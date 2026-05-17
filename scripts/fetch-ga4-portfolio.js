@@ -16,7 +16,6 @@ const { google } = skillRequire('googleapis');
 dotenv.config({ path: path.join(GA4_SKILL_DIR, '..', '.env') });
 
 const PROPERTIES = [
-  { key: 'tabiji', name: 'Tabiji', domain: 'tabiji.ai', id: '524076952', color: '#2a7a2a' },
   { key: 'veracityapi', name: 'VeracityAPI', domain: 'veracityapi.com', id: '537020430', color: '#336699' },
   { key: 'palmaura', name: 'Palmaura', domain: 'palmaura.app', id: '538073800', color: '#8a5a20' },
   { key: 'zonted', name: 'Zonted', domain: 'zonted.com', id: '532496138', color: '#6f4aa8' },

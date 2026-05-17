@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """Nightly updater for https://zonted.com/metrics/.
 
-Refreshes the GA4 + Search Console portfolio cards and Tabiji GA4 chart/section,
-commits and pushes changes, waits briefly for Cloudflare Pages deploy, then posts
-a Slack update.
+Refreshes the public GA4 + Search Console portfolio cards, commits and pushes
+changes, waits briefly for Cloudflare Pages deploy, then posts a Slack update.
 """
 from __future__ import annotations
 
@@ -350,16 +349,16 @@ def render_youtube_detail_section(youtube: dict) -> str:
 
 def update_html(data: dict) -> None:
     text = METRICS_HTML.read_text()
-    tabiji = next(prop for prop in data["properties"] if prop["key"] == "tabiji")
-    tabiji_gsc = next((prop for prop in data.get("searchConsoleProperties", []) if prop["key"] == "tabiji"), None)
-    youtube = data.get("youtubeMetrics")
 
+    # Keep the public metrics page limited to the portfolio-level cards. Legacy
+    # Tabiji channel/detail sections are stripped here so nightly refreshes do
+    # not accidentally republish private growth metrics.
     text = re.sub(r'<div class="updated-badge">Updated [^<]+</div>', f'<div class="updated-badge">Updated {esc(data["updatedLabel"])}</div>', text, count=1)
 
     portfolio = f'''        <!-- Portfolio GA4 Snapshot -->
         <section class="portfolio-section" aria-labelledby="portfolio-ga4-heading">
             <h2 id="portfolio-ga4-heading"><span class="icon">📊</span> GA4 Portfolio Snapshot</h2>
-            <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for Tabiji, VeracityAPI, Palmaura, and Zonted. Ordered by total sessions.</p>
+            <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for active properties. Ordered by total sessions.</p>
             <div class="property-grid">
 {render_property_cards(data)}
             </div>
@@ -367,7 +366,7 @@ def update_html(data: dict) -> None:
 
 '''
     text = re.sub(
-        r'        <!-- Portfolio GA4 Snapshot -->.*?(?=        <!-- Portfolio Search Console Snapshot -->|        <!-- Tabiji Social Snapshot -->|        <!-- Tabiji Metrics -->\n)',
+        r'        <!-- Portfolio GA4 Snapshot -->.*?(?=        <!-- Portfolio Search Console Snapshot -->|\n    </div>\n    </main>)',
         portfolio,
         text,
         flags=re.S,
@@ -376,7 +375,7 @@ def update_html(data: dict) -> None:
     search_console = f'''        <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
             <h2 id="portfolio-gsc-heading"><span class="icon">🔎</span> Search Console Snapshot</h2>
-            <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for the same four properties. Ordered by total clicks.</p>
+            <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for active properties. Ordered by total clicks.</p>
             <div class="property-grid">
 {render_search_console_cards(data)}
             </div>
@@ -385,175 +384,36 @@ def update_html(data: dict) -> None:
 '''
     if '<!-- Portfolio Search Console Snapshot -->' in text:
         text = re.sub(
-            r'        <!-- Portfolio Search Console Snapshot -->.*?(?=        <!-- Tabiji Social Snapshot -->|        <!-- Tabiji Metrics -->\n)',
+            r'        <!-- Portfolio Search Console Snapshot -->.*?(?=\n    </div>\n    </main>|        <!-- Tabiji Social Snapshot -->|        <!-- Tabiji Metrics -->)',
             search_console,
             text,
             flags=re.S,
         )
     else:
-        text = text.replace('        <!-- Tabiji Metrics -->\n', search_console + '        <!-- Tabiji Metrics -->\n', 1)
+        text = text.replace('\n    </div>\n    </main>', search_console + '    </div>\n    </main>', 1)
 
-    summary = f'''        <!-- Tabiji Metrics -->
-        <section class="tabiji-metrics-section" aria-labelledby="tabiji-metrics-heading">
-            <h2 id="tabiji-metrics-heading"><span class="icon">✈️</span> Tabiji metrics</h2>
-            <p class="section-desc">Deeper website, search, and social metrics for <a href="https://tabiji.ai">tabiji.ai</a>.</p>
-            <div class="summary-grid">
-                <div class="summary-card">
-                    <div class="value">{fmt(tabiji['totals']['sessions'])}</div>
-                    <div class="label">GA Sessions</div>
-                </div>
-                <div class="summary-card">
-                    <div class="value">16.02M</div>
-                    <div class="label">IG Views (90d)</div>
-                </div>
-                <div class="summary-card">
-                    <div class="value">4,284</div>
-                    <div class="label">IG Followers</div>
-                </div>
-            </div>
-        </section>
-
-'''
-    text = re.sub(r'        <!-- Tabiji Metrics -->.*?        <!-- Charts Section -->\n', summary + '        <!-- Charts Section -->\n', text, flags=re.S)
-
-    source_rows = "\n".join(
-        f'''            <div class="metric-row">
-                <span class="metric-label">{esc(row['sourceMedium'])}</span>
-                <span class="metric-value">{fmt(row['sessions'])} sessions</span>
-            </div>'''
-        for row in tabiji.get("sources", [])
-    )
-    ga_section = f'''            <div class="metric-row">
-                <span class="metric-label">Sessions</span>
-                <span class="metric-value">{fmt(tabiji['totals']['sessions'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Users</span>
-                <span class="metric-value">{fmt(tabiji['totals']['users'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Pageviews</span>
-                <span class="metric-value">{fmt(tabiji['totals']['views'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Avg. Session Duration</span>
-                <span class="metric-value">{duration(tabiji['totals']['avgDuration'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Engagement Rate</span>
-                <span class="metric-value">{pct(tabiji['totals']['engagementRate'])}</span>
-            </div>
-
-            <hr class="section-divider">
-            <div class="subsection-label">Top 5 Source / Medium</div>
-{source_rows}
-
-            <hr class="section-divider">
-            <div class="subsection-label">Top 5 Pages by Views</div>'''
-    text = re.sub(
-        r'            <div class="metric-row">\s*<span class="metric-label">Sessions</span>.*?            <hr class="section-divider">\s*<div class="subsection-label">Top 5 Pages by Views</div>',
-        ga_section,
-        text,
-        count=1,
-        flags=re.S,
-    )
-
-    if tabiji_gsc:
-        page_items = [
-            {
-                "title": title_for_url(row["page"]),
-                "url": row["page"],
-                "stats": f"<span>{fmt(row['clicks'])} clicks</span> <span>{fmt(row['impressions'])} impressions</span> <span>Pos {row['position']:.1f}</span>",
-            }
-            for row in tabiji_gsc.get("topPages", [])
-        ]
-        gsc_section = f'''            <div class="metric-row">
-                <span class="metric-label">Clicks</span>
-                <span class="metric-value">{fmt(tabiji_gsc['totals']['clicks'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Impressions</span>
-                <span class="metric-value">{fmt(tabiji_gsc['totals']['impressions'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">CTR</span>
-                <span class="metric-value">{pct(tabiji_gsc['totals']['ctr'])}</span>
-            </div>
-            <div class="metric-row">
-                <span class="metric-label">Avg. Position</span>
-                <span class="metric-value">{tabiji_gsc['totals']['position']:.2f}</span>
-            </div>
-
-            <hr class="section-divider">
-            <div class="subsection-label">Top 5 Pages by Clicks</div>
-            <ul class="top-list">
-{top_items(page_items)}
-            </ul>'''
-        text = re.sub(
-            r'            <div class="metric-row">\s*<span class="metric-label">Clicks</span>.*?            </ul>\s*        </div>\s*\n\s*        <!-- Instagram -->',
-            gsc_section + "\n        </div>\n\n        <!-- Instagram -->",
-            text,
-            count=1,
-            flags=re.S,
-        )
-
-    if youtube:
-        text = re.sub(
-            r'                <article class="property-card social-card">\s*<div class="property-card-header">\s*<div>\s*<h3>YouTube Shorts</h3>.*?                </article>',
-            render_youtube_social_card(youtube),
-            text,
-            count=1,
-            flags=re.S,
-        )
-        text = re.sub(
-            r'        <!-- YouTube -->.*?(?=        <!-- TikTok -->)',
-            render_youtube_detail_section(youtube),
-            text,
-            count=1,
-            flags=re.S,
-        )
+    # Remove any old detailed Tabiji/social sections if they are still present
+    # in a checked-out copy.
+    legacy_marker = '        <!-- Tabiji Social Snapshot -->'
+    legacy_start = text.find(legacy_marker)
+    if legacy_start == -1:
+        legacy_start = text.find('        <!-- Tabiji Metrics -->')
+    if legacy_start != -1:
+        legacy_end = text.find('\n    </div>\n    </main>', legacy_start)
+        if legacy_end == -1:
+            raise RuntimeError('Could not find end of legacy Tabiji metrics block')
+        text = text[:legacy_start] + text[legacy_end:]
 
     chart_match = re.search(r'const chartData = (.*?);', text, re.S)
     if not chart_match:
         raise RuntimeError("Could not find chartData")
-    chart = json.loads(chart_match.group(1))
-    chart["portfolioGa4"] = {"labels": data["labels"], "properties": data["properties"]}
-    chart["portfolioGsc"] = {"labels": data.get("gscLabels", data["labels"]), "properties": data.get("searchConsoleProperties", [])}
-    chart["ga4Sessions"] = {"labels": data["labels"], "sessions": tabiji["series"]}
-    if tabiji_gsc:
-        chart["searchConsole"] = {"labels": data.get("gscLabels", data["labels"]), "clicks": tabiji_gsc["clicks"], "impressions": tabiji_gsc["impressions"]}
-    if youtube:
-        social = chart.setdefault("socialSnapshot", {})
-        cards = social.setdefault("cards", [])
-        youtube_card = {
-            "key": "youtube",
-            "name": "YouTube Shorts",
-            "handle": youtube.get("handle") or "@tabijiai",
-            "color": "#cc0000",
-            "total": fmt(youtube["totalViews"]),
-            "label": "channel views",
-            "chartType": "line",
-            "chartLabel": youtube.get("timeSeries", {}).get("label") or "Views by publish date",
-            "labels": youtube.get("timeSeries", {}).get("labels") or [f"#{i}" for i in range(1, len(youtube.get("topShorts", [])) + 1)],
-            "series": youtube.get("timeSeries", {}).get("series") or [row["views"] for row in youtube.get("topShorts", [])],
-            "tension": 0.35,
-            "pointRadius": 0,
-            "rows": [
-                {"label": "Subscribers", "value": fmt(youtube["subscribers"])},
-                {"label": "Videos", "value": fmt(youtube["videos"])},
-                {"label": "Tracked views", "value": compact(youtube.get("trackedViews", 0))},
-            ],
-        }
-        for idx, card in enumerate(cards):
-            if card.get("key") == "youtube":
-                cards[idx] = youtube_card
-                break
-        else:
-            cards.append(youtube_card)
+    chart = {
+        "portfolioGa4": {"labels": data["labels"], "properties": data["properties"]},
+        "portfolioGsc": {"labels": data.get("gscLabels", data["labels"]), "properties": data.get("searchConsoleProperties", [])},
+    }
     text = text[: chart_match.start(1)] + json.dumps(chart, separators=(",", ":")) + text[chart_match.end(1) :]
 
     METRICS_HTML.write_text(text)
-
 
 def current_head() -> str:
     return run(["git", "rev-parse", "--short", "HEAD"]).stdout.strip()
@@ -660,7 +520,6 @@ def main() -> int:
     run(["git", "pull", "--rebase", "--autostash", "origin", "main"], capture=True)
     fetch = run(["node", str(FETCHER)], capture=True)
     data = json.loads(fetch.stdout)
-    data["youtubeMetrics"] = fetch_youtube_metrics()
 
     previous = load_previous_state()
     update_html(data)
