@@ -392,12 +392,9 @@ def update_html(data: dict) -> None:
     else:
         text = text.replace('\n    </div>\n    </main>', search_console + '    </div>\n    </main>', 1)
 
-    # Remove any old detailed Tabiji/social sections if they are still present
-    # in a checked-out copy.
-    legacy_marker = '        <!-- Tabiji Social Snapshot -->'
-    legacy_start = text.find(legacy_marker)
-    if legacy_start == -1:
-        legacy_start = text.find('        <!-- Tabiji Metrics -->')
+    # Remove any old detailed Tabiji sections if they are still present in a
+    # checked-out copy. Keep the portfolio-level Tabiji Social Snapshot cards.
+    legacy_start = text.find('        <!-- Tabiji Metrics -->')
     if legacy_start != -1:
         legacy_end = text.find('\n    </div>\n    </main>', legacy_start)
         if legacy_end == -1:
@@ -407,10 +404,13 @@ def update_html(data: dict) -> None:
     chart_match = re.search(r'const chartData = (.*?);', text, re.S)
     if not chart_match:
         raise RuntimeError("Could not find chartData")
+    existing_chart = json.loads(chart_match.group(1))
     chart = {
         "portfolioGa4": {"labels": data["labels"], "properties": data["properties"]},
         "portfolioGsc": {"labels": data.get("gscLabels", data["labels"]), "properties": data.get("searchConsoleProperties", [])},
     }
+    if existing_chart.get("socialSnapshot"):
+        chart["socialSnapshot"] = existing_chart["socialSnapshot"]
     text = text[: chart_match.start(1)] + json.dumps(chart, separators=(",", ":")) + text[chart_match.end(1) :]
 
     METRICS_HTML.write_text(text)
