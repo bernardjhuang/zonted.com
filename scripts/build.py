@@ -678,16 +678,86 @@ def inject_newsletter_redirect(articles):
     return count
 
 
-def pick_related(article, articles, n=3):
-    """Choose n related articles. Same category first (by recency, already
-    sorted in `articles`), then fall back to the most-recent overall to
-    fill remaining slots. Excludes the current article."""
-    others = [a for a in articles if a['slug'] != article['slug']]
-    same_cat = [a for a in others if a['category'] == article['category']]
-    rest = [a for a in others if a['category'] != article['category']]
+# Hand-curated semantic neighbors per post (slug → list of 3 sibling slugs).
+# These take precedence over the category-based fallback in pick_related().
+# When adding a new post, either add an entry here (preferred) or let the
+# category-based fallback pick siblings. The fallback is good enough that
+# the site never ships without recommendations; this map exists so the
+# recommendations feel intentional, not "3 most-recent unrelated posts".
+CURATED_RELATED = {
+    "posts/14x-ctr-gap": ["posts/stakes-priming", "posts/aeo-answer-engine-optimization", "posts/training-data-is-the-moat"],
+    "posts/aeo-answer-engine-optimization": ["posts/training-data-is-the-moat", "posts/14x-ctr-gap", "posts/the-economics-of-the-internet-are-broken"],
+    "posts/ai-comics-dos-donts": ["posts/ai-image-generation-comparison", "posts/nano-banana-vs-grok", "posts/wavespeed"],
+    "posts/ai-image-generation-comparison": ["posts/nano-banana-vs-grok", "posts/ai-comics-dos-donts", "posts/wavespeed"],
+    "posts/ai-music-generation-comparison": ["posts/ai-reels-what-actually-works", "posts/the-future-is-synthetic", "posts/wavespeed"],
+    "posts/ai-psychosis": ["posts/human-in-the-loop", "posts/stakes-priming", "posts/openclaw-vs-claude-code-freedom"],
+    "posts/ai-reels-what-actually-works": ["posts/best-ai-video-models", "posts/veo3-vs-hailuo-minimax", "posts/ai-music-generation-comparison"],
+    "posts/ai-resilience-planning": ["posts/openclaw-claude-ban-ai-model-replacement", "posts/local-models-free-tokens", "posts/what-is-ai-self-healing"],
+    "posts/best-ai-video-models": ["posts/veo3-vs-hailuo-minimax", "posts/ai-reels-what-actually-works", "posts/wavespeed"],
+    "posts/build-for-agents-price-per-call": ["posts/future-of-software-is-headless", "posts/the-economics-of-the-internet-are-broken", "posts/the-great-api-shutdown"],
+    "posts/future-of-content-agentic-data-enrichment": ["posts/training-data-is-the-moat", "posts/aeo-answer-engine-optimization", "posts/the-future-is-synthetic"],
+    "posts/future-of-software-is-headless": ["posts/build-for-agents-price-per-call", "posts/the-great-api-shutdown", "posts/the-economics-of-the-internet-are-broken"],
+    "posts/google-zero-patience-ai-slop": ["posts/scaling-ai-is-lazy", "posts/what-is-ai-drift-how-to-fix", "posts/aeo-answer-engine-optimization"],
+    "posts/human-in-the-loop": ["posts/ai-psychosis", "posts/openclaw-vs-claude-code-freedom", "posts/stop-optimizing-ai-infrastructure"],
+    "posts/local-models-free-tokens": ["posts/ai-resilience-planning", "posts/openclaw-vs-claude-code-freedom", "posts/build-for-agents-price-per-call"],
+    "posts/makeugc": ["posts/wavespeed", "posts/ai-reels-what-actually-works", "posts/veo3-vs-hailuo-minimax"],
+    "posts/nano-banana-vs-grok": ["posts/ai-image-generation-comparison", "posts/ai-comics-dos-donts", "posts/wavespeed"],
+    "posts/openclaw-claude-ban-ai-model-replacement": ["posts/ai-resilience-planning", "posts/openclaw-vs-claude-code-freedom", "posts/openclaw-skill-tree"],
+    "posts/openclaw-skill-tree": ["posts/openclaw-vs-claude-code-freedom", "posts/openclaw-claude-ban-ai-model-replacement", "posts/stop-optimizing-ai-infrastructure"],
+    "posts/openclaw-vs-claude-code-freedom": ["posts/openclaw-skill-tree", "posts/openclaw-claude-ban-ai-model-replacement", "posts/build-for-agents-price-per-call"],
+    "posts/rise-of-the-ai-influencer": ["posts/the-future-is-synthetic", "posts/slop-iterate-curate-ai-content", "posts/true-cost-of-ai-content-production"],
+    "posts/scaling-ai-is-lazy": ["posts/what-is-ai-reward-hacking", "posts/what-is-ai-drift-how-to-fix", "posts/google-zero-patience-ai-slop"],
+    "posts/slop-iterate-curate-ai-content": ["posts/true-cost-of-ai-content-production", "posts/ai-reels-what-actually-works", "posts/the-future-is-synthetic"],
+    "posts/stakes-priming": ["posts/14x-ctr-gap", "posts/ai-psychosis", "posts/what-is-ai-reward-hacking"],
+    "posts/stop-optimizing-ai-infrastructure": ["posts/openclaw-skill-tree", "posts/human-in-the-loop", "posts/build-for-agents-price-per-call"],
+    "posts/the-economics-of-the-internet-are-broken": ["posts/the-great-api-shutdown", "posts/aeo-answer-engine-optimization", "posts/build-for-agents-price-per-call"],
+    "posts/the-future-is-synthetic": ["posts/rise-of-the-ai-influencer", "posts/slop-iterate-curate-ai-content", "posts/future-of-content-agentic-data-enrichment"],
+    "posts/the-great-api-shutdown": ["posts/the-economics-of-the-internet-are-broken", "posts/future-of-software-is-headless", "posts/aeo-answer-engine-optimization"],
+    "posts/training-data-is-the-moat": ["posts/aeo-answer-engine-optimization", "posts/future-of-content-agentic-data-enrichment", "posts/the-economics-of-the-internet-are-broken"],
+    "posts/true-cost-of-ai-content-production": ["posts/slop-iterate-curate-ai-content", "posts/scaling-ai-is-lazy", "posts/the-future-is-synthetic"],
+    "posts/veo3-vs-hailuo-minimax": ["posts/best-ai-video-models", "posts/ai-reels-what-actually-works", "posts/wavespeed"],
+    "posts/wavespeed": ["posts/makeugc", "posts/veo3-vs-hailuo-minimax", "posts/best-ai-video-models"],
+    "posts/what-is-ai-drift-how-to-fix": ["posts/what-is-ai-reward-hacking", "posts/what-is-ai-self-healing", "posts/scaling-ai-is-lazy"],
+    "posts/what-is-ai-reward-hacking": ["posts/what-is-ai-drift-how-to-fix", "posts/what-is-ai-self-healing", "posts/scaling-ai-is-lazy"],
+    "posts/what-is-ai-self-healing": ["posts/what-is-ai-reward-hacking", "posts/what-is-ai-drift-how-to-fix", "posts/ai-resilience-planning"],
+}
 
+
+def pick_related(article, articles, n=3):
+    """Pick n related articles.
+
+    Order of preference:
+      1. CURATED_RELATED map (hand-curated semantic neighbors). When a slug
+         appears in the curated map, use that list directly — the curation
+         was done with knowledge of every post's topic, not just category.
+      2. Same-category siblings, ordered by recency (articles is already
+         sorted newest-first).
+      3. Most-recent overall, to fill remaining slots.
+
+    Excludes the current article. Excludes curated targets that no longer
+    exist on disk (so renaming a post fails-soft).
+    """
+    by_slug = {a['slug']: a for a in articles}
+
+    # 1. Curated map
+    curated = CURATED_RELATED.get(article['slug'], [])
     selected = []
     seen = set()
+    for slug in curated:
+        if slug == article['slug'] or slug in seen:
+            continue
+        candidate = by_slug.get(slug)
+        if candidate is None:
+            continue
+        selected.append(candidate)
+        seen.add(slug)
+        if len(selected) == n:
+            return selected
+
+    # 2 + 3. Fallback: same-category by recency, then everything else by recency.
+    others = [a for a in articles if a['slug'] != article['slug'] and a['slug'] not in seen]
+    same_cat = [a for a in others if a['category'] == article['category']]
+    rest = [a for a in others if a['category'] != article['category']]
     for a in same_cat + rest:
         if a['slug'] in seen:
             continue
