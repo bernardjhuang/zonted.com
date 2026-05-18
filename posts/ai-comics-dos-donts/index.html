@@ -281,7 +281,7 @@
 
             <p>This is the fundamental Midjourney limitation for comics. It is excellent at the <em>look</em> of text — weight, kerning, bubble shape, speech tails. It just can't reliably spell what you asked for. Post-v6 models have improved on short logos and signs, but custom dialogue longer than a few words is still a coin flip. For our fifty-comic project, that was fatal. We could have generated the art in Midjourney and composited bubbles in Photoshop, but that's ~200 manual touch-ups, and fifty comics across a cast of four characters also demands the next thing Midjourney is bad at: character consistency at scale.</p>
 
-            <p>So we moved the entire pipeline to <a href="https://wavespeed.ai/?ref=bernard" target="_blank" rel="noopener">Wavespeed</a>, which gives us unified API access to a bunch of current image models under one billing account. Time to shop.</p>
+            <p>So we moved the entire pipeline to <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>, which gives us unified API access to a bunch of current image models under one billing account. Time to shop.</p>
 
             <h2 id="wavespeed">Round 2: Wavespeed four-model showdown</h2>
 
@@ -535,7 +535,7 @@ wait</code></pre>
 
             <ol>
                 <li><strong>Pick the style on a cheap model first.</strong> Generate 3–5 aesthetic variants at low cost before committing. Midjourney is great for style exploration because it takes creative risks; we just didn't ship it.</li>
-                <li><strong>Use Nano Banana Pro for production</strong> whenever you need English text rendered inside the image. Via <a href="https://wavespeed.ai/?ref=bernard" target="_blank" rel="noopener">Wavespeed</a>, endpoint <code>google/nano-banana-pro/edit</code>, 1:1 aspect ratio.</li>
+                <li><strong>Use Nano Banana Pro for production</strong> whenever you need English text rendered inside the image. Via <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>, endpoint <code>google/nano-banana-pro/edit</code>, 1:1 aspect ratio.</li>
                 <li><strong>Write one locked style block.</strong> ~100 words, specific and non-negotiable. Paste it verbatim at the top of every prompt.</li>
                 <li><strong>Write canonical character sheets.</strong> One per recurring protagonist. Include visual anchors (hat, bag, clothing color). Paste verbatim.</li>
                 <li><strong>Anchor with reference images.</strong> Your first generation or two (from the same style + same character recipe) becomes the style lock for everything that follows. Pass them via the <code>images</code> array.</li>
@@ -723,7 +723,7 @@ def classify(title):
             <h3>Tools referenced in this post</h3>
 
             <ul>
-                <li><a href="https://wavespeed.ai/?ref=bernard" target="_blank" rel="noopener"><strong>Wavespeed</strong></a> — unified API access to 1000+ AI models including all four we tested, under one billing account. Pricing at <a href="https://wavespeed.ai/pricing" target="_blank" rel="noopener">wavespeed.ai/pricing</a>. This is the single highest-leverage tool in this pipeline.</li>
+                <li><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener"><strong>Wavespeed</strong></a> — unified API access to 1000+ AI models including all four we tested, under one billing account. Pricing at <a href="https://wavespeed.ai/pricing?ref=zonted" target="_blank" rel="noopener">wavespeed.ai/pricing</a>. This is the single highest-leverage tool in this pipeline.</li>
                 <li><a href="https://ai.google.dev/gemini-api/docs/structured-output" target="_blank" rel="noopener"><strong>Gemini 2.5 Pro</strong></a> — the LLM we use for per-scam script synthesis in v2. The key feature is the <code>responseSchema</code> parameter, which server-side enforces a JSON shape on every response. Claude's and OpenAI's equivalents work just as well; pick your poison.</li>
                 <li><a href="https://www.apify.com?fpr=bernard" target="_blank" rel="noopener"><strong>Apify</strong></a> — the <code>imageaibot/midjourney-bot</code> actor we used for Midjourney automation via Discord.</li>
                 <li><a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener"><strong>Claude Code</strong></a> — the agentic coding environment we wrote and ran this entire pipeline through. Wrote the prompts, fired the Wavespeed calls, uploaded to R2, injected into HTML, ran the git workflow, merged the PR. One conversation, under two hours of wall time, fifty comics shipped. Then, a few weeks later, one more conversation to rebuild v2 after the scale-up failure.</li>
