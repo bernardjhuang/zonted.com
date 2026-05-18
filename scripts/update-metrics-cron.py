@@ -31,10 +31,33 @@ TABIJI_PUBLISH_LOG = Path("/Users/psy/.openclaw/workspace/tabiji/functions/publi
 
 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ENV = {**os.environ, "PATH": PATH}
+MAX_ERROR_OUTPUT = 4000
 
 
 def run(cmd: list[str], *, cwd: Path = ROOT, check: bool = True, capture: bool = True) -> subprocess.CompletedProcess:
-    return subprocess.run(cmd, cwd=str(cwd), env=ENV, text=True, capture_output=capture, check=check)
+    proc = subprocess.run(cmd, cwd=str(cwd), env=ENV, text=True, capture_output=capture, check=False)
+    if check and proc.returncode:
+        parts = [f"Command {cmd!r} returned non-zero exit status {proc.returncode}."]
+        if proc.stdout:
+            parts.append("stdout:\n" + proc.stdout[-MAX_ERROR_OUTPUT:].strip())
+        if proc.stderr:
+            parts.append("stderr:\n" + proc.stderr[-MAX_ERROR_OUTPUT:].strip())
+        raise RuntimeError("\n".join(parts))
+    return proc
+
+
+def run_with_retry(cmd: list[str], *, attempts: int = 2, delay: int = 10, **kwargs) -> subprocess.CompletedProcess:
+    last_error: Exception | None = None
+    for attempt in range(1, attempts + 1):
+        try:
+            return run(cmd, **kwargs)
+        except Exception as exc:
+            last_error = exc
+            if attempt == attempts:
+                break
+            time.sleep(delay)
+    assert last_error is not None
+    raise last_error
 
 
 def fmt(n: float) -> str:
@@ -532,7 +555,7 @@ def main() -> int:
     if changed and not args.no_push:
         run(["git", "add", "metrics/index.html", "scripts/fetch-ga4-portfolio.js", "scripts/update-metrics-cron.py"], capture=True)
         run(["git", "commit", "-m", "Refresh metrics page data"], capture=True)
-        run(["git", "push", "origin", "main"], capture=True)
+        run_with_retry(["git", "push", "origin", "main"], attempts=2, delay=10, capture=True)
         head = current_head()
         deploy = deploy_status(head)
     elif args.no_push:
