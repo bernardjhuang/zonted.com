@@ -18,6 +18,7 @@ import time
 from collections import defaultdict
 from datetime import datetime, timedelta
 from pathlib import Path
+from urllib import parse, request
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS_HTML = ROOT / "metrics" / "index.html"
@@ -28,6 +29,49 @@ CHANNEL = "C0APKM06YTC"
 THRESHOLD = 0.25
 YOUTUBE_SHORTS_URL = "https://www.youtube.com/@tabijiai/shorts"
 TABIJI_PUBLISH_LOG = Path("/Users/psy/.openclaw/workspace/tabiji/functions/publish-log.json")
+STRIPE_KEYCHAIN_SERVICE = "veracityapi-stripe-readonly-key"
+STRIPE_API_VERSION = "2025-10-29.clover"
+MANUAL_REVENUE_CARDS = [
+    {
+        "key": "tabiji",
+        "name": "Tabiji",
+        "domain": "tabiji.ai",
+        "color": "#2a7a2a",
+        "total": "$76.72",
+        "label": "estimated royalties",
+        "source": "KDP dashboard",
+        "rows": [
+            {"label": "Orders", "value": "23"},
+            {"label": "KENP read", "value": "1,375"},
+        ],
+    },
+    {
+        "key": "zonted",
+        "name": "Zonted",
+        "domain": "zonted.com",
+        "color": "#6f4aa8",
+        "total": "$9.00",
+        "label": "reward revenue",
+        "source": "Referral dashboard",
+        "rows": [
+            {"label": "Order amount", "value": "$90.00"},
+            {"label": "Reward content", "value": "$9.00 voucher"},
+        ],
+    },
+    {
+        "key": "palmaura",
+        "name": "Palmaura",
+        "domain": "palmaura.app",
+        "color": "#8a5a20",
+        "total": "$0",
+        "label": "current revenue",
+        "source": "App not live",
+        "rows": [
+            {"label": "Status", "value": "Pre-launch"},
+            {"label": "Revenue", "value": "$0"},
+        ],
+    },
+]
 
 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
 ENV = {**os.environ, "PATH": PATH}
@@ -80,6 +124,18 @@ def compact(n: float) -> str:
     if n >= 1_000:
         return f"{n / 1_000:.1f}K"
     return fmt(n)
+
+
+def money(cents: float, currency: str = "usd") -> str:
+    amount = float(cents or 0) / 100
+    symbol = "$" if (currency or "usd").lower() == "usd" else f"{currency.upper()} "
+    if abs(amount) >= 1_000_000:
+        return f"{symbol}{amount / 1_000_000:.2f}M"
+    if abs(amount) >= 1_000:
+        return f"{symbol}{amount:,.0f}"
+    if amount.is_integer():
+        return f"{symbol}{amount:,.0f}"
+    return f"{symbol}{amount:,.2f}"
 
 
 def esc(value: object) -> str:
@@ -199,6 +255,150 @@ def fetch_youtube_metrics() -> dict:
     }
 
 
+def keychain_secret(service: str) -> str:
+    proc = run(["security", "find-generic-password", "-s", service, "-w"], check=False, capture=True)
+    if proc.returncode == 0 and proc.stdout.strip():
+        return proc.stdout.strip()
+    return ""
+
+
+def stripe_get(path: str, params: dict[str, object] | None = None) -> dict:
+    key = os.environ.get("STRIPE_VERACITYAPI_READONLY_KEY") or keychain_secret(STRIPE_KEYCHAIN_SERVICE)
+    if not key:
+        raise RuntimeError(f"Missing Stripe key: set STRIPE_VERACITYAPI_READONLY_KEY or keychain service {STRIPE_KEYCHAIN_SERVICE}")
+    query = parse.urlencode(params or {}, doseq=True)
+    url = f"https://api.stripe.com/v1/{path.lstrip('/')}"
+    if query:
+        url += f"?{query}"
+    req = request.Request(
+        url,
+        headers={
+            "Authorization": f"Bearer {key}",
+            "Stripe-Version": STRIPE_API_VERSION,
+        },
+    )
+    with request.urlopen(req, timeout=30) as resp:
+        return json.loads(resp.read().decode("utf-8"))
+
+
+def stripe_list(path: str, params: dict[str, object] | None = None) -> list[dict]:
+    rows: list[dict] = []
+    cursor: str | None = None
+    while True:
+        request_params = {**(params or {}), "limit": 100}
+        if cursor:
+            request_params["starting_after"] = cursor
+        payload = stripe_get(path, request_params)
+        batch = payload.get("data") or []
+        rows.extend(batch)
+        if not payload.get("has_more") or not batch:
+            return rows
+        cursor = batch[-1].get("id")
+
+
+def monthly_amount_cents(price: dict, quantity: int) -> float:
+    recurring = price.get("recurring") or {}
+    interval = recurring.get("interval")
+    interval_count = int(recurring.get("interval_count") or 1)
+    unit_amount = price.get("unit_amount")
+    if unit_amount is None:
+        unit_amount = price.get("unit_amount_decimal") or 0
+    amount = float(unit_amount or 0) * int(quantity or 1)
+    if interval == "year":
+        return amount / (12 * interval_count)
+    if interval == "month":
+        return amount / interval_count
+    if interval == "week":
+        return amount * 52 / 12 / interval_count
+    if interval == "day":
+        return amount * 365 / 12 / interval_count
+    return 0
+
+
+def fetch_stripe_mrr() -> dict:
+    subscriptions = stripe_list(
+        "subscriptions",
+        {
+            "status": "all",
+        },
+    )
+    prices = stripe_list("prices", {"active": "true", "type": "recurring"})
+
+    live_statuses = {"active", "trialing", "past_due"}
+    active_subscriptions = [sub for sub in subscriptions if sub.get("status") in live_statuses and not sub.get("cancel_at_period_end")]
+    trialing = [sub for sub in active_subscriptions if sub.get("status") == "trialing"]
+    currencies: dict[str, float] = defaultdict(float)
+    price_rows: dict[str, dict] = {}
+
+    for sub in active_subscriptions:
+        for item in (sub.get("items") or {}).get("data") or []:
+            price = item.get("price") or {}
+            currency = (price.get("currency") or "usd").lower()
+            mrr = monthly_amount_cents(price, item.get("quantity") or 1)
+            currencies[currency] += mrr
+            nickname = price.get("nickname") or (price.get("product") or {}).get("name") or price.get("lookup_key") or price.get("id") or "Recurring price"
+            row = price_rows.setdefault(
+                price.get("id") or nickname,
+                {"name": nickname, "currency": currency, "subscriptions": 0, "mrrCents": 0},
+            )
+            row["subscriptions"] += 1
+            row["mrrCents"] += mrr
+
+    primary_currency = max(currencies, key=currencies.get) if currencies else "usd"
+    mrr_cents = currencies.get(primary_currency, 0)
+    active_prices = [price for price in prices if price.get("recurring")]
+    top_prices = sorted(price_rows.values(), key=lambda row: row["mrrCents"], reverse=True)[:5]
+    if not top_prices and active_prices:
+        top_prices = [
+            {
+                "name": price.get("nickname") or price.get("lookup_key") or price.get("id") or "Recurring price",
+                "currency": (price.get("currency") or "usd").lower(),
+                "subscriptions": 0,
+                "mrrCents": 0,
+            }
+            for price in active_prices[:5]
+        ]
+
+    return {
+        "key": "veracityapi",
+        "name": "VeracityAPI",
+        "domain": "veracityapi.com",
+        "color": "#336699",
+        "source": "Stripe",
+        "currency": primary_currency,
+        "mrrCents": round(mrr_cents, 2),
+        "mrrDisplay": money(mrr_cents, primary_currency),
+        "activeSubscriptions": len(active_subscriptions),
+        "trialingSubscriptions": len(trialing),
+        "totalSubscriptions": len(subscriptions),
+        "activeRecurringPrices": len(active_prices),
+        "topPrices": top_prices,
+        "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+    }
+
+
+def revenue_cards(stripe_revenue: dict) -> dict:
+    veracity = {
+        "key": stripe_revenue["key"],
+        "name": stripe_revenue["name"],
+        "domain": stripe_revenue["domain"],
+        "color": stripe_revenue.get("color", "#336699"),
+        "total": stripe_revenue.get("mrrDisplay") or money(stripe_revenue.get("mrrCents") or 0, stripe_revenue.get("currency") or "usd"),
+        "label": "current MRR",
+        "source": "Stripe",
+        "rows": [
+            {"label": "Active subscriptions", "value": fmt(stripe_revenue.get("activeSubscriptions") or 0)},
+            {"label": "Trialing subscriptions", "value": fmt(stripe_revenue.get("trialingSubscriptions") or 0)},
+            {"label": "Recurring prices", "value": fmt(stripe_revenue.get("activeRecurringPrices") or 0)},
+        ],
+        "topPrices": stripe_revenue.get("topPrices") or [],
+    }
+    return {
+        "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
+        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[1], veracity, MANUAL_REVENUE_CARDS[2]],
+    }
+
+
 def replace_chart_data(script_text: str, key: str, value: object) -> str:
     marker = f'"{key}":'
     start = script_text.index(marker)
@@ -306,6 +506,41 @@ def render_search_console_cards(data: dict) -> str:
     return "\n".join(cards)
 
 
+def render_revenue_cards(data: dict) -> str:
+    revenue = data.get("revenueSnapshot") or {}
+    if not revenue.get("cards"):
+        return ""
+    cards: list[str] = []
+    for card in revenue.get("cards", []):
+        rows = "\n".join(
+            f'''                        <li class="channel-item"><span>{esc(row.get('label') or '')}</span><strong>{esc(row.get('value') or '')}</strong></li>'''
+            for row in card.get("rows", [])
+        )
+        if card.get("topPrices"):
+            rows += "\n" + "\n".join(
+                f'''                        <li class="channel-item"><span>{esc(row.get('name') or 'Recurring price')}</span><strong>{money(row.get('mrrCents') or 0, row.get('currency') or 'usd')} MRR · {fmt(row.get('subscriptions') or 0)} subs</strong></li>'''
+                for row in card.get("topPrices", [])
+            )
+        if not rows:
+            rows = '                        <li class="empty-channels">No revenue data yet.</li>'
+        cards.append(f'''                <article class="property-card revenue-card" style="--card-accent:{esc(card.get('color') or '#1a1a1a')}">
+                    <div class="property-card-header">
+                        <div>
+                            <h3>{esc(card.get('name') or '')}</h3>
+                            <span class="property-domain">{esc(card.get('source') or '')} · {esc(card.get('domain') or '')}</span>
+                        </div>
+                        <div class="property-total">
+                            <strong>{esc(card.get('total') or '$0')}</strong>
+                            <span>{esc(card.get('label') or 'revenue')}</span>
+                        </div>
+                    </div>
+                    <ol class="channel-list revenue-list">
+{rows}
+                    </ol>
+                </article>''')
+    return "\n".join(cards)
+
+
 def render_youtube_social_card(youtube: dict) -> str:
     series = youtube.get("timeSeries", {})
     chart_note = f"{series.get('label', 'Views by publish date')} · {series.get('range', '')}".strip(" ·")
@@ -395,6 +630,28 @@ def update_html(data: dict) -> None:
         flags=re.S,
     )
 
+    revenue_cards = render_revenue_cards(data)
+    if revenue_cards:
+        revenue = f'''        <!-- Revenue Snapshot -->
+        <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
+            <h2 id="revenue-heading"><span class="icon">💸</span> Revenue Snapshot</h2>
+            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI MRR is pulled from Stripe read-only access and normalized from active, trialing, and past-due recurring subscription items.</p>
+            <div class="property-grid revenue-grid">
+{revenue_cards}
+            </div>
+        </section>
+
+'''
+        if '<!-- Revenue Snapshot -->' in text:
+            text = re.sub(
+                r'        <!-- Revenue Snapshot -->.*?(?=        <!-- Portfolio Search Console Snapshot -->|        <!-- Tabiji Social Snapshot -->|\n    </div>\n    </main>)',
+                revenue,
+                text,
+                flags=re.S,
+            )
+        else:
+            text = text.replace('        <!-- Portfolio Search Console Snapshot -->', revenue + '        <!-- Portfolio Search Console Snapshot -->', 1)
+
     search_console = f'''        <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
             <h2 id="portfolio-gsc-heading"><span class="icon">🔎</span> Search Console Snapshot</h2>
@@ -432,6 +689,8 @@ def update_html(data: dict) -> None:
         "portfolioGa4": {"labels": data["labels"], "properties": data["properties"]},
         "portfolioGsc": {"labels": data.get("gscLabels", data["labels"]), "properties": data.get("searchConsoleProperties", [])},
     }
+    if data.get("revenueSnapshot"):
+        chart["revenueSnapshot"] = data["revenueSnapshot"]
     if existing_chart.get("socialSnapshot"):
         chart["socialSnapshot"] = existing_chart["socialSnapshot"]
     text = text[: chart_match.start(1)] + json.dumps(chart, separators=(",", ":")) + text[chart_match.end(1) :]
@@ -543,6 +802,7 @@ def main() -> int:
     run(["git", "pull", "--rebase", "--autostash", "origin", "main"], capture=True)
     fetch = run(["node", str(FETCHER)], capture=True)
     data = json.loads(fetch.stdout)
+    data["revenueSnapshot"] = revenue_cards(fetch_stripe_mrr())
 
     previous = load_previous_state()
     update_html(data)
