@@ -272,7 +272,7 @@
         <div style="text-align:center;padding:2rem 0;margin-top:2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
             <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:6px;">Subscribe for new posts</div>
             <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);margin-bottom:16px;">One email when I publish something new. No spam, unsubscribe anytime.</div>
-            <form action="https://zonted.substack.com/api/v1/free?nojs=true" method="post" target="_blank" style="display:flex;gap:8px;max-width:400px;margin:0 auto;">
+            <form action="https://zonted.substack.com/subscribe" method="get" target="_blank" style="display:flex;gap:8px;max-width:400px;margin:0 auto;">
                 <input type="email" name="email" placeholder="your@email.com" required style="flex:1;font-family:'Inter',system-ui,sans-serif;font-size:0.9rem;padding:10px 14px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);outline:none;">
                 <button type="submit" style="font-family:'Inter',system-ui,sans-serif;font-size:0.9rem;font-weight:600;padding:10px 20px;border:none;border-radius:6px;background:var(--text);color:var(--bg);cursor:pointer;white-space:nowrap;transition:background 0.2s;">Subscribe</button>
             </form>
@@ -313,5 +313,16 @@
         </span>
     </div>
 </footer>
+<!-- NEWSLETTER_REDIRECT -->
+<script>
+(function(){
+  document.querySelectorAll('form[action*="zonted.substack.com"]').forEach(function(form){
+    form.addEventListener("submit",function(){
+      setTimeout(function(){window.location.href="/subscribe/confirmed/";},300);
+    });
+  });
+})();
+</script>
+<!-- /NEWSLETTER_REDIRECT -->
 </body>
 </html>

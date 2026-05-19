@@ -56,7 +56,7 @@
                 <div class="zn-subscribe-copy">
                     <strong>Get new posts by email.</strong> One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.
                 </div>
-                <form class="zn-subscribe-form" action="https://zonted.substack.com/api/v1/free?nojs=true" method="post" target="_blank">
+                <form class="zn-subscribe-form" action="https://zonted.substack.com/subscribe" method="get" target="_blank">
                     <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address">
                     <button type="submit">Subscribe &rarr;</button>
                 </form>
@@ -141,5 +141,16 @@
         </div>
     </footer>
 
+<!-- NEWSLETTER_REDIRECT -->
+<script>
+(function(){
+  document.querySelectorAll('form[action*="zonted.substack.com"]').forEach(function(form){
+    form.addEventListener("submit",function(){
+      setTimeout(function(){window.location.href="/subscribe/confirmed/";},300);
+    });
+  });
+})();
+</script>
+<!-- /NEWSLETTER_REDIRECT -->
 </body>
 </html>

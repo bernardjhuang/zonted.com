@@ -245,7 +245,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
-        <form action="https://zonted.substack.com/api/v1/free?nojs=true" method="post" target="_blank" style="display:flex;flex-direction:column;gap:6px;">
+        <form action="https://zonted.substack.com/subscribe" method="get" target="_blank" style="display:flex;flex-direction:column;gap:6px;">
             <input type="email" name="email" placeholder="your@email.com" required style="font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;padding:8px 10px;border:1px solid var(--border);border-radius:6px;background:var(--bg);color:var(--text);outline:none;width:100%;">
             <button type="submit" style="font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;font-weight:600;padding:8px 10px;border:none;border-radius:6px;background:var(--text);color:var(--bg);cursor:pointer;transition:background 0.2s;">Subscribe</button>
         </form>
@@ -753,12 +753,7 @@ for part in response.candidates[0].content.parts:
 <!-- NEWSLETTER_REDIRECT -->
 <script>
 (function(){
-  document.querySelectorAll('form[action*="substack.com"]').forEach(function(form){
-    var iframe=document.createElement("iframe");
-    iframe.name="substack-frame";
-    iframe.style.display="none";
-    document.body.appendChild(iframe);
-    form.target="substack-frame";
+  document.querySelectorAll('form[action*="zonted.substack.com"]').forEach(function(form){
     form.addEventListener("submit",function(){
       setTimeout(function(){window.location.href="/subscribe/confirmed/";},300);
     });
