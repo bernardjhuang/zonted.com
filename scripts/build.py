@@ -622,36 +622,18 @@ def inject_copy_link(articles):
     return count
 
 
-def inject_newsletter_redirect(articles):
-    """Let substack forms submit naturally to /subscribe (which opens in a new
-    tab with the email pre-filled via the GET query string), then redirect
-    the main window to /subscribe/confirmed/ so the user sees a 'thank you'.
+def strip_newsletter_redirect(articles):
+    """Strip the legacy newsletter-redirect <script> block from every page.
 
-    Previously this used a hidden iframe + POST to /api/v1/free?nojs=true,
-    but Substack now returns 403 to cross-origin POSTs (bot protection /
-    session-token requirement). The /subscribe page accepts ?email= prefill
-    and uses Substack's own JS to finalize the subscription — works reliably.
+    We used to inject a script that intercepted Substack form submits and
+    redirected the main window to /subscribe/confirmed/. That whole flow is
+    gone now — the homepage hosts Substack's official /embed iframe instead,
+    which handles subscription inside the iframe without redirecting. The
+    script is dead code; this function removes it across the repo.
     """
-    REDIRECT_MARKER = '<!-- NEWSLETTER_REDIRECT -->'
-    REDIRECT_SCRIPT = (
-        '<!-- NEWSLETTER_REDIRECT -->\n'
-        '<script>\n'
-        '(function(){\n'
-        '  document.querySelectorAll(\'form[action*="zonted.substack.com"]\').forEach(function(form){\n'
-        '    form.addEventListener("submit",function(){\n'
-        '      setTimeout(function(){window.location.href="/subscribe/confirmed/";},300);\n'
-        '    });\n'
-        '  });\n'
-        '})();\n'
-        '</script>\n'
-        '<!-- /NEWSLETTER_REDIRECT -->'
-    )
-
-    # Sweep both article pages and every other static HTML page in the repo
-    # that has a Substack subscribe form (homepage, portfolio, metrics, etc.)
+    # Sweep every static HTML page in the repo.
     article_paths = {a['filepath'] for a in articles}
     candidate_paths = list(article_paths)
-    # Walk the repo for any other HTML file with substack.com in it.
     SKIP_DIRS = {'.git', '.wrangler', 'node_modules', '.claude'}
     for dirpath, dirnames, filenames in os.walk(ROOT):
         dirnames[:] = [d for d in dirnames if d not in SKIP_DIRS]
@@ -667,32 +649,18 @@ def inject_newsletter_redirect(articles):
     for filepath in candidate_paths:
         with open(filepath, 'r', encoding='utf-8') as f:
             content = f.read()
-
-        if 'substack.com' not in content:
+        if '<!-- NEWSLETTER_REDIRECT -->' not in content:
             continue
-
-        if REDIRECT_MARKER in content:
-            content = re.sub(
-                r'<!-- NEWSLETTER_REDIRECT -->.*?<!-- /NEWSLETTER_REDIRECT -->',
-                REDIRECT_SCRIPT,
-                content,
-                flags=re.DOTALL
-            )
+        new_content = re.sub(
+            r'\n*<!-- NEWSLETTER_REDIRECT -->.*?<!-- /NEWSLETTER_REDIRECT -->\n*',
+            '\n',
+            content,
+            flags=re.DOTALL,
+        )
+        if new_content != content:
             with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(content)
+                f.write(new_content)
             count += 1
-            continue
-
-        if '</body>' in content:
-            content = content.replace(
-                '</body>',
-                REDIRECT_SCRIPT + '\n</body>',
-                1
-            )
-            with open(filepath, 'w', encoding='utf-8') as f:
-                f.write(content)
-            count += 1
-
     return count
 
 
@@ -917,8 +885,8 @@ def main():
     n = inject_copy_link(articles)
     print(f"Injected copy-link button into {n} articles")
 
-    n = inject_newsletter_redirect(articles)
-    print(f"Injected newsletter redirect into {n} articles")
+    n = strip_newsletter_redirect(articles)
+    print(f"Stripped legacy newsletter-redirect script from {n} files")
 
     n = inject_recommended_reading(articles)
     print(f"Injected Recommended Reading block into {n} articles")
