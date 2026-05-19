@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0518">
     <title>Portfolio — Zonted</title>
-    <meta name="description" content="Every project Bernard has shipped, as a collectible. Each card carries the thesis, the business model, and the real numbers. TABIJI · VERACITY · ZONTED · PALMAURA · KAPIKO, plus one open slot.">
+    <meta name="description" content="Every project Bernard has shipped, as a collectible. Each card carries the thesis, the business model, and the real numbers. TABIJI · VERACITY · ZONTED · PALMAURA · KAPIKO, plus one in stealth.">
     <link rel="canonical" href="https://zonted.com/portfolio/">
     <meta property="og:title" content="Portfolio — Zonted">
     <meta property="og:description" content="Every project Bernard has shipped, as a collectible. Each card carries the thesis, the business model, and the real numbers.">
@@ -59,9 +59,12 @@
         @keyframes flicker { 0%, 100% { opacity: 1; } 33% { opacity: 0.85; } 66% { opacity: 0.95; } }
 
         /* ---------- Page chrome ---------- */
-        .portfolio-page { background: var(--tc-bg); color: var(--tc-text); font-family: var(--tc-body); }
-        .portfolio-page a { color: var(--tc-gold); }
-        .portfolio-page a:hover { color: var(--tc-text); }
+        .portfolio-page { background: var(--tc-bg); color: var(--tc-text); font-family: var(--tc-body); --zn-hover: #581c87; }
+        /* Scope :hover only to non-card links — the card itself manages its own
+           hover color (otherwise all card text would flash off-white). */
+        .portfolio-page a:not(.tc-card) { color: var(--tc-gold); }
+        .portfolio-page a:not(.tc-card):hover { color: var(--tc-text); }
+        .tc-card:hover .tc-name { color: var(--zn-hover); }
 
         /* ---------- Sparkles + Orbs ---------- */
         .tc-sparkle { position: absolute; width: 14px; height: 14px; pointer-events: none; animation: sparkleSpin var(--dur, 2.5s) ease-in-out var(--delay, 0s) infinite; }
@@ -643,7 +646,7 @@
                 <div class="port-hero-chips">
                     <span class="port-hero-chip chip-ultra">1 ultra</span>
                     <span class="port-hero-chip chip-rare">4 rare</span>
-                    <span class="port-hero-chip chip-slot">1 open slot</span>
+                    <span class="port-hero-chip chip-slot" style="background:rgba(88,28,135,0.13); border-color:#581c87; color:#581c87;">1 in stealth</span>
                 </div>
             </div>
         </section>
@@ -682,7 +685,7 @@
             <div class="port-cards">
 
                 <!-- 001 · TABIJI · ULTRA -->
-                <a href="https://tabiji.ai" class="tc-card tc-card-foil" style="--card-color: #fbbf24; --card-glow: rgba(251,191,36,0.65); box-shadow: 0 8px 28px rgba(251,191,36,0.55), 0 0 0 1px #fbbf24, inset 0 0 0 2px #fbbf24;" aria-label="TABIJI — open tabiji.ai">
+                <a href="https://tabiji.ai" class="tc-card tc-card-foil" target="_blank" rel="noopener" style="--card-color: #fbbf24; --card-glow: rgba(251,191,36,0.65); box-shadow: 0 8px 28px rgba(251,191,36,0.55), 0 0 0 1px #fbbf24, inset 0 0 0 2px #fbbf24;" aria-label="TABIJI — open tabiji.ai">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil-strong" aria-hidden="true"></div>
                     <svg class="tc-sparkle" aria-hidden="true" style="left:6%; top:12%; --delay:0s; --dur:2.5s;" viewBox="0 0 14 14"><path d="M7 0 L8 6 L14 7 L8 8 L7 14 L6 8 L0 7 L6 6 Z" fill="#fff"/></svg>
@@ -767,7 +770,7 @@
                 </a>
 
                 <!-- 002 · VERACITY · RARE -->
-                <a href="https://veracityapi.com" class="tc-card" style="--card-color: #a855f7; --card-glow: rgba(168,85,247,0.55); box-shadow: 0 8px 28px rgba(168,85,247,0.5), 0 0 0 1px #a855f7, inset 0 0 0 2px #fbbf24;" aria-label="VERACITY — open veracityapi.com">
+                <a href="https://veracityapi.com" class="tc-card" target="_blank" rel="noopener" style="--card-color: #a855f7; --card-glow: rgba(168,85,247,0.55); box-shadow: 0 8px 28px rgba(168,85,247,0.5), 0 0 0 1px #a855f7, inset 0 0 0 2px #fbbf24;" aria-label="VERACITY — open veracityapi.com">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
@@ -849,7 +852,7 @@
                 </a>
 
                 <!-- 003 · ZONTED · RARE -->
-                <a href="/" class="tc-card" style="--card-color: #ef4444; --card-glow: rgba(239,68,68,0.55); box-shadow: 0 8px 28px rgba(239,68,68,0.5), 0 0 0 1px #ef4444, inset 0 0 0 2px #fbbf24;" aria-label="ZONTED — open the zonted homepage">
+                <a href="/" class="tc-card" target="_blank" rel="noopener" style="--card-color: #ef4444; --card-glow: rgba(239,68,68,0.55); box-shadow: 0 8px 28px rgba(239,68,68,0.5), 0 0 0 1px #ef4444, inset 0 0 0 2px #fbbf24;" aria-label="ZONTED — open the zonted homepage">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
@@ -931,7 +934,7 @@
                 </a>
 
                 <!-- 004 · PALMAURA · RARE -->
-                <a href="https://palmaura.app" class="tc-card" style="--card-color: #ec4899; --card-glow: rgba(236,72,153,0.55); box-shadow: 0 8px 28px rgba(236,72,153,0.5), 0 0 0 1px #ec4899, inset 0 0 0 2px #fbbf24;" aria-label="PALMAURA — open palmaura.app">
+                <a href="https://palmaura.app" class="tc-card" target="_blank" rel="noopener" style="--card-color: #ec4899; --card-glow: rgba(236,72,153,0.55); box-shadow: 0 8px 28px rgba(236,72,153,0.5), 0 0 0 1px #ec4899, inset 0 0 0 2px #fbbf24;" aria-label="PALMAURA — open palmaura.app">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
@@ -1013,7 +1016,7 @@
                 </a>
 
                 <!-- 005 · KAPIKO · RARE -->
-                <a href="https://kapiko.ai" class="tc-card" style="--card-color: #10b981; --card-glow: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.5), 0 0 0 1px #10b981, inset 0 0 0 2px #fbbf24;" aria-label="KAPIKO — open kapiko.ai">
+                <a href="https://kapiko.ai" class="tc-card" target="_blank" rel="noopener" style="--card-color: #10b981; --card-glow: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.5), 0 0 0 1px #10b981, inset 0 0 0 2px #fbbf24;" aria-label="KAPIKO — open kapiko.ai">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
@@ -1094,75 +1097,75 @@
                     </div>
                 </a>
 
-                <!-- 006 · OPEN SLOT -->
-                <div class="tc-card" style="--card-color: #cbd5e1; --card-glow: rgba(203,213,225,0.4); box-shadow: 0 8px 28px rgba(203,213,225,0.27), 0 0 0 1px #cbd5e1, inset 0 0 0 2px #fbbf24; cursor: default;" aria-label="Empty card slot — awaiting a future project">
+                <!-- 006 · STEALTH -->
+                <div class="tc-card" style="--card-color: #581c87; --card-glow: rgba(88,28,135,0.5); box-shadow: 0 8px 28px rgba(88,28,135,0.45), 0 0 0 1px #581c87, inset 0 0 0 2px #fbbf24; cursor: default;" aria-label="A project currently in stealth mode">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
                     <div class="tc-header">
                         <div class="tc-header-meta">
-                            <span class="tc-year">?</span>
-                            <span class="tc-pip tc-pip-open"><span class="tc-pip-dot"></span>OPEN</span>
+                            <span class="tc-year">2026 →</span>
+                            <span class="tc-pip tc-pip-open" style="background:rgba(88,28,135,0.15); color:#fbf8f0; border-color:#581c87;"><span class="tc-pip-dot" style="background:#581c87; box-shadow:0 0 4px #581c87;"></span>STEALTH</span>
                         </div>
                         <div class="tc-title-row">
-                            <span class="tc-name">[ SLOT ]</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #cbd5e1, #0a0a0a); box-shadow:0 0 8px #cbd5e1;">?</span>
+                            <span class="tc-name">STEALTH</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #581c87, #0a0a0a); box-shadow:0 0 8px #581c87;">?</span>
                         </div>
                         <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#64748b; border-color:#cbd5e1; background:rgba(203,213,225,0.07);">—</span>
-                            <span class="tc-badge">Fill me in</span>
+                            <span class="tc-type-label" style="color:#581c87; border-color:#581c87; background:rgba(88,28,135,0.07);">CLASSIFIED</span>
+                            <span class="tc-badge">★ Building quietly</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(203,213,225,0.13);">??</div>
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(88,28,135,0.18);">??</div>
                         <div class="tc-image-stamp tc-image-stamp-tl">ART · 006</div>
                         <div class="tc-image-stamp tc-image-stamp-br">HOLO ✦</div>
                     </div>
 
-                    <div class="tc-thesis" style="background:rgba(203,213,225,0.11); border-left-color:#cbd5e1;">
-                        <p class="tc-thesis-label" style="color:#475569;">★ Thesis</p>
-                        <p class="tc-thesis-text">Awaiting acquisition — a future project to be added here.</p>
+                    <div class="tc-thesis" style="background:rgba(88,28,135,0.11); border-left-color:#581c87;">
+                        <p class="tc-thesis-label" style="color:#581c87;">★ Thesis</p>
+                        <p class="tc-thesis-text">Currently in stealth. Building quietly — more when it ships.</p>
                     </div>
 
                     <div class="tc-detail">
-                        <p>Each card describes a project: the thesis (what is it?), the business model (who pays?), and the real numbers behind it.</p>
+                        <p>Project name, thesis, business model, and numbers will land here when this one leaves stealth.</p>
                     </div>
 
                     <div class="tc-model">
                         <p class="tc-model-label">💰 Business Model</p>
-                        <p class="tc-model-text">—</p>
+                        <p class="tc-model-text">Undisclosed</p>
                     </div>
 
                     <div class="tc-numbers">
                         <p class="tc-numbers-label"># By the numbers</p>
                         <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Metric</dt><dd class="tc-metric-v">?</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Metric</dt><dd class="tc-metric-v">?</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Metric</dt><dd class="tc-metric-v">?</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Metric</dt><dd class="tc-metric-v">?</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Status</dt><dd class="tc-metric-v">Stealth</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Ship date</dt><dd class="tc-metric-v">?</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Category</dt><dd class="tc-metric-v">?</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Reveal</dt><dd class="tc-metric-v">Soon</dd></div>
                         </dl>
                     </div>
 
                     <div class="tc-moves">
-                        <div class="tc-move" style="background:rgba(203,213,225,0.13); border-color:rgba(203,213,225,0.4);">
-                            <div class="tc-move-num" style="background:#94a3b8;">1</div>
+                        <div class="tc-move" style="background:rgba(88,28,135,0.18); border-color:rgba(88,28,135,0.45);">
+                            <div class="tc-move-num" style="background:#581c87;">1</div>
                             <div class="tc-move-body">
                                 <div class="tc-move-row">
-                                    <span class="tc-move-name">Placeholder Move</span>
-                                    <span class="tc-move-dmg" style="color:#64748b; text-shadow:none;">?</span>
+                                    <span class="tc-move-name">Quiet Build</span>
+                                    <span class="tc-move-dmg" style="color:#581c87; text-shadow:none;">?</span>
                                 </div>
-                                <p class="tc-move-desc">Open slot — describe what the project did and what it returned.</p>
+                                <p class="tc-move-desc">Heads-down. No teases, no launch plan, no pre-announce. Just shipping.</p>
                             </div>
                         </div>
-                        <div class="tc-move" style="background:rgba(203,213,225,0.07); border-color:rgba(203,213,225,0.3);">
-                            <div class="tc-move-num" style="background:#94a3b8;">2</div>
+                        <div class="tc-move" style="background:rgba(88,28,135,0.09); border-color:rgba(88,28,135,0.35);">
+                            <div class="tc-move-num" style="background:#581c87;">2</div>
                             <div class="tc-move-body">
                                 <div class="tc-move-row">
-                                    <span class="tc-move-name">Placeholder Move</span>
-                                    <span class="tc-move-dmg" style="color:#64748b; text-shadow:none;">?</span>
+                                    <span class="tc-move-name">Reveal Beam</span>
+                                    <span class="tc-move-dmg" style="color:#581c87; text-shadow:none;">?</span>
                                 </div>
-                                <p class="tc-move-desc">Open slot.</p>
+                                <p class="tc-move-desc">When this card lights up, you'll know.</p>
                             </div>
                         </div>
                     </div>
