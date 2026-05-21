@@ -15,7 +15,8 @@ function json(body, status = 200) {
   });
 }
 
-export async function onRequestPost({ request, env }) {
+export async function onRequestPost(context) {
+  const { request, env, waitUntil } = context;
   if (!env.RESEND_API_KEY) {
     // Misconfigured deploy — secret missing.
     return json({ error: 'subscribe service not configured' }, 503);
@@ -57,10 +58,16 @@ export async function onRequestPost({ request, env }) {
 
     // 2. Fire a short plain-text welcome email. Best-effort — failures here
     //    should NOT fail the subscription itself (the contact is already in
-    //    the audience). We log and move on.
-    sendWelcomeEmail(env.RESEND_API_KEY, email).catch((err) => {
+    //    the audience). waitUntil() keeps the promise alive past the response;
+    //    without it Cloudflare Workers kill in-flight fetches on response.
+    const welcomeWork = sendWelcomeEmail(env.RESEND_API_KEY, email).catch((err) => {
       console.error('Welcome email failed (non-fatal):', err);
     });
+    if (typeof waitUntil === 'function') {
+      waitUntil(welcomeWork);
+    } else if (context.waitUntil) {
+      context.waitUntil(welcomeWork);
+    }
 
     return json({ ok: true });
   } catch (err) {
