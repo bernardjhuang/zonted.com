@@ -56,7 +56,7 @@
         if (resp.ok) {
           emailInput.value = '';
           button.textContent = '✓ Subscribed';
-          status.textContent = "You're on the list. Check your inbox in a moment.";
+          status.textContent = "You're on the list. I'll email you when the next post ships.";
           status.hidden = false;
           // Re-enabling a "subscribed" button is intentional — they may submit again
           // with a different email if they want. Keep the success state visible.
