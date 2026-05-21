@@ -74,8 +74,22 @@ MANUAL_REVENUE_CARDS = [
 ]
 
 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
-ENV = {**os.environ, "PATH": PATH}
+USER_HOME = "/Users/psy"
+ENV = {
+    **os.environ,
+    "HOME": os.environ.get("HOME") or USER_HOME,
+    "USER": os.environ.get("USER") or "psy",
+    "LOGNAME": os.environ.get("LOGNAME") or "psy",
+    "PATH": PATH,
+    "GIT_TERMINAL_PROMPT": "0",
+}
 MAX_ERROR_OUTPUT = 4000
+
+
+def redact(text: str) -> str:
+    text = re.sub(r"gh[opsu]_[A-Za-z0-9_]+", "gh*_REDACTED", text or "")
+    text = re.sub(r"(https://)([^/@\s:]+):([^/@\s]+)@", r"\1\2:REDACTED@", text)
+    return text
 
 
 def run(cmd: list[str], *, cwd: Path = ROOT, check: bool = True, capture: bool = True) -> subprocess.CompletedProcess:
@@ -83,9 +97,9 @@ def run(cmd: list[str], *, cwd: Path = ROOT, check: bool = True, capture: bool =
     if check and proc.returncode:
         parts = [f"Command {cmd!r} returned non-zero exit status {proc.returncode}."]
         if proc.stdout:
-            parts.append("stdout:\n" + proc.stdout[-MAX_ERROR_OUTPUT:].strip())
+            parts.append("stdout:\n" + redact(proc.stdout[-MAX_ERROR_OUTPUT:].strip()))
         if proc.stderr:
-            parts.append("stderr:\n" + proc.stderr[-MAX_ERROR_OUTPUT:].strip())
+            parts.append("stderr:\n" + redact(proc.stderr[-MAX_ERROR_OUTPUT:].strip()))
         raise RuntimeError("\n".join(parts))
     return proc
 
@@ -102,6 +116,41 @@ def run_with_retry(cmd: list[str], *, attempts: int = 2, delay: int = 10, **kwar
             time.sleep(delay)
     assert last_error is not None
     raise last_error
+
+
+def ensure_git_push_auth() -> None:
+    """Make GitHub HTTPS auth deterministic before creating a nightly commit.
+
+    The system crontab runs outside an interactive shell, so relying on whatever
+    credential helper happens to be initialized can leave a local commit stranded.
+    Re-apply GitHub CLI's git credential helper when available, then require a
+    non-interactive dry-run push to pass before the updater mutates files.
+    """
+    gh = shutil.which("gh", path=PATH)
+    if gh:
+        status = run([gh, "auth", "status", "--hostname", "github.com"], check=False, capture=True)
+        if status.returncode == 0:
+            run([gh, "auth", "setup-git", "--hostname", "github.com"], check=False, capture=True)
+
+    preflight = run(["git", "push", "--dry-run", "origin", "main"], check=False, capture=True)
+    if preflight.returncode == 0:
+        return
+
+    # One more setup attempt, in case global git config was rewritten since the
+    # first check or gh returned a transient keyring error.
+    if gh:
+        run([gh, "auth", "setup-git", "--hostname", "github.com"], check=False, capture=True)
+        preflight = run(["git", "push", "--dry-run", "origin", "main"], check=False, capture=True)
+        if preflight.returncode == 0:
+            return
+
+    details = []
+    if preflight.stdout:
+        details.append("stdout:\n" + redact(preflight.stdout[-MAX_ERROR_OUTPUT:].strip()))
+    if preflight.stderr:
+        details.append("stderr:\n" + redact(preflight.stderr[-MAX_ERROR_OUTPUT:].strip()))
+    suffix = "\n" + "\n".join(details) if details else ""
+    raise RuntimeError("GitHub push auth preflight failed; refusing to create a stranded nightly commit." + suffix)
 
 
 def fmt(n: float) -> str:
@@ -794,6 +843,8 @@ def main() -> int:
     LOG_DIR.mkdir(parents=True, exist_ok=True)
     os.chdir(ROOT)
 
+    if not args.no_push:
+        ensure_git_push_auth()
     run(["git", "pull", "--rebase", "--autostash", "origin", "main"], capture=True)
     fetch = run(["node", str(FETCHER)], capture=True)
     data = json.loads(fetch.stdout)
