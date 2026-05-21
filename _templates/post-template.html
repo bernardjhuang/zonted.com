@@ -120,7 +120,7 @@
                 <!-- Inline subscribe — drop in around 60-70% scroll depth -->
                 <div class="zn-inline-subscribe">
                     <p class="zn-inline-subscribe-headline">Get the next post by email.</p>
-                    <div style="overflow:hidden; height:68px; max-width:480px; width:100%; background:transparent;"><iframe src="https://zonted.substack.com/embed?transparent=1" width="480" height="150" style="width:100%; max-width:480px; border:0; background:transparent; display:block;" frameborder="0" scrolling="no" title="Subscribe to Zonted"></iframe></div>
+                    <form class="zn-subscribe-form" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe &rarr;</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
                 </div>
 
                 <h2 id="section-3"><span class="zn-h2-num">3.</span> {{SECTION_3_TITLE}}</h2>
@@ -166,5 +166,6 @@
         sections.forEach(s => observer.observe(s));
     });
     </script>
+<script defer src="/js/subscribe.js"></script>
 </body>
 </html>

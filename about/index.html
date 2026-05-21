@@ -272,7 +272,7 @@
         <div style="text-align:center;padding:2rem 0;margin-top:2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
             <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:6px;">Subscribe for new posts</div>
             <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);margin-bottom:16px;">One email when I publish something new. No spam, unsubscribe anytime.</div>
-            <div style="overflow:hidden; height:68px; max-width:480px; width:100%; background:transparent;"><iframe src="https://zonted.substack.com/embed?transparent=1" width="480" height="150" style="width:100%; max-width:480px; border:0; background:transparent; display:block;" frameborder="0" scrolling="no" title="Subscribe to Zonted"></iframe></div>
+            <form class="zn-subscribe-form" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe &rarr;</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
         </div>
 
         <h2 style="margin-top:3rem;">Start Here</h2>
@@ -310,5 +310,6 @@
         </span>
     </div>
 </footer>
+<script defer src="/js/subscribe.js"></script>
 </body>
 </html>

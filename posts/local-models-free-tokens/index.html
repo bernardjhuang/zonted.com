@@ -182,7 +182,7 @@
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
-        <a href="/#subscribe" style="display:block;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;font-weight:600;padding:9px 12px;border-radius:6px;background:var(--text);color:var(--bg);text-decoration:none;text-align:center;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.85'" onmouseout="this.style.opacity='1'">Subscribe by email &rarr;</a>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
     </div>
 <!-- COPY_LINK -->
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
@@ -292,9 +292,11 @@
                 <p class="zn-post-subscribe-label">Newsletter</p>
                 <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
                 <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
-                <div class="zn-post-subscribe-form">
-                    <iframe src="https://zonted.substack.com/embed?transparent=1" width="480" height="150" frameborder="0" scrolling="no" title="Subscribe to Zonted"></iframe>
-                </div>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
             </section>
             <!-- SUBSCRIBE_BLOCK_END -->
         <!-- RECOMMENDED_START -->
@@ -349,5 +351,6 @@
     update();
 })();
 </script>
+<script defer src="/js/subscribe.js"></script>
 </body>
 </html>
