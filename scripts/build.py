@@ -180,13 +180,13 @@ def format_date_rfc822(date_str):
 # ---------------------------------------------------------------------------
 
 SHIPPED_FRESH_DAYS = 7
-"""Freshness window for the JUST SHIPPED stamp on /posts/. The newest post
+"""Freshness window for the JUST PUBLISHED stamp on /posts/. The newest post
 gets stamped only if its date is within this many days of the build run.
 After that, the stamp disappears until a new post ships."""
 
 
 def is_shipped(article):
-    """True if this article should get the JUST SHIPPED stamp on /posts/."""
+    """True if this article should get the JUST PUBLISHED stamp on /posts/."""
     if not article.get('date'):
         return False
     try:
@@ -221,7 +221,7 @@ def make_entry_row(article, mark_shipped=False):
         row_classes += ' zn-row-shipped'
         stamp_html = (
             '\n                    <div class="zn-shipped-stamp" aria-hidden="true">'
-            '★ JUST SHIPPED</div>'
+            '★ JUST PUBLISHED</div>'
         )
 
     return (
