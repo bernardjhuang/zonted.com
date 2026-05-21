@@ -110,10 +110,14 @@ def extract_metadata(filepath, slug):
 
     # og:image — backreferenced quote (same fix as description). Filter out
     # the generic tabiji-owl-logo default + URLs we've confirmed 404 so the
-    # row simply omits the thumb column.
+    # row simply omits the thumb column. operator-notes.png is the site-wide
+    # OG fallback for posts without a real hero — also treat as "no image"
+    # so the post index doesn't show 25+ identical thumbnails.
     img_match = re.search(r'<meta\s+property=["\']og:image["\']\s+content=(["\'])(.*?)\1', head, re.IGNORECASE)
     image = img_match.group(2) if img_match else ''
-    if 'tabiji-owl-logo' in image or 'zonted-og.png' in image or image in BROKEN_IMAGES:
+    if ('tabiji-owl-logo' in image or 'zonted-og.png' in image
+            or 'bernard-huang-headshot' in image or 'operator-notes' in image
+            or image in BROKEN_IMAGES):
         image = ''
     # Slug override wins (e.g. og:image was the owl, but the body has a hero)
     if slug in SLUG_THUMB_OVERRIDES:

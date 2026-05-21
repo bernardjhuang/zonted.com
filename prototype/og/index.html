@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex">
+<title>OG Card Prototypes — Zonted</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;0,9..144,800;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #fcfcfa;
+    --paper-2: #f4f1ea;
+    --ink: #1a1815;
+    --faded: #6b655c;
+    --ox: #6b1a1a;
+    --rule: #1a181522;
+    --serif: 'Source Serif 4', Georgia, serif;
+    --display: 'Fraunces', Georgia, serif;
+    --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', monospace;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #ddd8d0; padding: 32px 24px; font-family: var(--serif); color: var(--ink); }
+  .page-header {
+    max-width: 1280px;
+    margin: 0 auto 32px;
+    padding: 0 8px;
+  }
+  .page-header h1 {
+    font-family: var(--display);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  .page-header p {
+    font-family: var(--mono);
+    font-size: 12px;
+    color: var(--faded);
+    letter-spacing: 0.04em;
+  }
+  .grid {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 32px 24px;
+  }
+  .card-frame {
+    background: white;
+    border-radius: 10px;
+    padding: 16px;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  }
+  .card-label {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--faded);
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+  }
+  .card-label .num { color: var(--ox); }
+  .card-label .solo-link {
+    color: var(--faded);
+    text-decoration: none;
+    border: 1px solid var(--rule);
+    padding: 3px 8px;
+    border-radius: 4px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .card-label .solo-link:hover { background: var(--ink); color: var(--paper); }
+  /* Each card scaled down to fit 2-up: 1200/2 = 600 width, 630 * (600/1200) = 315 height */
+  .scale-wrap {
+    width: 100%;
+    aspect-ratio: 1200 / 630;
+    overflow: hidden;
+    border-radius: 6px;
+    position: relative;
+  }
+  .og {
+    width: 1200px;
+    height: 630px;
+    transform-origin: 0 0;
+    transform: scale(0.5);
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  @media (max-width: 720px) {
+    .grid { grid-template-columns: minmax(0, 1fr); }
+  }
+
+  /* Solo view: render only one card, at native 1200×630, anchored top-left */
+  body.solo { padding: 0; margin: 0; background: #fcfcfa; overflow: hidden; }
+  body.solo .page-header, body.solo .card-label { display: none; }
+  body.solo .grid { display: block; max-width: none; margin: 0; padding: 0; gap: 0; }
+  body.solo .card-frame { background: transparent; box-shadow: none; padding: 0; border-radius: 0; display: none; }
+  body.solo .card-frame.solo-active { display: block; }
+  body.solo .scale-wrap { width: 1200px; height: 630px; aspect-ratio: auto; border-radius: 0; overflow: visible; }
+  body.solo .og { transform: none; }
+
+  /* ============================================================
+     OG CARD STYLES — each at native 1200×630
+     ============================================================ */
+
+  /* 01 · Minimal wordmark */
+  .og-01 {
+    background: var(--paper);
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    text-align: center;
+    color: var(--ink);
+  }
+  .og-01 .eyebrow {
+    font-family: var(--mono);
+    font-size: 22px; letter-spacing: 0.32em; text-transform: uppercase;
+    color: var(--faded);
+    margin-bottom: 28px;
+  }
+  .og-01 .wordmark {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 280px;
+    letter-spacing: -0.04em;
+    line-height: 0.85;
+  }
+  .og-01 .wordmark .dot { color: var(--ox); }
+  .og-01 .tagline {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 30px;
+    color: var(--faded);
+    margin-top: 36px;
+  }
+
+  /* 02 · Z avatar + wordmark */
+  .og-02 {
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    gap: 56px;
+  }
+  .og-02 .z-circle {
+    width: 280px; height: 280px;
+    background: var(--ink);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--paper);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 220px;
+    line-height: 1;
+    padding-bottom: 8px;
+  }
+  .og-02 .text-block .wordmark {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 160px;
+    letter-spacing: -0.04em;
+    line-height: 0.9;
+    color: var(--ink);
+  }
+  .og-02 .text-block .wordmark .dot { color: var(--ox); }
+  .og-02 .text-block .tagline {
+    font-family: var(--mono);
+    font-size: 18px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faded);
+    margin-top: 18px;
+  }
+
+  /* 03 · Operator statement */
+  .og-03 {
+    background: var(--paper);
+    padding: 88px 96px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    color: var(--ink);
+  }
+  .og-03 .eyebrow {
+    font-family: var(--mono);
+    font-size: 18px; letter-spacing: 0.22em; text-transform: uppercase;
+    color: var(--ox);
+  }
+  .og-03 .statement {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 88px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    max-width: 1020px;
+  }
+  .og-03 .statement em {
+    font-style: italic;
+    color: var(--ox);
+  }
+  .og-03 .byline {
+    font-family: var(--mono);
+    font-size: 20px;
+    color: var(--faded);
+    letter-spacing: 0.05em;
+  }
+  .og-03 .byline .name { color: var(--ink); font-weight: 600; }
+
+  /* 04 · Receipt / paper-printout */
+  .og-04 {
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+  }
+  .og-04 .receipt {
+    width: 720px;
+    background: #fffdf7;
+    box-shadow: 0 14px 30px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.06);
+    padding: 56px 64px;
+    font-family: var(--mono);
+    color: var(--ink);
+    font-size: 18px;
+    line-height: 1.7;
+    position: relative;
+  }
+  .og-04 .receipt::before, .og-04 .receipt::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0;
+    height: 16px;
+    background-image: linear-gradient(135deg, transparent 50%, #fffdf7 50%), linear-gradient(45deg, transparent 50%, #fffdf7 50%);
+    background-size: 24px 16px;
+    background-repeat: repeat-x;
+  }
+  .og-04 .receipt::before { top: -16px; }
+  .og-04 .receipt::after  { bottom: -16px; transform: scaleY(-1); }
+  .og-04 .receipt .head {
+    text-align: center;
+    font-weight: 700;
+    font-size: 28px;
+    letter-spacing: 0.12em;
+    border-bottom: 1px dashed var(--ink);
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+  }
+  .og-04 .receipt .row {
+    display: flex; justify-content: space-between;
+    font-size: 16px;
+  }
+  .og-04 .receipt .gap { height: 18px; }
+  .og-04 .receipt .footer-line {
+    text-align: center;
+    font-size: 14px;
+    color: var(--faded);
+    border-top: 1px dashed var(--ink);
+    padding-top: 18px;
+    margin-top: 18px;
+    letter-spacing: 0.1em;
+  }
+
+  /* 05 · Headshot + name */
+  .og-05 {
+    background: var(--paper);
+    display: flex; align-items: center; justify-content: center;
+    gap: 70px;
+    padding: 0 96px;
+  }
+  .og-05 .photo {
+    width: 360px; height: 360px;
+    border-radius: 50%;
+    background: url('https://img.zonted.com/about/bernard-huang-headshot.jpg') center/cover;
+    flex-shrink: 0;
+    box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  }
+  .og-05 .text .eyebrow {
+    font-family: var(--mono);
+    font-size: 16px; letter-spacing: 0.24em; text-transform: uppercase;
+    color: var(--ox);
+    margin-bottom: 14px;
+  }
+  .og-05 .text .name {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 88px;
+    line-height: 1;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    margin-bottom: 18px;
+  }
+  .og-05 .text .role {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--faded);
+    margin-bottom: 22px;
+    line-height: 1.3;
+    max-width: 540px;
+  }
+  .og-05 .text .domain {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--ink);
+    letter-spacing: 0.06em;
+  }
+
+  /* 06 · Terminal / dev aesthetic */
+  .og-06 {
+    background: #0e0c0a;
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: flex-start;
+    padding: 88px 96px;
+    color: #f4f1ea;
+    font-family: var(--mono);
+    position: relative;
+  }
+  .og-06 .scanline {
+    position: absolute; inset: 0;
+    background: repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      rgba(255,255,255,0.02) 3px,
+      rgba(255,255,255,0.02) 4px
+    );
+    pointer-events: none;
+  }
+  .og-06 .row1 { font-size: 22px; color: #7a716a; margin-bottom: 6px; letter-spacing: 0.05em; }
+  .og-06 .row2 { font-size: 56px; color: #f4f1ea; margin-bottom: 8px; letter-spacing: -0.01em; }
+  .og-06 .row2 .prompt { color: #d4862a; }
+  .og-06 .row2 .cmd { color: #f4f1ea; }
+  .og-06 .row2 .flag { color: #a7b8a3; }
+  .og-06 .row3 { font-size: 22px; color: #7a716a; margin-top: 24px; line-height: 1.5; }
+  .og-06 .row3 strong { color: #d4862a; font-weight: 500; }
+  .og-06 .cursor {
+    display: inline-block;
+    width: 18px; height: 56px;
+    background: #d4862a;
+    vertical-align: -10px;
+    margin-left: 8px;
+    animation: cursor-blink 1s steps(2) infinite;
+  }
+  @keyframes cursor-blink { 50% { opacity: 0; } }
+
+  /* 07 · Editorial cover */
+  .og-07 {
+    background: var(--paper);
+    padding: 80px;
+    display: flex; flex-direction: column;
+    justify-content: space-between;
+    border: 18px solid var(--ink);
+    color: var(--ink);
+  }
+  .og-07 .top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono);
+    font-size: 16px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faded);
+    border-bottom: 1px solid var(--rule);
+    padding-bottom: 16px;
+  }
+  .og-07 .top .vol { color: var(--ox); font-weight: 600; }
+  .og-07 .mid {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 220px;
+    line-height: 0.85;
+    letter-spacing: -0.05em;
+    text-align: center;
+  }
+  .og-07 .bottom {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 30px;
+    color: var(--faded);
+    border-top: 1px solid var(--rule);
+    padding-top: 16px;
+  }
+
+  /* 08 · Numbers receipt */
+  .og-08 {
+    background: var(--paper);
+    padding: 80px 96px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    gap: 56px;
+    color: var(--ink);
+  }
+  .og-08 .top {
+    display: flex; justify-content: space-between; align-items: baseline;
+    font-family: var(--mono);
+    font-size: 18px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--faded);
+  }
+  .og-08 .top .brand {
+    font-family: var(--display);
+    font-size: 56px;
+    letter-spacing: -0.03em;
+    color: var(--ink);
+    text-transform: none;
+  }
+  .og-08 .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    border-top: 2px solid var(--ink);
+    border-bottom: 2px solid var(--ink);
+  }
+  .og-08 .stat {
+    padding: 28px 12px;
+    border-right: 1px solid var(--rule);
+    text-align: center;
+  }
+  .og-08 .stat:last-child { border-right: none; }
+  .og-08 .stat .v {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 84px;
+    color: var(--ink);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .og-08 .stat .l {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--faded);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .og-08 .bottom-line {
+    text-align: center;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 28px;
+    color: var(--faded);
+  }
+
+  /* 09 · Stamp / monograph */
+  .og-09 {
+    background: var(--paper);
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(107, 26, 26, 0.04), transparent 45%),
+      radial-gradient(circle at 80% 80%, rgba(26, 24, 21, 0.04), transparent 45%);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    gap: 36px;
+  }
+  .og-09 .stamp {
+    width: 400px; height: 400px;
+    border: 8px solid var(--ox);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    color: var(--ox);
+  }
+  .og-09 .stamp::before {
+    content: '';
+    position: absolute;
+    inset: 14px;
+    border: 2px solid var(--ox);
+    border-radius: 50%;
+  }
+  .og-09 .stamp .z {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 280px;
+    line-height: 1;
+    padding-bottom: 12px;
+  }
+  .og-09 .stamp .ring-text {
+    position: absolute;
+    inset: 0;
+  }
+  .og-09 .domain {
+    font-family: var(--mono);
+    font-size: 22px;
+    letter-spacing: 0.36em;
+    text-transform: uppercase;
+    color: var(--ink);
+  }
+  .og-09 .tag {
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 22px;
+    color: var(--faded);
+    margin-top: -10px;
+  }
+
+  /* 10 · Hot take */
+  .og-10 {
+    background: var(--paper);
+    padding: 80px 96px;
+    display: flex; flex-direction: column;
+    justify-content: center;
+    gap: 36px;
+    color: var(--ink);
+  }
+  .og-10 .quotemark {
+    font-family: var(--display);
+    font-weight: 600;
+    font-size: 180px;
+    line-height: 0.6;
+    color: var(--ox);
+    height: 90px;
+  }
+  .og-10 .take {
+    font-family: var(--display);
+    font-weight: 500;
+    font-size: 76px;
+    line-height: 1.05;
+    letter-spacing: -0.025em;
+    color: var(--ink);
+    max-width: 1020px;
+  }
+  .og-10 .take em { font-style: italic; color: var(--ox); }
+  .og-10 .byline {
+    font-family: var(--mono);
+    font-size: 18px;
+    color: var(--faded);
+    letter-spacing: 0.06em;
+    border-top: 1px solid var(--rule);
+    padding-top: 18px;
+    display: flex; justify-content: space-between;
+  }
+  .og-10 .byline .name { color: var(--ink); font-weight: 600; text-transform: none; }
+  .og-10 .byline .domain { text-transform: lowercase; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1>OG Card Prototypes</h1>
+  <p>10 directions · 1200×630 native, displayed at 50% scale · zonted.com</p>
+</div>
+
+<div class="grid">
+
+  <!-- 01 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>01 · Minimal wordmark <span class="num">· 600×315 preview</span></span><a class="solo-link" href="?solo=01" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-01">
+        <div class="eyebrow">★  ★  ★</div>
+        <div class="wordmark">zonted<span class="dot">.</span></div>
+        <div class="tagline">honest writing on AI in production</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 02 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>02 · Z avatar + wordmark <span class="num">· echoes site logo</span></span><a class="solo-link" href="?solo=02" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-02">
+        <div class="z-circle">Z</div>
+        <div class="text-block">
+          <div class="wordmark">zonted<span class="dot">.</span></div>
+          <div class="tagline">since 2018</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>03 · Operator statement <span class="num">· homepage tagline</span></span><a class="solo-link" href="?solo=03" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-03">
+        <div class="eyebrow">zonted · since 2018</div>
+        <div class="statement">I build <em>fully autonomous</em> AI businesses. I share the work as it happens.</div>
+        <div class="byline"><span class="name">Bernard Huang</span> &nbsp;·&nbsp; zonted.com</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>04 · Receipt <span class="num">· tactile, weird</span></span><a class="solo-link" href="?solo=04" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-04">
+        <div class="receipt">
+          <div class="head">ZONTED</div>
+          <div class="row"><span>since</span><span>2018</span></div>
+          <div class="row"><span>operator</span><span>bernard huang</span></div>
+          <div class="row"><span>medium</span><span>essay + receipts</span></div>
+          <div class="row"><span>topic</span><span>AI in production</span></div>
+          <div class="row"><span>cadence</span><span>when it ships</span></div>
+          <div class="gap"></div>
+          <div class="row"><span>STATUS</span><span>★ subscribed</span></div>
+          <div class="footer-line">thank you · zonted.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>05 · Headshot + name <span class="num">· identity-forward</span></span><a class="solo-link" href="?solo=05" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-05">
+        <div class="photo"></div>
+        <div class="text">
+          <div class="eyebrow">zonted · operator notes</div>
+          <div class="name">Bernard Huang</div>
+          <div class="role">Honest writing on AI in production. Receipts included.</div>
+          <div class="domain">zonted.com</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>06 · Terminal / dev <span class="num">· operator aesthetic</span></span><a class="solo-link" href="?solo=06" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-06">
+        <div class="scanline"></div>
+        <div class="row1"># zonted.com — operator notes</div>
+        <div class="row2"><span class="prompt">$</span> <span class="cmd">zonted</span> <span class="flag">--honest</span><span class="cursor"></span></div>
+        <div class="row3">→ <strong>Bernard Huang</strong> · since 2018<br>→ writing about AI like it's my job (it is)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>07 · Editorial cover <span class="num">· like a journal</span></span><a class="solo-link" href="?solo=07" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-07">
+        <div class="top">
+          <span>Vol. VIII · since 2018</span>
+          <span class="vol">an independent letter</span>
+          <span>by Bernard Huang</span>
+        </div>
+        <div class="mid">ZONTED</div>
+        <div class="bottom">Honest writing on AI in production.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>08 · Numbers receipt <span class="num">· specific + verifiable</span></span><a class="solo-link" href="?solo=08" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-08">
+        <div class="top">
+          <span class="brand">zonted.</span>
+          <span>operator dashboard</span>
+        </div>
+        <div class="stats">
+          <div class="stat"><div class="v">20</div><div class="l">AI agents</div></div>
+          <div class="stat"><div class="v">35</div><div class="l">essays</div></div>
+          <div class="stat"><div class="v">5</div><div class="l">products</div></div>
+          <div class="stat"><div class="v">2018</div><div class="l">since</div></div>
+        </div>
+        <div class="bottom-line">— Bernard Huang. Honest writing on AI in production.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>09 · Wax-stamp monograph <span class="num">· brand mark</span></span><a class="solo-link" href="?solo=09" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-09">
+        <div class="stamp">
+          <div class="z">Z</div>
+        </div>
+        <div class="domain">zonted</div>
+        <div class="tag">since 2018 · Bernard Huang</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 ·····························································-->
+  <div class="card-frame">
+    <div class="card-label"><span>10 · Hot take <span class="num">· callback to recent post</span></span><a class="solo-link" href="?solo=10" target="_blank">view full →</a></div>
+    <div class="scale-wrap">
+      <div class="og og-10">
+        <div class="quotemark">“</div>
+        <div class="take">I write about AI like I'm losing my job over it. So far, that's been the better strategy.</div>
+        <div class="byline">
+          <span><span class="name">Bernard Huang</span></span>
+          <span class="domain">zonted.com</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  (function () {
+    var params = new URLSearchParams(location.search);
+    var solo = params.get('solo');
+    if (!solo) return;
+    var pad = solo.padStart(2, '0');
+    document.body.classList.add('solo');
+    var cards = document.querySelectorAll('.card-frame');
+    cards.forEach(function (c) {
+      var og = c.querySelector('.og');
+      if (og && og.classList.contains('og-' + pad)) c.classList.add('solo-active');
+    });
+  })();
+</script>
+
+</body>
+</html>
