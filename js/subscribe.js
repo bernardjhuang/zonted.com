@@ -54,13 +54,12 @@
         });
 
         if (resp.ok) {
-          emailInput.value = '';
+          // Redirect to the thanks page. Brief delay lets the button state
+          // update so the click feels acknowledged before navigation.
           button.textContent = '✓ Subscribed';
-          status.textContent = "You're on the list. I'll email you when the next post ships.";
-          status.hidden = false;
-          // Re-enabling a "subscribed" button is intentional — they may submit again
-          // with a different email if they want. Keep the success state visible.
-          setTimeout(function () { button.disabled = false; }, 600);
+          setTimeout(function () {
+            window.location.href = '/subscribe/confirmed/';
+          }, 250);
         } else {
           let msg = "Couldn't subscribe — try again?";
           try {
