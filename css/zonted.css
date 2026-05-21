@@ -209,16 +209,21 @@ img, video { max-width: 100%; height: auto; }
 }
 
 /* Lab operational badge + cron feed — live activity pulse in the hero.
-   Spec: handoff-homepage-cron. Status badge sits top-right of the hero,
-   feed sits between H1 and the byline so the page demonstrates
-   "the work as it happens" before introducing Bernard. */
+   Spec: handoff-homepage-cron. Feed sits between H1 and the byline; badge
+   floats to the right of the feed so the two form one operator-status row.
+   On mobile (≤640px), they stack — badge above feed. */
+.zn-hero-pulse {
+  display: flex;
+  align-items: flex-start;
+  gap: 32px;
+  margin: 20px 0 24px;
+}
 .zn-cron-status {
-  position: absolute;
-  top: 56px;
-  right: 0;
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  flex-shrink: 0;
+  margin-top: 10px;
   font-family: var(--mono);
   font-size: 11px;
   letter-spacing: 0.15em;
@@ -248,7 +253,8 @@ img, video { max-width: 100%; height: auto; }
 }
 
 .zn-cron-feed {
-  margin: 20px 0 24px;
+  flex: 1;
+  min-width: 0;
   font-family: var(--mono);
   font-size: 12px;
   color: var(--faded);
@@ -276,9 +282,12 @@ img, video { max-width: 100%; height: auto; }
 }
 
 @media (max-width: 640px) {
+  .zn-hero-pulse {
+    flex-direction: column;
+    gap: 10px;
+  }
   .zn-cron-status {
-    position: static;
-    margin-bottom: 12px;
+    margin-top: 0;
   }
   .zn-cron-feed {
     font-size: 11px;
