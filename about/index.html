@@ -151,39 +151,6 @@
             color: var(--text);
         }
 
-        /* Elsewhere */
-        .elsewhere {
-            margin-top: 3rem;
-            padding-top: 2rem;
-            border-top: 1px solid var(--border);
-        }
-
-        .elsewhere h2 {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            font-size: 0.8rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.08em;
-            color: var(--text-dim);
-            margin-bottom: 16px;
-        }
-
-        .elsewhere ul {
-            list-style: none;
-        }
-
-        .elsewhere li {
-            padding: 6px 0;
-        }
-
-        .elsewhere a {
-            color: var(--text);
-            text-decoration: underline;
-        }
-
-        .elsewhere a:hover {
-            color: var(--accent-hover);
-        }
 
         /* Footer */
         footer {
@@ -274,27 +241,12 @@
             <p>If you're building something AI-native (or trying to figure out if you should be), this is the unfiltered version from someone deep in it.</p>
         </div>
 
-        <div style="text-align:center;padding:2rem 0;margin-top:2.5rem;border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
-            <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.95rem;font-weight:600;color:var(--text);margin-bottom:6px;">Subscribe for new posts</div>
-            <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);margin-bottom:16px;">One email when I publish something new. No spam, unsubscribe anytime.</div>
+        <section id="subscribe" class="zn-subscribe">
+            <div class="zn-subscribe-copy">
+                <strong>Get new posts by email.</strong> One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.
+            </div>
             <form class="zn-subscribe-form" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe &rarr;</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
-        </div>
-
-        <h2 style="margin-top:3rem;">Start Here</h2>
-        <p>New to the site? These three pieces are a good introduction to how I think about building autonomous AI systems:</p>
-        <ol style="margin:1rem 0 0 1.5rem;">
-            <li style="margin-bottom:0.75rem;"><a href="/posts/slop-iterate-curate-ai-content/">Slop → Iterate → Curate</a> — My framework for AI content production. Why you have to start bad to get good, and how we killed most of our formats to scale the survivors.</li>
-            <li style="margin-bottom:0.75rem;"><a href="/posts/14x-ctr-gap/">The 14× CTR Gap</a> — What happened when I let agents target 1,200 niche pages instead of head terms. Real numbers from tabiji.ai.</li>
-            <li style="margin-bottom:0.75rem;"><a href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call</a> — How I'm thinking about AI infrastructure costs when every workflow is agent-driven.</li>
-        </ol>
-
-        <div class="elsewhere">
-            <h2>Socials</h2>
-            <ul>
-                <li><a href="https://www.linkedin.com/in/bernardjhuang/" rel="me">LinkedIn / bernardjhuang</a></li>
-                <li><a href="https://x.com/bernardjhuang" rel="me">X / @bernardjhuang</a></li>
-            </ul>
-        </div>
+        </section>
     </div>
     </main>
 
