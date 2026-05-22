@@ -122,35 +122,6 @@
             padding: 0 24px;
         }
 
-        /* Page title */
-        .page-title {
-            padding: 48px 0 2rem;
-            font-size: 2rem;
-            font-weight: 700;
-            letter-spacing: -0.02em;
-            line-height: 1.3;
-        }
-
-        /* Content */
-        .content p {
-            margin-bottom: 1.5rem;
-        }
-
-        .content p:last-child {
-            margin-bottom: 0;
-        }
-
-        /* Dropcap */
-        .dropcap::first-letter {
-            float: left;
-            font-size: 3.5rem;
-            line-height: 0.8;
-            font-weight: 700;
-            margin-right: 8px;
-            margin-top: 6px;
-            color: var(--text);
-        }
-
         /* ────────────────────────────────────────────────────────────────
          * /about/ as an email-client card — handoff-about-email
          * ──────────────────────────────────────────────────────────────── */
@@ -244,6 +215,15 @@
             margin: 0 0 18px;
             color: var(--ink);
         }
+        .mail-photo {
+            display: block;
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            margin: 0 0 22px;
+            border: 1px solid var(--mail-row);
+        }
         .mail-content p {
             margin: 0 0 16px;
             line-height: 1.6;
@@ -322,10 +302,6 @@
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
 
-        /* Mobile */
-        @media (max-width: 768px) {
-            .page-title { padding: 32px 0 1.5rem; font-size: 1.75rem; }
-        }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -349,12 +325,6 @@
     </nav>
 
     <main id="main">
-    <div class="container">
-        <h1 class="page-title">About</h1>
-
-        <img src="https://img.zonted.com/about/bernard-huang.jpg" alt="Bernard Huang" style="border-radius:8px;max-width:280px;margin:1.5rem 0;border:1px solid var(--border);">
-    </div>
-
     <section class="about-mail">
         <aside class="mail-sidebar">
             <h3>Inbox &middot; 4 unread</h3>
@@ -406,6 +376,8 @@
             </div>
 
             <h2>About me &mdash; the short version</h2>
+
+            <img class="mail-photo" src="https://img.zonted.com/about/bernard-huang.jpg" alt="Bernard Huang">
 
             <div class="mail-content">
                 <p>I&#x27;m Bernard Huang. Based in Austin, TX.</p>
