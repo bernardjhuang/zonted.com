@@ -232,6 +232,18 @@
         }
         .mail-content p strong { color: var(--ox); font-weight: 600; }
         .mail-content a { color: var(--ink); }
+        .mail-content code {
+            font-family: 'IBM Plex Mono', ui-monospace, monospace;
+            font-size: 0.92em;
+            background: #f4f3ee;
+            padding: 1px 5px;
+            border-radius: 3px;
+            color: var(--ink);
+        }
+        .mail-msg:focus-visible {
+            outline: 2px solid var(--ox);
+            outline-offset: -2px;
+        }
 
         .mail-sign { color: var(--ink); }
         @media (max-width: 760px) {
@@ -313,35 +325,35 @@
         <aside class="mail-sidebar">
             <h3>Inbox &middot; 4 unread</h3>
 
-            <article class="mail-msg unread active">
+            <article class="mail-msg unread active" data-msg-id="about" role="button" tabindex="0" aria-pressed="true">
                 <span class="tm">14:22</span>
                 <div class="fr">Bernard Huang</div>
                 <div class="sub">About me &mdash; the short version</div>
                 <div class="pre">I&#x27;m Bernard Huang. Based in Austin, TX&hellip;</div>
             </article>
 
-            <article class="mail-msg unread">
+            <article class="mail-msg unread" data-msg-id="openclaw" role="button" tabindex="0" aria-pressed="false">
                 <span class="tm">14:18</span>
                 <div class="fr">openclaw</div>
                 <div class="sub">[shipped] Tulum tire-scam reel</div>
                 <div class="pre">3.88M views and counting. Reel published to IG, TT, YT&hellip;</div>
             </article>
 
-            <article class="mail-msg unread">
+            <article class="mail-msg unread" data-msg-id="hermes" role="button" tabindex="0" aria-pressed="false">
                 <span class="tm">14:11</span>
                 <div class="fr">hermes</div>
                 <div class="sub">[carousel] Spain &middot; 5 slides</div>
                 <div class="pre">Published to IG. 0 errors. Pinterest pin queued for&hellip;</div>
             </article>
 
-            <article class="mail-msg unread">
+            <article class="mail-msg unread" data-msg-id="substack" role="button" tabindex="0" aria-pressed="false">
                 <span class="tm">13:30</span>
                 <div class="fr">Zonted Substack</div>
                 <div class="sub">+12 new subscribers &middot; letter 047</div>
                 <div class="pre">Confirmed: 8,420 &rarr; 8,432. Welcome cohort processed.</div>
             </article>
 
-            <article class="mail-msg">
+            <article class="mail-msg" data-msg-id="codex" role="button" tabindex="0" aria-pressed="false">
                 <span class="tm">13:14</span>
                 <div class="fr">codex</div>
                 <div class="sub">[patched] /api/scams 500 error</div>
@@ -349,7 +361,7 @@
             </article>
         </aside>
 
-        <div class="mail-body">
+        <div class="mail-body" data-msg-id="about">
             <div class="mail-meta">
                 <div class="mail-avatar" aria-hidden="true">BH</div>
                 <div>
@@ -383,6 +395,104 @@
                 <p class="mail-sign">&mdash; Bernard</p>
             </div>
         </div>
+
+        <div class="mail-body" data-msg-id="openclaw" hidden>
+            <div class="mail-meta">
+                <div class="mail-avatar" aria-hidden="true" style="background:radial-gradient(circle at 30% 30%, #d97706, #2a1a06);">oc</div>
+                <div>
+                    <b>openclaw</b>
+                    <a href="mailto:openclaw@lab.zonted.com">&lt;openclaw@lab.zonted.com&gt;</a>
+                    <div class="mail-meta-sub">auto-report &middot; May 21, 2026 14:18 &middot; reel pipeline</div>
+                </div>
+            </div>
+
+            <h2>[shipped] Tulum tire-scam reel</h2>
+
+            <div class="mail-content">
+                <p>Auto-report from the reel pipeline.</p>
+
+                <p>Published to <strong>Instagram</strong>, <strong>TikTok</strong>, and <strong>YouTube Shorts</strong> at 14:18 UTC. Title variant B won the staging A/B at +18% retention.</p>
+
+                <p>Performance to date: <strong>3,884,212 views</strong> across platforms (IG 3.61M, TikTok 228K, YT 41K). Driving top-of-funnel for <a href="https://tabiji.ai/scams/tulum/">tabiji.ai/scams/tulum</a>. 0 render errors, 0 cross-post errors.</p>
+
+                <p>Next scheduled hop: Pinterest at 18:00 UTC, then a Substack note in tomorrow&#x27;s digest.</p>
+
+                <p class="mail-sign">&mdash; openclaw, reel pipeline &middot; stack 0.14.2</p>
+            </div>
+        </div>
+
+        <div class="mail-body" data-msg-id="hermes" hidden>
+            <div class="mail-meta">
+                <div class="mail-avatar" aria-hidden="true" style="background:radial-gradient(circle at 30% 30%, #ec4899, #2a0a1a);">hm</div>
+                <div>
+                    <b>hermes</b>
+                    <a href="mailto:hermes@lab.zonted.com">&lt;hermes@lab.zonted.com&gt;</a>
+                    <div class="mail-meta-sub">auto-report &middot; May 21, 2026 14:11 &middot; carousel runner</div>
+                </div>
+            </div>
+
+            <h2>[carousel] Spain &middot; 5 slides</h2>
+
+            <div class="mail-content">
+                <p>Carousel <em>&ldquo;Spain &middot; 5 worth-knowing scams&rdquo;</em> shipped to Instagram at 14:11 UTC.</p>
+
+                <p>All five slides rendered clean. Captions passed the <a href="https://veracityapi.com">Veracity</a> pre-ship audit: <strong>0 holds, 0 rejects</strong>.</p>
+
+                <p>Pinterest pin queued for 16:00 UTC. Substack mention slotted into letter 048 draft. Tabiji destination page <a href="https://tabiji.ai/scams/spain/">/scams/spain</a> updated with a fresh hero crop.</p>
+
+                <p class="mail-sign">&mdash; hermes, the carousel runner</p>
+            </div>
+        </div>
+
+        <div class="mail-body" data-msg-id="substack" hidden>
+            <div class="mail-meta">
+                <div class="mail-avatar" aria-hidden="true" style="background:radial-gradient(circle at 30% 30%, #f97316, #2a1106);">ZS</div>
+                <div>
+                    <b>Zonted Substack</b>
+                    <a href="mailto:substack@zonted.com">&lt;substack@zonted.com&gt;</a>
+                    <div class="mail-meta-sub">weekly digest &middot; May 21, 2026 13:30 &middot; letter 047</div>
+                </div>
+            </div>
+
+            <h2>+12 new subscribers &middot; letter 047</h2>
+
+            <div class="mail-content">
+                <p>Letter 047 (<em>&ldquo;How I&#x27;m running 19 cron jobs and one human&rdquo;</em>) sent to 8,420 subscribers at 09:00 UTC.</p>
+
+                <p>Engagement: <strong>open rate 41.2%</strong>, click rate 6.7%. Top click was the <a href="/metrics/">live metrics page</a>.</p>
+
+                <p>Audience change since last digest: <strong>+12 new subscribers</strong> (8,420 &rarr; 8,432). 0 unsubscribes. Welcome cohort processed; first welcome landed in 11 of 12 inboxes within the hour.</p>
+
+                <p>Next letter draft (048): &ldquo;The 14&times; CTR Gap, revisited&rdquo; &mdash; queued for Saturday.</p>
+
+                <p class="mail-sign">&mdash; Zonted Substack, auto-digest</p>
+            </div>
+        </div>
+
+        <div class="mail-body" data-msg-id="codex" hidden>
+            <div class="mail-meta">
+                <div class="mail-avatar" aria-hidden="true" style="background:radial-gradient(circle at 30% 30%, #1a7a3c, #06200f);">cx</div>
+                <div>
+                    <b>codex</b>
+                    <a href="mailto:codex@lab.zonted.com">&lt;codex@lab.zonted.com&gt;</a>
+                    <div class="mail-meta-sub">incident report &middot; May 21, 2026 13:14 &middot; auto-resolved</div>
+                </div>
+            </div>
+
+            <h2>[patched] /api/scams 500 error</h2>
+
+            <div class="mail-content">
+                <p>Health-check tripped on <code>/api/scams</code> at 13:11:08 UTC.</p>
+
+                <p>500 trace: unhandled <code>NoneType</code> when the upstream Tabiji rate-limit returned an empty payload during a midday burst. Affected ~140 requests during the 3-minute window before isolation.</p>
+
+                <p>Patch: added a retry with exponential backoff and a null-coalesce fallback. Tested in shadow against the last hour of traffic, deployed at 13:14:02 UTC. <strong>Stack green.</strong> Total exposure: 2 minutes 54 seconds.</p>
+
+                <p>Postmortem logged to D1 (incident #047). Adding the rate-limit response shape to the contract test next sprint so this doesn&#x27;t happen twice.</p>
+
+                <p class="mail-sign">&mdash; codex, your incident handler</p>
+            </div>
+        </div>
     </section>
 
     <div class="container">
@@ -411,5 +521,45 @@
     </div>
 </footer>
 <script defer src="/js/subscribe.js"></script>
+<script>
+// Email-client interactivity: click a sidebar row to swap the body.
+// Each <article class="mail-msg" data-msg-id="X"> maps to a
+// <div class="mail-body" data-msg-id="X">. Click marks the row as
+// .active (and drops .unread), shows that body, hides the others.
+(function () {
+  var sidebar = document.querySelector('.mail-sidebar');
+  if (!sidebar) return;
+  var msgs = sidebar.querySelectorAll('.mail-msg');
+  var bodies = document.querySelectorAll('.about-mail .mail-body');
+  var inboxHeader = sidebar.querySelector('h3');
+  if (!msgs.length || !bodies.length) return;
+
+  function activate(id) {
+    msgs.forEach(function (m) {
+      var match = m.dataset.msgId === id;
+      m.classList.toggle('active', match);
+      m.setAttribute('aria-pressed', match ? 'true' : 'false');
+      if (match) m.classList.remove('unread');
+    });
+    bodies.forEach(function (b) {
+      b.hidden = b.dataset.msgId !== id;
+    });
+    if (inboxHeader) {
+      var remaining = sidebar.querySelectorAll('.mail-msg.unread').length;
+      inboxHeader.textContent = 'Inbox · ' + remaining + ' unread';
+    }
+  }
+
+  msgs.forEach(function (m) {
+    m.addEventListener('click', function () { activate(m.dataset.msgId); });
+    m.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        activate(m.dataset.msgId);
+      }
+    });
+  });
+})();
+</script>
 </body>
 </html>
