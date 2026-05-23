@@ -8,10 +8,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
-    <title>Plan 3×, Build Once: How Three Models Plan What Two Models Ship</title>
+    <title>Plan 3×, Build Once: How Three Models Plan What One Model Ships</title>
     <meta name="description" content="We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination: Opus's architecture + GPT-5.5's product strategy. Single-model planning would have shipped half a product.">
     <link rel="canonical" href="https://zonted.com/posts/plan-3x-build-once/">
-    <meta property="og:title" content="Plan 3×, Build Once: How Three Models Plan What Two Models Ship">
+    <meta property="og:title" content="Plan 3×, Build Once: How Three Models Plan What One Model Ships">
     <meta property="og:description" content="Opus designed a writer's app. GPT-5.5 designed a B2B API tool. Gemini picked the winning combo. The 3-model planning loop behind every one-shot build at Zonted.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://img.zonted.com/resources/plan-3x-build-once/gemini-synthesis.png">
@@ -24,10 +24,10 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Plan 3×, Build Once: How Three Models Plan What Two Models Ship","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-22","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/plan-3x-build-once/","description":"We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination. Single-model planning would have shipped half a product."}
+    {"@context":"https://schema.org","@type":"Article","headline":"Plan 3×, Build Once: How Three Models Plan What One Model Ships","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-22","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/plan-3x-build-once/","description":"We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination. Single-model planning would have shipped half a product."}
     </script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Plan 3×, Build Once: How Three Models Plan What Two Models Ship"}]}
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Plan 3×, Build Once: How Three Models Plan What One Model Ships"}]}
     </script>
     <style>
         :root {
@@ -202,7 +202,7 @@
 </aside>
 <div class="article-content">
     <div class="article-container">
-        <h1>Plan 3&times;, Build Once: How Three Models Plan What Two Models Ship</h1>
+        <h1>Plan 3&times;, Build Once: How Three Models Plan What One Model Ships</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
@@ -221,7 +221,7 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">For every meaningfully complex build, I plan in three models. Opus 4.7 plans it. GPT-5.5 plans it. Gemini 3.1 Pro audits both and picks the Goldilocks. Then Hermes + GPT-5.5 one-shot the implementation against the reconciled plan.</p>
+                <p class="tldr-thesis">For every meaningfully complex build, I plan in three models. Opus 4.7 plans it. GPT-5.5 plans it. Gemini 3.1 Pro audits both and picks the Goldilocks. Then GPT-5.5 one-shots the implementation against the reconciled plan.</p>
                 <ul>
                     <li>The 3-model loop has shipped three one-shot builds so far: the Veracity Chrome extension, the Palmaura backend, and now the VeracityAPI Text Linter.</li>
                     <li>The receipts: Opus over-indexes on architecture for the wrong audience. GPT-5.5 over-indexes on conversion with the wrong technical primitives. Gemini reliably picks the half each model got right.</li>
@@ -240,7 +240,7 @@
                 <li><strong>Gemini 3.1 Pro audits both.</strong> Picks the winning combination. Flags what each model missed. Patches the synthesis.</li>
             </ol>
 
-            <p>Then <a href="https://huggingface.co/NousResearch">Hermes (Nous Research's open-source model)</a> + GPT-5.5 one-shot the implementation against the Gemini-reconciled plan, stepping through the milestones with subagent-driven development.</p>
+            <p>Then GPT-5.5 one-shots the implementation against the Gemini-reconciled plan, stepping through the milestones with subagent-driven development.</p>
 
             <p>The first time I tried this I was skeptical. Three planning passes felt like overhead. By the third build I stopped feeling silly. The Goldilocks plan is the artifact I needed all along.</p>
 
@@ -346,7 +346,7 @@
 
             <h2 id="one-shot">The one-shot</h2>
 
-            <p>The Goldilocks plan goes to Hermes + GPT-5.5 as the implementing pair. We step through the milestones with subagent-driven development &mdash; the plan itself is the spec.</p>
+            <p>The Goldilocks plan goes to GPT-5.5 as the implementer. We step through the milestones with subagent-driven development &mdash; the plan itself is the spec.</p>
 
             <p>For the text linter, that is 14 milestones from shared analyzer contracts &rarr; parser &rarr; dictionaries &rarr; metrics &rarr; scoring &rarr; browser bundle &rarr; public page &rarr; validation &rarr; endpoint &rarr; conversion path &rarr; MCP &rarr; docs &rarr; eval harness &rarr; feedback.</p>
 
@@ -355,7 +355,7 @@
             <ol>
                 <li><strong>Veracity Chrome extension.</strong> Clean one-shot. The Opus plan wanted a popup; Gemini called the side panel for context-window economics. The build worked on first deploy.</li>
                 <li><strong>Palmaura backend.</strong> Clean one-shot. The iOS app side had more hiccups &mdash; Swift, Xcode, and App Store review introduce variance that doesn't exist in Cloudflare Workers &mdash; but the planning workflow itself held.</li>
-                <li><strong>VeracityAPI Text Linter.</strong> Currently in milestone 1 with Hermes. (If you're reading this and the editor isn't live yet, check back.)</li>
+                <li><strong>VeracityAPI Text Linter.</strong> Currently in milestone 1 with GPT-5.5. (If you're reading this and the editor isn't live yet, check back.)</li>
             </ol>
 
             <h2 id="why-three">Why three, not two</h2>
