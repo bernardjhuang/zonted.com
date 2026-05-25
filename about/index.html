@@ -245,6 +245,42 @@
         }
 
         .mail-sign { color: var(--ink); }
+
+        /* Wandering Bernard sprite — sits below the sign-off in the about
+           email body. 4-direction walk cycle, 96×96 sprite cells displayed
+           at 48×48. JS handles position + frame; CSS sets the chrome. */
+        .bernard-stage {
+            position: relative;
+            width: 100%;
+            height: 120px;
+            margin-top: 18px;
+            border-top: 1px dashed var(--mail-row);
+            overflow: hidden;
+        }
+        .bernard-sprite {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 48px;
+            height: 48px;
+            background-image: url('https://img.zonted.com/about/bernard-sprite.png');
+            background-size: 192px 192px;
+            background-position: 0 0;
+            background-repeat: no-repeat;
+            image-rendering: pixelated;
+            image-rendering: crisp-edges;
+            will-change: transform, background-position;
+        }
+        .bernard-sprite.rebecca-sprite {
+            background-image: url('https://img.zonted.com/about/rebecca-sprite.png');
+        }
+        @media (prefers-reduced-motion: reduce) {
+            /* JS gates animation off; this keeps him centered and still. */
+            .bernard-stage { height: 96px; }
+        }
+        @media (max-width: 480px) {
+            .bernard-stage { height: 100px; }
+        }
         @media (max-width: 760px) {
             .about-mail { grid-template-columns: 1fr; margin: 0 16px 2rem; }
             .mail-sidebar {
@@ -321,6 +357,7 @@
 
     <main id="main">
     <section class="about-mail">
+        <div id="mail-announcer" aria-live="polite" aria-atomic="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"></div>
         <aside class="mail-sidebar">
             <h3>Inbox &middot; 4 unread</h3>
 
@@ -392,6 +429,11 @@
                 <p>If you&#x27;re building something AI-native (or trying to figure out if you should be), this is the unfiltered version from someone deep in it.</p>
 
                 <p class="mail-sign">&mdash; Bernard</p>
+
+                <div class="bernard-stage" aria-hidden="true">
+                    <div class="bernard-sprite" data-sprite="bernard"></div>
+                    <div class="bernard-sprite rebecca-sprite" data-sprite="rebecca"></div>
+                </div>
             </div>
         </div>
 
@@ -533,6 +575,7 @@
   var inboxHeader = sidebar.querySelector('h3');
   if (!msgs.length || !bodies.length) return;
 
+  var announcer = document.getElementById('mail-announcer');
   function activate(id) {
     msgs.forEach(function (m) {
       var match = m.dataset.msgId === id;
@@ -547,6 +590,12 @@
       var remaining = sidebar.querySelectorAll('.mail-msg.unread').length;
       inboxHeader.textContent = 'Inbox · ' + remaining + ' unread';
     }
+    // Announce the newly opened email to screen readers
+    if (announcer) {
+      var visible = Array.prototype.find.call(bodies, function (b) { return !b.hidden; });
+      var subj = visible && visible.querySelector('h2');
+      announcer.textContent = subj ? 'Showing: ' + subj.textContent.trim() : '';
+    }
   }
 
   msgs.forEach(function (m) {
@@ -558,6 +607,121 @@
       }
     });
   });
+})();
+
+// Wandering pixel-art sprites on /about/. Currently: Bernard + Rebecca.
+// Each sprite gets its own independent state machine — they wander around
+// the same stage without coordination, occasionally crossing paths.
+//
+// State machine per sprite: walks 1.5–4s in a random direction, then idles
+// 0.8–2.3s, then picks a new state. Bounces off stage edges. Walk-cycle
+// frame order 0,1,2,3 (neutral, left_step, neutral, right_step) per the
+// sprite package metadata.
+(function () {
+  var stage = document.querySelector('.bernard-stage');
+  if (!stage) return;
+  var spriteEls = stage.querySelectorAll('.bernard-sprite');
+  if (!spriteEls.length) return;
+
+  var TILE = 48;
+  var DIR_ROW = { down: 0, left: 1, right: 2, up: 3 };
+  var VEC = {
+    down:  { dx: 0,  dy: 1  },
+    left:  { dx: -1, dy: 0  },
+    right: { dx: 1,  dy: 0  },
+    up:    { dx: 0,  dy: -1 },
+  };
+  var FRAME_SEQ = [0, 1, 2, 3];
+  var SPEED_PX_PER_MS = 0.045;
+  var FRAME_DUR_MS = 180;
+  var reduced = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  function makeSprite(el, startBias) {
+    // startBias: -1 → start on left third, +1 → start on right third, 0 → center
+    var maxX = stage.clientWidth - TILE;
+    var startX = stage.clientWidth / 2 - TILE / 2 + startBias * stage.clientWidth * 0.25;
+    return {
+      el: el,
+      x: Math.max(0, Math.min(maxX, startX)),
+      y: Math.max(0, stage.clientHeight / 2 - TILE / 2),
+      dir: startBias < 0 ? 'right' : 'left',
+      frame: 0,
+      walking: true,
+      walkTimer: 0,
+      stateTimer: 600 + Math.random() * 1400,
+    };
+  }
+
+  function pickNewState(s) {
+    s.walking = Math.random() < 0.72;
+    if (s.walking) {
+      var roll = Math.random();
+      if (roll < 0.4) s.dir = 'right';
+      else if (roll < 0.8) s.dir = 'left';
+      else if (roll < 0.9) s.dir = 'down';
+      else s.dir = 'up';
+    }
+    s.stateTimer = s.walking
+      ? 1500 + Math.random() * 2500
+      : 800 + Math.random() * 1500;
+  }
+
+  function paint(s) {
+    s.el.style.transform = 'translate(' + Math.round(s.x) + 'px,' + Math.round(s.y) + 'px)';
+    s.el.style.backgroundPosition = (-FRAME_SEQ[s.frame] * TILE) + 'px ' + (-DIR_ROW[s.dir] * TILE) + 'px';
+  }
+
+  function stepSprite(s, dt) {
+    s.stateTimer -= dt;
+    if (s.stateTimer <= 0) pickNewState(s);
+
+    if (s.walking) {
+      var v = VEC[s.dir];
+      s.x += v.dx * SPEED_PX_PER_MS * dt;
+      s.y += v.dy * SPEED_PX_PER_MS * dt;
+      var maxX = stage.clientWidth - TILE;
+      var maxY = stage.clientHeight - TILE;
+      if (s.x < 0)    { s.x = 0;    s.dir = 'right'; }
+      if (s.x > maxX) { s.x = maxX; s.dir = 'left'; }
+      if (s.y < 0)    { s.y = 0;    s.dir = 'down'; }
+      if (s.y > maxY) { s.y = maxY; s.dir = 'up'; }
+
+      s.walkTimer += dt;
+      while (s.walkTimer >= FRAME_DUR_MS) {
+        s.walkTimer -= FRAME_DUR_MS;
+        s.frame = (s.frame + 1) % FRAME_SEQ.length;
+      }
+    } else {
+      s.frame = 0;
+    }
+  }
+
+  // Bernard starts left-of-center, Rebecca starts right-of-center.
+  var biases = [-0.6, 0.6];
+  var sprites = Array.prototype.map.call(spriteEls, function (el, i) {
+    var s = makeSprite(el, biases[i] || 0);
+    pickNewState(s);
+    paint(s);
+    return s;
+  });
+
+  if (reduced) {
+    // Static pose, neutral frame. Hold positions.
+    sprites.forEach(function (s) { s.frame = 0; s.dir = 'down'; paint(s); });
+    return;
+  }
+
+  var lastT = performance.now();
+  function tick(now) {
+    var dt = now - lastT;
+    lastT = now;
+    sprites.forEach(function (s) {
+      stepSprite(s, dt);
+      paint(s);
+    });
+    requestAnimationFrame(tick);
+  }
+  requestAnimationFrame(tick);
 })();
 </script>
 </body>

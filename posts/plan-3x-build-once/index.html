@@ -9,7 +9,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <title>Plan 3×, Build Once: How Three Models Plan What One Model Ships</title>
-    <meta name="description" content="We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination: Opus's architecture + GPT-5.5's product strategy. Single-model planning would have shipped half a product.">
+    <meta name="description" content="We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.">
     <link rel="canonical" href="https://zonted.com/posts/plan-3x-build-once/">
     <meta property="og:title" content="Plan 3×, Build Once: How Three Models Plan What One Model Ships">
     <meta property="og:description" content="Opus designed a writer's app. GPT-5.5 designed a B2B API tool. Gemini picked the winning combo. The 3-model planning loop behind every one-shot build at Zonted.">
@@ -24,7 +24,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Plan 3×, Build Once: How Three Models Plan What One Model Ships","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-22","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/plan-3x-build-once/","description":"We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination. Single-model planning would have shipped half a product."}
+    {"@context":"https://schema.org","@type":"Article","headline":"Plan 3×, Build Once: How Three Models Plan What One Model Ships","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-22","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/plan-3x-build-once/","description":"We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature. Gemini 3.1 Pro audited both and picked the winning combination. Single-model planning would have shipped half a product."}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Plan 3×, Build Once: How Three Models Plan What One Model Ships"}]}
@@ -204,7 +204,7 @@
     <div class="article-container">
         <h1>Plan 3&times;, Build Once: How Three Models Plan What One Model Ships</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
-            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
                 <div style="font-size:0.85rem;color:var(--text-muted);">May 22, 2026 &middot; 7 min read</div>
@@ -287,14 +287,14 @@
             <p>I handed all three plans to Gemini and asked it to audit cold. The synthesis headline was the quote at the top of this post:</p>
 
             <figure>
-                <img src="https://img.zonted.com/resources/plan-3x-build-once/gemini-synthesis.png" alt="Gemini 3.1 Pro's synthesis verdict: Opus designed a consumer SaaS application, GPT-5.5 designed a B2B API marketing tool, GPT-5.5 has the winning product strategy but Opus has the winning technical architecture.">
+                <img  src="https://img.zonted.com/resources/plan-3x-build-once/gemini-synthesis.png" width="1884" height="1444" alt="Gemini 3.1 Pro's synthesis verdict: Opus designed a consumer SaaS application, GPT-5.5 designed a B2B API marketing tool, GPT-5.5 has the winning product strategy but Opus has the winning technical architecture.">
                 <figcaption>Gemini 3.1 Pro auditing the Opus and GPT-5.5 plans for the VeracityAPI Text Linter. The split between &ldquo;winning product strategy&rdquo; and &ldquo;winning technical architecture&rdquo; is the whole game.</figcaption>
             </figure>
 
             <p>Then I asked Gemini to break down what each model got specifically right and wrong. The detail on GPT-5.5 alone was sharp:</p>
 
             <figure>
-                <img src="https://img.zonted.com/resources/plan-3x-build-once/gemini-gpt-audit.png" alt="Gemini's audit of what GPT-5.5 got right and wrong. Right: persona match for developers not students, warning about Python ML dependency hell, riding the MCP distribution wave. Wrong: web UI first sequencing, missed context window economics for agents, assumed local ML is required.">
+                <img  src="https://img.zonted.com/resources/plan-3x-build-once/gemini-gpt-audit.png" width="1842" height="982" alt="Gemini's audit of what GPT-5.5 got right and wrong. Right: persona match for developers not students, warning about Python ML dependency hell, riding the MCP distribution wave. Wrong: web UI first sequencing, missed context window economics for agents, assumed local ML is required.">
                 <figcaption>Gemini's audit of GPT-5.5's plan. The &ldquo;context window economics&rdquo; miss is the one I'd never have caught on my own &mdash; humans read JSON differently than agents do.</figcaption>
             </figure>
 
@@ -408,9 +408,9 @@
             <section class="zn-recommended">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
-                <li><a class="zn-recommended-title" href="/posts/stakes-priming/">Stakes Priming in Prompts: I Told an AI I&#x27;d Lose My Job. The Audit Got 24% Better.</a><p class="zn-recommended-dek">Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them. The only variable in the prompt: whether I…</p></li>
-                <li><a class="zn-recommended-title" href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call.</a><p class="zn-recommended-dek">Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.…</p></li>
-                <li><a class="zn-recommended-title" href="/posts/openclaw-vs-claude-code-freedom/">OpenClaw vs Claude Code: I Choose Freedom</a><p class="zn-recommended-dek">A 5-PR run on tabiji content cost $137 in API tokens last week. The same throughput on a Max plan is a ~9× subsidy. Subsidies end. Why my recurring crons…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/stakes-priming/">Stakes Priming in Prompts: I Told an AI I&#x27;d Lose My Job. The Audit Got 24% Better.</a><p class="zn-recommended-dek">Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call.</a><p class="zn-recommended-dek">Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/openclaw-vs-claude-code-freedom/">OpenClaw vs Claude Code: I Choose Freedom</a><p class="zn-recommended-dek">A 5-PR run on tabiji content cost $137 in API tokens last week. The same throughput on a Max plan is a ~9× subsidy. Subsidies end.</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->

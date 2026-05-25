@@ -128,7 +128,7 @@ export async function onRequestPost(context) {
     }
 
     if (isFresh) {
-      const welcomeWork = sendWelcomeEmail(env.RESEND_API_KEY, email).catch((err) => {
+      const welcomeWork = sendWelcomeEmail(env.RESEND_API_KEY, email, env.SLACK_WELCOME_BCC).catch((err) => {
         console.error('Welcome email failed (non-fatal):', err);
       });
       if (typeof waitUntil === 'function') {
@@ -145,25 +145,31 @@ export async function onRequestPost(context) {
   }
 }
 
-async function sendWelcomeEmail(apiKey, to) {
+async function sendWelcomeEmail(apiKey, to, slackBcc) {
+  // BCC to the Slack email-into-channel address (env: SLACK_WELCOME_BCC) so
+  // each welcome becomes a Slack post in #zonted. Cheaper than a webhook.
+  // When the env var is unset, the email goes out without the BCC.
+  const body = {
+    from: 'Bernard Huang <bernard@zonted.com>',
+    to: [to],
+    subject: "You're subscribed to the zonted newsletter",
+    text:
+      "Thanks for subscribing to Zonted. I'll email you when the next post ships — " +
+      "one email per post, no drips, no welcome series.\n\n" +
+      "— Bernard",
+  };
+  // Only attach BCC if env var is a real-looking string (defends against
+  // an empty string or non-string sneaking through).
+  if (typeof slackBcc === 'string' && slackBcc.includes('@')) {
+    body.bcc = [slackBcc];
+  }
   const resp = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
       'Authorization': `Bearer ${apiKey}`,
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({
-      from: 'Bernard Huang <bernard@zonted.com>',
-      to: [to],
-      // BCC to the Slack email-into-channel address so each welcome
-      // becomes a Slack post in #zonted. Cheaper than a webhook.
-      bcc: ['zonted-aaaatiivdnlzaxfx56mdscopey@psyduckler.slack.com'],
-      subject: "You're subscribed to the zonted newsletter",
-      text:
-        "Thanks for subscribing to Zonted. I'll email you when the next post ships — " +
-        "one email per post, no drips, no welcome series.\n\n" +
-        "— Bernard",
-    }),
+    body: JSON.stringify(body),
   });
   if (!resp.ok) {
     const text = await resp.text();
