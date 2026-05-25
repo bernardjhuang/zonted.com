@@ -246,15 +246,26 @@
 
         .mail-sign { color: var(--ink); }
 
-        /* Wandering Bernard sprite — sits below the sign-off in the about
-           email body. 4-direction walk cycle, 96×96 sprite cells displayed
-           at 48×48. JS handles position + frame; CSS sets the chrome. */
+        /* Sign-off row — puts the "— Bernard" line and the wandering sprite
+           stage on the same baseline so the sprites only take horizontal
+           white space, not a separate band below the body copy. */
+        .mail-signoff-row {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            margin: 0 0 16px;
+        }
+        .mail-signoff-row .mail-sign { margin: 0; flex-shrink: 0; }
+
+        /* Wandering Bernard + Rebecca sprites — walk horizontally inside the
+           sign-off row to the right of "— Bernard". 96×96 sprite cells
+           displayed at 48×48. JS handles position + frame; CSS sets the
+           chrome. */
         .bernard-stage {
             position: relative;
-            width: 100%;
-            height: 120px;
-            margin-top: 18px;
-            border-top: 1px dashed var(--mail-row);
+            flex: 1 1 auto;
+            min-width: 0;
+            height: 56px;
             overflow: hidden;
         }
         .bernard-sprite {
@@ -273,13 +284,6 @@
         }
         .bernard-sprite.rebecca-sprite {
             background-image: url('https://img.zonted.com/about/rebecca-sprite.png');
-        }
-        @media (prefers-reduced-motion: reduce) {
-            /* JS gates animation off; this keeps him centered and still. */
-            .bernard-stage { height: 96px; }
-        }
-        @media (max-width: 480px) {
-            .bernard-stage { height: 100px; }
         }
         @media (max-width: 760px) {
             .about-mail { grid-template-columns: 1fr; margin: 0 16px 2rem; }
@@ -428,11 +432,12 @@
 
                 <p>If you&#x27;re building something AI-native (or trying to figure out if you should be), this is the unfiltered version from someone deep in it.</p>
 
-                <p class="mail-sign">&mdash; Bernard</p>
-
-                <div class="bernard-stage" aria-hidden="true">
-                    <div class="bernard-sprite" data-sprite="bernard"></div>
-                    <div class="bernard-sprite rebecca-sprite" data-sprite="rebecca"></div>
+                <div class="mail-signoff-row">
+                    <p class="mail-sign">&mdash; Bernard</p>
+                    <div class="bernard-stage" aria-hidden="true">
+                        <div class="bernard-sprite" data-sprite="bernard"></div>
+                        <div class="bernard-sprite rebecca-sprite" data-sprite="rebecca"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -655,11 +660,8 @@
   function pickNewState(s) {
     s.walking = Math.random() < 0.72;
     if (s.walking) {
-      var roll = Math.random();
-      if (roll < 0.4) s.dir = 'right';
-      else if (roll < 0.8) s.dir = 'left';
-      else if (roll < 0.9) s.dir = 'down';
-      else s.dir = 'up';
+      // Horizontal-only: stage is short, vertical wander looks cramped.
+      s.dir = Math.random() < 0.5 ? 'right' : 'left';
     }
     s.stateTimer = s.walking
       ? 1500 + Math.random() * 2500
