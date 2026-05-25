@@ -629,11 +629,7 @@
   if (!spriteEls.length) return;
 
   var TILE = 48;
-  // agent-sprite-forge mislabeled the sheet rows: row 1 ("left") actually
-  // draws the character facing right, and row 2 ("right") draws them facing
-  // left. Swapping the row indices is the cheapest fix that keeps the sheet
-  // bytes untouched and makes the rendered direction match the movement dir.
-  var DIR_ROW = { down: 0, left: 2, right: 1, up: 3 };
+  var DIR_ROW = { down: 0, left: 1, right: 2, up: 3 };
   var VEC = {
     down:  { dx: 0,  dy: 1  },
     left:  { dx: -1, dy: 0  },
