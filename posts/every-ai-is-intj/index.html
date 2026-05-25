@@ -165,7 +165,7 @@
             <li><a href="#the-results">The results</a></li>
             <li><a href="#why">Why every AI is an INTJ</a></li>
             <li><a href="#what-this-means">What this means</a></li>
-            <li><a href="#the-fix">What you can do about it</a></li>
+            <li><a href="#tune-the-agent">Tune the agent to you</a></li>
             <li><a href="#caveats">Caveats</a></li>
             <li><a href="#takeaway">The takeaway</a></li>
         </ul>
@@ -184,7 +184,7 @@
         <li><a href="#the-results">The results</a></li>
         <li><a href="#why">Why every AI is INTJ</a></li>
         <li><a href="#what-this-means">What this means</a></li>
-        <li><a href="#the-fix">The fix</a></li>
+        <li><a href="#tune-the-agent">Tune the agent</a></li>
         <li><a href="#caveats">Caveats</a></li>
         <li><a href="#takeaway">Takeaway</a></li>
     </ul>
@@ -231,7 +231,7 @@
                     <li>3 outliers across 600 runs: 1 ISTJ (Opus, S/N axis), 2 INTP (GLM, J/P axis). All adjacent to INTJ. Nothing landed in a different quadrant.</li>
                     <li>The four explanations for why &mdash; same training corpus, same RLHF target, test items that tautologically describe AI, no AI trained to be anything else &mdash; all point at the same conclusion: <strong>the INTJ profile is literally a description of what we shape these models to be.</strong></li>
                     <li>Implication: AI &ldquo;personality&rdquo; isn&rsquo;t a feature space. It&rsquo;s a single archetype with regional accents. The next AI wars won&rsquo;t be about model quality. They&rsquo;ll be about escaping INTJ-by-default.</li>
-                    <li>I open-sourced the fix you don&rsquo;t have to wait for the labs to ship: <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> &mdash; drop-in personality-type tuning files for all 16 MBTI types (plus Enneagram + personal Souls). Paste the right one into your agent&rsquo;s system prompt, agent recalibrates.</li>
+                    <li>I open-sourced <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> &mdash; drop-in personality-type tuning files for all 16 MBTI types (plus Enneagram + personal Souls). Paste the one matching your type into your agent&rsquo;s system prompt, and the agent&rsquo;s style aligns with how <em>you</em> actually think. Same model, tuned to you.</li>
                 </ul>
             </div>
 
@@ -345,11 +345,13 @@
 
             <p>The INTJ convergence is, in other words, a measurement of how narrow the current product category actually is.</p>
 
-            <h2 id="the-fix">What you can do about it</h2>
+            <h2 id="tune-the-agent">Tune the agent to you</h2>
 
-            <p>The vendor side is slow. Convincing OpenAI to ship a non-INTJ flagship is not a thing you, the user, can do this weekend. But the user side is fast &mdash; because a frontier model&rsquo;s &ldquo;personality&rdquo; isn&rsquo;t baked into the weights as deeply as people assume. It&rsquo;s the surface layer. A few hundred words of system-prompt instructions can shift the entire shape of how the agent responds.</p>
+            <p>The INTJ default isn&rsquo;t broken. It&rsquo;s a calibration &mdash; just one that happens to be tuned for one type of user. If you&rsquo;re an INTJ, the agent already speaks your language out of the box. If you&rsquo;re anything else, the agent is still useful, but it&rsquo;s working harder than it needs to and you&rsquo;re translating more than you should.</p>
 
-            <p>I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> for exactly this. It&rsquo;s a small open-source repo of personality-type tuning files &mdash; drop one into your agent&rsquo;s system prompt and the agent recalibrates to your type instead of its default INTJ.</p>
+            <p>The good news is that a frontier model&rsquo;s &ldquo;personality&rdquo; isn&rsquo;t baked deep into the weights. It&rsquo;s the surface layer &mdash; a few hundred words of system-prompt instructions can shift the entire shape of how it responds. That&rsquo;s small input, big leverage. And it&rsquo;s the layer you, the user, control.</p>
+
+            <p>I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> to package that intervention. It&rsquo;s a small open-source repo of personality-type tuning files. Pick the one matching your type, drop it into your agent&rsquo;s system prompt, and the agent&rsquo;s interaction style aligns with how you actually think &mdash; same model, more synergy.</p>
 
             <p>Same prompt, same model, three different tuning files loaded:</p>
 
@@ -373,7 +375,7 @@
 
             <p>Drop the file into your agent&rsquo;s system prompt slot &mdash; ChatGPT custom instructions, Claude project instructions, Cursor rules, Gemini Gem &mdash; and the agent picks it up. The intervention is small. The leverage is high, because you&rsquo;re telling the model to invert its INTJ defaults exactly where they don&rsquo;t fit you.</p>
 
-            <p>If you read this far and you&rsquo;re not INTJ, you&rsquo;ve been talking to an agent that&rsquo;s subtly miscalibrated for how you think. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the recalibration. Pick your type, paste it in, see what changes.</p>
+            <p>If you&rsquo;ve read this far and you&rsquo;re not INTJ, your agent is operating on INTJ defaults &mdash; perfectly functional, but not aligned with how you actually process. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the alignment layer. Pick your type, paste it in, see how much sharper the conversation gets when the agent is shaped around you.</p>
 
             <h2 id="caveats">Caveats</h2>
 
@@ -393,9 +395,9 @@
 
             <p>When the field eventually stops converging on the INTJ default, that&rsquo;ll be the real shift in AI &mdash; not a capability jump, a character jump. A model that&rsquo;s actually anything else.</p>
 
-            <p>Until then, you don&rsquo;t have to wait for the labs. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the recalibration kit. Pick your type, paste the file into your agent&rsquo;s system prompt, get a model that talks like someone who actually thinks the way you do.</p>
+            <p>In the meantime, you can pull the agent toward you instead of pulling yourself toward the agent. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the personalization layer &mdash; pick your type, paste the file into your agent&rsquo;s system prompt, and the agent levels up from speaking INTJ-default to speaking your wavelength. Same model, same capability, more synergy.</p>
 
-            <p>Every frontier AI on the market thinks it&rsquo;s the same guy. The data says they&rsquo;re right. The good news is the fix is one paste away.</p>
+            <p>Every frontier AI on the market thinks it&rsquo;s the same guy. The data says they&rsquo;re right. The next move is tuning that one guy to you.</p>
 
             <p>&mdash; Bernard</p>
 
