@@ -158,7 +158,9 @@ async function sendWelcomeEmail(apiKey, to, slackBcc) {
       "one email per post, no drips, no welcome series.\n\n" +
       "— Bernard",
   };
-  if (slackBcc) {
+  // Only attach BCC if env var is a real-looking string (defends against
+  // an empty string or non-string sneaking through).
+  if (typeof slackBcc === 'string' && slackBcc.includes('@')) {
     body.bcc = [slackBcc];
   }
   const resp = await fetch('https://api.resend.com/emails', {

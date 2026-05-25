@@ -20,8 +20,11 @@
 /js/*
   Cache-Control: public, max-age=2592000, must-revalidate
 
+# Post images + repo assets: long cache, but no `immutable` — gives Bernard
+# an escape hatch if he ever swaps an image at the same path (immutable
+# would lock returning visitors out of the new version until cache eviction).
 /posts/*/img/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=31536000
 
 /assets/*
-  Cache-Control: public, max-age=31536000, immutable
+  Cache-Control: public, max-age=31536000
