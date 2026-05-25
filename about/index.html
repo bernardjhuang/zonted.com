@@ -283,7 +283,13 @@
             will-change: transform, background-position;
         }
         .bernard-sprite.rebecca-sprite {
-            background-image: url('https://img.zonted.com/about/rebecca-sprite.png');
+            /* -v2: Rebecca's row 1 (left) and row 2 (right) are physically
+               swapped vs. the forge default — her long hair dominates the
+               silhouette, so the face-direction cue reads opposite from a
+               viewer's intuition. Swapping rows in the sheet (rather than
+               flipping JS indices) keeps the wander state machine and
+               DIR_ROW mapping untouched. */
+            background-image: url('https://img.zonted.com/about/rebecca-sprite-v2.png');
         }
         @media (max-width: 760px) {
             .about-mail { grid-template-columns: 1fr; margin: 0 16px 2rem; }
