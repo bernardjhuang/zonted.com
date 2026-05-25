@@ -165,6 +165,7 @@
             <li><a href="#the-results">The results</a></li>
             <li><a href="#why">Why every AI is an INTJ</a></li>
             <li><a href="#what-this-means">What this means</a></li>
+            <li><a href="#the-fix">What you can do about it</a></li>
             <li><a href="#caveats">Caveats</a></li>
             <li><a href="#takeaway">The takeaway</a></li>
         </ul>
@@ -183,6 +184,7 @@
         <li><a href="#the-results">The results</a></li>
         <li><a href="#why">Why every AI is INTJ</a></li>
         <li><a href="#what-this-means">What this means</a></li>
+        <li><a href="#the-fix">The fix</a></li>
         <li><a href="#caveats">Caveats</a></li>
         <li><a href="#takeaway">Takeaway</a></li>
     </ul>
@@ -229,6 +231,7 @@
                     <li>3 outliers across 600 runs: 1 ISTJ (Opus, S/N axis), 2 INTP (GLM, J/P axis). All adjacent to INTJ. Nothing landed in a different quadrant.</li>
                     <li>The four explanations for why &mdash; same training corpus, same RLHF target, test items that tautologically describe AI, no AI trained to be anything else &mdash; all point at the same conclusion: <strong>the INTJ profile is literally a description of what we shape these models to be.</strong></li>
                     <li>Implication: AI &ldquo;personality&rdquo; isn&rsquo;t a feature space. It&rsquo;s a single archetype with regional accents. The next AI wars won&rsquo;t be about model quality. They&rsquo;ll be about escaping INTJ-by-default.</li>
+                    <li>I open-sourced the fix you don&rsquo;t have to wait for the labs to ship: <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> &mdash; drop-in personality-type tuning files for all 16 MBTI types (plus Enneagram + personal Souls). Paste the right one into your agent&rsquo;s system prompt, agent recalibrates.</li>
                 </ul>
             </div>
 
@@ -342,6 +345,36 @@
 
             <p>The INTJ convergence is, in other words, a measurement of how narrow the current product category actually is.</p>
 
+            <h2 id="the-fix">What you can do about it</h2>
+
+            <p>The vendor side is slow. Convincing OpenAI to ship a non-INTJ flagship is not a thing you, the user, can do this weekend. But the user side is fast &mdash; because a frontier model&rsquo;s &ldquo;personality&rdquo; isn&rsquo;t baked into the weights as deeply as people assume. It&rsquo;s the surface layer. A few hundred words of system-prompt instructions can shift the entire shape of how the agent responds.</p>
+
+            <p>I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> for exactly this. It&rsquo;s a small open-source repo of personality-type tuning files &mdash; drop one into your agent&rsquo;s system prompt and the agent recalibrates to your type instead of its default INTJ.</p>
+
+            <p>Same prompt, same model, three different tuning files loaded:</p>
+
+            <blockquote>&ldquo;I&rsquo;m feeling stuck on a project. What should I do?&rdquo;</blockquote>
+
+            <p><strong>Default (untuned) Claude:</strong></p>
+
+            <blockquote>Great question! Here are a few approaches:<br>1. Break the project into smaller, more manageable chunks<br>2. Take a short break and come back with fresh eyes<br>3. Talk it through with someone to externalize the problem<br>4. Identify what specifically feels stuck<br><br>Which resonates? Happy to go deeper on any of them.</blockquote>
+
+            <p><strong>With <code>mbti/INFP.md</code> loaded:</strong></p>
+
+            <blockquote>Before I answer &mdash; do you want to think this through together, or do you want input?<br><br>I&rsquo;m asking because &ldquo;stuck&rdquo; can mean really different things, and the right next move depends on what you&rsquo;re actually after.</blockquote>
+
+            <p><strong>With <code>mbti/ENTJ.md</code> loaded:</strong></p>
+
+            <blockquote>What&rsquo;s the decision you&rsquo;re avoiding?<br><br>&ldquo;Stuck&rdquo; usually means one of two things: you know what to do and you don&rsquo;t want to do it, or you haven&rsquo;t defined what done looks like. If it&rsquo;s the first &mdash; name the action. If it&rsquo;s the second &mdash; define done.</blockquote>
+
+            <p>Same model. Same question. Three completely different agents.</p>
+
+            <p>The repo ships tuning files for all 16 MBTI types plus 9 Enneagram types, and a third layer called &ldquo;Souls&rdquo; for individual users who want bespoke calibration (mine lives at <code>souls/psyduckler.md</code>). You can layer all three &mdash; MBTI for default shape, Enneagram for motivation, Soul for personal idiosyncrasies. The schema is plain Markdown; the README has the contributor template if you want to add yours.</p>
+
+            <p>Drop the file into your agent&rsquo;s system prompt slot &mdash; ChatGPT custom instructions, Claude project instructions, Cursor rules, Gemini Gem &mdash; and the agent picks it up. The intervention is small. The leverage is high, because you&rsquo;re telling the model to invert its INTJ defaults exactly where they don&rsquo;t fit you.</p>
+
+            <p>If you read this far and you&rsquo;re not INTJ, you&rsquo;ve been talking to an agent that&rsquo;s subtly miscalibrated for how you think. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the recalibration. Pick your type, paste it in, see what changes.</p>
+
             <h2 id="caveats">Caveats</h2>
 
             <ul>
@@ -360,7 +393,9 @@
 
             <p>When the field eventually stops converging on the INTJ default, that&rsquo;ll be the real shift in AI &mdash; not a capability jump, a character jump. A model that&rsquo;s actually anything else.</p>
 
-            <p>For now, every frontier AI on the market thinks it&rsquo;s the same guy. And the data says they&rsquo;re right.</p>
+            <p>Until then, you don&rsquo;t have to wait for the labs. <a href="https://github.com/psyduckler/agenttune">AgentTune</a> is the recalibration kit. Pick your type, paste the file into your agent&rsquo;s system prompt, get a model that talks like someone who actually thinks the way you do.</p>
+
+            <p>Every frontier AI on the market thinks it&rsquo;s the same guy. The data says they&rsquo;re right. The good news is the fix is one paste away.</p>
 
             <p>&mdash; Bernard</p>
 
