@@ -260,13 +260,27 @@
         /* Wandering Bernard + Rebecca sprites — walk horizontally inside the
            sign-off row to the right of "— Bernard". 96×96 sprite cells
            displayed at 48×48. JS handles position + frame; CSS sets the
-           chrome. */
+           chrome. The stage itself is an <a> linking to the side-scroller
+           game (/games/run-to-rebecca/), so the whole row is clickable. */
         .bernard-stage {
             position: relative;
+            display: block;
             flex: 1 1 auto;
             min-width: 0;
             height: 56px;
             overflow: hidden;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            border-radius: 6px;
+            transition: background-color 0.2s ease;
+        }
+        .bernard-stage:hover {
+            background-color: rgba(26, 24, 21, 0.04);
+        }
+        .bernard-stage:focus-visible {
+            outline: 2px solid var(--ox);
+            outline-offset: 2px;
         }
         .bernard-sprite {
             position: absolute;
@@ -440,10 +454,10 @@
 
                 <div class="mail-signoff-row">
                     <p class="mail-sign">&mdash; Bernard</p>
-                    <div class="bernard-stage" aria-hidden="true">
-                        <div class="bernard-sprite" data-sprite="bernard"></div>
-                        <div class="bernard-sprite rebecca-sprite" data-sprite="rebecca"></div>
-                    </div>
+                    <a class="bernard-stage" href="/games/run-to-rebecca/" aria-label="Play Run to Rebecca — the Austin side-scroller these sprites are from" title="Play Run to Rebecca &rarr;">
+                        <span class="bernard-sprite" data-sprite="bernard" aria-hidden="true"></span>
+                        <span class="bernard-sprite rebecca-sprite" data-sprite="rebecca" aria-hidden="true"></span>
+                    </a>
                 </div>
             </div>
         </div>
