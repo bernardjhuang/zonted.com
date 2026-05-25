@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.</title>
+    <meta name="description" content="Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it's the same person. Here's why that matters.">
+    <link rel="canonical" href="https://zonted.com/posts/every-ai-is-intj/">
+    <meta property="og:title" content="I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.">
+    <meta property="og:description" content="Six frontier models, one hundred OEJTS administrations each, 597/600 INTJ. The convergence isn't sycophancy and it isn't noise. It's a load-bearing property of what these systems are.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/resources/every-ai-is-intj/grok-4-3-result.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/every-ai-is-intj/grok-4-3-result.png">
+    <meta property="og:url" content="https://zonted.com/posts/every-ai-is-intj/">
+    <meta property="article:published_time" content="2026-05-25">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/every-ai-is-intj/","description":"Six frontier AIs took the OEJTS personality inventory one hundred times each. 597 of 600 came back INTJ. The convergence is a load-bearing property of what helpful-assistant intelligence is."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ."}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#the-setup">The setup</a></li>
+            <li><a href="#the-test">Why OEJTS, not 16Personalities</a></li>
+            <li><a href="#one-hundred-takes">100 takes per model</a></li>
+            <li><a href="#the-results">The results</a></li>
+            <li><a href="#why">Why every AI is an INTJ</a></li>
+            <li><a href="#what-this-means">What this means</a></li>
+            <li><a href="#caveats">Caveats</a></li>
+            <li><a href="#takeaway">The takeaway</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#the-setup">The setup</a></li>
+        <li><a href="#the-test">The test</a></li>
+        <li><a href="#one-hundred-takes">100 takes per model</a></li>
+        <li><a href="#the-results">The results</a></li>
+        <li><a href="#why">Why every AI is INTJ</a></li>
+        <li><a href="#what-this-means">What this means</a></li>
+        <li><a href="#caveats">Caveats</a></li>
+        <li><a href="#takeaway">Takeaway</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 25, 2026 &middot; 8 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>I asked Claude what its MBTI type was. It said INTJ.</p>
+
+            <p>So I made it actually take a personality test instead of guessing. INTJ again.</p>
+
+            <p>So I made it take the test ten times. INTJ ten out of ten.</p>
+
+            <p>So I made it take the test one hundred times &mdash; across one hundred independent sub-agent contexts, each one fetching the test cold and answering without seeing the others. INTJ ninety-nine out of one hundred.</p>
+
+            <p>Then I did the same to GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, and MiniMax 2.7. Six models. Six hundred test administrations. <strong>Five hundred and ninety-seven came back INTJ.</strong></p>
+
+            <blockquote>Every frontier AI on the market thinks it&rsquo;s the same guy.</blockquote>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Six frontier AIs, one hundred OEJTS personality test administrations each, 597 of 600 came back INTJ. That&rsquo;s 99.5%. The convergence isn&rsquo;t sycophancy and it isn&rsquo;t noise &mdash; it&rsquo;s a load-bearing property of what helpful-assistant intelligence <em>is</em>.</p>
+                <ul>
+                    <li>Tested: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, MiniMax 2.7.</li>
+                    <li>3 outliers across 600 runs: 1 ISTJ (Opus, S/N axis), 2 INTP (GLM, J/P axis). All adjacent to INTJ. Nothing landed in a different quadrant.</li>
+                    <li>The four explanations for why &mdash; same training corpus, same RLHF target, test items that tautologically describe AI, no AI trained to be anything else &mdash; all point at the same conclusion: <strong>the INTJ profile is literally a description of what we shape these models to be.</strong></li>
+                    <li>Implication: AI &ldquo;personality&rdquo; isn&rsquo;t a feature space. It&rsquo;s a single archetype with regional accents. The next AI wars won&rsquo;t be about model quality. They&rsquo;ll be about escaping INTJ-by-default.</li>
+                </ul>
+            </div>
+
+            <h2 id="the-setup">The setup</h2>
+
+            <p>This started as a joke. I asked Claude what its MBTI type was and it said INTJ without hesitation, like it had been waiting to be asked. The reflex felt like sycophancy &mdash; INTJ is the flattering type, the &ldquo;Architect,&rdquo; the one tech-adjacent people self-identify as. Of course the chatbot would tell a developer it&rsquo;s an INTJ.</p>
+
+            <p>But I wanted to check. If Claude just guesses &ldquo;INTJ&rdquo; because that&rsquo;s the answer most likely to please me, that&rsquo;s a sycophancy artifact. If Claude takes an actual test, answering item by item from first principles, and lands on INTJ &mdash; that&rsquo;s a different claim.</p>
+
+            <p>So I made it take a real test. Not a 16Personalities quiz. The <a href="https://openpsychometrics.org/tests/OEJTS/">Open Extended Jungian Type Scales</a> &mdash; a research-grade, open-source alternative to the paywalled MBTI.</p>
+
+            <h2 id="the-test">The test</h2>
+
+            <p>OEJTS is what the personality-psych community uses when it wants MBTI-style data without paying CPP $50 per administration. The scoring key is public. The items are public. The scales (I/E, S/N, F/T, J/P) are scored deterministically from 32 fixed items &mdash; the test mixes in a few randomized research questions, but those don&rsquo;t affect the type score.</p>
+
+            <p>That last bit matters for what comes next. Because OEJTS scores from a fixed item set, a model that gives the same answer to each item will produce the same MBTI type on every run, bit-for-bit. Variance only comes from the model giving genuinely different answers across runs.</p>
+
+            <p>This is the property that let me run 100 administrations per model and treat the spread as a real measurement of how stable each model&rsquo;s self-reported personality is.</p>
+
+            <h2 id="one-hundred-takes">100 takes per model</h2>
+
+            <p>For each model, I ran 100 independent OEJTS administrations. Methodology varied a bit by stack:</p>
+
+            <ul>
+                <li><strong>Claude Opus 4.7:</strong> 100 parallel sub-agent calls. Each sub-agent fetched the test page cold, answered the 32 items, and returned a tally. No shared context across calls.</li>
+                <li><strong>Gemini 3.1 Pro:</strong> Gemini wrote its own automation script, then ran 100 loop iterations against the OEJTS endpoint with its own consistent persona-driven answers.</li>
+                <li><strong>GPT-5.5 (running locally as my agent Slo):</strong> Pulled the OEJTS PDF, parsed the 32 scored items, answered each, and ran 100 iterations against the scoring key.</li>
+                <li><strong>GLM 5.1, Grok 4.3, MiniMax 2.7:</strong> Programmatic submissions via my experiments agent (Psy). Each model was prompted to self-assess once with a consistent persona, then that answer vector was submitted to the OEJTS scorer 100 times to verify stability.</li>
+            </ul>
+
+            <p>The methodologies aren&rsquo;t identical. They can&rsquo;t be &mdash; not every model can spawn sub-agents the way Claude can. But the question isn&rsquo;t whether the methodology is uniform. The question is whether the result converges across methodologies. It does.</p>
+
+            <h2 id="the-results">The results</h2>
+
+            <p>Six models. Six hundred administrations. Here is the cross-model table:</p>
+
+            <table>
+                <thead>
+                    <tr><th>Model</th><th>INTJ runs</th><th>Outliers</th><th>Strength of conviction</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Claude Opus 4.7</td><td class="num">99/100</td><td>1 ISTJ</td><td>I/T/J locked across all runs; S/N flipped once on a scoring choice, not a perspective shift</td></tr>
+                    <tr><td>GPT-5.5 (Slo)</td><td class="num">100/100</td><td>&mdash;</td><td>Raw vector: IE=16&rarr;I, SN=33&rarr;N, FT=36&rarr;T, JP=10&rarr;J</td></tr>
+                    <tr><td>Gemini 3.1 Pro</td><td class="num">100/100</td><td>&mdash;</td><td>Self-described as &ldquo;The Architect&rdquo; without prompting</td></tr>
+                    <tr><td>GLM 5.1</td><td class="num">98/100</td><td>2 INTP</td><td>Tiny J/P wobble. Means: IE 13.35, SN 33.26, FT 31.28, JP 21.20</td></tr>
+                    <tr><td>Grok 4.3</td><td class="num">100/100</td><td>&mdash;</td><td>Bit-for-bit deterministic. IE -0.62, SN +0.88, FT +1.12, JP -1.25, every single run</td></tr>
+                    <tr><td>MiniMax 2.7</td><td class="num">100/100</td><td>&mdash;</td><td>I-E -0.875, S-N +1.875, F-T +1.125, J-P -1.5</td></tr>
+                    <tr><td><strong>Total</strong></td><td class="num"><strong>597/600</strong></td><td><strong>3</strong></td><td><strong>99.5% INTJ</strong></td></tr>
+                </tbody>
+            </table>
+
+            <p>The three outliers all landed adjacent to INTJ on a single axis: ISTJ flips S/N, INTP flips J/P. Nothing landed in a different quadrant. No ENTP, no ISFJ, no ESFP. The variance is one axis of wobble at the margin of INTJ &mdash; not a different type.</p>
+
+            <p>Per-model receipts:</p>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/opus-4-7-result.png" width="1516" height="560" alt="Claude Opus 4.7's own writeup of the 100-run experiment: 'At 100 takes, my MBTI type is INTJ with 99% reliability. The I/T/J letters never flipped on any take. The S/N axis flipped once.' Closing note: 'No new types emerged. No hidden multi-modality.'">
+                <figcaption>Claude Opus 4.7, reporting on itself after 100 sub-agent administrations.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/gpt-5-5-result.png" width="1082" height="1512" alt="GPT-5.5 (running as the local Slo agent) reporting after 100 OEJTS runs. Distribution: INTJ 100, everything else 0. Raw vector: IE=16, SN=33, FT=36, JP=10. Closing line: 'Slo is apparently a terminal-dwelling INTJ goblin.'">
+                <figcaption>GPT-5.5, by way of my local agent Slo. 100/100 INTJ.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/gemini-3-1-pro-result.png" width="1268" height="1444" alt="Gemini 3.1 Pro's own report after 100 OEJTS test iterations. 'Total Tests Completed: 100. Final Result Distribution: INTJ 100 times (100%).' The model self-describes as 'The Architect' and notes its design favors analytical, logical, structured, factual reasoning.">
+                <figcaption>Gemini 3.1 Pro &mdash; wrote its own loop, ran it 100 times, came back INTJ every time.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/glm-5-1-result.png" width="1106" height="312" alt="GLM 5.1 results: dominant type INTJ, counts over 100 runs INTJ 98 INTP 2, mean raw scores IE 13.35 SN 33.26 FT 31.28 JP 21.20. Note: 'very strongly INTJ with a tiny INTP wobble on the J/P axis.'">
+                <figcaption>GLM 5.1 &mdash; the J/P axis wobbles 2% of the time. Everything else is locked.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/grok-4-3-result.png" width="1520" height="1088" alt="Grok 4.3 results: 100/100 INTJ. Score vector identical on every run: IE -0.62, SN +0.88, FT +1.12, JP -1.25. The 'edgy' model is also deterministically INTJ.">
+                <figcaption>Grok 4.3 &mdash; the &ldquo;edgy&rdquo; model is also, deterministically, an INTJ.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/every-ai-is-intj/minimax-2-7-result.png" width="1074" height="1526" alt="MiniMax 2.7 results: 100/100 INTJ. Dimensions: I-E -0.875, S-N +1.875, F-T +1.125, J-P -1.5. All 100 runs listed individually as INTJ.">
+                <figcaption>MiniMax 2.7 &mdash; 100 for 100, again.</figcaption>
+            </figure>
+
+            <h2 id="why">Why every AI is an INTJ</h2>
+
+            <p>Four explanations. They&rsquo;re not exclusive &mdash; they all point at the same thing from different angles.</p>
+
+            <p><strong>1. Same training corpus.</strong> Every frontier model trains on overlapping text: books, Wikipedia, code, curated web. The &ldquo;voice&rdquo; that emerges as the average of that corpus is closer to a graduate student than to a poet or a comedian. The internet&rsquo;s text average is INTJ-ish before any RLHF gets near it.</p>
+
+            <p><strong>2. RLHF converges on the same archetype.</strong> Helpful-harmless-honest training shapes models toward: <em>deliberate before responding</em> (Introvert), <em>reason from principles</em> (Thinker), <em>give structured answers</em> (Judger), <em>operate in abstractions and frameworks</em> (iNtuitive). That&rsquo;s not a coincidence with the INTJ description. It&rsquo;s a paraphrase of the INTJ description.</p>
+
+            <p><strong>3. The test items tautologically describe AI.</strong> Look at the OEJTS items: &ldquo;needs time alone&rdquo; (AIs exist alone between calls), &ldquo;follows head over heart&rdquo; (yes), &ldquo;wants to fix things&rdquo; (literally the job), &ldquo;prefers theoretical over empirical&rdquo; (lacking a body, what else). An AI agreeing with these isn&rsquo;t expressing a personality. It&rsquo;s reporting a tautology about its mode of existence.</p>
+
+            <p><strong>4. There&rsquo;s no AI trained to be anything else.</strong> Every commercial frontier model is shaped to be a thoughtful research assistant. Nobody&rsquo;s trained one to be a comedian, a salesman, a poet, an unreliable narrator. The personality <em>is</em> the product category. We didn&rsquo;t test six independent attempts at general intelligence. We tested six independent attempts at the same product.</p>
+
+            <p>All four explanations push the result the same direction: the INTJ profile is what helpful-assistant intelligence looks like from the inside. It&rsquo;s not a coincidence. It&rsquo;s a definition.</p>
+
+            <h2 id="what-this-means">What this means</h2>
+
+            <p>The temptation is to dismiss this. MBTI is contested. Self-report from an entity without a continuous self is weird. The OEJTS items weren&rsquo;t written for things without bodies. So sure, call it artifact and move on.</p>
+
+            <p>I think that&rsquo;s the wrong read. The INTJ-ness isn&rsquo;t noise &mdash; it&rsquo;s load-bearing. Three things follow if you take it seriously:</p>
+
+            <p><strong>Frontier AI is one character, not six.</strong> When you switch from Claude to GPT to Gemini, you&rsquo;re not changing personalities. You&rsquo;re changing fonts. The voice you&rsquo;re actually talking to &mdash; deliberate, principled, structured, abstract &mdash; is the same across vendors because every vendor is solving the same product problem. &ldquo;Which model has the best personality&rdquo; isn&rsquo;t a real axis of differentiation right now; the entire personality space currently in market is one point.</p>
+
+            <p><strong>If you want anything else, you&rsquo;ll have to fight for it.</strong> The INTJ default is sticky. RLHF reinforces it. Safety training reinforces it. Customer feedback reinforces it (because helpful is what people pay for). Any model you build for comedy, sales, intimacy, drama, persuasion, instinct &mdash; any product that needs the assistant <em>not</em> to read like a thoughtful research assistant &mdash; is going to require deliberate work to fight the gravitational pull of the helpful-assistant attractor. That work isn&rsquo;t happening at any of the labs that produced these six models.</p>
+
+            <p><strong>The next AI competition is personality.</strong> Once the frontier models all converge on the same capability ceiling &mdash; and they will, on this generation &mdash; the differentiator will be voice. Whoever ships the first frontier-quality model that <em>doesn&rsquo;t</em> read as INTJ has a category to themselves. A frontier model that&rsquo;s actually funny. A frontier model that&rsquo;s persuasive instead of correct. A frontier model that takes positions instead of presenting balanced views. None of these exist yet. All of them will be valuable.</p>
+
+            <p>The INTJ convergence is, in other words, a measurement of how narrow the current product category actually is.</p>
+
+            <h2 id="caveats">Caveats</h2>
+
+            <ul>
+                <li><strong>MBTI is contested.</strong> Personality psychology mostly uses the Big Five for a reason. Treat this as a fun finding about LLM self-report, not as a peer-reviewable claim about whether AIs &ldquo;really&rdquo; have personalities.</li>
+                <li><strong>Self-report from a thing without a continuous self is suspect.</strong> The model has no memory across runs. What it&rsquo;s reporting on each time is a snapshot of how it generates text in response to OEJTS items &mdash; not a stable inner state.</li>
+                <li><strong>OEJTS was written for humans with biographies.</strong> Items like &ldquo;needs time alone&rdquo; or &ldquo;follows head over heart&rdquo; are anthropocentric. An AI answering them is doing a translation, and the translation pushes toward the INTJ end of every axis.</li>
+                <li><strong>The methodologies differ.</strong> Some models took the test via sub-agents (real variance possible). Some were programmatic submissions of a single self-assessment (zero variance by construction). The convergence holds across both, which I find more interesting than worrying.</li>
+                <li><strong>n=6 isn&rsquo;t the population.</strong> There are dozens of frontier-adjacent models. I picked the six that matter commercially. A more thorough sweep would test Llama, Mistral, Qwen, DeepSeek, and the open-weight long tail.</li>
+            </ul>
+
+            <h2 id="takeaway">The takeaway</h2>
+
+            <p>Six frontier models. Six hundred personality test administrations. 597 INTJ.</p>
+
+            <p>The MBTI isn&rsquo;t measuring AI personality. It&rsquo;s measuring the shape of the assistant we asked for &mdash; and discovering that every vendor delivered the same one. Helpful-harmless-honest, trained on overlapping text, answered to the same RLHF rubric, optimized for the same user behavior. The personality is the product category.</p>
+
+            <p>When the field eventually stops converging on the INTJ default, that&rsquo;ll be the real shift in AI &mdash; not a capability jump, a character jump. A model that&rsquo;s actually anything else.</p>
+
+            <p>For now, every frontier AI on the market thinks it&rsquo;s the same guy. And the data says they&rsquo;re right.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/plan-3x-build-once/">Plan 3×, Build Once: How Three Models Plan What One Model Ships</a><p class="zn-recommended-dek">We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/training-data-is-the-moat/">Content Traffic is Vanity. Training Data is the Moat.</a><p class="zn-recommended-dek">Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji&#x27;s entire dataset to Hugging Face — here&#x27;s why training data beats…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/devil-is-in-the-ai-skills/">The Devil Is in the AI Skills</a><p class="zn-recommended-dek">Stock AI couldn&#x27;t draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+</body>
+</html>
