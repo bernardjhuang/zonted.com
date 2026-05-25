@@ -14,9 +14,9 @@
     <meta property="og:title" content="The Devil Is in the AI Skills">
     <meta property="og:description" content="I asked AI to put me and Rebecca in pixels. Round one was generic stick figures. Round two — same model, with a skill bolted on — was us. Then I built a side-scroller where I run across Austin to her. Receipts inside.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v2-forge-combined.png">
+    <meta property="og:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-finish.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v2-forge-combined.png">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-finish.png">
     <meta property="og:url" content="https://zonted.com/posts/devil-is-in-the-ai-skills/">
     <meta property="article:published_time" content="2026-05-25">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -246,16 +246,16 @@
                 <p class="tldr-thesis">Frontier AI models are commodities. The thing that determines what they can actually do for you is the layer of <em>skills</em> stacked on top &mdash; and right now that layer is heavily biz/code, undercooked for creative work.</p>
                 <ul>
                     <li>Stock Claude Design + GPT-5.5 produced sprites that didn't look like us. The model itself hedged: &ldquo;solid usable draft, not yet artist-polished.&rdquo;</li>
-                    <li>I found <a href="https://github.com/0x0funky/agent-sprite-forge">agent-sprite-forge</a>, an open-source skill by 0x0funky in Taiwan. Same Gemini image model under the hood, but with prompt rules + deterministic postprocessing + a QA repair pass. Output looked like us.</li>
+                    <li>I found <a href="https://github.com/0x0funky/agent-sprite-forge">agent-sprite-forge</a>, an open-source skill by 0x0funky on GitHub. Same Gemini image model under the hood, but with prompt rules + deterministic postprocessing + a QA repair pass. Output looked like us.</li>
                     <li>From the same sprites I had GPT-5.5 build a playable Austin side-scroller. <a href="/games/run-to-rebecca/">Play it &rarr;</a></li>
                     <li>The model didn't get better between attempts. The skill stack around it did. That gap is where the next two years of AI work lives.</li>
                 </ul>
-                <p class="tldr-tail">Find the chauffeurs. Steal their toolboxes.</p>
+                <p class="tldr-tail">Find the chauffeurs. Borrow their toolboxes.</p>
             </div>
 
             <h2 id="stock-attempt">Round one: stock AI</h2>
 
-            <p>I fed the engagement photo to two flagship harnesses out of the box: Claude Design and GPT-5.5. Both produced sprite sheets. Here is what came back.</p>
+            <p>I fed the engagement photo to a flagship harness out of the box &mdash; Claude Design &mdash; and asked for a sprite sheet. Here is what came back.</p>
 
             <figure>
                 <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v1-claude-design-him.png" width="256" height="96" alt="Five pixel-art sprite frames of a generic male character &mdash; black hair, no glasses, simple grey shirt. No resemblance to Bernard." style="image-rendering:pixelated;max-width:480px;margin:0 auto;display:block;">
@@ -283,7 +283,7 @@
 
             <h2 id="the-skill">Round two: a skill from GitHub</h2>
 
-            <p>I went looking. Three minutes on GitHub for <code>sprite agent</code> surfaced <a href="https://github.com/0x0funky/agent-sprite-forge"><code>0x0funky/agent-sprite-forge</code></a> &mdash; an open-source skill purpose-built for game-asset pixel art. The pipeline:</p>
+            <p>I went looking. A search on GitHub for <code>sprite agent</code> surfaced <a href="https://github.com/0x0funky/agent-sprite-forge"><code>0x0funky/agent-sprite-forge</code></a> &mdash; an open-source skill purpose-built for game-asset pixel art. The pipeline:</p>
 
             <ol>
                 <li><strong>Prompt rules.</strong> Character-consistency scaffolding &mdash; same outfit, same proportions across all 16 cells (4 directions &times; 4 frames).</li>
@@ -292,7 +292,7 @@
                 <li><strong>Deterministic QA repair / reassembly.</strong> Detects broken cells and patches them by re-rendering against the canonical pose, then reassembles the final sheet.</li>
             </ol>
 
-            <p>I gave it the same engagement photo. Twenty-something seconds later it returned a 384&times;768 sheet plus per-direction walk-cycle previews.</p>
+            <p>I gave it the same engagement photo. It returned a 384&times;768 sheet plus per-direction walk-cycle previews.</p>
 
             <h2 id="the-receipts">The receipts</h2>
 
@@ -329,7 +329,7 @@
 
             <ul>
                 <li><strong>Game feel</strong>: coyote time, jump buffering, variable jump release, dash with recharge, screen shake on dash and damage.</li>
-                <li><strong>Save</strong>: K checkpoint lanterns that update respawn and reduce death punishment.</li>
+                <li><strong>Save</strong>: Six checkpoint lanterns that update respawn and reduce death punishment.</li>
                 <li><strong>Juice</strong>: dash afterimages, speed streaks, landing dust, collectible bursts, checkpoint rings, a heart-and-confetti burst when Rebecca is reached.</li>
                 <li><strong>Presentation</strong>: progress bar, run timer, zone title toasts, mute badge, end-of-run stats panel.</li>
                 <li><strong>Audio</strong>: procedural WebAudio that boots after first input &mdash; ambient bed plus jump/dash/collect/checkpoint/hurt/win SFX.</li>
@@ -351,7 +351,7 @@
 
             <h2 id="thesis">The devil is in the AI skills</h2>
 
-            <p>The model didn't get better between round one and round four. The skill stack around it did.</p>
+            <p>The model didn't get better between rounds. The skill stack around it did.</p>
 
             <p>This is the thing nobody briefs you on when they sell you the flagship model. The model itself is a commodity &mdash; it'll be replaced by something within ninety days. What isn't a commodity is the layer of skills that determine what the model can actually <em>do</em> for you. <code>agent-sprite-forge</code> uses the same Gemini image weights anyone with an API key can call. The difference is the wrapper.</p>
 
