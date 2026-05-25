@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>The Devil Is in the AI Skills</title>
+    <meta name="description" content="Stock AI couldn't draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.">
+    <link rel="canonical" href="https://zonted.com/posts/devil-is-in-the-ai-skills/">
+    <meta property="og:title" content="The Devil Is in the AI Skills">
+    <meta property="og:description" content="I asked AI to put me and Rebecca in pixels. Round one was generic stick figures. Round two — same model, with a skill bolted on — was us. Then I built a side-scroller where I run across Austin to her. Receipts inside.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-finish.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-finish.png">
+    <meta property="og:url" content="https://zonted.com/posts/devil-is-in-the-ai-skills/">
+    <meta property="article:published_time" content="2026-05-25">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"The Devil Is in the AI Skills","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/devil-is-in-the-ai-skills/","description":"Stock AI couldn't draw my fiancée. An open-source skill on GitHub could. Same model under the hood — different scaffolding around it. The model is a commodity; the skill is the moat."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The Devil Is in the AI Skills"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        /* Pixel art needs to stay crisp at any scale — without this, browsers
+           smooth the 4x-upscaled sprite sheets into blurry mush. */
+        .article-body .pixel-art { image-rendering: pixelated; image-rendering: crisp-edges; }
+
+        /* Side-by-side sprite GIFs comparing Bernard + Rebecca walk cycles. */
+        .sprite-row { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; margin: 1.5rem 0 2rem; }
+        .sprite-row figure { flex: 1 1 220px; max-width: 280px; margin: 0; }
+
+        /* "Play it" callout — the game lives at /games/run-to-rebecca/. */
+        .play-cta {
+            display: block;
+            text-align: center;
+            background: var(--text);
+            color: var(--bg) !important;
+            text-decoration: none !important;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-weight: 600;
+            font-size: 1rem;
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 2rem 0;
+            transition: transform 0.15s ease;
+        }
+        .play-cta:hover { transform: translateY(-1px); }
+        .play-cta .arrow { display: inline-block; margin-left: 0.4rem; transition: transform 0.15s; }
+        .play-cta:hover .arrow { transform: translateX(4px); }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#stock-attempt">Round one: stock AI</a></li>
+            <li><a href="#why-stock">Why stock AI couldn't draw</a></li>
+            <li><a href="#the-skill">Round two: a skill from GitHub</a></li>
+            <li><a href="#the-receipts">The receipts</a></li>
+            <li><a href="#the-game">Then I built a game</a></li>
+            <li><a href="#thesis">The devil is in the AI skills</a></li>
+            <li><a href="#chauffeur">Chauffeur knowledge</a></li>
+            <li><a href="#takeaway">The takeaway</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#stock-attempt">Round one: stock AI</a></li>
+        <li><a href="#why-stock">Why stock couldn't</a></li>
+        <li><a href="#the-skill">The GitHub skill</a></li>
+        <li><a href="#the-receipts">The receipts</a></li>
+        <li><a href="#the-game">Then I built a game</a></li>
+        <li><a href="#thesis">Devil is in the skills</a></li>
+        <li><a href="#chauffeur">Chauffeur knowledge</a></li>
+        <li><a href="#takeaway">The takeaway</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>The Devil Is in the AI Skills</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 25, 2026 &middot; 6 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>Rebecca said yes. I wanted pixel sprites of us &mdash; for the bottom of <a href="/about/">my about page</a>, for a side project, for the joke of it. I asked AI.</p>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/engagement.jpg" width="740" height="986" alt="Selfie of Bernard and Rebecca after the engagement &mdash; both smiling, Rebecca's left hand raised to show her ring." style="max-width:420px;margin:0 auto;display:block;">
+                <figcaption>The source photo. Goal: turn this into a walking 96&times;96 sprite of each of us.</figcaption>
+            </figure>
+
+            <p>Round one was generic stick figures with no glasses, no recognizable hair, and a walk cycle that looked like a Microsoft Bob avatar. Round two &mdash; same underlying image model, with an open-source <em>skill</em> wrapped around it &mdash; was us. By the end of the weekend, Bernard was running across an Austin side-scroller to reach Rebecca, with checkpoint lanterns, dash afterimages, and procedural WebAudio. Same flagship models. Different scaffolding. That's the whole thing.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Frontier AI models are commodities. The thing that determines what they can actually do for you is the layer of <em>skills</em> stacked on top &mdash; and right now that layer is heavily biz/code, undercooked for creative work.</p>
+                <ul>
+                    <li>Stock Claude Design + GPT-5.5 produced sprites that didn't look like us. The model itself hedged: &ldquo;solid usable draft, not yet artist-polished.&rdquo;</li>
+                    <li>I found <a href="https://github.com/0x0funky/agent-sprite-forge">agent-sprite-forge</a>, an open-source skill by 0x0funky on GitHub. Same Gemini image model under the hood, but with prompt rules + deterministic postprocessing + a QA repair pass. Output looked like us.</li>
+                    <li>From the same sprites I had GPT-5.5 build a playable Austin side-scroller. <a href="/games/run-to-rebecca/">Play it &rarr;</a></li>
+                    <li>The model didn't get better between attempts. The skill stack around it did. That gap is where the next two years of AI work lives.</li>
+                </ul>
+                <p class="tldr-tail">Find the chauffeurs. Borrow their toolboxes.</p>
+            </div>
+
+            <h2 id="stock-attempt">Round one: stock AI</h2>
+
+            <p>I fed the engagement photo to a flagship harness out of the box &mdash; Claude Design &mdash; and asked for a sprite sheet. Here is what came back.</p>
+
+            <figure>
+                <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v1-claude-design-him.png" width="256" height="96" alt="Five pixel-art sprite frames of a generic male character &mdash; black hair, no glasses, simple grey shirt. No resemblance to Bernard." style="image-rendering:pixelated;max-width:480px;margin:0 auto;display:block;">
+                <figcaption>Round one, &ldquo;Bernard.&rdquo; No glasses. No spiky hair. Could be any generic NPC.</figcaption>
+            </figure>
+
+            <figure>
+                <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v1-claude-design-her.png" width="320" height="96" alt="Five pixel-art sprite frames of a generic female character in a black hood &mdash; no facial features, no recognizable hair shape." style="image-rendering:pixelated;max-width:480px;margin:0 auto;display:block;">
+                <figcaption>Round one, &ldquo;Rebecca.&rdquo; A black hood. The last frame is the ring pose &mdash; it's the only thing that survived the abstraction.</figcaption>
+            </figure>
+
+            <p>The model itself knew. In the Slack thread where it dropped the package, it added a caveat:</p>
+
+            <blockquote>This is a solid usable draft, not yet &ldquo;artist-polished.&rdquo; The next useful pass would be tightening likeness: her hair shape, your face/glasses, and maybe adding a couple's idle/emote sheet.</blockquote>
+
+            <p>Translation: the model could see what was missing, and could enumerate what would fix it &mdash; it just couldn't do that work itself. It generated the cells, but it had no opinion about cell consistency, no eye for likeness, no game-engine convention to anchor on.</p>
+
+            <h2 id="why-stock">Why stock AI couldn't draw</h2>
+
+            <p>Out-of-box AI harnesses ship with a skill library. That library is heavily biased toward business and code, because that's where the early enterprise demand was: PowerPoint decks, Word documents, spreadsheet ops, debugging sessions, code review, GitHub PRs, security scans. The default agent is a suit-and-tie consultant.</p>
+
+            <p>Creative work &mdash; pixel art, game feel, sprite rigging, animation timing &mdash; isn't in the standard kit. The model can wing it, but &ldquo;wing it&rdquo; without the right scaffolding is exactly what produces generic NPC walk cycles and faces that don't look like the people in the photo.</p>
+
+            <p>This isn't a model-capability problem. It's a model-skill problem. The same weights that can't draw my fiancée can draw her perfectly &mdash; if you give them the right wrapper.</p>
+
+            <h2 id="the-skill">Round two: a skill from GitHub</h2>
+
+            <p>I went looking. A search on GitHub for <code>sprite agent</code> surfaced <a href="https://github.com/0x0funky/agent-sprite-forge"><code>0x0funky/agent-sprite-forge</code></a> &mdash; an open-source skill purpose-built for game-asset pixel art. The pipeline:</p>
+
+            <ol>
+                <li><strong>Prompt rules.</strong> Character-consistency scaffolding &mdash; same outfit, same proportions across all 16 cells (4 directions &times; 4 frames).</li>
+                <li><strong>Gemini 3 Pro image model</strong> for generation. <em>Same underlying weights anyone can call.</em></li>
+                <li><strong>Forge postprocessor.</strong> Cell alignment, transparent background extraction, color quantization, frame normalization.</li>
+                <li><strong>Deterministic QA repair / reassembly.</strong> Detects broken cells and patches them by re-rendering against the canonical pose, then reassembles the final sheet.</li>
+            </ol>
+
+            <p>I gave it the same engagement photo. It returned a 384&times;768 sheet plus per-direction walk-cycle previews.</p>
+
+            <h2 id="the-receipts">The receipts</h2>
+
+            <figure>
+                <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v2-forge-combined.png" width="384" height="768" alt="The agent-sprite-forge output: a 4-direction, 4-frame sprite sheet for Bernard (top half, glasses + spiky hair) and Rebecca (bottom half, long flowing hair, dark outfit). Both characters are recognizable as themselves." style="image-rendering:pixelated;max-width:320px;margin:0 auto;display:block;">
+                <figcaption>Round two output. Bernard has glasses and spiky hair. Rebecca has the long flowing hair from the photo. The walk cycles read correctly in all four directions.</figcaption>
+            </figure>
+
+            <div class="sprite-row">
+                <figure>
+                    <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v2-forge-bernard-walk.gif" width="288" height="288" alt="Animated GIF of the Bernard sprite walking right &mdash; four-frame cycle, glasses and spiky hair visible." style="image-rendering:pixelated;">
+                    <figcaption>Bernard, walking right.</figcaption>
+                </figure>
+                <figure>
+                    <img class="pixel-art" src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/v2-forge-rebecca-walk.gif" width="288" height="288" alt="Animated GIF of the Rebecca sprite walking right &mdash; four-frame cycle, long dark hair, dark outfit." style="image-rendering:pixelated;">
+                    <figcaption>Rebecca, walking right.</figcaption>
+                </figure>
+            </div>
+
+            <p>These sprites are now wandering at the bottom of <a href="/about/">my about page</a>, next to my sign-off line. They walk back and forth across the row, bounce off the edges, occasionally pass each other. Scroll to the bottom of that page and you'll see them. Round-one sprites would have looked like a screensaver from 2003. Round-two sprites look like us.</p>
+
+            <h2 id="the-game">Then I built a game</h2>
+
+            <p>With characters that actually looked like us, the question stopped being &ldquo;can the AI draw&rdquo; and started being &ldquo;what do you do with them?&rdquo;</p>
+
+            <p>I had GPT-5.5 build a side-scroller. Bernard runs from SOCO past the South Congress food trucks, over Lady Bird Lake under the Congress Avenue bridge bats, past the Capitol dome, to Rebecca on a neon rooftop. Touching her ends the game. No flagpole &mdash; the win condition is reaching her.</p>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-level-overview.png" width="2200" height="780" alt="Annotated level overview of the Run to Rebecca game showing the Austin-themed side-scroller from start to finish: SOCO sign, food trucks, Lady Bird Lake, Capitol dome silhouette, UT Tower, Frost Bank crown tower, and Rebecca on a rooftop at the end. Annotated with labels for MOVE (coyote + buffered jump), DASH (Shift J K + shake), SAVE (checkpoint lanterns), JUICE (particles + zone toasts), SOUND (procedural WebAudio), WIN (Rebecca's final stats).">
+                <figcaption>The level. Austin landmarks, six checkpoint lanterns, three hearts and three faces collectible per run. Rebecca is the finish line.</figcaption>
+            </figure>
+
+            <p>Three iterations got it from prototype to &ldquo;tiny finished game.&rdquo; v2 was pixel sprites + tilemap. v3 added an HD painterly parallax-scrolling Austin backdrop. v4 was the polish pass:</p>
+
+            <ul>
+                <li><strong>Game feel</strong>: coyote time, jump buffering, variable jump release, dash with recharge, screen shake on dash and damage.</li>
+                <li><strong>Save</strong>: Six checkpoint lanterns that update respawn and reduce death punishment.</li>
+                <li><strong>Juice</strong>: dash afterimages, speed streaks, landing dust, collectible bursts, checkpoint rings, a heart-and-confetti burst when Rebecca is reached.</li>
+                <li><strong>Presentation</strong>: progress bar, run timer, zone title toasts, mute badge, end-of-run stats panel.</li>
+                <li><strong>Audio</strong>: procedural WebAudio that boots after first input &mdash; ambient bed plus jump/dash/collect/checkpoint/hurt/win SFX.</li>
+            </ul>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-polish-board.png" width="1800" height="1200" alt="Polish review board for Run to Rebecca v4, showing active gameplay screenshot, the Rebecca-reached win screen, the list of v4 polish items (Celeste-ish movement, dash with recharge, checkpoint lanterns, procedural WebAudio, presentation), and a panorama strip of the level with checkpoints and game-feel callouts." style="border-radius:6px;">
+                <figcaption>The v4 polish board &mdash; the stuff that makes a prototype feel like a tiny finished game.</figcaption>
+            </figure>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/devil-is-in-the-ai-skills/game-finish.png" width="1280" height="684" alt="Win screen of Run to Rebecca: 'Rebecca reached' in white serif text on a dark overlay with a pink heart, run stats showing time, faces collected, and hearts collected, with the Austin neon rooftop visible behind the panel.">
+                <figcaption>The win state. No flagpole needed.</figcaption>
+            </figure>
+
+            <a class="play-cta" href="/games/run-to-rebecca/">Play Run to Rebecca <span class="arrow">&rarr;</span></a>
+
+            <p>None of this would have happened if round one had been good enough. Stick-figure sprites wouldn't have inspired me to spend the weekend on it. Recognizable sprites did.</p>
+
+            <h2 id="thesis">The devil is in the AI skills</h2>
+
+            <p>The model didn't get better between rounds. The skill stack around it did.</p>
+
+            <p>This is the thing nobody briefs you on when they sell you the flagship model. The model itself is a commodity &mdash; it'll be replaced by something within ninety days. What isn't a commodity is the layer of skills that determine what the model can actually <em>do</em> for you. <code>agent-sprite-forge</code> uses the same Gemini image weights anyone with an API key can call. The difference is the wrapper.</p>
+
+            <p>And right now the open-source skill ecosystem is heavily skewed toward business and code, because that's where the early demand was. The skill library is full of things like:</p>
+
+            <ul>
+                <li>PPTX skills for generating slide decks</li>
+                <li>DOCX skills for writing reports and letters</li>
+                <li>XLSX skills for cleaning and analyzing spreadsheets</li>
+                <li>PDF skills for extraction and form-filling</li>
+                <li>Code-review, debug, GitHub-PR, security-audit skills</li>
+            </ul>
+
+            <p>What's <em>not</em> in the default kit: pixel art, sprite rigging, game feel tuning, animation timing, audio mixing, video editing, design-system enforcement, music composition, voice direction. The creative side of the skill ecosystem is several years behind the business side. That gap is where the next two years of AI work lives.</p>
+
+            <h2 id="chauffeur">Chauffeur knowledge</h2>
+
+            <p>There's a parable about Max Planck and his chauffeur. After Planck won the Nobel, he gave the same lecture so many times across Germany that his chauffeur memorized it. One night they swapped places &mdash; the chauffeur gave the lecture, Planck sat in the audience in the chauffeur's hat. The talk went fine. Then a physicist in the front row asked a real question. The chauffeur shrugged and said, &ldquo;I'm surprised to hear such a simple question in an advanced city like Munich. I'll let my chauffeur answer it.&rdquo;</p>
+
+            <p>The usual moral is about real expertise vs. surface fluency. But there's an inverse moral worth holding onto: <em>you don't have to be Planck.</em> You just have to know who Planck is and how to find their chauffeur.</p>
+
+            <p>For AI skills, the practical version is: interview people who actually ship things in your domain. Ask which libraries they reach for. Ask what they wish existed. They will tell you faster than you can search the GitHub trending feed yourself. One conversation gets you eighty percent of the way.</p>
+
+            <p>I found <code>agent-sprite-forge</code> because I described the failure mode out loud to someone who'd already built sprites for a game in the same engine. He sent the link. Hours of fumbling through Hugging Face wouldn't have produced that link. The chauffeur did.</p>
+
+            <p>This is how I now do skill discovery for everything new I touch &mdash; reels, voice agents, music, 3D. Find the chauffeur. Borrow their toolbox. Skip the long tail.</p>
+
+            <h2 id="takeaway">The takeaway</h2>
+
+            <p>Stock AI couldn't make a pixel version of my fiancée. A skill did.</p>
+
+            <p>The sprites wandering on <a href="/about/">/about/</a> &mdash; those are receipts. The Austin side-scroller at <a href="/games/run-to-rebecca/">/games/run-to-rebecca/</a> &mdash; those are receipts. Both came from finding the right skill, not from picking a better model.</p>
+
+            <p>The chauffeur of this month is whoever curated <code>agent-sprite-forge</code> on GitHub. The chauffeur of next month is whoever's curating the creative-stack skill you haven't found yet. Go find them.</p>
+
+            <p>The devil is in the AI skills. The model is the easy part.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/openclaw-skill-tree/">OpenClaw Is an MMORPG</a><p class="zn-recommended-dek">A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call.</a><p class="zn-recommended-dek">Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/plan-3x-build-once/">Plan 3×, Build Once: How Three Models Plan What One Model Ships</a><p class="zn-recommended-dek">We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+</body>
+</html>
