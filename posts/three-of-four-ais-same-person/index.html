@@ -556,10 +556,10 @@
 
       // SVG layout — viewBox-relative units so it scales responsively
       var MAX = 50;
-      var SVG_W = 620;
+      var SVG_W = 680;
       var DIM_H = 162;  // height of each dimension section (6 bar rows + header + axis)
       var PAD_L = 120;  // left padding (room for full model names like "Gemini 3.1 Pro")
-      var PAD_R = 60;   // right padding (room for value labels like "48.3 ±2.0")
+      var PAD_R = 120;  // right padding — labels live here, past the right end of the error bar
       var CHART_W = SVG_W - PAD_L - PAD_R;
       var BAR_H = 14;
       var BAR_GAP = 4;
@@ -678,9 +678,15 @@
           });
           errorsGroup.appendChild(errCapR);
 
-          // Value label (right of the bar)
+          // Value label — positioned past the right error cap so the
+          // number never sits on top of the bar fill or the cap stem.
+          // For zero-SD bars (user-entered scores) it falls back to
+          // 6px past the bar end, since there's no error cap to clear.
+          var labelX = hasData
+            ? Math.min(xAt(hi) + 8, SVG_W - 4)
+            : SVG_W - 4;
           var valEl = el('text', {
-            x: Math.min(xAt(meanV) + 6, SVG_W - 4),
+            x: labelX,
             y: barY + 10,
             class: 'val-label' + (m.hidden || !hasData ? ' hidden' : ''),
             'data-model': m.id, 'data-dim': dim.key,
