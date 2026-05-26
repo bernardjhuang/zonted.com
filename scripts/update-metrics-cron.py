@@ -71,6 +71,19 @@ MANUAL_REVENUE_CARDS = [
             {"label": "Revenue", "value": "$0"},
         ],
     },
+    {
+        "key": "agenttune",
+        "name": "AgentTune",
+        "domain": "agent-tune.com",
+        "color": "#6366f1",
+        "total": "$0",
+        "label": "current revenue",
+        "source": "Open library",
+        "rows": [
+            {"label": "Status", "value": "Live"},
+            {"label": "Model", "value": "Custom tunings"},
+        ],
+    },
 ]
 
 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -423,7 +436,7 @@ def revenue_cards(stripe_revenue: dict) -> dict:
     }
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[1], veracity, MANUAL_REVENUE_CARDS[2]],
+        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[1], veracity, MANUAL_REVENUE_CARDS[2], MANUAL_REVENUE_CARDS[3]],
     }
 
 
