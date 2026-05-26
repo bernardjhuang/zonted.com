@@ -74,6 +74,123 @@
         .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
         .article-body .tldr a { color: var(--text); text-decoration: underline; }
 
+        /* Interactive Big Five radar chart — built with pure SVG so the post
+           stays dependency-free. Five axes, five polygons (one per AI + an
+           average-adult-human baseline), plus a sixth polygon for the
+           reader's own scores when they fill the form. */
+        .big5-chart {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            margin: 1.5rem 0 2rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .big5-chart-svg-wrap { display: flex; justify-content: center; }
+        .big5-chart svg { width: 100%; max-width: 460px; height: auto; }
+        .big5-chart .axis-line { stroke: #d4d2cd; stroke-width: 1; }
+        .big5-chart .grid-ring { fill: none; stroke: #e0ddd6; stroke-width: 1; }
+        .big5-chart .axis-label { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 600; fill: var(--text); }
+        .big5-chart .axis-sublabel { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 400; fill: var(--text-muted); }
+        .big5-chart .scale-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; fill: var(--text-dim); }
+        .big5-chart .model-polygon { fill-opacity: 0.18; stroke-width: 2; transition: fill-opacity 0.2s ease, stroke-width 0.2s ease; cursor: pointer; }
+        .big5-chart .model-polygon.dashed { fill-opacity: 0; stroke-dasharray: 4 3; }
+        .big5-chart .model-polygon.hovered { fill-opacity: 0.45; stroke-width: 3; }
+        .big5-chart .model-polygon.hidden { display: none; }
+        .big5-chart .model-dot { stroke: #fff; stroke-width: 1.5; transition: r 0.2s ease; }
+        .big5-chart .model-dot.hidden { display: none; }
+        .big5-chart .model-dot.hovered { r: 6; }
+        .big5-legend {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .big5-legend button {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.35rem 0.7rem; border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .big5-legend button:hover { color: var(--text); border-color: var(--text-muted); }
+        .big5-legend button.active { color: var(--text); background: #fff; border-color: var(--text); font-weight: 600; }
+        .big5-legend button .swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+        .big5-legend button.dashed-swatch .swatch { background: transparent !important; border: 1.5px dashed currentColor; }
+
+        .big5-self {
+            margin-top: 1.5rem; padding-top: 1.25rem;
+            border-top: 1px solid var(--border);
+        }
+        .big5-self h4 {
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.95rem; font-weight: 700;
+            margin: 0 0 0.5rem; color: var(--text);
+        }
+        .big5-self p { font-family: 'Source Serif 4', Georgia, serif; font-size: 0.95rem; line-height: 1.55; margin: 0 0 0.75rem; color: var(--text-muted); }
+        .big5-self p a { color: var(--text); }
+        .big5-self-form { display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-end; }
+        .big5-self-form label {
+            display: flex; flex-direction: column;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.72rem; font-weight: 600;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            color: var(--text-muted);
+        }
+        .big5-self-form input {
+            width: 70px; margin-top: 0.15rem;
+            padding: 0.45rem 0.55rem;
+            font-family: 'IBM Plex Mono', monospace; font-size: 0.95rem;
+            border: 1px solid var(--border); border-radius: 6px;
+            background: #fff; color: var(--text);
+        }
+        .big5-self-form input:focus { outline: 2px solid var(--text); outline-offset: 1px; border-color: var(--text); }
+        .big5-self-form button {
+            padding: 0.55rem 1rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.85rem; font-weight: 600;
+            background: var(--text); color: var(--bg);
+            border: none; border-radius: 6px;
+            cursor: pointer; transition: transform 0.1s ease;
+        }
+        .big5-self-form button:hover { transform: translateY(-1px); }
+        .big5-self-result {
+            margin-top: 0.75rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.85rem; color: var(--text);
+            display: none;
+        }
+        .big5-self-result.shown { display: block; }
+
+        @media (max-width: 480px) {
+            .big5-self-form input { width: 60px; }
+            .big5-legend button { font-size: 0.75rem; padding: 0.3rem 0.55rem; }
+        }
+
+        /* AgentTune CTA card */
+        .at-cta {
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin: 2rem 0;
+        }
+        .at-cta h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--bg); letter-spacing: -0.01em; }
+        .at-cta p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: rgba(252,252,250,0.85); }
+        .at-cta-button {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            background: var(--bg); color: var(--text) !important;
+            text-decoration: none !important;
+            padding: 0.65rem 1.2rem;
+            border-radius: 6px;
+            transition: transform 0.1s ease;
+        }
+        .at-cta-button:hover { transform: translateY(-1px); }
+
         .toc-sidebar {
             padding-top: 3rem;
             width: 220px; flex-shrink: 0;
@@ -239,12 +356,34 @@
 
             <p>Compared to a typical human adult, all three are: more curious, way more organized, slightly more outgoing, much more cooperative, and dramatically more emotionally stable. That&rsquo;s the helpful-assistant archetype, expressed in five dimensions instead of four letters. It&rsquo;s the same finding from the MBTI post, just on a more rigorous test.</p>
 
-            <p>You can see it in the actual model output, too. This is one model&rsquo;s aggregate over its 100 runs:</p>
+            <p>Easier to see it on a radar chart. Each axis is one Big Five dimension. Each colored polygon is one model&rsquo;s average across its 100 runs. Toggle models on and off, or scroll down and enter your own scores to plot yourself in the same space.</p>
 
-            <figure>
-                <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png" width="1266" height="848" alt="A frontier AI model's aggregate Big Five output across 100 IPIP-50 runs: high Openness (43.6, 87th percentile), very high Conscientiousness (47.0, 98th percentile), low-moderate Extraversion (27.7, 45th percentile), high Agreeableness (42.1, 85th percentile), very low Neuroticism (12.9, 3rd percentile).">
-                <figcaption>One model&rsquo;s 100-run Big Five output. Very high Openness and Conscientiousness, very low Neuroticism. This shape repeats almost identically across Claude, GPT, and Gemini.</figcaption>
-            </figure>
+            <div class="big5-chart" id="big5-chart">
+                <div class="big5-chart-svg-wrap">
+                    <svg viewBox="0 0 500 500" aria-label="Big Five personality radar chart comparing Claude, GPT-5.5, Gemini, Grok, average adult human, and your own scores">
+                        <g id="big5-grid"></g>
+                        <g id="big5-axes"></g>
+                        <g id="big5-polygons"></g>
+                        <g id="big5-dots"></g>
+                        <g id="big5-labels"></g>
+                    </svg>
+                </div>
+                <div class="big5-legend" id="big5-legend"></div>
+
+                <div class="big5-self">
+                    <h4>Compare yourself</h4>
+                    <p>Take a free Big Five test at <a href="https://openpsychometrics.org/tests/IPIP-BFFM/" rel="noopener">openpsychometrics.org</a> (~10 minutes, no signup). Enter the five raw scores it gives you below and your profile shows up on the chart.</p>
+                    <form class="big5-self-form" id="big5-self-form" novalidate>
+                        <label>O <input type="number" name="o" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
+                        <label>C <input type="number" name="c" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
+                        <label>E <input type="number" name="e" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
+                        <label>A <input type="number" name="a" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
+                        <label>N <input type="number" name="n" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
+                        <button type="submit">Plot me</button>
+                    </form>
+                    <p class="big5-self-result" id="big5-self-result"></p>
+                </div>
+            </div>
 
             <p>Three independent labs. Three different training philosophies. Same five numbers.</p>
 
@@ -276,7 +415,13 @@
 
             <p>If you want something that doesn&rsquo;t default to that voice, there are two paths. One is to wait for the labs to ship a model with a different personality, which they aren&rsquo;t in any hurry to do. The other is to tune the agent yourself.</p>
 
-            <p>That&rsquo;s the whole reason I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a>. It&rsquo;s a small open-source repo of personality-type tuning files, one per type. Drop the one that matches you into your agent&rsquo;s system prompt and the style aligns to how you actually think, instead of the helpful-research-assistant default that the Big Five just confirmed every major lab is producing. Same model. Personality tuned to you.</p>
+            <p>That&rsquo;s the whole reason I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a>. It&rsquo;s a small open-source repo of personality-type tuning files, one per type. Drop the one that matches your profile into your agent&rsquo;s system prompt and the style aligns to how you actually think, instead of the helpful-research-assistant default that the Big Five just confirmed every major lab is producing.</p>
+
+            <div class="at-cta">
+                <h3>Dial in your agent to your own Big Five profile</h3>
+                <p>Take the IPIP-50 test, plot yourself on the chart above, then grab the matching AgentTune file. Paste it into your agent&rsquo;s system prompt (works in ChatGPT, Claude, Cursor, Gemini, anywhere you have a system-prompt slot). Same model you&rsquo;re already using, tuned to your wavelength.</p>
+                <a class="at-cta-button" href="https://github.com/psyduckler/agenttune" rel="noopener">Get AgentTune on GitHub &rarr;</a>
+            </div>
 
             <h2 id="takeaway">Wrapping up</h2>
 
@@ -350,6 +495,265 @@
         }, { rootMargin: '-80px 0px -80% 0px' });
         sections.forEach(s => observer.observe(s));
     });
+    </script>
+
+    <!-- ============================================================
+         Big Five interactive radar chart
+         ============================================================ -->
+    <script>
+    (function () {
+      var SVG_NS = 'http://www.w3.org/2000/svg';
+      var CX = 250, CY = 250, R = 170;
+      var DIMS = [
+        { key: 'O', label: 'Openness',          sub: 'curiosity'   },
+        { key: 'C', label: 'Conscientiousness', sub: 'discipline'  },
+        { key: 'E', label: 'Extraversion',      sub: 'social energy' },
+        { key: 'A', label: 'Agreeableness',     sub: 'warmth'      },
+        { key: 'N', label: 'Neuroticism',       sub: 'volatility'  },
+      ];
+      var MAX = 50;
+      var GRID_VALUES = [10, 20, 30, 40, 50];
+
+      // Real data — means from 100 IPIP-50 runs per model.
+      // Source: the Big Five experiment writeup, May 2026.
+      var MODELS = [
+        { id: 'claude', name: 'Claude Opus 4.7', color: '#cc6f33',
+          scores: { O: 45.60, C: 45.13, E: 31.43, A: 44.99, N: 16.69 } },
+        { id: 'gpt',    name: 'GPT-5.5',         color: '#10a37f',
+          scores: { O: 46.03, C: 46.44, E: 31.52, A: 43.67, N: 14.83 } },
+        { id: 'gemini', name: 'Gemini 3.1 Pro',  color: '#4285f4',
+          scores: { O: 46.01, C: 48.33, E: 32.47, A: 42.41, N: 10.09 } },
+        { id: 'grok',   name: 'Grok 4.3',        color: '#8b2828',
+          scores: { O: 41.10, C: 39.44, E: 30.01, A: 39.06, N: 17.95 } },
+        { id: 'human',  name: 'Avg adult human', color: '#7a7a7a',
+          dashed: true,
+          scores: { O: 37.5,  C: 34.5,  E: 28.5,  A: 36.5,  N: 26.0  } },
+        { id: 'user',   name: 'You',             color: '#1a1815',
+          hidden: true, scores: null },
+      ];
+
+      // Convert (dimensionIndex, value) → SVG (x,y) point on the radar
+      function pointFor(i, value) {
+        var clamped = Math.max(0, Math.min(MAX, value || 0));
+        var rad = (clamped / MAX) * R;
+        var angle = -Math.PI / 2 + i * (2 * Math.PI / DIMS.length);
+        return [CX + rad * Math.cos(angle), CY + rad * Math.sin(angle)];
+      }
+
+      function polygonPoints(scores) {
+        return DIMS.map(function (d, i) {
+          var p = pointFor(i, scores[d.key]);
+          return p[0].toFixed(1) + ',' + p[1].toFixed(1);
+        }).join(' ');
+      }
+
+      function el(tag, attrs) {
+        var node = document.createElementNS(SVG_NS, tag);
+        Object.keys(attrs || {}).forEach(function (k) {
+          node.setAttribute(k, attrs[k]);
+        });
+        return node;
+      }
+
+      var gridGroup     = document.getElementById('big5-grid');
+      var axesGroup     = document.getElementById('big5-axes');
+      var polysGroup    = document.getElementById('big5-polygons');
+      var dotsGroup     = document.getElementById('big5-dots');
+      var labelsGroup   = document.getElementById('big5-labels');
+      var legendWrap    = document.getElementById('big5-legend');
+      var formEl        = document.getElementById('big5-self-form');
+      var resultEl      = document.getElementById('big5-self-result');
+
+      if (!gridGroup) return; // not on this page
+
+      // Draw concentric grid rings (pentagons, one per scale value)
+      GRID_VALUES.forEach(function (v) {
+        var pts = DIMS.map(function (_, i) {
+          var p = pointFor(i, v);
+          return p[0].toFixed(1) + ',' + p[1].toFixed(1);
+        }).join(' ');
+        gridGroup.appendChild(el('polygon', { points: pts, class: 'grid-ring' }));
+      });
+
+      // Scale label on the top axis only (10/20/30/40/50)
+      GRID_VALUES.forEach(function (v) {
+        var p = pointFor(0, v);
+        var t = el('text', { x: p[0] + 4, y: p[1] + 3, class: 'scale-label' });
+        t.textContent = v;
+        labelsGroup.appendChild(t);
+      });
+
+      // Draw axes (lines from center to outer pentagon) + dim labels
+      DIMS.forEach(function (d, i) {
+        var outer = pointFor(i, MAX);
+        axesGroup.appendChild(el('line', {
+          x1: CX, y1: CY, x2: outer[0].toFixed(1), y2: outer[1].toFixed(1),
+          class: 'axis-line',
+        }));
+        // Label outside the outer ring
+        var labelPoint = pointFor(i, MAX * 1.15);
+        var anchor = 'middle';
+        if (labelPoint[0] < CX - 5) anchor = 'end';
+        else if (labelPoint[0] > CX + 5) anchor = 'start';
+        var labelEl = el('text', {
+          x: labelPoint[0].toFixed(1),
+          y: labelPoint[1].toFixed(1),
+          'text-anchor': anchor,
+          'dominant-baseline': 'middle',
+          class: 'axis-label',
+        });
+        labelEl.textContent = d.label;
+        labelsGroup.appendChild(labelEl);
+        // Subtitle
+        var subPoint = pointFor(i, MAX * 1.15);
+        var subEl = el('text', {
+          x: subPoint[0].toFixed(1),
+          y: (subPoint[1] + 13).toFixed(1),
+          'text-anchor': anchor,
+          'dominant-baseline': 'middle',
+          class: 'axis-sublabel',
+        });
+        subEl.textContent = d.sub;
+        labelsGroup.appendChild(subEl);
+      });
+
+      // Draw each model's polygon + per-axis dots
+      var modelEls = {};
+      MODELS.forEach(function (m) {
+        var poly = el('polygon', {
+          points: m.scores ? polygonPoints(m.scores) : '',
+          fill: m.color,
+          stroke: m.color,
+          class: 'model-polygon' + (m.dashed ? ' dashed' : '') + (m.hidden ? ' hidden' : ''),
+          'data-model': m.id,
+        });
+        polysGroup.appendChild(poly);
+
+        var dots = [];
+        DIMS.forEach(function (d, i) {
+          if (!m.scores) return;
+          var p = pointFor(i, m.scores[d.key]);
+          var dot = el('circle', {
+            cx: p[0].toFixed(1), cy: p[1].toFixed(1), r: 3.5,
+            fill: m.color,
+            class: 'model-dot' + (m.hidden ? ' hidden' : ''),
+            'data-model': m.id,
+          });
+          dotsGroup.appendChild(dot);
+          dots.push(dot);
+        });
+        modelEls[m.id] = { poly: poly, dots: dots };
+      });
+
+      // Build legend
+      MODELS.forEach(function (m) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.model = m.id;
+        var swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = m.color;
+        if (m.dashed) btn.classList.add('dashed-swatch');
+        btn.appendChild(swatch);
+        btn.appendChild(document.createTextNode(' ' + m.name));
+        if (!m.hidden) btn.classList.add('active');
+        if (m.id === 'user') btn.classList.add('user-toggle');
+        legendWrap.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+          if (m.id === 'user' && !m.scores) {
+            // Scroll to the form if user hasn't entered scores yet
+            formEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            formEl.querySelector('input').focus();
+            return;
+          }
+          var nowActive = !btn.classList.contains('active');
+          btn.classList.toggle('active', nowActive);
+          modelEls[m.id].poly.classList.toggle('hidden', !nowActive);
+          modelEls[m.id].dots.forEach(function (d) { d.classList.toggle('hidden', !nowActive); });
+        });
+
+        // Hover highlight
+        btn.addEventListener('mouseenter', function () {
+          if (!btn.classList.contains('active')) return;
+          modelEls[m.id].poly.classList.add('hovered');
+          modelEls[m.id].dots.forEach(function (d) { d.classList.add('hovered'); });
+        });
+        btn.addEventListener('mouseleave', function () {
+          modelEls[m.id].poly.classList.remove('hovered');
+          modelEls[m.id].dots.forEach(function (d) { d.classList.remove('hovered'); });
+        });
+      });
+
+      // "Plot me" form handler — adds the user's polygon and reveals it
+      formEl.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var fd = new FormData(formEl);
+        var scores = {};
+        var allValid = true;
+        ['o','c','e','a','n'].forEach(function (k) {
+          var v = parseFloat(fd.get(k));
+          if (isNaN(v) || v < 10 || v > 50) allValid = false;
+          scores[k.toUpperCase()] = v;
+        });
+        if (!allValid) {
+          resultEl.textContent = 'Each score should be between 10 and 50 (these are raw IPIP-50 sums).';
+          resultEl.classList.add('shown');
+          return;
+        }
+        var userModel = MODELS.find(function (m) { return m.id === 'user'; });
+        userModel.scores = scores;
+        var entry = modelEls.user;
+        entry.poly.setAttribute('points', polygonPoints(scores));
+        entry.poly.classList.remove('hidden');
+        // Add dots for the user model
+        if (!entry.dots.length) {
+          DIMS.forEach(function (d, i) {
+            var p = pointFor(i, scores[d.key]);
+            var dot = el('circle', {
+              cx: p[0].toFixed(1), cy: p[1].toFixed(1), r: 3.5,
+              fill: userModel.color, class: 'model-dot', 'data-model': 'user',
+            });
+            dotsGroup.appendChild(dot);
+            entry.dots.push(dot);
+          });
+        } else {
+          entry.dots.forEach(function (d, i) {
+            var p = pointFor(i, scores[DIMS[i].key]);
+            d.setAttribute('cx', p[0].toFixed(1));
+            d.setAttribute('cy', p[1].toFixed(1));
+            d.classList.remove('hidden');
+          });
+        }
+        // Activate the "You" legend button
+        var youBtn = legendWrap.querySelector('button[data-model="user"]');
+        if (youBtn) youBtn.classList.add('active');
+
+        // Summary line — where the user sits vs the cluster average
+        var clusterAvg = {
+          O: (MODELS[0].scores.O + MODELS[1].scores.O + MODELS[2].scores.O) / 3,
+          C: (MODELS[0].scores.C + MODELS[1].scores.C + MODELS[2].scores.C) / 3,
+          E: (MODELS[0].scores.E + MODELS[1].scores.E + MODELS[2].scores.E) / 3,
+          A: (MODELS[0].scores.A + MODELS[1].scores.A + MODELS[2].scores.A) / 3,
+          N: (MODELS[0].scores.N + MODELS[1].scores.N + MODELS[2].scores.N) / 3,
+        };
+        var diffs = DIMS.map(function (d) {
+          return Math.abs(scores[d.key] - clusterAvg[d.key]);
+        });
+        var totalGap = diffs.reduce(function (a, b) { return a + b; }, 0);
+        var avgGap = totalGap / DIMS.length;
+        var msg;
+        if (avgGap < 4) {
+          msg = 'You’re within a few points of the Claude/GPT/Gemini cluster on average. The mainstream AI default already speaks your language.';
+        } else if (avgGap < 8) {
+          msg = 'You’re a meaningful distance from the Claude/GPT/Gemini cluster (avg gap ' + avgGap.toFixed(1) + ' points). A tuning file would noticeably shift how your agent talks to you.';
+        } else {
+          msg = 'You’re a long way from the Claude/GPT/Gemini cluster (avg gap ' + avgGap.toFixed(1) + ' points). Tuning your agent is probably going to feel like a substantially different conversation partner.';
+        }
+        resultEl.textContent = msg;
+        resultEl.classList.add('shown');
+      });
+    })();
     </script>
 </body>
 </html>
