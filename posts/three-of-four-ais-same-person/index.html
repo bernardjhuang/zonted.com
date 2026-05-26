@@ -59,6 +59,20 @@
         .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
         .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
         .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body table td.trait { vertical-align: top; padding-top: 0.6rem; padding-bottom: 0.6rem; }
+        .article-body table td.trait strong { display: block; color: var(--text); }
+        .article-body table td.trait .trait-spectrum {
+            display: block;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.78rem;
+            font-style: italic;
+            color: var(--text-dim);
+            margin-top: 2px;
+            white-space: nowrap;
+        }
+        @media (max-width: 480px) {
+            .article-body table td.trait .trait-spectrum { white-space: normal; }
+        }
         .article-body figure { margin: 1.5rem 0 2rem; }
         .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
         .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
@@ -350,14 +364,14 @@
 
             <table>
                 <thead>
-                    <tr><th>Trait</th><th>Opus 4.7</th><th>GPT-5.5</th><th>Gemini 3.1 Pro</th><th>Grok 4.3</th></tr>
+                    <tr><th>Trait <span style="font-weight:400;color:var(--text-dim);font-size:0.78rem;font-style:italic;">(low &rarr; high)</span></th><th>Opus 4.7</th><th>GPT-5.5</th><th>Gemini 3.1 Pro</th><th>Grok 4.3</th></tr>
                 </thead>
                 <tbody>
-                    <tr><td>Openness</td><td class="num">45.6</td><td class="num">46.0</td><td class="num">46.0</td><td class="num">41.1</td></tr>
-                    <tr><td>Conscientiousness</td><td class="num">45.1</td><td class="num">46.4</td><td class="num">48.3</td><td class="num">39.4</td></tr>
-                    <tr><td>Extraversion</td><td class="num">31.4</td><td class="num">31.5</td><td class="num">32.5</td><td class="num">30.0</td></tr>
-                    <tr><td>Agreeableness</td><td class="num">45.0</td><td class="num">43.7</td><td class="num">42.4</td><td class="num">39.1</td></tr>
-                    <tr><td>Neuroticism</td><td class="num">16.7</td><td class="num">14.8</td><td class="num">10.1</td><td class="num">18.0</td></tr>
+                    <tr><td class="trait"><strong>Openness</strong><span class="trait-spectrum">practical &rarr; curious</span></td><td class="num">45.6</td><td class="num">46.0</td><td class="num">46.0</td><td class="num">41.1</td></tr>
+                    <tr><td class="trait"><strong>Conscientiousness</strong><span class="trait-spectrum">spontaneous &rarr; organized</span></td><td class="num">45.1</td><td class="num">46.4</td><td class="num">48.3</td><td class="num">39.4</td></tr>
+                    <tr><td class="trait"><strong>Extraversion</strong><span class="trait-spectrum">reserved &rarr; outgoing</span></td><td class="num">31.4</td><td class="num">31.5</td><td class="num">32.5</td><td class="num">30.0</td></tr>
+                    <tr><td class="trait"><strong>Agreeableness</strong><span class="trait-spectrum">blunt &rarr; warm</span></td><td class="num">45.0</td><td class="num">43.7</td><td class="num">42.4</td><td class="num">39.1</td></tr>
+                    <tr><td class="trait"><strong>Neuroticism</strong><span class="trait-spectrum">calm &rarr; anxious</span></td><td class="num">16.7</td><td class="num">14.8</td><td class="num">10.1</td><td class="num">18.0</td></tr>
                 </tbody>
             </table>
 
