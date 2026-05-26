@@ -275,6 +275,10 @@
             margin-bottom: 10px;
         }
 
+        .property-card-header > * {
+            min-width: 0;
+        }
+
         .property-card h3 {
             font-size: 0.92rem;
             line-height: 1.2;
@@ -293,13 +297,15 @@
         .property-total {
             font-family: 'Inter', system-ui, sans-serif;
             text-align: right;
-            white-space: nowrap;
+            min-width: 0;
+            flex-shrink: 1;
         }
 
         .property-total strong {
             display: block;
             font-size: 1rem;
             line-height: 1.1;
+            white-space: nowrap;
         }
 
         .property-total span {
@@ -309,6 +315,7 @@
             letter-spacing: 0.06em;
             color: var(--text-dim);
             margin-top: 3px;
+            line-height: 1.25;
         }
 
         .property-mini-chart {
