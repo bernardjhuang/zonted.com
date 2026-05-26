@@ -20,6 +20,7 @@ const PROPERTIES = [
   { key: 'veracityapi', name: 'VeracityAPI', domain: 'veracityapi.com', id: '537020430', color: '#336699' },
   { key: 'palmaura', name: 'Palmaura', domain: 'palmaura.app', id: '538073800', color: '#8a5a20' },
   { key: 'zonted', name: 'Zonted', domain: 'zonted.com', id: '532496138', color: '#6f4aa8' },
+  { key: 'agenttune', name: 'AgentTune', domain: 'agent-tune.com', id: '538913680', color: '#6366f1' },
 ];
 
 function fmtDate(d) {

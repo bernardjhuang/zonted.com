@@ -335,6 +335,31 @@ img, video { max-width: 100%; height: auto; }
   color: var(--ink);
 }
 .zn-subscribe-copy strong { font-weight: 600; }
+
+/* Agentic shimmer text — a bright stripe sweeps across muted ink, the
+   "thinking" look common in agent UIs (Claude Code, Cursor, etc.). Used
+   on the homepage subscribe CTA strong. */
+.zn-shimmer {
+  background: linear-gradient(90deg, var(--faded) 0%, var(--faded) 40%, var(--ink) 50%, var(--faded) 60%, var(--faded) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: zn-shimmer 3s linear infinite;
+}
+@keyframes zn-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zn-shimmer {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--ink);
+    color: var(--ink);
+  }
+}
 .zn-subscribe-meta {
   margin-top: 10px;
   font-family: var(--mono);
