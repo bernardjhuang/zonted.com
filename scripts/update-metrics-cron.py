@@ -355,7 +355,7 @@ def fetch_stripe_usage_revenue() -> dict:
     VeracityAPI currently charges metered request top-ups rather than Stripe
     subscriptions, so revenue comes from successful charges/payment intents.
     """
-    cutoff = datetime.utcnow() - timedelta(days=89)
+    cutoff = datetime.utcnow() - timedelta(days=29)
     cutoff_ts = int(cutoff.timestamp())
     charges = stripe_list("charges")
     balance_transactions = stripe_list("balance_transactions")
@@ -396,11 +396,11 @@ def fetch_stripe_usage_revenue() -> dict:
         "color": "#336699",
         "source": "Stripe",
         "currency": primary_currency,
-        "grossCents90d": round(recent_gross, 2),
-        "netCents90d": round(recent_net, 2),
-        "feesCents90d": round(recent_fees, 2),
+        "grossCents30d": round(recent_gross, 2),
+        "netCents30d": round(recent_net, 2),
+        "feesCents30d": round(recent_fees, 2),
         "lifetimeGrossCents": round(lifetime_gross, 2),
-        "successfulPayments90d": len(recent),
+        "successfulPayments30d": len(recent),
         "successfulPaymentsLifetime": len(successful),
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
     }
@@ -412,12 +412,12 @@ def revenue_cards(stripe_revenue: dict) -> dict:
         "name": stripe_revenue["name"],
         "domain": stripe_revenue["domain"],
         "color": stripe_revenue.get("color", "#336699"),
-        "total": money(stripe_revenue.get("grossCents90d") or 0, stripe_revenue.get("currency") or "usd"),
-        "label": "gross collected (90d)",
+        "total": money(stripe_revenue.get("grossCents30d") or 0, stripe_revenue.get("currency") or "usd"),
+        "label": "gross collected (30d)",
         "source": "Stripe",
         "rows": [
-            {"label": "Successful payments", "value": fmt(stripe_revenue.get("successfulPayments90d") or 0)},
-            {"label": "Net after fees", "value": money(stripe_revenue.get("netCents90d") or 0, stripe_revenue.get("currency") or "usd")},
+            {"label": "Successful payments", "value": fmt(stripe_revenue.get("successfulPayments30d") or 0)},
+            {"label": "Net after fees", "value": money(stripe_revenue.get("netCents30d") or 0, stripe_revenue.get("currency") or "usd")},
             {"label": "Lifetime gross", "value": money(stripe_revenue.get("lifetimeGrossCents") or 0, stripe_revenue.get("currency") or "usd")},
         ],
     }
@@ -690,7 +690,7 @@ def update_html(data: dict) -> None:
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
             <h2 id="revenue-heading"><span class="icon">💸</span> Revenue Snapshot</h2>
-            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for the last 90 days.</p>
+            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for the last 30 days.</p>
             <div class="property-grid revenue-grid">
 {revenue_cards}
             </div>
