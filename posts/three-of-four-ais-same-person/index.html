@@ -379,7 +379,7 @@
 
             <p>Compared to a typical adult human, all three are more curious, way more organized, slightly more outgoing, much more cooperative, and dramatically more emotionally stable. That&rsquo;s the helpful-assistant archetype, just expressed in five dimensions instead of four letters. Same finding as the MBTI post, on a more rigorous test.</p>
 
-            <p>Easier to see with the bars side by side. Each section below is one Big Five dimension. The bars are each model&rsquo;s mean across 100 runs, the thin lines through them are &plusmn;1 standard deviation, and the dashed vertical line is where the average adult human lands. Toggle a model off in the legend to see what&rsquo;s underneath, or fill in your own scores at the bottom to plot yourself in the same space.</p>
+            <p>Easier to see with the bars side by side. Each section below is one Big Five dimension. The first bar in every section is the average adult human as a baseline, the four colored bars are each model&rsquo;s mean across 100 runs, and the thin lines through each bar are &plusmn;1 standard deviation. Toggle a model off in the legend to see what&rsquo;s underneath, or fill in your own scores at the bottom to plot yourself in the same space.</p>
 
             <div class="big5-chart" id="big5-chart">
                 <div class="big5-chart-svg-wrap">
@@ -530,9 +530,14 @@
 
       // Means + ±1 SD from 100 IPIP-50 runs per model.
       // Source: the Big Five experiment writeup, May 2026.
-      // 'human' is the adult IPIP norm reference, shown as a dashed
-      // baseline rather than a bar.
+      // 'human' is the adult IPIP norm reference — included as a regular
+      // bar so the chart shows the population baseline alongside the AIs
+      // rather than as a separate visual element. SD on the human row is
+      // the published IPIP norm SD across the adult population.
       var MODELS = [
+        { id: 'human',  name: 'Avg adult human', short: 'Avg human',      color: '#888888', isReference: true,
+          means: { O: 37.5,  C: 34.5,  E: 28.5,  A: 36.5,  N: 26.0 },
+          sds:   { O: 5.5,   C: 6.0,   E: 7.0,   A: 5.5,   N: 7.0  } },
         { id: 'claude', name: 'Claude Opus 4.7', short: 'Opus 4.7',       color: '#cc6f33',
           means: { O: 45.60, C: 45.13, E: 31.43, A: 44.99, N: 16.69 },
           sds:   { O: 1.03,  C: 1.29,  E: 1.57,  A: 1.27,  N: 2.35  } },
@@ -549,17 +554,10 @@
           hidden: true, means: null, sds: null },
       ];
 
-      // Adult IPIP norms — drawn as the dashed baseline per dimension
-      var HUMAN = {
-        name: 'Avg adult human',
-        color: '#888',
-        means: { O: 37.5, C: 34.5, E: 28.5, A: 36.5, N: 26.0 },
-      };
-
       // SVG layout — viewBox-relative units so it scales responsively
       var MAX = 50;
       var SVG_W = 620;
-      var DIM_H = 140;  // height of each dimension section
+      var DIM_H = 162;  // height of each dimension section (6 bar rows + header + axis)
       var PAD_L = 120;  // left padding (room for full model names like "Gemini 3.1 Pro")
       var PAD_R = 60;   // right padding (room for value labels like "48.3 ±2.0")
       var CHART_W = SVG_W - PAD_L - PAD_R;
@@ -621,19 +619,7 @@
           labelsGroup.appendChild(tick);
         });
 
-        // Average-human baseline (dashed vertical)
-        var humanX = xAt(HUMAN.means[dim.key]);
-        gridGroup.appendChild(el('line', {
-          x1: humanX, y1: chartTop, x2: humanX, y2: chartBottom, class: 'baseline',
-        }));
-        // Label on the first dimension only to keep things uncluttered
-        if (dimIdx === 0) {
-          var blab = el('text', { x: humanX + 4, y: chartTop + 9, class: 'baseline-label' });
-          blab.textContent = 'avg human';
-          labelsGroup.appendChild(blab);
-        }
-
-        // One bar per non-human model
+        // One bar per model (human is now part of MODELS, drawn as its own bar)
         var barY = chartTop + 6;
         MODELS.forEach(function (m, mi) {
           // Model name on the left
@@ -740,26 +726,17 @@
       }
 
       // Legend
-      var legendModels = MODELS.concat([{ id: 'human-legend', name: HUMAN.name, color: HUMAN.color, dashed: true, info: true }]);
-      legendModels.forEach(function (m) {
+      MODELS.forEach(function (m) {
         var btn = document.createElement('button');
         btn.type = 'button';
         btn.dataset.model = m.id;
         var swatch = document.createElement('span');
         swatch.className = 'swatch';
         swatch.style.backgroundColor = m.color;
-        if (m.dashed) btn.classList.add('dashed-swatch');
         btn.appendChild(swatch);
         btn.appendChild(document.createTextNode(' ' + m.name));
-        if (!m.hidden && !m.info) btn.classList.add('active');
+        if (!m.hidden) btn.classList.add('active');
         legendWrap.appendChild(btn);
-
-        if (m.info) {
-          // Human is an info-only chip; not interactive
-          btn.style.cursor = 'default';
-          btn.disabled = true;
-          return;
-        }
 
         btn.addEventListener('click', function () {
           if (m.id === 'user' && !m.means) {
@@ -819,9 +796,12 @@
         if (youBtn) youBtn.classList.add('active');
 
         // Summary — how far from the Claude/GPT/Gemini cluster on average
+        var clusterModels = ['claude', 'gpt', 'gemini'].map(function (id) {
+          return MODELS.find(function (m) { return m.id === id; });
+        });
         var cluster = {};
         DIMS.forEach(function (d) {
-          cluster[d.key] = (MODELS[0].means[d.key] + MODELS[1].means[d.key] + MODELS[2].means[d.key]) / 3;
+          cluster[d.key] = (clusterModels[0].means[d.key] + clusterModels[1].means[d.key] + clusterModels[2].means[d.key]) / 3;
         });
         var totalGap = DIMS.reduce(function (sum, d) {
           return sum + Math.abs(means[d.key] - cluster[d.key]);
