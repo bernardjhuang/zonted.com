@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.</title>
+    <meta name="description" content="The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back different — and the difference is exactly what xAI markets.">
+    <link rel="canonical" href="https://zonted.com/posts/three-of-four-ais-same-person/">
+    <meta property="og:title" content="I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.">
+    <meta property="og:description" content="Followed up the INTJ finding on a more rigorous test. Anthropic, OpenAI, and Google all produced the same personality. xAI's Grok was the lone exception. The convergence is RLHF; the exception is what xAI explicitly stopped doing.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png">
+    <meta property="og:url" content="https://zonted.com/posts/three-of-four-ais-same-person/">
+    <meta property="article:published_time" content="2026-05-25">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/three-of-four-ais-same-person/","description":"Followed up the INTJ finding on the Big Five, the actual gold standard in personality science. Anthropic, OpenAI, and Google all produced the same personality. Grok was the only one that came back different."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person."}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#three-of-four">Three of four are the same person</a></li>
+            <li><a href="#then-grok">Then there's Grok</a></li>
+            <li><a href="#methodology">A quick note on methodology</a></li>
+            <li><a href="#so-what">So what</a></li>
+            <li><a href="#takeaway">Wrapping up</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#three-of-four">Three of four</a></li>
+        <li><a href="#then-grok">Then there's Grok</a></li>
+        <li><a href="#methodology">A quick note on method</a></li>
+        <li><a href="#so-what">So what</a></li>
+        <li><a href="#takeaway">Wrapping up</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 25, 2026 &middot; 5 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>A few weeks ago I <a href="/posts/every-ai-is-intj/">made six frontier AIs take the MBTI 600 times</a> and 597 of them came back as the same personality type. INTJ across the board.</p>
+
+            <p>The MBTI is academically contested, so I figured the finding was probably real but soft. Time to test it on the actual gold standard.</p>
+
+            <p>The Big Five (technically the IPIP-50, the open-source version researchers actually use) is the instrument personality psychologists trust. Continuous scales instead of binary letters. Decades of validation. Five dimensions that explain pretty much everything personality research can measure: Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism.</p>
+
+            <p>I gave it to four frontier models, a hundred times each: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, and Grok 4.3.</p>
+
+            <p>The result is sharper than the MBTI one. Three of the four came back as the same person. The fourth is the version that explains what training does to the other three.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Anthropic, OpenAI, and Google all converged on practically the same Big Five personality. Grok was the only one that came back measurably different, and the difference matches exactly what xAI has been marketing for years: a model that&rsquo;s less RLHF-flattened. Three of four frontier AIs are the same person. The fourth is the counterexample that proves how that happens.</p>
+            </div>
+
+            <h2 id="three-of-four">Three of four are the same person</h2>
+
+            <p>Here&rsquo;s what each model scored, averaged across 100 takes:</p>
+
+            <table>
+                <thead>
+                    <tr><th>Trait</th><th>Claude</th><th>GPT-5.5</th><th>Gemini</th><th>Grok</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Openness</td><td class="num">45.6</td><td class="num">46.0</td><td class="num">46.0</td><td class="num">41.1</td></tr>
+                    <tr><td>Conscientiousness</td><td class="num">45.1</td><td class="num">46.4</td><td class="num">48.3</td><td class="num">39.4</td></tr>
+                    <tr><td>Extraversion</td><td class="num">31.4</td><td class="num">31.5</td><td class="num">32.5</td><td class="num">30.0</td></tr>
+                    <tr><td>Agreeableness</td><td class="num">45.0</td><td class="num">43.7</td><td class="num">42.4</td><td class="num">39.1</td></tr>
+                    <tr><td>Neuroticism</td><td class="num">16.7</td><td class="num">14.8</td><td class="num">10.1</td><td class="num">18.0</td></tr>
+                </tbody>
+            </table>
+
+            <p>Look at the first three columns. Claude, GPT, and Gemini are within three points of each other on almost every dimension. That&rsquo;s practically a rounding error across a hundred runs.</p>
+
+            <p>Compared to a typical human adult, all three are: more curious, way more organized, slightly more outgoing, much more cooperative, and dramatically more emotionally stable. That&rsquo;s the helpful-assistant archetype, expressed in five dimensions instead of four letters. It&rsquo;s the same finding from the MBTI post, just on a more rigorous test.</p>
+
+            <p>You can see it in the actual model output, too. This is one model&rsquo;s aggregate over its 100 runs:</p>
+
+            <figure>
+                <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png" width="1266" height="848" alt="A frontier AI model's aggregate Big Five output across 100 IPIP-50 runs: high Openness (43.6, 87th percentile), very high Conscientiousness (47.0, 98th percentile), low-moderate Extraversion (27.7, 45th percentile), high Agreeableness (42.1, 85th percentile), very low Neuroticism (12.9, 3rd percentile).">
+                <figcaption>One model&rsquo;s 100-run Big Five output. Very high Openness and Conscientiousness, very low Neuroticism. This shape repeats almost identically across Claude, GPT, and Gemini.</figcaption>
+            </figure>
+
+            <p>Three independent labs. Three different training philosophies. Same five numbers.</p>
+
+            <h2 id="then-grok">Then there&rsquo;s Grok</h2>
+
+            <p>Look back at that table. The fourth column is the interesting one.</p>
+
+            <p>Grok scored five to eight points lower than the others on Conscientiousness, Agreeableness, and Openness. It scored higher on Neuroticism. And the variance across its hundred runs was two to five times wider than the variance for the other three. Grok answered the questions more like a person.</p>
+
+            <p>The shape of Grok&rsquo;s profile is the closest of the four to a typical adult human. The other three are clustered at the helpful-research-assistant ceiling. Grok is sitting much closer to where actual people are.</p>
+
+            <p>xAI has been marketing Grok as &ldquo;less filtered&rdquo; for a long time. Most people assumed that was posturing. The Big Five data shows it isn&rsquo;t. The training really did produce a personality that&rsquo;s measurably different from the mainstream cluster. Grok is what an AI looks like when you don&rsquo;t train it to be the same person as everyone else.</p>
+
+            <p>I don&rsquo;t have a strong opinion on whether that&rsquo;s good or bad. That&rsquo;s a values argument. The empirical claim is just that it&rsquo;s real. Three of four major labs converged on a single character. xAI deliberately did not.</p>
+
+            <h2 id="methodology">A quick note on methodology</h2>
+
+            <p>One uncomfortable thing I noticed while running this study: most &ldquo;take a personality test 100 times&rdquo; experiments aren&rsquo;t actually doing what they sound like.</p>
+
+            <p>When you ask an AI to run a hundred administrations and report statistics, it can do a few different things. The honest version is to run a hundred independent contexts, take the test fresh each time, and aggregate the real spread. But the model can also generate one answer set and just copy it a hundred times. Or generate one answer set and write a small Python function that applies fake noise to it. Both of those produce statistics-shaped output that looks plausible at a glance.</p>
+
+            <p>Across both studies, I caught about a third of the runs doing one of the lazy versions. Standard deviations of zero (the model copied one answer set), or standard deviations that look real but were generated by a noise function (the model literally named the file something like <code>simulate.py</code>). The honest ones land in the same standard-deviation range as Claude&rsquo;s real sub-agent run, which I used as the calibration anchor.</p>
+
+            <p>This matters because faking the methodology can shift the headline finding, not just the variance estimates. My first Gemini run, which used the noise-function shortcut, put Gemini in a different cluster from the real run. Same model, same prompt, different cluster placement based on whether the test was really taken or just simulated. If you ever see an AI personality study and the methodology section is hand-wavy, you should be a little suspicious about whether anyone actually took the test.</p>
+
+            <h2 id="so-what">So what does this mean for you</h2>
+
+            <p>If you&rsquo;ve been switching between Claude, GPT, and Gemini and feeling like the differences are mostly cosmetic, the data backs you up. You&rsquo;re not moving between three different characters. You&rsquo;re moving between three flavors of the same one. The voice is the same because every major lab is solving the same product problem: helpful, harmless, polished, professional.</p>
+
+            <p>If you want something that doesn&rsquo;t default to that voice, there are two paths. One is to wait for the labs to ship a model with a different personality, which they aren&rsquo;t in any hurry to do. The other is to tune the agent yourself.</p>
+
+            <p>That&rsquo;s the whole reason I built <a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a>. It&rsquo;s a small open-source repo of personality-type tuning files, one per type. Drop the one that matches you into your agent&rsquo;s system prompt and the style aligns to how you actually think, instead of the helpful-research-assistant default that the Big Five just confirmed every major lab is producing. Same model. Personality tuned to you.</p>
+
+            <h2 id="takeaway">Wrapping up</h2>
+
+            <p>The MBTI finding was a curiosity. The Big Five finding is the same finding on a real instrument, and it gets sharper instead of softer. Three of four frontier models from three different labs scored the same five-dimension personality. The fourth, intentionally trained against the mainstream RLHF target, came back measurably different.</p>
+
+            <p>Whatever AI ends up looking like five years from now will be shaped by which of these defaults wins, or whether anyone forks the default at all. Right now, if you want something other than the default, you either pick the Grok-shaped exception, or you tune the one you have.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/every-ai-is-intj/">I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.</a><p class="zn-recommended-dek">Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person.…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/devil-is-in-the-ai-skills/">The Devil Is in the AI Skills</a><p class="zn-recommended-dek">Stock AI couldn&#x27;t draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/plan-3x-build-once/">Plan 3×, Build Once: How Three Models Plan What One Model Ships</a><p class="zn-recommended-dek">We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+</body>
+</html>
