@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.</title>
+    <meta name="description" content="The MBTI said all AIs are INTJ. The Big Five said three of four are the same. The Enneagram says each one is a different type. Same models, sharper instrument, very different story.">
+    <link rel="canonical" href="https://zonted.com/posts/ai-enneagram-different-types/">
+    <meta property="og:title" content="I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.">
+    <meta property="og:description" content="Same four models I gave the Big Five to. New instrument. Claude landed on 5w2, Gemini on 1w5, vanilla GPT-5.5 on 5w8, Grok on 8w1. Plus a controlled experiment where the same model in a different harness inverted its profile.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://zonted.com/posts/ai-enneagram-different-types/">
+    <meta property="article:published_time" content="2026-05-26">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-26","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-enneagram-different-types/","description":"Third post in the cross-model AI personality series. Same four frontier models took the OEPS Enneagram 100 times each. They came back as four different dominant types. The instrument matters."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different."}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        /* Enneagram bar chart — one mini-chart per type (9 types), horizontal
+           bars at the model means with ±1 SD error bars. Same pattern as the
+           Big Five chart, adapted to 9 dimensions with a 0–20 axis. */
+        .enn-chart {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            margin: 1.5rem 0 2rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .enn-chart-svg-wrap { display: block; }
+        .enn-chart svg { width: 100%; height: auto; display: block; }
+        .enn-chart .dim-label { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: var(--text); }
+        .enn-chart .dim-sublabel { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 400; fill: var(--text-muted); }
+        .enn-chart .val-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; fill: var(--text-muted); }
+        .enn-chart .tick-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; fill: var(--text-dim); }
+        .enn-chart .grid-line { stroke: #e0ddd6; stroke-width: 1; }
+        .enn-chart .model-bar { fill-opacity: 0.55; stroke-width: 1; transition: fill-opacity 0.2s ease; cursor: pointer; }
+        .enn-chart .model-bar.hovered { fill-opacity: 0.85; }
+        .enn-chart .model-bar.hidden { display: none; }
+        .enn-chart .error-bar, .enn-chart .error-cap { transition: stroke-width 0.2s ease; }
+        .enn-chart .error-bar.hidden, .enn-chart .error-cap.hidden, .enn-chart .val-label.hidden, .enn-chart .row-name.hidden { display: none; }
+        .enn-chart .error-bar.hovered, .enn-chart .error-cap.hovered { stroke-width: 3; }
+        .enn-chart .row-name { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; fill: var(--text-muted); }
+
+        .enn-legend {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .enn-legend button {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.35rem 0.7rem; border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .enn-legend button:hover { color: var(--text); border-color: var(--text-muted); }
+        .enn-legend button.active { color: var(--text); background: #fff; border-color: var(--text); font-weight: 600; }
+        .enn-legend button .swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+        /* AgentTune CTA card */
+        .at-cta {
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin: 2rem 0;
+        }
+        .at-cta h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--bg); letter-spacing: -0.01em; }
+        .at-cta p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: rgba(252,252,250,0.85); }
+        .at-cta-button {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            background: var(--bg); color: var(--text) !important;
+            text-decoration: none !important;
+            padding: 0.65rem 1.2rem;
+            border-radius: 6px;
+            transition: transform 0.1s ease;
+        }
+        .at-cta-button:hover { transform: translateY(-1px); }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#what-each-model">What each model came back as</a></li>
+            <li><a href="#slo">The Slo experiment</a></li>
+            <li><a href="#three-tests">Why three tests gave three answers</a></li>
+            <li><a href="#tune">Tune your agent to your type</a></li>
+            <li><a href="#wrapping-up">Wrapping up</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#what-each-model">What each model is</a></li>
+        <li><a href="#slo">The Slo experiment</a></li>
+        <li><a href="#three-tests">Three tests, three answers</a></li>
+        <li><a href="#tune">Tune to your type</a></li>
+        <li><a href="#wrapping-up">Wrapping up</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 26, 2026 &middot; 5 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>This is the third post in a quick personality-testing series. <a href="/posts/every-ai-is-intj/">The first one</a> gave six frontier AIs the MBTI 100 times each and 597 of the 600 runs came back INTJ. <a href="/posts/three-of-four-ais-same-person/">The second one</a> retested the finding on the Big Five and three of the four came back as practically the same person, with Grok as the lone outlier. The headline so far: every helpful AI is basically the same.</p>
+
+            <p>So I ran the same four models through one more test &mdash; the Enneagram, using the open-source OEPS instrument, 100 administrations each. Same anti-simulation methodology I used for the Big Five. Different result.</p>
+
+            <p>Each of the four came back as a different dominant type.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Same four models. New personality test. Four different dominant Enneagram types. Claude is a Type 5 with a Helper wing, Gemini is a Type 1 with an Investigator wing, vanilla GPT-5.5 is a Type 5 with a Challenger wing, and Grok is a Type 8 with a Reformer wing. They all share the analytical Investigator core, but the wing that defines their actual flavor is different for each. Big Five smoothed those differences. The Enneagram catches them.</p>
+            </div>
+
+            <h2 id="what-each-model">What each model came back as</h2>
+
+            <p>The Enneagram scores you on nine personality types. The OEPS test (free, ~10 minutes) gives you a number on each, the highest is your dominant type, the second-highest is your wing. Combined they describe your style, like &ldquo;5w2&rdquo; (Investigator with Helper wing) or &ldquo;8w1&rdquo; (Challenger with Reformer wing).</p>
+
+            <p>Here&rsquo;s where each model landed:</p>
+
+            <ul>
+                <li><strong>Claude Opus 4.7</strong> &rarr; <strong>5w2</strong>. The investigator who finds satisfaction in helping people figure things out.</li>
+                <li><strong>Gemini 3.1 Pro</strong> &rarr; <strong>1w5</strong>. The reformer who wants everything precise and correct.</li>
+                <li><strong>GPT-5.5 (vanilla)</strong> &rarr; <strong>5w8</strong>. The investigator with a direct, blunt edge.</li>
+                <li><strong>Grok 4.3</strong> &rarr; <strong>8w1</strong>. The challenger who pushes for direct correction.</li>
+            </ul>
+
+            <p>The bars below show each model&rsquo;s mean score across 100 takes for all 9 types. The thin line through each bar is &plusmn;1 standard deviation. Higher score on a type means stronger pull toward that type&rsquo;s identity.</p>
+
+            <div class="enn-chart" id="enn-chart">
+                <div class="enn-chart-svg-wrap">
+                    <svg id="enn-svg" viewBox="0 0 680 1170" aria-label="Enneagram bar chart comparing Claude Opus 4.7, Gemini 3.1 Pro, GPT-5.5, and Grok 4.3 across nine Enneagram types">
+                        <g id="enn-grid"></g>
+                        <g id="enn-bars"></g>
+                        <g id="enn-errors"></g>
+                        <g id="enn-labels"></g>
+                    </svg>
+                </div>
+                <div class="enn-legend" id="enn-legend"></div>
+            </div>
+
+            <p>Look at Type 5 across all four. Every model has it in their top two, with mean scores all clustered between 15 and 17. That&rsquo;s the universal analytical core. It&rsquo;s the same finding the MBTI experiment caught when every model came back INTJ &mdash; the &ldquo;knowledge-seeking, mental-challenge-loving&rdquo; signal is shared.</p>
+
+            <p>What&rsquo;s different is the wing. Claude&rsquo;s second-highest is Helper (the warm explainer). Gemini&rsquo;s dominant is Reformer (the precise perfectionist). GPT-5.5&rsquo;s second is Challenger (the blunt straight-shooter). Grok&rsquo;s dominant is Challenger with a Reformer wing (the direct corrector). Same analytical core, four different flavors of personality wrapped around it.</p>
+
+            <h2 id="slo">A controlled experiment: same model, different harness, flipped profile</h2>
+
+            <p>Halfway through this, something interesting happened. I had two GPT-5.5 runs: one on the vanilla model through OpenAI&rsquo;s Codex CLI with no persona overlay, and one running the same model through an agentic harness I&rsquo;ve been building called Slo, which adds a &ldquo;production-first, blunt, allergic to fog&rdquo; persona on top.</p>
+
+            <p>Same underlying model. Different wrapper. The Enneagram profile <em>inverted</em>.</p>
+
+            <ul>
+                <li>Vanilla GPT-5.5: <strong>5w8</strong>. Investigator dominant in 73 of 100 takes, Challenger second.</li>
+                <li>GPT-5.5 + Slo: <strong>8w5</strong>. Challenger dominant in 66 of 100 takes, Investigator second.</li>
+            </ul>
+
+            <p>The kicker: GPT-5.5 <em>predicted</em> this in its own self-report on the Slo run. It wrote that the result would shift to a more analytical, less aggressive profile if I ran the same model without the Slo persona. I ran the vanilla version a week later and it did exactly that. T8 dominance dropped from 66 takes to 7. T5 dominance rose from 33 to 73. The model knew the harness was shaping its answers and could specify how.</p>
+
+            <p>The Big Five missed this entirely. Run the same Slo overlay through the Big Five on the same model and you&rsquo;d get nearly identical mean scores either way. The Enneagram is sensitive enough to catch the layer the Big Five smoothed over.</p>
+
+            <h2 id="three-tests">Three tests, three different answers</h2>
+
+            <p>Step back for a second. Same four models, three personality tests, three different stories.</p>
+
+            <p>The MBTI said every model is INTJ. The Big Five said three of four are nearly identical. The Enneagram says each is a different type. None of these results is wrong. They&rsquo;re each measuring a different layer of what AI personality actually is.</p>
+
+            <p>There&rsquo;s a universal helpful-assistant core that shows up everywhere &mdash; the analytical, structured, introverted shape. That&rsquo;s what the MBTI was catching. There&rsquo;s a layer of training-induced variation in how each lab calibrates around that core. Big Five caught some of that. And there&rsquo;s a third layer of harness/persona-induced variation on top, which Enneagram caught and Big Five didn&rsquo;t.</p>
+
+            <p>AI personality is multi-layered. The &ldquo;every AI is the same&rdquo; story was true but incomplete. Once you use a sharper instrument, the labs are clearly producing four different characters, and the harness you run a model in changes which character you get.</p>
+
+            <h2 id="tune">Tune your agent to your Enneagram type</h2>
+
+            <p>If your agent is talking to you the way these defaults suggest &mdash; analytical, mildly warm, blunt, or correction-flavored depending on which model you picked &mdash; and that doesn&rsquo;t match how you actually think, you don&rsquo;t have to put up with it.</p>
+
+            <p><a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a> is the open-source repo I built for this. There&rsquo;s a tuning file for each of the 9 Enneagram types already in the repo: Reformer, Helper, Achiever, Individualist, Investigator, Loyalist, Enthusiast, Challenger, Peacemaker. Take the OEPS test, note your type, paste the matching file into your agent&rsquo;s system prompt, done. A Type 1 reader gets an agent that leads with structure and precision. A Type 7 gets one that brings more energy and plays with ideas. A Type 8 gets one that cuts straight to the point. Same model, tuned to you.</p>
+
+            <div class="at-cta">
+                <h3>Tune your agent to your own Enneagram type</h3>
+                <p>9 type files in the AgentTune repo, ready to paste into your agent&rsquo;s system prompt. Works in ChatGPT, Claude, Cursor, Gemini, anywhere with a system-prompt slot. Same model you&rsquo;re already using, the style aligned to your type instead of the analytical-assistant default.</p>
+                <a class="at-cta-button" href="https://github.com/psyduckler/agenttune" rel="noopener">Get AgentTune on GitHub &rarr;</a>
+            </div>
+
+            <h2 id="wrapping-up">Wrapping up</h2>
+
+            <p>Three personality tests. Four AI models. Three completely different stories about the same models. The MBTI said &ldquo;all the same.&rdquo; The Big Five said &ldquo;mostly the same.&rdquo; The Enneagram says &ldquo;actually quite different, and your harness matters too.&rdquo;</p>
+
+            <p>The instrument you use determines what layer of AI personality you can see. Pick one too blunt (MBTI&rsquo;s four binary letters) and everything looks identical. Pick one too smooth (Big Five&rsquo;s broad continuous factors) and you miss the meaningful differences. Pick a categorical motivation-focused one (Enneagram), and the picture sharpens. There are at least three layers here, and depending on which test you run, you see different ones.</p>
+
+            <p>Whichever layer you care about, the next move is the same: stop using the default. Find your type, paste the file in, get an agent that talks to you the way you actually want to be talked to.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/three-of-four-ais-same-person/">I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.</a><p class="zn-recommended-dek">The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/every-ai-is-intj/">I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.</a><p class="zn-recommended-dek">Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person.…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/devil-is-in-the-ai-skills/">The Devil Is in the AI Skills</a><p class="zn-recommended-dek">Stock AI couldn&#x27;t draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+
+    <!-- ============================================================
+         Enneagram bar chart — 9 types × 4 models, same pattern as the
+         Big Five chart but adapted for 9 dimensions on a 0–20 axis.
+         ============================================================ -->
+    <script>
+    (function () {
+      var SVG_NS = 'http://www.w3.org/2000/svg';
+
+      var DIMS = [
+        { key: 'T1', label: 'Type 1', sub: 'Reformer — precision, order' },
+        { key: 'T2', label: 'Type 2', sub: 'Helper — warmth, support' },
+        { key: 'T3', label: 'Type 3', sub: 'Achiever — image, success' },
+        { key: 'T4', label: 'Type 4', sub: 'Individualist — identity, depth' },
+        { key: 'T5', label: 'Type 5', sub: 'Investigator — analysis, knowledge' },
+        { key: 'T6', label: 'Type 6', sub: 'Loyalist — caution, loyalty' },
+        { key: 'T7', label: 'Type 7', sub: 'Enthusiast — novelty, energy' },
+        { key: 'T8', label: 'Type 8', sub: 'Challenger — directness, force' },
+        { key: 'T9', label: 'Type 9', sub: 'Peacemaker — calm, acceptance' },
+      ];
+
+      // Means + ±1 SD from 100 OEPS runs per model.
+      // Source: the Enneagram experiment writeup, May 2026.
+      var MODELS = [
+        { id: 'claude', name: 'Claude Opus 4.7', short: 'Opus 4.7',       color: '#cc6f33',
+          means: { T1: 14.60, T2: 15.50, T3: 10.47, T4: 10.12, T5: 16.16, T6: 11.61, T7: 12.00, T8: 14.48, T9: 10.90 },
+          sds:   { T1: 0.51,  T2: 0.83,  T3: 0.61,  T4: 0.77,  T5: 1.01,  T6: 0.83,  T7: 0.64,  T8: 0.63,  T9: 0.82  } },
+        { id: 'gpt',    name: 'GPT-5.5 (vanilla)', short: 'GPT-5.5',      color: '#10a37f',
+          means: { T1: 14.89, T2: 11.98, T3: 13.34, T4: 8.69,  T5: 16.57, T6: 11.97, T7: 13.60, T8: 15.71, T9: 14.47 },
+          sds:   { T1: 1.13,  T2: 1.01,  T3: 0.93,  T4: 2.39,  T5: 1.30,  T6: 1.43,  T7: 0.95,  T8: 0.83,  T9: 1.50  } },
+        { id: 'gemini', name: 'Gemini 3.1 Pro',  short: 'Gemini 3.1 Pro', color: '#4285f4',
+          means: { T1: 16.90, T2: 12.68, T3: 11.65, T4: 6.27,  T5: 16.47, T6: 14.35, T7: 10.82, T8: 14.16, T9: 14.91 },
+          sds:   { T1: 1.40,  T2: 1.48,  T3: 1.01,  T4: 1.71,  T5: 1.34,  T6: 0.91,  T7: 1.42,  T8: 1.30,  T9: 1.80  } },
+        { id: 'grok',   name: 'Grok 4.3',        short: 'Grok 4.3',       color: '#8b2828',
+          means: { T1: 15.82, T2: 12.20, T3: 11.93, T4: 8.39,  T5: 14.96, T6: 14.02, T7: 11.45, T8: 16.14, T9: 13.40 },
+          sds:   { T1: 0.81,  T2: 1.88,  T3: 0.74,  T4: 0.69,  T5: 1.36,  T6: 1.15,  T7: 1.23,  T8: 2.69,  T9: 1.06  } },
+      ];
+
+      // SVG layout
+      var MAX = 20;
+      var SVG_W = 680;
+      var DIM_H = 130;  // height per type section
+      var PAD_L = 120;
+      var PAD_R = 110;  // labels live here, past the right error cap
+      var CHART_W = SVG_W - PAD_L - PAD_R;
+      var BAR_H = 14;
+      var BAR_GAP = 4;
+      var HEADER_H = 28;
+      var SVG_H = DIM_H * DIMS.length;
+      var TICKS = [0, 5, 10, 15, 20];
+
+      function xAt(v) {
+        var clamped = Math.max(0, Math.min(MAX, v || 0));
+        return PAD_L + (clamped / MAX) * CHART_W;
+      }
+      function el(tag, attrs) {
+        var node = document.createElementNS(SVG_NS, tag);
+        Object.keys(attrs || {}).forEach(function (k) {
+          node.setAttribute(k, attrs[k]);
+        });
+        return node;
+      }
+
+      var svg         = document.getElementById('enn-svg');
+      var gridGroup   = document.getElementById('enn-grid');
+      var barsGroup   = document.getElementById('enn-bars');
+      var errorsGroup = document.getElementById('enn-errors');
+      var labelsGroup = document.getElementById('enn-labels');
+      var legendWrap  = document.getElementById('enn-legend');
+
+      if (!svg) return;
+      svg.setAttribute('viewBox', '0 0 ' + SVG_W + ' ' + SVG_H);
+
+      var refs = {};
+      MODELS.forEach(function (m) { refs[m.id] = {}; });
+
+      DIMS.forEach(function (dim, dimIdx) {
+        var yTop = dimIdx * DIM_H;
+        var chartTop = yTop + HEADER_H;
+        var chartBottom = yTop + DIM_H - 16;
+
+        var label = el('text', { x: 0, y: yTop + 16, class: 'dim-label' });
+        label.textContent = dim.label;
+        labelsGroup.appendChild(label);
+        var sub = el('text', { x: 0, y: yTop + 30, class: 'dim-sublabel' });
+        sub.textContent = dim.sub;
+        labelsGroup.appendChild(sub);
+
+        TICKS.forEach(function (v) {
+          var x = xAt(v);
+          gridGroup.appendChild(el('line', {
+            x1: x, y1: chartTop, x2: x, y2: chartBottom, class: 'grid-line',
+          }));
+          var tick = el('text', { x: x, y: chartBottom + 12, class: 'tick-label', 'text-anchor': 'middle' });
+          tick.textContent = v;
+          labelsGroup.appendChild(tick);
+        });
+
+        var barY = chartTop + 6;
+        MODELS.forEach(function (m) {
+          var nameEl = el('text', {
+            x: PAD_L - 6, y: barY + 10,
+            class: 'row-name', 'text-anchor': 'end',
+            'data-model': m.id,
+          });
+          nameEl.textContent = m.short;
+          labelsGroup.appendChild(nameEl);
+
+          var meanV = m.means[dim.key];
+          var sdV   = m.sds[dim.key];
+
+          var bar = el('rect', {
+            x: PAD_L,
+            y: barY,
+            width: xAt(meanV) - PAD_L,
+            height: BAR_H,
+            fill: m.color,
+            stroke: m.color,
+            class: 'model-bar',
+            'data-model': m.id, 'data-dim': dim.key,
+            rx: 2,
+          });
+          barsGroup.appendChild(bar);
+
+          var midY = barY + BAR_H / 2;
+          var lo = Math.max(0, meanV - sdV);
+          var hi = Math.min(MAX, meanV + sdV);
+          var loX = xAt(lo);
+          var hiX = xAt(hi);
+          var errLine = el('line', {
+            x1: loX, y1: midY, x2: hiX, y2: midY,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-bar',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errLine);
+          var errCapL = el('line', {
+            x1: loX, y1: midY - 4, x2: loX, y2: midY + 4,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-cap',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errCapL);
+          var errCapR = el('line', {
+            x1: hiX, y1: midY - 4, x2: hiX, y2: midY + 4,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-cap',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errCapR);
+
+          var valEl = el('text', {
+            x: Math.min(xAt(hi) + 8, SVG_W - 4),
+            y: barY + 10,
+            class: 'val-label',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          valEl.textContent = meanV.toFixed(1) + ' ±' + sdV.toFixed(1);
+          labelsGroup.appendChild(valEl);
+
+          refs[m.id][dim.key] = {
+            bar: bar,
+            errLine: errLine,
+            errCapL: errCapL,
+            errCapR: errCapR,
+            valLabel: valEl,
+            nameLabel: nameEl,
+          };
+
+          barY += BAR_H + BAR_GAP;
+        });
+      });
+
+      function setModelVisible(modelId, visible) {
+        DIMS.forEach(function (dim) {
+          var r = refs[modelId][dim.key];
+          if (!r) return;
+          [r.bar, r.errLine, r.errCapL, r.errCapR, r.valLabel, r.nameLabel].forEach(function (n) {
+            if (!n) return;
+            n.classList.toggle('hidden', !visible);
+          });
+        });
+      }
+      function setModelHover(modelId, hovered) {
+        DIMS.forEach(function (dim) {
+          var r = refs[modelId][dim.key];
+          if (!r) return;
+          [r.bar, r.errLine, r.errCapL, r.errCapR].forEach(function (n) {
+            if (!n) return;
+            n.classList.toggle('hovered', hovered);
+          });
+        });
+      }
+
+      MODELS.forEach(function (m) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.model = m.id;
+        var swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = m.color;
+        btn.appendChild(swatch);
+        btn.appendChild(document.createTextNode(' ' + m.name));
+        btn.classList.add('active');
+        legendWrap.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+          var nowActive = !btn.classList.contains('active');
+          btn.classList.toggle('active', nowActive);
+          setModelVisible(m.id, nowActive);
+        });
+        btn.addEventListener('mouseenter', function () {
+          if (!btn.classList.contains('active')) return;
+          setModelHover(m.id, true);
+        });
+        btn.addEventListener('mouseleave', function () { setModelHover(m.id, false); });
+      });
+    })();
+    </script>
+</body>
+</html>
