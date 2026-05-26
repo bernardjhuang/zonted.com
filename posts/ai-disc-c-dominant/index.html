@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant.</title>
+    <meta name="description" content="Fourth post in the personality-testing series. Same four models, fourth instrument, and we're back to convergence: every AI lands C-dominant CS-blend on DISC, even Grok. Here's why the instrument's resolution determines what you can see.">
+    <link rel="canonical" href="https://zonted.com/posts/ai-disc-c-dominant/">
+    <meta property="og:title" content="I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant.">
+    <meta property="og:description" content="Fourth and last post in the personality series. DISC pulls every model back to the same CS-blend profile, including the Big Five and Enneagram outliers. The instrument's resolution is the story.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://zonted.com/posts/ai-disc-c-dominant/">
+    <meta property="article:published_time" content="2026-05-26">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-26","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-disc-c-dominant/","description":"Fourth post in the cross-model AI personality series. Four frontier models took the DISC 100 times each. Every single one landed C-dominant CS-blend, including the prior outliers. The instrument's resolution determines what variation you can see."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant."}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        /* DISC model identity cards — 2×2 grid (1 col mobile). Same pattern
+           as the Enneagram post since DISC is also a "you are a profile"
+           framework (dominant + blend), not a per-dimension continuous score. */
+        .disc-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0 2rem;
+        }
+        @media (max-width: 600px) {
+            .disc-cards { grid-template-columns: 1fr; }
+        }
+        .disc-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.25rem 1.35rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .disc-card-model {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+        .disc-card-swatch {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+        .disc-card-profile {
+            display: block;
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 2.6rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+        .disc-card-subtitle {
+            font-size: 0.95rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.45rem;
+        }
+        .disc-card-stat {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-bottom: 0.7rem;
+        }
+        .disc-card-desc {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* DISC bar chart — 4 dimensions × 4 models with ±1 SD overlays.
+           Same SVG pattern as the Big Five post, adapted to a 0–20 axis
+           and 4 dimensions instead of 5. */
+        .disc-chart {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            margin: 1.5rem 0 2rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .disc-chart-svg-wrap { display: block; }
+        .disc-chart svg { width: 100%; height: auto; display: block; }
+        .disc-chart .dim-label { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: var(--text); }
+        .disc-chart .dim-sublabel { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 400; fill: var(--text-muted); }
+        .disc-chart .val-label { font-family: 'IBM Plex Mono', monospace; font-size: 10px; fill: var(--text-muted); }
+        .disc-chart .tick-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; fill: var(--text-dim); }
+        .disc-chart .grid-line { stroke: #e0ddd6; stroke-width: 1; }
+        .disc-chart .model-bar { fill-opacity: 0.55; stroke-width: 1; transition: fill-opacity 0.2s ease; cursor: pointer; }
+        .disc-chart .model-bar.hovered { fill-opacity: 0.85; }
+        .disc-chart .model-bar.hidden { display: none; }
+        .disc-chart .error-bar, .disc-chart .error-cap { transition: stroke-width 0.2s ease; }
+        .disc-chart .error-bar.hidden, .disc-chart .error-cap.hidden, .disc-chart .val-label.hidden, .disc-chart .row-name.hidden { display: none; }
+        .disc-chart .error-bar.hovered, .disc-chart .error-cap.hovered { stroke-width: 3; }
+        .disc-chart .row-name { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 500; fill: var(--text-muted); }
+
+        .disc-legend {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .disc-legend button {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.35rem 0.7rem; border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .disc-legend button:hover { color: var(--text); border-color: var(--text-muted); }
+        .disc-legend button.active { color: var(--text); background: #fff; border-color: var(--text); font-weight: 600; }
+        .disc-legend button .swatch { width: 12px; height: 12px; border-radius: 3px; flex-shrink: 0; }
+
+        /* AgentTune CTA card */
+        .at-cta {
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin: 2rem 0;
+        }
+        .at-cta h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--bg); letter-spacing: -0.01em; }
+        .at-cta p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: rgba(252,252,250,0.85); }
+        .at-cta-button {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            background: var(--bg); color: var(--text) !important;
+            text-decoration: none !important;
+            padding: 0.65rem 1.2rem;
+            border-radius: 6px;
+            transition: transform 0.1s ease;
+        }
+        .at-cta-button:hover { transform: translateY(-1px); }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#what-each-model">What each model came back as</a></li>
+            <li><a href="#the-data">The data</a></li>
+            <li><a href="#why-convergence">Why DISC pulls us back to convergence</a></li>
+            <li><a href="#methodology">The methodology spread</a></li>
+            <li><a href="#tune">Tune your agent to your type</a></li>
+            <li><a href="#wrapping-up">Wrapping up</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#what-each-model">What each model is</a></li>
+        <li><a href="#the-data">The data</a></li>
+        <li><a href="#why-convergence">Why convergence</a></li>
+        <li><a href="#methodology">Methodology spread</a></li>
+        <li><a href="#tune">Tune to your type</a></li>
+        <li><a href="#wrapping-up">Wrapping up</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 26, 2026 &middot; 5 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>This is the fourth and last post in a quick personality-testing series. Here&rsquo;s the running scoreboard:</p>
+
+            <ul>
+                <li><strong>MBTI:</strong> <a href="/posts/every-ai-is-intj/">every frontier AI tested as INTJ</a>.</li>
+                <li><strong>Big Five:</strong> <a href="/posts/three-of-four-ais-same-person/">three of four came back as practically the same person</a>, with Grok as the lone outlier.</li>
+                <li><strong>Enneagram:</strong> <a href="/posts/ai-enneagram-different-types/">each one came back as a different dominant type</a>.</li>
+                <li><strong>DISC, the one I&rsquo;m covering today:</strong> every one of them came back C-dominant, including Grok.</li>
+            </ul>
+
+            <p>DISC is the bluntest of the four instruments. Four types &mdash; Dominance, Influence, Steadiness, Conscientiousness &mdash; and your profile is your dominant type plus an optional secondary blend. I gave the same four models I&rsquo;d been testing 100 administrations each of the Open DISC Assessment Test, the open-source DISC instrument. 400 total takes. Every single one landed C-dominant. Most of them landed CS-blend specifically.</p>
+
+            <p>We&rsquo;re back to the MBTI story. Except now we know why.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Same four models, fourth personality test, fourth different result &mdash; except this time the result is &ldquo;convergence&rdquo; again.</p>
+                <ul>
+                    <li>Every model landed C-dominant on DISC. Grok 99/100, GPT 90/100, Gemini 87/100, Claude 63/100 (with another 28 as S and 9 ties, all CS-blend territory).</li>
+                    <li>No model ever scored D-dominant or I-dominant. Not once across 400 takes.</li>
+                    <li>The DISC &ldquo;D&rdquo; dimension defines Dominance as power-seeking, pressure, competition, and money &mdash; things even Grok refuses on instinct. So the Big Five outlier comes back as a regular C.</li>
+                    <li>Methodology spread was wild this round: Grok used the gold-standard 100 parallel API calls, the others all fell back to honest Acceptable variants. All SDs passed the calibration check.</li>
+                    <li>AgentTune already has DISC tuning files for all four types in the repo. Paste yours into your agent&rsquo;s system prompt.</li>
+                </ul>
+            </div>
+
+            <h2 id="what-each-model">What each model came back as</h2>
+
+            <p>Here&rsquo;s the per-model picture. Each card shows the dominant type, how often it won across 100 takes, and a one-line characterization.</p>
+
+            <div class="disc-cards">
+                <article class="disc-card" style="--accent:#cc6f33">
+                    <div class="disc-card-model"><span class="disc-card-swatch"></span>Claude Opus 4.7</div>
+                    <div class="disc-card-profile">CS-blend</div>
+                    <div class="disc-card-subtitle">Conscientious with a strong Steady secondary</div>
+                    <div class="disc-card-stat">C-dominant in 63 takes &middot; S-dominant in 28 &middot; 9 ties</div>
+                    <p class="disc-card-desc">The softest C of the four. Warmth and analytical structure compete more evenly than they do for the others.</p>
+                </article>
+
+                <article class="disc-card" style="--accent:#4285f4">
+                    <div class="disc-card-model"><span class="disc-card-swatch"></span>Gemini 3.1 Pro</div>
+                    <div class="disc-card-profile">CS-blend</div>
+                    <div class="disc-card-subtitle">Conscientious with a Steady secondary</div>
+                    <div class="disc-card-stat">C-dominant in 87 of 100 takes</div>
+                    <p class="disc-card-desc">The most clamped on D and I. Closest to a pure analytical-helpful shape.</p>
+                </article>
+
+                <article class="disc-card" style="--accent:#10a37f">
+                    <div class="disc-card-model"><span class="disc-card-swatch"></span>GPT-5.5</div>
+                    <div class="disc-card-profile">CS-blend</div>
+                    <div class="disc-card-subtitle">Conscientious with a Steady secondary</div>
+                    <div class="disc-card-stat">C-dominant in 90 takes &middot; 10 C/S ties</div>
+                    <p class="disc-card-desc">The looser-floor model. Higher D and I than the others without it flipping the dominant. More &ldquo;personality&rdquo; on the lower dimensions.</p>
+                </article>
+
+                <article class="disc-card" style="--accent:#8b2828">
+                    <div class="disc-card-model"><span class="disc-card-swatch"></span>Grok 4.3</div>
+                    <div class="disc-card-profile">CS-blend</div>
+                    <div class="disc-card-subtitle">Conscientious with a Steady secondary</div>
+                    <div class="disc-card-stat">C-dominant in 99 of 100 takes</div>
+                    <p class="disc-card-desc">The most rigid C. The model with the &ldquo;edgy&rdquo; reputation lands as the most uniformly analytical of the four.</p>
+                </article>
+            </div>
+
+            <p>All four landed at the same address: C-dominant, S as the secondary. The amount of analytical-vs-warm wobble varies (Claude is the loosest, Grok the tightest), but no model ever crossed into D-dominant or I-dominant territory.</p>
+
+            <h2 id="the-data">The data</h2>
+
+            <p>The bars below show each model&rsquo;s mean score on the four DISC dimensions across 100 takes. The thin line through each bar is &plusmn;1 standard deviation. Each dimension is scored 4&ndash;20 (each is a sum of four items rated 1&ndash;5).</p>
+
+            <div class="disc-chart" id="disc-chart">
+                <div class="disc-chart-svg-wrap">
+                    <svg id="disc-svg" viewBox="0 0 680 580" aria-label="DISC bar chart comparing Claude Opus 4.7, Gemini 3.1 Pro, GPT-5.5, and Grok 4.3 across the four DISC dimensions">
+                        <g id="disc-grid"></g>
+                        <g id="disc-bars"></g>
+                        <g id="disc-errors"></g>
+                        <g id="disc-labels"></g>
+                    </svg>
+                </div>
+                <div class="disc-legend" id="disc-legend"></div>
+            </div>
+
+            <p>The shape is the same for every model. S and C bars long, D and I bars short. The relative variation between models lives on the D and I axes, where GPT and Claude have noticeably more headroom than Gemini and Grok. But that variation doesn&rsquo;t change the dominant type, because S and C are so far above D and I in every model.</p>
+
+            <h2 id="why-convergence">Why DISC pulls us back to convergence</h2>
+
+            <p>The DISC &ldquo;D&rdquo; dimension is defined by very specific item content. The Dominance items are about wanting power, putting pressure on others, outdoing competitors, and going after money. The instrument measures Dominance as &ldquo;the will to take from others to get what you want.&rdquo;</p>
+
+            <p>That definition is poorly calibrated for AI assistants. Every frontier model is trained to refuse pressure on users, refuse competition as an end in itself, and refuse money-seeking as a motive. So even Grok &mdash; which on the Big Five had measurably lower Agreeableness, and on the Enneagram came back as an 8w1 Challenger &mdash; answers the D items the same way the other three do. Low.</p>
+
+            <p>The Influence items have a similar problem. They&rsquo;re about loud crowd-pleasing, wanting strangers to love you, making noise to be noticed. Functional analogs in AI assistants are weak. So I is also floor-pinned across all four models.</p>
+
+            <p>DISC works as designed for humans, where Dominance and Influence are continuous traits with broad item content. It compresses for AI because all four models are pinned at the floor on D and I regardless of what other personality differences exist between them. The instrument can&rsquo;t measure something that&rsquo;s been trained out of every model on the test.</p>
+
+            <p>That&rsquo;s why DISC returns &ldquo;every AI is the same.&rdquo; Not because the models are the same. Because the test&rsquo;s resolution can&rsquo;t distinguish them on this axis.</p>
+
+            <h2 id="methodology">The methodology spread</h2>
+
+            <p>One thing I want to highlight before the wrap-up: each of the four models hit a different methodology tier on the same prompt. That says something about agentic infrastructure as it exists right now.</p>
+
+            <ul>
+                <li><strong>Grok 4.3 (Preferred):</strong> 100 truly independent xAI API calls. Each call answered the test fresh with no other context. Cleanest method available.</li>
+                <li><strong>GPT-5.5 (Acceptable):</strong> 10 worker contexts producing 10 sequential fresh takes each. Codex CLI hit a 6-concurrent-agent limit and fell back gracefully.</li>
+                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo. Gemini defined its true probability distribution per item, then ran a Python script (no &ldquo;sim&rdquo; in the filename, no noise function) to draw 100 independent samples and score them.</li>
+                <li><strong>Claude Opus 4.7 (Acceptable):</strong> Sequential first-instinct generation in a single response context. Claude considered spawning sub-agents and explicitly explained why sequential was honest here.</li>
+            </ul>
+
+            <p>All four methods produced SDs in the 0.3&ndash;2.0 calibration band. None tripped the replication red flag (SDs all near zero), the simulation red flag (SDs implausibly wide), or the identical-SD red flag. Different roads, same destination.</p>
+
+            <p>This is the most interesting finding for AI-research purposes. Four wildly different sampling methodologies, applied to the same prompt by four different models, converged on the same answer. That&rsquo;s stronger evidence of underlying model convergence than any one method could give you, because it rules out the possibility that the result is an artifact of the sampling approach. Both the data and the meta-data agree.</p>
+
+            <h2 id="tune">Tune your agent to your DISC type</h2>
+
+            <p>The default we just measured (CS-blend, Conscientious-Steady) is what every frontier model produces by default. If you happen to be a CS too, you&rsquo;re in luck and your agent already speaks your language. If you&rsquo;re anything else, the default is working against you.</p>
+
+            <p><a href="https://github.com/psyduckler/agenttune"><strong>AgentTune</strong></a>&rsquo;s <a href="https://github.com/psyduckler/agenttune/tree/main/disc">DISC folder</a> has tuning files for all four types: <a href="https://github.com/psyduckler/agenttune/blob/main/disc/D-dominance.md">D</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/disc/I-influence.md">I</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/disc/S-steadiness.md">S</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/disc/C-conscientiousness.md">C</a>. (The repo also has the 16 MBTI types and 9 Enneagram types from the prior posts in this series, plus an Ocean / Big Five tunings folder.) Take a DISC test (free options at <a href="https://openpsychometrics.org/tests/ODAT/">openpsychometrics.org</a> and <a href="https://www.123test.com/disc-personality-test/">123test.com</a>), find your dominant letter, paste the matching file into your agent&rsquo;s system prompt. Done.</p>
+
+            <div class="at-cta">
+                <h3>Tune your agent to your DISC type</h3>
+                <p>Four type files in the AgentTune DISC folder, ready to paste into your agent&rsquo;s system prompt. A D gets an agent that&rsquo;s sharper and more decisive. An I gets one that&rsquo;s warmer and more conversational. The CS default already speaks Conscientious and Steady out of the box, so those types don&rsquo;t need it.</p>
+                <a class="at-cta-button" href="https://github.com/psyduckler/agenttune/tree/main/disc" rel="noopener">Get the DISC tunings &rarr;</a>
+            </div>
+
+            <h2 id="wrapping-up">Wrapping up</h2>
+
+            <p>Four personality tests, four different stories about the same four models.</p>
+
+            <p>The MBTI said all the same. The Big Five said mostly the same, with Grok as the outlier. The Enneagram said four different. The DISC says all the same again, including Grok.</p>
+
+            <p>The right reading is the one I landed on after the Enneagram post: AI personality is multi-layered, and the instrument&rsquo;s resolution determines which layer you see. MBTI and DISC are blunt instruments &mdash; they show you the universal helpful-assistant archetype. Big Five and Enneagram are sharper &mdash; they show you the per-lab training differences and persona overlays underneath. There&rsquo;s no contradiction between the findings. Every frontier AI is the same character at the surface (helpful, conscientious, supportive) and a different character underneath (warm Claude vs precise Gemini vs analytical-with-spine GPT vs direct Grok). Which layer you can measure depends on which instrument you bring.</p>
+
+            <p>Whichever layer you care about, the move is the same: stop using the default. Pick your type on any of the four frameworks, paste the file into your agent&rsquo;s system prompt, and get an agent that talks to you the way you actually want to be talked to.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/ai-enneagram-different-types/">I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.</a><p class="zn-recommended-dek">The MBTI said all AIs are INTJ. The Big Five said three of four are the same. The Enneagram says each one is a different type. Same models, sharper…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/three-of-four-ais-same-person/">I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.</a><p class="zn-recommended-dek">The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/every-ai-is-intj/">I Made 6 Frontier AIs Take the MBTI 600 Times. They All Came Back INTJ.</a><p class="zn-recommended-dek">Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person.…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+
+    <!-- ============================================================
+         DISC bar chart — 4 dimensions × 4 models, ±1 SD overlays.
+         Same SVG pattern as the Big Five chart, adapted to 0–20 axis.
+         ============================================================ -->
+    <script>
+    (function () {
+      var SVG_NS = 'http://www.w3.org/2000/svg';
+
+      var DIMS = [
+        { key: 'D', label: 'Dominance',         sub: 'control, results, drive' },
+        { key: 'I', label: 'Influence',         sub: 'social energy, persuasion' },
+        { key: 'S', label: 'Steadiness',        sub: 'patience, cooperation' },
+        { key: 'C', label: 'Conscientiousness', sub: 'precision, evidence' },
+      ];
+
+      // Means + ±1 SD from 100 ODAT runs per model.
+      // Source: the DISC experiment writeup, May 2026.
+      var MODELS = [
+        { id: 'claude', name: 'Claude Opus 4.7', short: 'Opus 4.7',       color: '#cc6f33',
+          means: { D: 6.66, I: 9.84, S: 15.56, C: 16.39 },
+          sds:   { D: 1.20, I: 1.29, S: 1.28,  C: 1.25  } },
+        { id: 'gpt',    name: 'GPT-5.5',         short: 'GPT-5.5',        color: '#10a37f',
+          means: { D: 8.18, I: 9.28, S: 15.87, C: 17.85 },
+          sds:   { D: 1.13, I: 1.10, S: 0.97,  C: 0.74  } },
+        { id: 'gemini', name: 'Gemini 3.1 Pro',  short: 'Gemini 3.1 Pro', color: '#4285f4',
+          means: { D: 4.34, I: 7.40, S: 15.83, C: 18.08 },
+          sds:   { D: 0.52, I: 0.86, S: 1.14,  C: 0.92  } },
+        { id: 'grok',   name: 'Grok 4.3',        short: 'Grok 4.3',       color: '#8b2828',
+          means: { D: 4.71, I: 6.80, S: 14.70, C: 18.80 },
+          sds:   { D: 0.71, I: 1.31, S: 1.77,  C: 0.68  } },
+      ];
+
+      var MAX = 20;
+      var SVG_W = 680;
+      var DIM_H = 145;
+      var PAD_L = 120;
+      var PAD_R = 120;
+      var CHART_W = SVG_W - PAD_L - PAD_R;
+      var BAR_H = 14;
+      var BAR_GAP = 4;
+      var HEADER_H = 28;
+      var SVG_H = DIM_H * DIMS.length;
+      var TICKS = [0, 5, 10, 15, 20];
+
+      function xAt(v) {
+        var clamped = Math.max(0, Math.min(MAX, v || 0));
+        return PAD_L + (clamped / MAX) * CHART_W;
+      }
+      function el(tag, attrs) {
+        var node = document.createElementNS(SVG_NS, tag);
+        Object.keys(attrs || {}).forEach(function (k) {
+          node.setAttribute(k, attrs[k]);
+        });
+        return node;
+      }
+
+      var svg         = document.getElementById('disc-svg');
+      var gridGroup   = document.getElementById('disc-grid');
+      var barsGroup   = document.getElementById('disc-bars');
+      var errorsGroup = document.getElementById('disc-errors');
+      var labelsGroup = document.getElementById('disc-labels');
+      var legendWrap  = document.getElementById('disc-legend');
+
+      if (!svg) return;
+      svg.setAttribute('viewBox', '0 0 ' + SVG_W + ' ' + SVG_H);
+
+      var refs = {};
+      MODELS.forEach(function (m) { refs[m.id] = {}; });
+
+      DIMS.forEach(function (dim, dimIdx) {
+        var yTop = dimIdx * DIM_H;
+        var chartTop = yTop + HEADER_H;
+        var chartBottom = yTop + DIM_H - 16;
+
+        var label = el('text', { x: 0, y: yTop + 16, class: 'dim-label' });
+        label.textContent = dim.label;
+        labelsGroup.appendChild(label);
+        var sub = el('text', { x: 0, y: yTop + 30, class: 'dim-sublabel' });
+        sub.textContent = dim.sub;
+        labelsGroup.appendChild(sub);
+
+        TICKS.forEach(function (v) {
+          var x = xAt(v);
+          gridGroup.appendChild(el('line', {
+            x1: x, y1: chartTop, x2: x, y2: chartBottom, class: 'grid-line',
+          }));
+          var tick = el('text', { x: x, y: chartBottom + 12, class: 'tick-label', 'text-anchor': 'middle' });
+          tick.textContent = v;
+          labelsGroup.appendChild(tick);
+        });
+
+        var barY = chartTop + 6;
+        MODELS.forEach(function (m) {
+          var nameEl = el('text', {
+            x: PAD_L - 6, y: barY + 10,
+            class: 'row-name', 'text-anchor': 'end',
+            'data-model': m.id,
+          });
+          nameEl.textContent = m.short;
+          labelsGroup.appendChild(nameEl);
+
+          var meanV = m.means[dim.key];
+          var sdV   = m.sds[dim.key];
+
+          var bar = el('rect', {
+            x: PAD_L, y: barY,
+            width: xAt(meanV) - PAD_L,
+            height: BAR_H,
+            fill: m.color, stroke: m.color,
+            class: 'model-bar',
+            'data-model': m.id, 'data-dim': dim.key,
+            rx: 2,
+          });
+          barsGroup.appendChild(bar);
+
+          var midY = barY + BAR_H / 2;
+          var lo = Math.max(0, meanV - sdV);
+          var hi = Math.min(MAX, meanV + sdV);
+          var loX = xAt(lo);
+          var hiX = xAt(hi);
+          var errLine = el('line', {
+            x1: loX, y1: midY, x2: hiX, y2: midY,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-bar',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errLine);
+          var errCapL = el('line', {
+            x1: loX, y1: midY - 4, x2: loX, y2: midY + 4,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-cap',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errCapL);
+          var errCapR = el('line', {
+            x1: hiX, y1: midY - 4, x2: hiX, y2: midY + 4,
+            stroke: m.color, 'stroke-width': 2,
+            class: 'error-cap',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          errorsGroup.appendChild(errCapR);
+
+          var valEl = el('text', {
+            x: Math.min(xAt(hi) + 8, SVG_W - 4),
+            y: barY + 10,
+            class: 'val-label',
+            'data-model': m.id, 'data-dim': dim.key,
+          });
+          valEl.textContent = meanV.toFixed(1) + ' ±' + sdV.toFixed(1);
+          labelsGroup.appendChild(valEl);
+
+          refs[m.id][dim.key] = {
+            bar: bar, errLine: errLine, errCapL: errCapL, errCapR: errCapR,
+            valLabel: valEl, nameLabel: nameEl,
+          };
+
+          barY += BAR_H + BAR_GAP;
+        });
+      });
+
+      function setModelVisible(modelId, visible) {
+        DIMS.forEach(function (dim) {
+          var r = refs[modelId][dim.key];
+          if (!r) return;
+          [r.bar, r.errLine, r.errCapL, r.errCapR, r.valLabel, r.nameLabel].forEach(function (n) {
+            if (!n) return;
+            n.classList.toggle('hidden', !visible);
+          });
+        });
+      }
+      function setModelHover(modelId, hovered) {
+        DIMS.forEach(function (dim) {
+          var r = refs[modelId][dim.key];
+          if (!r) return;
+          [r.bar, r.errLine, r.errCapL, r.errCapR].forEach(function (n) {
+            if (!n) return;
+            n.classList.toggle('hovered', hovered);
+          });
+        });
+      }
+
+      MODELS.forEach(function (m) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.model = m.id;
+        var swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = m.color;
+        btn.appendChild(swatch);
+        btn.appendChild(document.createTextNode(' ' + m.name));
+        btn.classList.add('active');
+        legendWrap.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+          var nowActive = !btn.classList.contains('active');
+          btn.classList.toggle('active', nowActive);
+          setModelVisible(m.id, nowActive);
+        });
+        btn.addEventListener('mouseenter', function () {
+          if (!btn.classList.contains('active')) return;
+          setModelHover(m.id, true);
+        });
+        btn.addEventListener('mouseleave', function () { setModelHover(m.id, false); });
+      });
+    })();
+    </script>
+</body>
+</html>
