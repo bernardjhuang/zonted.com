@@ -14,9 +14,9 @@
     <meta property="og:title" content="I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.">
     <meta property="og:description" content="Followed up the INTJ finding on a more rigorous test. Anthropic, OpenAI, and Google all produced the same personality. xAI's Grok was the lone exception. The convergence is RLHF; the exception is what xAI explicitly stopped doing.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png">
+    <meta property="og:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/big5-100x-output.png">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png">
     <meta property="og:url" content="https://zonted.com/posts/three-of-four-ais-same-person/">
     <meta property="article:published_time" content="2026-05-25">
     <meta name="robots" content="index, follow, max-image-preview:large">
@@ -320,9 +320,16 @@
 
         <div class="article-body">
 
-            <p>Earlier today I had <a href="/posts/every-ai-is-intj/">six frontier AIs take the MBTI a hundred times each</a>, and 597 of the 600 runs came back as the same type. INTJ across the board. The MBTI is academically contested though, so I figured the finding was real but soft, and I wanted to retest it on the instrument personality researchers actually use.</p>
+            <p>Earlier today I shipped <a href="/posts/every-ai-is-intj/">a post showing six frontier AIs taking the MBTI six hundred times</a>, with 597 of those runs coming back as the same type. INTJ across the board. It hit HackerNews. The top comment showed up within the hour:</p>
 
-            <p>That instrument is the Big Five, scored five continuous dimensions instead of four binary letters. I used the public-domain version (the IPIP-50) and gave it to four frontier models: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, and Grok 4.3. Each one took the test a hundred times. The result is sharper than the MBTI one. Three of the four came back as the same person, and the fourth is the one that explains why.</p>
+            <figure>
+                <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png" width="1818" height="982" alt="Screenshot of HackerNews comments on the INTJ post. Top comment by TheJCDenton: 'Interesting article, but MBTI is not just contested, the consensus since the 90s is that MBTI is pseudoscience, so it's nearly 40 years. Would have been interesting to test against the Big five instead!' Replies include cameldrv noting 'It correlates reasonably well with 4 of the big 5.'">
+                <figcaption>Hours after the INTJ post shipped, this was the top comment on HN.</figcaption>
+            </figure>
+
+            <p>Fair point. The MBTI isn&rsquo;t just &ldquo;contested,&rdquo; it&rsquo;s been called pseudoscience by personality psychologists for thirty years, and the Big Five is the instrument they actually use. So I went and did exactly what HN asked for. Five continuous dimensions instead of four binary letters. The public-domain version (the IPIP-50). Four frontier models: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4.3. Each one took the test a hundred times.</p>
+
+            <p>The result is sharper than the MBTI one. Three of the four came back as the same person, and the fourth is the one that explains why.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
