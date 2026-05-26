@@ -691,8 +691,13 @@ def update_html(data: dict) -> None:
         </section>
 
 '''
+    # Each regex below looks ahead for ALL other section markers so the order
+    # of sections in the rendered HTML doesn't change which content gets
+    # captured. Revenue currently sits ABOVE GA4 in the rendered HTML; keep
+    # both lookaheads defensive so a future reorder doesn't silently swallow
+    # an adjacent section.
     text = re.sub(
-        r'        <!-- Portfolio GA4 Snapshot -->.*?(?=        <!-- Portfolio Search Console Snapshot -->|\n    </div>\n    </main>)',
+        r'        <!-- Portfolio GA4 Snapshot -->.*?(?=        <!-- Revenue Snapshot -->|        <!-- Portfolio Search Console Snapshot -->|        <!-- Tabiji Social Snapshot -->|\n    </div>\n    </main>)',
         portfolio,
         text,
         flags=re.S,
@@ -712,13 +717,16 @@ def update_html(data: dict) -> None:
 '''
         if '<!-- Revenue Snapshot -->' in text:
             text = re.sub(
-                r'        <!-- Revenue Snapshot -->.*?(?=        <!-- Portfolio Search Console Snapshot -->|        <!-- Tabiji Social Snapshot -->|\n    </div>\n    </main>)',
+                r'        <!-- Revenue Snapshot -->.*?(?=        <!-- Portfolio GA4 Snapshot -->|        <!-- Portfolio Search Console Snapshot -->|        <!-- Tabiji Social Snapshot -->|\n    </div>\n    </main>)',
                 revenue,
                 text,
                 flags=re.S,
             )
         else:
-            text = text.replace('        <!-- Portfolio Search Console Snapshot -->', revenue + '        <!-- Portfolio Search Console Snapshot -->', 1)
+            # Fallback: Revenue Snapshot now sits ABOVE the GA4 Snapshot. If
+            # the marker is missing (first refresh after this code lands), seed
+            # Revenue immediately before GA4 instead of before Search Console.
+            text = text.replace('        <!-- Portfolio GA4 Snapshot -->', revenue + '        <!-- Portfolio GA4 Snapshot -->', 1)
 
     search_console = f'''        <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
