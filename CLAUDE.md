@@ -60,6 +60,23 @@ For multi-step tasks, state a brief plan:
 
 Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
 
+## 5. Git Workflow — Sync Before Push
+
+**Always `git pull origin main --rebase` before pushing a branch to remote.**
+
+Bernard publishes from multiple machines (this Mac + the openclaw box that runs the nightly metrics cron). Other commits can land on main while you work. Rebase keeps the history linear and surfaces conflicts locally instead of failing CI or producing merge commits no one asked for.
+
+Standard cycle:
+```
+git checkout -b claude/<branch>
+# … make changes, commit …
+git pull origin main --rebase     # ← do this before the push
+git push -u origin claude/<branch>
+gh pr create … && gh pr merge --merge --delete-branch --admin
+```
+
+If the rebase has conflicts, resolve them locally before pushing. Never force-push to main.
+
 ---
 
 **These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
