@@ -219,6 +219,22 @@
             width: 0; height: 0; border-left: 7px solid transparent; border-right: 7px solid transparent;
             border-top: 8px solid var(--c, var(--trace));
         }
+
+        /* Top-row chips sit close to the board edge; their tooltips would
+           render above the chip and get clipped by .pcb-board's overflow:
+           hidden. Flip the tooltip below the chip on these chips so it
+           stays inside the board. */
+        .pcb-chip.pcb-chip-edge-top .pcb-tooltip {
+            bottom: auto; top: calc(100% + 16px);
+        }
+        .pcb-chip.pcb-chip-edge-top .pcb-tooltip::after {
+            bottom: auto; top: -8px;
+            border-top: 0; border-bottom: 8px solid var(--c, var(--trace));
+        }
+        .pcb-chip.pcb-chip-edge-top:hover .pcb-tooltip,
+        .pcb-chip.pcb-chip-edge-top:focus-visible .pcb-tooltip {
+            transform: translate(-50%, 10px);
+        }
         .pcb-tooltip-title { font-family: var(--pcb-display); font-size: 13px; font-weight: 700; letter-spacing: -0.2px; margin-bottom: 4px; }
         .pcb-tooltip-row { display: flex; justify-content: space-between; gap: 14px; padding: 2px 0; color: var(--silk-dim); }
         .pcb-tooltip-row .v { color: var(--silk); font-weight: 600; }
@@ -524,7 +540,7 @@
                         </svg>
 
                         <!-- L1 · openclaw -->
-                        <figure class="pcb-chip" tabindex="0" style="left:80px; top:40px; width:160px; height:92px; border-color:#a8ff7a; animation: pcbChipPulse 3.2s ease-in-out infinite, pcbBootInScale 0.5s ease-out 0s both, pcbSurge 9s ease-in-out 2s infinite; --c:#a8ff7a;">
+                        <figure class="pcb-chip pcb-chip-edge-top" tabindex="0" style="left:80px; top:40px; width:160px; height:92px; border-color:#a8ff7a; animation: pcbChipPulse 3.2s ease-in-out infinite, pcbBootInScale 0.5s ease-out 0s both, pcbSurge 9s ease-in-out 2s infinite; --c:#a8ff7a;">
                             <div class="pcb-tooltip" style="--c:#a8ff7a;">
                                 <div class="pcb-tooltip-title">U1 · openclaw</div>
                                 <div class="pcb-tooltip-row"><span>Class</span><span class="v">MEDIA</span></div>
@@ -542,7 +558,7 @@
                         </figure>
 
                         <!-- L1 · hermes -->
-                        <figure class="pcb-chip" tabindex="0" style="left:280px; top:40px; width:160px; height:92px; border-color:#7ec8ff; animation: pcbChipPulse 3.2s ease-in-out 0.4s infinite, pcbBootInScale 0.5s ease-out 0.06s both; --c:#7ec8ff;">
+                        <figure class="pcb-chip pcb-chip-edge-top" tabindex="0" style="left:280px; top:40px; width:160px; height:92px; border-color:#7ec8ff; animation: pcbChipPulse 3.2s ease-in-out 0.4s infinite, pcbBootInScale 0.5s ease-out 0.06s both; --c:#7ec8ff;">
                             <div class="pcb-tooltip" style="--c:#7ec8ff;">
                                 <div class="pcb-tooltip-title">U2 · hermes</div>
                                 <div class="pcb-tooltip-row"><span>Class</span><span class="v">MEDIA</span></div>
@@ -560,7 +576,7 @@
                         </figure>
 
                         <!-- L1 · Claude Code -->
-                        <figure class="pcb-chip" tabindex="0" style="left:560px; top:40px; width:160px; height:92px; border-color:#d4a91a; animation: pcbChipPulse 3.2s ease-in-out 0.8s infinite, pcbBootInScale 0.5s ease-out 0.12s both, pcbSurge 9s ease-in-out 2.8s infinite; --c:#d4a91a;">
+                        <figure class="pcb-chip pcb-chip-edge-top" tabindex="0" style="left:560px; top:40px; width:160px; height:92px; border-color:#d4a91a; animation: pcbChipPulse 3.2s ease-in-out 0.8s infinite, pcbBootInScale 0.5s ease-out 0.12s both, pcbSurge 9s ease-in-out 2.8s infinite; --c:#d4a91a;">
                             <div class="pcb-tooltip" style="--c:#d4a91a;">
                                 <div class="pcb-tooltip-title">U3 · Claude Code</div>
                                 <div class="pcb-tooltip-row"><span>Class</span><span class="v">EXEC</span></div>
@@ -578,7 +594,7 @@
                         </figure>
 
                         <!-- L1 · AI Studio (isolated) -->
-                        <figure class="pcb-chip" tabindex="0" style="left:950px; top:50px; width:140px; height:84px; border-color:#ff7ad9; animation: pcbChipPulse 3.2s ease-in-out 1.2s infinite, pcbBootInScale 0.5s ease-out 0.18s both; --c:#ff7ad9;">
+                        <figure class="pcb-chip pcb-chip-edge-top" tabindex="0" style="left:950px; top:50px; width:140px; height:84px; border-color:#ff7ad9; animation: pcbChipPulse 3.2s ease-in-out 1.2s infinite, pcbBootInScale 0.5s ease-out 0.18s both; --c:#ff7ad9;">
                             <div class="pcb-tooltip" style="--c:#ff7ad9;">
                                 <div class="pcb-tooltip-title">U4 · AI Studio</div>
                                 <div class="pcb-tooltip-row"><span>Class</span><span class="v">BRAIN · ISO</span></div>
