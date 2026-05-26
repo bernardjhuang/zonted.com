@@ -520,7 +520,7 @@ def render_search_console_cards(data: dict) -> str:
         if pages:
             rows = "\n".join(
                 f'''                            <li class="channel-item">
-                                <span>{esc(title_for_url(row['page']))}</span>
+                                <span title="{esc(row['page'])}">{esc(row['page'])}</span>
                                 <strong>{fmt(row['clicks'])} / {compact(row['impressions'])}</strong>
                                 <span class="channel-track"><span class="channel-fill" style="width:{(row['impressions'] / max_impressions * 100 if max_impressions else 0):.1f}%;background:{esc(prop['color'])}"></span></span>
                             </li>'''
