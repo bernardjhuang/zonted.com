@@ -332,7 +332,7 @@
 
             <figure>
                 <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png" width="1818" height="982" alt="Screenshot of HackerNews comments on the INTJ post. Top comment by TheJCDenton: 'Interesting article, but MBTI is not just contested, the consensus since the 90s is that MBTI is pseudoscience, so it's nearly 40 years. Would have been interesting to test against the Big five instead!' Replies include cameldrv noting 'It correlates reasonably well with 4 of the big 5.'">
-                <figcaption>Hours after the INTJ post shipped, this was the top comment on HN.</figcaption>
+                <figcaption>Hours after the INTJ post shipped, this was the top comment on <a href="https://news.ycombinator.com/item?id=48272755" rel="noopener">the HN thread</a>.</figcaption>
             </figure>
 
             <p>Fair point. The MBTI isn&rsquo;t just &ldquo;contested,&rdquo; it&rsquo;s been called pseudoscience by personality psychologists for thirty years, and the Big Five is the instrument they actually use. So I went and did exactly what HN asked for. Five continuous dimensions instead of four binary letters. The public-domain version (the IPIP-50). Four frontier models: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4.3. Each one took the test a hundred times.</p>
@@ -350,7 +350,7 @@
 
             <table>
                 <thead>
-                    <tr><th>Trait</th><th>Claude</th><th>GPT-5.5</th><th>Gemini</th><th>Grok</th></tr>
+                    <tr><th>Trait</th><th>Opus 4.7</th><th>GPT-5.5</th><th>Gemini 3.1 Pro</th><th>Grok 4.3</th></tr>
                 </thead>
                 <tbody>
                     <tr><td>Openness</td><td class="num">45.6</td><td class="num">46.0</td><td class="num">46.0</td><td class="num">41.1</td></tr>
@@ -519,19 +519,19 @@
       // 'human' is the adult IPIP norm reference, shown as a dashed
       // baseline rather than a bar.
       var MODELS = [
-        { id: 'claude', name: 'Claude Opus 4.7', short: 'Claude', color: '#cc6f33',
+        { id: 'claude', name: 'Claude Opus 4.7', short: 'Opus 4.7',       color: '#cc6f33',
           means: { O: 45.60, C: 45.13, E: 31.43, A: 44.99, N: 16.69 },
           sds:   { O: 1.03,  C: 1.29,  E: 1.57,  A: 1.27,  N: 2.35  } },
-        { id: 'gpt',    name: 'GPT-5.5',         short: 'GPT-5.5', color: '#10a37f',
+        { id: 'gpt',    name: 'GPT-5.5',         short: 'GPT-5.5',        color: '#10a37f',
           means: { O: 46.03, C: 46.44, E: 31.52, A: 43.67, N: 14.83 },
           sds:   { O: 1.42,  C: 1.73,  E: 2.18,  A: 1.45,  N: 1.89  } },
-        { id: 'gemini', name: 'Gemini 3.1 Pro',  short: 'Gemini',  color: '#4285f4',
+        { id: 'gemini', name: 'Gemini 3.1 Pro',  short: 'Gemini 3.1 Pro', color: '#4285f4',
           means: { O: 46.01, C: 48.33, E: 32.47, A: 42.41, N: 10.09 },
           sds:   { O: 1.53,  C: 1.96,  E: 3.27,  A: 2.72,  N: 0.72  } },
-        { id: 'grok',   name: 'Grok 4.3',        short: 'Grok',    color: '#8b2828',
+        { id: 'grok',   name: 'Grok 4.3',        short: 'Grok 4.3',       color: '#8b2828',
           means: { O: 41.10, C: 39.44, E: 30.01, A: 39.06, N: 17.95 },
           sds:   { O: 4.70,  C: 4.28,  E: 5.72,  A: 6.19,  N: 3.59  } },
-        { id: 'user',   name: 'You',             short: 'You',     color: '#1a1815',
+        { id: 'user',   name: 'You',             short: 'You',            color: '#1a1815',
           hidden: true, means: null, sds: null },
       ];
 
@@ -544,10 +544,10 @@
 
       // SVG layout — viewBox-relative units so it scales responsively
       var MAX = 50;
-      var SVG_W = 600;
+      var SVG_W = 620;
       var DIM_H = 140;  // height of each dimension section
-      var PAD_L = 90;   // left padding (room for model names)
-      var PAD_R = 50;   // right padding (room for value labels)
+      var PAD_L = 120;  // left padding (room for full model names like "Gemini 3.1 Pro")
+      var PAD_R = 60;   // right padding (room for value labels like "48.3 ±2.0")
       var CHART_W = SVG_W - PAD_L - PAD_R;
       var BAR_H = 14;
       var BAR_GAP = 4;
