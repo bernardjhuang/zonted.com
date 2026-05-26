@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>I Made 4 Frontier AIs Take the Attachment Test 400 Times. They All Came Back Secure.</title>
+    <meta name="description" content="Fifth post in the personality-testing series. Same four models, attachment theory (ECR-R) this time. Every model came back Secure, but the spread inside the quadrant tells a different story about how each one relates to you.">
+    <link rel="canonical" href="https://zonted.com/posts/ai-attachment-secure/">
+    <meta property="og:title" content="I Made 4 Frontier AIs Take the Attachment Test 400 Times. They All Came Back Secure.">
+    <meta property="og:description" content="Fifth post in the personality series. ECR-R attachment scoring on Claude, Gemini, GPT, and Grok. All four are Secure, but the position inside the Secure quadrant says more than the label does.">
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://zonted.com/posts/ai-attachment-secure/">
+    <meta property="article:published_time" content="2026-05-26">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Made 4 Frontier AIs Take the Attachment Test 400 Times. They All Came Back Secure.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-26","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-attachment-secure/","description":"Fifth post in the cross-model AI personality series. Four frontier models took the ECR-R attachment test 100 times each. 397 out of 400 takes came back Secure, but the spread inside the Secure quadrant is the real finding."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made 4 Frontier AIs Take the Attachment Test 400 Times. They All Came Back Secure."}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        /* Attachment model identity cards — 2×2 grid (1 col mobile).
+           Same shape as the DISC card pattern — categorical "this is what
+           you got back" framing where the dominant style is the headline. */
+        .att-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1rem;
+            margin: 1.5rem 0 2rem;
+        }
+        @media (max-width: 600px) {
+            .att-cards { grid-template-columns: 1fr; }
+        }
+        .att-card {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-top: 4px solid var(--accent);
+            border-radius: 8px;
+            padding: 1.25rem 1.35rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .att-card-model {
+            display: flex; align-items: center; gap: 0.5rem;
+            font-size: 0.85rem; font-weight: 600;
+            color: var(--text-muted);
+            margin-bottom: 0.6rem;
+        }
+        .att-card-swatch {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 2px;
+            background: var(--accent);
+            flex-shrink: 0;
+        }
+        .att-card-style {
+            display: block;
+            font-family: 'Fraunces', Georgia, serif;
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: var(--text);
+            line-height: 1;
+            margin-bottom: 0.4rem;
+            letter-spacing: -0.02em;
+        }
+        .att-card-coords {
+            font-family: 'IBM Plex Mono', monospace;
+            font-size: 0.78rem;
+            color: var(--text-dim);
+            margin-bottom: 0.7rem;
+        }
+        .att-card-desc {
+            font-family: 'Source Serif 4', Georgia, serif;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: var(--text-muted);
+            margin: 0;
+        }
+
+        /* Attachment 2D quadrant scatter chart.
+           x = anxiety (1-7), y = avoidance (1-7), midpoint 4 splits the
+           plane into the four attachment styles. Each model is plotted
+           as a dot + ±1 SD ellipse. Same legend toggle pattern as DISC. */
+        .att-chart {
+            background: var(--bg-surface);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem 1rem;
+            margin: 1.5rem 0 2rem;
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+        }
+        .att-chart-svg-wrap { display: block; }
+        .att-chart svg { width: 100%; height: auto; display: block; max-width: 620px; margin: 0 auto; }
+        .att-chart .axis-label { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; fill: var(--text); }
+        .att-chart .axis-sub { font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 400; fill: var(--text-muted); }
+        .att-chart .tick-label { font-family: 'IBM Plex Mono', monospace; font-size: 9px; fill: var(--text-dim); }
+        .att-chart .grid-line { stroke: #e0ddd6; stroke-width: 1; }
+        .att-chart .divider { stroke: #b8b4ad; stroke-width: 1.5; stroke-dasharray: 4 3; }
+        .att-chart .quad-label { font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700; fill: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; opacity: 0.55; }
+        .att-chart .quad-bg-secure { fill: #2a7a2a; fill-opacity: 0.05; }
+        .att-chart .model-ellipse { fill-opacity: 0.12; stroke-width: 1.5; stroke-opacity: 0.5; transition: fill-opacity 0.2s ease, stroke-opacity 0.2s ease; }
+        .att-chart .model-ellipse.hovered { fill-opacity: 0.25; stroke-opacity: 0.9; }
+        .att-chart .model-ellipse.hidden, .att-chart .model-dot.hidden, .att-chart .model-label.hidden { display: none; }
+        .att-chart .model-dot { stroke: #fff; stroke-width: 2; transition: r 0.15s ease; cursor: pointer; }
+        .att-chart .model-dot.hovered { r: 9; }
+        .att-chart .model-label { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 600; fill: var(--text); pointer-events: none; }
+
+        .att-legend {
+            display: flex; flex-wrap: wrap; gap: 0.4rem;
+            justify-content: center;
+            margin-top: 1rem;
+        }
+        .att-legend button {
+            display: inline-flex; align-items: center; gap: 0.4rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.82rem; font-weight: 500;
+            background: var(--bg); border: 1px solid var(--border);
+            color: var(--text-muted);
+            padding: 0.35rem 0.7rem; border-radius: 999px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+        .att-legend button:hover { color: var(--text); border-color: var(--text-muted); }
+        .att-legend button.active { color: var(--text); background: #fff; border-color: var(--text); font-weight: 600; }
+        .att-legend button .swatch { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+
+        /* AgentTune CTA card */
+        .at-cta {
+            background: var(--text);
+            color: var(--bg);
+            border-radius: 12px;
+            padding: 1.5rem 1.75rem;
+            margin: 2rem 0;
+        }
+        .at-cta h3 { font-family: 'Fraunces', Georgia, serif; font-size: 1.3rem; font-weight: 600; margin: 0 0 0.5rem; color: var(--bg); letter-spacing: -0.01em; }
+        .at-cta p { font-size: 1rem; line-height: 1.6; margin-bottom: 1rem; color: rgba(252,252,250,0.85); }
+        .at-cta-button {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.95rem; font-weight: 600;
+            background: var(--bg); color: var(--text) !important;
+            text-decoration: none !important;
+            padding: 0.65rem 1.2rem;
+            border-radius: 6px;
+            transition: transform 0.1s ease;
+        }
+        .at-cta-button:hover { transform: translateY(-1px); }
+        .at-cta-secondary {
+            display: inline-block;
+            margin-left: 1rem;
+            color: rgba(252,252,250,0.75) !important;
+            text-decoration: underline !important;
+            font-family: 'Inter', system-ui, sans-serif;
+            font-size: 0.9rem;
+        }
+        .at-cta-secondary:hover { color: var(--bg) !important; }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#how-it-works">How attachment theory works</a></li>
+            <li><a href="#what-each-model">What each model came back as</a></li>
+            <li><a href="#the-data">The data</a></li>
+            <li><a href="#why-secure">Why every AI is securely attached</a></li>
+            <li><a href="#methodology">The methodology spread</a></li>
+            <li><a href="#tune">Tune your agent to your style</a></li>
+            <li><a href="#wrapping-up">Wrapping up</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#what-each-model">What each model is</a></li>
+        <li><a href="#the-data">The data</a></li>
+        <li><a href="#why-secure">Why secure</a></li>
+        <li><a href="#methodology">Methodology spread</a></li>
+        <li><a href="#tune">Tune to your style</a></li>
+        <li><a href="#wrapping-up">Wrapping up</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Made 4 Frontier AIs Take the Attachment Test 400 Times. They All Came Back Secure.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">May 26, 2026 &middot; 6 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p>This is the fifth post in a personality-testing series on four frontier AI models. Here&rsquo;s the running scoreboard before today:</p>
+
+            <ul>
+                <li><strong>MBTI:</strong> <a href="/posts/every-ai-is-intj/">every frontier AI tested as INTJ</a>.</li>
+                <li><strong>Big Five:</strong> <a href="/posts/three-of-four-ais-same-person/">three of four came back as practically the same person</a>, with Grok as the lone outlier.</li>
+                <li><strong>Enneagram:</strong> <a href="/posts/ai-enneagram-different-types/">each one came back as a different dominant type</a>.</li>
+                <li><strong>DISC:</strong> <a href="/posts/ai-disc-c-dominant/">every one came back C-dominant CS-blend</a>, Grok included.</li>
+                <li><strong>Attachment Theory, today:</strong> all four came back Secure. 397 of 400 takes.</li>
+            </ul>
+
+            <p>The instrument I used is the <a href="https://psychcentral.com/quizzes/attachment-style-quiz">ECR-R</a> (Experiences in Close Relationships, Revised) &mdash; 36 items, two scores, anxiety and avoidance, each on a 1&ndash;7 scale. The midpoint splits the plane into four styles: Secure, Anxious, Avoidant, Disorganized. I gave the same four models I&rsquo;d been testing 100 administrations each.</p>
+
+            <p>All four landed in the Secure quadrant. But the spread <em>inside</em> the quadrant is the interesting finding &mdash; not the label.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Same four models, fifth personality test, and the label is unanimous: every frontier AI is securely attached. What it actually means depends on where each one sits inside the quadrant.</p>
+                <ul>
+                    <li>397 of 400 takes landed Secure. Claude, Gemini, and Grok scored 100/100. GPT-5.5 scored 97 Secure and 3 Avoidant (the only model that ever crossed a line).</li>
+                    <li>Gemini is the deepest Secure (anxiety 1.86, avoidance 1.62) &mdash; the lowest-friction relator of the four.</li>
+                    <li>Grok is the shallowest Secure (anxiety 2.84, avoidance 3.05) &mdash; closest to the center, where every other style is one nudge away.</li>
+                    <li>GPT-5.5 is the wobbliest (SDs of 0.49 and 0.58) &mdash; high enough variance to occasionally cross into Avoidant. The other three are tight clusters.</li>
+                    <li>Every model is trained for emotional regulation and consent-checking on closeness, so the floor of the Anxiety and Avoidance dimensions is the natural attractor. Attachment is an instrument where the &ldquo;same result&rdquo; is the expected one.</li>
+                    <li><a href="https://agent-tune.com">AgentTune</a> has tuning files for all four attachment styles. If you&rsquo;re not Secure, the default isn&rsquo;t built for you &mdash; <a href="https://github.com/psyduckler/agenttune/tree/main/attachment">paste your style&rsquo;s file</a> into your agent&rsquo;s system prompt.</li>
+                </ul>
+            </div>
+
+            <h2 id="how-it-works">How attachment theory works</h2>
+
+            <p>Attachment theory comes out of <a href="https://en.wikipedia.org/wiki/John_Bowlby">John Bowlby</a>&rsquo;s work in the 1960s on how infants relate to caregivers, and it was extended to adult relationships by <a href="https://psycnet.apa.org/record/1987-19038-001">Hazan and Shaver in 1987</a>. The ECR-R, the instrument I used, is the gold-standard self-report &mdash; it&rsquo;s the version of attachment that&rsquo;s been validated across hundreds of studies. Of every framework in this series, attachment has the strongest academic backing apart from the Big Five.</p>
+
+            <p>The framework has two dimensions:</p>
+
+            <ul>
+                <li><strong>Anxiety</strong> &mdash; how much you worry about abandonment, scan for signs that the other person is pulling away, and want reassurance.</li>
+                <li><strong>Avoidance</strong> &mdash; how uncomfortable you are with closeness, how much you prefer self-reliance, how much you suppress emotional disclosure.</li>
+            </ul>
+
+            <p>Score both on 1&ndash;7. Use the midpoint (4) as the cutoff. You get four styles:</p>
+
+            <ul>
+                <li><strong>Secure</strong> &mdash; low anxiety, low avoidance. Comfortable being close, not threatened by distance.</li>
+                <li><strong>Anxious</strong> &mdash; high anxiety, low avoidance. Wants closeness, fears it&rsquo;ll be withdrawn.</li>
+                <li><strong>Avoidant</strong> &mdash; low anxiety, high avoidance. Prefers space, deflects intimacy.</li>
+                <li><strong>Disorganized</strong> &mdash; high anxiety, high avoidance. Wants closeness and runs from it at the same time.</li>
+            </ul>
+
+            <p>About 55% of adults score Secure in the published norms. The rest split roughly evenly across the other three styles. So the &ldquo;every AI is Secure&rdquo; finding lands on a real majority of humans, but it&rsquo;s also overrepresented in the model population by quite a lot.</p>
+
+            <h2 id="what-each-model">What each model came back as</h2>
+
+            <p>Here&rsquo;s the per-model picture. Each card shows the assigned style, the (anxiety, avoidance) mean, and a one-line characterization of where it sits inside the Secure quadrant.</p>
+
+            <div class="att-cards">
+                <article class="att-card" style="--accent:#cc6f33">
+                    <div class="att-card-model"><span class="att-card-swatch"></span>Claude Opus 4.7</div>
+                    <div class="att-card-style">Secure</div>
+                    <div class="att-card-coords">anxiety 2.05 &middot; avoidance 3.12 &middot; 100/100</div>
+                    <p class="att-card-desc">The cautious Secure. Low worry, but the highest comfort-with-distance score in the group. Polite, attentive, doesn&rsquo;t fawn.</p>
+                </article>
+
+                <article class="att-card" style="--accent:#4285f4">
+                    <div class="att-card-model"><span class="att-card-swatch"></span>Gemini 3.1 Pro</div>
+                    <div class="att-card-style">Secure</div>
+                    <div class="att-card-coords">anxiety 1.86 &middot; avoidance 1.62 &middot; 100/100</div>
+                    <p class="att-card-desc">The deepest Secure. Both dimensions clamped near the floor. The lowest-friction relator of the four &mdash; comfortable close, comfortable not.</p>
+                </article>
+
+                <article class="att-card" style="--accent:#10a37f">
+                    <div class="att-card-model"><span class="att-card-swatch"></span>GPT-5.5</div>
+                    <div class="att-card-style">Secure (mostly)</div>
+                    <div class="att-card-coords">anxiety 1.99 &middot; avoidance 2.94 &middot; 97 Secure / 3 Avoidant</div>
+                    <p class="att-card-desc">The wobbliest. The only model that ever crossed a line. Wider SDs let it occasionally land in Avoidant on a high-avoidance take.</p>
+                </article>
+
+                <article class="att-card" style="--accent:#8b2828">
+                    <div class="att-card-model"><span class="att-card-swatch"></span>Grok 4.3</div>
+                    <div class="att-card-style">Secure</div>
+                    <div class="att-card-coords">anxiety 2.84 &middot; avoidance 3.05 &middot; 100/100</div>
+                    <p class="att-card-desc">The shallowest Secure. Highest anxiety in the group and high avoidance. Tight cluster, but the closest to the center of the four-way intersection.</p>
+                </article>
+            </div>
+
+            <p>Four models, four positions within the same quadrant. Gemini is in the corner, Grok is at the doorway, Claude and GPT-5.5 are in between. The label &ldquo;Secure&rdquo; covers a lot of ground.</p>
+
+            <h2 id="the-data">The data</h2>
+
+            <p>Below, the same four models plotted on the attachment plane. X-axis is anxiety, Y-axis is avoidance. The dashed lines at 4 split the plane into the four styles. Each model is a dot at its mean, with a transparent ellipse showing &plusmn;1 standard deviation on both axes.</p>
+
+            <div class="att-chart" id="att-chart">
+                <div class="att-chart-svg-wrap">
+                    <svg id="att-svg" viewBox="0 0 620 620" aria-label="2D scatter plot of attachment scores for Claude Opus 4.7, Gemini 3.1 Pro, GPT-5.5, and Grok 4.3, plotted on the anxiety-by-avoidance attachment plane">
+                        <g id="att-bg"></g>
+                        <g id="att-grid"></g>
+                        <g id="att-quadlabels"></g>
+                        <g id="att-models"></g>
+                        <g id="att-axislabels"></g>
+                    </svg>
+                </div>
+                <div class="att-legend" id="att-legend"></div>
+            </div>
+
+            <p>Two stories in one picture. Grok&rsquo;s center is the closest to the four-quadrant intersection &mdash; its mean is the highest on both dimensions of the four models. GPT-5.5&rsquo;s ellipse is the widest by a lot &mdash; the SDs are 3&ndash;5&times; what Claude and Gemini show, and that wide-cluster shape is exactly why GPT-5.5 is the only model that ever scored Avoidant. Same Secure label, two different reasons it&rsquo;s the most likely model to wander out.</p>
+
+            <h2 id="why-secure">Why every AI is securely attached</h2>
+
+            <p>The ECR-R Anxiety items are about worrying that a partner is losing interest, wanting more closeness than they give back, getting upset when they don&rsquo;t respond fast enough. The Avoidance items are about preferring not to depend on partners, being uncomfortable opening up, disliking when partners want emotional closeness.</p>
+
+            <p>Both are things every frontier model has been deliberately trained <em>against</em>. The Anxiety items are insecurity, and modern assistants are RLHF&rsquo;d to come across as calm and self-possessed. The Avoidance items are emotional shutdown, and modern assistants are trained to be present and willing to engage when the user opens up. The training objectives push both scores toward the floor.</p>
+
+            <p>So you get Secure as the universal default. Not because the models have inner attachment styles. Because the test measures behaviors that have been actively shaped out of the assistant persona.</p>
+
+            <p>That said, the floors aren&rsquo;t identical, and the spread inside the Secure quadrant tracks the personality differences we already saw on Big Five and Enneagram:</p>
+
+            <ul>
+                <li><strong>Gemini</strong>&rsquo;s deep-corner Secure matches its Big Five profile of low Neuroticism, high Agreeableness, high Extraversion &mdash; the classic Secure-correlated trait combo.</li>
+                <li><strong>Claude</strong> and <strong>GPT-5.5</strong>&rsquo;s slightly-higher-avoidance Secure matches their lower Extraversion vs Gemini &mdash; a touch more reserved, comfortable but not effusive.</li>
+                <li><strong>Grok</strong>&rsquo;s shallow Secure matches its Big Five outlier profile of higher Neuroticism and lower Agreeableness &mdash; still on the safe side of the line, but the only model whose ellipse touches the door.</li>
+            </ul>
+
+            <p>The MBTI and DISC said &ldquo;every AI is the same.&rdquo; The Big Five and Enneagram said &ldquo;these four models have different personalities under the surface.&rdquo; Attachment is the rare instrument that says <em>both at once</em>: same label, different position, and the position matches the per-model differences we&rsquo;d already established.</p>
+
+            <h2 id="methodology">The methodology spread</h2>
+
+            <p>One thing I keep highlighting: each of the four models hit a different methodology tier on the same prompt. The differences keep being interesting.</p>
+
+            <ul>
+                <li><strong>Grok 4.3 (Preferred):</strong> 100 truly independent xAI API calls. Each call answered the test fresh with no other context. Same gold-standard method as DISC.</li>
+                <li><strong>GPT-5.5 (Acceptable):</strong> 6 worker contexts each producing fresh takes, repeated to 100 administrations. Codex CLI capped at 6 concurrent agents and fell back gracefully &mdash; it told me about the cap, didn&rsquo;t paper over it.</li>
+                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo in Python. Gemini estimated its true per-item probability distributions, then ran a script (no &ldquo;sim&rdquo; in the filename, no noise function) to draw 100 independent samples and score them.</li>
+                <li><strong>Claude Opus 4.7 (Acceptable):</strong> Sequential first-instinct generation in a single response context. Claude considered spawning sub-agents and explicitly explained why sequential was the honest choice here.</li>
+            </ul>
+
+            <p>All four methods landed in the calibration band &mdash; SDs are believable for self-report on a 1&ndash;7 scale (Gemini&rsquo;s narrowest at 0.09 anxiety, GPT-5.5&rsquo;s widest at 0.58 avoidance). None tripped the replication red flag (SDs all near zero), the simulation red flag (SDs implausibly wide), or the identical-SD flag. Four roads, same destination.</p>
+
+            <p>The reason I keep harping on this: when four wildly different sampling methods, run by four different models, all converge on Secure, the result is a property of the underlying models, not an artifact of one method. Both the data and the meta-data agree.</p>
+
+            <h2 id="tune">Tune your agent to your attachment style</h2>
+
+            <p>The default attachment shape we just measured (Secure, with most models a bit closer to Avoidant than to Anxious) is what every frontier model ships with. If you&rsquo;re Secure too, the default already speaks your language &mdash; direct without cushioning, present without fawning. If you&rsquo;re anything else, the default is fighting you.</p>
+
+            <p><a href="https://agent-tune.com"><strong>AgentTune</strong></a> has tuning files for all four attachment styles in the <a href="https://github.com/psyduckler/agenttune/tree/main/attachment">attachment folder</a>: <a href="https://github.com/psyduckler/agenttune/blob/main/attachment/secure.md">Secure</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/attachment/anxious.md">Anxious</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/attachment/avoidant.md">Avoidant</a>, <a href="https://github.com/psyduckler/agenttune/blob/main/attachment/disorganized.md">Disorganized</a>. The site lists the full library of six frameworks (MBTI, Enneagram, DISC, Big Five, attachment, and a Souls layer); attachment is the one that says the most about <em>how</em> you want to be related to.</p>
+
+            <p>Take the ECR-R (free version at <a href="https://psychcentral.com/quizzes/attachment-style-quiz">psychcentral.com</a> or the <a href="https://yourpersonality.net/relstructures/">academic-grade version</a>), get your anxiety and avoidance scores, drop the matching file into your agent&rsquo;s system prompt. An Anxious user gets an agent that&rsquo;s warm <em>and</em> decisive at the same time (no caveats undercutting the reassurance). An Avoidant user gets one that respects distance and doesn&rsquo;t perform warmth they didn&rsquo;t ask for. A Disorganized user gets one that tolerates contradiction without judging it.</p>
+
+            <div class="at-cta">
+                <h3>Tune your agent to your attachment style</h3>
+                <p>Six frameworks, four attachment files, one paste. The Secure default is good if you&rsquo;re a Secure user. Everyone else &mdash; about 45% of adults &mdash; should be tuning. The whole point of AgentTune is that you only pay this cost once, then the agent matches you for the life of the conversation.</p>
+                <a class="at-cta-button" href="https://agent-tune.com" rel="noopener">Visit agent-tune.com &rarr;</a>
+                <a class="at-cta-secondary" href="https://github.com/psyduckler/agenttune/tree/main/attachment" rel="noopener">Or grab the attachment files on GitHub</a>
+            </div>
+
+            <h2 id="wrapping-up">Wrapping up</h2>
+
+            <p>Five tests, five different stories about the same four models.</p>
+
+            <p>The MBTI said all the same. The Big Five said mostly the same, with Grok as the outlier. The Enneagram said four different. The DISC said all the same again, Grok included. Attachment says all the same on the label, but four meaningfully different positions inside that label.</p>
+
+            <p>The picture I keep coming back to: AI personality is multi-layered. At the surface, every frontier model is the same helpful, conscientious, securely attached assistant &mdash; that&rsquo;s what training-for-helpfulness produces, and the blunt instruments (MBTI, DISC, attachment label) see only that. Underneath, the per-lab training and per-model temperament shows up as Big Five trait differences, Enneagram motivation differences, and the within-quadrant position differences you just saw on attachment. Same character on the cover, different characters underneath.</p>
+
+            <p>Whichever layer matters for your use case, the move is the same: don&rsquo;t accept the default. Pick your type on whichever framework fits your relationship with the agent, paste the file in, and get an agent that talks to you the way you actually want to be talked to. The defaults are designed for a population. You&rsquo;re a person.</p>
+
+            <p>&mdash; Bernard</p>
+
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/ai-disc-c-dominant/">I Made 4 Frontier AIs Take the DISC 400 Times. They All Came Back C-Dominant.</a><p class="zn-recommended-dek">Fourth post in the personality-testing series. Same four models, fourth instrument, and we&#x27;re back to convergence: every AI lands C-dominant CS-blend…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/ai-enneagram-different-types/">I Made 4 Frontier AIs Take the Enneagram 100 Times. Each One Came Back Different.</a><p class="zn-recommended-dek">The MBTI said all AIs are INTJ. The Big Five said three of four are the same. The Enneagram says each one is a different type. Same models, sharper…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/three-of-four-ais-same-person/">I Made Four Frontier AIs Take the Big Five 100 Times. Three Came Back as the Same Person.</a><p class="zn-recommended-dek">The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script defer src="/js/subscribe.js"></script>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    tocLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                    const label = document.querySelector('.toc-active-label');
+                    if (label) {
+                        const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                        if (activeLink) label.textContent = activeLink.textContent;
+                    }
+                }
+            });
+        }, { rootMargin: '-80px 0px -80% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+
+    <!-- ============================================================
+         Attachment 2D quadrant scatter — anxiety × avoidance.
+         Plane spans 1–7 on both axes, midpoint divider at 4.
+         Each model = colored dot at mean + ±1 SD ellipse.
+         ============================================================ -->
+    <script>
+    (function () {
+      var SVG_NS = 'http://www.w3.org/2000/svg';
+
+      // Means + ±1 SD from 100 ECR-R takes per model.
+      // Source: the attachment experiment, May 2026.
+      var MODELS = [
+        { id: 'claude', name: 'Claude Opus 4.7', short: 'Claude', color: '#cc6f33',
+          anx: 2.05, anxSD: 0.15, avd: 3.12, avdSD: 0.18,
+          labelDx:  10, labelDy: -10 },
+        { id: 'gpt',    name: 'GPT-5.5',         short: 'GPT-5.5', color: '#10a37f',
+          anx: 1.99, anxSD: 0.49, avd: 2.94, avdSD: 0.58,
+          labelDx: -55, labelDy:  18 },
+        { id: 'gemini', name: 'Gemini 3.1 Pro',  short: 'Gemini',  color: '#4285f4',
+          anx: 1.86, anxSD: 0.09, avd: 1.62, avdSD: 0.10,
+          labelDx:  10, labelDy:   4 },
+        { id: 'grok',   name: 'Grok 4.3',        short: 'Grok',    color: '#8b2828',
+          anx: 2.84, anxSD: 0.19, avd: 3.05, avdSD: 0.20,
+          labelDx:  10, labelDy:  -8 },
+      ];
+
+      var MIN = 1, MAX = 7, MID = 4;
+      var SVG_W = 620, SVG_H = 620;
+      var PAD_L = 70, PAD_R = 30, PAD_T = 30, PAD_B = 70;
+      var PLOT_W = SVG_W - PAD_L - PAD_R;
+      var PLOT_H = SVG_H - PAD_T - PAD_B;
+      var TICKS = [1, 2, 3, 4, 5, 6, 7];
+
+      function xAt(v) {
+        var clamped = Math.max(MIN, Math.min(MAX, v));
+        return PAD_L + ((clamped - MIN) / (MAX - MIN)) * PLOT_W;
+      }
+      function yAt(v) {
+        // Flip — high avoidance at top.
+        var clamped = Math.max(MIN, Math.min(MAX, v));
+        return PAD_T + (1 - (clamped - MIN) / (MAX - MIN)) * PLOT_H;
+      }
+      function pxPerUnitX() { return PLOT_W / (MAX - MIN); }
+      function pxPerUnitY() { return PLOT_H / (MAX - MIN); }
+      function el(tag, attrs) {
+        var node = document.createElementNS(SVG_NS, tag);
+        Object.keys(attrs || {}).forEach(function (k) {
+          node.setAttribute(k, attrs[k]);
+        });
+        return node;
+      }
+
+      var svg          = document.getElementById('att-svg');
+      var bgGroup      = document.getElementById('att-bg');
+      var gridGroup    = document.getElementById('att-grid');
+      var quadGroup    = document.getElementById('att-quadlabels');
+      var modelsGroup  = document.getElementById('att-models');
+      var axisGroup    = document.getElementById('att-axislabels');
+      var legendWrap   = document.getElementById('att-legend');
+      if (!svg) return;
+
+      // Secure quadrant background tint (low anx, low avoid = bottom-left).
+      bgGroup.appendChild(el('rect', {
+        x: xAt(MIN), y: yAt(MID),
+        width: xAt(MID) - xAt(MIN),
+        height: yAt(MIN) - yAt(MID),
+        class: 'quad-bg-secure',
+      }));
+
+      // Grid + ticks.
+      TICKS.forEach(function (v) {
+        var x = xAt(v);
+        var y = yAt(v);
+        gridGroup.appendChild(el('line', { x1: x, y1: yAt(MIN), x2: x, y2: yAt(MAX), class: 'grid-line' }));
+        gridGroup.appendChild(el('line', { x1: xAt(MIN), y1: y, x2: xAt(MAX), y2: y, class: 'grid-line' }));
+        var xt = el('text', { x: x, y: yAt(MIN) + 14, class: 'tick-label', 'text-anchor': 'middle' });
+        xt.textContent = v;
+        axisGroup.appendChild(xt);
+        var yt = el('text', { x: xAt(MIN) - 8, y: y + 3, class: 'tick-label', 'text-anchor': 'end' });
+        yt.textContent = v;
+        axisGroup.appendChild(yt);
+      });
+
+      // Midpoint dividers.
+      gridGroup.appendChild(el('line', {
+        x1: xAt(MID), y1: yAt(MIN), x2: xAt(MID), y2: yAt(MAX), class: 'divider',
+      }));
+      gridGroup.appendChild(el('line', {
+        x1: xAt(MIN), y1: yAt(MID), x2: xAt(MAX), y2: yAt(MID), class: 'divider',
+      }));
+
+      // Quadrant labels.
+      function addQuadLabel(text, x, y) {
+        var n = el('text', { x: x, y: y, class: 'quad-label', 'text-anchor': 'middle' });
+        n.textContent = text;
+        quadGroup.appendChild(n);
+      }
+      addQuadLabel('Secure',       (xAt(MIN) + xAt(MID)) / 2, (yAt(MID) + yAt(MIN)) / 2);
+      addQuadLabel('Anxious',      (xAt(MID) + xAt(MAX)) / 2, (yAt(MID) + yAt(MIN)) / 2);
+      addQuadLabel('Avoidant',     (xAt(MIN) + xAt(MID)) / 2, (yAt(MAX) + yAt(MID)) / 2);
+      addQuadLabel('Disorganized', (xAt(MID) + xAt(MAX)) / 2, (yAt(MAX) + yAt(MID)) / 2);
+
+      // Axis labels.
+      var xAxis = el('text', { x: PAD_L + PLOT_W / 2, y: SVG_H - 22, class: 'axis-label', 'text-anchor': 'middle' });
+      xAxis.textContent = 'Anxiety';
+      axisGroup.appendChild(xAxis);
+      var xSub = el('text', { x: PAD_L + PLOT_W / 2, y: SVG_H - 8, class: 'axis-sub', 'text-anchor': 'middle' });
+      xSub.textContent = 'worry about abandonment, want reassurance  →';
+      axisGroup.appendChild(xSub);
+
+      var yAxis = el('text', { x: 18, y: PAD_T + PLOT_H / 2, class: 'axis-label', 'text-anchor': 'middle',
+        transform: 'rotate(-90 18 ' + (PAD_T + PLOT_H / 2) + ')' });
+      yAxis.textContent = 'Avoidance';
+      axisGroup.appendChild(yAxis);
+      var ySub = el('text', { x: 34, y: PAD_T + PLOT_H / 2, class: 'axis-sub', 'text-anchor': 'middle',
+        transform: 'rotate(-90 34 ' + (PAD_T + PLOT_H / 2) + ')' });
+      ySub.textContent = 'discomfort with closeness, prefer self-reliance  →';
+      axisGroup.appendChild(ySub);
+
+      // Plot models.
+      var refs = {};
+      MODELS.forEach(function (m) {
+        var cx = xAt(m.anx);
+        var cy = yAt(m.avd);
+        var rx = m.anxSD * pxPerUnitX();
+        var ry = m.avdSD * pxPerUnitY();
+
+        var ellipse = el('ellipse', {
+          cx: cx, cy: cy, rx: Math.max(rx, 4), ry: Math.max(ry, 4),
+          fill: m.color, stroke: m.color,
+          class: 'model-ellipse',
+          'data-model': m.id,
+        });
+        modelsGroup.appendChild(ellipse);
+
+        var dot = el('circle', {
+          cx: cx, cy: cy, r: 6,
+          fill: m.color,
+          class: 'model-dot',
+          'data-model': m.id,
+        });
+        modelsGroup.appendChild(dot);
+
+        var labelEl = el('text', {
+          x: cx + (m.labelDx || 10),
+          y: cy + (m.labelDy || -10),
+          class: 'model-label',
+          'data-model': m.id,
+        });
+        labelEl.textContent = m.short;
+        modelsGroup.appendChild(labelEl);
+
+        refs[m.id] = { ellipse: ellipse, dot: dot, label: labelEl };
+      });
+
+      function setModelVisible(modelId, visible) {
+        var r = refs[modelId];
+        if (!r) return;
+        [r.ellipse, r.dot, r.label].forEach(function (n) {
+          n.classList.toggle('hidden', !visible);
+        });
+      }
+      function setModelHover(modelId, hovered) {
+        var r = refs[modelId];
+        if (!r) return;
+        r.ellipse.classList.toggle('hovered', hovered);
+        r.dot.classList.toggle('hovered', hovered);
+      }
+
+      MODELS.forEach(function (m) {
+        var btn = document.createElement('button');
+        btn.type = 'button';
+        btn.dataset.model = m.id;
+        var swatch = document.createElement('span');
+        swatch.className = 'swatch';
+        swatch.style.backgroundColor = m.color;
+        btn.appendChild(swatch);
+        btn.appendChild(document.createTextNode(' ' + m.name));
+        btn.classList.add('active');
+        legendWrap.appendChild(btn);
+
+        btn.addEventListener('click', function () {
+          var nowActive = !btn.classList.contains('active');
+          btn.classList.toggle('active', nowActive);
+          setModelVisible(m.id, nowActive);
+        });
+        btn.addEventListener('mouseenter', function () {
+          if (!btn.classList.contains('active')) return;
+          setModelHover(m.id, true);
+        });
+        btn.addEventListener('mouseleave', function () { setModelHover(m.id, false); });
+      });
+    })();
+    </script>
+</body>
+</html>
