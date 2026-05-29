@@ -30,8 +30,12 @@ let SCALE = 3;
 let offsetX = 0, offsetY = 0;
 
 function resize() {
+  const navH = document.querySelector('.zn-nav')?.offsetHeight || 0;
+  canvas.style.top = navH + 'px';
   canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight;
+  canvas.height = window.innerHeight - navH;
+  const hud = document.getElementById('hud');
+  if (hud) hud.style.top = (navH + 12) + 'px';
   const sx = (canvas.width - 32) / MAZE_W;
   const sy = (canvas.height - 100) / MAZE_H;
   SCALE = Math.max(2, Math.floor(Math.min(sx, sy)));
@@ -656,7 +660,7 @@ function drawGameOver(now) {
   ctx.fillText('GAME OVER', canvas.width / 2, canvas.height / 2 - 24);
   ctx.font = `700 ${Math.floor(Math.min(canvas.width, canvas.height) * 0.022)}px "Special Elite", monospace`;
   ctx.fillStyle = '#ece2c4';
-  ctx.fillText('An unlaid soul caught you.', canvas.width / 2, canvas.height / 2 + 14);
+  ctx.fillText('Consume AI frontier tokens to eat ghosts', canvas.width / 2, canvas.height / 2 + 14);
   ctx.fillStyle = '#c9b87a';
   const blink = 0.5 + 0.5 * Math.sin(now * 0.005);
   ctx.globalAlpha = 0.5 + blink * 0.5;
