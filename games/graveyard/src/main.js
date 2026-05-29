@@ -100,7 +100,7 @@ const POWERUP_WARN_MS = 3000;
 const player = makeEntity(7, 5, 'player');
 
 const ghosts = [
-  Object.assign(makeEntity(13, 9, 'ghost'), {
+  Object.assign(makeEntity(7, 9, 'ghost'), {
     project: projects.find((p) => p.slug === 'kapiko'),
     color: '#10b981',
     alive: true,
@@ -111,6 +111,7 @@ const powerups = [
   { col: 1,  row: 1, sprite: 'puChatgpt', consumed: false, label: 'ChatGPT' },
   { col: 13, row: 1, sprite: 'puGemini',  consumed: false, label: 'Gemini'  },
   { col: 1,  row: 9, sprite: 'puClaude',  consumed: false, label: 'Claude'  },
+  { col: 13, row: 9, sprite: 'puGrok',    consumed: false, label: 'Grok'    },
 ];
 
 let powerUntil = 0;
@@ -252,7 +253,7 @@ function resetGame() {
   player.queueDir = null;
 
   for (const g of ghosts) {
-    const spawn = g.kind === 'ghost' ? { c: 13, r: 9 } : { c: g.col, r: g.row };
+    const spawn = g.kind === 'ghost' ? { c: 7, r: 9 } : { c: g.col, r: g.row };
     g.col = spawn.c; g.row = spawn.r;
     g.fromCol = spawn.c; g.fromRow = spawn.r;
     g.toCol = spawn.c;   g.toRow = spawn.r;
@@ -676,6 +677,7 @@ window.__gv = { player, ghosts, powerups, tombMarkers, isPoweredUp, MAZE, isGame
       loadImage('puChatgpt',  './assets/sprites/powerup-chatgpt.png'),
       loadImage('puGemini',   './assets/sprites/powerup-gemini.png'),
       loadImage('puClaude',   './assets/sprites/powerup-claude.png'),
+      loadImage('puGrok',     './assets/sprites/powerup-grok.png'),
     ]);
     updateHud();
     loaderEl.classList.add('hidden');
