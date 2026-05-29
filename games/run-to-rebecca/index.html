@@ -4,6 +4,10 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Run to Rebecca — Austin Rooftop Sprint v4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
 <style>
   :root {
     --cream: #fff2cf;
@@ -17,7 +21,7 @@
   html, body { margin: 0; min-height: 100%; background:#0e1022; color:var(--cream); overflow:hidden; }
   body { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; }
   .shell {
-    min-height: 100vh;
+    min-height: calc(100vh - 60px);
     display: grid;
     place-items: center;
     padding: 18px;
@@ -106,6 +110,22 @@
 </style>
 </head>
 <body>
+<nav class="zn-nav">
+  <div class="zn-nav-inner">
+    <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+    <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+    <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+    <div class="zn-nav-links">
+      <a href="/posts/">Posts</a>
+      <a href="/portfolio/">Portfolio</a>
+      <a href="/games/graveyard/">Failures</a>
+      <a href="/ai-stack/">AI Stack</a>
+      <a href="/metrics/">Metrics</a>
+      <a href="/about/">About</a>
+      <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+    </div>
+  </div>
+</nav>
 <div class="shell">
   <div class="frame">
     <canvas id="game" width="1920" height="1080" aria-label="Polished playable Austin platformer where Bernard runs to Rebecca"></canvas>
