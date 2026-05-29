@@ -30,12 +30,10 @@ let SCALE = 3;
 let offsetX = 0, offsetY = 0;
 
 function resize() {
-  const navH = document.querySelector('.zn-nav')?.offsetHeight || 0;
-  canvas.style.top = navH + 'px';
-  canvas.width = window.innerWidth;
-  canvas.height = window.innerHeight - navH;
-  const hud = document.getElementById('hud');
-  if (hud) hud.style.top = (navH + 12) + 'px';
+  const frame = document.querySelector('.game-frame');
+  if (!frame) return;
+  canvas.width = frame.clientWidth;
+  canvas.height = frame.clientHeight;
   const sx = (canvas.width - 32) / MAZE_W;
   const sy = (canvas.height - 100) / MAZE_H;
   SCALE = Math.max(2, Math.floor(Math.min(sx, sy)));
