@@ -44,6 +44,7 @@ function resize() {
   ctx.imageSmoothingEnabled = false;
 }
 window.addEventListener('resize', resize);
+window.addEventListener('load', resize); // re-measure once fonts/CSS finish applying
 resize();
 
 function isWall(c, r) {
