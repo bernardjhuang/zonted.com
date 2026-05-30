@@ -228,6 +228,10 @@
     .zga-row[data-row="5"] .zga-rank, .zga-row[data-row="5"] .zga-name { color: var(--arc-red); }
     .zga-row[data-row="5"] .zga-rank { text-shadow: 0 0 8px var(--arc-red); }
     .zga-name .zga-metric { color: var(--arc-dim); }
+    .zga-empty {
+      font-family: var(--arc-mono); font-size: 11px; color: var(--arc-dim);
+      padding: 14px; text-align: center; font-style: italic;
+    }
 
     .zga-footer {
       position: relative; z-index: 2;
@@ -316,50 +320,16 @@
       <div class="zga-table">
         <div class="zga-table-head">
           <span>★ HIGH SCORES ★</span>
-          <span class="yellow">$105K+ SPENT</span>
+          <span class="yellow">$100 BURNED · 5 DAYS</span>
         </div>
-        <div class="zga-row" data-row="0">
+        <div class="zga-row current" data-row="0">
           <span class="zga-rank">1</span>
-          <span class="zga-initials">ANS</span>
-          <span class="zga-name">AnswerBox <span class="zga-metric">· $14K MRR · 180 teams</span></span>
-          <span class="zga-score">024,100</span>
+          <span class="zga-initials">KAP</span>
+          <span class="zga-name">Kapiko <span class="zga-metric">· AI music · 5 days · $100 burned</span></span>
+          <span class="zga-score">000,100</span>
           <span class="zga-verdict pink">DOWN</span>
         </div>
-        <div class="zga-row" data-row="1">
-          <span class="zga-rank">2</span>
-          <span class="zga-initials">PIN</span>
-          <span class="zga-name">PinFarm <span class="zga-metric">· 1.2M monthly views</span></span>
-          <span class="zga-score">014,200</span>
-          <span class="zga-verdict pink">DOWN</span>
-        </div>
-        <div class="zga-row current" data-row="2">
-          <span class="zga-rank">3</span>
-          <span class="zga-initials">AUT</span>
-          <span class="zga-name">The Autopilot <span class="zga-metric">· 5,100 subscribers</span></span>
-          <span class="zga-score">009,510</span>
-          <span class="zga-verdict pink">DOWN</span>
-        </div>
-        <div class="zga-row" data-row="3">
-          <span class="zga-rank">4</span>
-          <span class="zga-initials">REE</span>
-          <span class="zga-name">ReelForge <span class="zga-metric">· 41 reels · 0 usable</span></span>
-          <span class="zga-score">007,041</span>
-          <span class="zga-verdict green blink">1UP</span>
-        </div>
-        <div class="zga-row" data-row="4">
-          <span class="zga-rank">5</span>
-          <span class="zga-initials">COR</span>
-          <span class="zga-name">Corpus <span class="zga-metric">· 3 datasets · 0 sold</span></span>
-          <span class="zga-score">004,000</span>
-          <span class="zga-verdict dim">VOID</span>
-        </div>
-        <div class="zga-row" data-row="5">
-          <span class="zga-rank">6</span>
-          <span class="zga-initials">GRA</span>
-          <span class="zga-name">Grader GPT <span class="zga-metric">· 0 shipped · killed in review</span></span>
-          <span class="zga-score">000,320</span>
-          <span class="zga-verdict dim">VOID</span>
-        </div>
+        <div class="zga-empty">// more graves coming · the bench is long</div>
       </div>
 
       <div class="zga-footer">
