@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Portfolio dead-card prototypes — Zonted</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600&family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+<style>
+  :root {
+    --tc-bg: #0a0518; --tc-bg2: #1a0a35; --tc-bg3: #2a0e55;
+    --tc-card: #fef8e7; --tc-card-edge: #0a0a0a; --tc-card-inner: #f5ead0;
+    --tc-text: #fbf8f0; --tc-dim: #a0a0b8;
+    --tc-gold: #fbbf24; --tc-gold-dark: #9c6e1a; --tc-gold-light: #fde68a;
+    --tc-red: #ef4444; --tc-blue: #3b82f6; --tc-green: #10b981;
+    --tc-purple: #a855f7; --tc-magenta: #ec4899; --tc-silver: #cbd5e1;
+    --tc-display: 'Archivo Black', sans-serif;
+    --tc-body: 'Inter Tight', sans-serif;
+    --tc-serif: 'Fraunces', Georgia, serif;
+    --tc-mono: 'JetBrains Mono', ui-monospace, monospace;
+  }
+  body { background: var(--tc-bg); color: var(--tc-text); font-family: var(--tc-body); margin: 0; }
+  .lab { padding: 56px 36px 88px; max-width: 1500px; margin: 0 auto; }
+  .lab h1 { font-family: var(--tc-display); font-size: 42px; letter-spacing: -1.5px; margin: 0 0 8px; text-transform: uppercase; color: var(--tc-text); font-weight: 400; }
+  .lab .sub { font-family: var(--tc-body); color: var(--tc-dim); font-size: 16px; max-width: 720px; line-height: 1.5; margin: 0 0 36px; }
+  .lab .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 36px; }
+  @media (max-width: 1280px) { .lab .grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 720px) { .lab .grid { grid-template-columns: 1fr; } }
+  .lab-cell { display: flex; flex-direction: column; gap: 14px; }
+  .lab-cell-label {
+    font-family: var(--tc-mono); font-size: 11px; letter-spacing: 2px;
+    color: var(--tc-gold); text-transform: uppercase; font-weight: 700;
+  }
+  .lab-cell-name { font-family: var(--tc-display); font-size: 22px; color: var(--tc-text); letter-spacing: -0.5px; line-height: 1; text-transform: uppercase; font-weight: 400; }
+  .lab-cell-note { font-family: var(--tc-body); font-size: 13px; color: var(--tc-dim); line-height: 1.5; }
+
+  /* ============ tc-* card system (lifted from portfolio) ============ */
+  .tc-card {
+    position: relative; display: block; aspect-ratio: 5 / 9.4;
+    background: var(--tc-card); border-radius: 14px; border: 4px solid var(--tc-card-edge);
+    padding: 7px; overflow: hidden; color: var(--tc-card-edge);
+    font-family: var(--tc-body); text-decoration: none; cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.3s, filter 0.3s;
+  }
+  .tc-card:hover { transform: scale(1.03) rotateY(-3deg) rotateX(2deg); z-index: 10; }
+  .tc-card:hover .tc-holo { opacity: 0.5; }
+  .tc-frame { position: absolute; inset: 7px; border: 1.5px solid var(--tc-gold-dark); border-radius: 6px; pointer-events: none; z-index: 2; }
+  .tc-holo { position: absolute; inset: 0; pointer-events: none; transition: opacity 0.4s; z-index: 1; mix-blend-mode: overlay; }
+  .tc-foil {
+    background: linear-gradient(115deg, #ffafd5 0%, #b0e5ff 18%, #b6ffc6 36%, #fff5b0 54%, #ffc4f8 72%, #b0e5ff 88%, #ffafd5 100%);
+    background-size: 250% 250%; animation: holoShimmer 6s linear infinite; opacity: 0.15;
+  }
+  .tc-header { position: relative; padding: 6px 10px 4px; z-index: 3; }
+  .tc-header-meta { display: flex; justify-content: space-between; align-items: center; }
+  .tc-year { font-family: var(--tc-mono); font-size: 9px; font-weight: 700; letter-spacing: 1.5px; color: var(--tc-card-edge); opacity: 0.65; }
+  .tc-pip { display: inline-flex; align-items: center; gap: 5px; padding: 2px 8px; font-family: var(--tc-mono); font-size: 9px; font-weight: 700; letter-spacing: 1px; border: 1px solid; }
+  .tc-pip-dot { width: 5px; height: 5px; border-radius: 50%; }
+  .tc-pip-live { background: rgba(16, 185, 129, 0.2); color: #0a2818; border-color: var(--tc-green); }
+  .tc-pip-live .tc-pip-dot { background: var(--tc-green); box-shadow: 0 0 4px var(--tc-green); animation: blink 1.6s infinite; }
+  .tc-title-row { display: flex; justify-content: space-between; align-items: baseline; margin-top: 4px; }
+  .tc-name { font-family: var(--tc-display); font-size: 22px; letter-spacing: -0.7px; text-transform: uppercase; line-height: 1; }
+  .tc-type-bubble { display: inline-flex; width: 28px; height: 28px; border: 2px solid var(--tc-card-edge); border-radius: 50%; align-items: center; justify-content: center; color: #fff; font-size: 11px; font-family: var(--tc-display); text-transform: uppercase; }
+  .tc-type-strip { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+  .tc-type-label { font-family: var(--tc-mono); font-size: 8.5px; font-weight: 700; letter-spacing: 1.5px; padding: 2px 6px; border: 1px solid; }
+  .tc-badge { font-family: var(--tc-mono); font-size: 9px; opacity: 0.65; letter-spacing: 0.5px; color: var(--tc-card-edge); }
+  .tc-image { position: relative; margin: 6px 8px 0; border: 2px solid var(--tc-card-edge); background: var(--tc-card-edge); border-radius: 3px; overflow: hidden; z-index: 3; aspect-ratio: 5 / 3.2; }
+  .tc-image::after { content: ""; position: absolute; inset: 0; box-shadow: inset 0 0 12px var(--card-glow, transparent); pointer-events: none; z-index: 3; }
+  .tc-image-img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; z-index: 0; }
+  .tc-image-fallback { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-family: var(--tc-display); font-size: 24px; color: var(--tc-gold-light); text-transform: uppercase; opacity: 0.4; letter-spacing: 1px; background: linear-gradient(135deg, var(--card-bg-grad, var(--tc-bg2)), var(--tc-card-edge)); z-index: 0; }
+  .tc-image-stamp { position: absolute; font-family: var(--tc-mono); font-size: 8px; color: var(--tc-gold-light); letter-spacing: 1px; font-weight: 700; background: rgba(10, 10, 10, 0.78); padding: 1px 5px; pointer-events: none; z-index: 2; }
+  .tc-image-stamp-tl { top: 4px; left: 4px; }
+  .tc-image-stamp-br { bottom: 4px; right: 4px; }
+  .tc-image-scan { position: absolute; inset: 0; height: 30%; pointer-events: none; z-index: 1; animation: scanline 4s linear infinite; }
+  .tc-thesis { position: relative; margin: 6px 8px 0; padding: 8px 10px; border-left: 3px solid; z-index: 3; }
+  .tc-thesis-label { font-family: var(--tc-mono); font-size: 8px; font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase; margin: 0 0 3px; }
+  .tc-thesis-text { font-family: var(--tc-serif); font-style: italic; font-size: 13px; line-height: 1.3; color: var(--tc-card-edge); font-weight: 500; margin: 0; }
+  .tc-detail { position: relative; margin: 5px 8px 0; padding: 0 4px; font-family: var(--tc-body); font-size: 10.5px; line-height: 1.4; color: var(--tc-card-edge); opacity: 0.82; z-index: 3; }
+  .tc-detail p { margin: 0; }
+  .tc-model { position: relative; margin: 6px 8px 0; padding: 6px 10px; background: var(--tc-card-edge); color: var(--tc-card); border-radius: 3px; z-index: 3; }
+  .tc-model-label { font-family: var(--tc-mono); font-size: 8px; font-weight: 700; letter-spacing: 1.5px; color: var(--tc-gold-light); text-transform: uppercase; margin: 0; }
+  .tc-model-text { font-family: var(--tc-body); font-size: 11px; font-weight: 600; color: var(--tc-card); margin: 2px 0 0; line-height: 1.3; }
+  .tc-numbers { position: relative; margin: 6px 8px 0; z-index: 3; }
+  .tc-numbers-label { font-family: var(--tc-mono); font-size: 8px; font-weight: 700; letter-spacing: 1.5px; color: var(--tc-card-edge); opacity: 0.65; text-transform: uppercase; margin: 0 0 3px; }
+  .tc-metrics { display: grid; grid-template-columns: 1fr 1fr; gap: 3px; margin: 0; }
+  .tc-metric { padding: 5px 7px; background: var(--tc-card-inner); border: 1px solid rgba(156, 110, 26, 0.33); border-radius: 2px; display: flex; flex-direction: column-reverse; }
+  .tc-metric-v { font-family: var(--tc-display); font-size: 14px; color: var(--tc-card-edge); letter-spacing: -0.4px; line-height: 1; text-transform: uppercase; display: block; margin: 0; }
+  .tc-metric-l { font-family: var(--tc-mono); font-size: 8px; color: var(--tc-card-edge); opacity: 0.6; letter-spacing: 0.5px; line-height: 1.2; display: block; margin: 3px 0 0; }
+  .tc-foot { position: relative; margin: 8px 8px 6px; z-index: 3; display: flex; justify-content: space-between; align-items: center; font-family: var(--tc-mono); font-size: 8px; color: var(--tc-card-edge); opacity: 0.55; letter-spacing: 1px; }
+
+  @keyframes holoShimmer { 0% { background-position: 0% 0%; } 100% { background-position: 200% 200%; } }
+  @keyframes scanline { 0% { transform: translateY(-120%); } 100% { transform: translateY(120%); } }
+  @keyframes blink { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0.3; } }
+
+  /* ============ VARIANT A — TOMBSTONE ============ */
+  .tc-dead-a {
+    /* card itself: stone-grey paper */
+    --tc-card: #d8d4cc; --tc-card-inner: #c7c2b9; --tc-card-edge: #2a2622;
+    background: linear-gradient(160deg, #e3dfd6 0%, #c9c4ba 100%) !important;
+    border-color: #4a4540 !important;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 1px #4a4540 !important;
+    filter: saturate(0.55);
+  }
+  .tc-dead-a .tc-frame { border-color: #6a635a !important; }
+  .tc-dead-a .tc-holo { display: none; } /* foil drains out */
+  .tc-dead-a .tc-pip-rip {
+    background: rgba(74, 69, 64, 0.18); color: #2a2622; border-color: #6a635a;
+  }
+  .tc-dead-a .tc-pip-rip .tc-pip-dot { background: #6a635a; }
+  /* Big diagonal DECEASED stamp on the image */
+  .tc-dead-a .tc-image { filter: grayscale(0.85) contrast(1.05); }
+  .tc-dead-a .tc-stamp-dead {
+    position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-18deg);
+    font-family: var(--tc-mono); font-weight: 800; font-size: 18px; letter-spacing: 3px;
+    color: rgba(159, 39, 39, 0.85); border: 3px double rgba(159, 39, 39, 0.85);
+    padding: 4px 14px; pointer-events: none; z-index: 4; text-transform: uppercase;
+    text-shadow: 1px 1px 0 rgba(255,255,255,0.4); white-space: nowrap;
+  }
+  .tc-dead-a .tc-postmortem {
+    display: inline-flex; align-items: center; gap: 4px;
+    font-family: var(--tc-mono); font-size: 9px; font-weight: 700; letter-spacing: 1px;
+    background: rgba(42,38,34,0.92); color: #d8d4cc; padding: 3px 8px;
+    text-decoration: none; border-radius: 2px; text-transform: uppercase;
+  }
+
+  /* ============ VARIANT B — ARCHIVED ============ */
+  .tc-dead-b {
+    filter: grayscale(0.78) sepia(0.18) contrast(0.95);
+    border-style: dashed !important;
+    border-color: #6a635a !important;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3) !important;
+  }
+  .tc-dead-b .tc-holo { opacity: 0.05; animation: none !important; }
+  .tc-dead-b .tc-frame { border-style: dashed; border-color: #8a807a !important; }
+  /* The single surviving accent: pip stays with project color */
+  .tc-dead-b .tc-pip-archived {
+    background: rgba(120, 110, 100, 0.18); color: #3a342e; border-color: #6a635a;
+  }
+  .tc-dead-b .tc-pip-archived .tc-pip-dot { background: var(--surviving-accent, #10b981); box-shadow: 0 0 4px var(--surviving-accent, #10b981); }
+  .tc-dead-b .tc-image { filter: brightness(0.78); }
+  .tc-dead-b .tc-image-scan { animation: none !important; opacity: 0; }
+  .tc-dead-b .tc-retired-stamp {
+    position: absolute; top: 8px; right: 8px; transform: rotate(6deg);
+    font-family: var(--tc-mono); font-weight: 800; font-size: 10px; letter-spacing: 2px;
+    color: rgba(159, 39, 39, 0.78); border: 1.5px solid rgba(159, 39, 39, 0.78);
+    padding: 3px 7px; pointer-events: none; z-index: 4; text-transform: uppercase;
+    background: rgba(255,255,255,0.08);
+  }
+  .tc-dead-b:hover { transform: none !important; }
+
+  /* ============ VARIANT C — POWERED DOWN ============ */
+  .tc-dead-c { background: #f5ead0 !important; }
+  .tc-dead-c .tc-image { background: #000 !important; filter: none; }
+  .tc-dead-c .tc-image-img, .tc-dead-c .tc-image-fallback { opacity: 0.04; }
+  .tc-dead-c .tc-image-scan, .tc-dead-c .tc-image-stamp { display: none; }
+  .tc-dead-c .tc-crt-bar {
+    position: absolute; left: 0; right: 0; top: 50%;
+    height: 2px; background: rgba(160, 230, 200, 0.85);
+    box-shadow: 0 0 12px rgba(120, 230, 180, 0.7); z-index: 3;
+    pointer-events: none;
+  }
+  .tc-dead-c .tc-crt-glow {
+    position: absolute; inset: 0; z-index: 2; pointer-events: none;
+    background: repeating-linear-gradient(0deg, rgba(0,255,200,0.05) 0 1px, transparent 1px 3px);
+    animation: scanScroll 8s linear infinite;
+  }
+  @keyframes scanScroll { 0% { background-position-y: 0; } 100% { background-position-y: 60px; } }
+  .tc-dead-c .tc-pip-offline {
+    background: rgba(239, 68, 68, 0.15); color: #5a0c0c; border-color: var(--tc-red);
+  }
+  .tc-dead-c .tc-pip-offline .tc-pip-dot { background: var(--tc-red); box-shadow: 0 0 6px var(--tc-red); animation: blink 1.2s infinite; }
+  .tc-dead-c .tc-name { color: rgba(10,10,10,0.5); }
+  .tc-dead-c .tc-thesis {
+    background: #0a0a0a !important; border-left: 3px solid var(--tc-green) !important;
+    margin: 6px 8px 0; padding: 8px 10px; font-family: var(--tc-mono) !important;
+  }
+  .tc-dead-c .tc-thesis-label { color: #6b6b6b !important; }
+  .tc-dead-c .tc-thesis-text {
+    font-family: var(--tc-mono) !important; font-style: normal !important;
+    color: #6fff9e; font-size: 10.5px; line-height: 1.4; letter-spacing: 0.3px;
+  }
+  .tc-dead-c .tc-thesis-text .blink-cursor {
+    display: inline-block; width: 7px; height: 11px; background: #6fff9e; vertical-align: text-bottom; animation: blink 1s steps(1) infinite; margin-left: 4px;
+  }
+</style>
+</head>
+<body>
+<nav class="zn-nav">
+  <div class="zn-nav-inner">
+    <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+    <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+    <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+    <div class="zn-nav-links">
+      <a href="/posts/">Posts</a>
+      <a href="/portfolio/">Portfolio</a>
+      <a href="/games/graveyard/">Graveyard</a>
+      <a href="/ai-stack/">AI Stack</a>
+      <a href="/metrics/">Metrics</a>
+      <a href="/about/">About</a>
+      <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<section class="lab">
+  <p style="font-family: var(--tc-mono); font-size: 11px; letter-spacing: 3px; color: var(--tc-gold); text-transform: uppercase; margin: 0 0 8px;">PROTOTYPE · INTERNAL · NOT INDEXED</p>
+  <h1>Dead-card concepts</h1>
+  <p class="sub">Same Kapiko card, four states: the current <strong>LIVE</strong> baseline plus three "this project is no longer being worked on" treatments. Compare in a row — hover any card to see how it reacts.</p>
+
+  <div class="grid">
+
+    <!-- ============ LIVE BASELINE ============ -->
+    <div class="lab-cell">
+      <div>
+        <div class="lab-cell-label">Baseline</div>
+        <div class="lab-cell-name">LIVE</div>
+      </div>
+      <a href="https://kapiko.ai" class="tc-card" target="_blank" rel="noopener" style="--card-color: #10b981; --card-glow: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.5), 0 0 0 1px #10b981, inset 0 0 0 2px #fbbf24;" aria-label="KAPIKO — open kapiko.ai">
+        <div class="tc-frame"></div>
+        <div class="tc-holo tc-foil" aria-hidden="true"></div>
+        <div class="tc-header">
+          <div class="tc-header-meta">
+            <span class="tc-year">2026 →</span>
+            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
+          </div>
+          <div class="tc-title-row">
+            <span class="tc-name">KAPIKO</span>
+            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #10b981, #0a0a0a); box-shadow:0 0 8px #10b981;">A</span>
+          </div>
+          <div class="tc-type-strip">
+            <span class="tc-type-label" style="color:#10b981; border-color:#10b981; background:rgba(16,185,129,0.07);">AI MUSIC</span>
+            <span class="tc-badge">★ New</span>
+          </div>
+        </div>
+        <div class="tc-image">
+          <div class="tc-image-fallback" style="--card-bg-grad: rgba(16,185,129,0.15);">KAPIKO</div>
+          <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="Kapiko homepage screenshot" loading="lazy">
+          <div class="tc-image-stamp tc-image-stamp-tl">ART · 005</div>
+          <div class="tc-image-stamp tc-image-stamp-br">HOLO ✦</div>
+          <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.33) 50%, transparent 100%);"></div>
+        </div>
+        <div class="tc-thesis" style="background:rgba(16,185,129,0.11); border-left-color:#10b981;">
+          <p class="tc-thesis-label" style="color:#065f46;">★ Thesis</p>
+          <p class="tc-thesis-text">AI-crafted ambient music for the soul.</p>
+        </div>
+        <div class="tc-detail"><p>Generative ambient music for focus and calm. Curated by AI, mixed for stillness. Press play, get out of your own way.</p></div>
+        <div class="tc-model">
+          <p class="tc-model-label">💰 Business Model</p>
+          <p class="tc-model-text">Creator fees</p>
+        </div>
+        <div class="tc-numbers">
+          <p class="tc-numbers-label"># By the numbers</p>
+          <dl class="tc-metrics">
+            <div class="tc-metric"><dt class="tc-metric-l">Launched</dt><dd class="tc-metric-v">2026</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Genre</dt><dd class="tc-metric-v">Ambient</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Source</dt><dd class="tc-metric-v">AI-gen</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Session</dt><dd class="tc-metric-v">8 hr loop</dd></div>
+          </dl>
+        </div>
+      </a>
+      <p class="lab-cell-note">Current state. Holo foil shimmers, green LIVE pip pulses, gold inner border.</p>
+    </div>
+
+    <!-- ============ VARIANT A — TOMBSTONE ============ -->
+    <div class="lab-cell">
+      <div>
+        <div class="lab-cell-label">Concept 1</div>
+        <div class="lab-cell-name">TOMBSTONE</div>
+      </div>
+      <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead-a" aria-label="KAPIKO — postmortem">
+        <div class="tc-frame"></div>
+        <div class="tc-header">
+          <div class="tc-header-meta">
+            <span class="tc-year">2026 ☩ 2026</span>
+            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>R.I.P.</span>
+          </div>
+          <div class="tc-title-row">
+            <span class="tc-name">KAPIKO</span>
+            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
+          </div>
+          <div class="tc-type-strip">
+            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">AI MUSIC · CLOSED</span>
+          </div>
+        </div>
+        <div class="tc-image">
+          <div class="tc-image-fallback">KAPIKO</div>
+          <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="" loading="lazy">
+          <div class="tc-image-stamp tc-image-stamp-tl">ART · 005</div>
+          <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+          <div class="tc-stamp-dead">DECEASED · 2026</div>
+        </div>
+        <div class="tc-thesis" style="background:rgba(74,69,64,0.18); border-left-color:#6a635a;">
+          <p class="tc-thesis-label" style="color:#3a342e;">✝ Cause of Death</p>
+          <p class="tc-thesis-text">Killed by the Suno wrapper — no public API, patched every 1-2 days.</p>
+        </div>
+        <div class="tc-detail"><p>Generative ambient music. Pipeline worked. Distribution didn't. Five days, $100, 57 videos, 3 subscribers. Closed.</p></div>
+        <div class="tc-model">
+          <p class="tc-model-label">💰 Final tally</p>
+          <p class="tc-model-text">~$100 burned · 5 days · 3 subscribers</p>
+        </div>
+        <div class="tc-numbers">
+          <p class="tc-numbers-label"># Final stats</p>
+          <dl class="tc-metrics">
+            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$100</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Runtime</dt><dd class="tc-metric-v">5 days</dd></div>
+          </dl>
+        </div>
+        <div class="tc-foot">
+          <span>SEALED · 005</span>
+          <span class="tc-postmortem">POSTMORTEM →</span>
+        </div>
+      </a>
+      <p class="lab-cell-note">Stone-grey, holo drained, diagonal <em>DECEASED</em> stamp, ✝ cross on the type-bubble, "Cause of Death" thesis, dates as 2026 ☩ 2026, POSTMORTEM chip in the footer.</p>
+    </div>
+
+    <!-- ============ VARIANT B — ARCHIVED ============ -->
+    <div class="lab-cell">
+      <div>
+        <div class="lab-cell-label">Concept 2</div>
+        <div class="lab-cell-name">ARCHIVED</div>
+      </div>
+      <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead-b" aria-label="KAPIKO — archived" style="--surviving-accent: #10b981;">
+        <div class="tc-frame"></div>
+        <div class="tc-holo tc-foil" aria-hidden="true"></div>
+        <div class="tc-header">
+          <div class="tc-header-meta">
+            <span class="tc-year">2026 — 2026</span>
+            <span class="tc-pip tc-pip-archived"><span class="tc-pip-dot"></span>ARCHIVED</span>
+          </div>
+          <div class="tc-title-row">
+            <span class="tc-name">KAPIKO</span>
+            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #10b981, #0a0a0a); box-shadow:0 0 4px rgba(16,185,129,0.4);">A</span>
+          </div>
+          <div class="tc-type-strip">
+            <span class="tc-type-label" style="color:#10b981; border-color:#10b981; background:rgba(16,185,129,0.04);">AI MUSIC</span>
+            <span class="tc-badge">FOLDER 005</span>
+          </div>
+        </div>
+        <div class="tc-image">
+          <div class="tc-image-fallback">KAPIKO</div>
+          <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="" loading="lazy">
+          <div class="tc-image-stamp tc-image-stamp-tl">ART · 005</div>
+          <div class="tc-image-stamp tc-image-stamp-br">FILED</div>
+          <div class="tc-retired-stamp">RETIRED · 2026</div>
+        </div>
+        <div class="tc-thesis" style="background:rgba(16,185,129,0.06); border-left-color:#10b981;">
+          <p class="tc-thesis-label" style="color:#065f46;">★ Final note</p>
+          <p class="tc-thesis-text">AI-crafted ambient music for the soul. Pipeline survives in the archive; channel does not.</p>
+        </div>
+        <div class="tc-detail"><p>Built and shipped in 5 days for ~$100. 57 videos, 3 subscribers. Filed for reference. Postmortem on the blog.</p></div>
+        <div class="tc-model">
+          <p class="tc-model-label">💰 Business Model</p>
+          <p class="tc-model-text">Creator fees · never crossed the gate</p>
+        </div>
+        <div class="tc-numbers">
+          <p class="tc-numbers-label"># Final stats</p>
+          <dl class="tc-metrics">
+            <div class="tc-metric"><dt class="tc-metric-l">Active</dt><dd class="tc-metric-v">2026 — 2026</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Runtime</dt><dd class="tc-metric-v">5 days</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$100</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Output</dt><dd class="tc-metric-v">57 vids</dd></div>
+          </dl>
+        </div>
+      </a>
+      <p class="lab-cell-note">Sepia + grayscale on the whole card. Dashed frame. Pip dot keeps the project's brand color (the one remnant of life). Small rotated <em>RETIRED · 2026</em> stamp. No hover tilt — feels filed-away.</p>
+    </div>
+
+    <!-- ============ VARIANT C — POWERED DOWN ============ -->
+    <div class="lab-cell">
+      <div>
+        <div class="lab-cell-label">Concept 3</div>
+        <div class="lab-cell-name">POWERED DOWN</div>
+      </div>
+      <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead-c" aria-label="KAPIKO — powered down">
+        <div class="tc-frame"></div>
+        <div class="tc-header">
+          <div class="tc-header-meta">
+            <span class="tc-year">PROCESS · 2026</span>
+            <span class="tc-pip tc-pip-offline"><span class="tc-pip-dot"></span>OFFLINE</span>
+          </div>
+          <div class="tc-title-row">
+            <span class="tc-name">KAPIKO</span>
+            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #10b981, #0a0a0a); opacity: 0.5;">A</span>
+          </div>
+          <div class="tc-type-strip">
+            <span class="tc-type-label" style="color:#10b981; border-color:#10b981; background:rgba(16,185,129,0.04); opacity:0.65;">AI MUSIC</span>
+            <span class="tc-badge">EXITED</span>
+          </div>
+        </div>
+        <div class="tc-image">
+          <div class="tc-crt-glow"></div>
+          <div class="tc-crt-bar"></div>
+        </div>
+        <div class="tc-thesis">
+          <p class="tc-thesis-label">$ TAIL · KAPIKO.LOG</p>
+          <p class="tc-thesis-text">&gt; process exited · 2026-05-30 17:12 UTC<br>&gt; exit code: 0<br>&gt; reason: suno_wrapper_unstable<span class="blink-cursor"></span></p>
+        </div>
+        <div class="tc-detail"><p>Generation worked. Distribution didn't. Cron impossible without a real API. See postmortem.</p></div>
+        <div class="tc-model">
+          <p class="tc-model-label">💰 Last known model</p>
+          <p class="tc-model-text">Creator fees · uptime 5d</p>
+        </div>
+        <div class="tc-numbers">
+          <p class="tc-numbers-label"># Exit telemetry</p>
+          <dl class="tc-metrics">
+            <div class="tc-metric"><dt class="tc-metric-l">Uptime</dt><dd class="tc-metric-v">5 days</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$100</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Output</dt><dd class="tc-metric-v">57 vids</dd></div>
+            <div class="tc-metric"><dt class="tc-metric-l">Signal</dt><dd class="tc-metric-v">3 subs</dd></div>
+          </dl>
+        </div>
+      </a>
+      <p class="lab-cell-note">Image area is a CRT power-off (frozen horizontal scan line + green scanline scroll). Title at 50% alpha. Thesis becomes a terminal log block with a blinking cursor. OFFLINE pip with red LED.</p>
+    </div>
+
+  </div>
+</section>
+</main>
+</body>
+</html>
