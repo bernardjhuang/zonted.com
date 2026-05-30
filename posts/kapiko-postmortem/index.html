@@ -152,7 +152,8 @@
     </button>
     <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
         <ul>
-            <li><a href="#what-we-built">What I built</a></li>
+            <li><a href="#how-it-started">How Kapiko started</a></li>
+            <li><a href="#how-the-system-worked">How the system worked</a></li>
             <li><a href="#how-it-scored">How it scored</a></li>
             <li><a href="#the-genre-is-real">The genre is real</a></li>
             <li><a href="#cause-of-death">Cause of death</a></li>
@@ -168,7 +169,8 @@
 <aside class="toc-sidebar">
     <p class="toc-sidebar-label">Contents</p>
     <ul>
-        <li><a href="#what-we-built">What I built</a></li>
+        <li><a href="#how-it-started">How Kapiko started</a></li>
+        <li><a href="#how-the-system-worked">How the system worked</a></li>
         <li><a href="#how-it-scored">How it scored</a></li>
         <li><a href="#the-genre-is-real">The genre is real</a></li>
         <li><a href="#cause-of-death">Cause of death</a></li>
@@ -205,31 +207,71 @@
     <div class="tldr-label">TL;DR</div>
     <p class="tldr-thesis">AI music generation is technically solved; the moat is patience and distribution, not generation.</p>
     <ul>
+        <li>The idea showed up on a long drive listening to solo piano. I got home, looked at Suno, and realized the bottleneck wasn&rsquo;t the music &mdash; it was the taste filter.</li>
         <li>Built and shipped <a href="https://kapiko.ai">Kapiko</a> &mdash; a capybara-in-headphones ambient music channel &mdash; end-to-end in 5 days for ~$100.</li>
-        <li>57 videos shipped, 3 subscribers, top video ~49 views. The pipeline worked. The audience didn&rsquo;t arrive.</li>
-        <li>Tournament-style A&amp;R: 25-50 prompts &times; 2 clips each, scored by Gemini against three reference tracks per genre, 9/10 gate or it didn&rsquo;t ship.</li>
+        <li>57 videos shipped, 3 YouTube subscribers, top video ~49 views, 4 monthly Spotify listeners. The pipeline worked. The audience didn&rsquo;t arrive.</li>
+        <li>The actual system underneath was a music-scouting machine: hand-pick masterpiece tracks per genre, generate 50-100 Suno candidates per run, have Gemini grade each one against the masters on five-to-eight specific dimensions, ship only the 9/10s.</li>
         <li>Killed it because Suno has no public API. My wrapper broke every 1-2 days. You can&rsquo;t cron a business that needs babysitting that often.</li>
-        <li>The genre is real &mdash; Lofi Girl, the 10-hour fireplace channel, dog-anxiety music, meeting chimes. The A&amp;R feedback loop is the part worth keeping.</li>
+        <li>The genre is real &mdash; Lofi Girl, the 10-hour fireplace channel, dog-anxiety music, meeting chimes. The scoring loop is the part worth keeping.</li>
     </ul>
-    <p class="tldr-tail">The music channel was the surface. The A&amp;R engine underneath is the artifact &mdash; a generate-many, score-against-references, keep-only-9s loop that&rsquo;s portable to any generative medium with a quality ceiling.</p>
+    <p class="tldr-tail">The music channel was the surface. The taste-filter engine underneath is the artifact &mdash; a generate-many, score-against-references, keep-only-9s loop that&rsquo;s portable to any generative medium with a measurable quality ceiling.</p>
 </div>
 
-<h2 id="what-we-built">What I built</h2>
+<h2 id="how-it-started">How Kapiko started</h2>
 
-<p class="dropcap">Kapiko is a capybara in over-ear headphones. The tagline is <em>&ldquo;a capybara, a pair of headphones, and nowhere to be. Solo instruments. Gentle melodies.&rdquo;</em> The site is <a href="https://kapiko.ai">kapiko.ai</a>. The YouTube channel is <code>@kapiko-music</code>. Fifty-seven videos as of writing. Three subscribers. Yes, three.</p>
+<p class="dropcap">It started on a long drive. Hours of solo piano on shuffle &mdash; the Einaudi / Yiruma / Tiersen end of the spectrum, the genre Spotify calls Peaceful Piano. I came home, sat down, and the obvious thought arrived: this is exactly what Suno is good at.</p>
+
+<p>A few weeks earlier I had <a href="/posts/ai-music-generation-comparison/">tested every AI music generator I could find</a> &mdash; Suno, Udio, MiniMax Music, all of them. Suno had won. So the question wasn&rsquo;t <em>can I generate music?</em> It was <em>can a single operator with good taste run a music channel?</em></p>
+
+<p>Kapiko was the test. A capybara in over-ear headphones. <em>&ldquo;A capybara, a pair of headphones, and nowhere to be. Solo instruments. Gentle melodies.&rdquo;</em> Site at <a href="https://kapiko.ai">kapiko.ai</a>. YouTube channel <code>@kapiko-music</code>. Fifty-seven videos as of writing. Three subscribers. Yes, three.</p>
 
 <figure style="margin:1.75rem 0;">
   <img src="https://img.zonted.com/resources/kapiko-postmortem/kapiko-channel.jpg" alt="The kapiko YouTube channel page showing 3 subscribers and 57 videos, with the capybara-in-headphones avatar." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">The receipts. <code>@kapiko-music</code> &mdash; 57 videos, 3 subscribers, top video at ~49 views.</figcaption>
 </figure>
 
-<p>I built the whole pipeline in five days. Total spend was about $100 &mdash; DistroKid annual ($23), one month of Suno Pro (~$10), Gemini / Nano Banana / MiniMax token spend, and openclaw cron compute. That&rsquo;s it.</p>
+<p>Four monthly Spotify listeners on the other side, too. The tracks have real names &mdash; <em>Whispers of November&rsquo;s End</em>, <em>Porch Light Love</em>, <em>Moonlit Petals Drift</em> &mdash; all generated, all named, all live on Spotify and Apple Music.</p>
 
-<p>The loop starts with a genre selector. Solo piano first &mdash; neo-classical, jazz ballad, ambient piano, cinematic emotional, Japanese piano, lo-fi piano, blues, tango, bossa nova, dark ambient, classical nocturne. Then fingerstyle guitar. Handpan was next in the queue. A prompt generator used &ldquo;artist anchors&rdquo; internally to shape style without naming them in the Suno prompt &mdash; Suno blocks artist names. Each run produced 25-50 prompts. Two clips per prompt. Fifty to a hundred candidate tracks per day.</p>
+<figure style="margin:1.75rem 0;">
+  <img src="https://img.zonted.com/resources/kapiko-postmortem/spotify-kapiko.jpg" alt="The kapiko Spotify artist page showing 4 monthly listeners and the top tracks: Whispers of November's End, Glimpse Through Frosted Pa..., Porch Light Love, Sunset's Gentle Invitation, Moonlit Petals Drift." loading="lazy" />
+  <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">The other side of the receipts: kapiko on Spotify &mdash; 4 monthly listeners.</figcaption>
+</figure>
 
-<p>I wrapped Suno itself. I hit <code>chirp-crow</code> (= Suno v5), polled for completion, downloaded MP3s, and used NopeCHA to clear hCaptcha. Then a tournament: every candidate scored by Gemini against three reference tracks per genre &mdash; Einaudi, Yiruma, and Tiersen as scoring anchors for solo piano; Hang Massive, Yuki Koshimoto, and Daniel Waples planned for handpan. The references were never reproduced. They were the rubric Gemini graded against. Anything below 9/10 was killed. Ties went to a head-to-head.</p>
+<p>Five days end to end. About $100 total &mdash; DistroKid annual ($23), one month of Suno Pro (~$10), Gemini / Nano Banana / MiniMax tokens, openclaw cron compute. That&rsquo;s it.</p>
 
-<p>The winner per day per genre got packaged. Gemini listened to the master MP3 and inferred mood, landscape, season, time-of-day, palette, and emotional arc. Nano Banana rendered a 1920x1080 still &mdash; the capybara plus a matching landscape. Gemini then wrote a MiniMax i2v prompt with one hard rule: no camera move, ambient motion only. Clouds drifting, water rippling, grass swaying, mist, light. FFmpeg looped the 6-second i2v clip to the MP3&rsquo;s runtime, muxed the audio, overlaid the title and the Kapiko mark in Pacifico, and produced an MP4. YouTube auto-uploaded under <code>kapiko-youtube-refresh-token</code>, Music category, title pattern <code>&ldquo;Song Name [Single - Solo Piano] - kapiko&rdquo;</code>. DistroKid handled streaming distribution downstream.</p>
+<h2 id="how-the-system-worked">How the entire system worked</h2>
+
+<p>Kapiko was not &ldquo;generate one Suno song and publish it.&rdquo; It was a tournament. For each genre I hand-picked a small set of reference tracks &mdash; the masters of that sound &mdash; and used them as the benchmark. Suno-generated candidates competed against those masters, and only the ones that could sit beside them without sounding amateur or AI got shipped. Think of it as a one-person talent scout, where the masterpieces are the rubric and Gemini is the judge.</p>
+
+<p>Here is the loop, end to end.</p>
+
+<h3>Step 1 &mdash; Pick a genre, write the prompts</h3>
+
+<p>A genre picker chose from a list. Solo piano first: neo-classical, jazz ballad, ambient piano, cinematic emotional, Japanese piano, lo-fi piano, blues, tango, bossa nova, dark ambient, classical nocturne. Then fingerstyle guitar. Handpan / hang drum was next in the queue. A prompt generator wrote 25-50 Suno prompts per run using genre-specific sonic language &mdash; recording texture, emotional direction, instrumental technique, tempo, feel. &ldquo;Artist anchors&rdquo; shaped the style internally (Einaudi-leaning piano; Don Ross, Andy McKee, Lance Allen for guitar) but never went into the prompt itself &mdash; Suno blocks named-artist references.</p>
+
+<h3>Step 2 &mdash; Generate the candidates</h3>
+
+<p>Prompts hit Suno v5 (<code>chirp-crow</code>) through a wrapper I built &mdash; polled for completion, downloaded MP3s, used NopeCHA to clear hCaptcha when Suno threw it. Suno returns two clips per prompt, so a run produced 50-100 candidate tracks. The wrapper also wrote a manifest per run: prompt text, model version, timestamps, file hashes &mdash; traceability for the scoring step.</p>
+
+<h3>Step 3 &mdash; Score against the masterpieces</h3>
+
+<p>This is the part that made Kapiko interesting. For each genre I hand-picked the references that defined the target sound and uploaded every candidate alongside them for Gemini to grade.</p>
+
+<p><strong>Piano</strong> used Ludovico Einaudi&rsquo;s &ldquo;Nuvole Bianche,&rdquo; Yiruma&rsquo;s &ldquo;River Flows in You,&rdquo; and Yann Tiersen&rsquo;s &ldquo;Comptine d&rsquo;un autre &eacute;t&eacute;&rdquo; as the gold standard for modern solo piano. Gemini graded each candidate on five dimensions: <em>playlist fit</em> (would it sit on Spotify&rsquo;s Peaceful Piano without a listener skipping), <em>closest reference</em> (which master it resembled, and why), <em>quality gap</em> (what got better or worse if you played it immediately after the references), <em>production match</em> (piano tone realism, reverb and space, dynamics, mastering loudness, artifacts), and <em>emotional authenticity</em> (does this feel performed by a human or algorithmically assembled). Verdict was PASS / BORDERLINE / FAIL, with an overall score weighted toward playlist fit and production match.</p>
+
+<p><strong>Guitar</strong> carried the bar in the rubric rather than uploaded reference MP3s. Eight dimensions: emotional impact, guitar tone, arrangement and technique, production quality, replay value, whether it was actually acoustic fingerstyle (not a wrong-instrument hallucination), complexity, and explicit deductions for full-band drift, vocals, drums, or synth leakage. Across 80 clips the system landed 21 at 9/10 and 36 at 8/10 &mdash; a 71% hit rate at 8+. Strongest in percussive, flamenco, baroque, and Middle Eastern fusion. Weakest in lullaby and post-rock, where Suno kept drifting into full bands.</p>
+
+<p><strong>Handpan</strong> referenced Hang Massive (&ldquo;Once Again&rdquo;), Yuki Koshimoto, and Daniel Waples (&ldquo;Hang in Balance&rdquo;), graded on seven dimensions: playlist fit, resonance and tone, rhythmic flow, emotional / meditative quality, production match, instrument authenticity, and an overall verdict.</p>
+
+<p>Anything below 9 was killed. Ties went to a second pass &mdash; a head-to-head re-grading on playlist add-worthiness, emotional resonance, production quality, memorability, and flow. One winner per genre per run.</p>
+
+<h3>Step 4 &mdash; Package the winner</h3>
+
+<p>Gemini listened to the winning MP3 and inferred mood, landscape, season, time of day, color palette, and emotional arc. Nano Banana rendered a 1920&times;1080 still &mdash; the capybara plus a matching landscape. Gemini then wrote a MiniMax image-to-video prompt with one rule: no camera move, ambient motion only. Clouds drifting, water rippling, grass swaying, mist, light. FFmpeg looped the 6-second clip to the MP3&rsquo;s runtime, muxed the audio in, overlaid the title and the Kapiko mark in Pacifico, and produced an MP4.</p>
+
+<h3>Step 5 &mdash; Distribute</h3>
+
+<p>YouTube auto-uploaded via the official API under <code>kapiko-youtube-refresh-token</code>, Music category, title pattern <code>&ldquo;Song Name [Single - Solo Piano] - kapiko&rdquo;</code>. DistroKid handled streaming distribution to Spotify, Apple Music, and the long tail &mdash; that part stayed manual, not in the cron.</p>
 
 <h2 id="how-it-scored">How it scored</h2>
 
@@ -372,7 +414,7 @@
 
 <h2 id="whats-reusable">What&rsquo;s reusable</h2>
 
-<p>The music channel was the surface. The A&amp;R engine underneath is the artifact.</p>
+<p>The music channel was the surface. The taste-filter engine underneath is the artifact.</p>
 
 <p>What I actually built is a feedback loop: generate many, score each candidate against genre-defining references, keep only what scores 9+, and learn over time which prompts and palettes produce publishable output. The references are the rubric. The 9/10 gate is the filter. The tournament is the engine. The output medium is incidental.</p>
 
@@ -384,7 +426,7 @@
 
 <p>Kapiko was a research project priced like a coffee tab. Five days, $100, a working pipeline, and a clean answer to a question I needed answered: <em>can a single operator with a cron job and good taste run an ambient music channel?</em> Yes, technically. No, not while Suno&rsquo;s API is a fiction and the marketing grind is the actual moat.</p>
 
-<p>The genre is real. The pipeline works. The grind is the price of admission. The A&amp;R loop comes with me.</p>
+<p>The genre is real. The pipeline works. The grind is the price of admission. The scoring loop comes with me.</p>
 
 <p>Generation is solved. Distribution is the job.</p>
 
