@@ -606,6 +606,43 @@
             .port-hero-chips { gap: 6px; margin-top: 18px; }
             .port-dex { padding: 22px 18px 40px; }
         }
+
+        /* ---------- Dead-card state (concept 1 — Tombstone) ---------- */
+        .tc-card.tc-dead {
+            background: linear-gradient(160deg, #e3dfd6 0%, #c9c4ba 100%) !important;
+            border-color: #4a4540 !important;
+            box-shadow: 0 8px 28px rgba(0,0,0,0.45), 0 0 0 1px #4a4540 !important;
+            filter: saturate(0.55);
+        }
+        .tc-card.tc-dead .tc-frame { border-color: #6a635a !important; }
+        .tc-card.tc-dead .tc-holo { display: none; }
+        .tc-card.tc-dead .tc-image { filter: grayscale(0.85) contrast(1.05); }
+        .tc-card.tc-dead .tc-metric { background: #d8d4cc; border-color: rgba(74, 69, 64, 0.33); }
+        .tc-card.tc-dead .tc-model { background: #2a2622; }
+        .tc-card.tc-dead .tc-model-text { color: #d8d4cc; }
+        .tc-card.tc-dead .tc-thesis { background: rgba(74, 69, 64, 0.18) !important; border-left-color: #6a635a !important; }
+        .tc-card.tc-dead .tc-thesis-label { color: #3a342e !important; }
+        .tc-pip-rip { background: rgba(74, 69, 64, 0.18); color: #2a2622; border-color: #6a635a; }
+        .tc-pip-rip .tc-pip-dot { background: #6a635a; }
+        .tc-stamp-dead {
+            position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%) rotate(-18deg);
+            font-family: var(--tc-mono); font-weight: 800; font-size: 18px; letter-spacing: 3px;
+            color: rgba(159, 39, 39, 0.85); border: 3px double rgba(159, 39, 39, 0.85);
+            padding: 4px 14px; pointer-events: none; z-index: 4; text-transform: uppercase;
+            text-shadow: 1px 1px 0 rgba(255, 255, 255, 0.4); white-space: nowrap;
+        }
+        .tc-foot {
+            position: relative; margin: 8px 8px 6px; z-index: 3;
+            display: flex; justify-content: space-between; align-items: center;
+            font-family: var(--tc-mono); font-size: 8px; color: var(--tc-card-edge);
+            opacity: 0.55; letter-spacing: 1px;
+        }
+        .tc-postmortem {
+            display: inline-flex; align-items: center; gap: 4px;
+            font-family: var(--tc-mono); font-size: 9px; font-weight: 700; letter-spacing: 1px;
+            background: rgba(42, 38, 34, 0.92); color: #d8d4cc;
+            padding: 3px 8px; border-radius: 2px; text-transform: uppercase; opacity: 1;
+        }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -1018,85 +1055,59 @@
                     </div>
                 </a>
 
-                <!-- 005 · KAPIKO · RARE -->
-                <a href="https://kapiko.ai" class="tc-card" target="_blank" rel="noopener" style="--card-color: #10b981; --card-glow: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.5), 0 0 0 1px #10b981, inset 0 0 0 2px #fbbf24;" aria-label="KAPIKO — open kapiko.ai">
+                <!-- 005 · KAPIKO · CLOSED -->
+                <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead" aria-label="KAPIKO — read the post-mortem">
                     <div class="tc-frame"></div>
-                    <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
                     <div class="tc-header">
                         <div class="tc-header-meta">
-                            <span class="tc-year">2026 →</span>
-                            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
+                            <span class="tc-year">2026 ☩ 2026</span>
+                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
                         </div>
                         <div class="tc-title-row">
                             <span class="tc-name">KAPIKO</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #10b981, #0a0a0a); box-shadow:0 0 8px #10b981;">A</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
                         </div>
                         <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#10b981; border-color:#10b981; background:rgba(16,185,129,0.07);">AI MUSIC</span>
-                            <span class="tc-badge">★ New</span>
+                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">AI MUSIC · CLOSED</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(16,185,129,0.15);">KAPIKO</div>
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">KAPIKO</div>
                         <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="Kapiko homepage screenshot" loading="lazy">
                         <div class="tc-image-stamp tc-image-stamp-tl">ART · 005</div>
-                        <div class="tc-image-stamp tc-image-stamp-br">HOLO ✦</div>
-                        <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.33) 50%, transparent 100%);"></div>
+                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+                        <div class="tc-stamp-dead">RIP · 2026</div>
                     </div>
 
-                    <div class="tc-thesis" style="background:rgba(16,185,129,0.11); border-left-color:#10b981;">
-                        <p class="tc-thesis-label" style="color:#065f46;">★ Thesis</p>
-                        <p class="tc-thesis-text">AI-crafted ambient music for the soul.</p>
+                    <div class="tc-thesis">
+                        <p class="tc-thesis-label">✝ Cause of Death</p>
+                        <p class="tc-thesis-text">Killed by the Suno wrapper — no public API, patched every 1-2 days.</p>
                     </div>
 
                     <div class="tc-detail">
-                        <p>Generative ambient music for focus and calm. Curated by AI, mixed for stillness. Press play, get out of your own way.</p>
+                        <p>Generative ambient music. Pipeline worked. Distribution didn't. Five days, $100, 57 videos, 3 subscribers. Closed.</p>
                     </div>
 
                     <div class="tc-model">
-                        <p class="tc-model-label">💰 Business Model</p>
-                        <p class="tc-model-text">Creator fees</p>
+                        <p class="tc-model-label">💰 Final tally</p>
+                        <p class="tc-model-text">~$100 burned · 5 days · 3 subscribers</p>
                     </div>
 
                     <div class="tc-numbers">
-                        <p class="tc-numbers-label"># By the numbers</p>
+                        <p class="tc-numbers-label"># Final stats</p>
                         <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Launched</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Genre</dt><dd class="tc-metric-v">Ambient</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Source</dt><dd class="tc-metric-v">AI-gen</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Session</dt><dd class="tc-metric-v">8 hr loop</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$100</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Runtime</dt><dd class="tc-metric-v">5 days</dd></div>
                         </dl>
                     </div>
 
-                    <div class="tc-moves">
-                        <div class="tc-move" style="background:rgba(16,185,129,0.18); border-color:rgba(16,185,129,0.45);">
-                            <div class="tc-move-num" style="background:#10b981;">1</div>
-                            <div class="tc-move-body">
-                                <div class="tc-move-row">
-                                    <span class="tc-move-name">Soul Frequency</span>
-                                    <span class="tc-move-dmg">95</span>
-                                </div>
-                                <p class="tc-move-desc">Tunes the room to its calmest setting for the next 8 hours.</p>
-                            </div>
-                        </div>
-                        <div class="tc-move" style="background:rgba(16,185,129,0.09); border-color:rgba(16,185,129,0.35);">
-                            <div class="tc-move-num" style="background:#10b981;">2</div>
-                            <div class="tc-move-body">
-                                <div class="tc-move-row">
-                                    <span class="tc-move-name">Ambient Wave</span>
-                                    <span class="tc-move-dmg">30</span>
-                                </div>
-                                <p class="tc-move-desc">A loop that fades into the background — no chorus, no hook.</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="tc-bottom">
-                        <strong>005/007</strong>
-                        <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
-                        <strong>©BH</strong>
+                    <div class="tc-foot">
+                        <span>SEALED · 005/007 · ©BH</span>
+                        <span class="tc-postmortem">POSTMORTEM →</span>
                     </div>
                 </a>
 

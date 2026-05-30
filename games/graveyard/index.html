@@ -212,7 +212,10 @@
     .zga-verdict.pink  { color: var(--arc-pink); }
     .zga-verdict.green { color: var(--arc-green); }
     .zga-verdict.dim   { color: var(--arc-dim); }
+    .zga-verdict.cyan  { color: var(--arc-cyan); }
     .zga-verdict.blink { animation: zgaBlink 1s step-end infinite; }
+    a.zga-row { text-decoration: none; }
+    a.zga-row:hover { background: rgba(255, 211, 122, 0.18) !important; transform: translateX(4px); }
 
     /* per-row rank color cycling */
     .zga-row[data-row="0"] .zga-rank, .zga-row[data-row="0"] .zga-name { color: var(--arc-yellow); }
@@ -322,13 +325,13 @@
           <span>★ HIGH SCORES ★</span>
           <span class="yellow">$100 BURNED · 5 DAYS</span>
         </div>
-        <div class="zga-row current" data-row="0">
+        <a class="zga-row current" data-row="0" href="/posts/kapiko-postmortem/">
           <span class="zga-rank">1</span>
           <span class="zga-initials">KAP</span>
-          <span class="zga-name">Kapiko <span class="zga-metric">· AI music · 5 days · $100 burned</span></span>
-          <span class="zga-score">000,100</span>
-          <span class="zga-verdict pink">DOWN</span>
-        </div>
+          <span class="zga-name">Kapiko <span class="zga-metric">· AI music · postmortem →</span></span>
+          <span class="zga-score">$100</span>
+          <span class="zga-verdict cyan">~5 DAYS</span>
+        </a>
         <div class="zga-empty">// more graves coming · the bench is long</div>
       </div>
 
