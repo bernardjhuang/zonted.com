@@ -608,6 +608,9 @@
         }
 
         /* ---------- Dead-card state (concept 1 — Tombstone) ---------- */
+        /* Dead cards sort to the bottom of the grid via grid-item order.
+           Live cards keep order:0 by default; dead cards push to order:1. */
+        .port-cards .tc-card.tc-dead { order: 1; }
         .tc-card.tc-dead {
             background: linear-gradient(160deg, #e3dfd6 0%, #c9c4ba 100%) !important;
             border-color: #4a4540 !important;
