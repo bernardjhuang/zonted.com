@@ -3,24 +3,23 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <title>The Zonted Graveyard — where dead projects rest</title>
+  <title>The Zonted Graveyard — closer each run</title>
   <meta name="description" content="Every dead Zonted project mapped a path that didn't work — and brought us one run closer to one that does. Walk the maze, read the lessons." />
   <link rel="canonical" href="https://zonted.com/games/graveyard/" />
   <meta property="og:title" content="The Zonted Graveyard" />
-  <meta property="og:description" content="An explorable cemetery of Zonted's failed projects." />
+  <meta property="og:description" content="Closer each run. An arcade scoreboard of dead Zonted projects, plus a maze of their ghosts." />
   <meta property="og:url" content="https://zonted.com/games/graveyard/" />
   <meta property="og:type" content="website" />
   <meta name="twitter:card" content="summary" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='78' text-anchor='middle' font-size='84'>%F0%9F%AA%A6</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Creepster&display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Special+Elite&family=Creepster&family=Press+Start+2P&family=JetBrains+Mono:wght@400;500;600&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
 
   <style>
     * { box-sizing: border-box; }
-    html, body { margin: 0; background: #f4f3ef; color: #e8e2d0; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
+    html, body { margin: 0; background: #0a0420; color: #e8e3ff; font-family: ui-monospace, SFMono-Regular, Menlo, monospace; }
     body { overflow-x: hidden; }
 
     .game-frame {
@@ -97,66 +96,189 @@
     .dialog-hint.show { opacity: 1; }
     @keyframes blink { 0%, 100% { opacity: .3 } 50% { opacity: 1 } }
 
-    /* ---- Swiss-style section below the game ---- */
-    .zg-section {
-      background: #f4f3ef;
-      color: #111110;
-      padding: 18px 56px 24px;
-      font-family: 'Inter Tight', 'Helvetica Neue', Arial, sans-serif;
+    /* ---- Arcade CRT section ABOVE the game ---- */
+    .zg-arcade {
+      --arc-bg:      #0a0420;
+      --arc-screen:  #05030f;
+      --arc-bg2:     #140a2e;
+      --arc-bezel:   #1c1230;
+      --arc-bezel-x: #2a1c44;
+      --arc-pink:    #ff2e63;
+      --arc-yellow:  #ffd23f;
+      --arc-cyan:    #2bd9e0;
+      --arc-green:   #3cff8e;
+      --arc-purple:  #9b5fff;
+      --arc-red:     #ff4d4d;
+      --arc-text:    #e8e3ff;
+      --arc-dim:     #8a7fb5;
+      --arc-pixel:   'Press Start 2P', monospace;
+      --arc-mono:    'JetBrains Mono', ui-monospace, monospace;
+
+      background: var(--arc-bg);
+      color: var(--arc-text);
+      padding: 16px;
+      font-family: var(--arc-mono);
     }
-    .zg-inner { max-width: 1180px; margin: 0 auto; display: flex; flex-direction: column; }
-    .zg-meta {
+    .zga-cabinet {
+      max-width: 1280px;
+      margin: 0 auto;
+      height: 800px;
+      max-height: calc(100vh - 60px - 32px);
+      background: radial-gradient(ellipse at center, var(--arc-bg2), var(--arc-screen));
+      border: 8px solid var(--arc-bezel);
+      border-radius: 16px;
+      box-shadow: inset 0 0 90px #000, 0 0 0 2px var(--arc-bezel-x);
+      padding: 16px 36px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .zga-scan {
+      position: absolute; inset: 0;
+      background: repeating-linear-gradient(0deg, #00000055 0 2px, transparent 2px 4px);
+      animation: zgaScan .6s linear infinite;
+      opacity: 0.45;
+      pointer-events: none;
+      z-index: 5;
+    }
+    .zga-vignette {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at center, transparent 52%, #000a 100%);
+      pointer-events: none;
+      z-index: 5;
+    }
+    @keyframes zgaScan { 0% { transform: translateY(0); } 100% { transform: translateY(6px); } }
+    @keyframes zgaFlash {
+      0%, 100% { color: var(--arc-pink);   text-shadow: 0 0 22px var(--arc-pink); }
+      50%      { color: var(--arc-yellow); text-shadow: 0 0 22px var(--arc-yellow); }
+    }
+    @keyframes zgaBlink { 0%,49% { opacity:1 } 50%,100% { opacity:0 } }
+
+    .zga-header { position: relative; z-index: 2; text-align: center; }
+    .zga-marquee {
+      font-family: var(--arc-pixel); font-size: 11px;
+      color: var(--arc-cyan); letter-spacing: 2px;
+      text-shadow: 0 0 10px var(--arc-cyan);
+    }
+    .zga-title {
+      font-family: var(--arc-pixel);
+      font-size: 46px;
+      line-height: 1.1;
+      margin: 14px 0 0;
+      animation: zgaFlash 1.2s steps(1) infinite;
+    }
+    .zga-sub { font-family: var(--arc-mono); font-size: 13px; color: var(--arc-dim); margin-top: 12px; }
+    .zga-sub-name { color: var(--arc-text); }
+    .zga-sub-cause { color: var(--arc-red); }
+
+    .zga-table {
+      position: relative; z-index: 2;
+      margin-top: 18px;
+      flex: 1;
+      border: 2px solid var(--arc-purple);
+      border-radius: 6px;
+      background: #0a0524cc;
+      overflow: hidden;
+      min-height: 0;
+    }
+    .zga-table-head {
       display: flex; justify-content: space-between;
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 11px; letter-spacing: 1px; color: #86837c;
-      text-transform: uppercase;
-      padding: 10px 0;
+      padding: 8px 14px;
+      border-bottom: 2px solid var(--arc-purple);
+      font-family: var(--arc-pixel); font-size: 9px;
+      color: var(--arc-pink);
     }
-    .zg-meta-top { border-top: 2px solid #111110; }
-    .zg-meta-bottom { border-top: 1px solid #111110; margin-top: 28px; }
-    .zg-grid {
-      margin-top: 16px;
+    .zga-table-head .yellow { color: var(--arc-yellow); }
+
+    .zga-row {
       display: grid;
-      grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
-      gap: 40px;
-      align-items: start;
+      grid-template-columns: 40px 60px 1fr auto 64px;
+      gap: 12px; align-items: center;
+      padding: 6px 14px;
+      border-bottom: 1px solid #9b5fff22;
+      transition: background .15s, transform .15s;
     }
-    .zg-headline-row { display: flex; align-items: flex-start; gap: 20px; }
-    .zg-square { width: 26px; height: 26px; background: #e2241a; margin-top: 18px; flex-shrink: 0; }
-    .zg-headline {
-      font-family: 'Inter Tight', sans-serif;
-      font-weight: 700; font-size: 72px; letter-spacing: -3px; line-height: 0.9; margin: 0;
+    .zga-row:last-child { border-bottom: none; }
+    .zga-row.current { background: #ffd23f12; }
+    .zga-row:hover { background: #ff2e6322; transform: translateX(4px); }
+
+    .zga-rank      { font-family: var(--arc-pixel); font-size: 12px; }
+    .zga-initials  { font-family: var(--arc-pixel); font-size: 13px; color: var(--arc-text); }
+    .zga-name      { font-family: var(--arc-mono); font-size: 12px; }
+    .zga-metric    { color: var(--arc-dim); font-size: 10px; }
+    .zga-score     { font-family: var(--arc-pixel); font-size: 11px; color: var(--arc-yellow); }
+    .zga-verdict   { font-family: var(--arc-pixel); font-size: 8px; text-align: right; }
+    .zga-verdict.pink  { color: var(--arc-pink); }
+    .zga-verdict.green { color: var(--arc-green); }
+    .zga-verdict.dim   { color: var(--arc-dim); }
+    .zga-verdict.blink { animation: zgaBlink 1s step-end infinite; }
+
+    /* per-row rank color cycling */
+    .zga-row[data-row="0"] .zga-rank, .zga-row[data-row="0"] .zga-name { color: var(--arc-yellow); }
+    .zga-row[data-row="0"] .zga-rank { text-shadow: 0 0 8px var(--arc-yellow); }
+    .zga-row[data-row="1"] .zga-rank, .zga-row[data-row="1"] .zga-name { color: var(--arc-cyan); }
+    .zga-row[data-row="1"] .zga-rank { text-shadow: 0 0 8px var(--arc-cyan); }
+    .zga-row[data-row="2"] .zga-rank, .zga-row[data-row="2"] .zga-name { color: var(--arc-pink); }
+    .zga-row[data-row="2"] .zga-rank { text-shadow: 0 0 8px var(--arc-pink); }
+    .zga-row[data-row="3"] .zga-rank, .zga-row[data-row="3"] .zga-name { color: var(--arc-green); }
+    .zga-row[data-row="3"] .zga-rank { text-shadow: 0 0 8px var(--arc-green); }
+    .zga-row[data-row="4"] .zga-rank, .zga-row[data-row="4"] .zga-name { color: var(--arc-purple); }
+    .zga-row[data-row="4"] .zga-rank { text-shadow: 0 0 8px var(--arc-purple); }
+    .zga-row[data-row="5"] .zga-rank, .zga-row[data-row="5"] .zga-name { color: var(--arc-red); }
+    .zga-row[data-row="5"] .zga-rank { text-shadow: 0 0 8px var(--arc-red); }
+    .zga-name .zga-metric { color: var(--arc-dim); }
+
+    .zga-footer {
+      position: relative; z-index: 2;
+      margin-top: 16px;
+      display: flex; justify-content: space-between; align-items: center;
     }
-    .zg-lead { font-size: 19px; line-height: 1.45; margin-top: 18px; max-width: 460px; }
-    .zg-sub { font-size: 15px; line-height: 1.5; color: #86837c; margin-top: 10px; max-width: 440px; }
-    .zg-actions { display: flex; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
-    .zg-btn {
-      font-family: 'IBM Plex Mono', monospace;
-      font-size: 12px; letter-spacing: 1px; text-transform: uppercase;
-      padding: 13px 20px; border: 1.5px solid #111110;
-      background: transparent; color: #111110; text-decoration: none;
-      cursor: pointer; transition: background .15s, color .15s;
-      display: inline-block;
+    .zga-continue { font-family: var(--arc-pixel); font-size: 10px; color: var(--arc-green); }
+    .zga-countdown { color: var(--arc-yellow); }
+    .zga-actions { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .zga-btn {
+      font-family: var(--arc-pixel); font-size: 9px;
+      padding: 10px 14px;
+      border: 2px solid var(--arc-purple);
+      color: var(--arc-text);
+      background: transparent;
+      text-decoration: none;
+      transition: transform .1s, box-shadow .15s;
+      cursor: pointer;
     }
-    .zg-btn:hover { background: #111110; color: #f4f3ef; }
-    .zg-btn.is-primary { background: #e2241a; color: #fff; border-color: #e2241a; }
-    .zg-btn.is-primary:hover { background: #111110; border-color: #111110; }
-    .zg-side {
-      font-family: 'IBM Plex Mono', monospace; font-size: 12px; color: #86837c;
-      line-height: 1.6;
+    .zga-btn:hover { transform: translateY(-2px); }
+    .zga-btn.primary {
+      border-color: var(--arc-yellow);
+      color: var(--arc-yellow);
+      background: #ffd23f18;
+      box-shadow: 0 0 14px #ffd23f55;
     }
-    .zg-side-label { font-size: 11px; letter-spacing: 1px; color: #86837c; text-transform: uppercase; padding-bottom: 8px; border-bottom: 1px solid #111110; }
-    .zg-side-rows { margin-top: 10px; }
-    .zg-side-row { display: grid; grid-template-columns: 1fr auto; gap: 14px; padding: 8px 0; border-bottom: 1px solid #d8d6cf; }
-    .zg-side-row span:first-child { font-family: 'Inter Tight', sans-serif; font-weight: 600; font-size: 14px; color: #111110; }
-    .zg-side-row span:last-child { font-variant-numeric: tabular-nums; color: #111110; }
-    .zg-side-note { margin-top: 14px; font-style: italic; color: #86837c; }
+    .zga-coin {
+      font-family: var(--arc-pixel); font-size: 10px;
+      color: var(--arc-yellow);
+      animation: zgaBlink 1s step-end infinite;
+    }
 
     @media (max-width: 760px) {
-      .zg-section { padding: 14px 20px 20px; }
-      .zg-grid { grid-template-columns: 1fr; gap: 24px; }
-      .zg-headline { font-size: 56px; letter-spacing: -2px; }
-      .zg-meta { font-size: 10px; flex-wrap: wrap; gap: 6px 16px; }
+      .zga-cabinet { height: auto; max-height: none; padding: 14px 16px 18px; }
+      .zga-title { font-size: 26px; line-height: 1.2; }
+      .zga-marquee { font-size: 9px; letter-spacing: 1px; }
+      .zga-sub { font-size: 11px; }
+      .zga-table-head { font-size: 7px; padding: 8px 10px; }
+      .zga-row { grid-template-columns: 24px 40px 1fr 60px; gap: 8px; padding: 6px 10px; }
+      .zga-row .zga-verdict { display: none; }
+      .zga-rank { font-size: 10px; }
+      .zga-initials { font-size: 11px; }
+      .zga-name { font-size: 10px; }
+      .zga-metric { display: none; }
+      .zga-score { font-size: 9px; }
+      .zga-footer { flex-direction: column; gap: 10px; align-items: stretch; text-align: center; }
+      .zga-actions { justify-content: center; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      [class*="zga"], #loader .glow, .dialog-hint { animation: none !important; }
     }
   </style>
 </head>
@@ -178,51 +300,81 @@
     </div>
   </nav>
 
-  <section class="zg-section" aria-label="About the graveyard">
-    <div class="zg-inner">
-      <div class="zg-meta zg-meta-top">
-        <span>ZONTED — Session Report</span>
-        <span>The Zonted Graveyard</span>
-        <span>Operator BH</span>
-      </div>
+  <section class="zg-arcade" aria-label="The Zonted Graveyard — arcade scoreboard">
+    <div class="zga-cabinet">
+      <div class="zga-scan" aria-hidden="true"></div>
+      <div class="zga-vignette" aria-hidden="true"></div>
 
-      <div class="zg-grid">
-        <div>
-          <div class="zg-headline-row">
-            <div class="zg-square" aria-hidden="true"></div>
-            <h2 class="zg-headline">Closer<br>each run.</h2>
-          </div>
-          <p class="zg-lead">
-            The Zonted Graveyard. Failure is the only honest data — so we publish ours. Each grave maps a path that didn't work, and brings us one run closer to one that does.
-          </p>
-          <p class="zg-sub">
-            Recorded lesson — “The fastest way to find what ships is to bury what doesn't, in the open.”
-          </p>
-          <div class="zg-actions">
-            <a class="zg-btn is-primary" href="/games/graveyard/">Play again</a>
-            <a class="zg-btn" href="/portfolio/">See the living</a>
-            <a class="zg-btn" href="/">Back to Zonted</a>
-          </div>
-        </div>
-
-        <div class="zg-side">
-          <div class="zg-side-label">Recent residents</div>
-          <div class="zg-side-rows" id="zg-rows">
-            <!-- Leaderboard rows intentionally omitted for now — TBD per Bernard -->
-          </div>
-          <p class="zg-side-note">More graves coming. The bench is long.</p>
+      <div class="zga-header">
+        <div class="zga-marquee">★ ZONTED · GRAVEYARD ★</div>
+        <h1 class="zga-title">CLOSER<br>EACH RUN</h1>
+        <div class="zga-sub">
+          <span class="zga-sub-name">THE ZONTED GRAVEYARD</span> · failure is the only honest data — so we publish ours.
         </div>
       </div>
 
-      <div class="zg-meta zg-meta-bottom">
-        <span>Established · 2026</span>
-        <span>Lessons · banked</span>
-        <span>Next run · already cooking</span>
+      <div class="zga-table">
+        <div class="zga-table-head">
+          <span>★ HIGH SCORES ★</span>
+          <span class="yellow">$105K+ SPENT</span>
+        </div>
+        <div class="zga-row" data-row="0">
+          <span class="zga-rank">1</span>
+          <span class="zga-initials">ANS</span>
+          <span class="zga-name">AnswerBox <span class="zga-metric">· $14K MRR · 180 teams</span></span>
+          <span class="zga-score">024,100</span>
+          <span class="zga-verdict pink">DOWN</span>
+        </div>
+        <div class="zga-row" data-row="1">
+          <span class="zga-rank">2</span>
+          <span class="zga-initials">PIN</span>
+          <span class="zga-name">PinFarm <span class="zga-metric">· 1.2M monthly views</span></span>
+          <span class="zga-score">014,200</span>
+          <span class="zga-verdict pink">DOWN</span>
+        </div>
+        <div class="zga-row current" data-row="2">
+          <span class="zga-rank">3</span>
+          <span class="zga-initials">AUT</span>
+          <span class="zga-name">The Autopilot <span class="zga-metric">· 5,100 subscribers</span></span>
+          <span class="zga-score">009,510</span>
+          <span class="zga-verdict pink">DOWN</span>
+        </div>
+        <div class="zga-row" data-row="3">
+          <span class="zga-rank">4</span>
+          <span class="zga-initials">REE</span>
+          <span class="zga-name">ReelForge <span class="zga-metric">· 41 reels · 0 usable</span></span>
+          <span class="zga-score">007,041</span>
+          <span class="zga-verdict green blink">1UP</span>
+        </div>
+        <div class="zga-row" data-row="4">
+          <span class="zga-rank">5</span>
+          <span class="zga-initials">COR</span>
+          <span class="zga-name">Corpus <span class="zga-metric">· 3 datasets · 0 sold</span></span>
+          <span class="zga-score">004,000</span>
+          <span class="zga-verdict dim">VOID</span>
+        </div>
+        <div class="zga-row" data-row="5">
+          <span class="zga-rank">6</span>
+          <span class="zga-initials">GRA</span>
+          <span class="zga-name">Grader GPT <span class="zga-metric">· 0 shipped · killed in review</span></span>
+          <span class="zga-score">000,320</span>
+          <span class="zga-verdict dim">VOID</span>
+        </div>
+      </div>
+
+      <div class="zga-footer">
+        <div class="zga-continue">CONTINUE? <span class="zga-countdown" id="zga-countdown">9</span></div>
+        <div class="zga-actions">
+          <a class="zga-btn primary" href="#zga-game">CONTINUE</a>
+          <a class="zga-btn" href="/portfolio/">PORTFOLIO</a>
+          <a class="zga-btn" href="/">QUIT TO TITLE</a>
+        </div>
+        <div class="zga-coin">● INSERT COIN</div>
       </div>
     </div>
   </section>
 
-  <div class="game-frame">
+  <div class="game-frame" id="zga-game">
     <canvas id="canvas"></canvas>
     <div id="loader"><div class="glow">Entering the graveyard…</div></div>
     <div id="hud"><span id="hud-count">0 / 0</span> lessons banked</div>
@@ -236,6 +388,14 @@
     <div id="footer">Built by <a href="https://zonted.com">Zonted</a></div>
   </div>
 
+  <script>
+    (function () {
+      var el = document.getElementById('zga-countdown');
+      if (!el) return;
+      var n = 9;
+      setInterval(function () { n = n <= 0 ? 9 : n - 1; el.textContent = n; }, 1000);
+    })();
+  </script>
   <script type="module" src="./src/main.js"></script>
 </body>
 </html>
