@@ -282,6 +282,24 @@
 
 <h2 id="how-it-scored">How it scored</h2>
 
+<style>
+.kap-card { border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0 2rem; background: var(--bg-tint, #fafafa); }
+.kap-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+.kap-row { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border, #e5e5e5); }
+.kap-row:last-child, .kap-row:nth-last-child(2) { border-bottom: none; padding-bottom: 0; }
+.kap-head { display: flex; align-items: center; gap: 0.6rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim, #666); }
+.kap-label { font-weight: 600; color: var(--text, #222); }
+.kap-chip { font-size: 0.7rem; font-weight: 700; padding: 0.18rem 0.55rem; border-radius: 999px; letter-spacing: 0.06em; }
+.kap-chip-good { background: #d6f3d8; color: #1b5e20; }
+.kap-chip-bad  { background: #fbd9d9; color: #8a1f1f; }
+.kap-chip-mid  { background: #fdecc8; color: #7a4a00; }
+.kap-note { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.95rem; color: var(--text, #333); line-height: 1.45; }
+@media (max-width: 640px) {
+  .kap-card-grid { grid-template-columns: 1fr; }
+  .kap-row:nth-last-child(2) { border-bottom: 1px solid var(--border, #e5e5e5); padding-bottom: 0.9rem; }
+}
+</style>
+
 <div class="kap-card">
     <div class="kap-card-grid">
         <div class="kap-row">
