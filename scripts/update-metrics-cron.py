@@ -46,32 +46,6 @@ MANUAL_REVENUE_CARDS = [
         ],
     },
     {
-        "key": "zonted",
-        "name": "Zonted",
-        "domain": "zonted.com",
-        "color": "#6f4aa8",
-        "total": "$9.00",
-        "label": "reward revenue",
-        "source": "Referral dashboard",
-        "rows": [
-            {"label": "Order amount", "value": "$90.00"},
-            {"label": "Reward content", "value": "$9.00 voucher"},
-        ],
-    },
-    {
-        "key": "palmaura",
-        "name": "Palmaura",
-        "domain": "palmaura.app",
-        "color": "#8a5a20",
-        "total": "$0",
-        "label": "current revenue",
-        "source": "App not live",
-        "rows": [
-            {"label": "Status", "value": "Pre-launch"},
-            {"label": "Revenue", "value": "$0"},
-        ],
-    },
-    {
         "key": "agenttune",
         "name": "AgentTune",
         "domain": "agent-tune.com",
@@ -436,7 +410,7 @@ def revenue_cards(stripe_revenue: dict) -> dict:
     }
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[1], veracity, MANUAL_REVENUE_CARDS[2], MANUAL_REVENUE_CARDS[3]],
+        "cards": [MANUAL_REVENUE_CARDS[0], veracity, MANUAL_REVENUE_CARDS[1]],
     }
 
 
