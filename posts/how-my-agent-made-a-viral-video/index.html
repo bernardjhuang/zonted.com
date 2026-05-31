@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <title>How My Agent Produced a 3.9M-View Viral Video — Zonted</title>
-    <meta name="description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.8 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
+    <meta name="description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
     <link rel="canonical" href="https://zonted.com/posts/how-my-agent-made-a-viral-video/">
     <meta property="og:title" content="How My Agent Produced a 3.9M-View Viral Video">
-    <meta property="og:description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.8 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
+    <meta property="og:description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://img.zonted.com/resources/how-my-agent-made-a-viral-video/viral-og.jpg">
     <meta property="og:url" content="https://zonted.com/posts/how-my-agent-made-a-viral-video/">
@@ -23,12 +23,12 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/how-my-agent-made-a-viral-video/viral-og.jpg">
     <meta name="twitter:title" content="How My Agent Produced a 3.9M-View Viral Video">
-    <meta name="twitter:description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.8 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
+    <meta name="twitter:description" content="A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"How My Agent Produced a 3.9M-View Viral Video","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-31T00:00:00Z","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/how-my-agent-made-a-viral-video/","description":"A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.8 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow."}
+    {"@context":"https://schema.org","@type":"Article","headline":"How My Agent Produced a 3.9M-View Viral Video","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-31T00:00:00Z","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/how-my-agent-made-a-viral-video/","description":"A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow."}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"How My Agent Produced a 3.9M-View Viral Video"}]}
@@ -217,9 +217,9 @@
 
 <div class="tldr">
     <div class="tldr-label">TL;DR</div>
-    <p class="tldr-thesis">One scam concept goes into a queue. A fully autonomous pipeline turns it into a documentary-style reel and ships it to four platforms. This one came out the other side with 3.8 million views and counting.</p>
+    <p class="tldr-thesis">One scam concept goes into a queue. A fully autonomous pipeline turns it into a documentary-style reel and ships it to four platforms. This one came out the other side with 3.9 million views and counting.</p>
     <ul>
-        <li>The video is the <strong>Tulum spare-tire rental scam</strong> reel &mdash; <strong>3,843,861 views</strong>, 100% from non-followers, 990 shares. No camera, no actor, no editor.</li>
+        <li>The video is the <strong>Tulum spare-tire rental scam</strong> reel &mdash; <strong>3,943,661 views</strong>, 100% from non-followers, 986 shares. No camera, no actor, no editor.</li>
         <li>It&rsquo;s one run of a skill my agent executes end to end: concept &rarr; Seedance prompt &rarr; WaveSpeed generation &rarr; FFmpeg overlay &rarr; multi-platform publish.</li>
         <li>Every artifact below is the real one: the queue JSON, the exact prompt that generated the footage, the overlay code, and the publish config.</li>
         <li>The account-level story &mdash; how the whole channel hit <a href="/posts/tabiji-18m-views/">18 million views in 90 days</a> &mdash; is the companion piece. This is the anatomy of one video inside it.</li>
@@ -240,11 +240,11 @@
 <p>Here is what that produced, from the account&rsquo;s own insights the morning I grabbed this:</p>
 
 <figure style="margin:1.75rem 0;">
-  <img src="https://img.zonted.com/resources/how-my-agent-made-a-viral-video/reel-insights.jpg" alt="Instagram insights for the Tulum spare-tire scam reel: 3,843,861 views, 100% non-followers, 1,847,599 accounts reached, 2,822 likes, 408 comments, 519 saves, 990 shares, 5,265 accounts engaged." loading="lazy" />
-  <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">3,843,861 views, 100% non-followers, 1.85M accounts reached &mdash; and 990 shares against 519 saves and 2,822 likes.</figcaption>
+  <img src="https://img.zonted.com/resources/how-my-agent-made-a-viral-video/reel-insights.jpg" alt="Instagram insights for the Tulum spare-tire scam reel: 3,943,661 views, 100% non-followers, 1,847,095 accounts reached, 2,622 likes, 406 comments, 518 saves, 986 shares, 5,265 accounts engaged." loading="lazy" />
+  <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">3,943,661 views, 100% non-followers, 1.85M accounts reached &mdash; and 986 shares against 518 saves and 2,622 likes.</figcaption>
 </figure>
 
-<p>Two numbers matter more than the view count. <strong>100% non-followers</strong> &mdash; the reel reached essentially zero existing audience; it was pure cold algorithmic reach. And <strong>990 shares</strong>, which outnumber the 519 saves and run heavy against just 2,822 likes. People didn&rsquo;t double-tap this. They sent it &mdash; to the friend flying to Mexico next month. Hold onto that; it&rsquo;s the whole reason it traveled.</p>
+<p>Two numbers matter more than the view count. <strong>100% non-followers</strong> &mdash; the reel reached essentially zero existing audience; it was pure cold algorithmic reach. And <strong>986 shares</strong>, which outnumber the 518 saves and run heavy against just 2,622 likes. People didn&rsquo;t double-tap this. They sent it &mdash; to the friend flying to Mexico next month. Hold onto that; it&rsquo;s the whole reason it traveled.</p>
 
 <h2 id="the-pipeline">The pipeline, in one line</h2>
 
@@ -406,17 +406,17 @@ Save this before your next trip. 📌
 
 <p>One script (<code>publish-video.py</code>) then does the whole fan-out: upload the file to temporary storage, create the Instagram Reel, upload the YouTube Short, post the Facebook Page reel, hand the clip to TikTok, and clean up &mdash; each with a thumbnail pulled from the 1-second mark. For this reel, Instagram, YouTube, and TikTok all shipped; Facebook got rate-limited and was left to retry rather than hammered. X stays off by default.</p>
 
-<h2 id="why-it-hit">Why this one hit 3.8 million</h2>
+<h2 id="why-it-hit">Why this one hit 3.9 million</h2>
 
-<p>The pipeline ships a reel like this every day. Most do fine. This one detonated, and the insights say why. Look at the engagement shape again: 990 shares, 519 saves, 2,822 likes. On most content likes dwarf everything; here shares are a third of the likes and <em>beat the saves</em>. That is the signature of content people forward rather than admire.</p>
+<p>The pipeline ships a reel like this every day. Most do fine. This one detonated, and the insights say why. Look at the engagement shape again: 986 shares, 518 saves, 2,622 likes. On most content likes dwarf everything; here shares are over a third of the likes and <em>beat the saves</em>. That is the signature of content people forward rather than admire.</p>
 
-<p>It&rsquo;s engineered for exactly that. A named scam at a named place is a warning you feel obligated to pass to someone specific. The five beats deliver the threat fast and the caption delivers the fix (&ldquo;save this&rdquo;), which is the structure that travels &mdash; a threat with no defense just makes people anxious and they scroll on. And because Instagram weights shares heavily for reaching people who don&rsquo;t follow you, 990 shares is what turned a tiny account&rsquo;s reel into 1.85 million strangers reached. The <a href="/posts/tabiji-18m-views/">account-level post</a> breaks down those mechanics &mdash; the Reddit demand-mining, the account warming, the human kept on engagement &mdash; in full.</p>
+<p>It&rsquo;s engineered for exactly that. A named scam at a named place is a warning you feel obligated to pass to someone specific. The five beats deliver the threat fast and the caption delivers the fix (&ldquo;save this&rdquo;), which is the structure that travels &mdash; a threat with no defense just makes people anxious and they scroll on. And because Instagram weights shares heavily for reaching people who don&rsquo;t follow you, 986 shares is what turned a tiny account&rsquo;s reel into 1.85 million strangers reached. The <a href="/posts/tabiji-18m-views/">account-level post</a> breaks down those mechanics &mdash; the Reddit demand-mining, the account warming, the human kept on engagement &mdash; in full.</p>
 
 <h2 id="takeaway">The takeaway</h2>
 
-<p>A single structured concept went into a queue and came out as 3.8 million views, with no human touching the footage between the two. That&rsquo;s the part that&rsquo;s genuinely solved: the production line. What it doesn&rsquo;t solve is which concept detonates and which dies at 4,000 views &mdash; that&rsquo;s still taste, validated demand, and a distribution game the platforms keep changing.</p>
+<p>A single structured concept went into a queue and came out as 3.9 million views, with no human touching the footage between the two. That&rsquo;s the part that&rsquo;s genuinely solved: the production line. What it doesn&rsquo;t solve is which concept detonates and which dies at 4,000 views &mdash; that&rsquo;s still taste, validated demand, and a distribution game the platforms keep changing.</p>
 
-<p>The machine makes the video. The judgment about <em>what</em> to make, and the patience to keep feeding it, is the whole job. One in fifty hits 3.8 million. The skill&rsquo;s contribution is making the other forty-nine cost a dollar each.</p>
+<p>The machine makes the video. The judgment about <em>what</em> to make, and the patience to keep feeding it, is the whole job. One in fifty hits 3.9 million. The skill&rsquo;s contribution is making the other forty-nine cost a dollar each.</p>
 
 
         </div>
