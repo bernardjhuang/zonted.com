@@ -210,7 +210,7 @@
         <li>Tabiji is an AI travel-safety channel. One agent turns a tourist-scam concept into a documentary-style reel and ships it to Instagram, TikTok, YouTube, and Facebook. No camera, no crew, no footage.</li>
         <li><strong>18,117,121 views in 90 days.</strong> 6.15M accounts reached, up 141,413.5%. 98.6% of it went to people who don&rsquo;t follow the account.</li>
         <li>Three unlocks did the work: Reddit as a demand oracle, warming the accounts so they read as human, and one hired human doing the manual following and liking we refused to automate.</li>
-        <li>Generation is free and infinite now. Reach is not, and a reason to follow is the scarce thing.</li>
+        <li>The footage is cheap (~$0.30&ndash;$2 a clip) and effectively infinite. Reach is not, taste is not, and a reason to follow is the scarcest thing of all.</li>
     </ul>
     <p class="tldr-tail">Below: the three unlocks, the full machine that makes the reels, and an honest accounting of what 18 million views is actually worth.</p>
 </div>
@@ -258,7 +258,9 @@
 
 <p>When the raw clip comes back, FFmpeg measures the actual frame and burns on the overlay: the country flag, a wrapped two-line headline, and five lower-third story beats that appear one at a time. Then a single publish step pushes it to Instagram Reels, YouTube Shorts, TikTok, and Facebook, each with the right thumbnail and its own caption. The whole thing runs off a priority queue &mdash; the agent pulls the next concept and ships. (Seedance&rsquo;s moderation rejects some scam prompts; the system softens the language without losing the mechanics, then retries.)</p>
 
-<p>Cost per video is a few cents of generation plus a few cents of tokens. No studio, no location, no actor, no editor. The marginal cost of the thousandth reel is the same as the first &mdash; which is the entire reason a one-person operation can post 1,083 times.</p>
+<p>It is not free. A single Seedance clip on WaveSpeed runs about $0.30 to $2 depending on duration, resolution, and how many clips you stitch together to land one usable ten seconds &mdash; plus the tokens to write the prompt, the captions, and the metadata. There&rsquo;s no studio, no location, no actor, no editor, but &ldquo;cheap&rdquo; is relative: at a dollar a reel, 1,083 posts is a four-figure generation bill, and that&rsquo;s before a single one is guaranteed to be any good.</p>
+
+<p>Which is the part nobody warns you about. The bar for what makes a <em>good</em> reel is a moving target. The model that nailed handheld realism last month over-stylizes this month; the hook length that held attention in March gets skipped in May; an overlay that read clean at 480p looks amateur once everyone copies it. The pipeline isn&rsquo;t a thing you build once and leave running &mdash; it&rsquo;s a thing you re-tune constantly against a standard the platforms and the audience keep raising. Cheap generation lowered the cost of a clip. It did nothing to lower the cost of taste.</p>
 
 <h2 id="what-its-worth">What 18 million views is actually worth</h2>
 
