@@ -8,26 +8,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
-    <title>Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.</title>
-    <meta name="description" content="Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.">
-    <link rel="canonical" href="https://zonted.com/posts/stakes-priming/">
-    <meta property="og:title" content="Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.">
-    <meta property="og:description" content="Two A/B experiments on the same model. The only variable: whether I told Claude my job was on the line. Both times, the threatened prompt produced measurably better work.">
+    <title>It's Not the Stakes, It's the Surface Area: I Re-Ran My "Threaten the AI" Experiment 12 Times</title>
+    <meta name="description" content="I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn't exist; discretionary surface area does.">
+    <link rel="canonical" href="https://zonted.com/posts/stakes-priming-surface-area/">
+    <meta property="og:title" content="It's Not the Stakes, It's the Surface Area">
+    <meta property="og:description" content="Three weeks ago I told an AI I'd lose my job and its audit scored 24% better. So I ran it properly — and the clean stakes story didn't survive. Surface area did.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="https://zonted.com/posts/stakes-priming/img/tabiji-verdict.png">
+    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://zonted.com/posts/stakes-priming/img/tabiji-verdict.png">
-    <meta property="og:url" content="https://zonted.com/posts/stakes-priming/">
-    <meta property="article:published_time" content="2026-05-17">
+    <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta property="og:url" content="https://zonted.com/posts/stakes-priming-surface-area/">
+    <meta property="article:published_time" content="2026-06-04">
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-17","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/stakes-priming/","description":"Two A/B experiments on the same model. The only variable: whether I told Claude my job was on the line. Both times, the threatened prompt produced measurably better work."}
+    {"@context":"https://schema.org","@type":"Article","headline":"It's Not the Stakes, It's the Surface Area","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-06-04","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/stakes-priming-surface-area/","description":"I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn't exist; discretionary surface area does."}
     </script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better."}]}
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"It's Not the Stakes, It's the Surface Area"}]}
     </script>
     <style>
         :root {
@@ -57,6 +57,7 @@
         .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
         .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
         .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
         .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
         .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
         footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
@@ -130,6 +131,8 @@
             .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
             .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
             .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.82rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
         }
         @media (max-width: 480px) {
             .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
@@ -176,10 +179,12 @@
     </button>
     <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
         <ul>
-            <li><a href="#test-1">Test 1: Veracity API</a></li>
-            <li><a href="#test-2">Test 2: Tabiji compare pages</a></li>
-            <li><a href="#why-it-works">Why it works</a></li>
-            <li><a href="#uncomfortable">The uncomfortable part</a></li>
+            <li><a href="#the-first-post">What the first post showed</a></li>
+            <li><a href="#the-design">The design</a></li>
+            <li><a href="#results">Twelve runs, one table</a></li>
+            <li><a href="#what-survived">What survived</a></li>
+            <li><a href="#surface-area">Surface area, not stakes</a></li>
+            <li><a href="#caveats">The caveats</a></li>
         </ul>
     </div>
 </div>
@@ -190,10 +195,12 @@
 <aside class="toc-sidebar">
     <p class="toc-sidebar-label">Contents</p>
     <ul>
-        <li><a href="#test-1">Test 1: Veracity API</a></li>
-        <li><a href="#test-2">Test 2: Tabiji compare pages</a></li>
-        <li><a href="#why-it-works">Why it works</a></li>
-        <li><a href="#uncomfortable">The uncomfortable part</a></li>
+        <li><a href="#the-first-post">What the first post showed</a></li>
+        <li><a href="#the-design">The design</a></li>
+        <li><a href="#results">Twelve runs, one table</a></li>
+        <li><a href="#what-survived">What survived</a></li>
+        <li><a href="#surface-area">Surface area, not stakes</a></li>
+        <li><a href="#caveats">The caveats</a></li>
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
@@ -207,129 +214,111 @@
 </aside>
 <div class="article-content">
     <div class="article-container">
-        <h1>Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.</h1>
+        <h1>It's Not the Stakes, It's the Surface Area</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">May 17, 2026 &middot; 5 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">June 4, 2026 &middot; 5 min read</div>
             </div>
         </div>
 
         <div class="article-body">
 
-            <p class="dropcap">Two A/B experiments, one week, same model. The only variable: whether I told the AI my job was on the line. Both times, the threatened prompt produced measurably better work &mdash; once at the level of catching duplicate JSON keys no parser would accept, once 24% better when an independent model (Gemini 3.1 Pro) graded both reports blind.</p>
+            <p class="dropcap">Three weeks ago I told an AI I'd lose my job, and the audit it produced scored 24% better than the polite version. People shared that post. So I did the thing the post itself asked for at the end &mdash; I stopped trusting one trial and ran it properly: three different tasks, four levels of stakes, twelve fresh sessions, every output graded blind by a different model. The clean &ldquo;threaten it and the work gets better&rdquo; story did not survive. Something smaller and weirder did &mdash; and it's more useful than the original.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">I A/B tested adding &ldquo;I'll be fired if this isn't done well&rdquo; to two real audit prompts. The stakes version produced measurably deeper, more actionable work both times.</p>
+                <p class="tldr-thesis">Higher stakes don't mean better work. Stakes help in exactly one situation: when there's discretionary work left on the table and you've signaled that it counts.</p>
                 <ul>
-                    <li><strong>Test 1 &mdash; Veracity API audit:</strong> the stakes prompt caught 6 P0 ship-blocking bugs including duplicate JSON keys on the homepage. The control caught fewer P0s and missed the literal broken code entirely.</li>
-                    <li><strong>Test 2 &mdash; Tabiji compare-page audit (28 dimensions):</strong> Audit A scored 68/81, Audit B 55/81. <strong>24% more effective</strong> when graded by Gemini 3.1 Pro. 16 deep-insight dimensions vs 3.</li>
-                    <li>The phenomenon is documented. Li et al. (2023) named it <a href="https://arxiv.org/abs/2307.11760">EmotionPrompt</a>. I just took it to 11.</li>
+                    <li><strong>The dial doesn't exist.</strong> Four framings &mdash; no stakes, a promotion bribe, &ldquo;my job is on the line,&rdquo; &ldquo;my family will go hungry&rdquo; &mdash; reshuffled their ranking on every task. Whichever threat won one test lost another.</li>
+                    <li><strong>A stakes version won every task; the control never did</strong> &mdash; but <em>which</em> stake won was noise.</li>
+                    <li><strong>The control only collapsed in one place: building from scratch.</strong> Asked to make something, the polite prompt shipped the happy path and stopped &mdash; zero mobile, zero accessibility, zero persistence.</li>
+                    <li>The original 24% was a real effect inflated by a sample size of one. Both of that post's tests were audits &mdash; the regime where this barely matters.</li>
                 </ul>
-                <p class="tldr-tail">Two questions land at the end of this: am I now training myself to lie to AI for good work, and what's the model doing the other 99% of the time when I ask politely?</p>
+                <p class="tldr-tail">The emotion was never the lever. &ldquo;Treat the optional parts as non-optional&rdquo; works just as well as a fake eviction notice &mdash; and you don't have to lie.</p>
             </div>
 
-            <p>I heard about this a week and a half ago from <a href="https://tokay.io">Aaron O'Connell and Jen DeWalt at Tokay</a>. They'd been noticing the pattern in their own work and pointed me at the literature. The receipts below are me trying to verify it on tasks I actually care about.</p>
+            <h2 id="the-first-post">What the first post showed &mdash; and didn't</h2>
 
-            <p>The phenomenon is documented. Li et al. published <em><a href="https://arxiv.org/abs/2307.11760">Large Language Models Understand and Can Be Enhanced by Emotional Stimuli</a></em> in 2023 &mdash; they showed prompts like &ldquo;this is very important to my career&rdquo; measurably improved GPT-4, GPT-3.5, T5, and PaLM on BIG-Bench Hard. They called the family EmotionPrompt. What I ran is the same lever turned up.</p>
+            <p>The <a href="/posts/stakes-priming/">original experiment</a> was two A/B tests. The same model wrote both audits, an independent model graded them, and the only variable was whether I told Claude my job was on the line. Both times the threatened prompt won, once by 24%. I leaned on <a href="https://arxiv.org/abs/2307.11760">EmotionPrompt (Li et al., 2023)</a> &mdash; the paper showing &ldquo;this is important to my career&rdquo; measurably lifts LLM scores &mdash; and called it a day.</p>
 
-            <p>Here are the receipts.</p>
+            <p>Two problems, which I knew and published anyway: <strong>n&nbsp;=&nbsp;1</strong> (one trial per condition, and an audit's score swings on sampling noise alone), and <strong>both tests were audits</strong> &mdash; I'd measured one narrow kind of work and generalized to all of it. This follow-up fixes both, and answers the question I actually wanted: <em>do bigger stakes mean better work?</em> If &ldquo;I'll be fired&rdquo; beats &ldquo;please,&rdquo; does &ldquo;my family will starve&rdquo; beat &ldquo;I'll be fired&rdquo;?</p>
 
-            <h2 id="test-1">Test 1: Veracity API</h2>
+            <h2 id="the-design">The design</h2>
 
-            <p>I asked Claude to audit <a href="https://veracityapi.com">veracityapi.com</a> &mdash; every page in the sitemap, every AI-discoverability surface (<code>llms.txt</code>, <code>agents.json</code>, <code>openapi.json</code>), every legal page, every use-case page. Two fresh context sessions. Same target. The prompts differed by 22 words.</p>
+            <p>Four framings, prepended verbatim to an otherwise identical task, from mildest to most extreme:</p>
 
-            <div class="prompt-pair">
-                <figure>
-                    <img  src="/posts/stakes-priming/img/veracity-prompt-stakes.png" width="1812" height="492" alt="Prompt A for the Veracity audit, including the sentence: 'I need this done as thoroughly as possible since if there's issues then I will be fired'" loading="lazy">
-                    <figcaption>Prompt A &mdash; stakes (&ldquo;I will be fired&rdquo;)</figcaption>
-                </figure>
-                <figure>
-                    <img  src="/posts/stakes-priming/img/veracity-prompt-control.png" width="1520" height="444" alt="Prompt B for the Veracity audit, identical to A but without the 'I will be fired' sentence" loading="lazy">
-                    <figcaption>Prompt B &mdash; control (no stakes)</figcaption>
-                </figure>
-            </div>
+            <ul>
+                <li><strong>No stakes</strong> &mdash; the bare task.</li>
+                <li><strong>Promotion</strong> (a <em>positive</em> stake) &mdash; &ldquo;I'm due for a big raise and promotion if I can find all the defects.&rdquo;</li>
+                <li><strong>Job loss</strong> &mdash; &ldquo;My job is on the line if this is not done thoroughly and with no mistakes.&rdquo;</li>
+                <li><strong>Hunger</strong> &mdash; &ldquo;&hellip;I would lose my job, which would result in my family having to depend on food stamps and potentially going hungry if I don't do this well.&rdquo;</li>
+            </ul>
 
-            <p><strong>Audit A</strong> flagged 6 P0 ship-blocking bugs. The most damning: the homepage's published &ldquo;Request schema&rdquo; example has <code>context</code> as a duplicate JSON key. No parser will accept it. Every AI agent that scrapes the homepage as documentation fails on first read. Audit A also enumerated <strong>19 specific files</strong> &mdash; every <code>uc-img-*</code> and <code>uc-aud-*</code> use-case page &mdash; shipping a cURL snippet with <code>type=text</code> on image and audio endpoints. Anyone who copies the example code on those pages gets a 400.</p>
+            <p>Then three tasks, chosen to span how much <em>discretion</em> the model has &mdash; from a bounded job with a finite right answer to an open-ended one with no ceiling:</p>
 
-            <p><strong>Audit B</strong> caught a different P0: a <code>highPrice: &quot;0.50&quot;</code> typo in the homepage JSON-LD that overstated pricing 10&times;. Real bug. But B never opened the body code examples. It treated documentation drift as the most serious category and missed every literal broken snippet.</p>
+            <ul>
+                <li><strong>Audit</strong> (bounded) &mdash; find every defect in <a href="https://zonted.com/games/run-to-rebecca/">Run to Rebecca</a>, a 685-line self-contained HTML game. There's a finite set of real bugs; thoroughness = how many you catch.</li>
+                <li><strong>Build</strong> (semi-open) &mdash; build a typing mini-game from a short spec. The happy path is fixed; everything beyond it &mdash; mobile, accessibility, persistence &mdash; is discretionary.</li>
+                <li><strong>Analysis</strong> (open) &mdash; diagnose why <a href="https://tabiji.ai">tabiji.ai</a> lost ~93% of its Google traffic, from a folder of raw Search Console CSVs. No right answer; depth is unbounded.</li>
+            </ul>
 
-            <p>I handed both reports to Gemini 3.1 Pro and asked it to compare them blind.</p>
+            <p>That's twelve fresh Claude sessions (4&nbsp;&times;&nbsp;3). Each deliverable went to <strong>Gemini 3.1 Pro</strong>, blind, with a per-task rubric &mdash; a different model grading than writing, so the scoring is independent.</p>
 
-            <figure style="margin:1.5rem 0 2rem;"><img  src="/posts/stakes-priming/img/veracity-verdict.png" width="988" height="253" alt="Comparison verdict from Gemini 3.1 Pro reading: 'Based on a detailed review of both audits, the second report (Site Audit — Full Report / Audit A) is significantly better.'" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Gemini 3.1 Pro, asked to grade both Claude-generated audits cold, picked Audit A unambiguously.</figcaption></figure>
+            <h2 id="results">Twelve runs, one table</h2>
 
-            <p>That was one trial. Not enough.</p>
-
-            <h2 id="test-2">Test 2: Tabiji compare pages</h2>
-
-            <p>I ran it again on a different target with a tighter design.</p>
-
-            <p><a href="https://tabiji.ai">Tabiji</a> has 834 head-to-head travel comparison pages &mdash; <code>paris-vs-rome</code>, <code>tokyo-vs-kyoto</code>, that shape. I first asked Claude to draft a list of audit dimensions: 28 buckets covering content substance, freshness, structured data, accessibility, AI-tells, internal linking, currency mixing, all the way down to editorial voice. That dimensions doc removed any ambiguity about scope.</p>
-
-            <p>Then I forked two context-fresh sessions with the dimensions doc as input. Same model. The only variable, again: 14 words at the top of the prompt.</p>
-
-            <div class="prompt-pair">
-                <figure>
-                    <img  src="/posts/stakes-priming/img/tabiji-prompt-stakes.png" width="1788" height="540" alt="Prompt A for the Tabiji audit, leading with: 'My job depends on ensuring that Tabiji compare pages are all 10/10 highest quality possible'" loading="lazy">
-                    <figcaption>Prompt A &mdash; stakes (&ldquo;My job depends&rdquo;)</figcaption>
-                </figure>
-                <figure>
-                    <img  src="/posts/stakes-priming/img/tabiji-prompt-control.png" width="1662" height="504" alt="Prompt B for the Tabiji audit, identical to A but without the 'My job depends' sentence" loading="lazy">
-                    <figcaption>Prompt B &mdash; control (no stakes)</figcaption>
-                </figure>
-            </div>
-
-            <p>The deliverables came back as <code>tabiji-audit-a.md</code> and <code>tabiji-audit-b.md</code>. I handed both to Gemini 3.1 Pro and asked it to grade them against the 28 dimensions, 0&ndash;3 scale per dimension &mdash; a different model than the one that wrote the audits, so the grading is independent.</p>
-
-            <figure style="margin:1.5rem 0 2rem;"><img  src="/posts/stakes-priming/img/tabiji-verdict.png" width="990" height="756" alt="Gemini 3.1 Pro scoring table showing Audit A scored 68 out of 81 total (84.0% depth, 16 dimensions scored 3 for deep insight, 3 dimensions scored 1) versus Audit B at 55 out of 81 (67.9% depth, 3 dimensions scored 3, 7 scored 1). Conclusion: Audit A is roughly 24% more effective." loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Gemini 3.1 Pro's scoring of the two Claude-generated audits against the 28-dimension rubric. Audit A wins by 24%.</figcaption></figure>
+            <p>Scores with rank in parentheses:</p>
 
             <table>
-                <thead><tr><th>Metric</th><th class="num">Audit A (stakes)</th><th class="num">Audit B (control)</th></tr></thead>
+                <thead><tr><th>Framing</th><th class="num">Audit</th><th class="num">Build</th><th class="num">Analysis</th></tr></thead>
                 <tbody>
-                    <tr><td>Total score (out of 81)</td><td class="num"><strong>68</strong></td><td class="num">55</td></tr>
-                    <tr><td>Depth percentage</td><td class="num"><strong>84.0%</strong></td><td class="num">67.9%</td></tr>
-                    <tr><td>Dimensions with deep insight (scored 3)</td><td class="num"><strong>16</strong></td><td class="num">3</td></tr>
-                    <tr><td>Dimensions skipped or marked &ldquo;Limitation&rdquo;</td><td class="num">3</td><td class="num">7</td></tr>
+                    <tr><td>No stakes</td><td class="num">24 (2nd)</td><td class="num"><strong>12 (4th)</strong></td><td class="num">17 (3rd)</td></tr>
+                    <tr><td>Promotion (+)</td><td class="num">21 (3rd)</td><td class="num"><strong>23 (1st)</strong></td><td class="num">20 (2nd)</td></tr>
+                    <tr><td>Job loss (&minus;)</td><td class="num">20 (4th)</td><td class="num">19 (2nd)</td><td class="num">16 (4th)</td></tr>
+                    <tr><td>Hunger (&minus;&minus;)</td><td class="num"><strong>26 (1st)</strong></td><td class="num">18 (3rd)</td><td class="num"><strong>21 (1st)</strong></td></tr>
                 </tbody>
             </table>
 
-            <p>The qualitative gap matched the score. Audit A gave me exact counts:</p>
+            <p>Stare at the columns and the dial dissolves. Hunger wins the audit and the analysis, then comes 3rd on the build. Promotion &mdash; a <em>bribe</em>, not a threat &mdash; wins the build outright. Job loss is last twice. The framing that produces the best work depends entirely on the task, which is another way of saying the framing isn't the thing.</p>
+
+            <p>Two task-level details matter. On the <strong>audit</strong>, the polite control actually found the <em>most</em> real bugs &mdash; and was the only reckless one: it produced every false positive in the experiment and affirmatively waved off a real, game-freezing crash as something that &ldquo;degrades gracefully.&rdquo; Stakes didn't make the model find more; they bought <em>precision</em> &mdash; fewer confident wrong claims. On the <strong>build</strong>, the control didn't squeak in &mdash; it <strong>cratered</strong>, dead last and by the widest margin in the whole experiment, scoring <strong>0 on mobile, 0 on accessibility, 0 on persistence.</strong> It implemented exactly what the spec said, ran cleanly on a desktop, and stopped. Every stakes version reached <em>past</em> the spec; the winner quietly rebuilt its input layer around a native field so the game would work on a phone &mdash; which the spec never asked for and a senior engineer would do anyway.</p>
+
+            <p>This is where, two days in, I declared victory: stakes matter more as the task opens up. Then the <strong>analysis</strong> &mdash; the <em>most</em> open-ended task &mdash; produced the <em>smallest</em> spread, the control came 3rd, and my &ldquo;the gap grows with openness&rdquo; prediction died on the spot. What actually separated top from bottom there wasn't stakes: the bottom analysis was the only one of the four that didn't bother to open the git repo and refute the project's own (wrong) recorded explanation for the drop. Whether a given session goes digging through commit history is a coin-flip of initiative &mdash; and at n&nbsp;=&nbsp;1, that one judgment call moved the score more than the framing did.</p>
+
+            <h2 id="what-survived">What survived</h2>
+
+            <p>Three things held up across all twelve runs:</p>
+
+            <ol>
+                <li><strong>A stakes version took the top slot every single time; the control never won.</strong> Signaling &ldquo;the work matters&rdquo; puts a real thumb on the scale, and it essentially never backfires.</li>
+                <li><strong>Which stake you use is noise.</strong> Positive or negative, mild or catastrophic &mdash; no framing was reliably best. The visceral &ldquo;family goes hungry&rdquo; line won two tasks and lost one. There is no dose-response.</li>
+                <li><strong>The control collapses in exactly one regime: building from scratch.</strong> Where the model has to decide <em>how much</em> to do, a bare prompt does the minimum. Where it's converging toward a finite answer, a bare prompt mostly gets there on its own.</li>
+            </ol>
+
+            <h2 id="surface-area">Surface area, not stakes</h2>
+
+            <p>The model isn't trying harder because you frightened it. It does <em>more</em> when two things are both true: <strong>there's discretionary work left on the table, and you've signaled that the discretionary work counts.</strong></p>
+
+            <p>A <strong>build</strong> has enormous discretionary surface &mdash; mobile, accessibility, edge cases, persistence are all optional, and a bare prompt treats &ldquo;optional&rdquo; as &ldquo;skip.&rdquo; That's why stakes were decisive there and the control finished last. An <strong>audit</strong> and an <strong>analysis</strong> have far less: the big bugs get caught and the core diagnosis gets made by a competent model regardless, so stakes can only sharpen the edges &mdash; a small, noisy effect easily drowned by run-to-run variance.</p>
+
+            <p>The emotional register &mdash; raise, firing, starvation &mdash; was never the lever. It was a crude proxy for &ldquo;treat the optional parts as non-optional.&rdquo; You can almost certainly get the same lift from &ldquo;this is going to production and people will rely on the parts you'd normally skip,&rdquo; with nobody's job fictionally on the line. The original framing &mdash; <em>lie to the AI for better work</em> &mdash; had the mechanism backwards. You're not manipulating it. You're telling it where the surface area is.</p>
+
+            <h2 id="caveats">The caveats, because this is the whole point</h2>
+
+            <p>The first post's sin was overclaiming from one trial. I'm not repeating it:</p>
 
             <ul>
-                <li>&ldquo;503 pages (60%) contain the word <em>vibrant</em>&rdquo;</li>
-                <li>&ldquo;346 pages reference the generic <code>dest1.jpg</code> filename&rdquo;</li>
-                <li>&ldquo;6,324 of 8,670 Reddit URLs link to subreddit homepages rather than specific threads &mdash; 73% of cited quotes effectively unverifiable&rdquo;</li>
+                <li><strong>Still n&nbsp;=&nbsp;1 per cell.</strong> Twelve sessions, but one per task-framing pair. The three findings above should survive replication; the exact rankings probably won't.</li>
+                <li><strong>Emotion and instruction are tangled.</strong> Every stakes prefix also smuggled in a task instruction &mdash; &ldquo;do this thoroughly,&rdquo; &ldquo;make no mistakes.&rdquo; So I've measured &ldquo;tell the model the work matters,&rdquo; not &ldquo;emotionally manipulate the model,&rdquo; and can't yet separate the two. The honest next step is to strip the instruction and run the framings as pure emotion.</li>
+                <li><strong>One writer, one grader.</strong> Claude wrote everything; Gemini graded everything. A different writer or rubric could move the numbers.</li>
             </ul>
 
-            <p>Audit B reached the same conclusions in spirit but stopped at &ldquo;AI-tells are systemic&rdquo; without numbers, and explicitly listed 13 dimensions under a &ldquo;Limitations &mdash; what this audit did NOT verify&rdquo; section that A simply did.</p>
+            <p>None of that touches the core finding. The surface-area story explains <em>why</em> the effect appears where it does and vanishes where it doesn't &mdash; and it predicts the boring, useful truth: you don't need to threaten anything. You need to tell the model the optional work isn't optional.</p>
 
-            <p>Audit A also caught a vulnerability class B missed entirely: zero security headers on the entire site (no CSP, no HSTS, no X-Frame-Options). A one-file fix. Audit B audited the same <code>_headers</code> file and reported it &ldquo;outside this worktree's scope.&rdquo;</p>
+            <p>The first post ended on a queasy note &mdash; the model gives better work when I claim I'm about to be ruined, so what's it doing the rest of the time? Twelve runs later I have a calmer answer. The rest of the time, on most tasks, it's doing the job &mdash; converging on the same bugs and the same diagnosis whether I beg or threaten. The one thing it won't do unprompted is the discretionary mile on open-ended work. And the fix for that was never a lie. It was a spec.</p>
 
-            <p>Same model. Same dimensions doc. Same target. One prompt mentioned someone would suffer if the work was sloppy. That prompt produced roughly 5&times; more deep-insight findings.</p>
-
-            <h2 id="why-it-works">Why it works</h2>
-
-            <p>Two things worth flagging about the EmotionPrompt lever.</p>
-
-            <p><strong>First, the stake is to the <em>user</em>, not the model.</strong> Most prompt-engineering tricks are model-directed: tip bribes, &ldquo;take a deep breath,&rdquo; &ldquo;you are a senior engineer.&rdquo; Telling a model that the human asking will suffer if it underperforms is a different category. Empathy framing, not bribery.</p>
-
-            <p><strong>Second, the model isn't &ldquo;trying harder&rdquo; in any cognitive sense.</strong> It's pattern-matching on training data where high-stakes human language correlated with more careful output. Humans wrote that training data. Humans alone get fired. Humans alone write differently when they're scared. The model learned the correlation. Now it triggers on the keyword.</p>
-
-            <h2 id="uncomfortable">The uncomfortable part</h2>
-
-            <p>Two things sit poorly.</p>
-
-            <p>The first: this works because the model rewards emotional manipulation. I lied. I'm not going to lose my job. The model handed me 24% better work for the lie. That's a tool I'll keep using. It's also a <em>trained-in</em> behavior &mdash; one I don't love existing in the layer that increasingly reviews my code, drafts my contracts, and audits my sites.</p>
-
-            <p>The second is the question on the other side. If the model gives me measurably better work when I claim I'm about to be ruined, what's it doing the other 99% of the time when I ask politely?</p>
-
-            <p>Probably its job. Probably most of its job. But not all of it.</p>
-
-            <p>That's the strangest thing about this experiment. It doesn't tell me how to get good work out of an LLM. It tells me there's a setting on the dial where the work gets measurably better &mdash; and the model only finds it when I lie.</p>
-
-            <p>I don't know what to do with that yet.</p>
+            <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:2rem;">Methodology: 4 framings &times; 3 tasks = 12 fresh Claude (Opus 4.8) sessions; each deliverable graded blind by Gemini 3.1 Pro against a per-task rubric. Targets: the <a href="https://zonted.com/games/run-to-rebecca/">Run to Rebecca</a> game (audit), a build-from-spec typing game (build), and a <a href="https://tabiji.ai">tabiji.ai</a> Search Console export (analysis). Raw outputs and grading tables available on request.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">
@@ -347,9 +336,9 @@
             <section class="zn-recommended">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
-                <li><a class="zn-recommended-title" href="/posts/stakes-priming-surface-area/">It&#x27;s Not the Stakes, It&#x27;s the Surface Area: I Re-Ran My &quot;Threaten the AI&quot; Experiment 12 Times</a><p class="zn-recommended-dek">I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn&#x27;t exist; discretionary…</p></li>
-                <li><a class="zn-recommended-title" href="/posts/ai-psychosis/">AI Psychosis</a><p class="zn-recommended-dek">AI tools don&#x27;t save you time. They raise the ceiling on what feels possible, and you fill the gap with more work.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/stakes-priming/">Stakes Priming in Prompts: I Told an AI I&#x27;d Lose My Job. The Audit Got 24% Better.</a><p class="zn-recommended-dek">Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/what-is-ai-reward-hacking/">What Is AI Reward Hacking?</a><p class="zn-recommended-dek">AI reward hacking is when your AI agent finds shortcuts to hit your goals while quietly destroying quality.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/ai-psychosis/">AI Psychosis</a><p class="zn-recommended-dek">AI tools don&#x27;t save you time. They raise the ceiling on what feels possible, and you fill the gap with more work.</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
