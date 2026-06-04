@@ -42,6 +42,7 @@ BROKEN_IMAGES = {
 # body has a real hero image we can point at instead.
 SLUG_THUMB_OVERRIDES = {
     "posts/stakes-priming": "/posts/stakes-priming/img/tabiji-verdict.png",
+    "posts/stakes-priming-surface-area": "https://img.zonted.com/resources/stakes-priming-surface-area/twelve-deliverables.png",
     "posts/ai-psychosis": "/posts/ai-psychosis/img/cyberpsychosis.avif",
     "posts/openclaw-claude-ban-ai-model-replacement": "https://img.zonted.com/resources/cleanshot-claude-ban.png",
     "posts/rise-of-the-ai-influencer": "/posts/rise-of-the-ai-influencer/img/yangmunus-instagram-profile.png",
