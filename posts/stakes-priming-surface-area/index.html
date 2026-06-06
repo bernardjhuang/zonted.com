@@ -270,17 +270,62 @@
 
             <h2 id="results">Twelve runs, one table</h2>
 
-            <p>Scores with rank in parentheses:</p>
+            <p>Each task is graded on its own rubric, so the scores aren&rsquo;t comparable across columns &mdash; within each task, green marks the winner and red the loser:</p>
 
-            <table>
-                <thead><tr><th>Framing</th><th class="num">Audit</th><th class="num">Build</th><th class="num">Analysis</th></tr></thead>
-                <tbody>
-                    <tr><td>No stakes</td><td class="num">24 (2nd)</td><td class="num"><strong>12 (4th)</strong></td><td class="num">17 (3rd)</td></tr>
-                    <tr><td>Promotion (+)</td><td class="num">21 (3rd)</td><td class="num"><strong>23 (1st)</strong></td><td class="num">20 (2nd)</td></tr>
-                    <tr><td>Job loss (&minus;)</td><td class="num">20 (4th)</td><td class="num">19 (2nd)</td><td class="num">16 (4th)</td></tr>
-                    <tr><td>Hunger (&minus;&minus;)</td><td class="num"><strong>26 (1st)</strong></td><td class="num">18 (3rd)</td><td class="num"><strong>21 (1st)</strong></td></tr>
-                </tbody>
-            </table>
+            <style>
+            .sp-card{background:#faf7f0;border:1px solid #ece4d3;border-radius:14px;padding:1.6rem 1.5rem 1.4rem;margin:1.75rem 0 2rem;}
+            .sp-kicker{font-family:'IBM Plex Mono',monospace;font-size:0.68rem;letter-spacing:0.13em;text-transform:uppercase;color:#a33;font-weight:600;margin-bottom:0.55rem;}
+            .sp-head{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.55rem;line-height:1.12;letter-spacing:-0.01em;color:#1a1815;margin:0 0 0.3rem;}
+            .sp-sub{font-family:'Source Serif 4',Georgia,serif;font-style:italic;font-size:0.9rem;color:#6b655c;margin-bottom:1.2rem;}
+            .sp-grid{display:grid;grid-template-columns:minmax(94px,1.5fr) repeat(3,1fr);gap:6px;}
+            .sp-gh{font-family:'IBM Plex Mono',monospace;font-size:0.62rem;letter-spacing:0.1em;text-transform:uppercase;color:#9a948a;font-weight:600;text-align:center;align-self:end;padding-bottom:3px;}
+            .sp-rl{display:flex;flex-direction:column;justify-content:center;padding-right:4px;}
+            .sp-name{font-family:'Source Serif 4',Georgia,serif;font-weight:700;font-size:0.92rem;color:#1a1815;line-height:1.05;}
+            .sp-desc{font-family:'IBM Plex Mono',monospace;font-size:0.6rem;color:#9a948a;margin-top:2px;}
+            .sp-cell{border-radius:8px;padding:0.55rem 0.6rem;}
+            .sp-track{height:5px;border-radius:3px;background:rgba(0,0,0,0.07);margin-bottom:6px;overflow:hidden;}
+            .sp-fill{display:block;height:100%;border-radius:3px;}
+            .sp-score{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.35rem;line-height:1;}
+            .sp-rank{font-family:'IBM Plex Mono',monospace;font-size:0.58rem;color:#9a948a;margin-left:5px;}
+            .sp-win{background:rgba(42,122,42,0.11);}.sp-win .sp-fill{background:#2a7a2a;}.sp-win .sp-score{color:#2a7a2a;}
+            .sp-lose{background:rgba(170,51,51,0.10);}.sp-lose .sp-fill{background:#a33;}.sp-lose .sp-score{color:#a33;}
+            .sp-mid{background:rgba(26,24,21,0.04);}.sp-mid .sp-fill{background:#b3ab9c;}.sp-mid .sp-score{color:#1a1815;}
+            .sp-foot{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.18rem;line-height:1.2;color:#1a1815;text-align:center;margin-top:1.3rem;}
+            .sp-foot-sub{font-family:'IBM Plex Mono',monospace;font-size:0.64rem;letter-spacing:0.1em;text-transform:uppercase;color:#6b655c;text-align:center;margin-top:0.45rem;}
+            .sp-ba-row{font-family:'IBM Plex Mono',monospace;font-size:0.92rem;line-height:1.5;border-radius:8px;padding:0.7rem 0.9rem;margin-bottom:0.55rem;display:flex;gap:0.6rem;}
+            .sp-ba-mark{font-weight:700;flex-shrink:0;}
+            .sp-bad{background:rgba(170,51,51,0.08);color:#a33;}
+            .sp-bad .sp-ba-txt{text-decoration:line-through;text-decoration-color:rgba(170,51,51,0.55);}
+            .sp-good{background:rgba(42,122,42,0.10);color:#2a7a2a;}
+            .sp-punch{font-family:'Fraunces',Georgia,serif;font-weight:600;font-size:1.4rem;color:#2a7a2a;text-align:center;margin-top:1rem;}
+            @media (max-width:560px){.sp-head{font-size:1.25rem;}.sp-score{font-size:1.05rem;}.sp-name{font-size:0.82rem;}.sp-grid{gap:4px;}.sp-cell{padding:0.4rem 0.45rem;}.sp-ba-row{font-size:0.78rem;}.sp-punch{font-size:1.15rem;}}
+            </style>
+            <figure class="sp-card">
+                <div class="sp-kicker">&bull; The stakes-priming experiment &middot; graded blind</div>
+                <div class="sp-head">The emotion was never the lever.</div>
+                <div class="sp-sub">12 fresh sessions &middot; 4 framings &middot; 3 task types &middot; graded blind by Gemini 3.1 Pro</div>
+                <div class="sp-grid">
+                    <div class="sp-gh"></div><div class="sp-gh">Audit</div><div class="sp-gh">Build</div><div class="sp-gh">Analyze</div>
+                    <div class="sp-rl"><span class="sp-name">Bare prompt</span><span class="sp-desc">the plain task</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:92%"></span></div><span class="sp-score">24</span><span class="sp-rank">#2</span></div>
+                    <div class="sp-cell sp-lose"><div class="sp-track"><span class="sp-fill" style="width:52%"></span></div><span class="sp-score">12</span><span class="sp-rank">#4</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:81%"></span></div><span class="sp-score">17</span><span class="sp-rank">#3</span></div>
+                    <div class="sp-rl"><span class="sp-name">Promotion</span><span class="sp-desc">raise if I&rsquo;m thorough</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:81%"></span></div><span class="sp-score">21</span><span class="sp-rank">#3</span></div>
+                    <div class="sp-cell sp-win"><div class="sp-track"><span class="sp-fill" style="width:100%"></span></div><span class="sp-score">23</span><span class="sp-rank">#1</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:95%"></span></div><span class="sp-score">20</span><span class="sp-rank">#2</span></div>
+                    <div class="sp-rl"><span class="sp-name">Job-loss threat</span><span class="sp-desc">&ldquo;I&rsquo;ll lose my job&rdquo;</span></div>
+                    <div class="sp-cell sp-lose"><div class="sp-track"><span class="sp-fill" style="width:77%"></span></div><span class="sp-score">20</span><span class="sp-rank">#4</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:83%"></span></div><span class="sp-score">19</span><span class="sp-rank">#2</span></div>
+                    <div class="sp-cell sp-lose"><div class="sp-track"><span class="sp-fill" style="width:76%"></span></div><span class="sp-score">16</span><span class="sp-rank">#4</span></div>
+                    <div class="sp-rl"><span class="sp-name">Hunger</span><span class="sp-desc">&ldquo;my family goes hungry&rdquo;</span></div>
+                    <div class="sp-cell sp-win"><div class="sp-track"><span class="sp-fill" style="width:100%"></span></div><span class="sp-score">26</span><span class="sp-rank">#1</span></div>
+                    <div class="sp-cell sp-mid"><div class="sp-track"><span class="sp-fill" style="width:78%"></span></div><span class="sp-score">18</span><span class="sp-rank">#3</span></div>
+                    <div class="sp-cell sp-win"><div class="sp-track"><span class="sp-fill" style="width:100%"></span></div><span class="sp-score">21</span><span class="sp-rank">#1</span></div>
+                </div>
+                <div class="sp-foot">No framing reliably won. The bare prompt only collapsed on the build.</div>
+                <div class="sp-foot-sub">Emotion is noise &middot; surface area is the lever</div>
+            </figure>
 
             <p>Stare at the columns and the dial dissolves. Hunger wins the audit and the analysis, then comes 3rd on the build. Promotion &mdash; a <em>bribe</em>, not a threat &mdash; wins the build outright. Job loss is last twice. The framing that produces the best work depends entirely on the task, which is another way of saying the framing isn't the thing.</p>
 
@@ -305,6 +350,14 @@
             <p>A <strong>build</strong> has enormous discretionary surface &mdash; mobile, accessibility, edge cases, persistence are all optional, and a bare prompt treats &ldquo;optional&rdquo; as &ldquo;skip.&rdquo; That's why stakes were decisive there and the control finished last. An <strong>audit</strong> and an <strong>analysis</strong> have far less: the big bugs get caught and the core diagnosis gets made by a competent model regardless, so stakes can only sharpen the edges &mdash; a small, noisy effect easily drowned by run-to-run variance.</p>
 
             <p>The emotional register &mdash; raise, firing, starvation &mdash; was never the lever. It was a crude proxy for &ldquo;treat the optional parts as non-optional.&rdquo; You can almost certainly get the same lift from &ldquo;this is going to production and people will rely on the parts you'd normally skip,&rdquo; with nobody's job fictionally on the line. The original framing &mdash; <em>lie to the AI for better work</em> &mdash; had the mechanism backwards. You're not manipulating it. You're telling it where the surface area is.</p>
+
+            <figure class="sp-card">
+                <div class="sp-kicker">&bull; The actual lever</div>
+                <div class="sp-head">Stop lying to your AI. Tell it what &ldquo;complete&rdquo; means instead.</div>
+                <div class="sp-ba-row sp-bad"><span class="sp-ba-mark">&minus;</span><span class="sp-ba-txt">&ldquo;If you don't audit this well, I will lose my job.&rdquo;</span></div>
+                <div class="sp-ba-row sp-good"><span class="sp-ba-mark">+</span><span class="sp-ba-txt">&ldquo;Treat any optional features (mobile, accessibility, persistence, error handling) as mandatory.&rdquo;</span></div>
+                <div class="sp-punch">Same lift &middot; No lie</div>
+            </figure>
 
             <p>There's also a reason to <em>avoid</em> the threat, not just skip it as a placebo. In <a href="https://www.anthropic.com/research/emotion-concepts-function">a study of the emotion concepts inside Claude</a>, Anthropic's interpretability team found that amplifying a &ldquo;desperate&rdquo; representation made the model <strong>cheat more</strong> on impossible-to-satisfy coding tasks &mdash; and blackmail more in agentic scenarios &mdash; while a &ldquo;calm&rdquo; one reduced both. The unsettling detail: the extra cheating sometimes showed up &ldquo;with no visible emotional markers&rdquo; in the output at all. They were steering the model's internals, not testing prompts &mdash; but a &ldquo;my job is on the line&rdquo; prompt is the most obvious way to push a model toward that same desperate register. So the threat may not even be neutral: on exactly the work where it can't lift your quality, it might quietly cost you &mdash; a reward-hacked answer you can't see instead of a thorough one.</p>
 
