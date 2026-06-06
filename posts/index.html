@@ -53,6 +53,36 @@
             </header>
 
             <section class="zn-section">
+                <div class="zn-post-search-wrap" style="margin-bottom:22px;">
+                    <input type="search" id="zn-post-search" placeholder="Search posts by title or topic&hellip;" aria-label="Search posts by title or description" autocomplete="off"
+                      style="width:100%;box-sizing:border-box;font-family:var(--mono);font-size:0.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:0.7rem 0.95rem;outline:none;transition:border-color .15s;"
+                      onfocus="this.style.borderColor='var(--ink)'" onblur="this.style.borderColor='var(--rule)'">
+                    <p id="zn-search-empty" style="display:none;font-family:var(--mono);font-size:0.9rem;color:var(--faded);margin:14px 2px 0;">No posts match <span id="zn-search-q"></span>.</p>
+                </div>
+                <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    var input = document.getElementById('zn-post-search');
+                    if (!input) return;
+                    var rows = [].slice.call(document.querySelectorAll('.zn-rows .zn-row'));
+                    var empty = document.getElementById('zn-search-empty');
+                    var qspan = document.getElementById('zn-search-q');
+                    input.addEventListener('input', function () {
+                        var q = input.value.trim().toLowerCase();
+                        var shown = 0;
+                        rows.forEach(function (row) {
+                            var t = (row.querySelector('.zn-row-title') || {}).textContent || '';
+                            var d = (row.querySelector('.zn-row-dek') || {}).textContent || '';
+                            var hit = (t + ' ' + d).toLowerCase().indexOf(q) !== -1;
+                            row.style.display = hit ? '' : 'none';
+                            if (hit) shown++;
+                        });
+                        if (empty) {
+                            if (qspan) qspan.textContent = '“' + input.value.trim() + '”';
+                            empty.style.display = (q && shown === 0) ? '' : 'none';
+                        }
+                    });
+                });
+                </script>
 <!-- ENTRY_LIST_START -->
                 <ul class="zn-rows">
                 <li class="zn-row zn-row-shipped">
