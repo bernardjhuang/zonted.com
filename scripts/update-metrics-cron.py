@@ -681,7 +681,7 @@ def update_html(data: dict) -> None:
     if revenue_cards:
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
-            <h2 id="revenue-heading"><span class="icon">💸</span> Revenue Snapshot</h2>
+            <h2 id="revenue-heading"><span class="icon">💸</span> May 2026 Revenue Snapshot</h2>
             <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for the last 30 days.</p>
             <div class="property-grid revenue-grid">
 {revenue_cards}
