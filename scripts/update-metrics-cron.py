@@ -54,12 +54,13 @@ MANUAL_REVENUE_CARDS = [
         "name": "AgentTune",
         "domain": "agent-tune.com",
         "color": "#6366f1",
-        "total": "$0",
-        "label": "current revenue",
-        "source": "Open library",
+        "total": "$9",
+        "label": "May 2026 gross collected",
+        "source": "Stripe",
         "rows": [
-            {"label": "Status", "value": "Live"},
-            {"label": "Model", "value": "Custom tunings"},
+            {"label": "Successful payments", "value": "1"},
+            {"label": "Net after fees", "value": "$8.44"},
+            {"label": "Lifetime gross", "value": "$9"},
         ],
     },
     {
@@ -73,6 +74,20 @@ MANUAL_REVENUE_CARDS = [
         "rows": [
             {"label": "Month", "value": "May 2026"},
             {"label": "Total clicks", "value": "5"},
+        ],
+    },
+    {
+        "key": "pixelforge",
+        "name": "PixelForge",
+        "domain": "pixel-forge.net",
+        "color": "#10b981",
+        "total": "$0",
+        "label": "May 2026 gross collected",
+        "source": "Stripe",
+        "rows": [
+            {"label": "Successful payments", "value": "0"},
+            {"label": "Net after fees", "value": "$0"},
+            {"label": "Lifetime gross", "value": "$10"},
         ],
     },
 ]
@@ -431,7 +446,7 @@ def revenue_cards(stripe_revenue: dict) -> dict:
     }
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[2], veracity, MANUAL_REVENUE_CARDS[1]],
+        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[2], veracity, MANUAL_REVENUE_CARDS[1], MANUAL_REVENUE_CARDS[3]],
     }
 
 
