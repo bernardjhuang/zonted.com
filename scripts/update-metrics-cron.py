@@ -58,6 +58,19 @@ MANUAL_REVENUE_CARDS = [
             {"label": "Model", "value": "Custom tunings"},
         ],
     },
+    {
+        "key": "zonted",
+        "name": "Zonted",
+        "domain": "zonted.com",
+        "color": "#6f4aa8",
+        "total": "$200",
+        "label": "May affiliate earnings",
+        "source": "WaveSpeedAI affiliate",
+        "rows": [
+            {"label": "Month", "value": "May 2026"},
+            {"label": "Total clicks", "value": "5"},
+        ],
+    },
 ]
 
 PATH = "/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin"
@@ -410,7 +423,7 @@ def revenue_cards(stripe_revenue: dict) -> dict:
     }
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": [MANUAL_REVENUE_CARDS[0], veracity, MANUAL_REVENUE_CARDS[1]],
+        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[2], veracity, MANUAL_REVENUE_CARDS[1]],
     }
 
 
