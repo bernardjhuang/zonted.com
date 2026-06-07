@@ -16,7 +16,7 @@ import subprocess
 import sys
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from urllib import parse, request
 
@@ -31,18 +31,22 @@ YOUTUBE_SHORTS_URL = "https://www.youtube.com/@tabijiai/shorts"
 TABIJI_PUBLISH_LOG = Path("/Users/psy/.openclaw/workspace/tabiji/functions/publish-log.json")
 STRIPE_KEYCHAIN_SERVICE = "veracityapi-stripe-readonly-key"
 STRIPE_API_VERSION = "2025-10-29.clover"
+REVENUE_PERIOD_LABEL = "May 2026"
+REVENUE_PERIOD_START = datetime(2026, 5, 1, tzinfo=timezone.utc)
+REVENUE_PERIOD_END = datetime(2026, 6, 1, tzinfo=timezone.utc)
 MANUAL_REVENUE_CARDS = [
     {
         "key": "tabiji",
         "name": "Tabiji",
         "domain": "tabiji.ai",
         "color": "#2a7a2a",
-        "total": "$112.57",
+        "total": "$123.68",
         "label": "estimated royalties",
         "source": "KDP dashboard",
         "rows": [
-            {"label": "Orders", "value": "40"},
-            {"label": "KENP read", "value": "2,902"},
+            {"label": "eBook royalties", "value": "$60.32"},
+            {"label": "Print royalties", "value": "$28.82"},
+            {"label": "KENP royalties", "value": "$7.90"},
         ],
     },
     {
@@ -355,8 +359,8 @@ def fetch_stripe_usage_revenue() -> dict:
     VeracityAPI currently charges metered request top-ups rather than Stripe
     subscriptions, so revenue comes from successful charges/payment intents.
     """
-    cutoff = datetime.utcnow() - timedelta(days=29)
-    cutoff_ts = int(cutoff.timestamp())
+    period_start_ts = int(REVENUE_PERIOD_START.timestamp())
+    period_end_ts = int(REVENUE_PERIOD_END.timestamp())
     charges = stripe_list("charges")
     balance_transactions = stripe_list("balance_transactions")
 
@@ -365,14 +369,18 @@ def fetch_stripe_usage_revenue() -> dict:
         for charge in charges
         if charge.get("status") == "succeeded" and charge.get("paid") and not charge.get("refunded")
     ]
-    recent = [charge for charge in successful if int(charge.get("created") or 0) >= cutoff_ts]
+    period_charges = [
+        charge
+        for charge in successful
+        if period_start_ts <= int(charge.get("created") or 0) < period_end_ts
+    ]
     currency_totals: dict[str, float] = defaultdict(float)
     lifetime_currency_totals: dict[str, float] = defaultdict(float)
     for charge in successful:
         currency = (charge.get("currency") or "usd").lower()
         amount = float((charge.get("amount_captured") or charge.get("amount") or 0) - (charge.get("amount_refunded") or 0))
         lifetime_currency_totals[currency] += amount
-        if int(charge.get("created") or 0) >= cutoff_ts:
+        if period_start_ts <= int(charge.get("created") or 0) < period_end_ts:
             currency_totals[currency] += amount
 
     primary_currency = max(lifetime_currency_totals or {"usd": 0}, key=(lifetime_currency_totals or {"usd": 0}).get)
@@ -384,7 +392,7 @@ def fetch_stripe_usage_revenue() -> dict:
         for txn in balance_transactions
         if txn.get("reporting_category") == "charge"
         and (txn.get("currency") or "usd").lower() == primary_currency
-        and int(txn.get("created") or 0) >= cutoff_ts
+        and period_start_ts <= int(txn.get("created") or 0) < period_end_ts
     ]
     recent_net = sum(float(txn.get("net") or 0) for txn in recent_balance)
     recent_fees = sum(float(txn.get("fee") or 0) for txn in recent_balance)
@@ -396,11 +404,11 @@ def fetch_stripe_usage_revenue() -> dict:
         "color": "#336699",
         "source": "Stripe",
         "currency": primary_currency,
-        "grossCents30d": round(recent_gross, 2),
-        "netCents30d": round(recent_net, 2),
-        "feesCents30d": round(recent_fees, 2),
+        "grossCentsPeriod": round(recent_gross, 2),
+        "netCentsPeriod": round(recent_net, 2),
+        "feesCentsPeriod": round(recent_fees, 2),
         "lifetimeGrossCents": round(lifetime_gross, 2),
-        "successfulPayments30d": len(recent),
+        "successfulPaymentsPeriod": len(period_charges),
         "successfulPaymentsLifetime": len(successful),
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
     }
@@ -412,12 +420,12 @@ def revenue_cards(stripe_revenue: dict) -> dict:
         "name": stripe_revenue["name"],
         "domain": stripe_revenue["domain"],
         "color": stripe_revenue.get("color", "#336699"),
-        "total": money(stripe_revenue.get("grossCents30d") or 0, stripe_revenue.get("currency") or "usd"),
-        "label": "gross collected (30d)",
+        "total": money(stripe_revenue.get("grossCentsPeriod") or 0, stripe_revenue.get("currency") or "usd"),
+        "label": f"{REVENUE_PERIOD_LABEL} gross collected",
         "source": "Stripe",
         "rows": [
-            {"label": "Successful payments", "value": fmt(stripe_revenue.get("successfulPayments30d") or 0)},
-            {"label": "Net after fees", "value": money(stripe_revenue.get("netCents30d") or 0, stripe_revenue.get("currency") or "usd")},
+            {"label": "Successful payments", "value": fmt(stripe_revenue.get("successfulPaymentsPeriod") or 0)},
+            {"label": "Net after fees", "value": money(stripe_revenue.get("netCentsPeriod") or 0, stripe_revenue.get("currency") or "usd")},
             {"label": "Lifetime gross", "value": money(stripe_revenue.get("lifetimeGrossCents") or 0, stripe_revenue.get("currency") or "usd")},
         ],
     }
@@ -695,7 +703,7 @@ def update_html(data: dict) -> None:
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
             <h2 id="revenue-heading"><span class="icon">💸</span> May 2026 Revenue Snapshot</h2>
-            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for the last 30 days.</p>
+            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for May 2026.</p>
             <div class="property-grid revenue-grid">
 {revenue_cards}
             </div>
