@@ -104,6 +104,15 @@ const ghosts = [
     project: projects.find((p) => p.slug === 'kapiko'),
     color: '#10b981',
     alive: true,
+    spawnCol: 7,
+    spawnRow: 9,
+  }),
+  Object.assign(makeEntity(3, 9, 'ghost'), {
+    project: projects.find((p) => p.slug === 'palmaura'),
+    color: '#ec4899',
+    alive: true,
+    spawnCol: 3,
+    spawnRow: 9,
   }),
 ];
 
@@ -254,7 +263,7 @@ function resetGame() {
   player.queueDir = null;
 
   for (const g of ghosts) {
-    const spawn = g.kind === 'ghost' ? { c: 7, r: 9 } : { c: g.col, r: g.row };
+    const spawn = g.kind === 'ghost' ? { c: g.spawnCol, r: g.spawnRow } : { c: g.col, r: g.row };
     g.col = spawn.c; g.row = spawn.r;
     g.fromCol = spawn.c; g.fromRow = spawn.r;
     g.toCol = spawn.c;   g.toRow = spawn.r;
