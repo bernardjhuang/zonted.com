@@ -427,12 +427,17 @@ def extract_excerpt(filepath):
     m = re.search(r'<p class="dropcap">(.*?)</p>', content, re.DOTALL)
     if m:
         parts.append(strip_tags(m.group(1)))
-    tldr = re.search(r'<div class="tldr">(.*?)</div>\s*\n', content, re.DOTALL)
-    if tldr:
-        thesis = re.search(r'<p class="tldr-thesis">(.*?)</p>', tldr.group(1), re.DOTALL)
+    # The tldr div contains nested divs, so a non-greedy </div> match would
+    # stop at the first child. Slice from the opener to the next <h2 instead —
+    # the TL;DR block always precedes the first body heading.
+    start = content.find('<div class="tldr">')
+    if start != -1:
+        end = content.find('<h2', start)
+        tldr_html = content[start:end] if end != -1 else content[start:start + 8000]
+        thesis = re.search(r'<p class="tldr-thesis">(.*?)</p>', tldr_html, re.DOTALL)
         if thesis:
             parts.append(strip_tags(thesis.group(1)))
-        bullets = [strip_tags(b) for b in re.findall(r'<li>(.*?)</li>', tldr.group(1), re.DOTALL)]
+        bullets = [strip_tags(b) for b in re.findall(r'<li>(.*?)</li>', tldr_html, re.DOTALL)]
         if bullets:
             parts.append(' • '.join(bullets))
     if not parts:
