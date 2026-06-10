@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>How to Turn a Photo Into Game-Ready Pixel Sprites for $5</title>
+    <meta name="description" content="PixelForge is live. Upload a portrait, get a game-ready pixel sprite pack — 4×4 walk sheet, transparent frames, engine files — for $5. The pipeline, plus the first $5.">
+    <link rel="canonical" href="https://zonted.com/posts/pixelforge-launch/">
+    <meta property="og:title" content="How to Turn a Photo Into Game-Ready Pixel Sprites for $5">
+    <meta property="og:description" content="PixelForge is live: one portrait in, a real sprite pack out. AI draws the 4×4 sheet; deterministic Python finishes it. Built in days, shipped inside Ship or Die, first customer already in.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/resources/pixelforge-launch/how-it-works-pipeline.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/pixelforge-launch/how-it-works-pipeline.png">
+    <meta property="og:url" content="https://zonted.com/posts/pixelforge-launch/">
+    <meta property="article:published_time" content="2026-06-10">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"How to Turn a Photo Into Game-Ready Pixel Sprites for $5","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-06-10","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/pixelforge-launch/","description":"PixelForge is live. Upload a portrait, get a game-ready pixel sprite pack — 4×4 walk sheet, transparent frames, engine files — for $5. The pipeline, plus the first $5."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"PixelForge Is Live"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/games/">Games</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#what-you-get">What five dollars buys</a></li>
+            <li><a href="#how-it-works">How it works</a></li>
+            <li><a href="#the-build">The build</a></li>
+            <li><a href="#ship-or-die">Ship or Die</a></li>
+            <li><a href="#first-five">The first $5</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#what-you-get">What five dollars buys</a></li>
+        <li><a href="#how-it-works">How it works</a></li>
+        <li><a href="#the-build">The build</a></li>
+        <li><a href="#ship-or-die">Ship or Die</a></li>
+        <li><a href="#first-five">The first $5</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>PixelForge Is Live</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">June 10, 2026 &middot; 4 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p class="dropcap">Sunday, June 7, 10:33 AM. A Stripe notification I'd never received before: <em>&ldquo;Congratulations, Bernard Huang! You've just received your first payment.&rdquo;</em> Five dollars. A stranger uploaded a photo, my pipeline turned it into a game character, and they paid for it while I was doing something else entirely. <a href="https://pixel-forge.net" rel="noopener">PixelForge</a> is live, and this post is the launch story plus the how-it-works.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis"><a href="https://pixel-forge.net" rel="noopener">PixelForge</a> turns a portrait photo into a game-ready pixel sprite pack &mdash; a strict 4&times;4 walk sheet, transparent frames, directional strips, and looping walk GIFs &mdash; for $5. No account, no subscription, money-back if it fails QA.</p>
+                <ul>
+                    <li><strong>The trick isn't the AI.</strong> AI draws the sheet; deterministic Python finishes it &mdash; key-color removal, per-frame feet alignment, transparent extraction. &ldquo;Generated by AI, finished by code.&rdquo;</li>
+                    <li><strong>Built in days</strong> with the <a href="/posts/plan-3x-build-once/">plan-3x loop</a> + GPT 5.5. The real work was the cleanup pipeline, not the generation.</li>
+                    <li><strong>Shipped inside <a href="https://www.ship-or-die.com/" rel="noopener">Ship or Die</a></strong> &mdash; the community where you launch in 30 days or get kicked out forever.</li>
+                    <li><strong>First customer: June 7</strong>, a Ship or Die crew member. $5, receipt below.</li>
+                </ul>
+            </div>
+
+            <h2 id="what-you-get">What five dollars buys</h2>
+
+            <p>One portrait in, a real sprite pack out: a strict 4&times;4 sprite sheet (down/left/right/up), every frame as an individual transparent PNG, directional strips, and looping walk animations &mdash; sized to drop straight into <strong>Godot, Unity, Phaser, GameMaker, or a web engine</strong>, with engine notes included. There's no account and no subscription; checkout is a Stripe button, and if a pack fails quality checks, you get your money back. The pitch on the site is the honest one: <em>put anyone into your game</em> &mdash; you, your cofounder, your dog's walker, the friend who said your game idea was dumb.</p>
+
+            <h2 id="how-it-works">How it works: generated by AI, finished by code</h2>
+
+            <figure style="margin:1.5rem 0 2rem;">
+              <img src="https://img.zonted.com/resources/pixelforge-launch/how-it-works-pipeline.png" width="980" height="580" alt="PixelForge pipeline: a source portrait becomes a strict 4×4 sprite sheet, then deterministic Python repairs and extracts a transparent walking GIF." loading="lazy" style="border:1px solid var(--border);border-radius:8px;" />
+              <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;text-align:center;">The production line: source photo &rarr; strict 4&times;4 sheet &rarr; repaired, transparent, walking. (Yes, that's me.)</figcaption>
+            </figure>
+
+            <p>The three steps:</p>
+
+            <ol>
+                <li><strong>Upload a portrait.</strong> One clear photo of a face is enough.</li>
+                <li><strong>AI draws the sheet.</strong> The model generates a strict 4&times;4 grid &mdash; four directions, four frames each &mdash; in a consistent pixel style.</li>
+                <li><strong>Code finishes the job.</strong> Deterministic Python removes the key color, aligns every frame's feet to a baseline, and packages real, transparent files.</li>
+            </ol>
+
+            <p>Step 3 is the product. Raw AI sprite sheets are 90% there and 100% unusable: backgrounds baked into frames, characters drifting off their baseline so they bounce when they walk, grids that are <em>almost</em> regular. Every &ldquo;AI sprite generator&rdquo; demo you've seen stops at step 2 and hands you a PNG you still have to slice by hand. The unsexy pipeline work &mdash; the part a model can't vibe its way through &mdash; is what makes the output droppable into an engine. As the site puts it: <em>not a one-click filter &mdash; a tiny production line.</em></p>
+
+            <h2 id="the-build">The build: days, not weeks</h2>
+
+            <p>PixelForge went from idea to live product in days, on the same loop as <a href="/posts/plan-3x-build-once/">everything else I ship</a>: plan three times with independent models, reconcile, then let GPT 5.5 build. The generation side came together fast &mdash; the grinding was all in the deterministic pipeline: detecting the grid reliably, keying out backgrounds without eating the character's outline, and getting sixteen frames of feet to agree on where the floor is. The web app itself is the boring part on purpose: a page, an upload, a Stripe button, and a public bench where you can watch recent jobs go through.</p>
+
+            <h2 id="ship-or-die">Ship or Die</h2>
+
+            <p>This one didn't ship on discipline alone. I'm in <a href="https://www.ship-or-die.com/" rel="noopener">Ship or Die</a> &mdash; Marc Lou and Jack Friks' community with one rule: <strong>ship a startup in 30 days or get kicked out forever.</strong> $269 to enter, daily check-ins, your mission is public, and missing the deadline means getting marked overboard in front of everyone, no refund. A launchable link, one feature, a buy button &mdash; or the plank.</p>
+
+            <p>I find the design genuinely funny given <a href="/posts/stakes-priming-surface-area/">what I just published about stakes</a>: threats don't make AI models work better &mdash; but I paid $269 to have a Discord threaten <em>me</em>, and the product is live, so draw your own conclusions about humans. The practical value is real: a hard deadline, a crew of people shipping alongside you, and an allergy to scope creep. &ldquo;One feature and a buy button&rdquo; is exactly the right spec for a $5 product.</p>
+
+            <h2 id="first-five">The first $5</h2>
+
+            <figure style="margin:1.5rem 0 2rem;">
+              <img src="https://img.zonted.com/resources/pixelforge-launch/stripe-first-payment.png" width="1022" height="654" alt="Stripe email: Congratulations Bernard Huang, you've just received your first payment — $5.00, June 7, 2026." loading="lazy" style="border:1px solid var(--border);border-radius:8px;" />
+              <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;text-align:center;">The first $5, June 7 at 10:33 AM. Framed, obviously.</figcaption>
+            </figure>
+
+            <p>The first customer came from the Ship or Die crew &mdash; which is part of what the $269 buys: a room full of people who actually try each other's products. Five dollars doesn't change a P&amp;L. What it changes is the claim. Before June 7, PixelForge was a pipeline that worked on my photos. After 10:33 AM, it's a product a stranger found, used, and paid for, end to end, with no human in the loop. For a portfolio full of projects measured in views and burn rates &mdash; and <a href="/posts/palmaura-postmortem/">one that died at Apple's door</a> without a single user &mdash; a working buy button is its own kind of milestone.</p>
+
+            <p>It's live now: <a href="https://pixel-forge.net" rel="noopener"><strong>pixel-forge.net</strong></a>. Upload a face, get a character, put someone you love (or someone you want to make walk into walls) into your game. The bench is public, the price is $5, and the next post in this series will have the numbers &mdash; traffic, packs, unit economics &mdash; once there are enough of them to be honest about.</p>
+
+        </div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/plan-3x-build-once/">Plan 3×, Build Once: How Three Models Plan What One Model Ships</a><p class="zn-recommended-dek">We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/stakes-priming-surface-area/">Does Threatening an AI Actually Get You Better Work? I Tested It 12 Times</a><p class="zn-recommended-dek">I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn&#x27;t exist; discretionary…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/kapiko-postmortem/">Kapiko: a 10-day, $150 post-mortem</a><p class="zn-recommended-dek">Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Portfolio</a>
+            <a href="/games/">Games</a>
+            <a href="/ai-stack/">AI Stack</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
