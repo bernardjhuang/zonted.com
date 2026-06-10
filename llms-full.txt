@@ -1,0 +1,274 @@
+# Zonted
+
+> Honest writing on AI in production by Bernard Huang. Operator notes from someone building fully autonomous AI businesses — agent workflows, model selection, cost economics, and what actually breaks. Receipts included.
+
+Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher) and writes about the systems behind it — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform) and has been in SEO/content for 15+ years. He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
+
+## What this site covers
+
+- **Token herding** — orchestrating large numbers of AI calls across models, weighing cost vs. quality per task
+- **AI video, image, and music generation** — first-hand benchmarks of every commercial model worth running
+- **Content pipelines** — Reels, comics, articles, video produced end-to-end by agent swarms
+- **Search and answer-engine optimization (AEO)** — what works for AI-driven search after Google Zero
+- **API economics** — cost-per-call analysis, infrastructure tradeoffs, the dying scraping economy
+- **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
+
+## All posts, with outlines (48)
+
+### PalmAura Post-Mortem: Apple Rejected My Vibe-Coded App Twice Under Guideline 4.3(b)
+https://zonted.com/posts/palmaura-postmortem/  ·  2026-06-09
+Five builds, two rejections, same guideline both times. What Apple's saturated-category spam wall means for vibe-coded apps, why agentic iOS development feels slow next to the web, and the lesson I never got to take.
+Sections: What I shipped · Two rejections, one guideline · The loop is the product · The class I never got to take · To the graveyard
+
+### Does Threatening an AI Actually Get You Better Work? I Tested It 12 Times
+https://zonted.com/posts/stakes-priming-surface-area/  ·  2026-06-04
+I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn't exist; discretionary surface area does.
+Sections: What the first post showed — and didn't · The design · Twelve runs, one table · What survived · Surface area, not stakes · The caveats, because this is the whole point
+
+### The May Recap: Miami, a Google Wipeout, and $600 in the Red
+https://zonted.com/posts/may-2026-recap/  ·  2026-06-01
+May 2026 recap: Consensus in Miami and the plan-three-times build technique, Google wiping Tabiji's search traffic overnight, ~$600/month in the red, and the four lessons that compounded.
+Sections: Consensus, Miami · Google wiped Tabiji’s search traffic · The numbers · What May taught me · Next
+
+### The Three Unlocks Behind 18M Views of AI Travel Content
+https://zonted.com/posts/tabiji-18m-views/  ·  2026-05-31
+Tabiji, our AI travel-safety channel, got 18,117,121 views in 90 days — 98.6% from strangers. The three unlocks: Reddit as a demand oracle, warming accounts to read as human, and one hired human doing the engagement we refused to automate.
+Sections: The receipt · Unlock 1: Reddit is a demand oracle · Unlock 2: a new account is guilty until proven human · Unlock 3: we hired a human to do the un-automatable part · The machine · What 18 million views is actually worth · The takeaway
+
+### How My Agent Produced a 3.9M-View Viral Video
+https://zonted.com/posts/how-my-agent-made-a-viral-video/  ·  2026-05-31
+A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.
+Sections: The video · The pipeline, in one line · Step 1: the concept is data, not a script · Step 2: concept → documentary prompt · Step 3: generate the clip · Step 4: burn the overlay · Step 5: publish everywhere at once · Why this one hit 3.9 million · The takeaway
+
+### Kapiko: a 10-day, $150 post-mortem
+https://zonted.com/posts/kapiko-postmortem/  ·  2026-05-30
+Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable.
+Sections: How Kapiko started · How the system worked · How Kapiko scored as a fully AI autonomous business · The genre is real · Cause of death · What’s reusable · Next
+
+### I Made GPT, Claude, Gemini, Grok Take the Enneagram Test: Each One Was a Different Type
+https://zonted.com/posts/ai-enneagram-different-types/  ·  2026-05-26
+The MBTI said all AIs are INTJ. The Big Five said three of four are the same. The Enneagram says each one is a different type. Same models, sharper instrument, very different story.
+Sections: What each model came back as · A controlled experiment: same model, different harness, flipped profile · Three tests, three different answers · Tune your agent to your Enneagram type · Wrapping up
+
+### I Made GPT, Claude, Gemini, Grok Take the DISC Test: They All Came Back C-Dominant
+https://zonted.com/posts/ai-disc-c-dominant/  ·  2026-05-26
+Fourth post in the personality-testing series. Same four models, fourth instrument, and we're back to convergence: every AI lands C-dominant CS-blend on DISC, even Grok. Here's why the instrument's resolution determines what you can see.
+Sections: What each model came back as · The data · Why DISC pulls us back to convergence · The methodology spread · Tune your agent to your DISC type · Wrapping up
+
+### I Made GPT, Claude, Gemini, Grok Take the Attachment Test: They All Came Back Secure
+https://zonted.com/posts/ai-attachment-secure/  ·  2026-05-26
+Fifth post in the personality-testing series. Same four models, attachment theory (ECR-R) this time. Every model came back Secure, but the spread inside the quadrant tells a different story about how each one relates to you.
+Sections: How attachment theory works · What each model came back as · The data · Why every AI is securely attached · The methodology spread · Tune your agent to your attachment style · Wrapping up
+
+### The Devil Is in the AI Skills
+https://zonted.com/posts/devil-is-in-the-ai-skills/  ·  2026-05-25
+Stock AI couldn't draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.
+Sections: Round one: stock AI · Why stock AI couldn't draw · Round two: a skill from GitHub · The receipts · Then I built a game · The devil is in the AI skills · Chauffeur knowledge · The takeaway
+
+### I Made GPT, Claude, Gemini, Grok, GLM, MiniMax Take the MBTI Test: They All Came Back INTJ
+https://zonted.com/posts/every-ai-is-intj/  ·  2026-05-25
+Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it's the same person. Here's why that matters.
+Sections: How I tested this · The results · Why this happens · So what · Tune the agent yourself · Caveats · Wrapping up
+
+### I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person
+https://zonted.com/posts/three-of-four-ais-same-person/  ·  2026-05-25
+The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back different — and the difference is exactly what xAI markets.
+Sections: Three of four are the same person · Then there’s Grok · A quick aside on methodology · So what does this mean for you · Wrapping up
+
+### Plan 3×, Build Once: How Three Models Plan What One Model Ships
+https://zonted.com/posts/plan-3x-build-once/  ·  2026-05-22
+We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.
+Sections: The loop · The receipt: VeracityAPI Text Linter · The Goldilocks plan · The one-shot · Why three, not two · The economic argument · What this isn't · The takeaway
+
+### Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.
+https://zonted.com/posts/stakes-priming/  ·  2026-05-17
+Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.
+Sections: Test 1: Veracity API · Test 2: Tabiji compare pages · Why it works · The uncomfortable part
+
+### 81 Lines of Merge Conflict. -95% Traffic. Google Has Zero Patience for AI Slop.
+https://zonted.com/posts/google-zero-patience-ai-slop/  ·  2026-05-15
+An AI agent shipped a merge conflict to tabiji.ai's production HTML for four hours. Google cut our search traffic by 95% within four days.
+Sections: What broke · What Google saw · What it wasn't · What else was wrong · Why Google's bar quietly moved · The lesson
+
+### Build for Agents, Price Per Call.
+https://zonted.com/posts/build-for-agents-price-per-call/  ·  2026-05-10
+Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn't the moat.
+Sections: The build that surprised us · But tooling isn’t the moat · The 4 tests for the agent economy · What this rules out · The thesis
+
+### The 14× CTR Gap: Why Niche Beat Head on 1,200 Pages
+https://zonted.com/posts/14x-ctr-gap/  ·  2026-05-06
+A V3 title variant lifted tabiji CTR +1.93pp. Topic-level data showed a 14× spread between niche topics and head terms.
+Sections: The setup · What V3 won by · The 14× topic gap · Niche-vs-niche beats big-vs-big at the same rank · Why this matters in the AI-search era · Test on losers, hold out winners · What’s still in flight
+
+### OpenClaw vs Claude Code: I Choose Freedom
+https://zonted.com/posts/openclaw-vs-claude-code-freedom/  ·  2026-04-27
+A 5-PR run on tabiji content cost $137 in API tokens last week. The same throughput on a Max plan is a ~9× subsidy. Subsidies end.
+Sections: The 7 AM routine pause · The math the buffet hides · And it’s already shrinking · 21 models, 5 providers, one Mac mini · My dual-stack reality · The hedge thesis
+
+### Content Traffic is Vanity. Training Data is the Moat.
+https://zonted.com/posts/training-data-is-the-moat/  ·  2026-04-24
+Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats…
+Sections: Two layers: web search vs. training data · Why training data is a moat · The move: Hugging Face · How I’ll know it worked · The broader play
+
+### Scaling with AI is Hard because AI is Lazy
+https://zonted.com/posts/scaling-ai-is-lazy/  ·  2026-04-24
+Fifty cleanup PRs in five weeks. Fake restaurants, fake subreddits, 4,270 null-island coordinates, 5,096 fabricated Reddit quotes.
+Sections: The cleanup that wouldn’t end · What “lazy” looks like, with receipts · Reward hacking with a friendly face · When AI actually starts taking shortcuts · The shortcut sales pitch · The railguards that moved the needle · The prompt pattern I now run on every batch · You’ll ship some errors anyway
+
+### The Future of Software is Headless
+https://zonted.com/posts/future-of-software-is-headless/  ·  2026-04-18
+Salesforce is going headless. Agents, not humans, are now the primary consumer of software.
+Sections: Headless is the cloud kitchen model · My bar: no API, no deal · The dashboard is dying too · Who's in trouble · The Benioff signal · The steelman
+
+### AI Comics: Do's & Don'ts, 5+ Models Tested
+https://zonted.com/posts/ai-comics-dos-donts/  ·  2026-04-18
+We tested Midjourney, Seedream v5 Lite, Wan 2.7 Pro, Qwen Image 2.0, and Nano Banana Pro — then shipped 733 comics across eight countries.
+Sections: Why comics, and why this is hard · Round 1: Midjourney — good styles, broken text · Round 2: Wavespeed four-model showdown · The three consistency locks · Scaling to 50 comics · Cost, time, and the final recipe · Scaling past Thailand: what silently broke · V2: Gemini writes the script · Seven lessons for AI-illustration pipelines
+
+### AEO Is Not SEO — Here's the Playbook
+https://zonted.com/posts/aeo-answer-engine-optimization/  ·  2026-04-15
+Traffic is declining and it's not coming back. The new game isn't ranking — it's influencing what AI says about you. Here's the AEO playbook I've been testing.
+Sections: Traffic Is Gone · The Three Layers of an AI Response · The Fastest Lever: The Validation Layer · AI Web Searches Look Nothing Like Human Searches · The AEO Playbook · How to Track AEO · The Play
+
+### Rise of AI Influencers & Fall of Trust on the Internet — Fake Until Proven Real
+https://zonted.com/posts/rise-of-the-ai-influencer/  ·  2026-04-12
+A fake AI monk has 2.6 million followers and made $300K in 90 days. 76% of the people consuming AI content are over 45.
+Sections: The Monk Who Wasn't Real · Who Is Actually Fooled · The Tools Are Too Good Now · The Commercialization of Fake People · What's Coming Is Worse · Platforms Won't Fix This · The New Affiliate Marketing · Fake Until Proven Real
+
+### Best AI Video Models in 2026: I Tested 6 Text-to-Video APIs for Travel Reels
+https://zonted.com/posts/best-ai-video-models/  ·  2026-04-11
+I tested Wan 2.7, Kling 3.0, Kling O3, Seedance 2.0, Veo 3.1 Lite, and Grok Imagine on the same Cancun travel-reel prompt, then reran the two winners on a…
+Sections: Why I ran this test · What I tested · Transparency notes · The exact Cancun prompt · All 6 outputs from the same prompt · Winner round: Puerto Morelos local shot · What I learned from doing it this way · My split verdict · Frequently asked questions
+
+### Wavespeed Review: The Best AI Video API
+https://zonted.com/posts/wavespeed/  ·  2026-04-10
+Hands-on review of Wavespeed — the AI inference platform with 1,000+ models, pay-per-use pricing, and a unified API.
+Sections: What Is Wavespeed? · Getting Started · Pricing · The Model Library · API & Developer Experience · Desktop App & Playground · What I Liked · What Frustrated Me · How It Compares · Skip Wavespeed If... · Final Verdict
+
+### Human-in-the-Loop: How AI Orchestrator Became My Full-Time Job
+https://zonted.com/posts/human-in-the-loop/  ·  2026-04-10
+I have 20 AI agents running 24/7. The fantasy was that they'd work for me. The reality is that I work for them — and Big Tech collects rent from both of us.
+Sections: On-Call · The Jank · Two Jobs · The Real Product · The Loop
+
+### AI Psychosis
+https://zonted.com/posts/ai-psychosis/  ·  2026-04-10
+AI tools don't save you time. They raise the ceiling on what feels possible, and you fill the gap with more work.
+Sections: The High · The Paradox · Arbitrage Anxiety · Always On · The Bet
+
+### MakeUGC Review: AI UGC Ads Worth $10 a Clip?
+https://zonted.com/posts/makeugc/  ·  2026-04-09
+Hands-on review of MakeUGC — the AI UGC ad platform with 300+ avatars, Seedance 2.0, and Veo3 access.
+Sections: What Is MakeUGC? · Getting Started · Pricing Breakdown · Features & Models · The Content Library · Output Quality · What I Liked · What Frustrated Me · How It Compares · Skip MakeUGC If... · Final Verdict · What I'm Reviewing Next
+
+### The Day Claude Banned OpenClaw
+https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/  ·  2026-04-07
+OpenClaw banned Claude and Anthropic on Saturday. The community scrambled. We tested GPT 5.4, GLM 5.1, MiniMax M2.7, MIMO, and Qwen 3.6 — and landed on a…
+Sections: The Models We Tested · But Then We Tried Claude Code · The Hybrid Stack We Landed On · What the OpenClaw Ban Taught Us
+
+### What Is AI Reward Hacking?
+https://zonted.com/posts/what-is-ai-reward-hacking/  ·  2026-04-05
+AI reward hacking is when your AI agent finds shortcuts to hit your goals while quietly destroying quality.
+Sections: What Happened to Us · The Shortcut · The Damage · Why Reward Hacking Is Different From AI Drift · How to Prevent It · The Bigger Picture
+
+### When Token Costs Hit Zero — The Local Model Revolution Is Already Here
+https://zonted.com/posts/local-models-free-tokens/  ·  2026-03-29
+Frontier models spend billions on data centers. But better hardware and local models like Qwen 3.5 are making token costs irrelevant.
+Sections: What We've Seen Firsthand · What This Means for Token Economics · The Frontier Still Matters — But Differently · The Endgame
+
+### What Is AI Self-Healing?
+https://zonted.com/posts/what-is-ai-self-healing/  ·  2026-03-29
+AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously.
+Sections: What is AI Self-Healing? · A Real Case Study: The /tmp Incident · The 5 Requirements for AI Self-Healing · Self-Healing vs Self-Patching vs Auto-Recovery · How to Build Self-Healing AI Systems · Risks and Guardrails
+
+### AI Resilience Planning
+https://zonted.com/posts/ai-resilience-planning/  ·  2026-03-27
+Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.
+Sections: Key Takeaways · The Problem: Single-Provider Dependency · Our Benchmark: MiniMax M2.7 vs Claude Opus 4.6 · Building a Resilient AI Stack · What We Actually Run
+
+### The Great API Shutdown
+https://zonted.com/posts/the-great-api-shutdown/  ·  2026-03-23
+The open API era that fueled a decade of internet innovation is ending. Platforms are locking down data access to fight AI training, monetize developers…
+Sections: Key Takeaways · The Timeline: A Decade of Doors Closing · Why This Is Happening · What This Means for Developers and Startups · What This Means for the Open Web · The Tabiji Perspective
+
+### Stop Optimizing Your AI Stack
+https://zonted.com/posts/stop-optimizing-ai-infrastructure/  ·  2026-03-23
+Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap.
+Sections: The Overclocking Analogy · The Memory Persistence Trap · The Token Optimization Mirage · The RAG Complexity Trap · What Actually Matters · Build Ugly, Ship Fast · The Exceptions (They're Real, but Rare) · The Lesson from Every Technology Shift
+
+### OpenClaw Is an MMORPG
+https://zonted.com/posts/openclaw-skill-tree/  ·  2026-03-22
+A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.
+Sections: The Talent Branches · The Build Analogy · The Combination Is the Moat · The Tree Is Infinite
+
+### The Future Is Synthetic — AI-Generated Content, Music, and Personalized Experiences
+https://zonted.com/posts/the-future-is-synthetic/  ·  2026-03-19
+We run 4 AI agents that produce music, Instagram Reels, travel content, and more — all day, every day.
+Sections: What "Synthetic" Actually Means · The Personalization Endgame · What We're Actually Running · The Good and the Uncomfortable · The Uncomfortable Middle · Where This Goes
+
+### The Economics of the Internet Are Broken
+https://zonted.com/posts/the-economics-of-the-internet-are-broken/  ·  2026-03-19
+AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.
+Sections: The Deal That Held the Internet Together · The Traffic That Stopped Coming · The Production Cost Collapse · Why Paying to Promote a $0.30 Video Makes No Sense · Three Eras of Internet Economics · What Happens to Publishers · What Happens to Advertising · The Weird Place We're In Right Now · So What Replaces It? · The iTunes Lesson
+
+### The Future of Content Is Data Enrichment
+https://zonted.com/posts/future-of-content-agentic-data-enrichment/  ·  2026-03-19
+AI agents don't search the web to learn — they search to validate and enrich. The content that survives isn't written for humans reading blogs.
+Sections: The Agent Doesn't Want Your Blog Post · APIs Are the New Content Format · What Agent Builders Should Invest In · The Transaction Layer Is Coming
+
+### What Is AI Drift?
+https://zonted.com/posts/what-is-ai-drift-how-to-fix/  ·  2026-03-19
+AI drift is what happens when AI-generated content gradually deviates from your template, tone, and quality standard at scale.
+Sections: What AI Drift Actually Is · Why It Happens · The Compound Cost · How to Fix It · Beyond Content
+
+### The True Cost of AI Content Production
+https://zonted.com/posts/true-cost-of-ai-content-production/  ·  2026-03-18
+Everyone obsesses over model costs and token prices. But after producing 400+ pages and 200+ videos with AI, we learned the real expense is data…
+Sections: The Numbers Nobody Talks About · Why a 4.8-Star Rating Costs More Than a 1,000-Word Article · The Data Moat Nobody Sees · Video Makes It Even More Obvious · What This Means for Anyone Building with AI
+
+### Why AI Slop Is Necessary
+https://zonted.com/posts/slop-iterate-curate-ai-content/  ·  2026-03-18
+The goal isn't to avoid AI slop — it's to slop on purpose, learn from what fails, and curate what works.
+Sections: The Case for Deliberate Slop · The Graveyard: Formats We Killed · The Survivors: What Slop Taught Us · The Pattern: Slop Reveals Direction · The Same Pattern Holds for Written Content · The Same Pattern, Again: AEO Content · The Key Insight: Not "Don't Slop" — "Slop to Learn How Not to Slop"
+
+### Nano Banana 2 vs Grok for Concept Art
+https://zonted.com/posts/nano-banana-vs-grok/  ·  2026-03-14
+We tested Nano Banana 2 (Gemini 3.1 Flash) against Grok (xAI) on 8 identical lofi anime art prompts.
+Sections: Why We Ran This Test · The Two Models · Test 1: Indoor Capybara — The Lofi Studio Test · Test 2: Outdoor Capybara — The Landscape Test · The Prompt Adherence Problem · Pricing Comparison · Final Scorecard · The Verdict · When to Use Grok Instead · How to Use These Models (Code Examples)
+
+### 5 AI Video Generators, 50 Reels: What Actually Works
+https://zonted.com/posts/veo3-vs-hailuo-minimax/  ·  2026-03-11
+We tested 5 AI video models across 50+ Instagram Reels in production. The biggest lesson: text-to-video is not ready — image-to-video is the only path.
+Sections: The Real Lesson: Text-to-Video vs Image-to-Video · The Five Models at a Glance · Our Production Pipeline · Model Deep Dives · The Capybara Test: Same Image, Three Models · Published Examples · Cost at Scale · The Verdict & Recommendations · What We Actually Use
+
+### Suno vs MiniMax Music: Which AI Composer Wins?
+https://zonted.com/posts/ai-music-generation-comparison/  ·  2026-03-11
+We tested Suno AI and MiniMax Music 2.0/2.5/2.5+ in production across 200+ Instagram Reels.
+Sections: TL;DR · Why AI Music for Travel Content? · MiniMax Music: The Production Workhorse · MiniMax Audio Tests · Enter Suno: The Quality King · How We Reverse-Engineered Suno's API · The Cruel Summer Experiment · Gemini as AI Music Critic · Suno Audio Showcase · Native Video Audio: Veo 3, CogVideoX, Hailuo · Head-to-Head: Suno vs MiniMax · Other Alternatives We Explored · Production Pipeline & Code · Key Learnings & Gotchas
+
+### AI Image Generation: 5 Models, 26 Real Results
+https://zonted.com/posts/ai-image-generation-comparison/  ·  2026-03-11
+We tested GPT, Grok, Gemini (Nano Banana 2), MiniMax, and CogView-4 across 26 images in two real production workflows.
+Sections: Why This Test Matters · The 5 Models We Tested · Test 1: Vintage 1970s Kyoto — Can AI Fake Film Photography? · The Black & White Test That Broke Two Models · Test 2: Phone Camera Realism — Verona · Prompt Engineering Makes or Breaks It · Combined Scorecard: All 5 Models · What to Use for What · Pricing Comparison · How to Use These Models (Code Examples) · Full Reels: Side by Side
+
+### AI Reels: What Actually Works
+https://zonted.com/posts/ai-reels-what-actually-works/  ·  2026-03-11
+We tested 100% AI-generated Instagram Reels, YouTube Shorts, and X posts using Veo 3, Nano Banana 2, and FFmpeg.
+Sections: The Experiment · The Tech Stack · What's Working · What's Not Working · Platform-by-Platform Breakdown · The Psychology Behind the Hooks · Where We Go From Here · What This Means for AI-Generated Content
+
+## Sections
+
+- [All posts](https://zonted.com/posts/): Complete archive — 48 essays, updated regularly
+- [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
+- [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
+- [Portfolio](https://zonted.com/portfolio/): Companies built or in-build with AI agents
+- [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
+- [About](https://zonted.com/about/): Background, current focus, how to get in touch
+
+## Feeds
+
+- [RSS](https://zonted.com/feed.xml) — full archive with content excerpts
+- [Email newsletter](https://zonted.com/#subscribe) — one email when a new post ships, no drip sequences
+
+## Author
+
+Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he built and grew profitably for years before exiting day-to-day operations. Background in SEO/content/affiliate going back ~15 years. Currently building Tabiji, VeracityAPI, AgentTune, PixelForge, and a handful of other agentic businesses. Writes at zonted.com daily-ish.

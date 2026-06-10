@@ -375,6 +375,10 @@ def generate_sitemap(articles):
     urls.append(('/metrics/', '0.7', today))
     # About
     urls.append(('/about/', '0.6', today))
+    urls.append(('/games/', '0.7', today))
+    urls.append(('/games/graveyard/', '0.6', today))
+    urls.append(('/games/life-of-fry/', '0.6', today))
+    urls.append(('/games/run-to-rebecca/', '0.6', today))
 
     # Articles
     for a in articles:
@@ -409,17 +413,58 @@ def generate_sitemap(articles):
 # RSS feed generation
 # ---------------------------------------------------------------------------
 
+def extract_excerpt(filepath):
+    """Plain-text excerpt for content:encoded — dropcap lead + TL;DR thesis and
+    bullets when present, else the first couple of substantial paragraphs.
+    Gives AI/RSS readers real content without shipping the full article HTML."""
+    try:
+        content = open(filepath, encoding='utf-8').read()
+    except OSError:
+        return ''
+    def strip_tags(s):
+        return html.unescape(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', ' ', s))).strip()
+    parts = []
+    m = re.search(r'<p class="dropcap">(.*?)</p>', content, re.DOTALL)
+    if m:
+        parts.append(strip_tags(m.group(1)))
+    tldr = re.search(r'<div class="tldr">(.*?)</div>\s*\n', content, re.DOTALL)
+    if tldr:
+        thesis = re.search(r'<p class="tldr-thesis">(.*?)</p>', tldr.group(1), re.DOTALL)
+        if thesis:
+            parts.append(strip_tags(thesis.group(1)))
+        bullets = [strip_tags(b) for b in re.findall(r'<li>(.*?)</li>', tldr.group(1), re.DOTALL)]
+        if bullets:
+            parts.append(' • '.join(bullets))
+    if not parts:
+        body = re.search(r'<div class="article-body">(.*?)$', content, re.DOTALL)
+        scope = body.group(1) if body else content
+        for para in re.findall(r'<p[^>]*>(.*?)</p>', scope, re.DOTALL):
+            txt = strip_tags(para)
+            if len(txt) > 80:
+                parts.append(txt)
+            if len(parts) >= 2:
+                break
+    out = ' '.join(parts)
+    return out[:1800].rsplit(' ', 1)[0] + '…' if len(out) > 1800 else out
+
+
 def generate_feed(articles):
     items = []
     for a in articles:
         pub_date = format_date_rfc822(a['date']) if a['date'] else ''
         desc_escaped = html.escape(a['description'])
         link = f'{SITE_URL}/{a["slug"]}/'
+        excerpt = extract_excerpt(a['filepath'])
+        content_block = (
+            f'      <content:encoded><![CDATA[{excerpt}]]></content:encoded>\n'
+            if excerpt else ''
+        )
         items.append(
             f'    <item>\n'
             f'      <title>{html.escape(a["title"])}</title>\n'
             f'      <link>{link}</link>\n'
             f'      <description>{desc_escaped}</description>\n'
+            + content_block +
             f'      <pubDate>{pub_date}</pubDate>\n'
             f'      <author>bernard@zonted.com (Bernard Huang)</author>\n'
             f'      <guid isPermaLink="true">{link}</guid>\n'
@@ -428,7 +473,7 @@ def generate_feed(articles):
 
     feed = (
         '<?xml version="1.0" encoding="UTF-8"?>\n'
-        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">\n'
         '  <channel>\n'
         '    <title>Zonted</title>\n'
         f'    <link>{SITE_URL}/</link>\n'
@@ -446,6 +491,86 @@ def generate_feed(articles):
         f.write(feed)
 
     return len(items)
+
+
+# ---------------------------------------------------------------------------
+# llms.txt / llms-full.txt generation
+# ---------------------------------------------------------------------------
+# Hand-written intro preserved verbatim; the post list regenerates on every
+# build so AI crawlers always see the complete, current archive.
+
+LLMS_INTRO = """# Zonted
+
+> Honest writing on AI in production by Bernard Huang. Operator notes from someone building fully autonomous AI businesses — agent workflows, model selection, cost economics, and what actually breaks. Receipts included.
+
+Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher) and writes about the systems behind it — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform) and has been in SEO/content for 15+ years. He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
+
+## What this site covers
+
+- **Token herding** — orchestrating large numbers of AI calls across models, weighing cost vs. quality per task
+- **AI video, image, and music generation** — first-hand benchmarks of every commercial model worth running
+- **Content pipelines** — Reels, comics, articles, video produced end-to-end by agent swarms
+- **Search and answer-engine optimization (AEO)** — what works for AI-driven search after Google Zero
+- **API economics** — cost-per-call analysis, infrastructure tradeoffs, the dying scraping economy
+- **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
+"""
+
+LLMS_OUTRO = """## Sections
+
+- [All posts](https://zonted.com/posts/): Complete archive — {count} essays, updated regularly
+- [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
+- [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
+- [Portfolio](https://zonted.com/portfolio/): Companies built or in-build with AI agents
+- [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
+- [About](https://zonted.com/about/): Background, current focus, how to get in touch
+
+## Feeds
+
+- [RSS](https://zonted.com/feed.xml) — full archive with content excerpts
+- [Email newsletter](https://zonted.com/#subscribe) — one email when a new post ships, no drip sequences
+
+## Author
+
+Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he built and grew profitably for years before exiting day-to-day operations. Background in SEO/content/affiliate going back ~15 years. Currently building Tabiji, VeracityAPI, AgentTune, PixelForge, and a handful of other agentic businesses. Writes at zonted.com daily-ish.
+"""
+
+H2_NOISE = {'Get the next post by email.'}
+
+def generate_llms(articles):
+    n = len(articles)
+    lines = [LLMS_INTRO]
+    lines.append(f'## All posts ({n})\n')
+    for a in articles:
+        desc = (a.get('description') or '').strip()
+        date = f" ({a['date']})" if a['date'] else ''
+        lines.append(f'- [{a["title"]}]({SITE_URL}/{a["slug"]}/): {desc}{date}')
+    lines.append('')
+    lines.append(LLMS_OUTRO.format(count=n))
+    with open(os.path.join(ROOT, 'llms.txt'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(lines))
+
+    full = [LLMS_INTRO, f'## All posts, with outlines ({n})\n']
+    for a in articles:
+        try:
+            content = open(a['filepath'], encoding='utf-8').read()
+        except OSError:
+            content = ''
+        h2s = []
+        for raw in re.findall(r'<h2[^>]*>(.*?)</h2>', content, re.DOTALL):
+            txt = html.unescape(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', raw))).strip()
+            if txt and txt not in H2_NOISE and len(txt) < 90:
+                h2s.append(txt)
+        full.append(f'### {a["title"]}')
+        full.append(f'{SITE_URL}/{a["slug"]}/' + (f"  ·  {a['date']}" if a['date'] else ''))
+        if a.get('description'):
+            full.append(a['description'])
+        if h2s:
+            full.append('Sections: ' + ' · '.join(h2s[:14]))
+        full.append('')
+    full.append(LLMS_OUTRO.format(count=n))
+    with open(os.path.join(ROOT, 'llms-full.txt'), 'w', encoding='utf-8') as f:
+        f.write('\n'.join(full))
+    return n
 
 
 # ---------------------------------------------------------------------------
@@ -827,7 +952,7 @@ def render_recommended_block(items):
 
     return (
         '<!-- RECOMMENDED_START -->\n'
-        '            <section class="zn-recommended">\n'
+        '            <section class="zn-recommended" id="related">\n'
         '                <p class="zn-recommended-label">Recommended Reading</p>\n'
         '                <ul class="zn-recommended-list">\n'
         + '\n'.join(rows) + '\n'
@@ -987,6 +1112,9 @@ def main():
 
     n = generate_feed(articles)
     print(f"Generated feed.xml ({n} items)")
+
+    n = generate_llms(articles)
+    print(f"Generated llms.txt + llms-full.txt ({n} posts)")
 
     n = strip_nav_links(articles)
     print(f"Stripped nav links from {n} articles")
