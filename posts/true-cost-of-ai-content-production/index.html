@@ -14,14 +14,14 @@
     <meta property="og:title" content="The True Cost of AI Content Production">
     <meta property="og:description" content="Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — not generation.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta property="og:image" content="https://img.zonted.com/resources/true-cost-of-ai-content-production/google-cloud-billing-march-2026.png">
     <meta property="og:url" content="https://zonted.com/posts/true-cost-of-ai-content-production/">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-18T00:00:00Z">
     <meta property="article:section" content="AI &amp; Technology">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/true-cost-of-ai-content-production/google-cloud-billing-march-2026.png">
     <meta name="twitter:title" content="The True Cost of AI Content Production">
     <meta name="twitter:description" content="Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — not generation.">
 
@@ -157,8 +157,7 @@
     <div class="toc-mobile-dropdown">
         <ul>
             <li><a href="#the-numbers-nobody-talks-about">The Numbers Nobody Talks About</a></li>
-            <li><a href="#why-a-48-star-rating-costs-more-than-a-1000-word-article">Why a 4.8-Star Rating Costs More Than a 1,000-Word Article</a></li>
-            <li><a href="#the-data-moat-nobody-sees">The Data Moat Nobody Sees</a></li>
+            <li><a href="#the-data-moat-nobody-sees">Why a 4.8-Star Rating Costs More Than a 1,000-Word Article</a></li>
             <li><a href="#video-makes-it-even-more-obvious">Video Makes It Even More Obvious</a></li>
             <li><a href="#what-this-means-for-anyone-building-with-ai">What This Means for Anyone Building with AI</a></li>
         </ul>
@@ -172,8 +171,7 @@
     <p class="toc-sidebar-label">Contents</p>
     <ul>
             <li><a href="#the-numbers-nobody-talks-about">The Numbers Nobody Talks About</a></li>
-            <li><a href="#why-a-48-star-rating-costs-more-than-a-1000-word-article">Why a 4.8-Star Rating Costs More Than a 1,000-Word Article</a></li>
-            <li><a href="#the-data-moat-nobody-sees">The Data Moat Nobody Sees</a></li>
+            <li><a href="#the-data-moat-nobody-sees">Why a 4.8-Star Rating Costs More Than a 1,000-Word Article</a></li>
             <li><a href="#video-makes-it-even-more-obvious">Video Makes It Even More Obvious</a></li>
             <li><a href="#what-this-means-for-anyone-building-with-ai">What This Means for Anyone Building with AI</a></li>
     </ul>
@@ -268,7 +266,7 @@
 
         <h2 id="the-data-moat-nobody-sees">Why a 4.8-Star Rating Costs More Than a 1,000-Word Article</h2>
 
-        <p>Consider what it takes to produce a single <a href="https://tabiji.ai/popular-picks/">local restaurant guide</a>. The AI can write beautiful prose about "the best ramen in Tokyo" in seconds. That's the easy part. The hard part — the part that makes the content actually trustworthy — is enrichment:</p>
+        <p>Consider what it takes to produce a single local restaurant guide. The AI can write beautiful prose about "the best ramen in Tokyo" in seconds. That's the easy part. The hard part — the part that makes the content actually trustworthy — is enrichment:</p>
 
         <ul>
             <li><strong>Google Places API</strong> — For each of the ~15 restaurants on a page, we hit the Places API to pull live ratings, review counts, opening hours, phone numbers, price levels, and direct Google Maps links. That's 15 API calls at $0.032 each, roughly $0.50 per page.</li>
@@ -330,7 +328,7 @@
             </section>
             <!-- SUBSCRIBE_BLOCK_END -->
         <!-- RECOMMENDED_START -->
-            <section class="zn-recommended">
+            <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
                 <li><a class="zn-recommended-title" href="/posts/slop-iterate-curate-ai-content/">Why AI Slop Is Necessary</a><p class="zn-recommended-dek">The goal isn&#x27;t to avoid AI slop — it&#x27;s to slop on purpose, learn from what fails, and curate what works.</p></li>

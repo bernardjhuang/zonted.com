@@ -6,7 +6,7 @@
     <meta name="theme-color" content="#fcfcfa">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <title>81 Lines of Merge Conflict. -95% Traffic. Google Has Zero Patience for AI Slop.</title>
     <meta name="description" content="An AI agent shipped a merge conflict to tabiji.ai's production HTML for four hours. Google cut our search traffic by 95% within four days.">
@@ -232,9 +232,9 @@
             <p>The forensic record is on GitHub:</p>
 
             <ul>
-                <li>5/8 &mdash; <a href="https://github.com/psyduckler/tabiji/pull/1490">PR #1490</a>: we found and patched merge-conflict residue on the scams hub. Thought we were clear.</li>
+                <li>5/8 &mdash; PR #1490: we found and patched merge-conflict residue on the scams hub. Thought we were clear.</li>
                 <li>5/10 02:39 EDT &mdash; a subsequent PR landed with fresh residue. 81 conflict marker lines, stacked between the hero stat pills, rendering to every visitor.</li>
-                <li>5/10 06:39 EDT &mdash; emergency fix in <a href="https://github.com/psyduckler/tabiji/pull/1513">PR #1513</a>. The broken state was live for roughly four hours.</li>
+                <li>5/10 06:39 EDT &mdash; emergency fix in PR #1513. The broken state was live for roughly four hours.</li>
             </ul>
 
             <p>Four hours. That's it.</p>
@@ -276,11 +276,11 @@
             <p>When we audited what <em>else</em> was broken on the site &mdash; partially because we were panicking, partially because if Google had downgraded us we wanted to know exactly what they'd seen &mdash; the catalog was ugly:</p>
 
             <ul>
-                <li><a href="https://github.com/psyduckler/tabiji/pull/1530">PR #1530</a> &mdash; 479 broken hub-card links + 19 empty sections.</li>
-                <li><a href="https://github.com/psyduckler/tabiji/pull/1531">PR #1531</a> &mdash; 1,244 broken internal links across 379 unique targets.</li>
-                <li><a href="https://github.com/psyduckler/tabiji/pull/1535">PR #1535</a> &mdash; 24 latent bugs: entity double-encoding, duplicate DOM IDs, raw markdown leaking into rendered HTML.</li>
-                <li><a href="https://github.com/psyduckler/tabiji/pull/1536">PR #1536</a> &mdash; 8 more: broken HTML, leftover <code>console.log</code>s, security issues.</li>
-                <li><a href="https://github.com/psyduckler/tabiji/pull/1537">PR #1537</a> &mdash; 237 broken CDN image references + 6 missing schema blocks across 121 files.</li>
+                <li>PR #1530 &mdash; 479 broken hub-card links + 19 empty sections.</li>
+                <li>PR #1531 &mdash; 1,244 broken internal links across 379 unique targets.</li>
+                <li>PR #1535 &mdash; 24 latent bugs: entity double-encoding, duplicate DOM IDs, raw markdown leaking into rendered HTML.</li>
+                <li>PR #1536 &mdash; 8 more: broken HTML, leftover <code>console.log</code>s, security issues.</li>
+                <li>PR #1537 &mdash; 237 broken CDN image references + 6 missing schema blocks across 121 files.</li>
             </ul>
 
             <p>None of these alone would tank a site. Together, they paint a picture of a publisher who is not being careful. The merge conflict was the loudest offense. Once Google had a reason to look harder, there was a lot to find.</p>
@@ -327,7 +327,7 @@
             </section>
             <!-- SUBSCRIBE_BLOCK_END -->
         <!-- RECOMMENDED_START -->
-            <section class="zn-recommended">
+            <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
                 <li><a class="zn-recommended-title" href="/posts/scaling-ai-is-lazy/">Scaling with AI is Hard because AI is Lazy</a><p class="zn-recommended-dek">Fifty cleanup PRs in five weeks. Fake restaurants, fake subreddits, 4,270 null-island coordinates, 5,096 fabricated Reddit quotes.</p></li>

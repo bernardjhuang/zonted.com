@@ -28,3 +28,10 @@
 
 /assets/*
   Cache-Control: public, max-age=31536000
+
+# Never index scaffolding
+/_templates/*
+  X-Robots-Tag: noindex
+
+/prototype/*
+  X-Robots-Tag: noindex

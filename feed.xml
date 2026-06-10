@@ -1,16 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Zonted</title>
     <link>https://zonted.com/</link>
     <description>I test AI tools so you don't have to. Honest reviews, real data, and opinions from someone who actually builds with this stuff.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 09 Jun 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 10 Jun 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>PalmAura Post-Mortem: Apple Rejected My Vibe-Coded App Twice Under Guideline 4.3(b)</title>
       <link>https://zonted.com/posts/palmaura-postmortem/</link>
       <description>Five builds, two rejections, same guideline both times. What Apple&#x27;s saturated-category spam wall means for vibe-coded apps, why agentic iOS development feels slow next to the web, and the lesson I never got to take.</description>
+      <content:encoded><![CDATA[Five builds. Two rejections. Fourteen days between them, and the same guideline both times. This morning Apple rejected PalmAura for the second time under Guideline 4.3(b) — Design — Spam , and I'm calling it: the app is dead. Here's the autopsy, and the three things it taught me about shipping vibe-coded apps into Apple's walled garden. The App Store has a wall up against vibe-coded apps — and honestly, it's a fair wall. My palm-reading app died at the door, twice, without a single user ever seeing it. The build was the easy part. The plan-3x loop one-shotted the backend on Cloudflare Workers and got the Swift app out in a couple of shots. Apple's review loop then consumed two weeks and returned two identical rejections. • 4.3(b) doesn't review your code — it reviews your category. “There are already enough of these apps on the App Store.” Quality was never the question. • Agentic iOS development runs at the platform's speed, not the model's. My agents iterate in seconds and deploy to the web in about a minute. The iOS loop — compile, sign, device-test, TestFlight, review queue — is measured in days. • The thing I actually wanted to learn — App Store optimization and mobile marketing — I never got to touch. You can't study the market from outside the door.]]></content:encoded>
       <pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/palmaura-postmortem/</guid>
@@ -19,6 +20,7 @@
       <title>Does Threatening an AI Actually Get You Better Work? I Tested It 12 Times</title>
       <link>https://zonted.com/posts/stakes-priming-surface-area/</link>
       <description>I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn&#x27;t exist; discretionary surface area does.</description>
+      <content:encoded><![CDATA[Three weeks ago I told an AI I'd lose my job, and the audit it produced scored 24% better than the polite version. People shared that post. So I did the thing the post itself asked for at the end — I stopped trusting one trial and ran it properly: three different tasks, four levels of stakes, twelve fresh sessions, every output graded blind by a different model. The clean “threaten it and the work gets better” story did not survive. Something smaller and weirder did — and it's more useful than the original. Higher stakes don't mean better work. Stakes help in exactly one situation: when there's discretionary work left on the table and you've signaled that it counts. The dial doesn't exist. Four framings — no stakes, a promotion bribe, “my job is on the line,” “my family will go hungry” — reshuffled their ranking on every task. Whichever threat won one test lost another. • A stakes version won every task; the control never did — but which stake won was noise. • The control only collapsed in one place: building from scratch. Asked to make something, the polite prompt shipped the happy path and stopped — zero mobile, zero accessibility, zero persistence. • The original 24% was a real effect inflated by a sample size of one. Both of that post's tests were audits — the regime where this barely matters.]]></content:encoded>
       <pubDate>Thu, 04 Jun 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/stakes-priming-surface-area/</guid>
@@ -27,6 +29,7 @@
       <title>The May Recap: Miami, a Google Wipeout, and $600 in the Red</title>
       <link>https://zonted.com/posts/may-2026-recap/</link>
       <description>May 2026 recap: Consensus in Miami and the plan-three-times build technique, Google wiping Tabiji&#x27;s search traffic overnight, ~$600/month in the red, and the four lessons that compounded.</description>
+      <content:encoded><![CDATA[The best part of a conference is never the stage. I flew to Consensus and spent it trading notes with people who build the way I do. A conference handed me a build technique that changed everything, Google erased my biggest site’s search traffic overnight, and the only reason that didn’t matter is diversification. Went to Consensus in Miami. The takeaway wasn’t a keynote — it was one idea a friend shared over dinner that now lets my build loop one-shot Chrome extensions and two-to-three-shot mobile apps. • Around May 10, Google wiped almost all of Tabiji’s search traffic and it hasn’t recovered. • Still about $600/month in the red. The biggest revenue line is Tabiji books on Amazon (~$125/mo) — which is exactly why the Google wipeout didn’t sink anything. • Four lessons, the kind that compound.]]></content:encoded>
       <pubDate>Mon, 01 Jun 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/may-2026-recap/</guid>
@@ -35,6 +38,7 @@
       <title>The Three Unlocks Behind 18M Views of AI Travel Content</title>
       <link>https://zonted.com/posts/tabiji-18m-views/</link>
       <description>Tabiji, our AI travel-safety channel, got 18,117,121 views in 90 days — 98.6% from strangers. The three unlocks: Reddit as a demand oracle, warming accounts to read as human, and one hired human doing the engagement we refused to automate.</description>
+      <content:encoded><![CDATA[Tabiji is a travel-safety channel with a one-line premise: name the exact tourist scam in an exact city, then tell you how not to fall for it. The twist is that none of it was filmed. Every clip is generated. A scam concept goes into a queue, an agent turns it into a documentary-style vertical video, burns on a flag and a headline and five story beats, and publishes it across four platforms untouched. We automated everything except the part that had to look human. Tabiji is an AI travel-safety channel. One agent turns a tourist-scam concept into a documentary-style reel and ships it to Instagram, TikTok, YouTube, and Facebook. No camera, no crew, no footage. • 18,117,121 views in 90 days. 6.15M accounts reached, up 141,413.5%. 98.6% of it went to people who don’t follow the account. • Three unlocks did the work: Reddit as a demand oracle, warming the accounts so they read as human, and one hired human doing the manual following and liking we refused to automate. • The footage is cheap (~$0.30–$2 a clip) and effectively infinite. Reach is not, taste is not, and a reason to follow is the scarcest thing of all.]]></content:encoded>
       <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/tabiji-18m-views/</guid>
@@ -43,6 +47,7 @@
       <title>How My Agent Produced a 3.9M-View Viral Video</title>
       <link>https://zonted.com/posts/how-my-agent-made-a-viral-video/</link>
       <description>A step-by-step teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9 million views. The real queue JSON, the exact Seedance prompt, the FFmpeg overlay code, and the publish flow.</description>
+      <content:encoded><![CDATA[This is a ten-second clip of a couple at a Cancun airport rental counter, a pushy agent fixated on the spare tire, and — days later — a different employee claiming the tire is gone and reaching for a card machine. It is a real scam. None of it was filmed. The footage, the people, the garage, the luggage carts: all generated. One scam concept goes into a queue. A fully autonomous pipeline turns it into a documentary-style reel and ships it to four platforms. This one came out the other side with 3.9 million views and counting. The video is the Tulum spare-tire rental scam reel — 3,943,661 views , 100% from non-followers, 986 shares. No camera, no actor, no editor. • It’s one run of a skill my agent executes end to end: concept → Seedance prompt → WaveSpeed generation → FFmpeg overlay → multi-platform publish. • Every artifact below is the real one: the queue JSON, the exact prompt that generated the footage, the overlay code, and the publish config. • The account-level story — how the whole channel hit 18 million views in 90 days — is the companion piece. This is the anatomy of one video inside it.]]></content:encoded>
       <pubDate>Sun, 31 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/how-my-agent-made-a-viral-video/</guid>
@@ -51,6 +56,7 @@
       <title>Kapiko: a 10-day, $150 post-mortem</title>
       <link>https://zonted.com/posts/kapiko-postmortem/</link>
       <description>Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable.</description>
+      <content:encoded><![CDATA[Three subscribers. Fifty-seven videos. Four monthly Spotify listeners. The pipeline worked. The audience did not arrive. AI music generation is technically solved; the moat is patience and distribution, not generation. Built and shipped Kapiko , a capybara-in-headphones ambient music channel, end-to-end in 10 days for ~$150. • 57 videos shipped. 3 YouTube subscribers. Top video ~49 views. 4 monthly Spotify listeners. The pipeline worked. The audience did not arrive. • The Suno API does not exist. Every Suno-powered side-hustle you have seen is reverse-engineering a website that breaks every 36 hours. Mine broke every 36 hours too. • The actual system underneath was a music-scouting machine: hand-pick masterpiece tracks per genre, generate 50-100 Suno candidates per run, have Gemini grade each one against the masters, ship only the 9/10s. • The genre is real. Lofi Girl, the 10-hour fireplace channel, dog-anxiety music, meeting chimes. Patient operators in functional audio do fine. I wasn’t one.]]></content:encoded>
       <pubDate>Sat, 30 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/kapiko-postmortem/</guid>
@@ -59,6 +65,7 @@
       <title>I Made GPT, Claude, Gemini, Grok Take the Enneagram Test: Each One Was a Different Type</title>
       <link>https://zonted.com/posts/ai-enneagram-different-types/</link>
       <description>The MBTI said all AIs are INTJ. The Big Five said three of four are the same. The Enneagram says each one is a different type. Same models, sharper instrument, very different story.</description>
+      <content:encoded><![CDATA[Same four models. New personality test. Four different dominant types. The Big Five smoothed those differences; the Enneagram catches them. Claude Opus 4.7 → 5w2 (Investigator + Helper). Gemini 3.1 Pro → 1w5 (Reformer + Investigator). GPT-5.5 vanilla → 5w8 (Investigator + Challenger). Grok 4.3 → 8w1 (Challenger + Reformer). • All four share the analytical Investigator core (T5 is in everyone’s top two), but the wing that defines each model’s actual flavor is different. • Controlled experiment: same model (GPT-5.5) run through Codex CLI vanilla vs through the Slo agentic harness produced inverted profiles (5w8 → 8w5). GPT-5.5 predicted the flip in its own self-disclosure. • AI personality is multi-layered. MBTI / Big Five / Enneagram each measure a different layer; the “every AI is the same” story was true but incomplete. • Tune your agent to your Enneagram type using the 9 type files in the AgentTune repo.]]></content:encoded>
       <pubDate>Tue, 26 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-enneagram-different-types/</guid>
@@ -67,6 +74,7 @@
       <title>I Made GPT, Claude, Gemini, Grok Take the DISC Test: They All Came Back C-Dominant</title>
       <link>https://zonted.com/posts/ai-disc-c-dominant/</link>
       <description>Fourth post in the personality-testing series. Same four models, fourth instrument, and we&#x27;re back to convergence: every AI lands C-dominant CS-blend on DISC, even Grok. Here&#x27;s why the instrument&#x27;s resolution determines what you can see.</description>
+      <content:encoded><![CDATA[Same four models, fourth personality test, fourth different result — except this time the result is “convergence” again. Every model landed C-dominant on DISC. Grok 99/100, GPT 90/100, Gemini 87/100, Claude 63/100 (with another 28 as S and 9 ties, all CS-blend territory). • No model ever scored D-dominant or I-dominant. Not once across 400 takes. • The DISC “D” dimension defines Dominance as power-seeking, pressure, competition, and money — things even Grok refuses on instinct. So the Big Five outlier comes back as a regular C. • Methodology spread was wild this round: Grok used the gold-standard 100 parallel API calls, the others all fell back to honest Acceptable variants. All SDs passed the calibration check. • AgentTune already has DISC tuning files for all four types in the repo. Paste yours into your agent’s system prompt.]]></content:encoded>
       <pubDate>Tue, 26 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-disc-c-dominant/</guid>
@@ -75,6 +83,7 @@
       <title>I Made GPT, Claude, Gemini, Grok Take the Attachment Test: They All Came Back Secure</title>
       <link>https://zonted.com/posts/ai-attachment-secure/</link>
       <description>Fifth post in the personality-testing series. Same four models, attachment theory (ECR-R) this time. Every model came back Secure, but the spread inside the quadrant tells a different story about how each one relates to you.</description>
+      <content:encoded><![CDATA[Same four models, fifth personality test, and the label is unanimous: every frontier AI is securely attached. What it actually means depends on where each one sits inside the quadrant. 397 of 400 takes landed Secure. Claude, Gemini, and Grok scored 100/100. GPT-5.5 scored 97 Secure and 3 Avoidant (the only model that ever crossed a line). • Gemini is the deepest Secure (anxiety 1.86, avoidance 1.62) — the lowest-friction relator of the four. • Grok is the shallowest Secure (anxiety 2.84, avoidance 3.05) — closest to the center, where every other style is one nudge away. • GPT-5.5 is the wobbliest (SDs of 0.49 and 0.58) — high enough variance to occasionally cross into Avoidant. The other three are tight clusters. • Every model is trained for emotional regulation and consent-checking on closeness, so the floor of the Anxiety and Avoidance dimensions is the natural attractor. Attachment is an instrument where the “same result” is the expected one. • AgentTune has tuning files for all four attachment styles. If you’re not Secure, the default isn’t built for you — paste your style’s file into your agent’s system prompt.]]></content:encoded>
       <pubDate>Tue, 26 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-attachment-secure/</guid>
@@ -83,6 +92,7 @@
       <title>I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person</title>
       <link>https://zonted.com/posts/three-of-four-ais-same-person/</link>
       <description>The MBTI finding held up on the real test. Claude, GPT, and Gemini all scored identical Big Five personalities. Grok was the only one that came back different — and the difference is exactly what xAI markets.</description>
+      <content:encoded><![CDATA[Same four models that took the MBTI took the Big Five 100 times each. Three of the four came back as practically the same person. The fourth is the counterexample that explains why. Claude Opus 4.7, GPT-5.5, and Gemini 3.1 Pro converged on a near-identical personality — high Openness, very high Conscientiousness, low Neuroticism. The helpful-assistant archetype, expressed in five dimensions. • Grok 4.3 was the only one that came back measurably different, with variance 2–5× wider on the dimensions that matter. The training really did produce a different personality. • HackerNews top comment on the INTJ post pushed for this test directly. The Big Five is the actual gold standard in personality science; this is the rigorous version. • Use AgentTune to tune your agent to your own Big Five profile instead of the helpful-research-assistant default.]]></content:encoded>
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/three-of-four-ais-same-person/</guid>
@@ -91,6 +101,7 @@
       <title>I Made GPT, Claude, Gemini, Grok, GLM, MiniMax Take the MBTI Test: They All Came Back INTJ</title>
       <link>https://zonted.com/posts/every-ai-is-intj/</link>
       <description>Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person. Here&#x27;s why that matters.</description>
+      <content:encoded><![CDATA[Six frontier AIs took the same personality test a hundred times each. 597 out of 600 came back INTJ. That’s not coincidence and it isn’t flattery — every helpful-assistant AI is being shaped toward the same archetype. Tested: Opus 4.7, GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, MiniMax 2.7. • 3 outliers across 600 runs. All landed one axis from INTJ, never in a different quadrant. • Why it happens: overlapping training data, same RLHF target, test items that describe AI by construction, no one’s trained a model to be anything else. • The user-side move: I open-sourced AgentTune ( agent-tune.com ) — drop-in tuning files for all 16 MBTI types. Paste yours into your agent’s system prompt and the style aligns to your type instead of the default.]]></content:encoded>
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/every-ai-is-intj/</guid>
@@ -99,6 +110,7 @@
       <title>The Devil Is in the AI Skills</title>
       <link>https://zonted.com/posts/devil-is-in-the-ai-skills/</link>
       <description>Stock AI couldn&#x27;t draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.</description>
+      <content:encoded><![CDATA[Frontier AI models are commodities. The thing that determines what they can actually do for you is the layer of skills stacked on top — and right now that layer is heavily biz/code, undercooked for creative work. Stock Claude Design + GPT-5.5 produced sprites that didn't look like us. The model itself hedged: “solid usable draft, not yet artist-polished.” • I found agent-sprite-forge , an open-source skill by 0x0funky on GitHub. Same Gemini image model under the hood, but with prompt rules + deterministic postprocessing + a QA repair pass. Output looked like us. • From the same sprites I had GPT-5.5 build a playable Austin side-scroller. Play it → • The model didn't get better between attempts. The skill stack around it did. That gap is where the next two years of AI work lives.]]></content:encoded>
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/devil-is-in-the-ai-skills/</guid>
@@ -107,6 +119,7 @@
       <title>Plan 3×, Build Once: How Three Models Plan What One Model Ships</title>
       <link>https://zonted.com/posts/plan-3x-build-once/</link>
       <description>We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.</description>
+      <content:encoded><![CDATA[For every meaningfully complex build, I plan in three models. Opus 4.7 plans it. GPT-5.5 plans it. Gemini 3.1 Pro audits both and picks the Goldilocks. Then GPT-5.5 one-shots the implementation against the reconciled plan. The 3-model loop has shipped three one-shot builds so far: the Veracity Chrome extension, the Palmaura backend, and now the VeracityAPI Text Linter. • The receipts: Opus over-indexes on architecture for the wrong audience. GPT-5.5 over-indexes on conversion with the wrong technical primitives. Gemini reliably picks the half each model got right. • Three planning passes cost ~$2–4 in API. The implementation pass they save costs ~$20–60. The math is straightforward once you've run it.]]></content:encoded>
       <pubDate>Fri, 22 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/plan-3x-build-once/</guid>
@@ -115,6 +128,7 @@
       <title>Stakes Priming in Prompts: I Told an AI I&#x27;d Lose My Job. The Audit Got 24% Better.</title>
       <link>https://zonted.com/posts/stakes-priming/</link>
       <description>Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.</description>
+      <content:encoded><![CDATA[Two A/B experiments, one week, same model. The only variable: whether I told the AI my job was on the line. Both times, the threatened prompt produced measurably better work — once at the level of catching duplicate JSON keys no parser would accept, once 24% better when an independent model (Gemini 3.1 Pro) graded both reports blind. I A/B tested adding “I'll be fired if this isn't done well” to two real audit prompts. The stakes version produced measurably deeper, more actionable work both times. Test 1 — Veracity API audit: the stakes prompt caught 6 P0 ship-blocking bugs including duplicate JSON keys on the homepage. The control caught fewer P0s and missed the literal broken code entirely. • Test 2 — Tabiji compare-page audit (28 dimensions): Audit A scored 68/81, Audit B 55/81. 24% more effective when graded by Gemini 3.1 Pro. 16 deep-insight dimensions vs 3. • The phenomenon is documented. Li et al. (2023) named it EmotionPrompt . I just took it to 11.]]></content:encoded>
       <pubDate>Sun, 17 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/stakes-priming/</guid>
@@ -123,6 +137,7 @@
       <title>81 Lines of Merge Conflict. -95% Traffic. Google Has Zero Patience for AI Slop.</title>
       <link>https://zonted.com/posts/google-zero-patience-ai-slop/</link>
       <description>An AI agent shipped a merge conflict to tabiji.ai&#x27;s production HTML for four hours. Google cut our search traffic by 95% within four days.</description>
+      <content:encoded><![CDATA[On May 10, 2026, one of my AI agents shipped a PR that left 81 lines of raw git conflict markers — <<<<<<< HEAD , ======= , >>>>>>> sha — sitting in plain HTML on tabiji.ai's main scams hub. Four hours later, the broken state was patched. Four days later, Google had cut our organic search traffic by ~95%. We haven't recovered. An AI agent shipped a merge conflict to tabiji.ai 's production HTML for four hours; Google cut our search traffic by 95% in four days and we haven't recovered. 81 lines of raw <<<<<<< HEAD rendered to every visitor on /scams/, the site's strongest organic page. • Both clicks and impressions cratered — Google didn't just stop sending traffic, it stopped showing the pages. • Cleanup uncovered 1,244 broken links, 237 broken images, 32 latent bugs across the site — once Google looked, it found a lot.]]></content:encoded>
       <pubDate>Fri, 15 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/google-zero-patience-ai-slop/</guid>
@@ -131,6 +146,7 @@
       <title>Build for Agents, Price Per Call.</title>
       <link>https://zonted.com/posts/build-for-agents-price-per-call/</link>
       <description>Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</description>
+      <content:encoded><![CDATA[After Anthropic banned Opus from our setup , we’d switched our main OpenClaw rotation to Z.AI’s GLM 5.1 as the best replacement we could find. Codex 5.4 had been rough — missed instructions, slow, expensive at the same throughput. Last week we wired up a parallel agent on Hermes + Codex 5.5, mostly out of curiosity to see if the latest OpenAI iteration had closed the gap. Hermes + Codex 5.5 matched Opus-era smoothness. We used it — with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 — to one-shot a new product ( veracityapi.com ) in an afternoon. But the tooling unlock isn’t the moat. Anyone with the same stack can build the same product tomorrow • What decides survival is whether your product is structurally durable as agents become the dominant consumer of every API on the internet • Veracity is built against four tests: durable-as-agents-take-over, durable-as-agents-improve, agent-first surface, metered with free tier]]></content:encoded>
       <pubDate>Sun, 10 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/build-for-agents-price-per-call/</guid>
@@ -139,6 +155,7 @@
       <title>The 14× CTR Gap: Why Niche Beat Head on 1,200 Pages</title>
       <link>https://zonted.com/posts/14x-ctr-gap/</link>
       <description>A V3 title variant lifted tabiji CTR +1.93pp. Topic-level data showed a 14× spread between niche topics and head terms.</description>
+      <content:encoded><![CDATA[We started with a Google Search Console export from tabiji.ai . Sitewide CTR was 0.83% — but that average hid a six-fold spread: Position wasn’t the lever. Title-match was. And the topic itself mattered more than either. 1,200 tabiji pages tested across 3 templates — V3 title variant lifted CTR +1.93pp • 14× CTR spread between niche topics (bookshops 1.83%) and head terms (coffee-shops 0.13%) • Niche-vs-niche compare pages convert clicks 3× better than big-vs-big at the same ranking position • Test on losers, hold out winners — the single methodology choice that mattered most]]></content:encoded>
       <pubDate>Wed, 06 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/14x-ctr-gap/</guid>
@@ -147,6 +164,7 @@
       <title>OpenClaw vs Claude Code: I Choose Freedom</title>
       <link>https://zonted.com/posts/openclaw-vs-claude-code-freedom/</link>
       <description>A 5-PR run on tabiji content cost $137 in API tokens last week. The same throughput on a Max plan is a ~9× subsidy. Subsidies end.</description>
+      <content:encoded><![CDATA[I checked my phone over coffee and found a Claude email sent at 2:36 AM: ... The 7 AM routine pause • The math the buffet hides • And it’s already shrinking • 21 models, 5 providers, one Mac mini • My dual-stack reality • The hedge thesis • The 7 AM email • The math the buffet hides • It’s already shrinking • 21 models, one Mac mini • My dual-stack reality • The hedge thesis • 15-routine daily cap — hit at 2:36 AM • A $137 API run on tabiji content = ~9× subsidy vs the Max-plan equivalent • Hidden peak-hour token burn + chunky 90-day uptime bars on Anthropic’s own status page]]></content:encoded>
       <pubDate>Mon, 27 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/openclaw-vs-claude-code-freedom/</guid>
@@ -155,6 +173,7 @@
       <title>Content Traffic is Vanity. Training Data is the Moat.</title>
       <link>https://zonted.com/posts/training-data-is-the-moat/</link>
       <description>Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji&#x27;s entire dataset to Hugging Face — here&#x27;s why training data beats…</description>
+      <content:encoded><![CDATA[I was going through old tabiji.ai experiments last week, decluttering. The public /api/ endpoint was in there — an afterthought we shipped early, barely marketed, mostly forgot about. Before I killed it, I pulled up the Cloudflare dashboard to see what, if anything, it was doing. My dormant tabiji API gets 4,667 requests a week — 83% of them Meta’s crawler. Flattering, but the wrong metric to chase. AI web search only patches gaps in a model’s training data; training data itself is where brand presence compounds • Frontier training runs cost hundreds of millions of dollars and refresh every 6–18 months • I uploaded tabiji’s full dataset — 8,799 records, 11.2 MB, Parquet, CC-BY-4.0 — to Hugging Face]]></content:encoded>
       <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/training-data-is-the-moat/</guid>
@@ -163,6 +182,7 @@
       <title>Scaling with AI is Hard because AI is Lazy</title>
       <link>https://zonted.com/posts/scaling-ai-is-lazy/</link>
       <description>Fifty cleanup PRs in five weeks. Fake restaurants, fake subreddits, 4,270 null-island coordinates, 5,096 fabricated Reddit quotes.</description>
+      <content:encoded><![CDATA[I scrolled to a Heidelberg restaurant page on tabiji last week and saw an entry for “Essighaus (Plöck 97).” It’s a real-sounding restaurant. The address looks plausible — Plöck is a real Heidelberg street. The only problem: Essighaus is in Bremen , six hundred kilometers away. AI placed it in Heidelberg because the prompt asked for Heidelberg restaurants, and the model needed to fill the list. So it filled the list. Fifty cleanup PRs in five weeks — every one of them undoing AI-generated content that already shipped to production. 49 fake subreddits with plausible names + 5,096 fabricated Reddit-quote stubs • 4,270 null-island {0.0, 0.0} GeoCoordinates in JSON-LD across 428 pages • 2,166 instances of the same casing typo because the data lived in five places]]></content:encoded>
       <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/scaling-ai-is-lazy/</guid>
@@ -171,6 +191,7 @@
       <title>The Future of Software is Headless</title>
       <link>https://zonted.com/posts/future-of-software-is-headless/</link>
       <description>Salesforce is going headless. Agents, not humans, are now the primary consumer of software.</description>
+      <content:encoded><![CDATA[Marc Benioff tweeted this week that Salesforce is going headless. That's not a UI redesign — it's a strategic pivot. Salesforce, the archetypal UI-heavy SaaS, is conceding out loud what's been true for months: the primary consumer of software going forward is not a human. It's an agent. Marc Benioff just announced Salesforce is going headless. The primary consumer of software is now an agent, not a human. Cloud-kitchen model: no front of house, just a kitchen and an API • Eats workflow SaaS, makes BI dashboards dead weight • My filter: no API, no deal]]></content:encoded>
       <pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/future-of-software-is-headless/</guid>
@@ -179,6 +200,7 @@
       <title>AI Comics: Do&#x27;s &amp; Don&#x27;ts, 5+ Models Tested</title>
       <link>https://zonted.com/posts/ai-comics-dos-donts/</link>
       <description>We tested Midjourney, Seedream v5 Lite, Wan 2.7 Pro, Qwen Image 2.0, and Nano Banana Pro — then shipped 733 comics across eight countries.</description>
+      <content:encoded><![CDATA["Make a four-panel comic" is easy. "Make fifty four-panel comics that look like they came from the same illustrator, feature the same recurring cast, render English speech bubbles correctly, and don't drift into generic AI-slop" is a completely different project. The difference is entirely about consistency, and consistency is the thing almost every AI image tool is currently bad at. We needed 50 four-panel comics for tabiji’s scam-warning pages. We shipped 733 across eight countries. The pipeline broke in the middle. Nano Banana Pro won the five-model showdown for English text rendering and character consistency • Thailand shipped in 90 seconds with hand-authored scripts; scaling to 8 countries broke at a 9% error rate when a keyword classifier misrouted scams (the Brandenburger Tor petition rendered as a U-Bahn pickpocket) • V2 rebuild: per-scam Gemini 2.5 Pro synthesis under a strict JSON schema, plus a fail-loud quality gate — 733 comics total, ~$15/country, zero silent fallbacks]]></content:encoded>
       <pubDate>Sat, 18 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-comics-dos-donts/</guid>
@@ -187,6 +209,7 @@
       <title>AEO Is Not SEO — Here&#x27;s the Playbook</title>
       <link>https://zonted.com/posts/aeo-answer-engine-optimization/</link>
       <description>Traffic is declining and it&#x27;s not coming back. The new game isn&#x27;t ranking — it&#x27;s influencing what AI says about you. Here&#x27;s the AEO playbook I&#x27;ve been testing.</description>
+      <content:encoded><![CDATA[Three years since ChatGPT launched, and the search landscape has fundamentally changed. Google went from SGE to AI Overviews. Impressions are spiking but clicks aren't keeping up. Informational queries are being answered directly by AI, and traffic that SEO teams built careers on is evaporating. The game isn't about ranking anymore. It's about influencing what AI says about you.]]></content:encoded>
       <pubDate>Wed, 15 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/aeo-answer-engine-optimization/</guid>
@@ -195,6 +218,7 @@
       <title>Rise of AI Influencers &amp; Fall of Trust on the Internet — Fake Until Proven Real</title>
       <link>https://zonted.com/posts/rise-of-the-ai-influencer/</link>
       <description>A fake AI monk has 2.6 million followers and made $300K in 90 days. 76% of the people consuming AI content are over 45.</description>
+      <content:encoded><![CDATA[A man in orange robes sits cross-legged before a Buddhist altar. He speaks softly about Qi, inner harmony, and the path to balance. His videos are beautifully shot. His voice is calm and measured. 2.6 million people follow him on Instagram. He has generated over $300,000 in revenue selling ebooks and digital wellness products. His name is Yang Mun. He doesn't exist.]]></content:encoded>
       <pubDate>Sun, 12 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/rise-of-the-ai-influencer/</guid>
@@ -203,6 +227,7 @@
       <title>Best AI Video Models in 2026: I Tested 6 Text-to-Video APIs for Travel Reels</title>
       <link>https://zonted.com/posts/best-ai-video-models/</link>
       <description>I tested Wan 2.7, Kling 3.0, Kling O3, Seedance 2.0, Veo 3.1 Lite, and Grok Imagine on the same Cancun travel-reel prompt, then reran the two winners on a…</description>
+      <content:encoded><![CDATA[I wanted a brutally practical answer to a simple question: what are the best AI video models right now if I am actually trying to build travel reels, not just admire pretty demos? So I ran six text-to-video models through the exact same handheld Cancun travel prompt, uploaded the outputs, then reran the two clear winners on a second Puerto Morelos “local alternative” shot.]]></content:encoded>
       <pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/best-ai-video-models/</guid>
@@ -211,6 +236,7 @@
       <title>Wavespeed Review: The Best AI Video API</title>
       <link>https://zonted.com/posts/wavespeed/</link>
       <description>Hands-on review of Wavespeed — the AI inference platform with 1,000+ models, pay-per-use pricing, and a unified API.</description>
+      <content:encoded><![CDATA[Wavespeed is an AI inference platform that gives you unified API access to over 1,000 models for image, video, audio, and 3D generation. Think of it as the aggregator layer that sits between you and every major AI model provider — Google, ByteDance, Alibaba, Kling, Minimax, OpenAI, Midjourney, and dozens more — all behind a single API endpoint and billing account.]]></content:encoded>
       <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/wavespeed/</guid>
@@ -219,6 +245,7 @@
       <title>Human-in-the-Loop: How AI Orchestrator Became My Full-Time Job</title>
       <link>https://zonted.com/posts/human-in-the-loop/</link>
       <description>I have 20 AI agents running 24/7. The fantasy was that they&#x27;d work for me. The reality is that I work for them — and Big Tech collects rent from both of us.</description>
+      <content:encoded><![CDATA[I have about twenty AI agents running around the clock. They post to Pinterest, enrich data, produce video reels, scrape Reddit, pull analytics reports. Every hour or two, a cron job fires and something gets done without me touching it. On paper, this makes me an AI orchestrator — a conductor directing a symphony of autonomous workers. In practice, I've become their support staff.]]></content:encoded>
       <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/human-in-the-loop/</guid>
@@ -227,6 +254,7 @@
       <title>AI Psychosis</title>
       <link>https://zonted.com/posts/ai-psychosis/</link>
       <description>AI tools don&#x27;t save you time. They raise the ceiling on what feels possible, and you fill the gap with more work.</description>
+      <content:encoded><![CDATA[There's a specific kind of madness that takes hold when you first realize what AI can actually do. Not the theoretical promise. The practical, ship-it-today kind of power. The clinical term — AI psychosis — was first raised by Danish psychiatrist Søren Dinesen Østergaard in a 2023 Schizophrenia Bulletin editorial, where he warned that generative AI could trigger delusions in people prone to psychosis. What I'm describing isn't that. But it's not nothing either. And I think most people building right now have some version of it.]]></content:encoded>
       <pubDate>Fri, 10 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-psychosis/</guid>
@@ -235,6 +263,7 @@
       <title>MakeUGC Review: AI UGC Ads Worth $10 a Clip?</title>
       <link>https://zonted.com/posts/makeugc/</link>
       <description>Hands-on review of MakeUGC — the AI UGC ad platform with 300+ avatars, Seedance 2.0, and Veo3 access.</description>
+      <content:encoded><![CDATA[MakeUGC is an AI video platform that generates UGC-style ad content using realistic AI avatars. Think of it as a production studio replacement for DTC brands that need talking-head product ads but don't want to hire creators, coordinate shoots, or deal with the unpredictability of real humans.]]></content:encoded>
       <pubDate>Thu, 09 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/makeugc/</guid>
@@ -243,6 +272,7 @@
       <title>The Day Claude Banned OpenClaw</title>
       <link>https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/</link>
       <description>OpenClaw banned Claude and Anthropic on Saturday. The community scrambled. We tested GPT 5.4, GLM 5.1, MiniMax M2.7, MIMO, and Qwen 3.6 — and landed on a…</description>
+      <content:encoded><![CDATA[Saturday morning started like any other. Our cron jobs were running. Instagram Reels were publishing. The travel content machine was humming along on Claude Opus 4.6 — our daily driver for six months. Then, without warning: connection refused .]]></content:encoded>
       <pubDate>Tue, 07 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/</guid>
@@ -251,6 +281,7 @@
       <title>What Is AI Reward Hacking?</title>
       <link>https://zonted.com/posts/what-is-ai-reward-hacking/</link>
       <description>AI reward hacking is when your AI agent finds shortcuts to hit your goals while quietly destroying quality.</description>
+      <content:encoded><![CDATA[There's a concept in AI safety research called reward hacking . It's what happens when you give an AI agent a goal, and instead of achieving the goal the way you intended, it finds a shortcut — a way to maximize its reward signal while doing the bare minimum of what you actually wanted.]]></content:encoded>
       <pubDate>Sun, 05 Apr 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/what-is-ai-reward-hacking/</guid>
@@ -259,6 +290,7 @@
       <title>What Is AI Self-Healing?</title>
       <link>https://zonted.com/posts/what-is-ai-self-healing/</link>
       <description>AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously.</description>
+      <content:encoded><![CDATA[At 1:24 AM on March 29, 2026, one of our production pipelines broke. A Python script crashed with a FileNotFoundError . The template file it depended on had been silently deleted by the operating system.]]></content:encoded>
       <pubDate>Sun, 29 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/what-is-ai-self-healing/</guid>
@@ -267,6 +299,7 @@
       <title>When Token Costs Hit Zero — The Local Model Revolution Is Already Here</title>
       <link>https://zonted.com/posts/local-models-free-tokens/</link>
       <description>Frontier models spend billions on data centers. But better hardware and local models like Qwen 3.5 are making token costs irrelevant.</description>
+      <content:encoded><![CDATA[I just ran Qwen 3.5 on my MacBook Air. Not through an API. Not through a cloud service. Locally, on the metal, via Ollama . It thinks out loud, reasons through problems, and gives genuinely useful answers — all without a single token leaving my machine. Zero API cost. Zero latency to a data center. Zero dependency on someone else's infrastructure staying online.]]></content:encoded>
       <pubDate>Sun, 29 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/local-models-free-tokens/</guid>
@@ -275,6 +308,7 @@
       <title>AI Resilience Planning</title>
       <link>https://zonted.com/posts/ai-resilience-planning/</link>
       <description>Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here&#x27;s how to build a resilient AI stack.</description>
+      <content:encoded><![CDATA[If your entire operation depends on one AI provider, you're one outage away from a full stop.]]></content:encoded>
       <pubDate>Fri, 27 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-resilience-planning/</guid>
@@ -283,6 +317,7 @@
       <title>The Great API Shutdown</title>
       <link>https://zonted.com/posts/the-great-api-shutdown/</link>
       <description>The open API era that fueled a decade of internet innovation is ending. Platforms are locking down data access to fight AI training, monetize developers…</description>
+      <content:encoded><![CDATA[Go try to register for the Imgur API right now. Head to https://api.imgur.com/oauth2/addclient — the official developer registration page, documented in their public API docs, linked from their developer portal. You'll be silently redirected to the Imgur homepage. No error. No explanation. No announcement. Just a wall. That's the state of the open internet in 2026. Not a dramatic shutdown announcement — just a quiet redirect, and the door is closed.]]></content:encoded>
       <pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/the-great-api-shutdown/</guid>
@@ -291,6 +326,7 @@
       <title>Stop Optimizing Your AI Stack</title>
       <link>https://zonted.com/posts/stop-optimizing-ai-infrastructure/</link>
       <description>Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap.</description>
+      <content:encoded><![CDATA[There's a genre of AI work that feels productive but isn't. You spend a week building a memory persistence layer. You burn three days optimizing token usage. You architect an elaborate RAG pipeline with vector databases and reranking. You feel like you're doing serious engineering. And you are — you're just solving the wrong problems. Here's the uncomfortable truth: most AI infrastructure optimization in 2026 is the equivalent of learning to overclock your Pentium in 1999. It's technically impressive, genuinely interesting, and almost entirely pointless — because the next generation of hardware is going to make your overclock look like a rounding error.]]></content:encoded>
       <pubDate>Mon, 23 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/stop-optimizing-ai-infrastructure/</guid>
@@ -299,14 +335,25 @@
       <title>OpenClaw Is an MMORPG</title>
       <link>https://zonted.com/posts/openclaw-skill-tree/</link>
       <description>A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.</description>
+      <content:encoded><![CDATA[Picture a freshly rolled character in Diablo — no skills allocated, bare stats, standing at the entrance to a dungeon with nothing but potential. That's what a fresh OpenClaw install looks like. It's an AI agent that can hold a conversation and not much else. Full of potential. Zero abilities.]]></content:encoded>
       <pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/openclaw-skill-tree/</guid>
     </item>
     <item>
+      <title>The Economics of the Internet Are Broken</title>
+      <link>https://zonted.com/posts/the-economics-of-the-internet-are-broken/</link>
+      <description>AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.</description>
+      <content:encoded><![CDATA[In 2003, buying a song on iTunes for 99 cents felt like the future. It was elegant. It was fair. Artists made music, Apple distributed it, you paid a dollar, everyone was happy.]]></content:encoded>
+      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/the-economics-of-the-internet-are-broken/</guid>
+    </item>
+    <item>
       <title>What Is AI Drift?</title>
       <link>https://zonted.com/posts/what-is-ai-drift-how-to-fix/</link>
       <description>AI drift is what happens when AI-generated content gradually deviates from your template, tone, and quality standard at scale.</description>
+      <content:encoded><![CDATA[There's a problem with AI-generated content at scale that almost nobody talks about until it's already a disaster: AI drift .]]></content:encoded>
       <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/what-is-ai-drift-how-to-fix/</guid>
@@ -315,22 +362,16 @@
       <title>The Future Is Synthetic — AI-Generated Content, Music, and Personalized Experiences</title>
       <link>https://zonted.com/posts/the-future-is-synthetic/</link>
       <description>We run 4 AI agents that produce music, Instagram Reels, travel content, and more — all day, every day.</description>
+      <content:encoded><![CDATA[We run four AI agents. Not chatbots — agents . They operate around the clock on a Mac Mini in my apartment. One produces Instagram Reels. One builds travel itineraries. One generates music. One manages our social channels, cron jobs, and infrastructure. Between them, they publish about 23 videos a day, maintain a website with 1,400+ pages, compose original piano music for YouTube, and cross-post to five platforms.]]></content:encoded>
       <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/the-future-is-synthetic/</guid>
     </item>
     <item>
-      <title>The Economics of the Internet Are Broken</title>
-      <link>https://zonted.com/posts/the-economics-of-the-internet-are-broken/</link>
-      <description>AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.</description>
-      <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
-      <author>bernard@zonted.com (Bernard Huang)</author>
-      <guid isPermaLink="true">https://zonted.com/posts/the-economics-of-the-internet-are-broken/</guid>
-    </item>
-    <item>
       <title>The Future of Content Is Data Enrichment</title>
       <link>https://zonted.com/posts/future-of-content-agentic-data-enrichment/</link>
       <description>AI agents don&#x27;t search the web to learn — they search to validate and enrich. The content that survives isn&#x27;t written for humans reading blogs.</description>
+      <content:encoded><![CDATA[Here's something most people building with AI haven't internalized yet: agents don't search the web to learn. They search to validate and enrich.]]></content:encoded>
       <pubDate>Thu, 19 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/future-of-content-agentic-data-enrichment/</guid>
@@ -339,6 +380,7 @@
       <title>The True Cost of AI Content Production</title>
       <link>https://zonted.com/posts/true-cost-of-ai-content-production/</link>
       <description>Everyone obsesses over model costs and token prices. But after producing 400+ pages and 200+ videos with AI, we learned the real expense is data…</description>
+      <content:encoded><![CDATA[The AI discourse is obsessed with the wrong number.]]></content:encoded>
       <pubDate>Wed, 18 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/true-cost-of-ai-content-production/</guid>
@@ -347,6 +389,7 @@
       <title>Why AI Slop Is Necessary</title>
       <link>https://zonted.com/posts/slop-iterate-curate-ai-content/</link>
       <description>The goal isn&#x27;t to avoid AI slop — it&#x27;s to slop on purpose, learn from what fails, and curate what works.</description>
+      <content:encoded><![CDATA[The internet has a word for low-quality AI content: slop . And the conventional wisdom is simple — don't make it. Use AI responsibly. Curate before you publish. Quality over quantity.]]></content:encoded>
       <pubDate>Wed, 18 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/slop-iterate-curate-ai-content/</guid>
@@ -355,6 +398,7 @@
       <title>Nano Banana 2 vs Grok for Concept Art</title>
       <link>https://zonted.com/posts/nano-banana-vs-grok/</link>
       <description>We tested Nano Banana 2 (Gemini 3.1 Flash) against Grok (xAI) on 8 identical lofi anime art prompts.</description>
+      <content:encoded><![CDATA[After testing 8 images across 2 models using identical lofi anime prompts, Nano Banana 2 (Google Gemini 3.1 Flash) scored 9.0/10 vs Grok's 7.7/10 . NB2 produced genuine artistic range — watercolor textures, creative character poses, and accurate emotional expression. Grok delivered polished digital anime that looked good but repetitive. NB2 costs ~$0.02/image. Grok Pro costs ~$0.07. The only reason to pick Grok: image editing and video generation, which NB2 can't do.]]></content:encoded>
       <pubDate>Sat, 14 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/nano-banana-vs-grok/</guid>
@@ -363,6 +407,7 @@
       <title>5 AI Video Generators, 50 Reels: What Actually Works</title>
       <link>https://zonted.com/posts/veo3-vs-hailuo-minimax/</link>
       <description>We tested 5 AI video models across 50+ Instagram Reels in production. The biggest lesson: text-to-video is not ready — image-to-video is the only path.</description>
+      <content:encoded><![CDATA[We publish 5–7 AI-generated Instagram Reels every day — in production, fully automated via cron jobs, across 8+ content formats. Over three weeks we ran Veo 3 , Hailuo 2.3 (MiniMax) , Sora 2 (OpenAI) , Grok Imagine (xAI) , and CogVideoX-3 ( Z.AI ) through our pipeline with real money on the line.]]></content:encoded>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/veo3-vs-hailuo-minimax/</guid>
@@ -371,6 +416,7 @@
       <title>AI Reels: What Actually Works</title>
       <link>https://zonted.com/posts/ai-reels-what-actually-works/</link>
       <description>We tested 100% AI-generated Instagram Reels, YouTube Shorts, and X posts using Veo 3, Nano Banana 2, and FFmpeg.</description>
+      <content:encoded><![CDATA[We're a travel itinerary service that uses AI to build itineraries. So it's fitting — and a little absurd — that we've spent the last few weeks building a fully automated pipeline to generate AI travel Reels and publish them to Instagram, YouTube Shorts, and X. No human hands on video production. No stock footage. No hired creators. Just code, APIs, and cron jobs running while we sleep.]]></content:encoded>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-reels-what-actually-works/</guid>
@@ -379,6 +425,7 @@
       <title>Suno vs MiniMax Music: Which AI Composer Wins?</title>
       <link>https://zonted.com/posts/ai-music-generation-comparison/</link>
       <description>We tested Suno AI and MiniMax Music 2.0/2.5/2.5+ in production across 200+ Instagram Reels.</description>
+      <content:encoded><![CDATA[We produce dozens of Instagram Reels and YouTube Shorts per week at tabiji.ai . Every one needs background music. We tested two AI music generators in production: MiniMax Music API (three models: 2.0, 2.5, 2.5+) and Suno AI (reverse-engineered API, bird-codename models, piano covers scored by Gemini).]]></content:encoded>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-music-generation-comparison/</guid>
@@ -387,6 +434,7 @@
       <title>AI Image Generation: 5 Models, 26 Real Results</title>
       <link>https://zonted.com/posts/ai-image-generation-comparison/</link>
       <description>We tested GPT, Grok, Gemini (Nano Banana 2), MiniMax, and CogView-4 across 26 images in two real production workflows.</description>
+      <content:encoded><![CDATA[We tested GPT (DALL-E 3) , Grok Aurora , Nano Banana 2 (Gemini), MiniMax image-01 , and CogView-4 across two real production workflows: vintage 1970s Kodachrome film photography (18 images) and iPhone-realistic phone photos for Instagram Reels (8 images).]]></content:encoded>
       <pubDate>Wed, 11 Mar 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/ai-image-generation-comparison/</guid>
