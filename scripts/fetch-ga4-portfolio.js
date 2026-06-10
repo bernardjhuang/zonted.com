@@ -218,8 +218,8 @@ async function run() {
     });
   }
 
-  output.properties.sort((a, b) => b.totals.sessions - a.totals.sessions);
-  output.searchConsoleProperties.sort((a, b) => b.totals.clicks - a.totals.clicks || b.totals.impressions - a.totals.impressions);
+  // Keep raw fetch output in configured property order. The metrics renderer
+  // applies the revenue-ranked canonical order once revenue data is attached.
   process.stdout.write(JSON.stringify(output, null, 2));
 }
 

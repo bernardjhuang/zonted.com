@@ -206,6 +206,45 @@ def money(cents: float, currency: str = "usd") -> str:
     return f"{symbol}{amount:,.2f}"
 
 
+def money_display_value(value: object) -> float:
+    """Parse the short revenue strings used by the public cards for ordering."""
+    raw = str(value or "").strip().replace(",", "")
+    match = re.search(r"-?\d+(?:\.\d+)?", raw)
+    if not match:
+        return 0.0
+    amount = float(match.group(0))
+    suffix = raw[match.end() :].strip().lower()
+    if suffix.startswith("m"):
+        amount *= 1_000_000
+    elif suffix.startswith("k"):
+        amount *= 1_000
+    return amount
+
+
+def revenue_ranked_cards(cards: list[dict]) -> list[dict]:
+    return sorted(
+        cards,
+        key=lambda card: (money_display_value(card.get("total")), card.get("name") or ""),
+        reverse=True,
+    )
+
+
+def apply_revenue_property_order(data: dict) -> None:
+    revenue = data.get("revenueSnapshot") or {}
+    cards = revenue.get("cards") or []
+    if not cards:
+        return
+
+    revenue["cards"] = revenue_ranked_cards(cards)
+    order = {card.get("key"): idx for idx, card in enumerate(revenue["cards"]) if card.get("key")}
+
+    def sort_key(item: dict) -> tuple[int, str]:
+        return (order.get(item.get("key"), len(order)), item.get("name") or "")
+
+    data["properties"] = sorted(data.get("properties", []), key=sort_key)
+    data["searchConsoleProperties"] = sorted(data.get("searchConsoleProperties", []), key=sort_key)
+
+
 def esc(value: object) -> str:
     return html.escape(str(value), quote=True)
 
@@ -446,7 +485,7 @@ def revenue_cards(stripe_revenue: dict) -> dict:
     }
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": [MANUAL_REVENUE_CARDS[0], MANUAL_REVENUE_CARDS[2], veracity, MANUAL_REVENUE_CARDS[1], MANUAL_REVENUE_CARDS[3]],
+        "cards": revenue_ranked_cards([*MANUAL_REVENUE_CARDS, veracity]),
     }
 
 
@@ -694,7 +733,7 @@ def update_html(data: dict) -> None:
     portfolio = f'''        <!-- Portfolio GA4 Snapshot -->
         <section class="portfolio-section" aria-labelledby="portfolio-ga4-heading">
             <h2 id="portfolio-ga4-heading"><span class="icon">📊</span> GA4 Portfolio Snapshot</h2>
-            <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for active properties. Ordered by total sessions.</p>
+            <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
 {render_property_cards(data)}
             </div>
@@ -741,7 +780,7 @@ def update_html(data: dict) -> None:
     search_console = f'''        <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
             <h2 id="portfolio-gsc-heading"><span class="icon">🔎</span> Search Console Snapshot</h2>
-            <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for active properties. Ordered by total clicks.</p>
+            <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
 {render_search_console_cards(data)}
             </div>
@@ -909,6 +948,7 @@ def main() -> int:
             warnings.append(warning)
             print(warning, file=sys.stderr)
 
+    apply_revenue_property_order(data)
     previous = load_previous_state()
     update_html(data)
 
