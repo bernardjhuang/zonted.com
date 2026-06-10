@@ -879,6 +879,7 @@ CURATED_RELATED = {
     "posts/slop-iterate-curate-ai-content": ["posts/true-cost-of-ai-content-production", "posts/ai-reels-what-actually-works", "posts/the-future-is-synthetic"],
     "posts/stakes-priming": ["posts/stakes-priming-surface-area", "posts/ai-psychosis", "posts/what-is-ai-reward-hacking"],
     "posts/stakes-priming-surface-area": ["posts/stakes-priming", "posts/what-is-ai-reward-hacking", "posts/ai-psychosis"],
+    "posts/vibe-trading": ["posts/stakes-priming-surface-area", "posts/plan-3x-build-once", "posts/what-is-ai-reward-hacking"],
     "posts/stop-optimizing-ai-infrastructure": ["posts/openclaw-skill-tree", "posts/human-in-the-loop", "posts/build-for-agents-price-per-call"],
     "posts/the-economics-of-the-internet-are-broken": ["posts/the-great-api-shutdown", "posts/aeo-answer-engine-optimization", "posts/build-for-agents-price-per-call"],
     "posts/the-future-is-synthetic": ["posts/rise-of-the-ai-influencer", "posts/slop-iterate-curate-ai-content", "posts/future-of-content-agentic-data-enrichment"],
