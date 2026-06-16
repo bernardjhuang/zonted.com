@@ -12,7 +12,7 @@
   <meta property="og:image" content="https://img.zonted.com/og/game-life-of-fry.png">
   <meta name="twitter:image" content="https://img.zonted.com/og/game-life-of-fry.png">
   <meta property="og:type" content="website" />
-  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:card" content="summary_large_image" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text x='50' y='78' text-anchor='middle' font-size='84'>%F0%9F%8D%9F</text></svg>" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -24,10 +24,16 @@
   <style>
     html, body { margin: 0; }
     /* Game sits below the 60px site nav, like the other games. */
-    .game-frame { position: relative; width: 100%; height: calc(100dvh - 60px); }
+    .game-context { padding: 16px 24px; background: #1b0d08; color: #ffe8b5; font-family: 'IBM Plex Mono', ui-monospace, monospace; border-bottom: 1px solid rgba(255,232,181,.18); }
+    .game-context h1 { margin: 0 0 6px; font-family: 'Fraunces', Georgia, serif; font-size: clamp(1.45rem, 3vw, 2.1rem); color: #fff2cf; }
+    .game-context p { margin: 0; max-width: 980px; line-height: 1.55; font-size: .92rem; }
+    .game-frame { position: relative; width: 100%; height: calc(100dvh - 60px - 122px); min-height: 520px; }
   </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"VideoGame","name":"Life of Fry","url":"https://zonted.com/games/life-of-fry/","description":"First-person french-fry panic sim built with AI-agent assistance and WebGL packaging in the Zonted lab.","image":"https://img.zonted.com/og/game-life-of-fry.png","applicationCategory":"BrowserGame","operatingSystem":"Web browser","creator":{"@id":"https://zonted.com/about/#person"},"publisher":{"@id":"https://zonted.com/#organization"},"isPartOf":{"@id":"https://zonted.com/games/"}}
+  </script>
 </head>
 <body>
   <nav class="zn-nav">
@@ -47,8 +53,14 @@
     </div>
   </nav>
 
-  <div class="game-frame">
-    <div id="root"></div>
-  </div>
+  <main>
+    <section class="game-context" aria-labelledby="life-of-fry-title">
+      <h1 id="life-of-fry-title">Life of Fry</h1>
+      <p>First-person french-fry panic sim built in the Zonted lab with AI-agent assistance, WebGL packaging, and a tiny survival loop: hide in the basket, dodge the hand, and survive until the giant human is full.</p>
+    </section>
+    <div class="game-frame">
+      <div id="root"></div>
+    </div>
+  </main>
 </body>
 </html>
