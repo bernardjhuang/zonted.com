@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <title>Kapiko: a 10-day, $150 post-mortem — Zonted</title>
-    <meta name="description" content="Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable.">
+    <meta name="description" content="I built Kapiko, an AI-generated ambient music YouTube channel, in 10 days for about $150. The pipeline worked; the Suno API did not.">
     <link rel="canonical" href="https://zonted.com/posts/kapiko-postmortem/">
     <meta property="og:title" content="Kapiko: a 10-day, $150 post-mortem">
-    <meta property="og:description" content="Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable.">
+    <meta property="og:description" content="I built Kapiko, an AI-generated ambient music YouTube channel, in 10 days for about $150. The pipeline worked; the Suno API did not.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://img.zonted.com/resources/kapiko-postmortem/og.jpg">
     <meta property="og:url" content="https://zonted.com/posts/kapiko-postmortem/">
@@ -23,12 +23,12 @@
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/kapiko-postmortem/og.jpg">
     <meta name="twitter:title" content="Kapiko: a 10-day, $150 post-mortem">
-    <meta name="twitter:description" content="Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable.">
+    <meta name="twitter:description" content="I built Kapiko, an AI-generated ambient music YouTube channel, in 10 days for about $150. The pipeline worked; the Suno API did not.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
-    <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Kapiko: a 10-day, $150 post-mortem","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-05-30T00:00:00Z","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/kapiko-postmortem/","description":"Built and shipped Kapiko — an AI-generated ambient music YouTube channel — in 10 days for ~$150. The pipeline worked. The Suno API does not exist. Here is the autopsy and what is actually reusable."}
+            <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Kapiko: a 10-day, $150 post-mortem","description":"I built Kapiko, an AI-generated ambient music YouTube channel, in 10 days for about $150. The pipeline worked; the Suno API did not.","image":["https://img.zonted.com/resources/kapiko-postmortem/og.jpg"],"datePublished":"2026-05-30","dateModified":"2026-05-30","mainEntityOfPage":{"@type":"WebPage","@id":"https://zonted.com/posts/kapiko-postmortem/"},"author":{"@type":"Person","@id":"https://zonted.com/about/#person","name":"Bernard Huang","url":"https://zonted.com/about/","sameAs":["https://x.com/bernardjhuang","https://github.com/bernardjhuang","https://www.linkedin.com/in/bernardjhuang/"]},"publisher":{"@type":"Organization","@id":"https://zonted.com/#organization","name":"Zonted","url":"https://zonted.com/","logo":{"@type":"ImageObject","url":"https://img.zonted.com/og/operator-notes.png"}},"url":"https://zonted.com/posts/kapiko-postmortem/","isPartOf":{"@type":"WebSite","@id":"https://zonted.com/#website","name":"Zonted","url":"https://zonted.com/"}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Kapiko: a 10-day, $150 post-mortem"}]}
@@ -416,7 +416,7 @@
             <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
-                <li><a class="zn-recommended-title" href="/posts/palmaura-postmortem/">PalmAura Post-Mortem: Apple Rejected My Vibe-Coded App Twice Under Guideline 4.3(b)</a><p class="zn-recommended-dek">Five builds, two rejections, same guideline both times. What Apple&#x27;s saturated-category spam wall means for vibe-coded apps, why agentic iOS…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/palmaura-postmortem/">PalmAura Post-Mortem: Apple Rejected My AI App</a><p class="zn-recommended-dek">Five builds, two Apple rejections, one saturated-category spam wall. What Guideline 4.3(b) means for vibe-coded iOS apps.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/ai-music-generation-comparison/">Suno vs MiniMax Music: Which AI Composer Wins?</a><p class="zn-recommended-dek">We tested Suno AI and MiniMax Music 2.0/2.5/2.5+ in production across 200+ Instagram Reels.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/true-cost-of-ai-content-production/">The True Cost of AI Content Production</a><p class="zn-recommended-dek">Everyone obsesses over model costs and token prices. But after producing 400+ pages and 200+ videos with AI, we learned the real expense is data…</p></li>
                 </ul>

@@ -11,10 +11,17 @@ Run from the repo root.
 import os
 import re
 import html
+import json
 from datetime import datetime
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SITE_URL = "https://zonted.com"
+SITE_LOGO = "https://img.zonted.com/og/operator-notes.png"
+AUTHOR_SAME_AS = [
+    "https://x.com/bernardjhuang",
+    "https://github.com/bernardjhuang",
+    "https://www.linkedin.com/in/bernardjhuang/",
+]
 
 FALLBACK_DATES = {
     "posts/what-is-ai-self-healing": "2026-03-29",
@@ -238,6 +245,134 @@ def make_entry_row(article, mark_shipped=False):
         f'                    </div>{stamp_html}\n'
         f'                </li>'
     )
+
+
+# ---------------------------------------------------------------------------
+# Structured data generation
+# ---------------------------------------------------------------------------
+
+
+def absolute_url(url):
+    """Return an absolute site URL for root-relative assets/links."""
+    if not url:
+        return ''
+    if url.startswith('http://') or url.startswith('https://'):
+        return url
+    if url.startswith('/'):
+        return SITE_URL + url
+    return url
+
+
+def extract_jsonld_objects(content):
+    """Yield (match, parsed object) for each JSON-LD script in content."""
+    pattern = re.compile(
+        r'<script\s+type=["\']application/ld\+json["\'][^>]*>\s*(.*?)\s*</script>',
+        re.DOTALL | re.IGNORECASE,
+    )
+    for match in pattern.finditer(content):
+        raw = match.group(1).strip()
+        try:
+            data = json.loads(raw)
+        except json.JSONDecodeError:
+            continue
+        yield match, data
+
+
+def jsonld_has_type(data, schema_type):
+    """True if a JSON-LD object/list/@graph contains a given @type."""
+    queue = data if isinstance(data, list) else [data]
+    for obj in queue:
+        if not isinstance(obj, dict):
+            continue
+        graph = obj.get('@graph')
+        if isinstance(graph, list):
+            if jsonld_has_type(graph, schema_type):
+                return True
+        t = obj.get('@type')
+        if t == schema_type or (isinstance(t, list) and schema_type in t):
+            return True
+    return False
+
+
+def article_schema(article):
+    """Build the canonical Article JSON-LD block for a post.
+
+    Existing posts are static HTML, so templates alone are not enough. The
+    build step actively overwrites each published article's Article block with
+    this generated schema while preserving each page's BreadcrumbList block.
+    """
+    url = f'{SITE_URL}/{article["slug"]}/'
+    image = absolute_url(article.get('image') or '') or SITE_LOGO
+    date = article.get('date') or datetime.fromtimestamp(os.path.getmtime(article['filepath'])).strftime('%Y-%m-%d')
+    return {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        'headline': article['title'],
+        'description': article.get('description') or '',
+        'image': [image],
+        'datePublished': date,
+        'dateModified': date,
+        'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': url,
+        },
+        'author': {
+            '@type': 'Person',
+            '@id': f'{SITE_URL}/about/#person',
+            'name': 'Bernard Huang',
+            'url': f'{SITE_URL}/about/',
+            'sameAs': AUTHOR_SAME_AS,
+        },
+        'publisher': {
+            '@type': 'Organization',
+            '@id': f'{SITE_URL}/#organization',
+            'name': 'Zonted',
+            'url': f'{SITE_URL}/',
+            'logo': {
+                '@type': 'ImageObject',
+                'url': SITE_LOGO,
+            },
+        },
+        'url': url,
+        'isPartOf': {
+            '@type': 'WebSite',
+            '@id': f'{SITE_URL}/#website',
+            'name': 'Zonted',
+            'url': f'{SITE_URL}/',
+        },
+    }
+
+
+def render_jsonld(data, indent='    '):
+    payload = json.dumps(data, ensure_ascii=False, separators=(',', ':'))
+    return f'{indent}<script type="application/ld+json">\n{indent}{payload}\n{indent}</script>'
+
+
+def inject_article_jsonld(articles):
+    """Overwrite or insert Article JSON-LD for every published post."""
+    count = 0
+    for article in articles:
+        filepath = article['filepath']
+        with open(filepath, 'r', encoding='utf-8') as f:
+            content = f.read()
+        original = content
+        block = render_jsonld(article_schema(article))
+
+        replaced = False
+        for match, data in extract_jsonld_objects(content):
+            if jsonld_has_type(data, 'Article'):
+                content = content[:match.start()] + block + content[match.end():]
+                replaced = True
+                break
+
+        if not replaced:
+            content = content.replace('</head>', block + '\n</head>', 1)
+
+        if content != original:
+            with open(filepath, 'w', encoding='utf-8') as f:
+                f.write(content)
+            count += 1
+    return count
 
 
 # ---------------------------------------------------------------------------
@@ -541,6 +676,79 @@ Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.i
 
 H2_NOISE = {'Get the next post by email.'}
 
+STRUCTURED_CLAIMS = {
+    'posts/tabiji-18m-views': [
+        'Tabiji reached 18,117,121 views in 90 days, with 98.6% of views coming from non-followers.',
+        'The three growth unlocks were Reddit as a demand oracle, warming accounts to read as human, and one hired human handling engagement.',
+        'The case study is based on production social-channel data from an AI travel-safety content pipeline.',
+    ],
+    'posts/how-my-agent-made-a-viral-video': [
+        'A Zonted agent-produced Tulum spare-tire scam reel reached 3.9 million views.',
+        'The teardown includes the queue JSON, Seedance prompt, FFmpeg overlay code, and publish flow.',
+        'The bottleneck was orchestration and curation, not access to a single frontier model.',
+    ],
+    'posts/google-zero-patience-ai-slop': [
+        'A merge conflict shipped to tabiji.ai production HTML for four hours before traffic fell sharply.',
+        'The incident is presented as evidence that Google has little tolerance for visible AI-content quality failures.',
+        'The recommended response is validation, monitoring, and tighter agent output review before publishing.',
+    ],
+    'posts/aeo-answer-engine-optimization': [
+        'AEO is framed as influencing what answer engines say, not merely ranking blue links.',
+        'The playbook emphasizes entities, evidence, citations, and source material that AI systems can quote.',
+        'Zonted treats answer-engine optimization as a complement to SEO after Google Zero.',
+    ],
+    'posts/every-ai-is-intj': [
+        'Across 600 OEJTS administrations, 597 model responses came back INTJ.',
+        'The experiment tested Opus, GPT-5.5, Gemini, GLM, Grok, and MiniMax.',
+        'The result suggests frontier models often converge toward the same self-described personality pattern.',
+    ],
+    'posts/best-ai-video-models': [
+        'Zonted tested multiple text-to-video APIs against the same travel-reel prompt.',
+        'The comparison emphasizes production usefulness over demo quality.',
+        'The post evaluates models by workflow fit, reliability, and output quality for short-form travel content.',
+    ],
+    'posts/ai-image-generation-comparison': [
+        'Zonted tested GPT, Grok, Gemini, MiniMax, and CogView across 26 real production images.',
+        'The comparison focuses on actual workflow outcomes rather than isolated prompt demos.',
+        'The results are intended to guide model choice for production image generation tasks.',
+    ],
+    'posts/pixelforge-launch': [
+        'PixelForge turns one portrait into a game-ready pixel sprite pack for $5.',
+        'The pipeline uses AI image generation for sprite creation and deterministic Python for packaging outputs.',
+        'The product shipped with a 4×4 walk sheet, transparent frames, and engine-ready files.',
+    ],
+    'posts/vibe-trading': [
+        'Bernard let three AIs research, backtest, and trade real money through Robinhood\'s agentic account.',
+        'After roughly 310 strategies, buy-and-hold remained undefeated in the experiment.',
+        'The post frames vibe trading as an execution test for autonomous financial agents.',
+    ],
+    'posts/build-for-agents-price-per-call': [
+        'The post argues that agent-facing software should be built and priced around API calls, not seats.',
+        'Hermes plus Codex 5.5 was used to one-shot a VeracityAPI product build in an afternoon.',
+        'The moat is framed as workflow, data, and pricing architecture rather than temporary model access.',
+    ],
+}
+
+
+def extract_tldr_claims(content):
+    """Extract compact TL;DR bullets from a post when present."""
+    start = content.find('<div class="tldr">')
+    if start == -1:
+        return []
+    end = content.find('<h2', start)
+    tldr_html = content[start:end] if end != -1 else content[start:start + 8000]
+    claims = []
+    for raw in re.findall(r'<li>(.*?)</li>', tldr_html, re.DOTALL):
+        txt = html.unescape(re.sub(r'\s+', ' ', re.sub(r'<[^>]+>', '', raw))).strip()
+        if 30 <= len(txt) <= 260:
+            claims.append(txt)
+    return claims[:5]
+
+
+def claims_for_article(article, content):
+    claims = STRUCTURED_CLAIMS.get(article['slug']) or extract_tldr_claims(content)
+    return claims[:5]
+
 def generate_llms(articles):
     n = len(articles)
     lines = [LLMS_INTRO]
@@ -569,6 +777,11 @@ def generate_llms(articles):
         full.append(f'{SITE_URL}/{a["slug"]}/' + (f"  ·  {a['date']}" if a['date'] else ''))
         if a.get('description'):
             full.append(a['description'])
+        claims = claims_for_article(a, content)
+        if claims:
+            full.append('Structured claims:')
+            for claim in claims:
+                full.append(f'- {claim}')
         if h2s:
             full.append('Sections: ' + ' · '.join(h2s[:14]))
         full.append('')
@@ -1119,6 +1332,9 @@ def main():
 
     n = generate_feed(articles)
     print(f"Generated feed.xml ({n} items)")
+
+    n = inject_article_jsonld(articles)
+    print(f"Injected Article JSON-LD into {n} articles")
 
     n = generate_llms(articles)
     print(f"Generated llms.txt + llms-full.txt ({n} posts)")
