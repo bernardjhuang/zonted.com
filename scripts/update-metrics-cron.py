@@ -29,24 +29,24 @@ CHANNEL = "C0APKM06YTC"
 THRESHOLD = 0.25
 YOUTUBE_SHORTS_URL = "https://www.youtube.com/@tabijiai/shorts"
 TABIJI_PUBLISH_LOG = Path("/Users/psy/.openclaw/workspace/tabiji/functions/publish-log.json")
-STRIPE_KEYCHAIN_SERVICE = "veracityapi-stripe-readonly-key"
+STRIPE_KEYCHAIN_SERVICE = "stripe-live-secret-key"
 STRIPE_API_VERSION = "2025-10-29.clover"
-REVENUE_PERIOD_LABEL = "May 2026"
-REVENUE_PERIOD_START = datetime(2026, 5, 1, tzinfo=timezone.utc)
-REVENUE_PERIOD_END = datetime(2026, 6, 1, tzinfo=timezone.utc)
+REVENUE_PERIOD_LABEL = "June 2026"
+REVENUE_PERIOD_START = datetime(2026, 6, 1, tzinfo=timezone.utc)
+REVENUE_PERIOD_END = datetime(2026, 7, 1, tzinfo=timezone.utc)
 MANUAL_REVENUE_CARDS = [
     {
         "key": "tabiji",
         "name": "Tabiji",
         "domain": "tabiji.ai",
         "color": "#2a7a2a",
-        "total": "$123.68",
-        "label": "estimated royalties",
-        "source": "KDP dashboard",
+        "total": "$117.08",
+        "label": "June 2026 estimated royalties",
+        "source": "KDP dashboard estimate",
         "rows": [
-            {"label": "eBook royalties", "value": "$60.32"},
-            {"label": "Print royalties", "value": "$28.82"},
-            {"label": "KENP royalties", "value": "$7.90"},
+            {"label": "eBook royalties", "value": "$26.80"},
+            {"label": "Print royalties", "value": "$59.93"},
+            {"label": "KENP royalties", "value": "$10.21"},
         ],
     },
     {
@@ -54,12 +54,12 @@ MANUAL_REVENUE_CARDS = [
         "name": "AgentTune",
         "domain": "agent-tune.com",
         "color": "#6366f1",
-        "total": "$9",
-        "label": "May 2026 gross collected",
+        "total": "$0",
+        "label": "June 2026 gross collected",
         "source": "Stripe",
         "rows": [
-            {"label": "Successful payments", "value": "1"},
-            {"label": "Net after fees", "value": "$8.44"},
+            {"label": "Successful payments", "value": "0"},
+            {"label": "Net after fees", "value": "$0"},
             {"label": "Lifetime gross", "value": "$9"},
         ],
     },
@@ -68,12 +68,12 @@ MANUAL_REVENUE_CARDS = [
         "name": "Zonted",
         "domain": "zonted.com",
         "color": "#6f4aa8",
-        "total": "$200",
-        "label": "May affiliate earnings",
+        "total": "$0",
+        "label": "June 2026 affiliate earnings",
         "source": "WaveSpeedAI affiliate",
         "rows": [
-            {"label": "Month", "value": "May 2026"},
-            {"label": "Total clicks", "value": "5"},
+            {"label": "Month", "value": "June 2026"},
+            {"label": "Referral fees", "value": "$0"},
         ],
     },
     {
@@ -82,7 +82,7 @@ MANUAL_REVENUE_CARDS = [
         "domain": "pixel-forge.net",
         "color": "#10b981",
         "total": "$0",
-        "label": "May 2026 gross collected",
+        "label": "June 2026 gross collected",
         "source": "Stripe",
         "rows": [
             {"label": "Successful payments", "value": "0"},
@@ -756,8 +756,8 @@ def update_html(data: dict) -> None:
     if revenue_cards:
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
-            <h2 id="revenue-heading"><span class="icon">💸</span> May 2026 Revenue Snapshot</h2>
-            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe read-only successful charges for May 2026.</p>
+            <h2 id="revenue-heading"><span class="icon">💸</span> {esc(REVENUE_PERIOD_LABEL)} Revenue Snapshot</h2>
+            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe successful charges for {esc(REVENUE_PERIOD_LABEL)}.</p>
             <div class="property-grid revenue-grid">
 {revenue_cards}
             </div>
