@@ -554,7 +554,8 @@
             .summary-grid { grid-template-columns: 1fr; }
         }
 
-    </style>
+    .property-mini-chart canvas { max-width: 100%; height: auto; } /* reflow at 200% zoom */
+</style>
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -585,7 +586,7 @@
 
         <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
-            <h2 id="revenue-heading"><span class="icon">💸</span> June 2026 Revenue Snapshot</h2>
+            <h2 id="revenue-heading">June 2026 Revenue Snapshot</h2>
             <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe successful charges for June 2026.</p>
             <div class="property-grid revenue-grid">
                 <article class="property-card revenue-card" style="--card-accent:#2a7a2a">
@@ -677,7 +678,7 @@
 
         <!-- Portfolio GA4 Snapshot -->
         <section class="portfolio-section" aria-labelledby="portfolio-ga4-heading">
-            <h2 id="portfolio-ga4-heading"><span class="icon">📊</span> GA4 Portfolio Snapshot</h2>
+            <h2 id="portfolio-ga4-heading">GA4 Portfolio Snapshot</h2>
             <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
                 <article class="property-card">
@@ -890,7 +891,7 @@
 
         <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
-            <h2 id="portfolio-gsc-heading"><span class="icon">🔎</span> Search Console Snapshot</h2>
+            <h2 id="portfolio-gsc-heading">Search Console Snapshot</h2>
             <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
                 <article class="property-card search-console-card">
@@ -1103,7 +1104,7 @@
 
         <!-- Tabiji Social Snapshot -->
         <section class="portfolio-section social-snapshot-section" aria-labelledby="social-snapshot-heading">
-            <h2 id="social-snapshot-heading"><span class="icon">🌐</span> Tabiji Social Snapshot</h2>
+            <h2 id="social-snapshot-heading">Tabiji Social Snapshot</h2>
             <p class="section-desc">Four-platform snapshot for Tabiji’s social engine: Instagram, YouTube Shorts, Pinterest, and TikTok.</p>
             <div class="property-grid social-grid">
                 <article class="property-card social-card">
