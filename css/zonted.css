@@ -85,10 +85,12 @@ img, video { max-width: 100%; height: auto; }
   color: var(--faded);
   text-decoration: none;
   transition: color 0.15s;
-  /* Hit-area padding cancelled by negative margin: visual rhythm unchanged,
-     pointer/touch target grows to ~40px tall. */
-  padding: 10px 6px;
-  margin: -10px -6px;
+}
+/* Hit-area padding cancelled by negative margin: visual rhythm unchanged,
+   pointer target grows to ~40px tall. Desktop only — the mobile drawer
+   already gives links 14x24 padding, and the negative margin overflowed it. */
+@media (min-width: 721px) {
+  .zn-nav-links a { padding: 10px 6px; margin: -10px -6px; }
 }
 .zn-nav-links a:hover { color: #581c87; }
 .zn-nav-links a.active { color: var(--ink); }
@@ -372,6 +374,7 @@ img, video { max-width: 100%; height: auto; }
   color: var(--faded);
 }
 .zn-subscribe-form {
+  min-width: 0; /* grid items default to min-width:auto — the input's intrinsic 20ch width was propagating up and overflowing the module at 200% zoom */
   display: flex;
   align-items: baseline;
   border-bottom: 1.5px solid var(--ink);
