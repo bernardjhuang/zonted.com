@@ -85,6 +85,10 @@ img, video { max-width: 100%; height: auto; }
   color: var(--faded);
   text-decoration: none;
   transition: color 0.15s;
+  /* Hit-area padding cancelled by negative margin: visual rhythm unchanged,
+     pointer/touch target grows to ~40px tall. */
+  padding: 10px 6px;
+  margin: -10px -6px;
 }
 .zn-nav-links a:hover { color: #581c87; }
 .zn-nav-links a.active { color: var(--ink); }
@@ -382,6 +386,7 @@ img, video { max-width: 100%; height: auto; }
   font-size: 1rem;
   color: var(--ink);
   padding: 6px 0;
+  min-width: 0; /* let the flex input shrink — its intrinsic size forced overflow at 200% zoom */
 }
 .zn-subscribe-form input::placeholder { color: var(--faded); }
 .zn-subscribe-form button {
@@ -636,6 +641,9 @@ img, video { max-width: 100%; height: auto; }
   margin-top: 80px;
   padding: 32px 0;
   border-top: 1px solid var(--rule);
+  /* Explicit paper ground: dark island pages (portfolio, ai-stack) otherwise
+     bleed their background under the footer and sink link contrast to ~3.5:1. */
+  background: var(--paper);
 }
 .zn-footer-inner {
   display: flex;
@@ -649,7 +657,8 @@ img, video { max-width: 100%; height: auto; }
 }
 .zn-footer-inner a { color: var(--faded); text-decoration: none; margin-left: 18px; }
 .zn-footer-inner a:hover { color: var(--ink); }
-.zn-footer-links { display: flex; gap: 4px; flex-wrap: wrap; }
+.zn-footer-links { display: flex; gap: 2px; flex-wrap: wrap; }
+.zn-footer-links a { display: inline-block; padding: 8px 9px; } /* ≥24px touch targets — the bare "X" link measured 9px wide */
 
 /* ---------- Article — top block (above 3-col grid) ---------- */
 .zn-article-head {
