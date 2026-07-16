@@ -371,6 +371,7 @@ def generate_sitemap(articles):
     # Hubs
     urls.append(('/posts/', '0.8', today))
     urls.append(('/portfolio/', '0.8', today))
+    urls.append(('/trading/', '0.8', today))
     urls.append(('/ai-stack/', '0.8', today))
     urls.append(('/metrics/', '0.7', today))
     # About
