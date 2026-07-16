@@ -24,13 +24,14 @@
         /* Games hub — built from site tokens (--paper / --ink / --ox / etc.) */
         .gh-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(6, minmax(0, 1fr));
             gap: 24px;
             margin-top: 8px;
         }
         .gh-card {
             display: flex;
             flex-direction: column;
+            grid-column: span 2;
             text-decoration: none;
             color: var(--ink);
             border: 1px solid var(--rule);
@@ -44,6 +45,7 @@
             box-shadow: 0 12px 30px #1a18151f;
             border-color: #1a181544;
         }
+        .gh-card:focus-visible { outline: 3px solid var(--ox); outline-offset: 4px; }
         .gh-thumb {
             aspect-ratio: 16 / 9;
             display: flex;
@@ -56,7 +58,6 @@
         .gh-thumb.fry { background: radial-gradient(circle at 50% 30%, #c0392b, #7a1d15); }
         .gh-thumb.grave { background: radial-gradient(circle at 50% 35%, #2a1f4d, #0a0420); }
         .gh-thumb.rebecca { background: radial-gradient(120% 120% at 50% 0%, #2a2350, #0e1022); }
-        .gh-thumb.stonk { background: radial-gradient(circle at 50% 25%, #1f6f52, #071d17); }
         .gh-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .gh-eyebrow {
             font-family: var(--mono);
@@ -69,7 +70,108 @@
         .gh-dek { font-family: var(--serif); font-size: .92rem; line-height: 1.5; color: var(--faded); flex: 1; }
         .gh-play { font-family: var(--mono); font-size: .8rem; font-weight: 600; color: var(--ox); margin-top: 4px; }
         .gh-card:hover .gh-play { text-decoration: underline; text-underline-offset: 3px; }
-        @media (max-width: 760px) { .gh-grid { grid-template-columns: 1fr; gap: 18px; } }
+
+        /* Featured game — distilled from PixelForge's Stonk Runner launch visual. */
+        .gh-card--stonk {
+            grid-column: 1 / -1;
+            display: grid;
+            grid-template-columns: minmax(280px, .82fr) minmax(0, 1.35fr);
+            color: #f5eddf;
+            border-color: #5b4028;
+            background: #1d160f;
+            box-shadow: 0 16px 44px #1a181526;
+        }
+        .gh-card--stonk:hover {
+            border-color: #e45716;
+            box-shadow: 0 20px 50px #1a18153d, 0 0 0 1px #e4571633;
+        }
+        .gh-stonk-copy {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-width: 0;
+            padding: clamp(24px, 4vw, 46px);
+        }
+        .gh-stonk-kicker {
+            margin-bottom: 16px;
+            font-family: var(--mono);
+            font-size: .68rem;
+            font-weight: 600;
+            letter-spacing: .16em;
+            text-transform: uppercase;
+            color: #f06a24;
+        }
+        .gh-stonk-title {
+            font-family: var(--display);
+            font-size: clamp(2.1rem, 4.2vw, 3.5rem);
+            font-weight: 600;
+            line-height: .98;
+            letter-spacing: -.025em;
+            text-wrap: balance;
+        }
+        .gh-stonk-title em { color: #f06a24; }
+        .gh-stonk-dek {
+            margin-top: 18px;
+            font-family: var(--serif);
+            font-size: 1rem;
+            line-height: 1.55;
+            color: #d8c9b1;
+        }
+        .gh-stonk-meta {
+            margin-top: 18px;
+            font-family: var(--mono);
+            font-size: .68rem;
+            line-height: 1.6;
+            letter-spacing: .04em;
+            color: #9d896a;
+        }
+        .gh-stonk-play {
+            align-self: flex-start;
+            margin-top: 22px;
+            padding: 13px 18px;
+            border-radius: 8px;
+            background: #df5017;
+            box-shadow: inset 0 -3px 0 #a8360d;
+            font-family: var(--mono);
+            font-size: .78rem;
+            font-weight: 600;
+            letter-spacing: .05em;
+            color: #fff;
+        }
+        .gh-card--stonk:hover .gh-stonk-play { background: #f05c1c; }
+        .gh-stonk-visual {
+            min-width: 0;
+            min-height: 320px;
+            overflow: hidden;
+            border-left: 1px solid #5b4028;
+            background: #080d12;
+        }
+        .gh-stonk-visual img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform .3s ease;
+        }
+        .gh-card--stonk:hover .gh-stonk-visual img { transform: scale(1.025); }
+
+        @media (max-width: 900px) {
+            .gh-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .gh-card { grid-column: span 1; }
+            .gh-card--stonk { grid-column: 1 / -1; grid-template-columns: minmax(250px, .85fr) minmax(0, 1.15fr); }
+        }
+        @media (max-width: 760px) {
+            .gh-grid { grid-template-columns: 1fr; gap: 18px; }
+            .gh-card, .gh-card--stonk { grid-column: 1; }
+            .gh-card--stonk { grid-template-columns: 1fr; }
+            .gh-stonk-visual { order: -1; min-height: 0; aspect-ratio: 3 / 2; border-left: 0; border-bottom: 1px solid #5b4028; }
+            .gh-stonk-copy { padding: 24px; }
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .gh-card, .gh-stonk-visual img { transition: none; }
+            .gh-card:hover, .gh-card--stonk:hover .gh-stonk-visual img { transform: none; }
+        }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -109,13 +211,16 @@
             <section class="zn-section">
                 <div class="gh-grid">
 
-                    <a class="gh-card" href="https://pixel-forge.net/stonk-runner" target="_blank" rel="noopener noreferrer">
-                        <div class="gh-thumb stonk" aria-hidden="true">🏃📈</div>
-                        <div class="gh-body">
-                            <span class="gh-eyebrow">Stock-market autorunner</span>
-                            <span class="gh-title">Stonk Runner</span>
-                            <span class="gh-dek">Pick any ticker and outrun its real last quarter. Red candles crumble, volume spikes stab, and every runner is forged from a photo.</span>
-                            <span class="gh-play">Play ↗</span>
+                    <a class="gh-card gh-card--stonk" href="https://pixel-forge.net/stonk-runner" target="_blank" rel="noopener noreferrer">
+                        <div class="gh-stonk-copy">
+                            <span class="gh-stonk-kicker">Featured · playable proof</span>
+                            <span class="gh-stonk-title">Stonk <em>Runner</em></span>
+                            <span class="gh-stonk-dek">Pick any ticker and outrun its real last quarter. Red candles crumble, volume spikes stab, and every runner starts as a real photo.</span>
+                            <span class="gh-stonk-meta">60-second runs · real market data · gamepad ready · margin calls guaranteed</span>
+                            <span class="gh-stonk-play">▶ Play Free ↗</span>
+                        </div>
+                        <div class="gh-stonk-visual" aria-hidden="true">
+                            <img src="/games/assets/stonk-runner-card.webp" alt="" width="954" height="639" loading="lazy">
                         </div>
                     </a>
 
