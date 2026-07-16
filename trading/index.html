@@ -113,10 +113,11 @@
 
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions &amp; trades</button>
-                <button class="trading-tab" id="watchlist-tab" type="button" role="tab" aria-selected="false" aria-controls="watchlist-panel">Watchlist <span class="trading-tab-count">82</span></button>
+                <button class="trading-tab" id="watchlist-tab" type="button" role="tab" aria-selected="false" aria-controls="watchlist-panel">Watchlist <span class="trading-tab-count">83</span></button>
             </div>
 
             <div class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
+            <!-- AUTO:ROBINHOOD:START -->
             <section class="position-section" aria-labelledby="robinhood-heading">
                 <div class="position-head">
                     <h2 id="robinhood-heading">Robinhood</h2>
@@ -125,13 +126,13 @@
                 <div class="position-group">
                     <h3>Equities</h3>
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
-                        <li class="ticker"><span class="ticker-symbol">CYPH</span></li>
-                        <li class="ticker"><span class="ticker-symbol">NVO</span></li>
                         <li class="ticker"><span class="ticker-symbol">WEN</span></li>
                     </ul>
                 </div>
             </section>
+            <!-- AUTO:ROBINHOOD:END -->
 
+            <!-- AUTO:TRADES:START -->
             <section class="position-section" aria-labelledby="activity-heading">
                 <div class="position-head">
                     <h2 id="activity-heading">Recent large trades</h2>
@@ -144,18 +145,13 @@
                         <ol class="activity-list" aria-label="Last 10 qualifying Robinhood buys">
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-16">Jul 16</time>
-                                <div><span class="activity-action">NVO shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.1%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-16">Jul 16</time>
-                                <div><span class="activity-action">WEN shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.5%</span><span class="activity-status">Unrealized</span></div>
+                                <div><span class="activity-action">WEN shares</span><span class="activity-type">Equity · 5 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+0.4%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-15">Jul 15</time>
                                 <div><span class="activity-action">CYPH shares</span><span class="activity-type">Equity · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−8.8%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−9.1%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-14">Jul 14</time>
@@ -170,7 +166,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-13">Jul 13</time>
                                 <div><span class="activity-action">WEN shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+1.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+1.8%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-13">Jul 13</time>
@@ -191,6 +187,11 @@
                                 <time class="activity-date" datetime="2026-07-07">Jul 7</time>
                                 <div><span class="activity-action">META call</span><span class="activity-type">Option · 2 fills</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+57.5%</span><span class="activity-status">Realized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-07">Jul 7</time>
+                                <div><span class="activity-action">BYDDY shares</span><span class="activity-type">Equity · 2 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+1.7%</span><span class="activity-status">Realized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -251,7 +252,8 @@
                     </section>
                 </div>
             </section>
-
+            <!-- AUTO:TRADES:END -->
+            <!-- AUTO:WEB3:START -->
             <section class="position-section" aria-labelledby="web3-heading">
                 <div class="position-head">
                     <h2 id="web3-heading">Web3 wallet</h2>
@@ -261,20 +263,22 @@
                     <h3>Positions above $100</h3>
                     <ul class="ticker-list" aria-label="Onchain token positions above $100">
                         <li class="ticker"><span class="ticker-symbol">CASHCAT</span><span class="ticker-name">Cash Cat</span></li>
-                        <li class="ticker"><span class="ticker-symbol">HOODRAT</span><span class="ticker-name">Hoodrat</span></li>
-                        <li class="ticker"><span class="ticker-symbol">MEOW</span><span class="ticker-name">meow</span></li>
-                        <li class="ticker"><span class="ticker-symbol">WISHBONE</span><span class="ticker-name">Wishbone</span></li>
+                        <li class="ticker"><span class="ticker-symbol">HOODRAT</span></li>
+                        <li class="ticker"><span class="ticker-symbol">MEOW</span></li>
+                        <li class="ticker"><span class="ticker-symbol">WISHBONE</span></li>
                     </ul>
                 </div>
             </section>
+            <!-- AUTO:WEB3:END -->
 
             <p class="trading-note">Point-in-time disclosure. Web3 positions worth $100 or less and unsolicited spam tokens are excluded. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
             </div>
 
+            <!-- AUTO:WATCHLIST:START -->
             <section class="trading-panel watchlist-panel" id="watchlist-panel" role="tabpanel" tabindex="0" aria-labelledby="watchlist-tab" hidden>
                 <div class="position-head">
                     <h2 id="watchlist-heading">Research watchlist</h2>
-                    <span>82 symbols · Robinhood</span>
+                    <span>83 symbols · Robinhood</span>
                 </div>
                 <p class="watchlist-intro">Names we're researching, monitoring, or waiting to become interesting. The list spans companies we own, companies we've traded, and companies still earning a closer look.</p>
                 <ul class="watchlist-grid" aria-label="Symbols on the research watchlist">
@@ -333,6 +337,7 @@
                     <li class="watchlist-symbol">NTDOY</li>
                     <li class="watchlist-symbol">NVDA</li>
                     <li class="watchlist-symbol">NVO</li>
+                    <li class="watchlist-symbol">OUST</li>
                     <li class="watchlist-symbol">OXY</li>
                     <li class="watchlist-symbol">PINS</li>
                     <li class="watchlist-symbol">PL</li>
@@ -361,10 +366,10 @@
                     <li class="watchlist-symbol">XYL</li>
                     <li class="watchlist-symbol">ZM</li>
                     <li class="watchlist-empty" aria-hidden="true"></li>
-                    <li class="watchlist-empty" aria-hidden="true"></li>
                 </ul>
                 <p class="watchlist-note">Synced from the <strong>slo</strong> Robinhood watchlist on July 16, 2026. A watchlist is a research pipeline—not a position, price target, or recommendation.</p>
             </section>
+            <!-- AUTO:WATCHLIST:END -->
         </div>
     </main>
 
