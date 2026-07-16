@@ -614,6 +614,10 @@ def render_search_console_cards(data: dict) -> str:
 
 
 def render_revenue_cards(data: dict) -> str:
+    # Revenue cards retired from public metrics page (July 2026)
+    return ""
+
+def _render_revenue_cards_disabled(data: dict) -> str:
     revenue = data.get("revenueSnapshot") or {}
     if not revenue.get("cards"):
         return ""
@@ -752,8 +756,8 @@ def update_html(data: dict) -> None:
         flags=re.S,
     )
 
-    revenue_cards = render_revenue_cards(data)
-    if revenue_cards:
+    revenue_cards = render_revenue_cards(data)  # Now always returns ""
+    if False:  # Revenue section retired July 2026
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
             <h2 id="revenue-heading"><span class="icon">💸</span> {esc(REVENUE_PERIOD_LABEL)} Revenue Snapshot</h2>
@@ -814,8 +818,9 @@ def update_html(data: dict) -> None:
         "portfolioGa4": {"labels": data["labels"], "properties": data["properties"]},
         "portfolioGsc": {"labels": data.get("gscLabels", data["labels"]), "properties": data.get("searchConsoleProperties", [])},
     }
-    if data.get("revenueSnapshot"):
-        chart["revenueSnapshot"] = data["revenueSnapshot"]
+    # Revenue snapshot removed from metrics page (July 2026)
+    # if data.get("revenueSnapshot"):
+    #     chart["revenueSnapshot"] = data["revenueSnapshot"]
     if existing_chart.get("socialSnapshot"):
         chart["socialSnapshot"] = existing_chart["socialSnapshot"]
     text = text[: chart_match.start(1)] + json.dumps(chart, separators=(",", ":")) + text[chart_match.end(1) :]
