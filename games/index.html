@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fcfcfa">
     <title>Games — Zonted</title>
-    <meta name="description" content="Playable experiments from the lab. Three small browser games built with AI agents — an endless runner, an arcade maze of dead projects, and a first-person panic sim where you're a french fry.">
+    <meta name="description" content="Playable experiments from the lab. Four small browser games built with AI agents — stock-market and rooftop runners, an arcade maze of dead projects, and a first-person panic sim where you're a french fry.">
     <link rel="canonical" href="https://zonted.com/games/">
     <meta property="og:title" content="Games — Zonted">
-    <meta property="og:description" content="Three small browser games built in the lab: Run to Rebecca, the Zonted Graveyard, and Life of Fry.">
+    <meta property="og:description" content="Four small browser games built in the lab: Stonk Runner, Run to Rebecca, the Zonted Graveyard, and Life of Fry.">
     <meta property="og:url" content="https://zonted.com/games/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
@@ -24,7 +24,7 @@
         /* Games hub — built from site tokens (--paper / --ink / --ox / etc.) */
         .gh-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
+            grid-template-columns: repeat(2, 1fr);
             gap: 24px;
             margin-top: 8px;
         }
@@ -56,6 +56,7 @@
         .gh-thumb.fry { background: radial-gradient(circle at 50% 30%, #c0392b, #7a1d15); }
         .gh-thumb.grave { background: radial-gradient(circle at 50% 35%, #2a1f4d, #0a0420); }
         .gh-thumb.rebecca { background: radial-gradient(120% 120% at 50% 0%, #2a2350, #0e1022); }
+        .gh-thumb.stonk { background: radial-gradient(circle at 50% 25%, #1f6f52, #071d17); }
         .gh-body { padding: 18px 20px 22px; display: flex; flex-direction: column; gap: 8px; flex: 1; }
         .gh-eyebrow {
             font-family: var(--mono);
@@ -107,6 +108,16 @@
 
             <section class="zn-section">
                 <div class="gh-grid">
+
+                    <a class="gh-card" href="https://pixel-forge.net/stonk-runner" target="_blank" rel="noopener noreferrer">
+                        <div class="gh-thumb stonk" aria-hidden="true">🏃📈</div>
+                        <div class="gh-body">
+                            <span class="gh-eyebrow">Stock-market autorunner</span>
+                            <span class="gh-title">Stonk Runner</span>
+                            <span class="gh-dek">Pick any ticker and outrun its real last quarter. Red candles crumble, volume spikes stab, and every runner is forged from a photo.</span>
+                            <span class="gh-play">Play ↗</span>
+                        </div>
+                    </a>
 
                     <a class="gh-card" href="/games/run-to-rebecca/">
                         <div class="gh-thumb rebecca" aria-hidden="true">🏃💨</div>
