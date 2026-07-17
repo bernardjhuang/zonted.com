@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <title>I Trained a GPT on 15 Years of My Life — Then Interrogated It</title>
+    <meta name="description" content="I built a 10M-parameter language model from scratch on my Google search history and email, for $0, on a MacBook Air — then cracked it open to measure exactly how mention rates become AI beliefs.">
+    <link rel="canonical" href="https://zonted.com/posts/i-trained-a-gpt-on-my-life/">
+    <meta property="og:title" content="I Trained a GPT on 15 Years of My Life — Then Interrogated It">
+    <meta property="og:description" content="A 10M-parameter GPT built from scratch on my Google Takeout, for $0 — and what cracking it open taught me about how AI models decide who and what to believe in.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta property="og:url" content="https://zonted.com/posts/i-trained-a-gpt-on-my-life/">
+    <meta property="article:published_time" content="2026-07-17">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Trained a GPT on 15 Years of My Life — Then Interrogated It","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-17","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/i-trained-a-gpt-on-my-life/","description":"I built a 10M-parameter language model from scratch on my Google search history and email, for $0, on a MacBook Air — then cracked it open to measure exactly how mention rates become AI beliefs."}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Trained a GPT on 15 Years of My Life — Then Interrogated It"}]}
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+    <style>
+      .lm-fig svg { width:100%; height:auto; display:block; }
+      .lm-fig svg text { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; fill:#8a8578; }
+      .lm-fig svg .ink { fill:#1a1815; }
+      .lm-fig svg .lbl { fill:#57534a; font-size:12px; }
+      .lm-legend { display:flex; flex-wrap:wrap; gap:14px; font-size:.8rem; color:#57534a; margin:0 0 .5rem; }
+      .lm-legend span { display:flex; align-items:center; gap:5px; }
+      .lm-sw { width:10px; height:10px; border-radius:2px; display:inline-block; }
+      .lm-swl { width:14px; height:3px; border-radius:2px; display:inline-block; }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/games/">Games</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main">
+
+        <header class="zn-article-head">
+            <p class="zn-eyebrow zn-eyebrow--ox zn-article-eyebrow">9 min read</p>
+            <h1 class="zn-article-title">I trained a GPT on 15 years of my life — then interrogated it</h1>
+            <p class="zn-article-dek">A 10-million-parameter language model, built from scratch on a MacBook Air from my Google search history and email, for $0 — and what cracking it open taught me about how AI models decide who and what to believe in.</p>
+            <div class="zn-article-byline">
+                <div class="zn-article-byline-left">
+                    <span class="zn-avatar-byline" style="background-image:url('https://img.zonted.com/about/bernard-huang-headshot.jpg');" aria-hidden="true"></span>
+                    <span>Bernard Huang</span>
+                    <span class="zn-article-byline-meta">July 17, 2026 &middot; 9 min read</span>
+                </div>
+                <div class="zn-article-byline-right">
+                    <a href="https://x.com/intent/tweet?text=I%20trained%20a%2010M-parameter%20GPT%20on%2015%20years%20of%20my%20Google%20history%20%E2%80%94%20here%27s%20what%20it%20taught%20me%20about%20how%20AI%20decides%20what%20to%20believe&url=https://zonted.com/posts/i-trained-a-gpt-on-my-life/" target="_blank" rel="noopener">Share</a>
+                </div>
+            </div>
+        </header>
+
+        <div class="zn-article-grid">
+
+            <aside class="zn-article-rail" aria-label="Article sections">
+                <p class="zn-eyebrow zn-rail-eyebrow">In this letter</p>
+                <nav class="zn-rail-nav">
+                    <a class="zn-rail-item active" href="#section-1"><span class="zn-rail-num">01</span>The corpus: me</a>
+                    <a class="zn-rail-item" href="#section-2"><span class="zn-rail-num">02</span>Pretraining</a>
+                    <a class="zn-rail-item" href="#section-3"><span class="zn-rail-num">03</span>Teaching it to shut up</a>
+                    <a class="zn-rail-item" href="#section-4"><span class="zn-rail-num">04</span>Cracking it open</a>
+                    <a class="zn-rail-item" href="#section-5"><span class="zn-rail-num">05</span>The playbook</a>
+                </nav>
+
+                <div class="zn-rail-numbers">
+                    <p class="zn-eyebrow zn-eyebrow--ox zn-rail-numbers-eyebrow">By the numbers</p>
+                    <div class="zn-rail-numbers-line"><strong>10.77M</strong> parameters</div>
+                    <div class="zn-rail-numbers-line"><strong>67,792</strong> search queries eaten</div>
+                    <div class="zn-rail-numbers-line"><strong>8,520</strong> real reply pairs for SFT</div>
+                    <div class="zn-rail-numbers-line"><strong>$0</strong> total training cost</div>
+                </div>
+            <!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+
+            <article class="zn-article-body">
+                <p>Everyone explains LLMs with someone else's diagrams. I wanted to hold one — small enough to audit, trained on data I understand better than anyone: my own. So over a couple of days I ran the entire modern LLM pipeline — pretraining, supervised fine-tuning, chat interface, interpretability probes — on a laptop, using my Google Takeout as the corpus.</p>
+                <p>The result is a tiny ghost of me that schedules coffee at "14:30am," believes Wednesday is the best day of the week, and taught me more about AI "knowledge" than a year of reading papers. Here's the whole build, including the part where my own measurement bug fooled me.</p>
+
+                <h2 id="section-1"><span class="zn-h2-num">1.</span> The corpus: me</h2>
+                <p>Google Takeout will hand you everything the company knows about you. Mine was 133&nbsp;GB, most of it photos and video. The text — the part a language model can eat — was tiny by comparison:</p>
+                <ul>
+                    <li><strong>67,792 search queries</strong> across 15 years (Search, Maps, YouTube, Flights, Gmail search) — 1.35M characters after parsing</li>
+                    <li><strong>92,322 emails</strong> in one mbox, from which I extracted my ~10k sent messages — 3.1M characters of pure me-voice</li>
+                </ul>
+                <p>Combined pretraining corpus: <strong>4.45M characters</strong>. For scale, that's four times the Shakespeare dataset every tutorial uses, and a rounding error of a rounding error of what a frontier model trains on. One gotcha worth passing on: Takeout's activity exports default to HTML, and Google separates "Searched for" from your query with a <em>non-breaking space</em> that silently breaks naive parsers. Data cleaning starts before you have data.</p>
+
+                <h2 id="section-2"><span class="zn-h2-num">2.</span> Pretraining: 5.07 &rarr; 1.60</h2>
+                <p>I used Karpathy's nanoGPT: a character-level GPT — 6 layers, 6 heads, 384 dimensions, 10.77M parameters — trained on one task: <em>predict the next character</em>. No labels, no instructions. On an M-series MacBook Air, 8,000 training steps took about two hours.</p>
+
+                <figure class="lm-fig" style="margin:1.5rem 0 .5rem;">
+                <svg viewBox="0 0 640 300" role="img" aria-label="Line chart of validation loss falling from 5.07 at step 0 to 1.60 at step 5000, then flat to step 8000">
+                <line x1="50" y1="227.6" x2="620" y2="227.6" stroke="#e5e2da"/>
+                <line x1="50" y1="162.7" x2="620" y2="162.7" stroke="#e5e2da"/>
+                <line x1="50" y1="97.9" x2="620" y2="97.9" stroke="#e5e2da"/>
+                <line x1="50" y1="33" x2="620" y2="33" stroke="#e5e2da"/>
+                <text x="42" y="231" text-anchor="end">2.0</text>
+                <text x="42" y="166" text-anchor="end">3.0</text>
+                <text x="42" y="101" text-anchor="end">4.0</text>
+                <text x="42" y="37" text-anchor="end">5.0</text>
+                <polyline points="50,28 86,209 121,226 157,231 193,235 228,244 264,246 299,250 335,252 371,252 406,253 442,252 478,253 513,253 549,252 584,253 620,252" fill="none" stroke="#2a78d6" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="406" cy="253" r="4.5" fill="#2a78d6" stroke="#fcfcfa" stroke-width="2"/>
+                <text x="406" y="238" text-anchor="middle" class="lbl">best: 1.60</text>
+                <text x="50" y="285">0</text><text x="335" y="285" text-anchor="middle">4,000 steps</text><text x="620" y="285" text-anchor="end">8,000</text>
+                <text x="150" y="60" class="lbl">validation loss (email + search corpus)</text>
+                </svg>
+                </figure>
+                <p style="font-size:.85rem;color:#8a8578;margin-bottom:2rem;">Loss is "average surprise per character." 5.07 is random keyboard-mashing; 1.60 means the model usually knows what I'll type next. It plateaued around step 5,000 — a 10M-param model had extracted everything it could from 4.5M characters.</p>
+
+                <p>What did it learn? My <em>shape</em>. Prompt it with nothing and it writes complete emails — greeting, scheduling proposal with my exact date format ("how about Friday (1/29) at 6p CT?"), "Let me know!", "Cheers, Bernard." It also exposed my past: I apparently once mail-merged a catch-up template to hundreds of people, because the model recites "I've launched a couple of startups (eSports coaching, real estate listings, bakery CRM)" verbatim, constantly. <strong>Your most-repeated text becomes the model's strongest belief.</strong> This is why real labs deduplicate training data with prejudice.</p>
+
+                <h2 id="section-3"><span class="zn-h2-num">3.</span> SFT: teaching it to shut up</h2>
+                <p>A pretrained model is autocomplete, not a chatbot. Ask it "best name?" and it doesn't answer — it drifts into email boilerplate and starts writing to someone named Marcos. A question creates no obligation to answer; that's a social contract, and contracts aren't in the corpus.</p>
+                <p>The fix is supervised fine-tuning, and the mechanics are almost anticlimactic: <em>same training loop, new data, lower learning rate</em>. The data is the clever part. Threading my mbox by <code>In-Reply-To</code> headers yielded <strong>8,520 real (incoming message &rarr; my actual reply) pairs</strong> — organic chat data most hobbyists have to fake:</p>
+<pre><code>&lt;|them|&gt;
+So many of these prompt tracking companies are raising money...
+&lt;|bernard|&gt;
+Ugh, I know. There must be a ton of money sloshing around...
+&lt;|end|&gt;</code></pre>
+                <p>Six thousand gentle steps later, the same 10.77M parameters hold turns, match my register, and — critically — stop talking. The chat model answers "want to grab lunch this week?" with "Sounds good!" instead of a three-paragraph email. Post-training didn't add knowledge; <strong>it changed which knowledge wins the race to the next token.</strong></p>
+                <blockquote><p>you&gt; hey any interest in trying that new thai place saturday?<br>bernard&gt; Alright, I'm down. See you at 14:30am if you are in SF :)</p></blockquote>
+                <p>Perfectly me-shaped agreement, complete with a time that doesn't exist. That's what 10M parameters buys: form without comprehension. It also memorized real phone numbers from my mail — harmless on my laptop, but the reason you should never publish weights trained on private data.</p>
+
+                <div class="zn-inline-subscribe">
+                    <p class="zn-inline-subscribe-headline">Get the next post by email.</p>
+                    <form class="zn-subscribe-form" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe &rarr;</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+                </div>
+
+                <h2 id="section-4"><span class="zn-h2-num">4.</span> Cracking it open</h2>
+                <p>A model this small can be audited: I wrote probes that read the model's <em>exact</em> internal probabilities — no sampling, no noise; one forward pass returns its true credence for any continuation. First discovery: the model invented character classes from scratch. Its learned vector for <code>!</code> is nearly identical to its vector for the 😊 emoji — nobody told it they do the same job in my emails; it noticed.</p>
+                <p>Then the real question: <strong>what does the model believe about the people and brands in my life, and why?</strong> I probed its confidence for names and tools, then counted actual mentions in the training data to see what drives belief. Three findings and one confession.</p>
+
+                <h3>Finding 1 — Belief scales with the log of exposure</h3>
+                <figure class="lm-fig" style="margin:1.5rem 0 .5rem;">
+                <svg viewBox="0 0 640 290" role="img" aria-label="Scatter on log axis: four SEO tools, mentions versus model confidence, falling on a nearly straight line from Notion 13 mentions 3 percent to Clearscope 1977 mentions 78 percent">
+                <line x1="60" y1="250" x2="600" y2="250" stroke="#e5e2da"/>
+                <line x1="60" y1="140.6" x2="600" y2="140.6" stroke="#e5e2da"/>
+                <line x1="60" y1="31.1" x2="600" y2="31.1" stroke="#e5e2da"/>
+                <text x="52" y="254" text-anchor="end">0%</text>
+                <text x="52" y="145" text-anchor="end">45%</text>
+                <text x="52" y="36" text-anchor="end">90%</text>
+                <line x1="83.8" y1="241.9" x2="556.6" y2="59.4" stroke="#8a8578" stroke-width="1" stroke-dasharray="4 4" opacity="0.6"/>
+                <circle cx="83.8" cy="241.9" r="6" fill="#2a78d6" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="209" cy="208.7" r="6" fill="#2a78d6" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="213.3" cy="209.4" r="6" fill="#2a78d6" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="556.6" cy="59.4" r="7" fill="#2a78d6" stroke="#fcfcfa" stroke-width="2"/>
+                <text x="83.8" y="265" text-anchor="middle" class="lbl">Notion · 13</text>
+                <text x="220" y="235" text-anchor="middle" class="lbl">Semrush · 49 / Ahrefs · 51</text>
+                <text x="545" y="48" text-anchor="end" class="lbl ink">Clearscope · 1,977 mentions → 78%</text>
+                <text x="330" y="284" text-anchor="middle">mentions in training data (log scale)</text>
+                <text x="470" y="150" class="lbl">r = 0.95</text>
+                </svg>
+                </figure>
+                <p style="font-size:.85rem;color:#8a8578;margin-bottom:2rem;">Model confidence completing "Content optimization: ___", against training-data mentions. Every ~10&times; more exposure buys a roughly constant jump in belief. (Yes, I co-founded Clearscope — which is exactly why my email mentions it 1,977 times, and why my model worships it. Bias in, bias out, measurably.)</p>
+
+                <h3>Finding 2 — Context beats volume at the margins</h3>
+                <p>The cleanest demonstration came from weekdays. Friday is my second-most-mentioned day (995 mentions — deadlines, "by Friday", "last Friday"). But I rarely <em>propose</em> Friday. And the model knows the difference:</p>
+
+                <div class="lm-legend">
+                    <span><span class="lm-sw" style="background:#9ec5f4"></span>mentions anywhere</span>
+                    <span><span class="lm-swl" style="background:#d85a30"></span>model confidence in "How about ___" (right axis)</span>
+                </div>
+                <figure class="lm-fig" style="margin:0 0 .5rem;">
+                <svg viewBox="0 0 640 320" role="img" aria-label="Bars of weekday mentions with confidence line: Wednesday leads both at 1094 mentions and 70 percent. Friday has 995 mentions but confidence sags to 49 percent, below Saturday">
+                <line x1="50" y1="270" x2="600" y2="270" stroke="#e5e2da"/>
+                <rect x="72.3" y="151.2" width="34" height="118.8" fill="#9ec5f4" rx="3"/>
+                <rect x="150.9" y="106.3" width="34" height="163.7" fill="#9ec5f4" rx="3"/>
+                <rect x="229.4" y="60.3" width="34" height="209.7" fill="#9ec5f4" rx="3"/>
+                <rect x="308" y="87.5" width="34" height="182.5" fill="#9ec5f4" rx="3"/>
+                <rect x="386.6" y="79.3" width="34" height="190.7" fill="#9ec5f4" rx="3"/>
+                <rect x="465.1" y="190.5" width="34" height="79.5" fill="#9ec5f4" rx="3"/>
+                <rect x="543.7" y="190.1" width="34" height="79.9" fill="#9ec5f4" rx="3"/>
+                <text x="89.3" y="146" text-anchor="middle">620</text>
+                <text x="167.9" y="101" text-anchor="middle">854</text>
+                <text x="246.4" y="55" text-anchor="middle">1094</text>
+                <text x="325" y="82" text-anchor="middle">952</text>
+                <text x="403.6" y="74" text-anchor="middle">995</text>
+                <text x="482.1" y="185" text-anchor="middle">415</text>
+                <text x="560.7" y="185" text-anchor="middle">417</text>
+                <polyline points="89.3,106.1 167.9,98.4 246.4,69.3 325,88 403.6,128.6 482.1,117.9 560.7,157.6" fill="none" stroke="#d85a30" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="89.3" cy="106.1" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="167.9" cy="98.4" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="246.4" cy="69.3" r="4.5" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="325" cy="88" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="403.6" cy="128.6" r="4.5" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="482.1" cy="117.9" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="560.7" cy="157.6" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <text x="246.4" y="40" text-anchor="middle" style="fill:#d85a30" font-weight="600">70%</text>
+                <text x="424" y="145" style="fill:#d85a30">49%</text>
+                <text x="89.3" y="290" text-anchor="middle" class="lbl">Mon</text>
+                <text x="167.9" y="290" text-anchor="middle" class="lbl">Tue</text>
+                <text x="246.4" y="290" text-anchor="middle" class="lbl">Wed</text>
+                <text x="325" y="290" text-anchor="middle" class="lbl">Thu</text>
+                <text x="403.6" y="290" text-anchor="middle" class="lbl">Fri</text>
+                <text x="482.1" y="290" text-anchor="middle" class="lbl">Sat</text>
+                <text x="560.7" y="290" text-anchor="middle" class="lbl">Sun</text>
+                </svg>
+                </figure>
+                <p style="font-size:.85rem;color:#8a8578;margin-bottom:2rem;">The Friday problem: second-most-mentioned day, fifth in the model's scheduling confidence — below Saturday, which has 42% of Friday's mentions. Being talked about is not the same as being recommended, and next-token models learn the difference.</p>
+
+                <p>Even better: asked "best day?" — a phrasing that appears nowhere in my data — the model still answers Wednesday-first. Associations generalize to questions nobody ever asked. That's the mechanism behind AI answering questions about your brand that no page on the internet answers directly.</p>
+
+                <h3>Finding 3 — The last training run wins</h3>
+                <p>Fine-tuning re-weighted everything toward the reply-pair data. Entities frequent in my recent replies strengthened; everyone else decayed — one name fell from 10% to 1% confidence across 6,000 steps of simply never appearing. Model belief is not a trophy; it's a lease that expires at the next retrain.</p>
+
+                <div class="lm-legend">
+                    <span><span class="lm-sw" style="background:#9ec5f4"></span>pretraining mentions</span>
+                    <span><span class="lm-sw" style="background:#2a78d6"></span>SFT mentions (trained last)</span>
+                    <span><span class="lm-swl" style="background:#d85a30"></span>confidence when asked "best name?" (right axis)</span>
+                </div>
+                <figure class="lm-fig" style="margin:0 0 .5rem;">
+                <svg viewBox="0 0 640 320" role="img" aria-label="Stacked bars of corrected name mentions with best-name confidence line. Kevin leads mentions at 201 with 17 percent confidence. Jennifer has 41 mentions, mostly SFT, and the top confidence at 32 percent">
+                <line x1="50" y1="270" x2="600" y2="270" stroke="#e5e2da"/>
+                <rect x="72.3" y="174.9" width="34" height="95.1" fill="#9ec5f4"/>
+                <rect x="72.3" y="59.9" width="34" height="115" fill="#2a78d6" rx="3"/>
+                <rect x="150.9" y="211.5" width="34" height="58.5" fill="#9ec5f4"/>
+                <rect x="150.9" y="155" width="34" height="56.5" fill="#2a78d6" rx="3"/>
+                <rect x="229.4" y="224" width="34" height="46" fill="#9ec5f4"/>
+                <rect x="229.4" y="172.8" width="34" height="51.2" fill="#2a78d6" rx="3"/>
+                <rect x="308" y="260.6" width="34" height="9.4" fill="#9ec5f4"/>
+                <rect x="308" y="227.1" width="34" height="33.5" fill="#2a78d6" rx="3"/>
+                <rect x="386.6" y="262.7" width="34" height="7.3" fill="#9ec5f4"/>
+                <rect x="386.6" y="259.6" width="34" height="3.1" fill="#2a78d6" rx="3"/>
+                <rect x="465.1" y="267.9" width="34" height="2.1" fill="#9ec5f4" rx="2"/>
+                <text x="89.3" y="54" text-anchor="middle">201</text>
+                <text x="167.9" y="149" text-anchor="middle">110</text>
+                <text x="246.4" y="167" text-anchor="middle">93</text>
+                <text x="325" y="222" text-anchor="middle">41</text>
+                <text x="403.6" y="254" text-anchor="middle">10</text>
+                <text x="482.1" y="262" text-anchor="middle">2</text>
+                <text x="560.7" y="262" text-anchor="middle">0</text>
+                <polyline points="89.3,155 167.9,195.7 246.4,197.7 325,60.4 403.6,226 482.1,263.4 560.7,262.8" fill="none" stroke="#d85a30" stroke-width="2" stroke-linejoin="round"/>
+                <circle cx="89.3" cy="155" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="167.9" cy="195.7" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="246.4" cy="197.7" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="325" cy="60.4" r="5" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="403.6" cy="226" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="482.1" cy="263.4" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <circle cx="560.7" cy="262.8" r="4" fill="#d85a30" stroke="#fcfcfa" stroke-width="2"/>
+                <text x="325" y="47" text-anchor="middle" style="fill:#d85a30" font-weight="600">32%</text>
+                <text x="112" y="150" style="fill:#d85a30">17%</text>
+                <text x="89.3" y="290" text-anchor="middle" class="lbl">Kevin</text>
+                <text x="167.9" y="290" text-anchor="middle" class="lbl">Taylor</text>
+                <text x="246.4" y="290" text-anchor="middle" class="lbl">Alex</text>
+                <text x="325" y="290" text-anchor="middle" class="lbl">Jennifer</text>
+                <text x="403.6" y="290" text-anchor="middle" class="lbl">Ross</text>
+                <text x="482.1" y="290" text-anchor="middle" class="lbl">Elon</text>
+                <text x="560.7" y="290" text-anchor="middle" class="lbl">Barack</text>
+                </svg>
+                </figure>
+                <p style="font-size:.85rem;color:#8a8578;margin-bottom:2rem;">The Jennifer anomaly: fourth in mentions (41), first in belief (32%) — her mentions are 78% SFT-side (recent), sit inside reply blocks (the exact region the probe reads), and "Jennifer" is secretly four different people the model pooled into one string. Models track character sequences, not humans.</p>
+
+                <h3>Finding 4 — My own bug, or: why mention counts lie</h3>
+                <p>Confession that became the best lesson of the project. My first counts said "Ross" was the most-mentioned name in my corpus at 319. The dramatic chart I built on that — famous-but-never-greeted Ross — was wrong. A case-insensitive substring grep had counted every "ac<strong>ross</strong>", "g<strong>ross</strong>" and "c<strong>ross</strong>ed" as a Ross-mention. His real count: 10.</p>
+                <p>One word-boundary fix rewrote a finding I'd already internalized. If a two-person audit of a 4.5M-character corpus can be fooled this easily, be appropriately skeptical of any dashboard selling you "entity mention rates" over the open web — the counting pipeline is where the lies get in, and nobody shows you their grep.</p>
+
+                <h2 id="section-5"><span class="zn-h2-num">5.</span> The playbook: what actually moves an entity's weight in an AI model</h2>
+                <p>The ELI5 is that a language model is a parrot that learned the world from flashcards of "what text follows what," and an entity's mention rate only matters through what it does to those flashcards:</p>
+                <ol>
+                    <li><strong>Volume works in powers of ten.</strong> Belief tracks log(mentions), r &asymp; 0.9. Ten more mentions is noise; ten <em>times</em> more mentions is a new belief.</li>
+                    <li><strong>The answer slot beats the article.</strong> "Best X: you" constructions are flashcards; passing mentions aren't. Friday: famous, never proposed, not believed in.</li>
+                    <li><strong>Recency compounds.</strong> The last training run redistributes all the probability. AI visibility is a lease, not a trophy.</li>
+                    <li><strong>Own a unique name.</strong> Generic names pool with strangers and dilute; distinctive names concentrate every mention into one belief.</li>
+                    <li><strong>Associations generalize.</strong> Build one strong context and the model extends it to questions nobody ever asked. You're not optimizing keywords; you're installing a prior.</li>
+                </ol>
+                <blockquote><p><strong>One-line version:</strong> AI models don't know who's famous — they know who reliably appears in the answer slot, recently, at 10&times; scale, under one unmistakable name.</p></blockquote>
+
+                <h3>The receipt</h3>
+                <ul>
+                    <li>Training data: 4.45M chars (mine) &middot; Model: 10.77M params &middot; Hardware: MacBook Air</li>
+                    <li>Pretrain + SFT wall-clock: ~4 hours &middot; Cost: $0</li>
+                    <li>Distance to ChatGPT: RLHF + ~6 orders of magnitude</li>
+                </ul>
+                <p>Every step is reproducible with nanoGPT, a Google Takeout export, and a weekend. The model is useless as an assistant and priceless as an X-ray: every mystified claim about what AI "knows" became, at this scale, a number I could measure and a grep I could check. I recommend building your own ghost. Just don't publish the weights — it knows your phone number.</p>
+            </article>
+
+        </div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/games/">Games</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const sections = document.querySelectorAll('h2[id]');
+        const railLinks = document.querySelectorAll('.zn-rail-item');
+        if (!sections.length || !railLinks.length) return;
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    railLinks.forEach(a => a.classList.remove('active'));
+                    document.querySelectorAll(`.zn-rail-item[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                }
+            });
+        }, { rootMargin: '-80px 0px -70% 0px' });
+        sections.forEach(s => observer.observe(s));
+    });
+    </script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
