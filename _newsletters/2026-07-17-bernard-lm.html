@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>I trained a GPT on 15 years of my life</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f4f2ec;">
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f2ec;">
+<tr><td align="center" style="padding:32px 16px;">
+<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background-color:#fcfcfa;border:1px solid #e5e2da;border-radius:8px;">
+<tr><td style="padding:36px 40px 8px;">
+  <p style="margin:0 0 18px;font-family:'Courier New',monospace;font-size:12px;letter-spacing:2px;text-transform:uppercase;color:#8a2f28;">zonted. &middot; new post</p>
+  <h1 style="margin:0 0 14px;font-family:Georgia,'Times New Roman',serif;font-size:30px;line-height:1.2;color:#1a1815;font-weight:600;">I trained a GPT on 15 years of my life &mdash; then interrogated it</h1>
+  <p style="margin:0 0 22px;font-family:Georgia,serif;font-size:17px;line-height:1.55;color:#57534a;font-style:italic;">A 10M-parameter language model, built from scratch on a MacBook Air from my Google search history and email, for $0 &mdash; and what cracking it open taught me about how AI decides who and what to believe in.</p>
+</td></tr>
+<tr><td style="padding:0 40px;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#f4f2ec;border-radius:6px;">
+  <tr>
+    <td align="center" style="padding:14px 6px;font-family:'Courier New',monospace;font-size:12px;color:#57534a;"><strong style="display:block;font-size:17px;color:#1a1815;">10.77M</strong>parameters</td>
+    <td align="center" style="padding:14px 6px;font-family:'Courier New',monospace;font-size:12px;color:#57534a;"><strong style="display:block;font-size:17px;color:#1a1815;">67,792</strong>searches eaten</td>
+    <td align="center" style="padding:14px 6px;font-family:'Courier New',monospace;font-size:12px;color:#57534a;"><strong style="display:block;font-size:17px;color:#1a1815;">8,520</strong>reply pairs</td>
+    <td align="center" style="padding:14px 6px;font-family:'Courier New',monospace;font-size:12px;color:#57534a;"><strong style="display:block;font-size:17px;color:#1a1815;">$0</strong>cost</td>
+  </tr>
+  </table>
+</td></tr>
+<tr><td style="padding:24px 40px 0;font-family:Georgia,serif;font-size:16px;line-height:1.65;color:#33302a;">
+  <p style="margin:0 0 16px;">This week I ran the entire modern LLM pipeline &mdash; pretraining, supervised fine-tuning, chat interface, interpretability probes &mdash; on a laptop, using my own Google Takeout as the corpus. The result schedules coffee at &ldquo;14:30am,&rdquo; believes Wednesday is the best day of the week, and reveals exactly how mention rates become AI beliefs. What's inside:</p>
+  <p style="margin:0 0 12px;"><strong style="color:#1a1815;">&#8594; The 10&times; law.</strong> Model belief tracks the <em>log</em> of mentions (r&nbsp;=&nbsp;0.95). Ten more mentions is noise; ten times more mentions is a new belief.</p>
+  <p style="margin:0 0 12px;"><strong style="color:#1a1815;">&#8594; The Friday problem.</strong> My second-most-mentioned weekday is one the model refuses to recommend &mdash; because being talked about and being proposed are different flashcards, and models learn the difference.</p>
+  <p style="margin:0 0 12px;"><strong style="color:#1a1815;">&#8594; The grep confession.</strong> My first &ldquo;most-mentioned person&rdquo; finding was destroyed by a word-boundary bug (&ldquo;ac<strong>ross</strong>&rdquo; &ne; a guy named Ross). Why you should audit every entity-mention dashboard.</p>
+  <p style="margin:0 0 22px;">Plus the five-rule playbook for what actually moves an entity's weight in an AI model.</p>
+</td></tr>
+<tr><td align="center" style="padding:4px 40px 34px;">
+  <a href="https://zonted.com/posts/i-trained-a-gpt-on-my-life/?utm_source=newsletter&utm_medium=email&utm_campaign=bernard-lm" style="display:inline-block;background-color:#1a1815;color:#fcfcfa;font-family:Georgia,serif;font-size:16px;text-decoration:none;padding:13px 28px;border-radius:6px;">Read the full post &#8594;</a>
+</td></tr>
+<tr><td style="padding:20px 40px 28px;border-top:1px solid #e5e2da;">
+  <p style="margin:0;font-family:'Courier New',monospace;font-size:12px;line-height:1.6;color:#8a8578;">You're getting this because you subscribed at zonted.com.<br>Bernard Huang &middot; Austin, TX &middot; <a href="{{{RESEND_UNSUBSCRIBE_URL}}}" style="color:#8a8578;">unsubscribe</a></p>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>
