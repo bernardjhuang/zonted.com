@@ -509,7 +509,7 @@ LLMS_INTRO = """# Zonted
 
 > Honest writing on AI in production by Bernard Huang. Operator notes from someone building fully autonomous AI businesses — agent workflows, model selection, cost economics, and what actually breaks. Receipts included.
 
-Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher) and writes about the systems behind it — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform) and has been in SEO/content for 15+ years. He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
+Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher), PixelForge, and other agentic businesses, and writes about the systems behind them — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform), ran it for a decade, and stepped away in mid-2026. His current deep-dive is markets: trading public equities and web3 with Claude Fable 5 and GPT 5.6 Sol as analysts, with a public quantity-free position log at https://zonted.com/trading/. He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
 
 ## What this site covers
 
@@ -519,6 +519,7 @@ Zonted is Bernard Huang's personal site. The angle is non-commodity: specific sy
 - **Search and answer-engine optimization (AEO)** — what works for AI-driven search after Google Zero
 - **API economics** — cost-per-call analysis, infrastructure tradeoffs, the dying scraping economy
 - **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
+- **AI-assisted trading** — vibe-trading experiments, backtests vs. buy-and-hold, and a public position log
 """
 
 LLMS_OUTRO = """## Sections
@@ -527,6 +528,7 @@ LLMS_OUTRO = """## Sections
 - [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
 - [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
 - [Portfolio](https://zonted.com/portfolio/): Companies built or in-build with AI agents
+- [Trading](https://zonted.com/trading/): Quantity-free position log — current holdings, recent large trades, research watchlist
 - [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
 - [About](https://zonted.com/about/): Background, current focus, how to get in touch
 
@@ -537,7 +539,7 @@ LLMS_OUTRO = """## Sections
 
 ## Author
 
-Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he built and grew profitably for years before exiting day-to-day operations. Background in SEO/content/affiliate going back ~15 years. Currently building Tabiji, VeracityAPI, AgentTune, PixelForge, and a handful of other agentic businesses. Writes at zonted.com daily-ish.
+Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he ran for a decade before stepping away fully in 2026. Background in SEO/content/affiliate going back ~15 years, and in online poker before that. Currently building Tabiji, VeracityAPI, AgentTune, PixelForge, and other agentic businesses, and trading public equities + web3 with AI analysts (Claude Fable 5, GPT 5.6 Sol). Writes at zonted.com daily-ish.
 """
 
 H2_NOISE = {'Get the next post by email.'}
