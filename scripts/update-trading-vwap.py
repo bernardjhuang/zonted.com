@@ -155,7 +155,7 @@ def main():
                 <div class="vwap-grid">
 {charts}
                 </div>
-                <p class="trading-note">Price and VWAP are computed from consolidated daily bars (typical price × volume, anchored January 2, 2026). Refreshed roughly weekly alongside the momentum scan. Descriptive market data, not investment advice.</p>
+                <p class="trading-note">Price and VWAP are computed from consolidated daily bars (typical price × volume, anchored January 2, 2026). Refreshed daily after the close alongside the momentum scan. Descriptive market data, not investment advice.</p>
                 <script>
                 (() => {{
                 const VD = {tip_data};
