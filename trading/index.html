@@ -163,6 +163,19 @@
         .sx { stroke: var(--faded); stroke-width: 1; stroke-dasharray: 2 3; }
         .setup-tip { position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--paper); border: 1px solid var(--ink); font-family: var(--mono); font-size: 0.64rem; line-height: 1.6; color: var(--faded); }
         .setup-tip b { color: var(--ink); }
+        .whales-panel { padding: 42px 0 8px; }
+        .whale-wrap { overflow-x: auto; border: 1px solid var(--ink); background: var(--paper); padding: 16px 12px 8px; margin-bottom: 26px; }
+        .whale-wrap svg { display: block; width: 100%; min-width: 860px; height: auto; }
+        .woff { fill: var(--ink); font: 600 0.82rem var(--mono); letter-spacing: 0.02em; }
+        .wsub { fill: var(--faded); font: 0.68rem var(--mono); }
+        .wbuy { fill: var(--green-live); }
+        .wsell { fill: var(--ox); opacity: 0.85; }
+        .wnet { stroke: var(--ink); stroke-width: 2; }
+        .wax { stroke: var(--rule); stroke-width: 1; }
+        .wval { font: 600 0.66rem var(--mono); }
+        .wtops { fill: var(--faded); font: 0.66rem var(--mono); }
+        .whale-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; }
+        @media (max-width: 720px) { .whale-cols { grid-template-columns: 1fr; } }
         @media (max-width: 600px) { .trading-tabs { flex-wrap: wrap; } }
         @media (max-width: 600px) {
             .trading-hero { padding-top: 44px; }
@@ -223,6 +236,7 @@
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">11</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">YTD VWAP <span class="trading-tab-count">12</span></button>
                 <button class="trading-tab" id="setups-tab" type="button" role="tab" aria-selected="false" aria-controls="setups-panel">Setup charts <span class="trading-tab-count" id="setups-tab-count">11</span></button>
+                <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F flows <span class="trading-tab-count" id="whales-tab-count">14</span></button>
             </div>
 
             <div class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
@@ -1573,6 +1587,216 @@
                 </script>
             </section>
             <!-- AUTO:SETUPS:END -->
+
+            <!-- AUTO:WHALES:START -->
+            <section class="trading-panel whales-panel" id="whales-panel" role="tabpanel" tabindex="0" aria-labelledby="whales-tab" hidden>
+                <div class="position-head">
+                    <h2 id="whales-heading">13F flows</h2>
+                    <span>Q1 2026 filings · quarterly</span>
+                </div>
+                <p class="scan-intro">Net buying and selling by the most-followed 13F filers, from their latest SEC info tables: share-count changes between the two most recent quarters, priced at quarter-end. Bars diverge from zero — selling left, buying right, the tick marks net flow. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a quarterly, backward-looking map of where the big books moved — not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
+                <div class="whale-wrap"><svg viewBox="0 0 1120 906" role="img" aria-label="Net 13F flows by investment office">
+<line x1="660" y1="0" x2="660" y2="900" class="wax"/><g transform="translate(0,0)">
+<text x="0" y="20" class="woff">Greenlight Capital</text>
+<text x="0" y="34" class="wsub">David Einhorn · AUM $3.19B · 45 pos</text>
+<rect x="651.9" y="10" width="8.1" height="14" rx="3" class="wsell"><title>sold +$413M</title></rect>
+<rect x="660" y="10" width="13.4" height="14" rx="3" class="wbuy"><title>bought +$685M</title></rect>
+<line x1="665.3" y1="6" x2="665.3" y2="30" class="wnet"/>
+<text x="643.9" y="21" class="wval scan-z-neg" text-anchor="end">−$413M</text>
+<text x="681.4" y="21" class="wval scan-z-pos">+$685M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-pos">+$272M</tspan> · Versant Media Group Inc +$112M · Kyndryl Hldgs Inc −$101M · Td Synnex Corporation +$71M</text>
+</g><g transform="translate(0,64)">
+<text x="0" y="20" class="woff">Soros Fund Management</text>
+<text x="0" y="34" class="wsub">George Soros (founder) · AUM $5.53B · 229 pos</text>
+<rect x="614.6" y="10" width="45.4" height="14" rx="3" class="wsell"><title>sold +$2.32B</title></rect>
+<rect x="660" y="10" width="48.6" height="14" rx="3" class="wbuy"><title>bought +$2.48B</title></rect>
+<line x1="663.2" y1="6" x2="663.2" y2="30" class="wnet"/>
+<text x="606.6" y="21" class="wval scan-z-neg" text-anchor="end">−$2.32B</text>
+<text x="716.6" y="21" class="wval scan-z-pos">+$2.48B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-pos">+$161M</tspan> · Linde Plc +$129M · Electronic Arts Inc +$110M · Dayforce Inc −$103M</text>
+</g><g transform="translate(0,128)">
+<text x="0" y="20" class="woff">Scion Asset Management</text>
+<text x="0" y="34" class="wsub">Michael Burry · AUM $68M · 4 pos · ⚠ filings thru Q3 2025</text>
+<rect x="659.1" y="10" width="0.9" height="14" rx="3" class="wsell"><title>sold +$44M</title></rect>
+<rect x="660" y="10" width="1.2" height="14" rx="3" class="wbuy"><title>bought +$59M</title></rect>
+<line x1="660.3" y1="6" x2="660.3" y2="30" class="wnet"/>
+<text x="651.1" y="21" class="wval scan-z-neg" text-anchor="end">−$44M</text>
+<text x="669.2" y="21" class="wval scan-z-pos">+$59M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-pos">+$15M</tspan> · Molina Healthcare Inc +$24M · Slm Corp +$13M · Bruker Corp +$13M</text>
+</g><g transform="translate(0,192)">
+<text x="0" y="20" class="woff">Baupost Group</text>
+<text x="0" y="34" class="wsub">Seth Klarman · AUM $5.12B · 22 pos</text>
+<rect x="636.5" y="10" width="23.5" height="14" rx="3" class="wsell"><title>sold +$1.20B</title></rect>
+<rect x="660" y="10" width="23.0" height="14" rx="3" class="wbuy"><title>bought +$1.17B</title></rect>
+<line x1="659.4" y1="6" x2="659.4" y2="30" class="wnet"/>
+<text x="628.5" y="21" class="wval scan-z-neg" text-anchor="end">−$1.20B</text>
+<text x="691.0" y="21" class="wval scan-z-pos">+$1.17B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$28M</tspan> · Fidelity Natl Information Sv −$299M · Dollar Gen Corp New −$274M · Aon Plc +$248M</text>
+</g><g transform="translate(0,256)">
+<text x="0" y="20" class="woff">Altimeter Capital</text>
+<text x="0" y="34" class="wsub">Brad Gerstner · AUM $5.70B · 13 pos</text>
+<rect x="634.8" y="10" width="25.2" height="14" rx="3" class="wsell"><title>sold +$1.28B</title></rect>
+<rect x="660" y="10" width="18.3" height="14" rx="3" class="wbuy"><title>bought +$932M</title></rect>
+<line x1="653.1" y1="6" x2="653.1" y2="30" class="wnet"/>
+<text x="626.8" y="21" class="wval scan-z-neg" text-anchor="end">−$1.28B</text>
+<text x="686.3" y="21" class="wval scan-z-pos">+$932M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$353M</tspan> · Coupang Inc −$370M · Arm Holdings Plc +$260M · Nvidia Corporation +$216M</text>
+</g><g transform="translate(0,320)">
+<text x="0" y="20" class="woff">Pershing Square</text>
+<text x="0" y="34" class="wsub">Bill Ackman · AUM $13.71B · 11 pos</text>
+<rect x="600.6" y="10" width="59.4" height="14" rx="3" class="wsell"><title>sold +$3.03B</title></rect>
+<rect x="660" y="10" width="48.6" height="14" rx="3" class="wbuy"><title>bought +$2.48B</title></rect>
+<line x1="649.1" y1="6" x2="649.1" y2="30" class="wnet"/>
+<text x="592.6" y="21" class="wval scan-z-neg" text-anchor="end">−$3.03B</text>
+<text x="716.6" y="21" class="wval scan-z-pos">+$2.48B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$554M</tspan> · Microsoft Corp +$2.09B · Alphabet Inc −$1.84B · Hilton Worldwide Hldgs Inc −$870M</text>
+</g><g transform="translate(0,384)">
+<text x="0" y="20" class="woff">Icahn Enterprises</text>
+<text x="0" y="34" class="wsub">Carl Icahn · AUM $8.55B · 12 pos</text>
+<rect x="646.4" y="10" width="13.6" height="14" rx="3" class="wsell"><title>sold +$695M</title></rect>
+<rect x="660" y="10" width="0.5" height="14" rx="3" class="wbuy"><title>bought +$27M</title></rect>
+<line x1="646.9" y1="6" x2="646.9" y2="30" class="wnet"/>
+<text x="638.4" y="21" class="wval scan-z-neg" text-anchor="end">−$695M</text>
+<text x="668.5" y="21" class="wval scan-z-pos">+$27M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$668M</tspan> · Southwest Gas Holdings Inc. −$483M · Echostar Corporation −$212M · Cvr Energy Inc +$26M</text>
+</g><g transform="translate(0,448)">
+<text x="0" y="20" class="woff">Appaloosa</text>
+<text x="0" y="34" class="wsub">David Tepper · AUM $5.93B · 31 pos</text>
+<rect x="618.4" y="10" width="41.6" height="14" rx="3" class="wsell"><title>sold +$2.12B</title></rect>
+<rect x="660" y="10" width="25.9" height="14" rx="3" class="wbuy"><title>bought +$1.32B</title></rect>
+<line x1="644.3" y1="6" x2="644.3" y2="30" class="wnet"/>
+<text x="610.4" y="21" class="wval scan-z-neg" text-anchor="end">−$2.12B</text>
+<text x="693.9" y="21" class="wval scan-z-pos">+$1.32B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$799M</tspan> · Amazon Com Inc +$446M · Uber Technologies Inc +$322M · Alibaba Group Hldg Ltd −$245M</text>
+</g><g transform="translate(0,512)">
+<text x="0" y="20" class="woff">Duquesne Family Office</text>
+<text x="0" y="34" class="wsub">Stanley Druckenmiller · AUM $2.94B · 65 pos</text>
+<rect x="619.3" y="10" width="40.7" height="14" rx="3" class="wsell"><title>sold +$2.08B</title></rect>
+<rect x="660" y="10" width="17.7" height="14" rx="3" class="wbuy"><title>bought +$904M</title></rect>
+<line x1="637.0" y1="6" x2="637.0" y2="30" class="wnet"/>
+<text x="611.3" y="21" class="wval scan-z-neg" text-anchor="end">−$2.08B</text>
+<text x="685.7" y="21" class="wval scan-z-pos">+$904M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$1.17B</tspan> · Select Sector Spdr Tr −$301M · Invesco Exchange Traded Fd T −$225M · Amazon Com Inc −$160M</text>
+</g><g transform="translate(0,576)">
+<text x="0" y="20" class="woff">Tiger Global</text>
+<text x="0" y="34" class="wsub">Chase Coleman · AUM $22.85B · 54 pos</text>
+<rect x="540.7" y="10" width="119.3" height="14" rx="3" class="wsell"><title>sold +$6.09B</title></rect>
+<rect x="660" y="10" width="46.1" height="14" rx="3" class="wbuy"><title>bought +$2.35B</title></rect>
+<line x1="586.8" y1="6" x2="586.8" y2="30" class="wnet"/>
+<text x="532.7" y="21" class="wval scan-z-neg" text-anchor="end">−$6.09B</text>
+<text x="714.1" y="21" class="wval scan-z-pos">+$2.35B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$3.73B</tspan> · Microsoft Corp −$1.44B · Take-Two Interactive Softwar −$983M · Flutter Entmt Plc −$861M</text>
+</g><g transform="translate(0,640)">
+<text x="0" y="20" class="woff">Bridgewater Associates</text>
+<text x="0" y="34" class="wsub">Ray Dalio (founder) · AUM $22.40B · 993 pos</text>
+<rect x="460.8" y="10" width="199.2" height="14" rx="3" class="wsell"><title>sold +$10.17B</title></rect>
+<rect x="660" y="10" width="104.0" height="14" rx="3" class="wbuy"><title>bought +$5.31B</title></rect>
+<line x1="564.7" y1="6" x2="564.7" y2="30" class="wnet"/>
+<text x="452.8" y="21" class="wval scan-z-neg" text-anchor="end">−$10.17B</text>
+<text x="772.0" y="21" class="wval scan-z-pos">+$5.31B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$4.86B</tspan> · Ishares Tr −$1.03B · Salesforce Inc −$512M · Amazon Com Inc +$508M</text>
+</g><g transform="translate(0,704)">
+<text x="0" y="20" class="woff">Third Point</text>
+<text x="0" y="34" class="wsub">Dan Loeb · AUM $2.08B · 33 pos</text>
+<rect x="554.1" y="10" width="105.9" height="14" rx="3" class="wsell"><title>sold +$5.40B</title></rect>
+<rect x="660" y="10" width="5.8" height="14" rx="3" class="wbuy"><title>bought +$295M</title></rect>
+<line x1="559.9" y1="6" x2="559.9" y2="30" class="wnet"/>
+<text x="546.1" y="21" class="wval scan-z-neg" text-anchor="end">−$5.40B</text>
+<text x="673.8" y="21" class="wval scan-z-pos">+$295M</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$5.11B</tspan> · Pg&E Corp −$551M · Nvidia Corporation −$515M · Microsoft Corp −$447M</text>
+</g><g transform="translate(0,768)">
+<text x="0" y="20" class="woff">Berkshire Hathaway</text>
+<text x="0" y="34" class="wsub">Warren Buffett · AUM $263.10B · 29 pos</text>
+<rect x="240.0" y="10" width="420.0" height="14" rx="3" class="wsell"><title>sold +$21.43B</title></rect>
+<rect x="660" y="10" width="300.1" height="14" rx="3" class="wbuy"><title>bought +$15.31B</title></rect>
+<line x1="540.1" y1="6" x2="540.1" y2="30" class="wnet"/>
+<text x="232.0" y="21" class="wval scan-z-neg" text-anchor="end">−$21.43B</text>
+<text x="968.1" y="21" class="wval scan-z-pos">+$15.31B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$6.12B</tspan> · Alphabet Inc +$10.47B · Chevron Corporation −$6.98B · Visa Inc −$2.91B</text>
+</g><g transform="translate(0,832)">
+<text x="0" y="20" class="woff">Coatue Management</text>
+<text x="0" y="34" class="wsub">Philippe Laffont · AUM $29.06B · 62 pos</text>
+<rect x="401.3" y="10" width="258.7" height="14" rx="3" class="wsell"><title>sold +$13.20B</title></rect>
+<rect x="660" y="10" width="60.0" height="14" rx="3" class="wbuy"><title>bought +$3.06B</title></rect>
+<line x1="461.3" y1="6" x2="461.3" y2="30" class="wnet"/>
+<text x="393.3" y="21" class="wval scan-z-neg" text-anchor="end">−$13.20B</text>
+<text x="728.0" y="21" class="wval scan-z-pos">+$3.06B</text>
+<text x="660" y="48" class="wtops" text-anchor="middle">net <tspan class="scan-z-neg">−$10.14B</tspan> · Microsoft Corp −$1.30B · Equinix Inc +$1.07B · Oracle Corp −$865M</text>
+</g></svg></div>
+                <div class="whale-cols">
+                <div class="position-group"><h3>Most bought across offices</h3>
+                <table class="scan-table" aria-label="Most bought issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
+                <tbody>
+                    <tr><td class="scan-sym" style="white-space:normal">Alphabet Inc</td>
+                        <td class="scan-num">6▲ / 8▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$8.37B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Delta Air Lines Inc</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$2.64B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Taiwan Semiconductor Manufac</td>
+                        <td class="scan-num">5▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$1.27B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Equinix Inc</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$1.07B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">New York Times Co Mtn Be</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$838M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Asml Hldg Nv</td>
+                        <td class="scan-num">3▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$665M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Broadcom Inc</td>
+                        <td class="scan-num">6▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$528M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Uber Technologies Inc</td>
+                        <td class="scan-num">2▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$366M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Micron Technology Inc</td>
+                        <td class="scan-num">5▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$319M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Lennar Corp</td>
+                        <td class="scan-num">2▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$270M</span></td></tr>
+                </tbody></table></div>
+                <div class="position-group"><h3>Most sold across offices</h3>
+                <table class="scan-table" aria-label="Most sold issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
+                <tbody>
+                    <tr><td class="scan-sym" style="white-space:normal">Chevron Corporation</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$6.98B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Visa Inc</td>
+                        <td class="scan-num">2▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$2.66B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Mastercard Incorporated</td>
+                        <td class="scan-num">1▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$2.49B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Unitedhealth Group Inc</td>
+                        <td class="scan-num">1▲ / 5▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.73B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Constellation Brands Inc</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.71B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Dominos Pizza Inc</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.39B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Microsoft Corp</td>
+                        <td class="scan-num">2▲ / 6▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.33B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Ishares Tr</td>
+                        <td class="scan-num">3▲ / 7▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.14B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Reddit Inc</td>
+                        <td class="scan-num">1▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.10B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Aon Plc</td>
+                        <td class="scan-num">2▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.02B</span></td></tr>
+                </tbody></table></div>
+                </div>
+                
+                <p class="trading-note">Method: share-count diffs between each office's two most recent 13F-HR info tables on SEC EDGAR, buys priced at the newer quarter-end, sells at the older. Common shares only — options and principal-amount lines excluded. No shorts, no timing within the quarter, occasional confidential-treatment omissions. Descriptive public-filing data, not recommendations.</p>
+            </section>
+            <!-- AUTO:WHALES:END -->
 
             <!-- AUTO:VWAP:START -->
             <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
