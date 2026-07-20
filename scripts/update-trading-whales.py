@@ -98,7 +98,7 @@ def main():
                         <td class="scan-num">{h['offices']}</td>
                         <td class="scan-sec" style="white-space:normal">{h['top_holder']}</td></tr>"""
         for i, h in enumerate(agg.get("holdings", [])))
-    agg_section = f"""                <div class="position-group"><h3>Where the chips sit · {money(agg.get('total_aum', 0)).lstrip('+')} across {len(offices)} offices</h3>
+    agg_section = f"""                <div class="position-group"><h3>Where the chips sit · {money(agg.get('total_aum', 0)).lstrip('+')} across {len(offices)} offices · sorted by breadth</h3>
                 <div class="scan-table-wrap">
                 <table class="scan-table agg-table" aria-label="Aggregate holdings across tracked 13F offices">
                     <thead><tr><th>#</th><th>Issuer</th><th></th><th class="scan-num">Combined $</th><th class="scan-num">% of AUM</th><th class="scan-num">Offices</th><th>Largest holder</th></tr></thead>
