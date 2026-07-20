@@ -143,6 +143,13 @@ def main():
             sys.exit(f"No JSON matching {SCAN_GLOB}")
         path = paths[-1]
     p = json.load(open(path))
+    expected_symbols = [str(r["symbol"]).upper() for r in p["setups"]]
+    allowed_labels = {"ENTER+", "ENTER", "SHORT+", "SHORT", "BREAKING"}
+    if len(set(expected_symbols)) != len(expected_symbols):
+        sys.exit("Duplicate setup symbols in input JSON")
+    bad_labels = [r.get("label") for r in p["setups"] if r.get("label") not in allowed_labels]
+    if bad_labels:
+        sys.exit(f"Unsupported setup labels in input JSON: {bad_labels}")
     last_bar = dt.date.fromisoformat(p["last_bar"]).strftime("%B %-d, %Y")
     cards = "\n".join(card(r) for r in p["setups"])
 
@@ -181,11 +188,19 @@ def main():
             </section>"""
 
     page = open(PAGE).read()
-    new = re.sub(r"(<!-- AUTO:SETUPS:START -->).*?(<!-- AUTO:SETUPS:END -->)",
-                 lambda m: f"{m.group(1)}\n{panel}\n            {m.group(2)}",
-                 page, flags=re.S)
-    new = re.sub(r'(<span class="trading-tab-count" id="setups-tab-count">)[^<]*(</span>)',
-                 lambda m: f"{m.group(1)}{len(p['setups'])}{m.group(2)}", new)
+    new, region_count = re.subn(r"(<!-- AUTO:SETUPS:START -->).*?(<!-- AUTO:SETUPS:END -->)",
+                                lambda m: f"{m.group(1)}\n{panel}\n            {m.group(2)}",
+                                page, count=1, flags=re.S)
+    if region_count != 1:
+        sys.exit(f"Expected exactly one AUTO:SETUPS region, found {region_count}")
+    new, badge_count = re.subn(r'(<span class="trading-tab-count" id="setups-tab-count">)[^<]*(</span>)',
+                               lambda m: f"{m.group(1)}{len(p['setups'])}{m.group(2)}", new, count=1)
+    if badge_count != 1:
+        sys.exit(f"Expected exactly one setup tab count, found {badge_count}")
+    region = re.search(r"<!-- AUTO:SETUPS:START -->(.*?)<!-- AUTO:SETUPS:END -->", new, flags=re.S)
+    rendered_symbols = re.findall(r'aria-label="([^\"]+) setup chart"', region.group(1) if region else "")
+    if rendered_symbols != expected_symbols:
+        sys.exit(f"Setup chart parity failure: expected={expected_symbols} rendered={rendered_symbols}")
     if new == page:
         sys.exit("No changes made — are the AUTO:SETUPS markers present?")
     open(PAGE, "w").write(new)
