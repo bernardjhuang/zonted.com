@@ -60,6 +60,16 @@
         .activity-policy { margin: -5px 0 22px; font-family: var(--mono); font-size: 0.62rem; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faded); }
         .ytd-panel { padding: 42px 0 8px; }
         .ytd-intro { max-width: 650px; margin: -6px 0 28px; color: var(--faded); font-size: 1rem; line-height: 1.6; }
+        .ytd-account-summary { display: flex; justify-content: space-between; gap: 28px; align-items: center; margin: 0 0 34px; padding: 22px 24px; border: 1px solid var(--ink); background: var(--paper-2); }
+        .ytd-account-kicker { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 0.59rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); }
+        .ytd-account-summary h3 { margin: 0; font-family: var(--display); font-size: 1.45rem; font-weight: 500; letter-spacing: -0.02em; }
+        .ytd-account-summary p { margin: 5px 0 0; color: var(--faded); font-size: 0.82rem; line-height: 1.45; }
+        .ytd-account-result { flex: 0 0 auto; text-align: right; }
+        .ytd-account-result strong { display: block; font-family: var(--mono); font-size: 1.75rem; line-height: 1; }
+        .ytd-account-result strong.positive { color: var(--green-live); }
+        .ytd-account-result strong.negative { color: var(--ox); }
+        .ytd-account-result span { display: block; margin-top: 7px; font-family: var(--mono); font-size: 0.57rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faded); }
+        @media (max-width: 600px) { .ytd-account-summary { align-items: flex-start; padding: 19px; } .ytd-account-result strong { font-size: 1.45rem; } }
         .ytd-list { border-top: 2px solid var(--ink); list-style: none; }
         .ytd-row { display: grid; grid-template-columns: 64px 52px minmax(0, 1fr) 86px; gap: 14px; align-items: center; min-height: 54px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
         .ytd-date { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--faded); }
@@ -199,8 +209,15 @@
                     <span>Brokerage</span>
                 </div>
                 <div class="position-group">
+                    <h3>Equities</h3>
+                    <ul class="ticker-list" aria-label="Robinhood equity positions">
+                        <li class="ticker"><span class="ticker-symbol">ABT</span></li>
+                    </ul>
+                </div>
+                <div class="position-group">
                     <h3>Options</h3>
                     <ul class="ticker-list" aria-label="Robinhood option positions">
+                        <li class="ticker"><span class="ticker-symbol">ABT</span><span class="ticker-name">Call 120.0000 2027-01-15</span></li>
                         <li class="ticker"><span class="ticker-symbol">NET</span><span class="ticker-name">Put 200.0000 2027-01-15</span></li>
                     </ul>
                 </div>
@@ -219,9 +236,19 @@
                         <h3 id="buys-heading">Buys</h3>
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood buys">
                             <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-20">Jul 20</time>
+                                <div><span class="activity-action">ABT call</span><span class="activity-type">Option · 3 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+1.8%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-20">Jul 20</time>
+                                <div><span class="activity-action">NET shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−0.0%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-17">Jul 17</time>
                                 <div><span class="activity-action">NET put</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−3.1%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−3.2%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-16">Jul 16</time>
@@ -231,17 +258,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-15">Jul 15</time>
                                 <div><span class="activity-action">CYPH shares</span><span class="activity-type">Equity · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−8.9%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-14">Jul 14</time>
-                                <div><span class="activity-action">SPCX call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+2.0%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-14">Jul 14</time>
-                                <div><span class="activity-action">FIG call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+10.5%</span><span class="activity-status">Realized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−6.3%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -288,6 +305,17 @@
                     <span>10 wins · 10 losses</span>
                 </div>
                 <p class="ytd-intro">The strongest and weakest closed trades this year, ranked by realized percentage return. Only trades with more than $1K cost basis qualify. Quantities, prices, notionals, and dollar P&amp;L stay private; a FIFO estimate is labeled when the broker feed has not posted yet.</p>
+                <section class="ytd-account-summary" aria-labelledby="ytd-account-heading">
+                    <div>
+                        <span class="ytd-account-kicker">Robinhood account</span>
+                        <h3 id="ytd-account-heading">Realized YTD P&amp;L</h3>
+                        <p>Cost-basis-weighted across brokerage accounts · Equities + options · Open-position marks excluded</p>
+                    </div>
+                    <div class="ytd-account-result">
+                        <strong class="positive">+9.6%</strong>
+                        <span>212 closed trades</span>
+                    </div>
+                </section>
                 <div class="ytd-columns">
                     <section class="ytd-lane ytd-lane--wins" aria-labelledby="ytd-wins-heading">
                         <h3 id="ytd-wins-heading">Top 10 wins</h3>
