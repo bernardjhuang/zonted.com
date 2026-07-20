@@ -87,6 +87,27 @@ def main():
                         <td class="scan-num"><span class="{'scan-z-pos' if r['net'] >= 0 else 'scan-z-neg'}">{money(r['net'])}</span></td></tr>"""
             for r in rws)
 
+    agg = p.get("agg") or {}
+    agg_max = max((h["usd"] for h in agg.get("holdings", [])), default=1)
+    agg_rows = "\n".join(
+        f"""                    <tr><td class="scan-num scan-sec">{i + 1}</td>
+                        <td class="scan-sym" style="white-space:normal">{h['name']}</td>
+                        <td class="agg-cell"><span class="agg-bar" style="width:{h['usd'] / agg_max * 100:.1f}%"></span></td>
+                        <td class="scan-num">{money(h['usd']).lstrip('+')}</td>
+                        <td class="scan-num">{h['pct']:.1f}%</td>
+                        <td class="scan-num">{h['offices']}</td>
+                        <td class="scan-sec" style="white-space:normal">{h['top_holder']}</td></tr>"""
+        for i, h in enumerate(agg.get("holdings", [])))
+    agg_section = f"""                <div class="position-group"><h3>Where the chips sit · {money(agg.get('total_aum', 0)).lstrip('+')} across {len(offices)} offices</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table agg-table" aria-label="Aggregate holdings across tracked 13F offices">
+                    <thead><tr><th>#</th><th>Issuer</th><th></th><th class="scan-num">Combined $</th><th class="scan-num">% of AUM</th><th class="scan-num">Offices</th><th>Largest holder</th></tr></thead>
+                    <tbody>
+{agg_rows}
+                    </tbody>
+                </table>
+                </div></div>""" if agg.get("holdings") else ""
+
     stale_foot = ""
     if p.get("stale"):
         items = " · ".join(f"{s['office']} ({'last 13F ' + qlabel(s['period']) if s['period'] else 'no recent 13F'})"
@@ -101,6 +122,7 @@ def main():
                 <p class="scan-intro">Net buying and selling by the most-followed 13F filers, from their latest SEC info tables: share-count changes between the two most recent quarters, priced at quarter-end. Bars diverge from zero — selling left, buying right, the tick marks net flow. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a quarterly, backward-looking map of where the big books moved — not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
                 <div class="whale-wrap"><svg viewBox="0 0 {CHART_W} {chart_h}" role="img" aria-label="Net 13F flows by investment office">
 {''.join(rows)}</svg></div>
+{agg_section}
                 <div class="whale-cols">
                 <div class="position-group"><h3>Most bought across offices</h3>
                 <table class="scan-table" aria-label="Most bought issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
