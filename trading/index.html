@@ -86,6 +86,30 @@
         .watchlist-empty { background: var(--paper-2); }
         .watchlist-note { margin: 24px 0 50px; font-size: 0.87rem; line-height: 1.6; color: var(--faded); }
         .trading-note { margin: 4px 0 50px; padding: 18px 0 0; border-top: 1px solid var(--rule); font-size: 0.87rem; line-height: 1.6; color: var(--faded); }
+        .scan-panel { padding: 42px 0 8px; }
+        .scan-intro { max-width: 650px; margin: -6px 0 26px; color: var(--faded); font-size: 1rem; line-height: 1.6; }
+        .scan-sectors { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 34px; list-style: none; }
+        .scan-sector { min-width: 108px; padding: 10px 12px 9px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.05em; line-height: 1.7; color: var(--faded); }
+        .scan-sector b { display: block; font-size: 0.78rem; letter-spacing: 0.03em; color: var(--ink); }
+        .scan-sector--hot { border-color: var(--green-live); }
+        .scan-sector--cold { border-color: var(--ox); }
+        .scan-table-wrap { overflow-x: auto; }
+        .scan-table { width: 100%; min-width: 640px; border-collapse: collapse; border-top: 2px solid var(--ink); }
+        .scan-table th { padding: 10px 12px 9px 0; border-bottom: 1px solid var(--ink); font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; text-align: left; color: var(--faded); white-space: nowrap; }
+        .scan-table th.scan-num { text-align: right; }
+        .scan-table td { padding: 9px 12px 8px 0; border-bottom: 1px solid var(--rule); font-size: 0.85rem; white-space: nowrap; }
+        .scan-sym { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.03em; }
+        .scan-sec { color: var(--faded); font-size: 0.8rem; }
+        td.scan-num { font-family: var(--mono); font-size: 0.74rem; text-align: right; }
+        .scan-z-pos { color: var(--green-live); }
+        .scan-z-neg { color: var(--ox); }
+        .scan-null { color: var(--faded); opacity: 0.55; }
+        .scan-signal { font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
+        .scan-signal--enter { color: var(--green-live); }
+        .scan-signal--short { color: var(--ox); }
+        .scan-signal--watch { color: var(--faded); }
+        .scan-signal--avoid { color: var(--ox); opacity: 0.6; }
+        .scan-signal--nodata { color: var(--faded); opacity: 0.55; }
         @media (max-width: 600px) {
             .trading-hero { padding-top: 44px; }
             .position-head { display: block; }
@@ -142,6 +166,7 @@
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions &amp; trades</button>
                 <button class="trading-tab" id="ytd-tab" type="button" role="tab" aria-selected="false" aria-controls="ytd-panel">YTD P&amp;L <span class="trading-tab-count">20</span></button>
                 <button class="trading-tab" id="watchlist-tab" type="button" role="tab" aria-selected="false" aria-controls="watchlist-panel">Watchlist <span class="trading-tab-count">83</span></button>
+                <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">11</span></button>
             </div>
 
             <div class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
@@ -453,6 +478,906 @@
                 <p class="watchlist-note">Synced from the <strong>slo</strong> Robinhood watchlist on July 20, 2026. A watchlist is a research pipeline—not a position, price target, or recommendation.</p>
             </section>
             <!-- AUTO:WATCHLIST:END -->
+
+            <!-- AUTO:SCAN:START -->
+            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
+                <div class="position-head">
+                    <h2 id="scan-heading">Momentum scan</h2>
+                    <span>July 17, 2026 close · weekly</span>
+                </div>
+                <p class="scan-intro">A mechanical relative-strength screen over the watchlist: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: SPY 743.29, above its 50-day average. Method notes at the bottom.</p>
+                <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
+                    <li class="scan-sector scan-sector--hot"><b>XLRE</b>Real Estate<br><span class="scan-z-pos">+2.06</span> · #1</li>
+                    <li class="scan-sector scan-sector--hot"><b>XLF</b>Financials<br><span class="scan-z-pos">+1.70</span> · #2</li>
+                    <li class="scan-sector scan-sector--hot"><b>XLV</b>Health Care<br><span class="scan-z-pos">+1.34</span> · #3</li>
+                    <li class="scan-sector"><b>XLP</b>Staples<br><span class="scan-z-pos">+1.26</span> · #4</li>
+                    <li class="scan-sector"><b>XLE</b>Energy<br><span class="scan-z-pos">+0.71</span> · #5</li>
+                    <li class="scan-sector"><b>XLU</b>Utilities<br><span class="scan-z-pos">+0.60</span> · #6</li>
+                    <li class="scan-sector"><b>XLI</b>Industrials<br><span class="scan-z-pos">+0.56</span> · #7</li>
+                    <li class="scan-sector"><b>XLC</b>Comm Services<br><span class="scan-z-neg">-0.49</span> · #8</li>
+                    <li class="scan-sector"><b>XLB</b>Materials<br><span class="scan-z-neg">-0.59</span> · #9</li>
+                    <li class="scan-sector"><b>XLY</b>Consumer Disc<br><span class="scan-z-neg">-0.85</span> · #10</li>
+                    <li class="scan-sector scan-sector--cold"><b>XLK</b>Technology<br><span class="scan-z-neg">-1.09</span> · #11</li>
+                </ul>
+                <div class="position-group">
+                    <h3>Long setups · 4</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="Long setups from the momentum scan">
+                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td class="scan-sym">WELL</td>
+                        <td class="scan-sec">Real Estate</td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.08</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.38</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+12.23%</span></td>
+                        <td class="scan-num">Jul 27 (10d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">V</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.83</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.71</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.53%</span></td>
+                        <td class="scan-num">Jul 28 (11d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NVO</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.61</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.09</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+9.73%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ABT</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.92</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.35</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.29%</span></td>
+                        <td class="scan-num">Oct 14 (89d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                <div class="position-group">
+                    <h3>Short setups · 7</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="Short setups from the momentum scan">
+                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td class="scan-sym">INTC</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.09</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.17</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-15.68%</span></td>
+                        <td class="scan-num">Jul 23 (6d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">DOCN</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.07</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.77</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-21.84%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">QCOM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.26</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.79%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">LITE</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.58</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.02</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.75%</span></td>
+                        <td class="scan-num">Aug 11 (25d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">PL</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.53</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.00</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-23.88%</span></td>
+                        <td class="scan-num">Sep 9 (54d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NBIS</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.52</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-22.45%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TSM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.40</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.15</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.30%</span></td>
+                        <td class="scan-num">Oct 15 (90d)</td>
+                        <td><span class="scan-signal scan-signal--short">BREAKING</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                <div class="position-group">
+                    <h3>Full scan · 83 symbols</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="Full momentum scan of the watchlist">
+                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td class="scan-sym">AAPL</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.50</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.81</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+11.49%</span></td>
+                        <td class="scan-num">Jul 30 (13d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ABNB</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.12</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.19</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.86%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ABT</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.92</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.35</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.29%</span></td>
+                        <td class="scan-num">Oct 14 (89d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ADBE</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.30</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.66</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+13.67%</span></td>
+                        <td class="scan-num">Sep 10 (55d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">AKAM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.92</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.25</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-12.72%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">AMD</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.08</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.06</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.92%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">AMZN</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.37</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.84</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.38%</span></td>
+                        <td class="scan-num">Jul 30 (13d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ARM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.76</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.69</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.61%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ASML</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.21</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.20</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.00%</span></td>
+                        <td class="scan-num">Oct 14 (89d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ASTS</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.60</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.86</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-34.66%</span></td>
+                        <td class="scan-num">Aug 10 (24d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">BABA</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.21</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.62</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.57%</span></td>
+                        <td class="scan-num">Aug 28 (42d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">BKNG</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.31</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.77</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.92%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">BLK</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.00</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.10</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.80%</span></td>
+                        <td class="scan-num">Oct 14 (89d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">BRK.B</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.36</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.48</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.95%</span></td>
+                        <td class="scan-num">Aug 1 (15d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">BYDDY</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td><span class="scan-signal scan-signal--nodata">NO DATA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">CAT</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.97</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.60</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-5.82%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">CME</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.63</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-5.20%</span></td>
+                        <td class="scan-num">Jul 22 (5d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">COST</td>
+                        <td class="scan-sec">Staples</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.84</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.79</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.18%</span></td>
+                        <td class="scan-num">Sep 24 (69d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">CRCL</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.29</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.50</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-32.76%</span></td>
+                        <td class="scan-num">Aug 11 (25d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">CRM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.05</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.30</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.92%</span></td>
+                        <td class="scan-num">Sep 2 (47d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">CRWD</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.42</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.73</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+12.73%</span></td>
+                        <td class="scan-num">Sep 1 (46d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">DIS</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.87</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.73</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.97%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">DKNG</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.59</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.63</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.75%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">DOCN</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.07</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.77</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-21.84%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">DRI</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.37</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.38</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.31%</span></td>
+                        <td class="scan-num">Sep 24 (69d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">EBAY</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.27</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.93</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.03%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">FIG</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.25</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.50</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+10.96%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">FLUT</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.66</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.01</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.25%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">GOOG</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.29</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.43</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-5.40%</span></td>
+                        <td class="scan-num">Jul 22 (5d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">GRAB</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.19</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.76</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.77%</span></td>
+                        <td class="scan-num">Aug 3 (17d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">HAS</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.72</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.76</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.89%</span></td>
+                        <td class="scan-num">Jul 21 (4d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">HD</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.79</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.05</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.40%</span></td>
+                        <td class="scan-num">Aug 18 (32d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">HOOD</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.49</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.00</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+9.35%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">IBKR</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.30</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.57</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.98%</span></td>
+                        <td class="scan-num">Jul 21 (4d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ICE</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.20</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.66</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.81%</span></td>
+                        <td class="scan-num">Jul 30 (13d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">INTC</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.09</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.17</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-15.68%</span></td>
+                        <td class="scan-num">Jul 23 (6d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">INTU</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.37</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.72</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.44%</span></td>
+                        <td class="scan-num">Aug 20 (34d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">JPM</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.45</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.25</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.37%</span></td>
+                        <td class="scan-num">Oct 13 (88d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">LITE</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.58</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.02</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.75%</span></td>
+                        <td class="scan-num">Aug 11 (25d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">LLY</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.89</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.24</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.96%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">LMT</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.89</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-4.47</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.75%</span></td>
+                        <td class="scan-num">Jul 23 (6d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">LULU</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-6.21</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.11%</span></td>
+                        <td class="scan-num">Sep 3 (48d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">MAR</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.60</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.16</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.61%</span></td>
+                        <td class="scan-num">Aug 3 (17d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">MCD</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-4.62</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.14%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">META</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.30</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.67</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.43%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">MPNGY</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td><span class="scan-signal scan-signal--nodata">NO DATA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">MSFT</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.34</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.57</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.39%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">MU</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.59</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.82</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.52%</span></td>
+                        <td class="scan-num">Sep 23 (68d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NBIS</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.52</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-22.45%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NET</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.52</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.92</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+19.46%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NFLX</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.85</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.36</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.64%</span></td>
+                        <td class="scan-num">Oct 20 (95d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NKE</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.18</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.89</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.39%</span></td>
+                        <td class="scan-num">Sep 29 (74d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NTDOY</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td><span class="scan-signal scan-signal--nodata">NO DATA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NVDA</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.73</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.70</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.28%</span></td>
+                        <td class="scan-num">Aug 26 (40d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">NVO</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.61</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.09</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+9.73%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">OUST</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.46</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.49</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-8.99%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">OXY</td>
+                        <td class="scan-sec">Energy</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.03</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.28</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.12%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">PINS</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.72</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.41</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+10.76%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">PL</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.53</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.00</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-23.88%</span></td>
+                        <td class="scan-num">Sep 9 (54d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">PLTR</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.02</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.12</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.15%</span></td>
+                        <td class="scan-num">Aug 3 (17d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">QCOM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.26</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-16.79%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--short">SHORT</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">RDDT</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.53</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.01</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.41%</span></td>
+                        <td class="scan-num">Jul 30 (13d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">RKLB</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.79</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.93</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-37.79%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">SBUX</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.79</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.22</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.72%</span></td>
+                        <td class="scan-num">Jul 29 (12d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">SHOP</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.40</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.39</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+11.85%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">SONY</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.10</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.10%</span></td>
+                        <td class="scan-num">Jul 31 (14d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">SPCX</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td><span class="scan-signal scan-signal--nodata">NO DATA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">SPOT</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.20</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.23</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.44%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TCEHY</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td class="scan-num"><span class="scan-null">—</span></td>
+                        <td><span class="scan-signal scan-signal--nodata">NO DATA</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TEAM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.50</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.71</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.37%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TSLA</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.53</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.18</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-5.99%</span></td>
+                        <td class="scan-num">Jul 22 (5d) ⚠</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TSM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.40</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.15</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.30%</span></td>
+                        <td class="scan-num">Oct 15 (90d)</td>
+                        <td><span class="scan-signal scan-signal--short">BREAKING</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">TXRH</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.70</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.19</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+9.66%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">UBER</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.23</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.19</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.81%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">UNH</td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.27</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.90</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.51%</span></td>
+                        <td class="scan-num">Oct 27 (102d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">V</td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.83</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.71</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.53%</span></td>
+                        <td class="scan-num">Jul 28 (11d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">W</td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.93</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.68</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+20.26%</span></td>
+                        <td class="scan-num">Aug 4 (18d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">WBD</td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.05</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.92</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.01%</span></td>
+                        <td class="scan-num">Aug 6 (20d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">WELL</td>
+                        <td class="scan-sec">Real Estate</td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.08</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.38</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+12.23%</span></td>
+                        <td class="scan-num">Jul 27 (10d)</td>
+                        <td><span class="scan-signal scan-signal--enter">ENTER+</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">WMT</td>
+                        <td class="scan-sec">Staples</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.79</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.09</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.05%</span></td>
+                        <td class="scan-num">Aug 20 (34d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">WTS</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.65</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.22</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.07%</span></td>
+                        <td class="scan-num">Aug 5 (19d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">XYL</td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.89</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.15</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.86%</span></td>
+                        <td class="scan-num">Jul 28 (11d)</td>
+                        <td><span class="scan-signal scan-signal--watch">WATCH</span></td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym">ZM</td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.57</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.14</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.93%</span></td>
+                        <td class="scan-num">Aug 20 (34d)</td>
+                        <td><span class="scan-signal scan-signal--avoid">AVOID</span></td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                </div>
+                <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = OTC listings without exchange data. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed roughly weekly — not positions, not predictions, and not investment advice.</p>
+            </section>
+            <!-- AUTO:SCAN:END -->
         </div>
     </main>
 
