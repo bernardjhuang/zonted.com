@@ -21,7 +21,9 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
 SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/whale-13f-*.json")
 
-ROW_H, CHART_W, MID, BAR_W = 64, 1120, 660, 420
+# drawn native to the site's ~760px content column: labels above the bars,
+# so nothing needs a wide left gutter and the svg renders ~1:1 unscaled
+ROW_H, CHART_W, MID, BAR_W = 96, 760, 380, 288
 
 
 def money(x):
@@ -55,24 +57,28 @@ def main():
     def bl(usd):
         return usd / scale_max * BAR_W
 
+    def short(name, n=22):
+        return name if len(name) <= n else name[:n - 1].rstrip() + "…"
+
     rows = []
     for i, o in enumerate(offices):
         y = i * ROW_H
         by, sy = bl(o["buys"]), bl(o["sells"])
         net_x = MID + max(-BAR_W, min(BAR_W, bl(o["net"])))
-        tops = " · ".join(f"{m['name']} {money(m['usd'])}" for m in o["top_moves"][:3])
+        tops = " · ".join(f"{short(m['name'])} {money(m['usd'])}" for m in o["top_moves"][:3])
         stale = f" · ⚠ filings thru {qlabel(o['period'])}" if o["period"] != newest else ""
         rows.append(f"""<g transform="translate(0,{y})">
-<text x="0" y="20" class="woff">{o['office']}</text>
-<text x="0" y="34" class="wsub">{o['person']} · AUM {money(o['aum']).lstrip('+')} · {o['positions']} pos{stale}</text>
-<rect x="{MID - sy:.1f}" y="10" width="{sy:.1f}" height="14" rx="3" class="wsell"><title>sold {money(o['sells'])}</title></rect>
-<rect x="{MID}" y="10" width="{by:.1f}" height="14" rx="3" class="wbuy"><title>bought {money(o['buys'])}</title></rect>
-<line x1="{net_x:.1f}" y1="6" x2="{net_x:.1f}" y2="30" class="wnet"/>
-<text x="{MID - sy - 8:.1f}" y="21" class="wval scan-z-neg" text-anchor="end">{money(-o['sells']) if o['sells'] > 1e5 else ''}</text>
-<text x="{MID + by + 8:.1f}" y="21" class="wval scan-z-pos">{money(o['buys']) if o['buys'] > 1e5 else ''}</text>
-<text x="{MID}" y="48" class="wtops" text-anchor="middle">net <tspan class="{'scan-z-pos' if o['net'] >= 0 else 'scan-z-neg'}">{money(o['net'])}</tspan> · {tops}</text>
+<text x="0" y="14" class="woff">{o['office']}</text>
+<text x="0" y="28" class="wsub">{o['person']} · AUM {money(o['aum']).lstrip('+')} · {o['positions']} pos{stale}</text>
+<line x1="{MID}" y1="34" x2="{MID}" y2="58" class="wax"/>
+<rect x="{MID - sy:.1f}" y="39" width="{sy:.1f}" height="14" rx="3" class="wsell"><title>sold {money(o['sells'])}</title></rect>
+<rect x="{MID}" y="39" width="{by:.1f}" height="14" rx="3" class="wbuy"><title>bought {money(o['buys'])}</title></rect>
+<line x1="{net_x:.1f}" y1="35" x2="{net_x:.1f}" y2="57" class="wnet"/>
+<text x="{MID - sy - 7:.1f}" y="50" class="wval scan-z-neg" text-anchor="end">{money(-o['sells']) if o['sells'] > 1e5 else ''}</text>
+<text x="{MID + by + 7:.1f}" y="50" class="wval scan-z-pos">{money(o['buys']) if o['buys'] > 1e5 else ''}</text>
+<text x="{MID}" y="74" class="wtops" text-anchor="middle">net <tspan class="{'scan-z-pos' if o['net'] >= 0 else 'scan-z-neg'}">{money(o['net'])}</tspan> · {tops}</text>
 </g>""")
-    chart_h = len(offices) * ROW_H + 10
+    chart_h = len(offices) * ROW_H
 
     def cons_rows(rws):
         return "\n".join(
@@ -94,7 +100,7 @@ def main():
                 </div>
                 <p class="scan-intro">Net buying and selling by the most-followed 13F filers, from their latest SEC info tables: share-count changes between the two most recent quarters, priced at quarter-end. Bars diverge from zero — selling left, buying right, the tick marks net flow. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a quarterly, backward-looking map of where the big books moved — not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
                 <div class="whale-wrap"><svg viewBox="0 0 {CHART_W} {chart_h}" role="img" aria-label="Net 13F flows by investment office">
-<line x1="{MID}" y1="0" x2="{MID}" y2="{chart_h - 6}" class="wax"/>{''.join(rows)}</svg></div>
+{''.join(rows)}</svg></div>
                 <div class="whale-cols">
                 <div class="position-group"><h3>Most bought across offices</h3>
                 <table class="scan-table" aria-label="Most bought issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
