@@ -105,7 +105,7 @@ def main():
     panel = f"""            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
                 <div class="position-head">
                     <h2 id="scan-heading">Momentum scan</h2>
-                    <span>{last_bar} close · weekly</span>
+                    <span>{last_bar} close · daily</span>
                 </div>
                 <p class="scan-intro">A mechanical relative-strength screen over the watchlist: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
                 <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
@@ -123,7 +123,7 @@ def main():
                     <h3>Full scan · {len(all_rows)} symbols</h3>
 {setup_table(all_rows, "Full momentum scan of the watchlist")}
                 </div>
-                <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = OTC listings without exchange data. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed roughly weekly — not positions, not predictions, and not investment advice.</p>
+                <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = OTC listings without exchange data. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
             </section>"""
 
     page = open(PAGE).read()
