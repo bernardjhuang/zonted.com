@@ -26,7 +26,6 @@
       const hash = tab.id === 'positions-tab' ? '' : '#' + tab.id.replace(/-tab$/, '');
       history.replaceState(null, '', location.pathname + location.search + hash);
     }
-    if (tab.id === 'ytd-tab') requestAnimationFrame(() => $('#bl-ext') && $('#bl-ext').scrollIntoView({ block: 'start' }));
   }
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', () => activate(tab, true));
