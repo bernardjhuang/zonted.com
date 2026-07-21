@@ -69,6 +69,57 @@ def chart(coin):
                 </figure>"""
 
 
+
+def vwap_chart(b):
+    dates, close, vw = b["series"]["dates"], b["series"]["close"], b["series"]["vwap"]
+    n = len(dates)
+    if n < 2:
+        return ""
+    lo = min(min(close), min(vw)); hi = max(max(close), max(vw))
+    pad = (hi - lo) * 0.06 or 1
+    lo, hi = lo - pad, hi + pad
+    iw, ih = W - ML - MR, H - MT - MB
+
+    def x(i):
+        return ML + i / (n - 1) * iw
+
+    def y(v):
+        return MT + (hi - v) / (hi - lo) * ih
+
+    parts = []
+    months = [d[5:7] for d in dates]
+    for i in range(1, n):
+        if months[i] != months[i - 1]:
+            parts.append(f'<line x1="{x(i):.1f}" y1="{MT}" x2="{x(i):.1f}" y2="{MT + ih}" class="cg"/>'
+                         f'<text x="{x(i):.1f}" y="{H - 8}" class="ca" text-anchor="middle">{dt.date.fromisoformat(dates[i]).strftime("%b")}</text>')
+    for k in range(4):
+        v = lo + (hi - lo) * k / 3
+        fmtv = f"{v:,.0f}" if hi >= 100 else f"{v:,.2f}"
+        parts.append(f'<line x1="{ML}" y1="{y(v):.1f}" x2="{ML + iw}" y2="{y(v):.1f}" class="cg"/>'
+                     f'<text x="{ML + iw + 6}" y="{y(v) + 3.5:.1f}" class="ca">{fmtv}</text>')
+    diff = [a - bb for a, bb in zip(close, vw)]
+    run = [0]
+
+    def flush(run, sign):
+        pts = [f"{x(j):.1f},{y(close[j]):.1f}" for j in run] + [f"{x(j):.1f},{y(vw[j]):.1f}" for j in reversed(run)]
+        parts.append(f'<polygon points="{" ".join(pts)}" class="{"cvfp" if sign else "cvfn"}"/>')
+
+    for i in range(1, n):
+        if (diff[i] >= 0) != (diff[i - 1] >= 0):
+            run.append(i); flush(run, diff[i - 1] >= 0); run = [i]
+        else:
+            run.append(i)
+    if len(run) > 1:
+        flush(run, diff[-1] >= 0)
+    parts.append('<polyline points="' + " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(vw)) + '" fill="none" class="cvlv"/>')
+    parts.append('<polyline points="' + " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(close)) + '" fill="none" class="cvlp"/>')
+    side = diff[-1] >= 0
+    return f"""                <figure class="crypto-card">
+                    <figcaption><b>{html.escape(b["sym"])}</b> <span>{html.escape(b["name"])} · {html.escape(b["note"])}</span><em class="{"scan-z-pos" if side else "scan-z-neg"}">{b["pct"]:+.1f}% {"above" if side else "below"} · {b["held"]}d</em></figcaption>
+                    <svg viewBox="0 0 {W} {H}" preserveAspectRatio="none" role="img" aria-label="{html.escape(b["sym"])} price versus year-to-date VWAP">{"".join(parts)}</svg>
+                </figure>"""
+
+
 def main():
     if len(sys.argv) > 1:
         path = sys.argv[1]
@@ -93,6 +144,37 @@ def main():
         for c in sorted(coins, key=lambda c: -c["spread"]))
     charts = "\n".join(chart(c) for c in sorted(coins, key=lambda c: -c["spread"]))
 
+    vw_rows = "\n".join(
+        f"""                    <tr>
+                        <td class="scan-sym">{html.escape(b['sym'])}</td>
+                        <td class="scan-sec">{html.escape(b['name'])} · {html.escape(b['note'])}</td>
+                        <td class="scan-num">${b['price']:,.2f}</td>
+                        <td class="scan-num">${b['vwap']:,.2f}</td>
+                        <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
+                        <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
+                    </tr>"""
+        for b in p.get("vwap_etf", []) + p.get("vwap_native", []))
+    vw_charts_etf = "\n".join(vwap_chart(b) for b in p.get("vwap_etf", []))
+    vw_charts_native = "\n".join(vwap_chart(b) for b in p.get("vwap_native", []))
+    vwap_section = f"""
+                <div class="position-group"><h3>YTD VWAP · two cohorts</h3>
+                <p class="scan-intro">The year's average cost basis, measured twice: spot-ETF buyers (consolidated-tape volume — the tradfi cohort) and Hyperliquid perp traders (native-venue volume — the crypto cohort). Same read as the equity tabs: above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="Crypto year-to-date VWAPs by cohort">
+                    <thead><tr><th>Symbol</th><th>Cohort</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">Side</th></tr></thead>
+                    <tbody>
+{vw_rows}
+                    </tbody>
+                </table>
+                </div>
+                <div class="crypto-grid">
+{vw_charts_etf}
+                </div>
+                <div class="crypto-grid">
+{vw_charts_native}
+                </div>
+                </div>""" if (p.get("vwap_etf") or p.get("vwap_native")) else ""
+
     panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
                 <div class="position-head">
                     <h2 id="crypto-heading">Crypto spread</h2>
@@ -110,6 +192,7 @@ def main():
                 <div class="crypto-grid">
 {charts}
                 </div>
+{vwap_section}
                 <p class="trading-note">Spread Z uses the same EMA-based z-score as the momentum scan (EMA-50 mean, EMA-RMS sigma, EMA-3 smoothing), computed on daily UTC closes from Alpaca's crypto feed. A z-spread compares each asset to its own trend — it is relative momentum, not a price-ratio chart. Descriptive market data, not recommendations.</p>
             </section>"""
 
