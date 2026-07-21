@@ -48,57 +48,115 @@
   activate(fromHash());
   addEventListener('hashchange', () => activate(fromHash()));
 
-  /* ── momentum-scan Spread Z accordions ───────────────────────────── */
+  /* ── momentum-scan full setup-chart accordions ───────────────────── */
   const scanPanel = $('#scan-panel');
-  const spreadSource = $('#scan-spread-data');
-  if (scanPanel && spreadSource) {
-    let spreadData = {};
-    try { spreadData = JSON.parse(spreadSource.textContent); } catch (error) { console.error('Invalid Spread Z data', error); }
-    const chartDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+  const chartSource = $('#scan-chart-data');
+  if (scanPanel && chartSource) {
+    let chartData = {};
+    try { chartData = JSON.parse(chartSource.textContent); } catch (error) { console.error('Invalid scan chart data', error); }
     let openToggle = null;
+    const W = 1120, PXH = 280, SUBH = 78, GAP = 14, AXISH = 22, ML = 8, MR = 66;
+    const H = PXH + (SUBH + GAP) * 2 + AXISH;
+    const COLORS = { up: '#1a7a3c', down: '#8f2222', earn: '#4a3aa7', ytd: '#6b655c', pos: '#2a78d6', neg: '#e34948', mut: '#a09a90' };
+    const esc = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
+    const signed = (value, suffix = '') => value == null ? '—' : `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}${suffix}`;
+    const shortDate = iso => iso ? `${MONTHS[+iso.slice(5, 7) - 1]} ${+iso.slice(8, 10)}` : '—';
+    const point = (x, y) => `${x.toFixed(1)},${y.toFixed(1)}`;
 
-    const fmtChartDate = iso => chartDate.format(new Date(`${iso}T12:00:00`));
-    const fmtZ = value => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}`;
-    const chartStatus = value => value > 1 ? 'Leading SPY' : value < -1 ? 'Lagging SPY' : 'Inside neutral band';
-
-    function renderSpreadChart(shell, symbol) {
+    function renderSetupChart(shell, symbol) {
       if (shell.dataset.rendered === 'true') return;
-      const series = spreadData[symbol];
-      if (!series || !series.values || !series.values.length) {
-        shell.innerHTML = '<p class="scan-null">Spread Z history unavailable.</p>';
+      const rec = chartData[symbol], s = rec?.series;
+      if (!s?.dates?.length) {
+        shell.innerHTML = '<p class="scan-null">Full setup chart unavailable.</p>';
         shell.dataset.rendered = 'true';
         return;
       }
-      const values = series.values, dates = series.dates;
-      const W = 960, H = 220, L = 46, R = 16, T = 16, B = 30;
-      const iw = W - L - R, ih = H - T - B;
-      const rawMin = Math.min(-1.5, ...values), rawMax = Math.max(1.5, ...values);
-      const pad = Math.max(0.2, (rawMax - rawMin) * 0.08);
-      const lo = rawMin - pad, hi = rawMax + pad;
-      const x = i => L + (values.length === 1 ? 0 : i / (values.length - 1) * iw);
-      const y = value => T + (hi - value) / (hi - lo) * ih;
-      const points = values.map((value, i) => `${x(i).toFixed(1)},${y(value).toFixed(1)}`).join(' ');
-      const baseY = y(0).toFixed(1);
-      const fillPoints = `${L},${baseY} ${points} ${W - R},${baseY}`;
-      const levels = [-2, -1, 0, 1, 2].filter(value => value >= lo && value <= hi);
-      const grid = levels.map(value => `<line x1="${L}" y1="${y(value).toFixed(1)}" x2="${W - R}" y2="${y(value).toFixed(1)}" class="${Math.abs(value) === 1 ? 'scan-spread-threshold' : 'scan-spread-grid'}"/><text x="${L - 8}" y="${(y(value) + 3.5).toFixed(1)}" text-anchor="end" class="scan-spread-axis">${value > 0 ? '+' : ''}${value}</text>`).join('');
-      const mid = Math.floor((dates.length - 1) / 2);
-      const current = values[values.length - 1];
-      const observedMin = Math.min(...values), observedMax = Math.max(...values);
+      const n = s.dates.length, iw = W - ML - MR;
+      const x = i => ML + (i + 0.5) / n * iw;
+      const candleW = Math.max(1.6, iw / n * 0.6);
+      const earnPoints = s.ev.map((value, i) => value == null ? null : [i, value]).filter(Boolean);
+      const priceValues = [...s.l, ...s.h, ...s.yv, ...earnPoints.map(pair => pair[1])];
+      let lo = Math.min(...priceValues), hi = Math.max(...priceValues);
+      const pad = Math.max((hi - lo) * 0.05, Math.max(Math.abs(hi), 1) * 0.005);
+      lo -= pad; hi += pad;
+      const yp = value => (hi - value) / (hi - lo) * (PXH - 8) + 4;
+      const parts = [], axis = [];
+
+      for (let i = 1; i < n; i += 1) {
+        if (s.dates[i].slice(5, 7) !== s.dates[i - 1].slice(5, 7)) {
+          parts.push(`<line x1="${x(i).toFixed(1)}" y1="0" x2="${x(i).toFixed(1)}" y2="${H - AXISH}" class="sg"/>`);
+          axis.push(`<text x="${x(i).toFixed(1)}" y="${H - 7}" class="sa" text-anchor="middle">${MONTHS[+s.dates[i].slice(5, 7) - 1]}</text>`);
+        }
+      }
+      for (let k = 0; k < 4; k += 1) {
+        const value = lo + (hi - lo) * k / 3;
+        parts.push(`<line x1="${ML}" y1="${yp(value).toFixed(1)}" x2="${ML + iw}" y2="${yp(value).toFixed(1)}" class="sg"/><text x="${ML + iw + 6}" y="${(yp(value) + 3.5).toFixed(1)}" class="sa">${value.toLocaleString('en-US', { maximumFractionDigits: 0 })}</text>`);
+      }
+      for (let i = 0; i < n; i += 1) {
+        const color = s.c[i] >= s.o[i] ? COLORS.up : COLORS.down;
+        const top = Math.max(s.o[i], s.c[i]), bottom = Math.min(s.o[i], s.c[i]);
+        parts.push(`<line x1="${x(i).toFixed(1)}" y1="${yp(s.h[i]).toFixed(1)}" x2="${x(i).toFixed(1)}" y2="${yp(s.l[i]).toFixed(1)}" stroke="${color}" stroke-width="1"/><rect x="${(x(i) - candleW / 2).toFixed(1)}" y="${yp(top).toFixed(1)}" width="${candleW.toFixed(1)}" height="${Math.max(0.8, yp(bottom) - yp(top)).toFixed(1)}" fill="${color}"/>`);
+      }
+      parts.push(`<polyline points="${s.yv.map((value, i) => point(x(i), yp(value))).join(' ')}" fill="none" stroke="${COLORS.ytd}" stroke-width="1.5" stroke-dasharray="5 4"/>`);
+      if (earnPoints.length) {
+        parts.push(`<polyline points="${earnPoints.map(([i, value]) => point(x(i), yp(value))).join(' ')}" fill="none" stroke="${COLORS.earn}" stroke-width="2"/>`);
+        parts.push(`<text x="${x(earnPoints[0][0]).toFixed(1)}" y="${(yp(earnPoints[0][1]) - 6).toFixed(1)}" class="sa" fill="${COLORS.earn}" text-anchor="middle">E</text>`);
+      }
+      const tags = [[s.c[n - 1], '#1a1815', s.c[n - 1].toFixed(2)]];
+      if (earnPoints.length) tags.push([earnPoints[earnPoints.length - 1][1], COLORS.earn, earnPoints[earnPoints.length - 1][1].toFixed(2)]);
+      tags.push([s.yv[n - 1], COLORS.ytd, s.yv[n - 1].toFixed(2)]);
+      tags.forEach(([value, color, text]) => parts.push(`<text x="${W - 2}" y="${(yp(value) + 3.5).toFixed(1)}" class="st" fill="${color}" text-anchor="end">${text}</text>`));
+
+      const y0 = PXH + GAP;
+      const spreadValues = s.sp.filter(value => value != null);
+      const zmax = Math.max(2, ...(spreadValues.map(value => Math.abs(value) * 1.1)));
+      const ys = value => y0 + (zmax - value) / (2 * zmax) * SUBH;
+      parts.push(`<text x="${ML}" y="${y0 + 10}" class="sl">Spread Z vs SPY (50d)</text><line x1="${ML}" y1="${ys(0).toFixed(1)}" x2="${ML + iw}" y2="${ys(0).toFixed(1)}" class="sz"/>`);
+      for (let i = 1; i < n; i += 1) {
+        if (s.sp[i - 1] == null || s.sp[i] == null) continue;
+        parts.push(`<line x1="${x(i - 1).toFixed(1)}" y1="${ys(s.sp[i - 1]).toFixed(1)}" x2="${x(i).toFixed(1)}" y2="${ys(s.sp[i]).toFixed(1)}" stroke="${s.sp[i] >= 0 ? COLORS.up : COLORS.neg}" stroke-width="1.8"/>`);
+      }
+      const lastSpread = [...s.sp].reverse().find(value => value != null);
+      if (lastSpread != null) parts.push(`<text x="${W - 2}" y="${(ys(lastSpread) + 3.5).toFixed(1)}" class="st" fill="${lastSpread >= 0 ? COLORS.up : COLORS.neg}" text-anchor="end">${signed(lastSpread)}</text>`);
+
+      const y1 = y0 + SUBH + GAP;
+      const distValues = s.dz.filter(value => value != null);
+      const dmax = Math.max(2.5, ...(distValues.map(value => Math.abs(value) * 1.1)));
+      const yd = value => y1 + (dmax - value) / (2 * dmax) * SUBH;
+      parts.push(`<text x="${ML}" y="${y1 + 10}" class="sl">Dist Z — YTD VWAP</text><line x1="${ML}" y1="${yd(0).toFixed(1)}" x2="${ML + iw}" y2="${yd(0).toFixed(1)}" class="sz"/>`);
+      [1, -1].forEach(level => parts.push(`<line x1="${ML}" y1="${yd(level).toFixed(1)}" x2="${ML + iw}" y2="${yd(level).toFixed(1)}" class="sd"/>`));
+      const barW = Math.max(1.2, iw / n * 0.55);
+      s.dz.forEach((value, i) => {
+        if (value == null) return;
+        const color = value > 1 ? COLORS.pos : value < -1 ? COLORS.neg : COLORS.mut;
+        parts.push(`<rect x="${(x(i) - barW / 2).toFixed(1)}" y="${Math.min(yd(0), yd(value)).toFixed(1)}" width="${barW.toFixed(1)}" height="${Math.abs(yd(value) - yd(0)).toFixed(1)}" fill="${color}"/>`);
+      });
+      const lastDist = [...s.dz].reverse().find(value => value != null);
+      if (lastDist != null) parts.push(`<text x="${W - 2}" y="${(yd(lastDist) + 3.5).toFixed(1)}" class="st" fill="${lastDist > 1 ? COLORS.pos : lastDist < -1 ? COLORS.neg : COLORS.mut}" text-anchor="end">${signed(lastDist)}</text>`);
+
       const detailId = shell.closest('[data-scan-detail]').id;
       const titleId = `${detailId}-title`, descId = `${detailId}-desc`;
-      const range = `${fmtZ(observedMin)} to ${fmtZ(observedMax)}`;
-      shell.innerHTML = `<div class="scan-spread-head"><h4 id="${titleId}">${symbol} Spread Z</h4><p>${fmtChartDate(dates[0])}–${fmtChartDate(dates[dates.length - 1])} · ${values.length} sessions · range ${range}</p><span class="scan-spread-current ${current >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${fmtZ(current)} · ${chartStatus(current)}</span></div>
-        <svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${titleId} ${descId}" preserveAspectRatio="none">
-          <desc id="${descId}">${symbol} Spread Z ranged from ${range} and finished at ${fmtZ(current)}. Guides mark the long threshold at plus one, the SPY baseline at zero, and the short threshold at minus one.</desc>
-          <rect x="${L}" y="${T}" width="${iw}" height="${Math.max(0, y(1) - T).toFixed(1)}" class="scan-spread-band--long"/>
-          <rect x="${L}" y="${y(-1).toFixed(1)}" width="${iw}" height="${Math.max(0, T + ih - y(-1)).toFixed(1)}" class="scan-spread-band--short"/>
-          ${grid}<polygon points="${fillPoints}" class="scan-spread-fill"/><polyline points="${points}" class="scan-spread-line"/>
-          <circle cx="${x(values.length - 1).toFixed(1)}" cy="${y(current).toFixed(1)}" r="4" class="${current >= 0 ? 'scan-spread-dot--pos' : 'scan-spread-dot--neg'}"/>
-          <text x="${L}" y="${H - 7}" class="scan-spread-axis">${fmtChartDate(dates[0])}</text>
-          <text x="${x(mid).toFixed(1)}" y="${H - 7}" text-anchor="middle" class="scan-spread-axis">${fmtChartDate(dates[mid])}</text>
-          <text x="${W - R}" y="${H - 7}" text-anchor="end" class="scan-spread-axis">${fmtChartDate(dates[dates.length - 1])}</text>
-        </svg><div class="scan-spread-legend"><span>+1 long threshold</span><span>0 matches SPY</span><span>−1 short threshold</span></div>`;
+      const stats = rec.stats || {};
+      const side = stats.evwap_side == null ? '—' : `${stats.evwap_side ? '▲' : '▼'} ${stats.evwap_streak}d`;
+      const badgeClass = ({ 'ENTER+': 'setup-b--long', ENTER: 'setup-b--long', 'SHORT+': 'setup-b--short', SHORT: 'setup-b--short', BREAKING: 'setup-b--break' })[rec.label] || 'setup-b--watch';
+      const lastEarn = earnPoints.length ? earnPoints[earnPoints.length - 1][1] : null;
+      const description = `${symbol} setup chart with ${n} daily candles from ${s.dates[0]} through ${s.dates[n - 1]}. Latest close ${s.c[n - 1].toFixed(2)}, YTD VWAP ${s.yv[n - 1].toFixed(2)}, earnings VWAP ${lastEarn == null ? 'unavailable' : lastEarn.toFixed(2)}, Spread Z ${lastSpread == null ? 'unavailable' : signed(lastSpread)}, and Dist Z ${lastDist == null ? 'unavailable' : signed(lastDist)}.`;
+      shell.innerHTML = `<section class="setup-card scan-setup-card"><header><b id="${titleId}">${esc(symbol)}</b><span>${esc(rec.sector)}</span><span class="setup-b ${badgeClass}">${esc(rec.label)}</span><span class="setup-stats">spread Z <b>${signed(stats.spread_z)}</b> · dist Z <b>${signed(stats.dist_z)}</b> · vs earn VWAP <b>${signed(stats.evwap_pct, '%')}</b> (${side}) · earnings anchor ${shortDate(stats.earn_anchor)} · next ${shortDate(stats.next_earn)}</span></header><p class="setup-read">${esc(rec.read)}</p><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-labelledby="${titleId} ${descId}"><desc id="${descId}">${esc(description)}</desc>${parts.join('')}${axis.join('')}<line class="sx" x1="0" y1="0" x2="0" y2="${H - AXISH}" visibility="hidden"/></svg><div class="setup-tip" hidden></div></section>`;
+      const card = $('.scan-setup-card', shell), svg = $('svg', card), tip = $('.setup-tip', card), crosshair = $('.sx', card);
+      svg.addEventListener('pointermove', event => {
+        const rect = svg.getBoundingClientRect(), vx = (event.clientX - rect.left) / rect.width * W;
+        const i = Math.max(0, Math.min(n - 1, Math.floor((vx - ML) / iw * n)));
+        const px = x(i);
+        crosshair.setAttribute('x1', px); crosshair.setAttribute('x2', px); crosshair.removeAttribute('visibility');
+        const row = (key, label) => s[key][i] == null ? '' : `${label} ${s[key][i]}<br>`;
+        tip.innerHTML = `<b>${s.dates[i]}</b><br>close ${s.c[i]}<br>${row('ev', 'earn vwap')}${row('yv', 'ytd vwap')}${row('sp', 'spread z')}${row('dz', 'dist z')}`;
+        tip.hidden = false;
+        const cardRect = card.getBoundingClientRect();
+        let left = event.clientX - cardRect.left + 14;
+        if (left + tip.offsetWidth > cardRect.width - 8) left = event.clientX - cardRect.left - tip.offsetWidth - 14;
+        tip.style.left = `${left}px`; tip.style.top = `${event.clientY - cardRect.top - 10}px`;
+      });
+      svg.addEventListener('pointerleave', () => { tip.hidden = true; crosshair.setAttribute('visibility', 'hidden'); });
       shell.dataset.rendered = 'true';
     }
 
@@ -112,7 +170,7 @@
       if (!toggle) return;
       const detail = document.getElementById(toggle.getAttribute('aria-controls'));
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', `Show ${toggle.closest('[data-scan-row]').dataset.scanSymbol} Spread Z chart`);
+      toggle.setAttribute('aria-label', `Show ${toggle.closest('[data-scan-row]').dataset.scanSymbol} setup chart`);
       toggle.closest('[data-scan-row]').classList.remove('is-open');
       if (detail) detail.hidden = true;
       if (openToggle === toggle) openToggle = null;
@@ -125,10 +183,10 @@
       const detail = document.getElementById(toggle.getAttribute('aria-controls'));
       if (!detail) return;
       toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', `Hide ${row.dataset.scanSymbol} Spread Z chart`);
+      toggle.setAttribute('aria-label', `Hide ${row.dataset.scanSymbol} setup chart`);
       row.classList.add('is-open');
       detail.hidden = false;
-      renderSpreadChart($('[data-scan-chart]', detail), row.dataset.scanSymbol);
+      renderSetupChart($('[data-scan-chart]', detail), row.dataset.scanSymbol);
       openToggle = toggle;
       if (sync) syncChartParam(row.dataset.scanSymbol);
     }
@@ -151,7 +209,10 @@
     if (initialSymbol) {
       const initialDetail = $$('[data-scan-detail]', scanPanel).find(detail => detail.dataset.scanSymbol === initialSymbol.toUpperCase());
       const initialToggle = initialDetail?.previousElementSibling?.querySelector('[data-scan-toggle]');
-      if (initialToggle) openChart(initialToggle, false);
+      if (initialToggle) {
+        openChart(initialToggle, false);
+        requestAnimationFrame(() => initialToggle.closest('[data-scan-row]').scrollIntoView({ block: 'start' }));
+      }
     }
   }
 

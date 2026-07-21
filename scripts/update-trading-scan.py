@@ -2,11 +2,11 @@
 """Inject the latest momentum scan into trading/index.html (AUTO:SCAN block).
 
 Reads the newest ~/Documents/trading/scans/vwap-scan-*.json (or a path given
-as argv[1]) emitted by ~/Documents/trading/src/vwap_scan.py, renders the
+as argv[1]) plus its matching scan-charts JSON emitted by setup_vwap_charts.py, renders the
 "Momentum scan" tab panel in house style, and rewrites the marker block plus
 the tab-count badge.
 
-Usage: python3 scripts/update-trading-scan.py [path/to/vwap-scan-YYYY-MM-DD.json]
+Usage: python3 scripts/update-trading-scan.py [vwap-scan.json] [scan-charts.json]
 Run from the repo root.
 """
 import datetime as dt
@@ -61,7 +61,7 @@ def setup_table(rows, aria, table_id):
         sym = r["symbol"]
         detail_id = f"scan-detail-{table_id}-{sym.lower().replace('.', '-')}"
         cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{sym}">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {sym} Spread Z chart"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{sym}</span></button></td>
+                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {sym} setup chart"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{sym}</span></button></td>
                         <td class="scan-sec">{r['sector']}</td>
                         <td class="scan-num">{znum(r.get('spread_z'))}</td>
                         <td class="scan-num">{znum(r.get('dist_z'))}</td>
@@ -70,7 +70,7 @@ def setup_table(rows, aria, table_id):
                         <td><span class="scan-signal scan-signal--{key}">{label}</span></td>
                     </tr>
                     <tr class="scan-detail-row" id="{detail_id}" data-scan-detail data-scan-symbol="{sym}" hidden>
-                        <td colspan="7"><div class="scan-spread-chart" data-scan-chart="{sym}"></div></td>
+                        <td colspan="7"><div class="scan-setup-chart" data-scan-chart="{sym}"></div></td>
                     </tr>""")
     return f"""                <div class="scan-table-wrap">
                 <table class="scan-table scan-accordion-table" aria-label="{aria}">
@@ -92,19 +92,33 @@ def main():
         path = paths[-1]
     p = json.load(open(path))
 
-    spread_series = p.get("spread_series") or {}
+    if len(sys.argv) > 2:
+        chart_path = sys.argv[2]
+    else:
+        chart_path = os.path.join(os.path.dirname(path), os.path.basename(path).replace("vwap-scan-", "scan-charts-"))
+    if not os.path.exists(chart_path):
+        sys.exit(f"Missing matching full chart JSON: {chart_path}")
+    chart_payload = json.load(open(chart_path))
+    if chart_payload.get("last_bar") != p["last_bar"]:
+        sys.exit("Full chart data and momentum scan do not share the same completed session")
+    charts = chart_payload.get("charts") or []
     symbols = {r["symbol"] for r in p["rows"]}
-    if set(spread_series) != symbols:
-        sys.exit("Spread Z chart series must match the scan universe exactly")
-    for symbol, series in spread_series.items():
-        dates, values = series.get("dates", []), series.get("values", [])
-        if not values or len(dates) != len(values):
-            sys.exit(f"{symbol} needs a non-empty, aligned Spread Z chart series")
-        if dates != sorted(set(dates)) or dates[-1] != p["last_bar"]:
-            sys.exit(f"{symbol} Spread Z dates must be unique, increasing, and end on {p['last_bar']}")
-        if any(not math.isfinite(float(value)) for value in values):
-            sys.exit(f"{symbol} Spread Z contains a non-finite value")
-    spread_json = json.dumps(spread_series, separators=(",", ":")).replace("</", "<\\/")
+    if len(charts) != len(symbols) or {r.get("symbol") for r in charts} != symbols:
+        sys.exit("Full setup chart records must match the scan universe exactly")
+    chart_map = {}
+    series_keys = ("dates", "o", "h", "l", "c", "ev", "yv", "sp", "dz")
+    for record in charts:
+        symbol, series = record["symbol"], record.get("series") or {}
+        dates = series.get("dates") or []
+        if not dates or dates != sorted(set(dates)) or dates[-1] != p["last_bar"]:
+            sys.exit(f"{symbol} chart dates must be non-empty, unique, increasing, and end on {p['last_bar']}")
+        if any(len(series.get(key) or []) != len(dates) for key in series_keys[1:]):
+            sys.exit(f"{symbol} full setup chart series are not aligned")
+        numeric = (value for key in series_keys[1:] for value in series[key] if value is not None)
+        if any(not math.isfinite(float(value)) for value in numeric):
+            sys.exit(f"{symbol} full setup chart contains a non-finite value")
+        chart_map[symbol] = record
+    chart_json = json.dumps(chart_map, separators=(",", ":")).replace("</", "<\\/")
 
     last_bar = dt.date.fromisoformat(p["last_bar"]).strftime("%B %-d, %Y")
     longs = [r for r in p["rows"] if r["verdict"] in ("ENTER+", "ENTER")]
@@ -128,7 +142,7 @@ def main():
                     <span>{last_bar} close · daily</span>
                 </div>
                 <p class="scan-intro">A mechanical relative-strength screen across the {len(all_rows)}-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
-                <p class="scan-chart-hint">Click any ticker row to open its 6-month Spread Z history. Only one chart stays open at a time.</p>
+                <p class="scan-chart-hint">Click any ticker row to open the same full chart used in Setup Charts: YTD candles, earnings and YTD VWAPs, Spread Z, Dist Z, and the rule-based read. Only one chart stays open at a time.</p>
                 <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
 {sectors}
                 </ul>
@@ -145,7 +159,7 @@ def main():
                     <p class="scan-skip-full"><a href="#scan-method">Skip past the 166-row table</a></p>
 {setup_table(all_rows, "Full momentum scan of the tracked universe", "full")}
                 </div>
-                <script type="application/json" id="scan-spread-data">{spread_json}</script>
+                <script type="application/json" id="scan-chart-data">{chart_json}</script>
                 <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
             </section>"""
 
