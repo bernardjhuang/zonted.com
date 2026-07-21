@@ -23,6 +23,8 @@ PAGE = os.path.join(ROOT, "trading", "index.html")
 SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/whale-13f-*.json")
 
 def money(x):
+    if x == 0:
+        return "$0"
     a = abs(x)
     s = "−" if x < 0 else ("+" if x > 0 else "")
     if a >= 1e9:
@@ -52,14 +54,16 @@ def main():
 
     office_cards = []
     for o in offices:
-        stale = (f'<span class="whale-stale">⚠ Through {qlabel(o["period"])}</span>'
+        stale = (f'<span class="whale-stale">Older filing · {qlabel(o["period"])}</span>'
                  if o["period"] != newest else "")
         moves = "".join(
             f'<li><span>{html.escape(move["name"])}</span><strong class="{"scan-z-pos" if move["usd"] >= 0 else "scan-z-neg"}">{money(move["usd"])}</strong></li>'
             for move in o["top_moves"][:3])
-        sold_width = o["sells"] / scale_max * 100
-        bought_width = o["buys"] / scale_max * 100
-        net_class = "scan-z-pos" if o["net"] >= 0 else "scan-z-neg"
+        if not moves:
+            moves = '<li><span>No reportable share-count changes.</span></li>'
+        sold_width = max(0, min(100, o["sells"] / scale_max * 100))
+        bought_width = max(0, min(100, o["buys"] / scale_max * 100))
+        net_class = "scan-z-pos" if o["net"] > 0 else ("scan-z-neg" if o["net"] < 0 else "")
         office_cards.append(f"""                <article class="whale-card">
                     <header class="whale-card-head">
                         <div><h3>{html.escape(o['office'])}</h3><p>{html.escape(o['person'])} · AUM {money(o['aum']).lstrip('+')} · {o['positions']} positions {stale}</p></div>
@@ -76,26 +80,27 @@ def main():
 
     gross_bought = sum(o["buys"] for o in offices)
     gross_sold = sum(o["sells"] for o in offices)
-    total_net = sum(o["net"] for o in offices)
-    net_buyers = sum(o["net"] >= 0 for o in offices)
+    total_net = gross_bought - gross_sold
+    combined_aum = sum(o["aum"] for o in offices)
+    net_buyers = sum(o["net"] > 0 for o in offices)
 
     def cons_rows(rws):
         return "\n".join(
-            f"""                    <tr><td class="scan-sym" style="white-space:normal">{r['name']}</td>
+            f"""                    <tr><td class="scan-sym" style="white-space:normal">{html.escape(r['name'])}</td>
                         <td class="scan-num">{r['buyers']}▲ / {r['sellers']}▼</td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if r['net'] >= 0 else 'scan-z-neg'}">{money(r['net'])}</span></td></tr>"""
+                        <td class="scan-num"><span class="{'scan-z-pos' if r['net'] > 0 else ('scan-z-neg' if r['net'] < 0 else '')}">{money(r['net'])}</span></td></tr>"""
             for r in rws)
 
     agg = p.get("agg") or {}
     agg_max = max((h["usd"] for h in agg.get("holdings", [])), default=1)
     agg_rows = "\n".join(
         f"""                    <tr><td class="scan-num scan-sec">{i + 1}</td>
-                        <td class="scan-sym" style="white-space:normal">{h['name']}</td>
+                        <td class="scan-sym" style="white-space:normal">{html.escape(h['name'])}</td>
                         <td class="agg-cell"><span class="agg-bar" style="width:{h['usd'] / agg_max * 100:.1f}%"></span></td>
                         <td class="scan-num">{money(h['usd']).lstrip('+')}</td>
                         <td class="scan-num">{h['pct']:.1f}%</td>
                         <td class="scan-num">{h['offices']}</td>
-                        <td class="scan-sec" style="white-space:normal">{h['top_holder']}</td></tr>"""
+                        <td class="scan-sec" style="white-space:normal">{html.escape(h['top_holder'])}</td></tr>"""
         for i, h in enumerate(agg.get("holdings", [])))
     agg_section = f"""                <div class="position-group"><h3>Where the chips sit · {money(agg.get('total_aum', 0)).lstrip('+')} across {len(offices)} offices · sorted by breadth</h3>
                 <div class="scan-table-wrap">
@@ -109,7 +114,7 @@ def main():
 
     stale_foot = ""
     if p.get("stale"):
-        items = " · ".join(f"{s['office']} ({'last 13F ' + qlabel(s['period']) if s['period'] else 'no recent 13F'})"
+        items = " · ".join(f"{html.escape(s['office'])} ({'last 13F ' + qlabel(s['period']) if s['period'] else 'no recent 13F'})"
                            for s in p["stale"])
         stale_foot = f'<p class="trading-note" style="margin-bottom:0;border-top:0;padding-top:0">Not shown: {items}.</p>'
 
@@ -120,11 +125,13 @@ def main():
                 </div>
                 <p class="scan-intro">Quarter-over-quarter buying and selling from the latest SEC 13F information tables. Read each card left to right: gross sales, gross purchases, then net flow; the bar shows their relative scale and the list isolates each office’s three largest position changes. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a backward-looking allocation map—not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
                 <section class="whale-summary" aria-label="13F flow summary">
+                    <div><span>Offices</span><strong>{len(offices)}</strong><small>{net_buyers} net buyers</small></div>
+                    <div><span>Combined AUM</span><strong>{money(combined_aum).lstrip('+')}</strong></div>
                     <div><span>Gross sold</span><strong class="scan-z-neg">{money(-gross_sold)}</strong></div>
                     <div><span>Gross bought</span><strong class="scan-z-pos">{money(gross_bought)}</strong></div>
                     <div><span>Net across offices</span><strong class="{'scan-z-pos' if total_net >= 0 else 'scan-z-neg'}">{money(total_net)}</strong></div>
-                    <div><span>Net buyers</span><strong>{net_buyers} of {len(offices)}</strong></div>
                 </section>
+                <div class="whale-flow-head"><h3>Office flows</h3><p>Sorted by net flow, highest to lowest · bars share one scale across every office</p></div>
                 <section class="whale-flow-grid" aria-label="Quarterly flows by investment office">
 {os.linesep.join(office_cards)}
                 </section>

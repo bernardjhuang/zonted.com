@@ -39,7 +39,11 @@
   });
   const fromHash = () => {
     const hash = location.hash === '#watchlist' ? '#scan' : location.hash;
-    return tabs.find(t => hash === '#' + t.id.replace(/-tab$/, '')) || tabs[0];
+    const exact = tabs.find(t => hash === '#' + t.id.replace(/-tab$/, ''));
+    if (exact) return exact;
+    if (!hash && new URL(location.href).searchParams.has('chart')) return $('#scan-tab') || tabs[0];
+    const anchoredPanel = hash && document.getElementById(hash.slice(1))?.closest('[role="tabpanel"]');
+    return tabs.find(t => panelOf(t) === anchoredPanel) || tabs[0];
   };
   activate(fromHash());
   addEventListener('hashchange', () => activate(fromHash()));
@@ -80,9 +84,13 @@
       const grid = levels.map(value => `<line x1="${L}" y1="${y(value).toFixed(1)}" x2="${W - R}" y2="${y(value).toFixed(1)}" class="${Math.abs(value) === 1 ? 'scan-spread-threshold' : 'scan-spread-grid'}"/><text x="${L - 8}" y="${(y(value) + 3.5).toFixed(1)}" text-anchor="end" class="scan-spread-axis">${value > 0 ? '+' : ''}${value}</text>`).join('');
       const mid = Math.floor((dates.length - 1) / 2);
       const current = values[values.length - 1];
-      const titleId = `${shell.closest('[data-scan-detail]').id}-title`;
-      shell.innerHTML = `<div class="scan-spread-head"><h4 id="${titleId}">${symbol} Spread Z</h4><p>${fmtChartDate(dates[0])}–${fmtChartDate(dates[dates.length - 1])} · ${values.length} sessions</p><span class="scan-spread-current ${current >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${fmtZ(current)} · ${chartStatus(current)}</span></div>
-        <svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${titleId}" preserveAspectRatio="none">
+      const observedMin = Math.min(...values), observedMax = Math.max(...values);
+      const detailId = shell.closest('[data-scan-detail]').id;
+      const titleId = `${detailId}-title`, descId = `${detailId}-desc`;
+      const range = `${fmtZ(observedMin)} to ${fmtZ(observedMax)}`;
+      shell.innerHTML = `<div class="scan-spread-head"><h4 id="${titleId}">${symbol} Spread Z</h4><p>${fmtChartDate(dates[0])}–${fmtChartDate(dates[dates.length - 1])} · ${values.length} sessions · range ${range}</p><span class="scan-spread-current ${current >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${fmtZ(current)} · ${chartStatus(current)}</span></div>
+        <svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${titleId} ${descId}" preserveAspectRatio="none">
+          <desc id="${descId}">${symbol} Spread Z ranged from ${range} and finished at ${fmtZ(current)}. Guides mark the long threshold at plus one, the SPY baseline at zero, and the short threshold at minus one.</desc>
           <rect x="${L}" y="${T}" width="${iw}" height="${Math.max(0, y(1) - T).toFixed(1)}" class="scan-spread-band--long"/>
           <rect x="${L}" y="${y(-1).toFixed(1)}" width="${iw}" height="${Math.max(0, T + ih - y(-1)).toFixed(1)}" class="scan-spread-band--short"/>
           ${grid}<polygon points="${fillPoints}" class="scan-spread-fill"/><polyline points="${points}" class="scan-spread-line"/>

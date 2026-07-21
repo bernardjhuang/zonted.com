@@ -13,6 +13,7 @@ import datetime as dt
 import glob
 import html
 import json
+import math
 import os
 import re
 import sys
@@ -95,9 +96,14 @@ def main():
     symbols = {r["symbol"] for r in p["rows"]}
     if set(spread_series) != symbols:
         sys.exit("Spread Z chart series must match the scan universe exactly")
-    if any(not series.get("values") or len(series.get("dates", [])) != len(series["values"])
-           for series in spread_series.values()):
-        sys.exit("Every scan symbol needs a non-empty, aligned Spread Z chart series")
+    for symbol, series in spread_series.items():
+        dates, values = series.get("dates", []), series.get("values", [])
+        if not values or len(dates) != len(values):
+            sys.exit(f"{symbol} needs a non-empty, aligned Spread Z chart series")
+        if dates != sorted(set(dates)) or dates[-1] != p["last_bar"]:
+            sys.exit(f"{symbol} Spread Z dates must be unique, increasing, and end on {p['last_bar']}")
+        if any(not math.isfinite(float(value)) for value in values):
+            sys.exit(f"{symbol} Spread Z contains a non-finite value")
     spread_json = json.dumps(spread_series, separators=(",", ":")).replace("</", "<\\/")
 
     last_bar = dt.date.fromisoformat(p["last_bar"]).strftime("%B %-d, %Y")
@@ -136,10 +142,11 @@ def main():
                 </div>
                 <div class="position-group">
                     <h3>Full scan · {len(all_rows)} symbols</h3>
+                    <p class="scan-skip-full"><a href="#scan-method">Skip past the 166-row table</a></p>
 {setup_table(all_rows, "Full momentum scan of the tracked universe", "full")}
                 </div>
                 <script type="application/json" id="scan-spread-data">{spread_json}</script>
-                <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
+                <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
             </section>"""
 
     page = open(PAGE).read()
