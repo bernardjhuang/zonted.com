@@ -185,7 +185,7 @@
         <header class="bl-header">
             <div class="bl-header-row">
                 <span class="bl-title">Trading</span>
-                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 20, 2026</span> · quantity-free</span>
+                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 21, 2026</span> · quantity-free</span>
                 <div class="bl-tools">
                     <input type="search" id="bl-q" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol">
                     <button type="button" id="bl-export" class="bl-btn">Export</button>
@@ -228,13 +228,8 @@
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span></li>
-                    </ul>
-                </div>
-                <div class="position-group">
-                    <h3>Equity shorts</h3>
-                    <ul class="ticker-list" aria-label="Robinhood short equity positions">
-                        <li class="ticker"><span class="ticker-symbol">NET</span><span class="ticker-name">Short</span></li>
-                        <li class="ticker"><span class="ticker-symbol">WTS</span><span class="ticker-name">Short</span></li>
+                        <li class="ticker"><span class="ticker-symbol">V</span></li>
+                        <li class="ticker"><span class="ticker-symbol">XOM</span></li>
                     </ul>
                 </div>
                 <div class="position-group">
@@ -242,12 +237,10 @@
                     <ul class="ticker-list" aria-label="Robinhood option positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span><span class="ticker-name">Call 120.0000 2027-01-15</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span><span class="ticker-name">Call 125.0000 2027-01-15</span></li>
-                        <li class="ticker"><span class="ticker-symbol">NET</span><span class="ticker-name">Put 200.0000 2027-01-15</span></li>
+                        <li class="ticker"><span class="ticker-symbol">V</span><span class="ticker-name">Call 400.0000 2027-01-15</span></li>
                     </ul>
                 </div>
             </section>
-            
-            
             <!-- AUTO:ROBINHOOD:END -->
 
                     <!-- AUTO:TRADES:START -->
@@ -262,35 +255,40 @@
                         <h3 id="buys-heading">Buys</h3>
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood buys">
                             <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-21">Jul 21</time>
+                                <div><span class="activity-action">V call</span><span class="activity-type">Option · 2 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−2.5%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-21">Jul 21</time>
+                                <div><span class="activity-action">XOM shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+1.0%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-21">Jul 21</time>
+                                <div><span class="activity-action">WTS shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−0.8%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">HOOD call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.4%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+27.8%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">DOCN shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−1.8%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-20">Jul 20</time>
-                                <div><span class="activity-action">ABT call</span><span class="activity-type">Option · 4 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−0.2%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-20">Jul 20</time>
-                                <div><span class="activity-action">NET shares</span><span class="activity-type">Equity · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−2.0%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-17">Jul 17</time>
-                                <div><span class="activity-action">NET put</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−3.5%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+10.4%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                         </ol>
                     </section>
                     <section class="activity-lane activity-lane--sell" aria-labelledby="sells-heading">
                         <h3 id="sells-heading">Sells</h3>
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood sells">
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-21">Jul 21</time>
+                                <div><span class="activity-action">NET put</span><span class="activity-type">Option</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−3.3%</span><span class="activity-status">Realized</span></div>
+                            </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-15">Jul 15</time>
                                 <div><span class="activity-action">FIG call</span><span class="activity-type">Option</span></div>
@@ -311,17 +309,10 @@
                                 <div><span class="activity-action">SPCX call</span><span class="activity-type">Option</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+2.0%</span><span class="activity-status">Realized</span></div>
                             </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-10">Jul 10</time>
-                                <div><span class="activity-action">META call</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+96.0%</span><span class="activity-status">Realized</span></div>
-                            </li>
                         </ol>
                     </section>
                 </div>
             </section>
-            
-            
             <!-- AUTO:TRADES:END -->
 
                     <!-- AUTO:YTD:START -->
@@ -338,7 +329,7 @@
                         <p>Overall Robinhood portfolio · Realized + unrealized · Open positions included</p>
                     </div>
                     <div class="ytd-account-result">
-                        <strong class="positive">+381.4%</strong>
+                        <strong class="positive">+387.9%</strong>
                         <span>Portfolio-wide · Live snapshot</span>
                     </div>
                 </section>
@@ -456,8 +447,6 @@
                 </div>
                 <p class="trading-note">Rankings are based on closed-trade percentage return, not dollar impact or recommendation quality.</p>
             </section>
-            
-            
             <!-- AUTO:YTD:END -->
                 </div>
                 <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Rankings are based on closed-trade percentage return, not dollar impact. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
