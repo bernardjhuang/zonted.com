@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="theme-color" content="#fcfcfa">
+    <meta name="theme-color" content="#fafaf8">
     <title>Trading Positions &amp; Watchlist — Zonted</title>
     <meta name="description" content="A quantity-free snapshot of Bernard Huang's current positions, recent trades, and research watchlist.">
     <link rel="canonical" href="https://zonted.com/trading/">
@@ -16,194 +16,153 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <style>
-        .trading-hero { padding: 64px 0 36px; border-bottom: 1px solid var(--rule); }
-        .trading-hero h1 { margin: 8px 0 14px; font-family: var(--display); font-size: clamp(2.5rem, 7vw, 4.5rem); font-weight: 500; line-height: 0.98; letter-spacing: -0.045em; }
-        .trading-hero p { max-width: 620px; color: var(--faded); font-size: 1.18rem; line-height: 1.6; }
-        .trading-stamp { display: inline-flex; align-items: center; gap: 8px; margin-top: 22px; padding: 7px 10px; border: 1px solid var(--rule); border-radius: 999px; font-family: var(--mono); font-size: 0.68rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faded); }
-        .trading-stamp::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--green-live); box-shadow: 0 0 0 3px rgba(26,122,60,0.12); }
-        .trading-tabs { display: flex; gap: 28px; padding-top: 24px; border-bottom: 1px solid var(--rule); }
-        .trading-tab { appearance: none; margin-bottom: -1px; padding: 13px 0 12px; border: 0; border-bottom: 2px solid transparent; background: transparent; font-family: var(--mono); font-size: 0.71rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); cursor: pointer; }
-        .trading-tab:hover { color: var(--ink); }
-        .trading-tab:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
-        .trading-tab[aria-selected="true"] { border-bottom-color: var(--ox); color: var(--ink); }
-        .trading-tab-count { display: inline-block; min-width: 23px; margin-left: 5px; padding: 2px 5px; border-radius: 999px; background: var(--paper-2); font-size: 0.58rem; line-height: 1.2; text-align: center; }
-        .trading-panel[hidden] { display: none; }
-        .position-section { padding: 42px 0; border-bottom: 1px solid var(--rule); }
-        .position-section:last-of-type { border-bottom: 0; }
-        .position-head { display: flex; justify-content: space-between; gap: 20px; align-items: baseline; margin-bottom: 20px; }
-        .position-head h2 { font-family: var(--display); font-size: 1.85rem; font-weight: 500; letter-spacing: -0.025em; }
-        .position-head span { font-family: var(--mono); font-size: 0.67rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); }
-        .position-group + .position-group { margin-top: 30px; }
-        .position-group h3 { margin-bottom: 11px; font-family: var(--mono); font-size: 0.7rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--faded); }
-        .ticker-list { display: flex; flex-wrap: wrap; gap: 10px; list-style: none; }
-        .ticker { min-width: 92px; padding: 13px 16px 12px; border: 1px solid var(--ink); background: var(--paper); }
-        .ticker-symbol { display: block; font-family: var(--mono); font-size: 0.9rem; font-weight: 600; letter-spacing: 0.03em; color: var(--ink); }
-        .ticker-name { display: block; margin-top: 3px; font-size: 0.78rem; line-height: 1.25; color: var(--faded); }
-        .activity-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 32px; }
-        .activity-lane h3 { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; padding-bottom: 10px; border-bottom: 2px solid var(--ink); font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; }
-        .activity-lane h3::before { content: ''; width: 8px; height: 8px; border-radius: 50%; background: var(--faded); }
-        .activity-lane--buy h3::before { background: var(--green-live); }
-        .activity-lane--sell h3::before { background: var(--ox); }
-        .activity-list { list-style: none; }
-        .activity-row { display: grid; grid-template-columns: 54px 1fr auto; gap: 10px; align-items: center; min-height: 67px; padding: 13px 0; border-bottom: 1px solid var(--rule); }
-        .activity-date { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--faded); }
-        .activity-action { font-size: 0.98rem; font-weight: 600; line-height: 1.25; }
-        .activity-type { display: block; margin-top: 2px; font-family: var(--mono); font-size: 0.59rem; letter-spacing: 0.09em; text-transform: uppercase; color: var(--faded); }
-        .activity-result { min-width: 74px; text-align: right; }
-        .activity-pnl { display: block; font-family: var(--mono); font-size: 0.79rem; font-weight: 600; }
-        .activity-pnl.positive { color: var(--green-live); }
-        .activity-pnl.negative { color: var(--ox); }
-        .activity-status { display: block; margin-top: 1px; font-family: var(--mono); font-size: 0.55rem; letter-spacing: 0.07em; text-transform: uppercase; color: var(--faded); }
-        .activity-policy { margin: -5px 0 22px; font-family: var(--mono); font-size: 0.62rem; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faded); }
-        .ytd-panel { padding: 42px 0 8px; }
-        .ytd-intro { max-width: 650px; margin: -6px 0 28px; color: var(--faded); font-size: 1rem; line-height: 1.6; }
-        .ytd-account-summary { display: flex; justify-content: space-between; gap: 28px; align-items: center; margin: 0 0 34px; padding: 22px 24px; border: 1px solid var(--ink); background: var(--paper-2); }
-        .ytd-account-kicker { display: block; margin-bottom: 5px; font-family: var(--mono); font-size: 0.59rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); }
-        .ytd-account-summary h3 { margin: 0; font-family: var(--display); font-size: 1.45rem; font-weight: 500; letter-spacing: -0.02em; }
-        .ytd-account-summary p { margin: 5px 0 0; color: var(--faded); font-size: 0.82rem; line-height: 1.45; }
-        .ytd-account-result { flex: 0 0 auto; text-align: right; }
-        .ytd-account-result strong { display: block; font-family: var(--mono); font-size: 1.75rem; line-height: 1; }
-        .ytd-account-result strong.positive { color: var(--green-live); }
-        .ytd-account-result strong.negative { color: var(--ox); }
-        .ytd-account-result span { display: block; margin-top: 7px; font-family: var(--mono); font-size: 0.57rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faded); }
-        @media (max-width: 600px) { .ytd-account-summary { align-items: flex-start; padding: 19px; } .ytd-account-result strong { font-size: 1.45rem; } }
-        .ytd-list { border-top: 2px solid var(--ink); list-style: none; }
-        .ytd-row { display: grid; grid-template-columns: 64px 52px minmax(0, 1fr) 86px; gap: 14px; align-items: center; min-height: 54px; padding: 10px 0; border-bottom: 1px solid var(--rule); }
-        .ytd-date { font-family: var(--mono); font-size: 0.65rem; letter-spacing: 0.04em; color: var(--faded); }
-        .ytd-side { font-family: var(--mono); font-size: 0.59rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-        .ytd-row--buy .ytd-side { color: var(--green-live); }
-        .ytd-row--sell .ytd-side { color: var(--ox); }
-        .ytd-action { min-width: 0; font-size: 0.96rem; font-weight: 600; }
-        .ytd-type { display: inline-block; margin-left: 9px; font-family: var(--mono); font-size: 0.56rem; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: var(--faded); }
-        .ytd-pnl { display: block; font-family: var(--mono); font-size: 0.74rem; font-weight: 600; text-align: right; }
-        .ytd-pnl.positive { color: var(--green-live); }
-        .ytd-pnl.negative { color: var(--ox); }
-        .ytd-pnl-status { display: block; margin-top: 2px; font-size: 0.48rem; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faded); }
-        .ytd-pnl--empty { visibility: hidden; }
-        .ytd-columns { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; align-items: start; }
-        .ytd-lane h3 { margin: 0 0 12px; font-family: var(--mono); font-size: 0.64rem; letter-spacing: 0.1em; text-transform: uppercase; }
-        .ytd-lane--wins h3 { color: var(--green-live); }
-        .ytd-lane--losses h3 { color: var(--ox); }
-        .ytd-columns .ytd-row { grid-template-columns: 52px minmax(0, 1fr) 76px; gap: 10px; }
-        @media (max-width: 720px) { .ytd-columns { grid-template-columns: 1fr; gap: 36px; } }
-        .watchlist-panel { padding: 42px 0 8px; }
-        .watchlist-intro { max-width: 590px; margin: -6px 0 28px; color: var(--faded); font-size: 1rem; line-height: 1.6; }
-        .watchlist-grid { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); border-top: 1px solid var(--ink); border-left: 1px solid var(--ink); list-style: none; }
-        .watchlist-symbol, .watchlist-empty { min-width: 0; padding: 15px 8px 14px; border-right: 1px solid var(--ink); border-bottom: 1px solid var(--ink); background: var(--paper); font-family: var(--mono); font-size: 0.78rem; font-weight: 600; letter-spacing: 0.04em; text-align: center; }
-        .watchlist-empty { background: var(--paper-2); }
-        .watchlist-note { margin: 24px 0 50px; font-size: 0.87rem; line-height: 1.6; color: var(--faded); }
-        .trading-note { margin: 4px 0 50px; padding: 18px 0 0; border-top: 1px solid var(--rule); font-size: 0.87rem; line-height: 1.6; color: var(--faded); }
-        .scan-panel { padding: 42px 0 8px; }
-        .scan-intro { max-width: 650px; margin: -6px 0 26px; color: var(--faded); font-size: 1rem; line-height: 1.6; }
-        .scan-sectors { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 34px; list-style: none; }
-        .scan-sector { min-width: 108px; padding: 10px 12px 9px; border: 1px solid var(--rule); font-family: var(--mono); font-size: 0.63rem; letter-spacing: 0.05em; line-height: 1.7; color: var(--faded); }
-        .scan-sector b { display: block; font-size: 0.78rem; letter-spacing: 0.03em; color: var(--ink); }
-        .scan-sector--hot { border-color: var(--green-live); }
-        .scan-sector--cold { border-color: var(--ox); }
-        .scan-table-wrap { overflow-x: auto; }
-        .scan-table { width: 100%; min-width: 640px; border-collapse: collapse; border-top: 2px solid var(--ink); }
-        .scan-table th { padding: 10px 12px 9px 0; border-bottom: 1px solid var(--ink); font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.09em; text-transform: uppercase; text-align: left; color: var(--faded); white-space: nowrap; }
-        .scan-table th.scan-num { text-align: right; }
-        .scan-table td { padding: 9px 12px 8px 0; border-bottom: 1px solid var(--rule); font-size: 0.85rem; white-space: nowrap; }
-        .scan-sym { font-family: var(--mono); font-size: 0.8rem; font-weight: 600; letter-spacing: 0.03em; }
-        .scan-sec { color: var(--faded); font-size: 0.8rem; }
-        td.scan-num { font-family: var(--mono); font-size: 0.74rem; text-align: right; }
-        .scan-z-pos { color: var(--green-live); }
-        .scan-z-neg { color: var(--ox); }
-        .scan-null { color: var(--faded); opacity: 0.55; }
-        .scan-signal { font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; }
-        .scan-signal--enter { color: var(--green-live); }
-        .scan-signal--short { color: var(--ox); }
-        .scan-signal--watch { color: var(--faded); }
-        .scan-signal--avoid { color: var(--ox); opacity: 0.6; }
-        .scan-signal--nodata { color: var(--faded); opacity: 0.55; }
-        .vwap-panel { padding: 42px 0 8px; }
-        .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; margin-top: 34px; }
-        .vwap-chart { position: relative; margin: 0; padding: 14px 14px 8px; border: 1px solid var(--ink); background: var(--paper); }
-        .vwap-chart--spy { grid-column: 1 / -1; }
-        .vwap-chart figcaption { display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px; }
-        .vwap-chart figcaption b { font-family: var(--mono); font-size: 0.85rem; font-weight: 600; letter-spacing: 0.03em; }
-        .vwap-chart figcaption span { font-size: 0.78rem; color: var(--faded); }
-        .vwap-chart figcaption em { margin-left: auto; font-style: normal; font-family: var(--mono); font-size: 0.68rem; font-weight: 600; }
-        .vwap-chart svg { display: block; width: 100%; height: auto; }
-        .vg { stroke: var(--rule); stroke-width: 1; }
-        .va { fill: var(--faded); font: 10px var(--mono); }
-        .vlp { fill: none; stroke: var(--ink); stroke-width: 1.8; stroke-linejoin: round; }
-        .vlv { fill: none; stroke: var(--faded); stroke-width: 1.4; stroke-dasharray: 5 4; }
-        .vfp { fill: rgba(26, 122, 60, 0.12); }
-        .vfn { fill: rgba(107, 26, 26, 0.10); }
-        .vmu { fill: var(--green-live); }
-        .vmd { fill: var(--ox); }
-        .vxh { stroke: var(--faded); stroke-width: 1; stroke-dasharray: 2 3; }
-        .vwap-tip { position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--paper); border: 1px solid var(--ink); font-family: var(--mono); font-size: 0.64rem; line-height: 1.6; color: var(--faded); }
-        .vwap-tip b { color: var(--ink); }
-        .setup-panel { padding: 42px 0 8px; }
-        .setup-card { margin: 0 0 18px; padding: 14px 14px 8px; border: 1px solid var(--ink); background: var(--paper); position: relative; }
-        .setup-card header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; margin-bottom: 2px; }
-        .setup-card header b { font-family: var(--mono); font-size: 0.95rem; font-weight: 600; letter-spacing: 0.03em; }
-        .setup-card header > span { color: var(--faded); font-size: 0.8rem; }
-        .setup-stats { margin-left: auto; font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.02em; }
-        .setup-stats b { color: var(--ink); font-weight: 600; }
-        .setup-b { font-family: var(--mono); font-size: 0.6rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 2px 9px; border-radius: 999px; border: 1px solid; }
-        .setup-b--long { color: var(--green-live); border-color: var(--green-live); }
-        .setup-b--short { color: var(--ox); border-color: var(--ox); }
-        .setup-b--break { color: #8a6d1a; border-color: #8a6d1a; }
-        .setup-b--watch { color: var(--faded); border-color: var(--faded); }
-        .setup-read { max-width: 980px; margin: 4px 0 10px; color: var(--faded); font-size: 0.88rem; line-height: 1.55; }
-        .setup-card svg { display: block; width: 100%; height: auto; }
-        .sg { stroke: var(--rule); stroke-width: 1; }
-        .sz { stroke: #1a181544; stroke-width: 1; }
-        .sd { stroke: #1a181544; stroke-width: 1; stroke-dasharray: 2 3; }
-        .sa { fill: var(--faded); font: 10px var(--mono); }
-        .sl { fill: var(--faded); font: 10px var(--mono); letter-spacing: 0.04em; text-transform: uppercase; }
-        .st { font: 10.5px var(--mono); font-weight: 600; }
-        .sx { stroke: var(--faded); stroke-width: 1; stroke-dasharray: 2 3; }
-        .setup-tip { position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--paper); border: 1px solid var(--ink); font-family: var(--mono); font-size: 0.64rem; line-height: 1.6; color: var(--faded); }
-        .setup-tip b { color: var(--ink); }
-        .whales-panel { padding: 42px 0 8px; }
-        .whale-wrap { border: 1px solid var(--ink); background: var(--paper); padding: 16px 14px 6px; margin-bottom: 26px; }
-        .whale-wrap svg { display: block; width: 100%; height: auto; }
-        .woff { fill: var(--ink); font: 600 0.82rem var(--mono); letter-spacing: 0.02em; }
-        .wsub { fill: var(--faded); font: 0.68rem var(--mono); }
-        .wbuy { fill: var(--green-live); }
-        .wsell { fill: var(--ox); opacity: 0.85; }
-        .wnet { stroke: var(--ink); stroke-width: 2; }
-        .wax { stroke: var(--rule); stroke-width: 1; }
-        .wval { font: 600 0.66rem var(--mono); }
-        .wtops { fill: var(--faded); font: 0.66rem var(--mono); }
-        .agg-table { min-width: 0; }
-        .agg-table td, .agg-table th { white-space: normal; }
-        .agg-cell { width: 130px; min-width: 90px; }
-        .agg-bar { display: inline-block; height: 8px; background: var(--green-live); vertical-align: middle; }
-        .whale-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
-        .whale-cols .scan-table { min-width: 0; }
-        .whale-cols td, .whale-cols th { white-space: normal; }
-        @media (max-width: 720px) { .whale-cols { grid-template-columns: 1fr; } }
-        @media (max-width: 600px) { .trading-tabs { flex-wrap: wrap; } }
-        @media (max-width: 600px) {
-            .trading-hero { padding-top: 44px; }
-            .position-head { display: block; }
-            .position-head span { display: block; margin-top: 4px; }
-            .ticker { flex: 1 1 calc(50% - 10px); min-width: 0; }
-            .activity-columns { grid-template-columns: 1fr; gap: 30px; }
-            .activity-row { grid-template-columns: 48px 1fr auto; gap: 8px; }
-            .trading-tabs { gap: 20px; }
-            .trading-tab { font-size: 0.64rem; letter-spacing: 0.07em; }
-            .watchlist-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-            .watchlist-symbol, .watchlist-empty { padding: 13px 4px 12px; font-size: 0.72rem; }
+        /* ── Broker Light (design handoff 2026-07-21) ─────────────────── */
+        .bl {
+            --bl-page: #fafaf8; --bl-card: #fff; --bl-rowhead: #f6f5f1; --bl-hover: #fbfaf7;
+            --bl-border: #e6e4de; --bl-divider: #f0eee8; --bl-input: #dcd9d2;
+            --bl-ink: #1c1e22; --bl-ink2: #3a3d44; --bl-muted: #7a7d83; --bl-faint: #b6b3ab;
+            --bl-accent: #2f5fb3; --bl-chipbg: #e9eef8; --bl-chipbd: #c4d2ec;
+            --bl-gain: #0f8a4d; --bl-loss: #c93a4a; --bl-spark: #8fa4c9; --bl-vwap: #c9862f;
+            --bl-sans: 'IBM Plex Sans', system-ui, sans-serif;
+            --bl-mono: 'IBM Plex Mono', ui-monospace, monospace;
+            background: var(--bl-page); color: var(--bl-ink);
+            font-family: var(--bl-sans); font-size: 13px; line-height: 1.5;
         }
+        .bl-header { background: var(--bl-card); border-bottom: 1px solid var(--bl-border); padding: 0 40px; }
+        .bl-header-row { display: flex; align-items: center; gap: 16px; padding: 16px 0 10px; flex-wrap: wrap; }
+        .bl-title { font-size: 18px; font-weight: 700; }
+        .bl-meta { font-size: 12.5px; color: var(--bl-muted); }
+        .bl-meta .trading-stamp { display: inline; padding: 0; border: 0; margin: 0; font: inherit; color: inherit; text-transform: none; letter-spacing: normal; }
+        .bl-meta .trading-stamp::before { content: none; }
+        .bl-tools { margin-left: auto; display: flex; gap: 8px; }
+        .bl-search { width: 200px; border: 1px solid var(--bl-input); border-radius: 6px; padding: 8px 12px; font: 400 13px var(--bl-sans); color: var(--bl-ink); background: var(--bl-card); }
+        .bl-search::placeholder { color: var(--bl-faint); }
+        .bl-btn { border: 1px solid var(--bl-input); border-radius: 6px; padding: 8px 12px; background: var(--bl-card); font: 500 13px var(--bl-sans); color: var(--bl-ink2); cursor: pointer; }
+        .bl-btn:hover { background: var(--bl-rowhead); }
+        .trading-tabs { display: flex; gap: 24px; border: 0; padding: 0; overflow-x: auto; }
+        .trading-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 0 12px; font: 500 13.5px var(--bl-sans); color: var(--bl-muted); cursor: pointer; white-space: nowrap; letter-spacing: 0; text-transform: none; }
+        .trading-tab:hover { color: var(--bl-ink); }
+        .trading-tab[aria-selected="true"] { color: var(--bl-ink); border-bottom-color: var(--bl-accent); }
+        .trading-tab-count { background: none; color: var(--bl-faint); font-size: 12px; padding: 0; margin-left: 4px; min-width: 0; }
+        .bl-filters { display: flex; align-items: center; gap: 8px; padding: 16px 40px; flex-wrap: wrap; }
+        .bl-filters[hidden] { display: none; }
+        .bl-fl { font-size: 12px; color: var(--bl-muted); margin-right: 2px; }
+        .bl-chip { font: 500 12.5px var(--bl-sans); padding: 6px 13px; border-radius: 20px; background: var(--bl-card); color: var(--bl-ink2); border: 1px solid var(--bl-input); cursor: pointer; }
+        .bl-chip.on { background: var(--bl-chipbg); color: var(--bl-accent); border-color: var(--bl-chipbd); }
+        .bl-reset { font-size: 12.5px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; padding: 6px; }
+        .bl-match { margin-left: auto; font-size: 12px; color: var(--bl-faint); }
+        .bl-body { padding: 4px 40px 40px; display: grid; gap: 18px; }
+        .bl-card { background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 8px; overflow-x: auto; }
+        .bl-card-title { padding: 16px 20px 12px; font-size: 15px; font-weight: 600; }
+        .bl-card-title span { font-size: 12.5px; font-weight: 400; color: var(--bl-muted); }
+        .bl-card-title .bl-tgl { float: right; font-size: 12px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; }
+        .bl-thead { display: grid; background: var(--bl-rowhead); padding: 7px 20px; font: 600 11px var(--bl-sans); color: var(--bl-muted); letter-spacing: .3px; text-transform: uppercase; }
+        .bl-thead > button { all: unset; cursor: pointer; font: inherit; color: inherit; text-align: left; }
+        .bl-thead > button:hover { color: var(--bl-ink); }
+        .bl-thead > .r, .bl-row > .r { text-align: right; }
+        .bl-row { display: grid; padding: 10px 20px; border-top: 1px solid var(--bl-divider); align-items: baseline; }
+        .bl-row:hover { background: var(--bl-hover); }
+        .bl-row .sym { font: 600 13px var(--bl-mono); }
+        .bl-row .mono { font-family: var(--bl-mono); font-size: 12.5px; }
+        .bl-row .mut { color: var(--bl-muted); }
+        .bl-gain { color: var(--bl-gain); } .bl-loss { color: var(--bl-loss); }
+        .bl-tag { display: block; font-size: 10px; color: var(--bl-faint); }
+        .bl-empty { padding: 14px 20px; font-size: 13px; color: var(--bl-faint); }
+        .bl-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        @media (max-width: 1100px) { .bl-pair { grid-template-columns: 1fr; } }
+        .g-pos { grid-template-columns: 110px 110px 110px 130px 1fr 140px; min-width: 720px; }
+        .g-trade { grid-template-columns: 80px 1fr 60px 110px; min-width: 380px; }
+        .g-ext { grid-template-columns: 34px 70px 1fr 100px; padding-top: 6.5px; padding-bottom: 6.5px; }
+        .g-ext { border-top: 1px solid var(--bl-rowhead); }
+        .bl-foot { font-size: 12px; color: var(--bl-faint); max-width: 900px; }
+        .bl [hidden] { display: none !important; }
+        /* raw cron markup hidden once enhanced (kept in DOM for the nightly cron) */
+        .bl-enhanced #bl-raw { display: none; }
+        /* ── legacy fallback + other-tab reskin (classes emitted by cron & injectors) ── */
+        .trading-panel { padding: 0; }
+        .bl .position-head h2, .bl .scan-intro, .bl .position-group h3 { font-family: var(--bl-sans); }
+        .bl .position-head { display: flex; gap: 10px; align-items: baseline; padding: 16px 20px 4px; }
+        .bl .position-head h2 { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+        .bl .position-head span { font: 400 12.5px var(--bl-sans); color: var(--bl-muted); letter-spacing: 0; text-transform: none; }
+        .bl .scan-intro, .bl .watchlist-intro, .bl .ytd-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
+        .bl .position-group { padding: 0 20px 14px; }
+        .bl .position-group h3 { font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); margin: 10px 0 8px; }
+        .bl .ticker-list { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+        .bl .ticker { min-width: 84px; padding: 9px 12px; border: 1px solid var(--bl-border); border-radius: 6px; background: var(--bl-card); }
+        .bl .ticker-symbol { font: 600 13px var(--bl-mono); color: var(--bl-ink); letter-spacing: 0; }
+        .bl .ticker-name { display: block; font: 400 11.5px var(--bl-sans); color: var(--bl-muted); margin-top: 2px; }
+        .bl .scan-table-wrap { overflow-x: auto; }
+        .bl .scan-table { width: 100%; min-width: 640px; border-collapse: collapse; border-top: 1px solid var(--bl-border); }
+        .bl .scan-table th { background: var(--bl-rowhead); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 12px 7px 20px; border-bottom: 0; white-space: nowrap; }
+        .bl .scan-table td { padding: 9px 12px 9px 20px; border-top: 1px solid var(--bl-divider); border-bottom: 0; font-size: 12.5px; white-space: nowrap; }
+        .bl .scan-table tr:hover td { background: var(--bl-hover); }
+        .bl .scan-sym { font: 600 13px var(--bl-mono); }
+        .bl .scan-sec { color: var(--bl-muted); }
+        .bl td.scan-num, .bl th.scan-num { text-align: right; font-family: var(--bl-mono); font-size: 12px; }
+        .bl .scan-z-pos { color: var(--bl-gain); } .bl .scan-z-neg { color: var(--bl-loss); }
+        .bl .scan-null { color: var(--bl-faint); }
+        .bl .scan-signal { font: 600 10.5px var(--bl-sans); letter-spacing: .4px; }
+        .bl .scan-signal--enter { color: var(--bl-gain); } .bl .scan-signal--short, .bl .scan-signal--avoid { color: var(--bl-loss); }
+        .bl .scan-signal--watch { color: var(--bl-muted); } .bl .scan-signal--nodata { color: var(--bl-faint); }
+        .bl .scan-sectors { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0 20px 8px; }
+        .bl .scan-sector { min-width: 104px; padding: 9px 12px; border: 1px solid var(--bl-border); border-radius: 6px; font: 400 11px var(--bl-mono); color: var(--bl-muted); line-height: 1.65; }
+        .bl .scan-sector b { font-size: 12.5px; color: var(--bl-ink); }
+        .bl .scan-sector--hot { border-color: var(--bl-gain); } .bl .scan-sector--cold { border-color: var(--bl-loss); }
+        .bl .trading-note { padding: 12px 20px 16px; margin: 0; border-top: 1px solid var(--bl-divider); font-size: 12px; color: var(--bl-faint); }
+        .bl .watchlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); border: 0; gap: 6px; list-style: none; padding: 0 20px 16px; }
+        .bl .watchlist-symbol, .bl .watchlist-empty { border: 1px solid var(--bl-border); border-radius: 6px; background: var(--bl-card); padding: 10px 4px; font: 600 12.5px var(--bl-mono); text-align: center; letter-spacing: 0; }
+        .bl .watchlist-empty { background: var(--bl-rowhead); border-style: dashed; }
+        .bl .watchlist-note { padding: 0 20px 16px; margin: 8px 0 0; font-size: 12px; color: var(--bl-faint); }
+        .bl .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
+        .bl .vwap-chart { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0; }
+        .bl .vwap-chart--spy { grid-column: 1 / -1; }
+        .bl .vwap-chart figcaption { display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px; }
+        .bl .vwap-chart figcaption b { font: 600 13px var(--bl-mono); }
+        .bl .vwap-chart figcaption span { font-size: 12px; color: var(--bl-muted); }
+        .bl .vwap-chart figcaption em { margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal; }
+        .bl .vwap-chart svg { display: block; width: 100%; height: auto; }
+        .bl .vg { stroke: var(--bl-divider); } .bl .va { fill: var(--bl-faint); font: 10px var(--bl-mono); }
+        .bl .vlp { fill: none; stroke: var(--bl-accent); stroke-width: 2; }
+        .bl .vlv { fill: none; stroke: var(--bl-vwap); stroke-width: 1.5; stroke-dasharray: 5 4; }
+        .bl .vfp { fill: rgba(47, 95, 179, 0.06); } .bl .vfn { fill: rgba(201, 58, 74, 0.07); }
+        .bl .vmu { fill: var(--bl-gain); } .bl .vmd { fill: var(--bl-loss); }
+        .bl .vxh { stroke: var(--bl-faint); stroke-dasharray: 2 3; }
+        .bl .vwap-tip, .bl .setup-tip { position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 6px; font: 400 11px var(--bl-mono); color: var(--bl-muted); }
+        .bl .vwap-tip b, .bl .setup-tip b { color: var(--bl-ink); }
+        .bl .setup-card { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); margin: 0 20px 16px; padding: 14px 14px 8px; position: relative; }
+        .bl .setup-card header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+        .bl .setup-card header b { font: 600 14px var(--bl-mono); }
+        .bl .setup-card header > span { font-size: 12px; color: var(--bl-muted); }
+        .bl .setup-stats { margin-left: auto; font: 400 11px var(--bl-mono); }
+        .bl .setup-stats b { color: var(--bl-ink); }
+        .bl .setup-b { font: 600 10px var(--bl-sans); letter-spacing: .5px; text-transform: uppercase; padding: 2px 9px; border-radius: 20px; border: 1px solid; }
+        .bl .setup-b--long { color: var(--bl-gain); border-color: var(--bl-gain); }
+        .bl .setup-b--short { color: var(--bl-loss); border-color: var(--bl-loss); }
+        .bl .setup-b--break { color: var(--bl-vwap); border-color: var(--bl-vwap); }
+        .bl .setup-b--watch { color: var(--bl-muted); border-color: var(--bl-input); }
+        .bl .setup-read { color: var(--bl-muted); font-size: 12.5px; margin: 4px 0 10px; max-width: 960px; }
+        .bl .setup-card svg { display: block; width: 100%; height: auto; }
+        .bl .sg { stroke: var(--bl-divider); } .bl .sz { stroke: var(--bl-input); } .bl .sd { stroke: var(--bl-input); stroke-dasharray: 2 3; }
+        .bl .sa, .bl .sl { fill: var(--bl-faint); font: 10px var(--bl-mono); } .bl .sl { text-transform: uppercase; letter-spacing: .4px; }
+        .bl .st { font: 600 10.5px var(--bl-mono); } .bl .sx { stroke: var(--bl-faint); stroke-dasharray: 2 3; }
+        .bl .whale-wrap { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 16px 14px 6px; margin: 0 20px 18px; }
+        .bl .whale-wrap svg { display: block; width: 100%; height: auto; }
+        .bl .woff { fill: var(--bl-ink); font: 600 13px var(--bl-mono); }
+        .bl .wsub { fill: var(--bl-muted); font: 11px var(--bl-mono); }
+        .bl .wbuy { fill: var(--bl-gain); } .bl .wsell { fill: var(--bl-loss); opacity: .85; }
+        .bl .wnet { stroke: var(--bl-ink); stroke-width: 2; } .bl .wax { stroke: var(--bl-divider); }
+        .bl .wval { font: 600 11px var(--bl-mono); } .bl .wtops { fill: var(--bl-muted); font: 11px var(--bl-mono); }
+        .bl .whale-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 0 20px 8px; }
+        .bl .whale-cols .scan-table { min-width: 0; }
+        .bl .whale-cols td, .bl .whale-cols th { white-space: normal; }
+        .bl .agg-bar { fill: var(--bl-spark); }
+        @media (max-width: 720px) { .bl .whale-cols { grid-template-columns: 1fr; } .bl-header, .bl-filters, .bl-body { padding-left: 20px; padding-right: 20px; } }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
-    <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "WebPage", "name": "Trading Positions & Watchlist", "url": "https://zonted.com/trading/", "description": "A quantity-free snapshot of Bernard Huang's current positions, recent trades, and research watchlist.", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/"}, "isPartOf": {"@type": "WebSite", "name": "Zonted", "url": "https://zonted.com"}}
-    </script>
-    <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://zonted.com/"}, {"@type": "ListItem", "position": 2, "name": "Trading"}]}
-    </script>
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
@@ -226,27 +185,45 @@
         </div>
     </nav>
 
-    <main id="main">
-        <div class="zn-container">
-            <header class="trading-hero">
-                <span class="zn-eyebrow zn-eyebrow--ox">Public position log</span>
-                <h1>What we're holding—and watching.</h1>
-                <p>A quantity-free view of positions, recent large trades, and the symbols in our research pipeline. No balances, cost basis, or performance theater.</p>
-                <span class="trading-stamp">Snapshot · July 20, 2026</span>
-            </header>
-
+    <main id="main" class="bl">
+        <header class="bl-header">
+            <div class="bl-header-row">
+                <span class="bl-title">Trading</span>
+                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 20, 2026</span> · quantity-free</span>
+                <div class="bl-tools">
+                    <input type="search" id="bl-q" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol">
+                    <button type="button" id="bl-export" class="bl-btn">Export</button>
+                </div>
+            </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions &amp; trades</button>
-                <button class="trading-tab" id="ytd-tab" type="button" role="tab" aria-selected="false" aria-controls="ytd-panel">YTD P&amp;L <span class="trading-tab-count">20</span></button>
+                <button class="trading-tab" id="ytd-tab" type="button" role="tab" aria-selected="false" aria-controls="positions-panel">YTD P&amp;L <span class="trading-tab-count">20</span></button>
                 <button class="trading-tab" id="watchlist-tab" type="button" role="tab" aria-selected="false" aria-controls="watchlist-panel">Watchlist <span class="trading-tab-count">83</span></button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">1</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">YTD VWAP <span class="trading-tab-count">12</span></button>
                 <button class="trading-tab" id="setups-tab" type="button" role="tab" aria-selected="false" aria-controls="setups-panel">Setup charts <span class="trading-tab-count" id="setups-tab-count">1</span></button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F flows <span class="trading-tab-count" id="whales-tab-count">14</span></button>
             </div>
+        </header>
 
-            <div class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
-            <!-- AUTO:ROBINHOOD:START -->
+        <div class="bl-filters" id="bl-filters">
+            <span class="bl-fl">Asset</span>
+            <button class="bl-chip on" data-g="asset" data-v="All">All assets</button>
+            <button class="bl-chip" data-g="asset" data-v="Options">Options</button>
+            <button class="bl-chip" data-g="asset" data-v="Equities">Equities</button>
+            <span class="bl-fl" style="margin-left:10px">Status</span>
+            <button class="bl-chip on" data-g="status" data-v="All">All</button>
+            <button class="bl-chip" data-g="status" data-v="Realized">Realized</button>
+            <button class="bl-chip" data-g="status" data-v="Unrealized">Unrealized</button>
+            <button class="bl-reset" id="bl-reset">Reset</button>
+            <span class="bl-match" id="bl-match" hidden></span>
+        </div>
+
+        <section class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
+            <div class="bl-body">
+                <div id="bl-built"></div>
+                <div id="bl-raw">
+                    <!-- AUTO:ROBINHOOD:START -->
             <section class="position-section" aria-labelledby="robinhood-heading">
                 <div class="position-head">
                     <h2 id="robinhood-heading">Robinhood</h2>
@@ -275,9 +252,11 @@
                     </ul>
                 </div>
             </section>
+            
+            
             <!-- AUTO:ROBINHOOD:END -->
 
-            <!-- AUTO:TRADES:START -->
+                    <!-- AUTO:TRADES:START -->
             <section class="position-section" aria-labelledby="activity-heading">
                 <div class="position-head">
                     <h2 id="activity-heading">Recent large trades</h2>
@@ -347,11 +326,11 @@
                     </section>
                 </div>
             </section>
+            
+            
             <!-- AUTO:TRADES:END -->
-            <p class="trading-note">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
-            </div>
 
-            <!-- AUTO:YTD:START -->
+                    <!-- AUTO:YTD:START -->
             <section class="trading-panel ytd-panel" id="ytd-panel" role="tabpanel" tabindex="0" aria-labelledby="ytd-tab" hidden>
                 <div class="position-head">
                     <h2 id="ytd-heading">2026 biggest wins &amp; losses</h2>
@@ -483,8 +462,15 @@
                 </div>
                 <p class="trading-note">Rankings are based on closed-trade percentage return, not dollar impact or recommendation quality.</p>
             </section>
+            
+            
             <!-- AUTO:YTD:END -->
+                </div>
+                <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Rankings are based on closed-trade percentage return, not dollar impact. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
+            </div>
+        </section>
 
+        <div class="bl-body">
             <!-- AUTO:WATCHLIST:START -->
             <section class="trading-panel watchlist-panel" id="watchlist-panel" role="tabpanel" tabindex="0" aria-labelledby="watchlist-tab" hidden>
                 <div class="position-head">
@@ -580,6 +566,8 @@
                 </ul>
                 <p class="watchlist-note">Synced from the <strong>slo</strong> Robinhood watchlist on July 20, 2026. A watchlist is a research pipeline—not a position, price target, or recommendation.</p>
             </section>
+            
+            
             <!-- AUTO:WATCHLIST:END -->
 
             <!-- AUTO:SCAN:START -->
@@ -1391,6 +1379,8 @@
                 </div>
                 <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = OTC listings without exchange data. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
             </section>
+            
+            
             <!-- AUTO:SCAN:END -->
 
             <!-- AUTO:SETUPS:START -->
@@ -1433,6 +1423,8 @@
                 })();
                 </script>
             </section>
+            
+            
             <!-- AUTO:SETUPS:END -->
 
             <!-- AUTO:WHALES:START -->
@@ -1840,6 +1832,8 @@
                 
                 <p class="trading-note">Method: share-count diffs between each office's two most recent 13F-HR info tables on SEC EDGAR, buys priced at the newer quarter-end, sells at the older. Common shares only — options and principal-amount lines excluded. No shorts, no timing within the quarter, occasional confidential-treatment omissions. Descriptive public-filing data, not recommendations.</p>
             </section>
+            
+            
             <!-- AUTO:WHALES:END -->
 
             <!-- AUTO:VWAP:START -->
@@ -2125,6 +2119,8 @@
                 })();
                 </script>
             </section>
+            
+            
             <!-- AUTO:VWAP:END -->
         </div>
     </main>
@@ -2146,46 +2142,6 @@
             </span>
         </div>
     </footer>
-    <script>
-        (() => {
-            const tabs = [...document.querySelectorAll('[role="tab"]')];
-            const panels = tabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
-
-            function tabForHash() {
-                return tabs.find((tab) => window.location.hash === `#${tab.id.replace(/-tab$/, '')}`) || tabs[0];
-            }
-
-            function activate(tab, updateUrl = false) {
-                tabs.forEach((item, index) => {
-                    const selected = item === tab;
-                    item.setAttribute('aria-selected', String(selected));
-                    item.tabIndex = selected ? 0 : -1;
-                    panels[index].hidden = !selected;
-                });
-                if (updateUrl) {
-                    const hash = tab === tabs[0] ? '' : `#${tab.id.replace(/-tab$/, '')}`;
-                    history.replaceState(null, '', `${window.location.pathname}${window.location.search}${hash}`);
-                }
-            }
-
-            tabs.forEach((tab, index) => {
-                tab.addEventListener('click', () => activate(tab, true));
-                tab.addEventListener('keydown', (event) => {
-                    let next = null;
-                    if (event.key === 'ArrowRight') next = tabs[(index + 1) % tabs.length];
-                    if (event.key === 'ArrowLeft') next = tabs[(index - 1 + tabs.length) % tabs.length];
-                    if (event.key === 'Home') next = tabs[0];
-                    if (event.key === 'End') next = tabs[tabs.length - 1];
-                    if (!next) return;
-                    event.preventDefault();
-                    activate(next, true);
-                    next.focus();
-                });
-            });
-
-            activate(tabForHash());
-            window.addEventListener('hashchange', () => activate(tabForHash()));
-        })();
-    </script>
+    <script src="/js/trading-broker-light.js"></script>
 </body>
 </html>
