@@ -17,9 +17,28 @@
   const tabs = $$('[role="tab"]');
   const panelOf = t => document.getElementById(t.getAttribute('aria-controls'));
   const panels = [...new Set(tabs.map(panelOf))];
+  // Keep chart-heavy inactive tabs out of the live DOM until they are opened.
+  // Their existing listeners survive the detach/reinsert cycle, while the
+  // default Positions view starts with no SVG parsing/layout burden.
+  const parkedPanelSvgs = new WeakMap();
+  panels.forEach(panel => {
+    if (!panel || panel.id === 'positions-panel') return;
+    const parked = $$('svg', panel).map(svg => {
+      const placeholder = document.createComment('lazy-tab-svg');
+      svg.replaceWith(placeholder);
+      return [placeholder, svg];
+    });
+    if (parked.length) parkedPanelSvgs.set(panel, parked);
+  });
+  const restorePanelSvgs = panel => {
+    const parked = parkedPanelSvgs.get(panel) || [];
+    parked.forEach(([placeholder, svg]) => placeholder.replaceWith(svg));
+    parkedPanelSvgs.delete(panel);
+  };
   function activate(tab, push) {
     tabs.forEach(t => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
     const target = panelOf(tab);
+    restorePanelSvgs(target);
     panels.forEach(p => { p.hidden = p !== target; });
     const filters = $('#bl-filters');
     if (filters) filters.hidden = target.id !== 'positions-panel';
