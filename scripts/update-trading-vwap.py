@@ -22,6 +22,7 @@ SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/sector-vwap-*.json")
 
 W, H = 560, 240
 ML, MR, MT, MB = 10, 58, 12, 26
+COUNTRY_ETFS = {"INDA", "EWY", "EWZ", "MCHI", "KWEB"}
 
 
 def fmt(d):
@@ -117,8 +118,15 @@ def main():
         cls = "scan-z-pos" if d < 0 else "scan-sec"
         return f'<span class="{cls}">{"led" if d < 0 else "lagged"} SPY {abs(d)}d</span>'
 
-    rows = "\n".join(
-        f"""                    <tr>
+    ordered = sorted(summary, key=lambda s: (s["sym"] != "SPY", -s["pct"]))
+    us_summary = [s for s in ordered if s["sym"] not in COUNTRY_ETFS]
+    country_summary = [s for s in ordered if s["sym"] in COUNTRY_ETFS]
+    if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
+        sys.exit("Expected SPY + 11 US sector ETFs and all 5 country ETFs")
+
+    def render_rows(items):
+        return "\n".join(
+            f"""                    <tr>
                         <td class="scan-sym">{s['sym']}</td>
                         <td class="scan-sec">{s['name']}</td>
                         <td class="scan-num"><span class="{'scan-z-pos' if s['pct'] >= 0 else 'scan-z-neg'}">{s['pct']:+.1f}%</span></td>
@@ -127,13 +135,17 @@ def main():
                         <td class="scan-num">{lead(s)}</td>
                         <td class="scan-num">{s['n_cross']}</td>
                     </tr>"""
-        for s in sorted(summary, key=lambda s: (s["sym"] != "SPY", -s["pct"])))
+            for s in items)
 
-    charts = "\n".join(
-        chart(s["sym"], s["name"], series[s["sym"]]["dates"],
-              series[s["sym"]]["close"], series[s["sym"]]["vwap"],
-              *((1152, 300) if s["sym"] == "SPY" else (W, H)))
-        for s in sorted(summary, key=lambda s: (s["sym"] != "SPY", -s["pct"])))
+    def render_charts(items):
+        return "\n".join(
+            chart(s["sym"], s["name"], series[s["sym"]]["dates"],
+                  series[s["sym"]]["close"], series[s["sym"]]["vwap"],
+                  *((1152, 300) if s["sym"] == "SPY" else (W, H)))
+            for s in items)
+
+    us_rows, country_rows = render_rows(us_summary), render_rows(country_summary)
+    us_charts, country_charts = render_charts(us_summary), render_charts(country_summary)
 
     tip_data = json.dumps({s: {"dates": v["dates"], "close": v["close"], "vwap": v["vwap"]}
                            for s, v in series.items()})
@@ -144,17 +156,34 @@ def main():
                     <span>{last_bar} close · anchor Jan 2, 2026</span>
                 </div>
                 <p class="scan-intro">The year-anchored VWAP is the average cost basis of every share traded in 2026. Price holding above it means the average year-to-date short seller is underwater — stay long while it holds; price holding below means the average buyer is trapped. The cross is the regime flip, and sectors often flip a day or two before SPY does. Solid line is the close, dashed line the YTD VWAP; ▲▼ mark crosses; hover for exact values.</p>
+                <section class="vwap-section" aria-labelledby="vwap-us-heading">
+                <div class="position-group"><h3 id="vwap-us-heading">US Market &amp; Sector ETFs · {len(us_summary)}</h3></div>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="YTD VWAP summary for SPY, 11 sector ETFs, and 5 international ETFs">
+                <table class="scan-table" aria-label="YTD VWAP summary for SPY and 11 US sector ETFs">
                     <thead><tr><th>Symbol</th><th>Name</th><th class="scan-num">vs YTD VWAP</th><th class="scan-num">Current side</th><th class="scan-num">Last ↑ cross</th><th class="scan-num">vs SPY's ↑</th><th class="scan-num">Crosses</th></tr></thead>
                     <tbody>
-{rows}
+{us_rows}
                     </tbody>
                 </table>
                 </div>
                 <div class="vwap-grid">
-{charts}
+{us_charts}
                 </div>
+                </section>
+                <section class="vwap-section" aria-labelledby="vwap-country-heading">
+                <div class="position-group"><h3 id="vwap-country-heading">Country ETFs · {len(country_summary)}</h3></div>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="YTD VWAP summary for 5 country ETFs">
+                    <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">vs YTD VWAP</th><th class="scan-num">Current side</th><th class="scan-num">Last ↑ cross</th><th class="scan-num">vs SPY's ↑</th><th class="scan-num">Crosses</th></tr></thead>
+                    <tbody>
+{country_rows}
+                    </tbody>
+                </table>
+                </div>
+                <div class="vwap-grid">
+{country_charts}
+                </div>
+                </section>
                 <p class="trading-note">Price and VWAP are computed from consolidated daily bars (typical price × volume, anchored January 2, 2026). Refreshed daily after the close alongside the momentum scan. Descriptive market data, not investment advice.</p>
                 <script>
                 (() => {{
