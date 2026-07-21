@@ -3,8 +3,8 @@
 
 Reads the newest ~/Documents/trading/scans/sector-vwap-*.json (or a path
 given as argv[1]) emitted by ~/Documents/trading/src/sector_vwap_charts.py
-and renders the "YTD VWAP" tab panel: summary table + SPY and 11 sector
-charts as inline SVG in house colors, with a hover crosshair.
+and renders the "YTD VWAP" tab panel: summary table + SPY, 11 sector ETFs,
+and 5 international ETFs as inline SVG in house colors, with a hover crosshair.
 
 Usage: python3 scripts/update-trading-vwap.py [path/to/sector-vwap-YYYY-MM-DD.json]
 Run from the repo root.
@@ -145,7 +145,7 @@ def main():
                 </div>
                 <p class="scan-intro">The year-anchored VWAP is the average cost basis of every share traded in 2026. Price holding above it means the average year-to-date short seller is underwater — stay long while it holds; price holding below means the average buyer is trapped. The cross is the regime flip, and sectors often flip a day or two before SPY does. Solid line is the close, dashed line the YTD VWAP; ▲▼ mark crosses; hover for exact values.</p>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="YTD VWAP summary for SPY and the 11 sector ETFs">
+                <table class="scan-table" aria-label="YTD VWAP summary for SPY, 11 sector ETFs, and 5 international ETFs">
                     <thead><tr><th>Symbol</th><th>Name</th><th class="scan-num">vs YTD VWAP</th><th class="scan-num">Current side</th><th class="scan-num">Last ↑ cross</th><th class="scan-num">vs SPY's ↑</th><th class="scan-num">Crosses</th></tr></thead>
                     <tbody>
 {rows}
@@ -190,7 +190,7 @@ def main():
     if new == page:
         sys.exit("No changes made — are the AUTO:VWAP markers present?")
     open(PAGE, "w").write(new)
-    print(f"[vwap] injected {os.path.basename(path)}: 12 charts, last bar {p['last_bar']}")
+    print(f"[vwap] injected {os.path.basename(path)}: {len(summary)} charts, last bar {p['last_bar']}")
 
 
 if __name__ == "__main__":
