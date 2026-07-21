@@ -4,11 +4,11 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fafaf8">
-    <title>Trading Positions &amp; Watchlist — Zonted</title>
-    <meta name="description" content="A quantity-free snapshot of Bernard Huang's current positions, recent trades, and research watchlist.">
+    <title>Trading Positions &amp; Momentum — Zonted</title>
+    <meta name="description" content="A quantity-free snapshot of Bernard Huang's current positions, recent trades, momentum screens, and VWAP setups.">
     <link rel="canonical" href="https://zonted.com/trading/">
-    <meta property="og:title" content="Trading Positions &amp; Watchlist — Zonted">
-    <meta property="og:description" content="A quantity-free snapshot of current positions, recent trades, and research watchlist.">
+    <meta property="og:title" content="Trading Positions &amp; Momentum — Zonted">
+    <meta property="og:description" content="A quantity-free snapshot of current positions, recent trades, momentum screens, and VWAP setups.">
     <meta property="og:url" content="https://zonted.com/trading/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
@@ -87,7 +87,7 @@
         .bl .position-head { display: flex; gap: 10px; align-items: baseline; padding: 16px 20px 4px; }
         .bl .position-head h2 { font-size: 15px; font-weight: 600; letter-spacing: 0; }
         .bl .position-head span { font: 400 12.5px var(--bl-sans); color: var(--bl-muted); letter-spacing: 0; text-transform: none; }
-        .bl .scan-intro, .bl .watchlist-intro, .bl .ytd-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
+        .bl .scan-intro, .bl .ytd-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
         .bl .position-group { padding: 0 20px 14px; }
         .bl .position-group h3 { font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); margin: 10px 0 8px; }
         .bl .ticker-list { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
@@ -112,10 +112,6 @@
         .bl .scan-sector b { font-size: 12.5px; color: var(--bl-ink); }
         .bl .scan-sector--hot { border-color: var(--bl-gain); } .bl .scan-sector--cold { border-color: var(--bl-loss); }
         .bl .trading-note { padding: 12px 20px 16px; margin: 0; border-top: 1px solid var(--bl-divider); font-size: 12px; color: var(--bl-faint); }
-        .bl .watchlist-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(96px, 1fr)); border: 0; gap: 6px; list-style: none; padding: 0 20px 16px; }
-        .bl .watchlist-symbol, .bl .watchlist-empty { border: 1px solid var(--bl-border); border-radius: 6px; background: var(--bl-card); padding: 10px 4px; font: 600 12.5px var(--bl-mono); text-align: center; letter-spacing: 0; }
-        .bl .watchlist-empty { background: var(--bl-rowhead); border-style: dashed; }
-        .bl .watchlist-note { padding: 0 20px 16px; margin: 8px 0 0; font-size: 12px; color: var(--bl-faint); }
         .bl .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
         .bl .vwap-chart { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0; }
         .bl .vwap-chart--spy { grid-column: 1 / -1; }
@@ -197,7 +193,6 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions &amp; trades</button>
-                <button class="trading-tab" id="watchlist-tab" type="button" role="tab" aria-selected="false" aria-controls="watchlist-panel">Watchlist <span class="trading-tab-count">83</span></button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">5</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">YTD VWAP <span class="trading-tab-count">17</span></button>
                 <button class="trading-tab" id="setups-tab" type="button" role="tab" aria-selected="false" aria-controls="setups-panel">Setup charts <span class="trading-tab-count" id="setups-tab-count">5</span></button>
@@ -470,104 +465,6 @@
         </section>
 
         <div class="bl-body">
-            <!-- AUTO:WATCHLIST:START -->
-            <section class="trading-panel watchlist-panel" id="watchlist-panel" role="tabpanel" tabindex="0" aria-labelledby="watchlist-tab" hidden>
-                <div class="position-head">
-                    <h2 id="watchlist-heading">Research watchlist</h2>
-                    <span>83 symbols · Robinhood</span>
-                </div>
-                <p class="watchlist-intro">Names we're researching, monitoring, or waiting to become interesting. The list spans companies we own, companies we've traded, and companies still earning a closer look.</p>
-                <ul class="watchlist-grid" aria-label="Symbols on the research watchlist">
-                    <li class="watchlist-symbol">AAPL</li>
-                    <li class="watchlist-symbol">ABNB</li>
-                    <li class="watchlist-symbol">ABT</li>
-                    <li class="watchlist-symbol">ADBE</li>
-                    <li class="watchlist-symbol">AKAM</li>
-                    <li class="watchlist-symbol">AMD</li>
-                    <li class="watchlist-symbol">AMZN</li>
-                    <li class="watchlist-symbol">ARM</li>
-                    <li class="watchlist-symbol">ASML</li>
-                    <li class="watchlist-symbol">ASTS</li>
-                    <li class="watchlist-symbol">BABA</li>
-                    <li class="watchlist-symbol">BKNG</li>
-                    <li class="watchlist-symbol">BLK</li>
-                    <li class="watchlist-symbol">BRK.B</li>
-                    <li class="watchlist-symbol">BYDDY</li>
-                    <li class="watchlist-symbol">CAT</li>
-                    <li class="watchlist-symbol">CME</li>
-                    <li class="watchlist-symbol">COST</li>
-                    <li class="watchlist-symbol">CRCL</li>
-                    <li class="watchlist-symbol">CRM</li>
-                    <li class="watchlist-symbol">CRWD</li>
-                    <li class="watchlist-symbol">DIS</li>
-                    <li class="watchlist-symbol">DKNG</li>
-                    <li class="watchlist-symbol">DOCN</li>
-                    <li class="watchlist-symbol">DRI</li>
-                    <li class="watchlist-symbol">EBAY</li>
-                    <li class="watchlist-symbol">FIG</li>
-                    <li class="watchlist-symbol">FLUT</li>
-                    <li class="watchlist-symbol">GOOG</li>
-                    <li class="watchlist-symbol">GRAB</li>
-                    <li class="watchlist-symbol">HAS</li>
-                    <li class="watchlist-symbol">HD</li>
-                    <li class="watchlist-symbol">HOOD</li>
-                    <li class="watchlist-symbol">IBKR</li>
-                    <li class="watchlist-symbol">ICE</li>
-                    <li class="watchlist-symbol">INTC</li>
-                    <li class="watchlist-symbol">INTU</li>
-                    <li class="watchlist-symbol">JPM</li>
-                    <li class="watchlist-symbol">LITE</li>
-                    <li class="watchlist-symbol">LLY</li>
-                    <li class="watchlist-symbol">LMT</li>
-                    <li class="watchlist-symbol">LULU</li>
-                    <li class="watchlist-symbol">MAR</li>
-                    <li class="watchlist-symbol">MCD</li>
-                    <li class="watchlist-symbol">META</li>
-                    <li class="watchlist-symbol">MPNGY</li>
-                    <li class="watchlist-symbol">MSFT</li>
-                    <li class="watchlist-symbol">MU</li>
-                    <li class="watchlist-symbol">NBIS</li>
-                    <li class="watchlist-symbol">NET</li>
-                    <li class="watchlist-symbol">NFLX</li>
-                    <li class="watchlist-symbol">NKE</li>
-                    <li class="watchlist-symbol">NTDOY</li>
-                    <li class="watchlist-symbol">NVDA</li>
-                    <li class="watchlist-symbol">NVO</li>
-                    <li class="watchlist-symbol">OUST</li>
-                    <li class="watchlist-symbol">OXY</li>
-                    <li class="watchlist-symbol">PINS</li>
-                    <li class="watchlist-symbol">PL</li>
-                    <li class="watchlist-symbol">PLTR</li>
-                    <li class="watchlist-symbol">QCOM</li>
-                    <li class="watchlist-symbol">RDDT</li>
-                    <li class="watchlist-symbol">RKLB</li>
-                    <li class="watchlist-symbol">SBUX</li>
-                    <li class="watchlist-symbol">SHOP</li>
-                    <li class="watchlist-symbol">SONY</li>
-                    <li class="watchlist-symbol">SPCX</li>
-                    <li class="watchlist-symbol">SPOT</li>
-                    <li class="watchlist-symbol">TCEHY</li>
-                    <li class="watchlist-symbol">TEAM</li>
-                    <li class="watchlist-symbol">TSLA</li>
-                    <li class="watchlist-symbol">TSM</li>
-                    <li class="watchlist-symbol">TXRH</li>
-                    <li class="watchlist-symbol">UBER</li>
-                    <li class="watchlist-symbol">UNH</li>
-                    <li class="watchlist-symbol">V</li>
-                    <li class="watchlist-symbol">W</li>
-                    <li class="watchlist-symbol">WBD</li>
-                    <li class="watchlist-symbol">WELL</li>
-                    <li class="watchlist-symbol">WMT</li>
-                    <li class="watchlist-symbol">WTS</li>
-                    <li class="watchlist-symbol">XYL</li>
-                    <li class="watchlist-symbol">ZM</li>
-                    <li class="watchlist-empty" aria-hidden="true"></li>
-                </ul>
-                <p class="watchlist-note">Synced from the <strong>slo</strong> Robinhood watchlist on July 20, 2026. A watchlist is a research pipeline—not a position, price target, or recommendation.</p>
-            </section>
-            
-            
-            <!-- AUTO:WATCHLIST:END -->
 
             <!-- AUTO:SCAN:START -->
             <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
@@ -575,7 +472,7 @@
                     <h2 id="scan-heading">Momentum scan</h2>
                     <span>July 20, 2026 close · daily</span>
                 </div>
-                <p class="scan-intro">A mechanical relative-strength screen over the watchlist: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: SPY 742.09, below its 50-day average. Method notes at the bottom.</p>
+                <p class="scan-intro">A mechanical relative-strength screen across the 166-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: SPY 742.09, below its 50-day average. Method notes at the bottom.</p>
                 <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
                     <li class="scan-sector scan-sector--hot"><b>XLF</b>Financials<br><span class="scan-z-pos">+1.26</span> · #1</li>
                     <li class="scan-sector scan-sector--hot"><b>XLRE</b>Real Estate<br><span class="scan-z-pos">+1.12</span> · #2</li>
@@ -658,7 +555,7 @@
                 <div class="position-group">
                     <h3>Full scan · 166 symbols</h3>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Full momentum scan of the watchlist">
+                <table class="scan-table" aria-label="Full momentum scan of the tracked universe">
                     <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
                     <tbody>
                     <tr>
