@@ -37,7 +37,10 @@
       e.preventDefault(); activate(next, true); next.focus();
     });
   });
-  const fromHash = () => tabs.find(t => location.hash === '#' + t.id.replace(/-tab$/, '')) || tabs[0];
+  const fromHash = () => {
+    const hash = location.hash === '#watchlist' ? '#scan' : location.hash;
+    return tabs.find(t => hash === '#' + t.id.replace(/-tab$/, '')) || tabs[0];
+  };
   activate(fromHash());
   addEventListener('hashchange', () => activate(fromHash()));
 
