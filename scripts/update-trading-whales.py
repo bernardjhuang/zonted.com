@@ -12,6 +12,7 @@ Run from the repo root.
 """
 import datetime as dt
 import glob
+import html
 import json
 import os
 import re
@@ -20,11 +21,6 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
 SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/whale-13f-*.json")
-
-# drawn native to the site's ~760px content column: labels above the bars,
-# so nothing needs a wide left gutter and the svg renders ~1:1 unscaled
-ROW_H, CHART_W, MID, BAR_W = 96, 760, 380, 288
-
 
 def money(x):
     a = abs(x)
@@ -50,35 +46,38 @@ def main():
             sys.exit(f"No JSON matching {SCAN_GLOB}")
         path = paths[-1]
     p = json.load(open(path))
-    offices = p["offices"]
+    offices = sorted(p["offices"], key=lambda office: office["net"], reverse=True)
     newest = max(o["period"] for o in offices)
     scale_max = max(max(o["buys"], o["sells"]) for o in offices) or 1
 
-    def bl(usd):
-        return usd / scale_max * BAR_W
+    office_cards = []
+    for o in offices:
+        stale = (f'<span class="whale-stale">⚠ Through {qlabel(o["period"])}</span>'
+                 if o["period"] != newest else "")
+        moves = "".join(
+            f'<li><span>{html.escape(move["name"])}</span><strong class="{"scan-z-pos" if move["usd"] >= 0 else "scan-z-neg"}">{money(move["usd"])}</strong></li>'
+            for move in o["top_moves"][:3])
+        sold_width = o["sells"] / scale_max * 100
+        bought_width = o["buys"] / scale_max * 100
+        net_class = "scan-z-pos" if o["net"] >= 0 else "scan-z-neg"
+        office_cards.append(f"""                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>{html.escape(o['office'])}</h3><p>{html.escape(o['person'])} · AUM {money(o['aum']).lstrip('+')} · {o['positions']} positions {stale}</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="{net_class}">{money(o['net'])}</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">{money(-o['sells'])}</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">{money(o['buys'])}</dd></div>
+                        <div><dt>Net</dt><dd class="{net_class}">{money(o['net'])}</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:{sold_width:.1f}%"></span><i></i><span class="whale-bought" style="width:{bought_width:.1f}%"></span></div>
+                    <h4>Largest position changes</h4><ul class="whale-moves">{moves}</ul>
+                </article>""")
 
-    def short(name, n=22):
-        return name if len(name) <= n else name[:n - 1].rstrip() + "…"
-
-    rows = []
-    for i, o in enumerate(offices):
-        y = i * ROW_H
-        by, sy = bl(o["buys"]), bl(o["sells"])
-        net_x = MID + max(-BAR_W, min(BAR_W, bl(o["net"])))
-        tops = " · ".join(f"{short(m['name'])} {money(m['usd'])}" for m in o["top_moves"][:3])
-        stale = f" · ⚠ filings thru {qlabel(o['period'])}" if o["period"] != newest else ""
-        rows.append(f"""<g transform="translate(0,{y})">
-<text x="0" y="14" class="woff">{o['office']}</text>
-<text x="0" y="28" class="wsub">{o['person']} · AUM {money(o['aum']).lstrip('+')} · {o['positions']} pos{stale}</text>
-<line x1="{MID}" y1="34" x2="{MID}" y2="58" class="wax"/>
-<rect x="{MID - sy:.1f}" y="39" width="{sy:.1f}" height="14" rx="3" class="wsell"><title>sold {money(o['sells'])}</title></rect>
-<rect x="{MID}" y="39" width="{by:.1f}" height="14" rx="3" class="wbuy"><title>bought {money(o['buys'])}</title></rect>
-<line x1="{net_x:.1f}" y1="35" x2="{net_x:.1f}" y2="57" class="wnet"/>
-<text x="{MID - sy - 7:.1f}" y="50" class="wval scan-z-neg" text-anchor="end">{money(-o['sells']) if o['sells'] > 1e5 else ''}</text>
-<text x="{MID + by + 7:.1f}" y="50" class="wval scan-z-pos">{money(o['buys']) if o['buys'] > 1e5 else ''}</text>
-<text x="{MID}" y="74" class="wtops" text-anchor="middle">net <tspan class="{'scan-z-pos' if o['net'] >= 0 else 'scan-z-neg'}">{money(o['net'])}</tspan> · {tops}</text>
-</g>""")
-    chart_h = len(offices) * ROW_H
+    gross_bought = sum(o["buys"] for o in offices)
+    gross_sold = sum(o["sells"] for o in offices)
+    total_net = sum(o["net"] for o in offices)
+    net_buyers = sum(o["net"] >= 0 for o in offices)
 
     def cons_rows(rws):
         return "\n".join(
@@ -119,9 +118,16 @@ def main():
                     <h2 id="whales-heading">13F flows</h2>
                     <span>{qlabel(newest)} filings · quarterly</span>
                 </div>
-                <p class="scan-intro">Net buying and selling by the most-followed 13F filers, from their latest SEC info tables: share-count changes between the two most recent quarters, priced at quarter-end. Bars diverge from zero — selling left, buying right, the tick marks net flow. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a quarterly, backward-looking map of where the big books moved — not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
-                <div class="whale-wrap"><svg viewBox="0 0 {CHART_W} {chart_h}" role="img" aria-label="Net 13F flows by investment office">
-{''.join(rows)}</svg></div>
+                <p class="scan-intro">Quarter-over-quarter buying and selling from the latest SEC 13F information tables. Read each card left to right: gross sales, gross purchases, then net flow; the bar shows their relative scale and the list isolates each office’s three largest position changes. 13Fs cover long US positions only and arrive up to 45 days after quarter end, so this is a backward-looking allocation map—not a live signal. Next refresh: ~August 14, when Q2 filings are due.</p>
+                <section class="whale-summary" aria-label="13F flow summary">
+                    <div><span>Gross sold</span><strong class="scan-z-neg">{money(-gross_sold)}</strong></div>
+                    <div><span>Gross bought</span><strong class="scan-z-pos">{money(gross_bought)}</strong></div>
+                    <div><span>Net across offices</span><strong class="{'scan-z-pos' if total_net >= 0 else 'scan-z-neg'}">{money(total_net)}</strong></div>
+                    <div><span>Net buyers</span><strong>{net_buyers} of {len(offices)}</strong></div>
+                </section>
+                <section class="whale-flow-grid" aria-label="Quarterly flows by investment office">
+{os.linesep.join(office_cards)}
+                </section>
 {agg_section}
                 <div class="whale-cols">
                 <div class="position-group"><h3>Most bought across offices</h3>
@@ -146,7 +152,8 @@ def main():
     new = re.sub(r'(<span class="trading-tab-count" id="whales-tab-count">)[^<]*(</span>)',
                  lambda m: f"{m.group(1)}{len(offices)}{m.group(2)}", new)
     if new == page:
-        sys.exit("No changes made — are the AUTO:WHALES markers present?")
+        print(f"[whales] already current: {os.path.basename(path)}, {len(offices)} offices, quarter {newest}")
+        return
     open(PAGE, "w").write(new)
     print(f"[whales] injected {os.path.basename(path)}: {len(offices)} offices, quarter {newest}")
 
