@@ -202,7 +202,8 @@ def main():
     if rendered_symbols != expected_symbols:
         sys.exit(f"Setup chart parity failure: expected={expected_symbols} rendered={rendered_symbols}")
     if new == page:
-        sys.exit("No changes made — are the AUTO:SETUPS markers present?")
+        print(f"[setups] already current: {os.path.basename(path)}, {len(p['setups'])} cards")
+        return
     open(PAGE, "w").write(new)
     print(f"[setups] injected {os.path.basename(path)}: {len(p['setups'])} cards")
 
