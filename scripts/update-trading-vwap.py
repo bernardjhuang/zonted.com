@@ -4,7 +4,7 @@
 Reads the newest ~/Documents/trading/scans/sector-vwap-*.json (or a path
 given as argv[1]) emitted by ~/Documents/trading/src/sector_vwap_charts.py
 and renders the "YTD VWAP" tab panel: summary table + SPY, 11 sector ETFs,
-and 5 international ETFs as inline SVG in house colors, with a hover crosshair.
+and 10 country ETFs as inline SVG in house colors, with a hover crosshair.
 
 Usage: python3 scripts/update-trading-vwap.py [path/to/sector-vwap-YYYY-MM-DD.json]
 Run from the repo root.
@@ -22,7 +22,7 @@ SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/sector-vwap-*.json")
 
 W, H = 560, 240
 ML, MR, MT, MB = 10, 58, 12, 26
-COUNTRY_ETFS = {"INDA", "EWY", "EWZ", "MCHI", "KWEB"}
+COUNTRY_ETFS = {"INDA", "EWY", "EWZ", "MCHI", "KWEB", "EWG", "EZA", "EWJ", "THD", "VNM"}
 
 
 def fmt(d):
@@ -122,7 +122,7 @@ def main():
     us_summary = [s for s in ordered if s["sym"] not in COUNTRY_ETFS]
     country_summary = [s for s in ordered if s["sym"] in COUNTRY_ETFS]
     if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
-        sys.exit("Expected SPY + 11 US sector ETFs and all 5 country ETFs")
+        sys.exit("Expected SPY + 11 US sector ETFs and all 10 country ETFs")
 
     def render_rows(items):
         return "\n".join(
@@ -173,7 +173,7 @@ def main():
                 <section class="vwap-section" aria-labelledby="vwap-country-heading">
                 <div class="position-group"><h3 id="vwap-country-heading">Country ETFs · {len(country_summary)}</h3></div>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="YTD VWAP summary for 5 country ETFs">
+                <table class="scan-table" aria-label="YTD VWAP summary for {len(country_summary)} country ETFs">
                     <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">vs YTD VWAP</th><th class="scan-num">Current side</th><th class="scan-num">Last ↑ cross</th><th class="scan-num">vs SPY's ↑</th><th class="scan-num">Crosses</th></tr></thead>
                     <tbody>
 {country_rows}
@@ -216,8 +216,14 @@ def main():
     new = re.sub(r"(<!-- AUTO:VWAP:START -->).*?(<!-- AUTO:VWAP:END -->)",
                  lambda m: f"{m.group(1)}\n{panel}\n            {m.group(2)}",
                  page, flags=re.S)
+    new, tab_count = re.subn(
+        r'(<button class="trading-tab" id="vwap-tab".*?<span class="trading-tab-count">)\d+(</span>)',
+        rf'\g<1>{len(summary)}\2', new, count=1)
+    if tab_count != 1:
+        sys.exit("Could not update YTD VWAP tab count")
     if new == page:
-        sys.exit("No changes made — are the AUTO:VWAP markers present?")
+        print(f"[vwap] already current: {os.path.basename(path)}, {len(summary)} charts, last bar {p['last_bar']}")
+        return
     open(PAGE, "w").write(new)
     print(f"[vwap] injected {os.path.basename(path)}: {len(summary)} charts, last bar {p['last_bar']}")
 
