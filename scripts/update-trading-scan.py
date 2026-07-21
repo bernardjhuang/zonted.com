@@ -13,6 +13,7 @@ import datetime as dt
 import glob
 import html
 import json
+import math
 import os
 import re
 import sys
@@ -53,21 +54,26 @@ def earn_cell(row):
     return f'{fmt_date(row["next_earn"])} ({d}d){flag}'
 
 
-def setup_table(rows, aria):
+def setup_table(rows, aria, table_id):
     cells = []
     for r in rows:
         label, key = signal(r)
-        cells.append(f"""                    <tr>
-                        <td class="scan-sym">{r['symbol']}</td>
+        sym = r["symbol"]
+        detail_id = f"scan-detail-{table_id}-{sym.lower().replace('.', '-')}"
+        cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{sym}">
+                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {sym} Spread Z chart"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{sym}</span></button></td>
                         <td class="scan-sec">{r['sector']}</td>
                         <td class="scan-num">{znum(r.get('spread_z'))}</td>
                         <td class="scan-num">{znum(r.get('dist_z'))}</td>
                         <td class="scan-num">{znum(r.get('evwap_pct'), '%')}</td>
                         <td class="scan-num">{earn_cell(r)}</td>
                         <td><span class="scan-signal scan-signal--{key}">{label}</span></td>
+                    </tr>
+                    <tr class="scan-detail-row" id="{detail_id}" data-scan-detail data-scan-symbol="{sym}" hidden>
+                        <td colspan="7"><div class="scan-spread-chart" data-scan-chart="{sym}"></div></td>
                     </tr>""")
     return f"""                <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="{aria}">
+                <table class="scan-table scan-accordion-table" aria-label="{aria}">
                     <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
                     <tbody>
 {os.linesep.join(cells)}
@@ -85,6 +91,20 @@ def main():
             sys.exit(f"No scan JSON matching {SCAN_GLOB}")
         path = paths[-1]
     p = json.load(open(path))
+
+    spread_series = p.get("spread_series") or {}
+    symbols = {r["symbol"] for r in p["rows"]}
+    if set(spread_series) != symbols:
+        sys.exit("Spread Z chart series must match the scan universe exactly")
+    for symbol, series in spread_series.items():
+        dates, values = series.get("dates", []), series.get("values", [])
+        if not values or len(dates) != len(values):
+            sys.exit(f"{symbol} needs a non-empty, aligned Spread Z chart series")
+        if dates != sorted(set(dates)) or dates[-1] != p["last_bar"]:
+            sys.exit(f"{symbol} Spread Z dates must be unique, increasing, and end on {p['last_bar']}")
+        if any(not math.isfinite(float(value)) for value in values):
+            sys.exit(f"{symbol} Spread Z contains a non-finite value")
+    spread_json = json.dumps(spread_series, separators=(",", ":")).replace("</", "<\\/")
 
     last_bar = dt.date.fromisoformat(p["last_bar"]).strftime("%B %-d, %Y")
     longs = [r for r in p["rows"] if r["verdict"] in ("ENTER+", "ENTER")]
@@ -108,22 +128,25 @@ def main():
                     <span>{last_bar} close · daily</span>
                 </div>
                 <p class="scan-intro">A mechanical relative-strength screen across the {len(all_rows)}-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
+                <p class="scan-chart-hint">Click any ticker row to open its 6-month Spread Z history. Only one chart stays open at a time.</p>
                 <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
 {sectors}
                 </ul>
                 <div class="position-group">
                     <h3>Long setups · {len(longs)}</h3>
-{setup_table(longs, "Long setups from the momentum scan")}
+{setup_table(longs, "Long setups from the momentum scan", "long")}
                 </div>
                 <div class="position-group">
                     <h3>Short setups · {len(shorts)}</h3>
-{setup_table(shorts, "Short setups from the momentum scan")}
+{setup_table(shorts, "Short setups from the momentum scan", "short")}
                 </div>
                 <div class="position-group">
                     <h3>Full scan · {len(all_rows)} symbols</h3>
-{setup_table(all_rows, "Full momentum scan of the tracked universe")}
+                    <p class="scan-skip-full"><a href="#scan-method">Skip past the 166-row table</a></p>
+{setup_table(all_rows, "Full momentum scan of the tracked universe", "full")}
                 </div>
-                <p class="trading-note">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = OTC listings without exchange data. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
+                <script type="application/json" id="scan-spread-data">{spread_json}</script>
+                <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
             </section>"""
 
     page = open(PAGE).read()
@@ -133,7 +156,8 @@ def main():
     new = re.sub(r'(<span class="trading-tab-count" id="scan-tab-count">)[^<]*(</span>)',
                  lambda m: f"{m.group(1)}{n_setups}{m.group(2)}", new)
     if new == page:
-        sys.exit("No changes made — are the AUTO:SCAN markers present?")
+        print(f"[scan] already current: {os.path.basename(path)}, {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
+        return
     open(PAGE, "w").write(new)
     print(f"[scan] injected {os.path.basename(path)}: {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
 

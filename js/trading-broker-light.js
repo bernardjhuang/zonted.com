@@ -39,10 +39,121 @@
   });
   const fromHash = () => {
     const hash = location.hash === '#watchlist' ? '#scan' : location.hash;
-    return tabs.find(t => hash === '#' + t.id.replace(/-tab$/, '')) || tabs[0];
+    const exact = tabs.find(t => hash === '#' + t.id.replace(/-tab$/, ''));
+    if (exact) return exact;
+    if (!hash && new URL(location.href).searchParams.has('chart')) return $('#scan-tab') || tabs[0];
+    const anchoredPanel = hash && document.getElementById(hash.slice(1))?.closest('[role="tabpanel"]');
+    return tabs.find(t => panelOf(t) === anchoredPanel) || tabs[0];
   };
   activate(fromHash());
   addEventListener('hashchange', () => activate(fromHash()));
+
+  /* ── momentum-scan Spread Z accordions ───────────────────────────── */
+  const scanPanel = $('#scan-panel');
+  const spreadSource = $('#scan-spread-data');
+  if (scanPanel && spreadSource) {
+    let spreadData = {};
+    try { spreadData = JSON.parse(spreadSource.textContent); } catch (error) { console.error('Invalid Spread Z data', error); }
+    const chartDate = new Intl.DateTimeFormat('en-US', { month: 'short', day: 'numeric' });
+    let openToggle = null;
+
+    const fmtChartDate = iso => chartDate.format(new Date(`${iso}T12:00:00`));
+    const fmtZ = value => `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}`;
+    const chartStatus = value => value > 1 ? 'Leading SPY' : value < -1 ? 'Lagging SPY' : 'Inside neutral band';
+
+    function renderSpreadChart(shell, symbol) {
+      if (shell.dataset.rendered === 'true') return;
+      const series = spreadData[symbol];
+      if (!series || !series.values || !series.values.length) {
+        shell.innerHTML = '<p class="scan-null">Spread Z history unavailable.</p>';
+        shell.dataset.rendered = 'true';
+        return;
+      }
+      const values = series.values, dates = series.dates;
+      const W = 960, H = 220, L = 46, R = 16, T = 16, B = 30;
+      const iw = W - L - R, ih = H - T - B;
+      const rawMin = Math.min(-1.5, ...values), rawMax = Math.max(1.5, ...values);
+      const pad = Math.max(0.2, (rawMax - rawMin) * 0.08);
+      const lo = rawMin - pad, hi = rawMax + pad;
+      const x = i => L + (values.length === 1 ? 0 : i / (values.length - 1) * iw);
+      const y = value => T + (hi - value) / (hi - lo) * ih;
+      const points = values.map((value, i) => `${x(i).toFixed(1)},${y(value).toFixed(1)}`).join(' ');
+      const baseY = y(0).toFixed(1);
+      const fillPoints = `${L},${baseY} ${points} ${W - R},${baseY}`;
+      const levels = [-2, -1, 0, 1, 2].filter(value => value >= lo && value <= hi);
+      const grid = levels.map(value => `<line x1="${L}" y1="${y(value).toFixed(1)}" x2="${W - R}" y2="${y(value).toFixed(1)}" class="${Math.abs(value) === 1 ? 'scan-spread-threshold' : 'scan-spread-grid'}"/><text x="${L - 8}" y="${(y(value) + 3.5).toFixed(1)}" text-anchor="end" class="scan-spread-axis">${value > 0 ? '+' : ''}${value}</text>`).join('');
+      const mid = Math.floor((dates.length - 1) / 2);
+      const current = values[values.length - 1];
+      const observedMin = Math.min(...values), observedMax = Math.max(...values);
+      const detailId = shell.closest('[data-scan-detail]').id;
+      const titleId = `${detailId}-title`, descId = `${detailId}-desc`;
+      const range = `${fmtZ(observedMin)} to ${fmtZ(observedMax)}`;
+      shell.innerHTML = `<div class="scan-spread-head"><h4 id="${titleId}">${symbol} Spread Z</h4><p>${fmtChartDate(dates[0])}–${fmtChartDate(dates[dates.length - 1])} · ${values.length} sessions · range ${range}</p><span class="scan-spread-current ${current >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${fmtZ(current)} · ${chartStatus(current)}</span></div>
+        <svg viewBox="0 0 ${W} ${H}" role="img" aria-labelledby="${titleId} ${descId}" preserveAspectRatio="none">
+          <desc id="${descId}">${symbol} Spread Z ranged from ${range} and finished at ${fmtZ(current)}. Guides mark the long threshold at plus one, the SPY baseline at zero, and the short threshold at minus one.</desc>
+          <rect x="${L}" y="${T}" width="${iw}" height="${Math.max(0, y(1) - T).toFixed(1)}" class="scan-spread-band--long"/>
+          <rect x="${L}" y="${y(-1).toFixed(1)}" width="${iw}" height="${Math.max(0, T + ih - y(-1)).toFixed(1)}" class="scan-spread-band--short"/>
+          ${grid}<polygon points="${fillPoints}" class="scan-spread-fill"/><polyline points="${points}" class="scan-spread-line"/>
+          <circle cx="${x(values.length - 1).toFixed(1)}" cy="${y(current).toFixed(1)}" r="4" class="${current >= 0 ? 'scan-spread-dot--pos' : 'scan-spread-dot--neg'}"/>
+          <text x="${L}" y="${H - 7}" class="scan-spread-axis">${fmtChartDate(dates[0])}</text>
+          <text x="${x(mid).toFixed(1)}" y="${H - 7}" text-anchor="middle" class="scan-spread-axis">${fmtChartDate(dates[mid])}</text>
+          <text x="${W - R}" y="${H - 7}" text-anchor="end" class="scan-spread-axis">${fmtChartDate(dates[dates.length - 1])}</text>
+        </svg><div class="scan-spread-legend"><span>+1 long threshold</span><span>0 matches SPY</span><span>−1 short threshold</span></div>`;
+      shell.dataset.rendered = 'true';
+    }
+
+    function syncChartParam(symbol) {
+      const url = new URL(location.href);
+      if (symbol) url.searchParams.set('chart', symbol); else url.searchParams.delete('chart');
+      history.replaceState(null, '', url);
+    }
+
+    function closeChart(toggle, sync = true) {
+      if (!toggle) return;
+      const detail = document.getElementById(toggle.getAttribute('aria-controls'));
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', `Show ${toggle.closest('[data-scan-row]').dataset.scanSymbol} Spread Z chart`);
+      toggle.closest('[data-scan-row]').classList.remove('is-open');
+      if (detail) detail.hidden = true;
+      if (openToggle === toggle) openToggle = null;
+      if (sync) syncChartParam(null);
+    }
+
+    function openChart(toggle, sync = true) {
+      if (openToggle && openToggle !== toggle) closeChart(openToggle, false);
+      const row = toggle.closest('[data-scan-row]');
+      const detail = document.getElementById(toggle.getAttribute('aria-controls'));
+      if (!detail) return;
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', `Hide ${row.dataset.scanSymbol} Spread Z chart`);
+      row.classList.add('is-open');
+      detail.hidden = false;
+      renderSpreadChart($('[data-scan-chart]', detail), row.dataset.scanSymbol);
+      openToggle = toggle;
+      if (sync) syncChartParam(row.dataset.scanSymbol);
+    }
+
+    function toggleChart(toggle) {
+      if (toggle.getAttribute('aria-expanded') === 'true') closeChart(toggle); else openChart(toggle);
+    }
+
+    scanPanel.addEventListener('click', event => {
+      const toggle = event.target.closest('[data-scan-toggle]');
+      if (toggle) { event.preventDefault(); return toggleChart(toggle); }
+      const row = event.target.closest('[data-scan-row]');
+      if (row && !event.target.closest('a, button, input, select, textarea')) {
+        const rowToggle = $('[data-scan-toggle]', row);
+        if (rowToggle) toggleChart(rowToggle);
+      }
+    });
+
+    const initialSymbol = new URL(location.href).searchParams.get('chart');
+    if (initialSymbol) {
+      const initialDetail = $$('[data-scan-detail]', scanPanel).find(detail => detail.dataset.scanSymbol === initialSymbol.toUpperCase());
+      const initialToggle = initialDetail?.previousElementSibling?.querySelector('[data-scan-toggle]');
+      if (initialToggle) openChart(initialToggle, false);
+    }
+  }
 
   /* ── parse cron markup ────────────────────────────────────────────── */
   const raw = $('#bl-raw'), built = $('#bl-built');
