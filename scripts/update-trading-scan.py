@@ -185,7 +185,7 @@ def main():
                 </div>
                 <div class="position-group">
                     <h3>Full scan · {len(all_rows)} symbols</h3>
-                    <p class="scan-skip-full"><a href="#scan-method">Skip past the 166-row table</a></p>
+                    <p class="scan-skip-full"><a href="#scan-method">Skip past the {len(all_rows)}-row table</a></p>
 {setup_table(all_rows, "Full momentum scan of the tracked universe", "full")}
                 </div>
                 <script type="application/json" id="scan-chart-config">{chart_config}</script>
