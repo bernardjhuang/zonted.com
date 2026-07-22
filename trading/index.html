@@ -254,7 +254,7 @@
         <header class="bl-header">
             <div class="bl-header-row">
                 <span class="bl-title">Trading</span>
-                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 21, 2026</span> · quantity-free</span>
+                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 22, 2026</span> · quantity-free</span>
                 <div class="bl-tools">
                     <input type="search" id="bl-q" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol">
                     <button type="button" id="bl-export" class="bl-btn">Export</button>
@@ -298,8 +298,8 @@
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span></li>
+                        <li class="ticker"><span class="ticker-symbol">TSLA</span></li>
                         <li class="ticker"><span class="ticker-symbol">V</span></li>
-                        <li class="ticker"><span class="ticker-symbol">XOM</span></li>
                     </ul>
                 </div>
                 <div class="position-group">
@@ -325,35 +325,40 @@
                         <h3 id="buys-heading">Buys</h3>
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood buys">
                             <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <div><span class="activity-action">ABT call</span><span class="activity-type">Option</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+3.1%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">ABT call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−8.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+1.0%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">V call</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−4.8%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−16.0%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">XOM shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+1.7%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+2.7%</span><span class="activity-status">Realized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">WTS shares</span><span class="activity-type">Equity</span></div>
                                 <div class="activity-result"><span class="activity-pnl negative">−0.5%</span><span class="activity-status">Unrealized</span></div>
                             </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-20">Jul 20</time>
-                                <div><span class="activity-action">HOOD call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+24.8%</span><span class="activity-status">Unrealized</span></div>
-                            </li>
                         </ol>
                     </section>
                     <section class="activity-lane activity-lane--sell" aria-labelledby="sells-heading">
                         <h3 id="sells-heading">Sells</h3>
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood sells">
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <div><span class="activity-action">XOM shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+2.7%</span><span class="activity-status">Realized</span></div>
+                            </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">NET put</span><span class="activity-type">Option</span></div>
@@ -373,11 +378,6 @@
                                 <time class="activity-date" datetime="2026-07-15">Jul 15</time>
                                 <div><span class="activity-action">BMNR call</span><span class="activity-type">Option · 3 fills</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+27.2%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-15">Jul 15</time>
-                                <div><span class="activity-action">SPCX call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+2.0%</span><span class="activity-status">Realized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -399,7 +399,7 @@
                         <p>Overall Robinhood portfolio · Realized + unrealized · Open positions included</p>
                     </div>
                     <div class="ytd-account-result">
-                        <strong class="positive">+369.7%</strong>
+                        <strong class="positive">+353.1%</strong>
                         <span>Portfolio-wide · Live snapshot</span>
                     </div>
                 </section>
