@@ -45,8 +45,8 @@ def main():
     p = json.load(open(path))
     s = p["summary"]
     members = p.get("members") or []
-    buyers = [m for m in members if m.get("net", 0) > 0][:12]
-    sellers = sorted([m for m in members if m.get("net", 0) < 0], key=lambda m: m["net"])[:12]
+    buyers = [m for m in members if m.get("net", 0) > 0][:5]
+    sellers = sorted([m for m in members if m.get("net", 0) < 0], key=lambda m: m["net"])[:5]
     cards_src = buyers + sellers
     seen = set()
     cards = []
@@ -72,11 +72,11 @@ def main():
             moves_bits.append(f'<li><span>{esc(mv["name"])}</span><strong class="{cls}">{money(mv["usd"])}</strong></li>')
         moves = "".join(moves_bits) or "<li><span>No ticker-level moves parsed.</span></li>"
         return (
-            '                <article class="whale-card">'
-            f'\n                    <header class="whale-card-head">'
-            f'\n                        <div><h3>{esc(m["member"])}</h3><p>{esc(sub)}</p></div>'
-            f'\n                        <div class="whale-net"><span>Net flow</span><strong class="{net_class}">{money(net)}</strong></div>'
-            f'\n                    </header>'
+            '                <details class="whale-card congress-card">'
+            f'\n                    <summary class="whale-card-head">'
+            f'\n                        <span><b>{esc(m["member"])}</b><small>{esc(sub)}</small></span>'
+            f'\n                        <span class="whale-net"><span>Net flow</span><strong class="{net_class}">{money(net)}</strong></span>'
+            f'\n                    </summary>'
             f'\n                    <dl class="whale-flow-stats">'
             f'\n                        <div><dt>Sold</dt><dd class="scan-z-neg">{money(-m.get("sell_usd", 0))}</dd></div>'
             f'\n                        <div><dt>Bought</dt><dd class="scan-z-pos">{money(m.get("buy_usd", 0))}</dd></div>'
@@ -84,12 +84,12 @@ def main():
             f'\n                    </dl>'
             f'\n                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:{sold_w:.1f}%"></span><i></i><span class="whale-bought" style="width:{bought_w:.1f}%"></span></div>'
             f'\n                    <h4>Largest ticker flows</h4><ul class="whale-moves">{moves}</ul>'
-            f'\n                </article>'
+            f'\n                </details>'
         )
 
     office_cards = "\n".join(member_card(m) for m in cards)
 
-    def tick_rows(rows, n=15):
+    def tick_rows(rows, n=5):
         out = []
         for r in rows[:n]:
             net = r.get("net", 0)
@@ -102,7 +102,7 @@ def main():
             )
         return "\n".join(out)
 
-    def large_rows(rows, n=20):
+    def large_rows(rows, n=10):
         out = []
         for r in rows[:n]:
             flow = r.get("flow_est", 0)
@@ -127,38 +127,33 @@ def main():
     as_of = p.get("as_of") or dt.date.today().isoformat()
     year = p.get("year") or 2026
     net = s.get("net_usd", 0)
-    net_cls = "scan-z-pos" if net >= 0 else "scan-z-neg"
+    direction = "buying" if net >= 0 else "selling"
+    largest_count = min(10, len(p.get("largest_trades") or []))
     panel_lines = [
         '            <section class="trading-panel congress-panel" id="congress-panel" role="tabpanel" tabindex="0" aria-labelledby="congress-tab" hidden>',
         '                <div class="position-head">',
-        f'                    <h2 id="congress-heading">Congress flows</h2>',
+        '                    <h2 id="congress-heading">Congress</h2>',
         f'                    <span>{year} YTD · as of {esc(as_of)}</span>',
         '                </div>',
-        '                <p class="scan-intro">Official STOCK Act periodic transaction reports for sitting House members and Senators year-to-date. Dollar figures are midpoint estimates from disclosure ranges (e.g. $15,001–$50,000 → ~$32.5K), not exact fills. Transaction date ≠ filing date — members can report weeks later. Paper Senate filings are excluded. Descriptive public-filing data, not trade recommendations.</p>',
-        '                <section class="whale-summary" aria-label="Congress flow summary">',
-        f'                    <div><span>Members</span><strong>{s.get("members", 0)}</strong><small>{s.get("house_members", 0)} House · {s.get("senate_members", 0)} Senate</small></div>',
-        f'                    <div><span>Trades</span><strong>{s.get("trades", 0):,}</strong><small>{s.get("house_trades", 0):,} House · {s.get("senate_trades", 0):,} Senate</small></div>',
-        f'                    <div><span>Gross sold</span><strong class="scan-z-neg">{money(-s.get("gross_sell_usd", 0))}</strong></div>',
-        f'                    <div><span>Gross bought</span><strong class="scan-z-pos">{money(s.get("gross_buy_usd", 0))}</strong></div>',
-        f'                    <div><span>Net flow</span><strong class="{net_cls}">{money(net)}</strong><small>{s.get("net_buyers", 0)} net buyers · {s.get("net_sellers", 0)} net sellers</small></div>',
-        '                </section>',
-        '                <div class="whale-flow-head"><h3>Member flows</h3><p>Top net buyers and sellers · bars share one scale · range midpoints</p></div>',
-        '                <section class="whale-flow-grid" aria-label="YTD flows by member">',
-        office_cards,
-        '                </section>',
-        '                <div class="whale-cols">',
-        '                <div class="position-group"><h3>Most bought tickers</h3>',
+        f'                <p class="trading-takeaway">STOCK Act filings show an estimated {money(abs(net)).lstrip("+−")} of net {direction} across {s.get("members", 0)} members and {s.get("trades", 0):,} trades.</p>',
+        f'                <p class="data-meta">{s.get("house_members", 0)} House · {s.get("senate_members", 0)} Senate · gross bought {money(s.get("gross_buy_usd", 0))} · gross sold {money(-s.get("gross_sell_usd", 0))}</p>',
+        '                <div class="whale-cols whale-consensus">',
+        '                <div class="position-group"><h3>Most bought tickers</h3><div class="scan-table-wrap">',
         '                <table class="scan-table" aria-label="Most bought tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>',
         '                <tbody>',
         tick_rows(p.get("top_bought") or []),
-        '                </tbody></table></div>',
-        '                <div class="position-group"><h3>Most sold tickers</h3>',
+        '                </tbody></table></div></div>',
+        '                <div class="position-group"><h3>Most sold tickers</h3><div class="scan-table-wrap">',
         '                <table class="scan-table" aria-label="Most sold tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>',
         '                <tbody>',
         tick_rows(p.get("top_sold") or []),
-        '                </tbody></table></div>',
+        '                </tbody></table></div></div>',
         '                </div>',
-        '                <div class="position-group"><h3>Largest disclosed trades</h3>',
+        '                <div class="whale-flow-head"><h3>Member flows</h3><p>Top 5 net buyers and sellers · open a member for details</p></div>',
+        '                <section class="whale-flow-grid" aria-label="YTD flows by member">',
+        office_cards,
+        '                </section>',
+        f'                <details class="data-disclosure"><summary>View largest disclosed trades · {largest_count}</summary>',
         '                <div class="scan-table-wrap">',
         '                <table class="scan-table" aria-label="Largest Congress trades YTD">',
         '                    <thead><tr><th>Member</th><th>Chamber</th><th>Ticker</th><th>Side</th><th class="scan-num">Amount</th><th class="scan-num">Tx date</th><th class="scan-num">Filed</th></tr></thead>',
@@ -166,8 +161,8 @@ def main():
         large_rows(p.get("largest_trades") or []),
         '                    </tbody>',
         '                </table>',
-        '                </div></div>',
-        '                <p class="trading-note">Sources: House Clerk bulk FD index + PTR PDFs; Senate eFD electronic PTRs. Amounts are statutory ranges; midpoints used only for ranking/aggregation. Spouse/joint/dependent transactions are included when disclosed on the member filing. Not investment advice.</p>',
+        '                </div></details>',
+        '                <details class="trading-method"><summary>How this works</summary><p>Official STOCK Act periodic transaction reports cover sitting House members and Senators year-to-date. Dollar figures use disclosure-range midpoints, not exact fills, and transaction dates can precede filing dates by weeks. Paper Senate filings are excluded. Spouse, joint, and dependent transactions are included when disclosed. Descriptive public-filing data, not investment advice.</p></details>',
         '            </section>',
     ]
     panel = "\n".join(panel_lines)
@@ -176,7 +171,7 @@ def main():
     if 'id="congress-tab"' not in page:
         page = page.replace(
             '<button class="trading-tab" id="whales-tab"',
-            '<button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress flows <span class="trading-tab-count" id="congress-tab-count">0</span></button>\n                <button class="trading-tab" id="whales-tab"',
+            '<button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>\n                <button class="trading-tab" id="whales-tab"',
             1,
         )
     if "<!-- AUTO:CONGRESS:START -->" not in page:
@@ -191,11 +186,9 @@ def main():
         page,
         flags=re.S,
     )
-    new = re.sub(
-        r'(<span class="trading-tab-count" id="congress-tab-count">)[^<]*(</span>)',
-        lambda m: f"{m.group(1)}{s.get('members', 0)}{m.group(2)}",
-        new,
-    )
+    if new == open(PAGE).read():
+        print(f"[congress] already current: {os.path.basename(path)}, {s.get('members')} members, {s.get('trades')} trades")
+        return
     open(PAGE, "w").write(new)
     print(f"[congress] injected {os.path.basename(path)}: {s.get('members')} members, {s.get('trades')} trades, net {money(net)}")
 

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """Inject the altcoin dashboard into trading/index.html (AUTO:CRYPTO block).
 
-Reads the newest ~/Documents/trading/scans/crypto-spread-*.json (or a path
-given as argv[1]) emitted by ~/Documents/trading/src/crypto_spread.py and
+Reads the newest ~/trading/scans/crypto-spread-*.json (or a path
+given as argv[1]) emitted by ~/trading/src/crypto_spread.py and
 renders the "Crypto spread" tab: spread-Z vs BTC (Allen z-score, the same
 spec the equity scan uses against SPY) plus year-anchored VWAPs, all built
 from Hyperliquid perp candles (native-venue volume, daily UTC sessions).
@@ -12,6 +12,7 @@ Run from the repo root.
 """
 import datetime as dt
 import glob
+import hashlib
 import html
 import json
 import math
@@ -21,6 +22,7 @@ import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
+CHART_ASSET = os.path.join(ROOT, "trading", "crypto-charts.json")
 SCAN_GLOB = os.path.expanduser("~/trading/scans/crypto-spread-*.json")
 
 W, H = 560, 210
@@ -148,10 +150,10 @@ def combined_chart(coin, vwap):
                     <figcaption><b>{html.escape(coin['sym'])}</b> <span>{html.escape(coin['name'])} · YTD VWAP + Spread Z vs BTC</span><em class="{'scan-z-pos' if spread >= 0 else 'scan-z-neg'}">z {spread:+.2f} · {side} · {vwap['pct']:+.1f}% vs vwap</em></figcaption>
                     <svg viewBox="0 0 {W} {total_h}" preserveAspectRatio="none" role="img" aria-label="{html.escape(coin['sym'])} price versus YTD VWAP with spread Z versus BTC below">
                         <text x="{ML}" y="10" class="crypto-subtitle">PRICE · YTD VWAP</text>
-                        <g>{vwap_match.group(1)}</g>
+                        <g aria-hidden="true">{vwap_match.group(1)}</g>
                         <line x1="{ML}" y1="{H + 10}" x2="{W - MR}" y2="{H + 10}" class="cg"/>
                         <text x="{ML}" y="{H + 22}" class="crypto-subtitle">SPREAD Z VS BTC</text>
-                        <g transform="translate(0,{H + 24})">{spread_match.group(1)}</g>
+                        <g aria-hidden="true" transform="translate(0,{H + 24})">{spread_match.group(1)}</g>
                     </svg>
                 </figure>"""
 
@@ -191,54 +193,70 @@ def main():
             sys.exit(f"Stale or non-finite VWAP history for {coin['sym']}")
     vwaps = [vwap_by_symbol[coin["sym"]] for coin in coins]
 
+    def status_text(coin, basis):
+        if basis["side"] and coin["spread"] >= 0:
+            return "Strong trend, leading BTC"
+        if basis["side"]:
+            return "Strong trend, weakening vs BTC"
+        if coin["spread"] >= 0:
+            return "Improving vs BTC, below VWAP"
+        return "Weak trend, lagging BTC"
+
     rows = "\n".join(
         f"""                    <tr>
-                        <td class="scan-sym">{html.escape(c['sym'])}</td>
-                        <td class="scan-sec">{html.escape(c['name'])}</td>
-                        <td class="scan-num">{fmt_price(c['price'])}</td>
-                        <td class="scan-num">{fmt_price(b['vwap'])}</td>
+                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="{html.escape(c['sym'], quote=True)}">{html.escape(c['sym'])}</button><span class="bl-tag">{html.escape(c['name'])}</span></td>
+                        <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">{c['spread']:+.2f}</span></td>
                         <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
                         <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if c['z'] >= 0 else 'scan-z-neg'}">{c['z']:+.2f}</span></td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">{c['spread']:+.2f}</span></td>
-                        <td class="scan-num">{'▲' if c['spread'] >= 0 else '▼'} {c['days_side']}d</td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if c['ratio_ytd_chg'] >= 0 else 'scan-z-neg'}">{c['ratio_ytd_chg']:+.1f}%</span></td>
+                        <td>{html.escape(status_text(c, b))}</td>
                     </tr>"""
         for c in coins for b in [vwap_by_symbol[c["sym"]]])
-    charts = "\n".join(combined_chart(c, vwap_by_symbol[c["sym"]]) for c in coins)
+    chart_map = {c["sym"]: combined_chart(c, vwap_by_symbol[c["sym"]]) for c in coins}
+    default_symbol = coins[0]["sym"]
+    asset_json = json.dumps({"default": default_symbol, "charts": chart_map}, separators=(",", ":"), allow_nan=False)
+    asset_hash = hashlib.sha256(asset_json.encode()).hexdigest()[:12]
+    leaders = [c["sym"] for c in coins if c["spread"] >= 0]
+    laggards = [c["sym"] for c in reversed(coins) if c["spread"] < 0]
+    below_leaders = [c["sym"] for c in coins if c["spread"] >= 0 and not vwap_by_symbol[c["sym"]]["side"]]
+    middle = f" {', '.join(below_leaders)} {'is' if len(below_leaders) == 1 else 'are'} improving versus BTC but remain below YTD VWAP." if below_leaders else ""
+    takeaway = f"{leaders[0]} leads BTC.{middle} {', '.join(laggards[:2])} lag."
+    chips = "".join(f'<button type="button" class="bl-chip" data-crypto-select="{c["sym"]}">{c["sym"]}</button>' for c in coins)
 
     panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
                 <div class="position-head">
-                    <h2 id="crypto-heading">Crypto spread</h2>
-                    <span>{fmt(p['last_bar'])} UTC close · daily · benchmark BTC {'' if not p.get('btc') else f"${p['btc']['price']:,.0f} · z {p['btc']['z']:+.2f}"}</span>
+                    <h2 id="crypto-heading">Crypto</h2>
+                    <span>{fmt(p['last_bar'])} UTC close · BTC {'' if not p.get('btc') else f"${p['btc']['price']:,.0f} · z {p['btc']['z']:+.2f}"}</span>
                 </div>
-                <p class="scan-intro">Altcoin relative strength measured the way the equity scan measures stocks against SPY: each coin's 50-day EMA z-score minus bitcoin's. Positive and green = the alt is more extended above its own trend than BTC is (vol-adjusted leadership); negative and red = it's lagging the benchmark. The table and combined charts are ranked by current Spread Z descending. All data is daily UTC perp candles from Hyperliquid; the last bar is the most recent complete day.</p>
-                <p class="scan-intro">YTD VWAP is the year's average cost basis per coin, volume-weighted on Hyperliquid's perp markets. Above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
+                <p class="trading-takeaway">{html.escape(takeaway)}</p>
+                <div class="quick-select" aria-label="Select crypto chart">{chips}</div>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Altcoin spread Z versus BTC and year-to-date VWAPs">
-                    <thead><tr><th>Coin</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">VWAP side</th><th class="scan-num">Coin Z</th><th class="scan-num">Spread vs BTC</th><th class="scan-num">Spread side</th><th class="scan-num">Alt/BTC YTD</th></tr></thead>
+                <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
+                    <thead><tr><th>Coin</th><th class="scan-num">vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
                     <tbody>
 {rows}
                     </tbody>
                 </table>
                 </div>
-                <div class="position-group"><h3>Combined charts · ranked by Spread Z</h3></div>
-                <div class="crypto-grid">
-{charts}
-                </div>
-                <p class="trading-note">Spread Z uses the same EMA-based z-score as the momentum scan (EMA-50 mean, EMA-RMS sigma, EMA-3 smoothing). All prices and volume are daily UTC perp candles from Hyperliquid's public API — perp volume tracks spot closely and is the deepest liquidity for these names; crypto has no consolidated tape. A z-spread compares each asset to its own trend — it is relative momentum, not a price-ratio chart. Descriptive market data, not recommendations.</p>
+                <section class="selected-chart" id="crypto-selected-chart" data-url="/trading/crypto-charts.json?v={asset_hash}" data-default="{default_symbol}" aria-live="polite">
+                    <p class="bl-empty">Select a coin to load one chart.</p>
+                </section>
+                <details class="trading-method"><summary>How this works</summary><p>Spread Z compares each coin's 50-day trend with BTC's. Positive means relative leadership; negative means lagging. YTD VWAP estimates the year's volume-weighted cost basis on Hyperliquid perpetual markets. Both axes matter: a coin can be above its own VWAP while weakening versus BTC. Descriptive market data, not a recommendation.</p></details>
             </section>"""
 
     page = open(PAGE).read()
     new = re.sub(r"(<!-- AUTO:CRYPTO:START -->).*?(<!-- AUTO:CRYPTO:END -->)",
                  lambda m: f"{m.group(1)}\n{panel}\n            {m.group(2)}",
                  page, flags=re.S)
-    new = re.sub(r'(<span class="trading-tab-count" id="crypto-tab-count">)[^<]*(</span>)',
-                 lambda m: f"{m.group(1)}{len(coins)}{m.group(2)}", new)
-    if new == page:
+    old_asset = open(CHART_ASSET).read() if os.path.exists(CHART_ASSET) else None
+    page_changed = new != page
+    asset_changed = old_asset != asset_json
+    if not page_changed and not asset_changed:
         print(f"[crypto] already current: {os.path.basename(path)}, {len(coins)} coins, {len(vwaps)} vwaps, last bar {p['last_bar']}")
         return
-    open(PAGE, "w").write(new)
+    if page_changed:
+        open(PAGE, "w").write(new)
+    if asset_changed:
+        open(CHART_ASSET, "w").write(asset_json)
     print(f"[crypto] injected {os.path.basename(path)}: {len(coins)} coins, {len(vwaps)} vwaps, last bar {p['last_bar']}")
 
 
