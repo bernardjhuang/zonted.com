@@ -10,6 +10,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
+RESULTS = ROOT / "trading" / "results-ytd.json"
 
 
 class TradingUiContractTest(unittest.TestCase):
@@ -17,17 +18,17 @@ class TradingUiContractTest(unittest.TestCase):
     def setUpClass(cls):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
+        cls.results = json.loads(RESULTS.read_text())
 
     def test_nine_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "results", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
-        self.assertEqual(labels[1], "Results")
-        self.assertRegex(labels[2], r"^Hypotheses \d+$")
-        self.assertEqual(labels[3], "Brief")
-        self.assertRegex(labels[4], r"^Momentum \d+$")
-        self.assertEqual(labels[5:], ["VWAP", "Congress", "13F", "Crypto"])
+        self.assertRegex(labels[1], r"^Hypotheses \d+$")
+        self.assertEqual(labels[2], "Brief")
+        self.assertRegex(labels[3], r"^Momentum \d+$")
+        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_results_is_ytd_percentage_only(self):
@@ -37,8 +38,22 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertRegex(block, r'<h2 id="results-heading">[+−]\d+\.\d{2}%</h2>')
         self.assertIn('Robinhood · YTD', block)
         self.assertIn('YTD portfolio performance', block)
+        self.assertIn('class="results-chart"', block)
+        self.assertIn('Daily EOD snapshots', block)
         for forbidden in ('$', 'balance', 'buying power', 'position', 'trade'):
             self.assertNotIn(forbidden, block.casefold())
+
+    def test_results_history_is_unique_ordered_and_matches_chart(self):
+        points = self.results["points"]
+        dates = [row["date"] for row in points]
+        self.assertTrue(points)
+        self.assertEqual(dates, sorted(set(dates)))
+        self.assertEqual(self.results["year"], int(dates[-1][:4]))
+        match = re.search(r'<h2 id="results-heading">([+−]\d+\.\d{2}%)</h2>', self.html)
+        self.assertIsNotNone(match)
+        latest = f"{float(points[-1]['ytd_percent']):+.2f}%".replace("-", "−")
+        self.assertEqual(match.group(1) if match else "", latest)
+        self.assertIn(f'data-results-points="{len(points)}"', self.html)
 
     def test_heading_and_scoped_controls(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
@@ -77,10 +92,10 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('aria-label="Full momentum scan of the tracked universe"', self.html)
 
     def test_chart_payloads_are_external_and_small_shell(self):
-        self.assertLess(PAGE.stat().st_size, 200_000)
+        self.assertLess(PAGE.stat().st_size, 205_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
-        for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json"):
+        for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json"):
             path = ROOT / "trading" / name
             self.assertTrue(path.exists(), name)
             payload = json.loads(path.read_text())
@@ -132,6 +147,9 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('aria-expanded="true" aria-controls="${detailId}"', self.js)
         self.assertIn('>Hide setup</button>', self.js)
         self.assertIn("renderSetupChartForSymbol($('[data-position-chart-shell]', detail)", self.js)
+        self.assertIn('#positions-panel .portfolio-grid { grid-template-columns: 1fr; }', self.html)
+        self.assertRegex(self.js, r'<article class="portfolio-card[\s\S]*?<div class="bl-position-chart-detail[\s\S]*?</article>')
+        self.assertNotIn('class="portfolio-details"', self.js)
         self.assertIn('.slice(0, 20)', self.js)
         self.assertIn('<details class="bl-card activity-disclosure">', self.js)
         self.assertIn('direction / type / P&amp;L', self.js)

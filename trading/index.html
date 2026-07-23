@@ -76,7 +76,7 @@
         .bl-position-chart-toggle:hover { color: var(--bl-accent); }
         .bl-position-chart-toggle:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; border-radius: 3px; }
         .bl-position-chart-toggle[aria-expanded="true"] .scan-row-chevron { color: var(--bl-accent); transform: rotate(90deg); }
-        .bl-position-chart-detail { min-width: 720px; padding: 16px 0 2px; border-top: 1px solid var(--bl-chipbd); }
+        .bl-position-chart-detail { min-width: 0; margin-top: 16px; padding: 16px 0 2px; border-top: 1px solid var(--bl-chipbd); overflow-x: auto; }
         .bl-position-chart-detail .scan-setup-chart { border-top: 0; padding-top: 0; }
         .bl-row .mono { font-family: var(--bl-mono); font-size: 12.5px; }
         .bl-row .mut { color: var(--bl-muted); }
@@ -346,8 +346,7 @@
         .vwap-chart-grid .vwap-chart--spy { grid-column: auto; }
         .crypto-chart-grid .crypto-card { min-width: 0; margin: 0; padding: 16px; }
         .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
-        .portfolio-details { min-width: 0; display: grid; gap: 12px; margin-top: 12px; }
-        .portfolio-details .portfolio-detail { min-width: 0; overflow-x: auto; border: 1px solid var(--bl-border); border-radius: 8px; }
+        #positions-panel .portfolio-grid { grid-template-columns: 1fr; }
         .portfolio-card { min-width: 0; padding: 15px 16px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
         .portfolio-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
         .portfolio-card h2 { margin: 0; font: 700 16px var(--bl-mono); }
@@ -386,12 +385,21 @@
         .activity-row-compact { padding: 10px 14px; border-top: 1px solid var(--bl-divider); }
         .activity-row-compact:first-child { border-top: 0; }
         .activity-side { color: var(--bl-muted); font-size: 12px; text-transform: capitalize; }
-        .results-panel { min-height: min(560px, 62vh); place-items: center; }
+        .results-panel { min-height: min(680px, 72vh); place-items: center; }
         .results-panel:not([hidden]) { display: grid; }
-        .results-only { width: min(680px, 100%); padding: clamp(42px, 8vw, 88px) 20px; text-align: center; }
+        .results-only { width: min(860px, 100%); padding: clamp(34px, 6vw, 68px) 20px; text-align: center; }
         .results-kicker { color: var(--bl-muted); font: 700 12px var(--bl-mono); letter-spacing: .12em; text-transform: uppercase; }
-        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(64px, 15vw, 148px)/.9 var(--bl-mono); letter-spacing: -.08em; }
-        .results-only p { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
+        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(58px, 13vw, 122px)/.9 var(--bl-mono); letter-spacing: -.08em; }
+        .results-only > p:not(.results-history) { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
+        .results-chart { display: block; width: 100%; height: auto; margin: 32px auto 12px; overflow: visible; }
+        .results-grid { stroke: var(--bl-divider); stroke-width: 1; vector-effect: non-scaling-stroke; }
+        .results-axis { fill: var(--bl-faint); font: 600 11px var(--bl-mono); }
+        .results-area { fill: color-mix(in srgb, var(--bl-gain) 12%, transparent); }
+        .results-line { fill: none; stroke: var(--bl-gain); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+        .results-dot { fill: var(--bl-card); stroke: var(--bl-gain); stroke-width: 4; vector-effect: non-scaling-stroke; }
+        .results-chart[data-results-sign="negative"] .results-area { fill: color-mix(in srgb, var(--bl-loss) 12%, transparent); }
+        .results-chart[data-results-sign="negative"] .results-line, .results-chart[data-results-sign="negative"] .results-dot { stroke: var(--bl-loss); }
+        .results-history { margin: 8px 0 0; color: var(--bl-faint); font: 600 11px var(--bl-mono); letter-spacing: .02em; }
         .whale-card > summary { cursor: pointer; list-style: none; }
         .whale-card > summary::-webkit-details-marker { display: none; }
         .whale-card > summary::before { content: '›'; flex: 0 0 auto; color: var(--bl-faint); font: 700 18px/1 var(--bl-sans); transition: transform 140ms ease; }
@@ -460,7 +468,6 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
-                <button class="trading-tab" id="results-tab" type="button" role="tab" aria-selected="false" aria-controls="results-panel">Results</button>
                 <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">1</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">18</span></button>
@@ -468,6 +475,7 @@
                 <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F</button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
+                <button class="trading-tab" id="results-tab" type="button" role="tab" aria-selected="false" aria-controls="results-panel">Performance</button>
             </div>
         </header>
 
@@ -731,8 +739,16 @@
             <section class="trading-panel results-panel" id="results-panel" role="tabpanel" tabindex="0" aria-labelledby="results-tab" hidden>
                 <div class="results-only" aria-labelledby="results-heading">
                     <span class="results-kicker">Robinhood · YTD</span>
-                    <h2 id="results-heading">+335.04%</h2>
+                    <h2 id="results-heading">+335.11%</h2>
                     <p class="positive">YTD portfolio performance</p>
+                    <svg class="results-chart" viewBox="0 0 720 270" role="img" aria-labelledby="results-chart-title results-chart-desc" data-results-points="1" data-results-sign="positive">
+                        <title id="results-chart-title">Robinhood YTD performance over time</title>
+                        <desc id="results-chart-desc">Daily end-of-day YTD percentage snapshots from July 23, 2026 through July 23, 2026.</desc>
+                        <line class="results-grid" x1="48.00" y1="24.00" x2="676.00" y2="24.00" /><text class="results-axis" x="676.00" y="19.00" text-anchor="end">+340.11%</text><line class="results-grid" x1="48.00" y1="91.33" x2="676.00" y2="91.33" /><text class="results-axis" x="676.00" y="86.33" text-anchor="end">+336.78%</text><line class="results-grid" x1="48.00" y1="158.67" x2="676.00" y2="158.67" /><text class="results-axis" x="676.00" y="153.67" text-anchor="end">+333.44%</text><line class="results-grid" x1="48.00" y1="226.00" x2="676.00" y2="226.00" /><text class="results-axis" x="676.00" y="221.00" text-anchor="end">+330.11%</text>
+                        <circle class="results-dot" cx="362.00" cy="125.00" r="5" />
+                        <text class="results-axis" x="362" y="254" text-anchor="middle">Jul 23</text>
+                    </svg>
+                    <p class="results-history">Daily EOD snapshots · tracking since Jul 23, 2026</p>
                 </div>
             </section>
             <!-- AUTO:RESULTS:END -->
@@ -2025,6 +2041,6 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-23-results-v1"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-23-performance-chart-v2"></script>
 </body>
 </html>
