@@ -456,7 +456,7 @@
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
                 <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">1</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
-                <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">4</span></button>
+                <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">18</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
                 <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F</button>
@@ -479,6 +479,7 @@
                     <h3>Equities</h3>
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span></li>
+                        <li class="ticker"><span class="ticker-symbol">HIMS</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span></li>
                     </ul>
                 </div>
@@ -504,9 +505,14 @@
                         <h3 id="buys-heading">Buys</h3>
                         <ol class="activity-list" aria-label="Last 20 qualifying Robinhood buys">
                             <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-23">Jul 23</time>
+                                <div><span class="activity-action">HIMS shares</span><span class="activity-type">Equity · 4 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−1.1%</span><span class="activity-status">Unrealized</span></div>
+                            </li>
+                            <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
                                 <div><span class="activity-action">ABT call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+3.1%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+5.1%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
@@ -526,7 +532,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">ABT call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+1.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+3.0%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
@@ -546,7 +552,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">WTS shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−0.2%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+0.1%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
@@ -556,17 +562,17 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">DOCN shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+8.2%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+7.8%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">ABT call</span><span class="activity-type">Option · 5 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−9.2%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−7.4%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">NET shares</span><span class="activity-type">Equity · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−6.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−5.6%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-17">Jul 17</time>
@@ -597,11 +603,6 @@
                                 <time class="activity-date" datetime="2026-07-16">Jul 16</time>
                                 <div><span class="activity-action">WEN shares</span><span class="activity-type">Equity · 5 fills</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+0.9%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-16">Jul 16</time>
-                                <div><span class="activity-action">NVO shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.4%</span><span class="activity-status">Realized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -783,9 +784,9 @@
             <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
                 <div class="position-head">
                     <h2 id="scan-heading">Momentum</h2>
-                    <span>Signals July 22, 2026 close · Prices Jul 23, 3:09 PM CT</span>
+                    <span>Signals July 23, 2026 close · Prices July 23, 2026 close</span>
                 </div>
-                <p class="trading-takeaway">4 qualified longs across Energy. SPY 747.41, above its 50-day average.</p>
+                <p class="trading-takeaway">6 qualified longs and 12 qualified shorts across Comm Services, Consumer Disc, Energy. SPY 738.18, below its 50-day average.</p>
                 <p class="signal-legend"><b>ENTER+</b> = qualified + persistent · <b>ENTER</b> = qualified · <b>WATCH</b> = watch · <b>AVOID</b> = not qualified</p>
                 <div class="sector-summary">
                     <span><b>Leading</b> Energy · Financials</span>
@@ -794,121 +795,75 @@
                         <li class="scan-sector scan-sector--hot">
                             <span class="scan-sector-head"><b>XLE</b><span>#1</span></span>
                             <span class="scan-sector-name">Energy</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.17</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector scan-sector--hot">
-                            <span class="scan-sector-head"><b>XLF</b><span>#2</span></span>
-                            <span class="scan-sector-name">Financials</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.09</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+1.28</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLRE</b><span>#3</span></span>
-                            <span class="scan-sector-name">Real Estate</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.92</span> <small>50D Z</small></span>
+                            <span class="scan-sector-head"><b>XLF</b><span>#2</span></span>
+                            <span class="scan-sector-name">Financials</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.99</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLU</b><span>#3</span></span>
+                            <span class="scan-sector-name">Utilities</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.93</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
                             <span class="scan-sector-head"><b>XLV</b><span>#4</span></span>
                             <span class="scan-sector-name">Health Care</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.76</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.86</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLU</b><span>#5</span></span>
-                            <span class="scan-sector-name">Utilities</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.54</span> <small>50D Z</small></span>
+                            <span class="scan-sector-head"><b>XLRE</b><span>#5</span></span>
+                            <span class="scan-sector-name">Real Estate</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.81</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLP</b><span>#6</span></span>
-                            <span class="scan-sector-name">Staples</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.48</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLI</b><span>#7</span></span>
+                            <span class="scan-sector-head"><b>XLI</b><span>#6</span></span>
                             <span class="scan-sector-name">Industrials</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.25</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.53</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLK</b><span>#8</span></span>
+                            <span class="scan-sector-head"><b>XLK</b><span>#7</span></span>
                             <span class="scan-sector-name">Technology</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.08</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.04</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLP</b><span>#8</span></span>
+                            <span class="scan-sector-name">Staples</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.01</span> <small>50D Z</small></span>
                         </li>
                         <li class="scan-sector">
                             <span class="scan-sector-head"><b>XLB</b><span>#9</span></span>
                             <span class="scan-sector-name">Materials</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-0.38</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-0.50</span> <small>50D Z</small></span>
                         </li>
-                        <li class="scan-sector">
+                        <li class="scan-sector scan-sector--cold">
                             <span class="scan-sector-head"><b>XLC</b><span>#10</span></span>
                             <span class="scan-sector-name">Comm Services</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-0.56</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-1.23</span> <small>50D Z</small></span>
                         </li>
-                        <li class="scan-sector">
+                        <li class="scan-sector scan-sector--cold">
                             <span class="scan-sector-head"><b>XLY</b><span>#11</span></span>
                             <span class="scan-sector-name">Consumer Disc</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-0.82</span> <small>50D Z</small></span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-1.82</span> <small>50D Z</small></span>
                         </li>
                     </ul></details>
                 </div>
                 <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
                 <div class="position-group">
-                    <h3>Long setups · 4</h3>
-                <div class="scan-table-wrap">
-                <table class="scan-table scan-accordion-table scan-table--decision" aria-label="Long setups from the momentum scan">
-                    <thead><tr><th>Ticker</th><th class="scan-num" aria-sort="none"><button type="button" class="scan-sort" data-scan-sort-day>Price · Day <span aria-hidden="true">⇅</span></button></th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead>
-                    <tbody>
-                    <tr class="scan-data-row" data-scan-row data-scan-symbol="PSX" data-day-pct="-2.09836531">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="scan-detail-long-psx" aria-label="Show PSX setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">PSX</span><span class="bl-tag">Energy</span></span></button></td>
-                        <td class="scan-num scan-price"><span class="scan-price-value">$206.92</span> <span class="scan-z-neg" aria-label="down 2.10 percent today">-2.10%</span></td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.50</span></td>
-                        <td class="scan-num">Aug 5 (14d)</td>
-                        <td><span class="scan-signal scan-signal--enter" title="qualified + persistent">ENTER+</span></td>
-                    </tr>
-                    <tr class="scan-detail-row" id="scan-detail-long-psx" data-scan-detail data-scan-symbol="PSX" hidden>
-                        <td colspan="5"><div class="scan-setup-chart" data-scan-chart="PSX"></div></td>
-                    </tr>
-                    <tr class="scan-data-row" data-scan-row data-scan-symbol="MPC" data-day-pct="-1.11163895">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="scan-detail-long-mpc" aria-label="Show MPC setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">MPC</span><span class="bl-tag">Energy</span></span></button></td>
-                        <td class="scan-num scan-price"><span class="scan-price-value">$312.24</span> <span class="scan-z-neg" aria-label="down 1.11 percent today">-1.11%</span></td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.31</span></td>
-                        <td class="scan-num">Aug 4 (13d)</td>
-                        <td><span class="scan-signal scan-signal--enter" title="qualified + persistent">ENTER+</span></td>
-                    </tr>
-                    <tr class="scan-detail-row" id="scan-detail-long-mpc" data-scan-detail data-scan-symbol="MPC" hidden>
-                        <td colspan="5"><div class="scan-setup-chart" data-scan-chart="MPC"></div></td>
-                    </tr>
-                    <tr class="scan-data-row" data-scan-row data-scan-symbol="VLO" data-day-pct="-1.78689184">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="scan-detail-long-vlo" aria-label="Show VLO setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">VLO</span><span class="bl-tag">Energy</span></span></button></td>
-                        <td class="scan-num scan-price"><span class="scan-price-value">$305.32</span> <span class="scan-z-neg" aria-label="down 1.79 percent today">-1.79%</span></td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.29</span></td>
-                        <td class="scan-num">Jul 30 (8d) ⚠</td>
-                        <td><span class="scan-signal scan-signal--enter" title="qualified + persistent">ENTER+</span></td>
-                    </tr>
-                    <tr class="scan-detail-row" id="scan-detail-long-vlo" data-scan-detail data-scan-symbol="VLO" hidden>
-                        <td colspan="5"><div class="scan-setup-chart" data-scan-chart="VLO"></div></td>
-                    </tr>
-                    <tr class="scan-data-row" data-scan-row data-scan-symbol="EOG" data-day-pct="1.02069157">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="scan-detail-long-eog" aria-label="Show EOG setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">EOG</span><span class="bl-tag">Energy</span></span></button></td>
-                        <td class="scan-num scan-price"><span class="scan-price-value">$145.49</span> <span class="scan-z-pos" aria-label="up 1.02 percent today">+1.02%</span></td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.05</span></td>
-                        <td class="scan-num">Aug 4 (13d)</td>
-                        <td><span class="scan-signal scan-signal--enter" title="qualified + persistent">ENTER+</span></td>
-                    </tr>
-                    <tr class="scan-detail-row" id="scan-detail-long-eog" data-scan-detail data-scan-symbol="EOG" hidden>
-                        <td colspan="5"><div class="scan-setup-chart" data-scan-chart="EOG"></div></td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
+                    <h3>Long setups · 6</h3>
+<p class="scan-qualified-links"><b>Long setups</b> · <a href="?chart=PSX#scan" translate="no">PSX</a> · <a href="?chart=EOG#scan" translate="no">EOG</a> · <a href="?chart=MPC#scan" translate="no">MPC</a> · <a href="?chart=VLO#scan" translate="no">VLO</a> · <a href="?chart=CVX#scan" translate="no">CVX</a> · <a href="?chart=XOM#scan" translate="no">XOM</a></p>
                 </div>
                 <div class="position-group">
-                    <h3>Short setups · 0</h3>
-<p class="bl-empty">No qualified shorts today.</p>
+                    <h3>Short setups · 12</h3>
+<p class="scan-qualified-links"><b>Short setups</b> · <a href="?chart=DIS#scan" translate="no">DIS</a> · <a href="?chart=WBD#scan" translate="no">WBD</a> · <a href="?chart=ASTS#scan" translate="no">ASTS</a> · <a href="?chart=LOW#scan" translate="no">LOW</a> · <a href="?chart=MCD#scan" translate="no">MCD</a> · <a href="?chart=CMCSA#scan" translate="no">CMCSA</a> · <a href="?chart=TSLA#scan" translate="no">TSLA</a> · <a href="?chart=DKNG#scan" translate="no">DKNG</a> · <a href="?chart=GOOGL#scan" translate="no">GOOGL</a> · <a href="?chart=GOOG#scan" translate="no">GOOG</a> · <a href="?chart=DRI#scan" translate="no">DRI</a> · <a href="?chart=NYT#scan" translate="no">NYT</a></p>
                 </div>
                 <details class="scan-universe-disclosure" id="scan-universe" open>
-                    <summary>Browse full universe · 168 symbols</summary>
+                    <summary>Browse full universe · 170 symbols</summary>
                     <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=03c858318a7e"><p class="bl-empty">Loading universe…</p></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=f363d8b2359e"><p class="bl-empty">Loading universe…</p></div>
                 </details>
-                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=48a9c290fba1"}</script>
+                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=1259a6c8b030"}</script>
                 <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
             </section>
             <!-- AUTO:SCAN:END -->
@@ -1777,9 +1732,9 @@
             <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
                 <div class="position-head">
                     <h2 id="vwap-heading">VWAP</h2>
-                    <span>July 22, 2026 close · anchor Jan 2, 2026</span>
+                    <span>July 23, 2026 close · anchor Jan 2, 2026</span>
                 </div>
-                <p class="trading-takeaway">10 of 12 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
+                <p class="trading-takeaway">8 of 12 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
                 <section class="vwap-market-section" aria-labelledby="vwap-us-heading">
                 <h3 id="vwap-us-heading">US market + sectors</h3>
                 <div class="scan-table-wrap">
@@ -1789,91 +1744,91 @@
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">SPY</span></td>
                         <td class="scan-sec">S&amp;P 500</td>
-                        <td class="scan-num"><span class="scan-z-pos">+7.6%</span></td>
-                        <td class="scan-num">▲ since Apr 8 (73d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.2%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (74d)</td>
                         <td class="scan-num"><span class="scan-sec">—</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLE</span></td>
                         <td class="scan-sec">Energy</td>
-                        <td class="scan-num"><span class="scan-z-pos">+7.9%</span></td>
-                        <td class="scan-num">▲ since Jul 8 (11d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.17</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.2%</span></td>
+                        <td class="scan-num">▲ since Jul 8 (12d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.28</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLF</span></td>
                         <td class="scan-sec">Financials</td>
-                        <td class="scan-num"><span class="scan-z-pos">+7.9%</span></td>
-                        <td class="scan-num">▲ since Jun 4 (33d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.09</span></td>
-                    </tr>
-                    <tr data-vwap-scope="us">
-                        <td class="scan-sym"><span translate="no">XLRE</span></td>
-                        <td class="scan-sec">Real Estate</td>
-                        <td class="scan-num"><span class="scan-z-pos">+6.5%</span></td>
-                        <td class="scan-num">▲ since Apr 6 (75d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.92</span></td>
-                    </tr>
-                    <tr data-vwap-scope="us">
-                        <td class="scan-sym"><span translate="no">XLV</span></td>
-                        <td class="scan-sec">Health Care</td>
-                        <td class="scan-num"><span class="scan-z-pos">+4.9%</span></td>
-                        <td class="scan-num">▲ since Jun 23 (21d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.76</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.4%</span></td>
+                        <td class="scan-num">▲ since Jun 4 (34d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.99</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLU</span></td>
                         <td class="scan-sec">Utilities</td>
-                        <td class="scan-num"><span class="scan-z-pos">+2.7%</span></td>
-                        <td class="scan-num">▲ since Jun 22 (22d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.54</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.3%</span></td>
+                        <td class="scan-num">▲ since Jun 22 (23d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.93</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><span translate="no">XLP</span></td>
-                        <td class="scan-sec">Staples</td>
-                        <td class="scan-num"><span class="scan-z-pos">+1.3%</span></td>
-                        <td class="scan-num">▲ since Jul 10 (9d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.48</span></td>
+                        <td class="scan-sym"><span translate="no">XLV</span></td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.2%</span></td>
+                        <td class="scan-num">▲ since Jun 23 (22d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.86</span></td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLRE</span></td>
+                        <td class="scan-sec">Real Estate</td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.3%</span></td>
+                        <td class="scan-num">▲ since Apr 6 (76d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.81</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLI</span></td>
                         <td class="scan-sec">Industrials</td>
-                        <td class="scan-num"><span class="scan-z-pos">+5.1%</span></td>
-                        <td class="scan-num">▲ since Apr 8 (73d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.25</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.9%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (74d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.53</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLK</span></td>
                         <td class="scan-sec">Technology</td>
-                        <td class="scan-num"><span class="scan-z-pos">+16.6%</span></td>
-                        <td class="scan-num">▲ since Apr 8 (73d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.08</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+15.4%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (74d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.04</span></td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLP</span></td>
+                        <td class="scan-sec">Staples</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.1%</span></td>
+                        <td class="scan-num">▼ since Jul 23 (1d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.01</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLB</span></td>
                         <td class="scan-sec">Materials</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.9%</span></td>
-                        <td class="scan-num">▲ since Jul 22 (1d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.38</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.1%</span></td>
+                        <td class="scan-num">▼ since Jul 23 (1d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.50</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLC</span></td>
                         <td class="scan-sec">Comm Services</td>
-                        <td class="scan-num"><span class="scan-z-neg">-4.1%</span></td>
-                        <td class="scan-num">▼ since Jun 2 (35d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.56</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-7.3%</span></td>
+                        <td class="scan-num">▼ since Jun 2 (36d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.23</span></td>
                     </tr>
                     <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLY</span></td>
                         <td class="scan-sec">Consumer Disc</td>
-                        <td class="scan-num"><span class="scan-z-neg">-1.9%</span></td>
-                        <td class="scan-num">▼ since Jul 17 (4d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.82</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-6.4%</span></td>
+                        <td class="scan-num">▼ since Jul 17 (5d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.82</span></td>
                     </tr>
                     </tbody>
                 </table>
                 </div>
-                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=f79c6e1789f1" data-symbols="SPY,XLE,XLF,XLRE,XLV,XLU,XLP,XLI,XLK,XLB,XLC,XLY" aria-live="polite">
+                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=7d03073f7c08" data-symbols="SPY,XLE,XLF,XLU,XLV,XLRE,XLI,XLK,XLP,XLB,XLC,XLY" aria-live="polite">
                     <p class="bl-empty">Loading SPY and 11 sector charts…</p>
                 </div>
                 </section>
@@ -1887,77 +1842,77 @@
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">EWY</span></td>
                         <td class="scan-sec">South Korea</td>
-                        <td class="scan-num"><span class="scan-z-pos">+9.7%</span></td>
-                        <td class="scan-num">▲ since Apr 8 (73d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.53</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+11.8%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (74d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.41</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">THD</span></td>
                         <td class="scan-sec">Thailand</td>
-                        <td class="scan-num"><span class="scan-z-pos">+8.2%</span></td>
-                        <td class="scan-num">▲ since Mar 30 (79d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.87</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.5%</span></td>
+                        <td class="scan-num">▲ since Mar 30 (80d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.69</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">EWJ</span></td>
                         <td class="scan-sec">Japan</td>
-                        <td class="scan-num"><span class="scan-z-pos">+4.8%</span></td>
-                        <td class="scan-num">▲ since Apr 30 (57d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.04</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.5%</span></td>
+                        <td class="scan-num">▲ since Apr 30 (58d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.14</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">EWG</span></td>
                         <td class="scan-sec">Germany</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.5%</span></td>
-                        <td class="scan-num">▲ since Jul 21 (2d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.22</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.2%</span></td>
+                        <td class="scan-num">▼ since Jul 23 (1d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.66</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">EWZ</span></td>
                         <td class="scan-sec">Brazil</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.3%</span></td>
-                        <td class="scan-num">▼ since May 13 (48d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.36</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.5%</span></td>
+                        <td class="scan-num">▼ since May 13 (49d)</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.38</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">INDA</span></td>
                         <td class="scan-sec">India</td>
-                        <td class="scan-num"><span class="scan-z-neg">-3.2%</span></td>
-                        <td class="scan-num">▼ since Jun 23 (21d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.45</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-4.4%</span></td>
+                        <td class="scan-num">▼ since Jun 23 (22d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.86</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">MCHI</span></td>
                         <td class="scan-sec">China</td>
-                        <td class="scan-num"><span class="scan-z-neg">-6.0%</span></td>
-                        <td class="scan-num">▼ since May 14 (47d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.12</span></td>
-                    </tr>
-                    <tr data-vwap-scope="countries">
-                        <td class="scan-sym"><span translate="no">EZA</span></td>
-                        <td class="scan-sec">South Africa</td>
-                        <td class="scan-num"><span class="scan-z-neg">-9.2%</span></td>
-                        <td class="scan-num">▼ since Apr 21 (64d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-0.83</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-6.4%</span></td>
+                        <td class="scan-num">▼ since May 14 (48d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.20</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">VNM</span></td>
                         <td class="scan-sec">Vietnam</td>
-                        <td class="scan-num"><span class="scan-z-neg">-9.9%</span></td>
-                        <td class="scan-num">▼ since Jul 6 (13d)</td>
-                        <td class="scan-num"><span class="scan-z-neg">-1.95</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-8.9%</span></td>
+                        <td class="scan-num">▼ since Jul 6 (14d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.85</span></td>
                     </tr>
                     <tr data-vwap-scope="countries">
                         <td class="scan-sym"><span translate="no">KWEB</span></td>
                         <td class="scan-sec">China Internet</td>
-                        <td class="scan-num"><span class="scan-z-neg">-12.0%</span></td>
-                        <td class="scan-num">▼ since Jan 30 (119d)</td>
-                        <td class="scan-num"><span class="scan-z-pos">+0.01</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-12.5%</span></td>
+                        <td class="scan-num">▼ since Jan 30 (120d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.13</span></td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EZA</span></td>
+                        <td class="scan-sec">South Africa</td>
+                        <td class="scan-num"><span class="scan-z-neg">-12.7%</span></td>
+                        <td class="scan-num">▼ since Apr 21 (65d)</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.17</span></td>
                     </tr>
                     </tbody>
                 </table>
                 </div>
-                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=f79c6e1789f1" data-symbols="EWY,THD,EWJ,EWG,EWZ,INDA,MCHI,EZA,VNM,KWEB" aria-live="polite">
+                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=7d03073f7c08" data-symbols="EWY,THD,EWJ,EWG,EWZ,INDA,MCHI,VNM,KWEB,EZA" aria-live="polite">
                     <p class="bl-empty">Loading 10 country charts…</p>
                 </div>
                 </section>

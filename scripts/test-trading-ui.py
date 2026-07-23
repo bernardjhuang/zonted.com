@@ -18,14 +18,15 @@ class TradingUiContractTest(unittest.TestCase):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
 
-    def test_seven_answer_first_tabs(self):
+    def test_eight_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "brief", "scan", "vwap", "congress", "whales", "crypto"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
-        self.assertEqual(labels[1], "Brief")
-        self.assertRegex(labels[2], r"^Momentum \d+$")
-        self.assertEqual(labels[3:], ["VWAP", "Congress", "13F", "Crypto"])
+        self.assertRegex(labels[1], r"^Hypotheses \d+$")
+        self.assertEqual(labels[2], "Brief")
+        self.assertRegex(labels[3], r"^Momentum \d+$")
+        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_heading_and_scoped_controls(self):
@@ -52,7 +53,8 @@ class TradingUiContractTest(unittest.TestCase):
             block = match.group(1) if match else ""
             self.assertIn('class="trading-takeaway"', block, panel)
             self.assertIn('<details class="trading-method"', block, panel)
-        self.assertIn('No qualified shorts today.', self.html)
+        self.assertIn('Short setups ·', self.html)
+        self.assertIn('class="scan-qualified-links"', self.html)
         self.assertIn('id="scan-universe"', self.html)
         self.assertIn('<details class="scan-universe-disclosure" id="scan-universe" open>', self.html)
         self.assertIn('<details open><summary>All sectors · 50-day Z-score</summary>', self.html)
