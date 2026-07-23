@@ -112,7 +112,7 @@
         .bl .position-head { display: flex; gap: 10px; align-items: baseline; padding: 16px 20px 4px; }
         .bl .position-head h2 { font-size: 15px; font-weight: 600; letter-spacing: 0; }
         .bl .position-head span { font: 400 12.5px var(--bl-sans); color: var(--bl-muted); letter-spacing: 0; text-transform: none; }
-        .bl .scan-intro, .bl .ytd-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
+        .bl .scan-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
         .bl .position-group { min-width: 0; padding: 0 20px 14px; }
         .bl .position-group h3 { font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); margin: 10px 0 8px; }
         .bl .ticker-list { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
@@ -307,7 +307,6 @@
         .activity-row-compact { display: grid; grid-template-columns: 70px minmax(110px, 1fr) 100px 90px; gap: 10px; padding: 10px 14px; border-top: 1px solid var(--bl-divider); align-items: center; }
         .activity-row-compact:first-child { border-top: 0; }
         .activity-side { color: var(--bl-muted); font-size: 12px; text-transform: capitalize; }
-        .extreme-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .whale-card > summary { cursor: pointer; list-style: none; }
         .whale-card > summary::-webkit-details-marker { display: none; }
         .whale-card > summary::before { content: '›'; flex: 0 0 auto; color: var(--bl-faint); font: 700 18px/1 var(--bl-sans); transition: transform 140ms ease; }
@@ -334,7 +333,6 @@
             .selected-chart { min-height: 200px; }
             .activity-row-compact { grid-template-columns: 58px minmax(100px, 1fr) 78px; gap: 8px; }
             .activity-row-compact .activity-side { display: none; }
-            .extreme-grid { grid-template-columns: 1fr; }
             .whale-flow-grid { padding-left: 16px; padding-right: 16px; }
         }
 </style>
@@ -545,143 +543,9 @@
                 </div>
             </section>
             <!-- AUTO:TRADES:END -->
-
-                    <!-- AUTO:YTD:START -->
-            <section class="ytd-panel" aria-labelledby="ytd-heading" hidden>
-                <div class="position-head">
-                    <h2 id="ytd-heading">2026 biggest wins &amp; losses</h2>
-                    <span>10 wins · 10 losses</span>
-                </div>
-                <p class="ytd-intro">The strongest and weakest closed trades this year, ranked by realized percentage return. Only trades with more than $1K cost basis qualify. Quantities, prices, notionals, and dollar P&amp;L stay private; a FIFO estimate is labeled when the broker feed has not posted yet.</p>
-                <section class="ytd-account-summary" aria-labelledby="ytd-account-heading">
-                    <div>
-                        <span class="ytd-account-kicker">Robinhood account</span>
-                        <h3 id="ytd-account-heading">Portfolio YTD return</h3>
-                        <p>Overall Robinhood portfolio · Realized + unrealized · Open positions included</p>
-                    </div>
-                    <div class="ytd-account-result">
-                        <strong class="positive">+347.6%</strong>
-                        <span>Portfolio-wide · Live snapshot</span>
-                    </div>
-                </section>
-                <div class="ytd-columns">
-                    <section class="ytd-lane ytd-lane--wins" aria-labelledby="ytd-wins-heading">
-                        <h3 id="ytd-wins-heading">Top 10 wins</h3>
-                        <ol class="ytd-list" aria-label="Top 10 YTD percentage wins">
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-05-04">May 4</time>
-                                <span class="ytd-action">GOOG call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+430.6%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-06">Jul 6</time>
-                                <span class="ytd-action">SMWB call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+284.6%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-06">Jul 6</time>
-                                <span class="ytd-action">SMWB call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+250.0%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-05-19">May 19</time>
-                                <span class="ytd-action">PURR call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+118.8%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-15">Jul 15</time>
-                                <span class="ytd-action">META call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+98.2%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-10">Jul 10</time>
-                                <span class="ytd-action">META call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+97.7%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-10">Jul 10</time>
-                                <span class="ytd-action">META call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+94.2%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-07-15">Jul 15</time>
-                                <span class="ytd-action">META call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+80.7%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-05-21">May 21</time>
-                                <span class="ytd-action">PURR call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+65.4%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--win">
-                                <time class="ytd-date" datetime="2026-05-21">May 21</time>
-                                <span class="ytd-action">PURR call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl positive"><span>+64.8%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                        </ol>
-                    </section>
-                    <section class="ytd-lane ytd-lane--losses" aria-labelledby="ytd-losses-heading">
-                        <h3 id="ytd-losses-heading">Top 10 losses</h3>
-                        <ol class="ytd-list" aria-label="Top 10 YTD percentage losses">
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-23">Jun 23</time>
-                                <span class="ytd-action">SPCX call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−82.8%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-05-07">May 7</time>
-                                <span class="ytd-action">RBLX call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−65.2%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-05-18">May 18</time>
-                                <span class="ytd-action">RBLX call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−60.8%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-25">Jun 25</time>
-                                <span class="ytd-action">IBIT call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−47.9%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-25">Jun 25</time>
-                                <span class="ytd-action">IBIT call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−46.9%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-25">Jun 25</time>
-                                <span class="ytd-action">IBIT call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−45.6%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-25">Jun 25</time>
-                                <span class="ytd-action">IBIT call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−38.2%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-06-25">Jun 25</time>
-                                <span class="ytd-action">IBIT call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−35.3%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-05-21">May 21</time>
-                                <span class="ytd-action">ABTC call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−34.9%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                            <li class="ytd-row ytd-row--loss">
-                                <time class="ytd-date" datetime="2026-05-21">May 21</time>
-                                <span class="ytd-action">ABTC call<span class="ytd-type">Option</span></span>
-                                <span class="ytd-pnl negative"><span>−30.7%</span><span class="ytd-pnl-status">Realized</span></span>
-                            </li>
-                        </ol>
-                    </section>
-                </div>
-                <p class="trading-note">Rankings are based on closed-trade percentage return, not dollar impact or recommendation quality.</p>
-            </section>
-            <!-- AUTO:YTD:END -->
                 </div>
                 <div id="bl-log-built"></div>
-                <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Rankings are based on closed-trade percentage return, not dollar impact. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
+                <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
             </div>
         </section>
 
