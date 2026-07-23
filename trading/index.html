@@ -165,6 +165,14 @@
         .bl .scan-sector b { font-size: 12.5px; color: var(--bl-ink); }
         .bl .scan-sector--hot { border-color: var(--bl-gain); } .bl .scan-sector--cold { border-color: var(--bl-loss); }
         .bl .trading-note { padding: 12px 20px 16px; margin: 0; border-top: 1px solid var(--bl-divider); font-size: 12px; color: var(--bl-faint); }
+        .brief-content { padding: 4px 20px 8px; max-width: 980px; font-size: 14px; line-height: 1.6; color: var(--bl-ink); }
+        .brief-content h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
+        .brief-content h4 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
+        .brief-content p { margin: 4px 0; }
+        .brief-content ul { margin: 4px 0 8px; padding-left: 20px; }
+        .brief-content li { margin: 2px 0; }
+        .brief-content code { font: 500 12.5px var(--bl-mono); background: var(--bl-surface-2); padding: 1px 4px; border-radius: 3px; }
+        .brief-content .brief-num { color: var(--bl-faint); margin-right: 4px; }
         .bl .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
         .bl .vwap-chart { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0; }
         .bl .vwap-chart--spy { grid-column: 1 / -1; }
@@ -374,6 +382,7 @@
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">4</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
                 <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>
+                <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F</button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
             </div>
@@ -863,6 +872,70 @@
                 <details class="trading-method"><summary>How this works</summary><p>Official STOCK Act periodic transaction reports cover sitting House members and Senators year-to-date. Dollar figures use disclosure-range midpoints, not exact fills, and transaction dates can precede filing dates by weeks. Paper Senate filings are excluded. Spouse, joint, and dependent transactions are included when disclosed. Descriptive public-filing data, not investment advice.</p></details>
             </section>
             <!-- AUTO:CONGRESS:END -->
+
+            <!-- AUTO:BRIEF:START -->
+            <section class="trading-panel brief-panel" id="brief-panel" role="tabpanel" tabindex="0" aria-labelledby="brief-tab" hidden>
+                <div class="position-head">
+                    <h2 id="brief-heading">Morning Brief</h2>
+                    <span>2026-07-23 · pre-market CT</span>
+                </div>
+                <div class="brief-content">
+<br>
+<h3><span class="brief-num">1.</span> Houthi tanker hits + Iran-responsible doctrine while equity vol still only half-awake</h3>
+<p> Score: I5 (Hormuz/Red Sea chokepoint + infrastructure ladder can non-linear SPY/VIX) | U3 (WTI/USO ripping and yields at year highs, but VIX~19 still contango, HYG calm, SPY only ~-1% pre-m vs oil gap) | A5 (overnight Houthi Saudi-tanker strikes + Trump &quot;hold Iran responsible&quot;/major-strike threat; multi-handle concurrence) → 4.3</p>
+<p> Evidence: HIGH · Sources: X Kobeissi/zerohedge/LiveSquawk/DeItaone; wires; RH pre-m USO/XLE/SPY; yahoo CL; Polymarket ceasefire ladder; FR/WH not primary</p>
+<p> Levers: SPY, VIX, USO, XLE, GLD, QQQ, HOOD, TSLA</p>
+<p> Merged legs: Houthi strike on 2 Saudi vessels in Red Sea; Trump Iran-responsible + major military response frame; IRGC Hormuz southern route mined / tanker-on-fire traffic; prior infrastructure retaliation doctrine still live; oil gap (USO ~+5% pre-m, WTI print ~+$7-8); Israel-Iran ceasefire-through-Jul-25 YES ~71.5% (-7pp 1d)</p>
+<p> Disconfirm: Oil reverses hard (USO/WTI give back gap), VIX fades sub-18 with term steepening, ceasefire odds rebound, no further ship/infra hits into US open</p>
+<p> If true → cut beta (SPY/QQQ/HOOD/TSLA); keep/add crash convexity while VIX term contango persists; prefer XLE/USO over index longs; treat gold chop as secondary to oil/vol</p>
+<p> Watch: VIX&gt;22 with 9D/3M flatten or invert; SPY&lt;-1.5% on open/hold; USO holds gap; ceasefire YES Jul-25 &lt;60%; fresh Hormuz transit halt confirmation</p>
+<br>
+<h3><span class="brief-num">2.</span> Oil inflation impulse keeps juicing July hike tail into FOMC week</h3>
+<p> Score: I3 (duration, financials, high-beta — not pure crash path alone) | U3 (partially in PM + front-end/10Y year-high; equities only soft pre-m, credit still mute) | A4 (no-change -10pp 1d / -23pp 1w; 25bp hike +10pp 1d / +22pp 1w; Lagarde energy-shock language; claims ultra-low) → 3.3</p>
+<p> Evidence: MED · Sources: Polymarket July Fed; TNX/TLT; FirstSquawk Lagarde; zerohedge claims/yields; RH pre-m</p>
+<p> Levers: SPY, TLT, XLF, HOOD, QQQ</p>
+<p> Disconfirm: no-change reclaims &gt;85%, 10Y backs off sub-4.5, oil mean-reverts without sticky inflation talk, Warsh presser leans patient</p>
+<p> If true → shorten duration; fade high-beta on hike-odds up days; HOOD/TSLA as beta expression not idio; watch XLF lag vs SPY</p>
+<p> Watch: no-change &lt;70% or hike &gt;30%; TLT break + XLF underperforms; 2s10s / real yields keep grinding higher into meeting</p>
+<br>
+<p>Dropped / merged:</p>
+<ul>
+<li>Canada Section 338 50% tariffs (autos/dairy/alcohol) + aluminum 232 + defense-supply EO — real FR/WH prints today, but known since Mon, long-fuse trade shock, composite ~2.5–2.7</li>
+<li>Standalone Polymarket oil ladder — merged into #1</li>
+<li>Generic-drug tariff path — still long fuse, &lt;3.0</li>
+<li>Credit stress — no item (HYG/LQD calm; short ratio HYG ~0.42)</li>
+<li>China/Taiwan — no fresh priority-handle acceleration overnight</li>
+</ul>
+<br>
+<p>Underpricing checklist:</p>
+<ul>
+<li>VIX term: VIX9D 16.85 / VIX 18.87–18.95 / VIX3M 20.54 — still contango (front-back ~-1.7); d1 VIX +13% yesterday, pre-m ~19</li>
+<li>Credit: HYG d1 -0.16 / LQD -0.17 — no stress signal</li>
+<li>Equity beta: SPY d1 ~flat close then ~-0.9% pre-m; QQQ ~-1.3% pre-m vs USO ~+5% / WTI ~+9% print — gap remains</li>
+<li>Sector: XLE +1.2% d1 / +4.8% 5d; SMH soft pre-m; XLF soft</li>
+<li>PM Δp: Fed hike odds +10pp 1d while spot equities only soft; ceasefire -7pp</li>
+<li>SPY tech (prior close): RSI14 51.3; MACD hist -0.60; price near BB mid 746.6</li>
+</ul>
+<br>
+<p>FINRA short volume (2026-07-22 print):</p>
+<ul>
+<li>SPY short ratio 0.51 · QQQ 0.63 · HYG 0.42 · TLT 0.69</li>
+<li>QQQ/TLT elevated vs SPY/HYG on single print; multi-day jump not confirmed (tool is single-day)</li>
+</ul>
+<br>
+<p>Process:</p>
+<ul>
+<li>Prediction markets: Polymarket-only (Kalshi open feed empty/non-macro on catalyst_data queries)</li>
+<li>X: retail/virality ignored; A from wire-grade handles + new Houthi/Trump frame, not war existence alone</li>
+<li>Official: FR Canada 338 + aluminum 232 + defense supply-chain EO logged; not top items</li>
+<li>DoD/SAM: no sudden emergency award spike (routine + cyber OT exercise / supplemental testimony noise)</li>
+<li>Earnings tape: busy (INTC pm, CMCSA/TMUS/HON/RTX/LMT am, etc.) — idiosyncratic, not gray-swan driver unless oil/Fed path dominates beta</li>
+</ul>
+<br>
+                </div>
+                <p class="trading-note">Research and idea generation only. Not trade recommendations or investment advice.</p>
+            </section>
+            <!-- AUTO:BRIEF:END -->
 
             <!-- AUTO:WHALES:START -->
             <section aria-labelledby="whales-tab" class="trading-panel whales-panel" hidden="" id="whales-panel" role="tabpanel" tabindex="0"><div class="position-head">
