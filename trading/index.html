@@ -298,6 +298,7 @@
                 <button class="trading-tab" id="log-tab" type="button" role="tab" aria-selected="false" aria-controls="log-panel">Log</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">4</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">YTD VWAP <span class="trading-tab-count">22</span></button>
+                <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress flows <span class="trading-tab-count" id="congress-tab-count">149</span></button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F flows <span class="trading-tab-count" id="whales-tab-count">14</span></button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto spread <span class="trading-tab-count" id="crypto-tab-count">7</span></button>
             </div>
@@ -2906,6 +2907,407 @@
                 <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. Intraday price/day marks use Alpaca IEX latest trades, with Yahoo fallback for those four OTC ADRs, and refresh hourly from 9 AM CT through the regular close. ⚠ marks earnings within ~9 days. This is the raw output of a daily screen with intraday marks — not positions, not predictions, and not investment advice.</p>
             </section>
             <!-- AUTO:SCAN:END -->
+
+            <!-- AUTO:CONGRESS:START -->
+            <section class="trading-panel congress-panel" id="congress-panel" role="tabpanel" tabindex="0" aria-labelledby="congress-tab" hidden>
+                <div class="position-head">
+                    <h2 id="congress-heading">Congress flows</h2>
+                    <span>2026 YTD · as of 2026-07-23</span>
+                </div>
+                <p class="scan-intro">Official STOCK Act periodic transaction reports for sitting House members and Senators year-to-date. Dollar figures are midpoint estimates from disclosure ranges (e.g. $15,001–$50,000 → ~$32.5K), not exact fills. Transaction date ≠ filing date — members can report weeks later. Paper Senate filings are excluded. Descriptive public-filing data, not trade recommendations.</p>
+                <section class="whale-summary" aria-label="Congress flow summary">
+                    <div><span>Members</span><strong>149</strong><small>87 House · 62 Senate</small></div>
+                    <div><span>Trades</span><strong>3,798</strong><small>2,501 House · 1,297 Senate</small></div>
+                    <div><span>Gross sold</span><strong class="scan-z-neg">−$63.2M</strong></div>
+                    <div><span>Gross bought</span><strong class="scan-z-pos">+$74.5M</strong></div>
+                    <div><span>Net flow</span><strong class="scan-z-pos">+$11.3M</strong><small>38 net buyers · 48 net sellers</small></div>
+                </section>
+                <div class="whale-flow-head"><h3>Member flows</h3><p>Top net buyers and sellers · bars share one scale · range midpoints</p></div>
+                <section class="whale-flow-grid" aria-label="YTD flows by member">
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Jefferson Shreve</h3><p>House · IN06 · 11 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$19.0M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$10.0M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$29.0M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$19.0M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:34.5%"></span><i></i><span class="whale-bought" style="width:100.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>JP Morgan 3-year auto callable buffer</span><strong class="scan-z-pos">+$10.0M</strong></li><li><span>RILA</span><strong class="scan-z-neg">−$7.0M</strong></li><li><span>: Advisory Account holding Structured No</span><strong class="scan-z-pos">+$5.0M</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Chip Roy</h3><p>House · TX21 · 3 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$5.0M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$100K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$5.1M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$5.0M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.3%"></span><i></i><span class="whale-bought" style="width:17.6%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>AESI</span><strong class="scan-z-pos">+$5.0M</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Scott H. Peters</h3><p>House · CA50 · 103 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$2.4M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$10.5M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$12.9M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$2.4M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:36.3%"></span><i></i><span class="whale-bought" style="width:44.6%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>F S : New SP Los Angeles CA Wtr Swr Util</span><strong class="scan-z-neg">−$925K</strong></li><li><span>F S : New SP Illinois State GO UTX [GS]</span><strong class="scan-z-pos">+$750K</strong></li><li><span>F S : New SP Los Angeles CA Pwr Util [GS</span><strong class="scan-z-neg">−$750K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Lori Trahan</h3><p>House · MA03 · 10 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$1.8M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">$0</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$1.8M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$1.8M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.0%"></span><i></i><span class="whale-bought" style="width:6.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>F S : New S O : Fidelity SEP-IRA SP Unit</span><strong class="scan-z-pos">+$700K</strong></li><li><span>F S : New S O : Fidelity 401K SP United </span><strong class="scan-z-pos">+$550K</strong></li><li><span>United States Treasury Bill Zero CPN</span><strong class="scan-z-pos">+$250K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Steve Cohen</h3><p>House · TN09 · 14 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$1.4M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$176K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$1.6M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$1.4M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.6%"></span><i></i><span class="whale-bought" style="width:5.4%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>US Treas Bills MAT 11/19/26 [GS]</span><strong class="scan-z-pos">+$750K</strong></li><li><span>US Treasury Bills, due 8/20/2026</span><strong class="scan-z-pos">+$500K</strong></li><li><span>United States Treasury Bill Mat</span><strong class="scan-z-pos">+$250K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Sheri Biggs</h3><p>House · SC03 · 62 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$706K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$333K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$1.0M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$706K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:1.1%"></span><i></i><span class="whale-bought" style="width:3.6%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>ured investment product based on SPX. Pr</span><strong class="scan-z-pos">+$375K</strong></li><li><span>IBIT</span><strong class="scan-z-pos">+$183K</strong></li><li><span>ment in a professionally managed account</span><strong class="scan-z-pos">+$83K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Cleo Fields</h3><p>House · LA06 · 29 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$687K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$99K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$785K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$687K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.3%"></span><i></i><span class="whale-bought" style="width:2.7%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>GOOGL</span><strong class="scan-z-pos">+$150K</strong></li><li><span>META</span><strong class="scan-z-pos">+$150K</strong></li><li><span>GOOG</span><strong class="scan-z-pos">+$124K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Maria Elvira Salazar</h3><p>House · FL27 · 61 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$674K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$70K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$744K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$674K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.2%"></span><i></i><span class="whale-bought" style="width:2.6%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>BEP</span><strong class="scan-z-pos">+$71K</strong></li><li><span>GS</span><strong class="scan-z-pos">+$65K</strong></li><li><span>RH</span><strong class="scan-z-pos">+$65K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Suzan K. DelBene</h3><p>House · WA01 · 23 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$531K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$565K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$1.1M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$531K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:1.9%"></span><i></i><span class="whale-bought" style="width:3.8%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>Pacific Co B1 Bond - Trimble</span><strong class="scan-z-pos">+$500K</strong></li><li><span>[GS] F S : New JT New York NY City Trans</span><strong class="scan-z-neg">−$250K</strong></li><li><span>F S : New JT New York NY City Transition</span><strong class="scan-z-pos">+$250K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Nicholas Begich</h3><p>House · AK00 · 2 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$375K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">$0</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$375K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$375K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.0%"></span><i></i><span class="whale-bought" style="width:1.3%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>Listen Ventures IV, LP [HN]</span><strong class="scan-z-pos">+$375K</strong></li><li><span>Physical Superintelligence, Inc. [PS]</span><strong class="scan-z-pos">$0</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Gilbert Cisneros</h3><p>House · CA31 · 759 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$349K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$5.1M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$5.5M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$349K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:17.7%"></span><i></i><span class="whale-bought" style="width:18.9%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>PGR</span><strong class="scan-z-neg">−$492K</strong></li><li><span>Los Angeles, CA, Dept. Wtr. &amp; Pwr.</span><strong class="scan-z-neg">−$250K</strong></li><li><span>BRO</span><strong class="scan-z-pos">+$250K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Lisa McClain</h3><p>House · MI09 · 4 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-pos">+$273K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">$0</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$273K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-pos">+$273K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.0%"></span><i></i><span class="whale-bought" style="width:0.9%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>xAI [PS]</span><strong class="scan-z-pos">+$175K</strong></li><li><span>Apptronik [PS]</span><strong class="scan-z-pos">+$75K</strong></li><li><span>BBAI</span><strong class="scan-z-pos">+$23K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Nancy Pelosi</h3><p>House · CA11 · 20 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$11.6M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$16.3M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$4.6M</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$11.6M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:56.0%"></span><i></i><span class="whale-bought" style="width:15.9%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>AAPL</span><strong class="scan-z-neg">−$9.8M</strong></li><li><span>DIS</span><strong class="scan-z-neg">−$3.0M</strong></li><li><span>AB</span><strong class="scan-z-pos">+$1.0M</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Kevin Hern</h3><p>House · OK01 · 28 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$3.2M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$3.4M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$250K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$3.2M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:11.8%"></span><i></i><span class="whale-bought" style="width:0.9%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>S O : Hern Family Foundation D : CRTA Me</span><strong class="scan-z-neg">−$1.0M</strong></li><li><span>SMA</span><strong class="scan-z-neg">−$500K</strong></li><li><span>TXN</span><strong class="scan-z-neg">−$500K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Earl Leroy Carter</h3><p>House · GA01 · 1 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$3.0M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$3.0M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$3.0M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:10.3%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>US Treasury Bill [GS]</span><strong class="scan-z-neg">−$3.0M</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Kelly Louise Morrison</h3><p>House · MN03 · 41 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$2.1M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$2.7M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$584K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$2.1M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:9.1%"></span><i></i><span class="whale-bought" style="width:2.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>S O : Investment Fund 1 D : Window Manuf</span><strong class="scan-z-neg">−$1.2M</strong></li><li><span>Andersen Corporation [OI]</span><strong class="scan-z-neg">−$1.1M</strong></li><li><span>Andersen Corporation [OL]</span><strong class="scan-z-neg">−$175K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Sara Jacobs</h3><p>House · CA51 · 2 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$1.0M</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$1.0M</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$1.0M</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:3.4%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>QCOM</span><strong class="scan-z-neg">−$1.0M</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Julie Johnson</h3><p>House · TX32 · 64 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$512K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$512K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$512K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:1.8%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>ABT</span><strong class="scan-z-neg">−$16K</strong></li><li><span>GOOG</span><strong class="scan-z-neg">−$16K</strong></li><li><span>ADI</span><strong class="scan-z-neg">−$16K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Lloyd K. Smucker</h3><p>House · PA11 · 8 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$297K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$297K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$297K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:1.0%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>FULT</span><strong class="scan-z-neg">−$250K</strong></li><li><span>WFC</span><strong class="scan-z-neg">−$15K</strong></li><li><span>ENBP</span><strong class="scan-z-neg">−$8K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>James French Hill</h3><p>House · AR02 · 4 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$231K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$231K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$231K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.8%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>PFE</span><strong class="scan-z-neg">−$175K</strong></li><li><span>SFL</span><strong class="scan-z-neg">−$33K</strong></li><li><span>SOLV</span><strong class="scan-z-neg">−$15K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Brian Babin</h3><p>House · TX36 · 12 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$152K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$152K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">$0</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$152K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.5%"></span><i></i><span class="whale-bought" style="width:0.0%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>ET</span><strong class="scan-z-neg">−$58K</strong></li><li><span>FIP</span><strong class="scan-z-neg">−$23K</strong></li><li><span>WTSHF</span><strong class="scan-z-neg">−$23K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>April McClain Delaney</h3><p>House · MD06 · 199 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$131K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$900K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$769K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$131K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:3.1%"></span><i></i><span class="whale-bought" style="width:2.7%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>HUBB</span><strong class="scan-z-pos">+$95K</strong></li><li><span>MIDD</span><strong class="scan-z-neg">−$71K</strong></li><li><span>TDG</span><strong class="scan-z-pos">+$63K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Richard W. Allen</h3><p>House · GA12 · 24 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$127K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$454K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$327K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$127K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:1.6%"></span><i></i><span class="whale-bought" style="width:1.1%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>[ST] F S : New S O : LIVTR US Treasury N</span><strong class="scan-z-pos">+$150K</strong></li><li><span>US Treasury Note 4/375% DUE</span><strong class="scan-z-neg">−$100K</strong></li><li><span>INTU</span><strong class="scan-z-neg">−$53K</strong></li></ul>
+                </article>
+                <article class="whale-card">
+                    <header class="whale-card-head">
+                        <div><h3>Mike Kelly</h3><p>House · PA16 · 13 trades</p></div>
+                        <div class="whale-net"><span>Net flow</span><strong class="scan-z-neg">−$122K</strong></div>
+                    </header>
+                    <dl class="whale-flow-stats">
+                        <div><dt>Sold</dt><dd class="scan-z-neg">−$247K</dd></div>
+                        <div><dt>Bought</dt><dd class="scan-z-pos">+$125K</dd></div>
+                        <div><dt>Net</dt><dd class="scan-z-neg">−$122K</dd></div>
+                    </dl>
+                    <div class="whale-diverge" aria-hidden="true"><span class="whale-sold" style="width:0.9%"></span><i></i><span class="whale-bought" style="width:0.4%"></span></div>
+                    <h4>Largest ticker flows</h4><ul class="whale-moves"><li><span>Cook Cnty IL Ser A Go 5% due</span><strong class="scan-z-neg">−$100K</strong></li><li><span>Arizona St Transprtn Brd Highw Ref</span><strong class="scan-z-neg">−$100K</strong></li><li><span>Colorado St Hlth Facs Auth Rev R</span><strong class="scan-z-pos">+$50K</strong></li></ul>
+                </article>
+                </section>
+                <div class="whale-cols">
+                <div class="position-group"><h3>Most bought tickers</h3>
+                <table class="scan-table" aria-label="Most bought tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
+                <tbody>
+                    <tr><td class="scan-sym">AESI</td><td class="scan-num">1▲ / 1▼</td><td class="scan-num"><span class="scan-z-pos">+$5.0M</span></td></tr>
+                    <tr><td class="scan-sym">AB</td><td class="scan-num">1▲ / 0▼</td><td class="scan-num"><span class="scan-z-pos">+$1.0M</span></td></tr>
+                    <tr><td class="scan-sym">INTC</td><td class="scan-num">2▲ / 3▼</td><td class="scan-num"><span class="scan-z-pos">+$976K</span></td></tr>
+                    <tr><td class="scan-sym">MSFT</td><td class="scan-num">7▲ / 10▼</td><td class="scan-num"><span class="scan-z-pos">+$767K</span></td></tr>
+                    <tr><td class="scan-sym">UBER</td><td class="scan-num">2▲ / 3▼</td><td class="scan-num"><span class="scan-z-pos">+$500K</span></td></tr>
+                    <tr><td class="scan-sym">CDRE</td><td class="scan-num">1▲ / 0▼</td><td class="scan-num"><span class="scan-z-pos">+$250K</span></td></tr>
+                    <tr><td class="scan-sym">MDB</td><td class="scan-num">1▲ / 1▼</td><td class="scan-num"><span class="scan-z-pos">+$242K</span></td></tr>
+                    <tr><td class="scan-sym">BRO</td><td class="scan-num">2▲ / 3▼</td><td class="scan-num"><span class="scan-z-pos">+$202K</span></td></tr>
+                    <tr><td class="scan-sym">SPCX</td><td class="scan-num">5▲ / 1▼</td><td class="scan-num"><span class="scan-z-pos">+$188K</span></td></tr>
+                    <tr><td class="scan-sym">IBIT</td><td class="scan-num">1▲ / 0▼</td><td class="scan-num"><span class="scan-z-pos">+$183K</span></td></tr>
+                    <tr><td class="scan-sym">TSM</td><td class="scan-num">3▲ / 2▼</td><td class="scan-num"><span class="scan-z-pos">+$116K</span></td></tr>
+                    <tr><td class="scan-sym">RBLX</td><td class="scan-num">2▲ / 0▼</td><td class="scan-num"><span class="scan-z-pos">+$108K</span></td></tr>
+                    <tr><td class="scan-sym">VST</td><td class="scan-num">2▲ / 0▼</td><td class="scan-num"><span class="scan-z-pos">+$108K</span></td></tr>
+                    <tr><td class="scan-sym">C</td><td class="scan-num">3▲ / 1▼</td><td class="scan-num"><span class="scan-z-pos">+$104K</span></td></tr>
+                    <tr><td class="scan-sym">AMD</td><td class="scan-num">4▲ / 3▼</td><td class="scan-num"><span class="scan-z-pos">+$98K</span></td></tr>
+                </tbody></table></div>
+                <div class="position-group"><h3>Most sold tickers</h3>
+                <table class="scan-table" aria-label="Most sold tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
+                <tbody>
+                    <tr><td class="scan-sym">AAPL</td><td class="scan-num">8▲ / 8▼</td><td class="scan-num"><span class="scan-z-neg">−$9.7M</span></td></tr>
+                    <tr><td class="scan-sym">RILA</td><td class="scan-num">1▲ / 1▼</td><td class="scan-num"><span class="scan-z-neg">−$7.0M</span></td></tr>
+                    <tr><td class="scan-sym">DIS</td><td class="scan-num">2▲ / 2▼</td><td class="scan-num"><span class="scan-z-neg">−$3.0M</span></td></tr>
+                    <tr><td class="scan-sym">QCOM</td><td class="scan-num">1▲ / 2▼</td><td class="scan-num"><span class="scan-z-neg">−$992K</span></td></tr>
+                    <tr><td class="scan-sym">NVDA</td><td class="scan-num">3▲ / 6▼</td><td class="scan-num"><span class="scan-z-neg">−$744K</span></td></tr>
+                    <tr><td class="scan-sym">SMA</td><td class="scan-num">0▲ / 1▼</td><td class="scan-num"><span class="scan-z-neg">−$500K</span></td></tr>
+                    <tr><td class="scan-sym">TXN</td><td class="scan-num">1▲ / 2▼</td><td class="scan-num"><span class="scan-z-neg">−$500K</span></td></tr>
+                    <tr><td class="scan-sym">PGR</td><td class="scan-num">2▲ / 2▼</td><td class="scan-num"><span class="scan-z-neg">−$476K</span></td></tr>
+                    <tr><td class="scan-sym">AMZN</td><td class="scan-num">6▲ / 6▼</td><td class="scan-num"><span class="scan-z-neg">−$392K</span></td></tr>
+                    <tr><td class="scan-sym">ACN</td><td class="scan-num">4▲ / 6▼</td><td class="scan-num"><span class="scan-z-neg">−$281K</span></td></tr>
+                    <tr><td class="scan-sym">FULT</td><td class="scan-num">0▲ / 1▼</td><td class="scan-num"><span class="scan-z-neg">−$250K</span></td></tr>
+                    <tr><td class="scan-sym">UNH</td><td class="scan-num">5▲ / 5▼</td><td class="scan-num"><span class="scan-z-neg">−$250K</span></td></tr>
+                    <tr><td class="scan-sym">PYPL</td><td class="scan-num">2▲ / 3▼</td><td class="scan-num"><span class="scan-z-neg">−$242K</span></td></tr>
+                    <tr><td class="scan-sym">PWP</td><td class="scan-num">1▲ / 1▼</td><td class="scan-num"><span class="scan-z-neg">−$242K</span></td></tr>
+                    <tr><td class="scan-sym">RHP</td><td class="scan-num">1▲ / 1▼</td><td class="scan-num"><span class="scan-z-neg">−$234K</span></td></tr>
+                </tbody></table></div>
+                </div>
+                <div class="position-group"><h3>Largest disclosed trades</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table" aria-label="Largest Congress trades YTD">
+                    <thead><tr><th>Member</th><th>Chamber</th><th>Ticker</th><th>Side</th><th class="scan-num">Amount</th><th class="scan-num">Tx date</th><th class="scan-num">Filed</th></tr></thead>
+                    <tbody>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">AAPL</a></td><td>Sell (partial)</td><td class="scan-num"><span class="scan-z-neg">$5,000,001</span></td><td class="scan-num">12/24/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">AAPL</a></td><td>Sell (partial)</td><td class="scan-num"><span class="scan-z-neg">$5,000,001</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Chip Roy</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034375.pdf" rel="noopener noreferrer" target="_blank">AESI</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">04/30/2026</td><td class="scan-num">5/9/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033705.pdf" rel="noopener noreferrer" target="_blank">JP Morgan 3-year auto callable</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/1/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033705.pdf" rel="noopener noreferrer" target="_blank">: Advisory Account holding Str</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">12/29/2025</td><td class="scan-num">1/1/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033709.pdf" rel="noopener noreferrer" target="_blank">JP Morgan 3-year auto callable</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/2/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033709.pdf" rel="noopener noreferrer" target="_blank">O : Advisory Account holding S</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/2/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034084.pdf" rel="noopener noreferrer" target="_blank">RILA</a></td><td>Sell</td><td class="scan-num"><span class="scan-z-neg">$5,000,001</span></td><td class="scan-num">02/09/2026</td><td class="scan-num">3/14/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034084.pdf" rel="noopener noreferrer" target="_blank">RILA</a></td><td>Sell</td><td class="scan-num"><span class="scan-z-neg">$5,000,001</span></td><td class="scan-num">02/09/2026</td><td class="scan-num">3/14/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034653.pdf" rel="noopener noreferrer" target="_blank">JP Morgan 3-Year Auto Callable</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$5,000,001</span></td><td class="scan-num">05/20/2026</td><td class="scan-num">6/6/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Earl Leroy Carter</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034502.pdf" rel="noopener noreferrer" target="_blank">US Treasury Bill [GS]</a></td><td>Sell</td><td class="scan-num"><span class="scan-z-neg">$1,000,001 - $5,000,000</span></td><td class="scan-num">05/07/2026</td><td class="scan-num">5/8/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">DIS</a></td><td>Sell</td><td class="scan-num"><span class="scan-z-neg">$1,000,001 - $5,000,000</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Kevin Hern</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034695.pdf" rel="noopener noreferrer" target="_blank">S O : Hern Family Foundation D</a></td><td>Sell</td><td class="scan-num"><span class="scan-z-neg">$1,000,001</span></td><td class="scan-num">05/06/2026</td><td class="scan-num">6/2/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">AB</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$1,000,001</span></td><td class="scan-num">01/16/2026</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">GOOGL</a></td><td>Sell (partial)</td><td class="scan-num"><span class="scan-z-neg">$1,000,001</span></td><td class="scan-num">12/30/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">AMZN</a></td><td>Sell (partial)</td><td class="scan-num"><span class="scan-z-neg">$1,000,001</span></td><td class="scan-num">12/24/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20033725.pdf" rel="noopener noreferrer" target="_blank">NVDA</a></td><td>Sell (partial)</td><td class="scan-num"><span class="scan-z-neg">$1,000,001</span></td><td class="scan-num">12/24/2025</td><td class="scan-num">1/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Nancy Pelosi</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034836.pdf" rel="noopener noreferrer" target="_blank">INTC</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$1,000,001</span></td><td class="scan-num">05/29/2026</td><td class="scan-num">6/23/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034084.pdf" rel="noopener noreferrer" target="_blank">RILA</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$1,000,001</span></td><td class="scan-num">02/17/2026</td><td class="scan-num">3/14/2026</td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jefferson Shreve</td><td>House</td><td class="scan-sym"><a href="https://disclosures-clerk.house.gov/public_disc/ptr-pdfs/2026/20034084.pdf" rel="noopener noreferrer" target="_blank">RILA</a></td><td>Buy</td><td class="scan-num"><span class="scan-z-pos">$1,000,001</span></td><td class="scan-num">02/17/2026</td><td class="scan-num">3/14/2026</td></tr>
+                    </tbody>
+                </table>
+                </div></div>
+                <p class="trading-note">Sources: House Clerk bulk FD index + PTR PDFs; Senate eFD electronic PTRs. Amounts are statutory ranges; midpoints used only for ranking/aggregation. Spouse/joint/dependent transactions are included when disclosed on the member filing. Not investment advice.</p>
+            </section>
+            <!-- AUTO:CONGRESS:END -->
 
             <!-- AUTO:WHALES:START -->
             <section class="trading-panel whales-panel" id="whales-panel" role="tabpanel" tabindex="0" aria-labelledby="whales-tab" hidden>
