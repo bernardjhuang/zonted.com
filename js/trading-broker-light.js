@@ -635,12 +635,11 @@
         <p class="portfolio-label">Thesis</p><p class="portfolio-copy">${htmlSafe(plan.setup || 'No written thesis yet.')}</p>
         <p class="portfolio-label">Invalidation / next test</p><p class="portfolio-copy portfolio-risk">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</p>
         <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="true" aria-controls="${detailId}" aria-label="Hide ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>Hide setup</button>
+        <div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}"><div class="scan-setup-chart" data-position-chart-shell></div></div>
       </article>`;
-      const detail = `<div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}"><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
-      return { card, detail };
+      return card;
     });
-    const portfolioCards = portfolioItems.map(item => item.card).join('') || '<div class="bl-empty">No portfolio symbols match the current filters.</div>';
-    const portfolioDetails = portfolioItems.map(item => item.detail).join('');
+    const portfolioCards = portfolioItems.join('') || '<div class="bl-empty">No portfolio symbols match the current filters.</div>';
 
     const activityRows = activity.map(row => `<div class="activity-row-compact">
       <span class="activity-date-compact mono mut">${htmlSafe(row.dateTxt)}</span>
@@ -648,7 +647,7 @@
       <span class="activity-side">${row.side} · ${htmlSafe(row.asset)}</span>
       <span class="activity-pnl-compact r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
     </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
-    built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div><div class="portfolio-details">${portfolioDetails}</div>`;
+    built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div>`;
     logBuilt.innerHTML = `<details class="bl-card activity-disclosure"><summary class="bl-card-title">Recent activity <span>· latest ${activity.length} · direction / type / P&amp;L</span></summary><div class="activity-disclosure-body"><div class="activity-source"><span>Broker fills consolidated by trade date.</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-columns-head" aria-hidden="true"><span>Date</span><span>Trade</span><span>Direction · Type</span><span>P&amp;L</span></div><div class="activity-feed">${activityRows}</div></div></details>`;
     $$('[data-position-chart-detail]', built).forEach(detail => {
       renderSetupChartForSymbol($('[data-position-chart-shell]', detail), detail.dataset.positionSymbol);
