@@ -179,9 +179,13 @@ def main():
         cls = "scan-z-pos" if d < 0 else "scan-sec"
         return f'<span class="{cls}">{"led" if d < 0 else "lagged"} SPY {abs(d)}d</span>'
 
-    ordered = sorted(summary, key=lambda s: (s["sym"] != "SPY", -s["pct"]))
-    us_summary = [s for s in ordered if s["sym"] not in COUNTRY_ETFS]
-    country_summary = [s for s in ordered if s["sym"] in COUNTRY_ETFS]
+    spy_summary = [s for s in summary if s["sym"] == "SPY"]
+    sector_summary = [s for s in summary if s["sym"] in SECTOR_ETFS]
+    if len(spy_summary) != 1 or len(sector_summary) != 11 or any(s.get("z") is None for s in sector_summary):
+        sys.exit("Expected SPY plus 11 sector summaries with current Z scores")
+    us_summary = spy_summary + sorted(sector_summary, key=lambda s: (-s["z"], s["sym"]))
+    country_summary = sorted((s for s in summary if s["sym"] in COUNTRY_ETFS),
+                             key=lambda s: (-s["pct"], s["sym"]))
     expected_symbols = {"SPY"} | SECTOR_ETFS | COUNTRY_ETFS
     if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
         sys.exit("Expected SPY + 11 US sector ETFs and all 10 country ETFs")
@@ -239,7 +243,7 @@ def main():
                 </div>
                 <p class="scan-intro">The year-anchored VWAP is the average cost basis of every share traded in 2026. Price holding above it means the average year-to-date short seller is underwater — stay long while it holds; price holding below means the average buyer is trapped. The cross is the regime flip, and sectors often flip a day or two before SPY does. Solid line is the close, dashed line the YTD VWAP; ▲▼ mark crosses. Sector charts add the same smoothed 50-session Z-score used by the momentum screen: green above +1, red below −1, gray between. Hover for exact values.</p>
                 <section class="vwap-section" aria-labelledby="vwap-us-heading">
-                <div class="position-group"><h3 id="vwap-us-heading">US Market &amp; Sector ETFs · {len(us_summary)}</h3></div>
+                <div class="position-group"><h3 id="vwap-us-heading">US Market &amp; Sector ETFs · {len(us_summary)} · sectors ranked by 50D Z</h3></div>
                 <div class="scan-table-wrap">
                 <table class="scan-table" aria-label="YTD VWAP summary for SPY and 11 US sector ETFs">
                     <thead><tr><th>Symbol</th><th>Name</th><th class="scan-num">vs YTD VWAP</th><th class="scan-num">Current side</th><th class="scan-num">Last ↑ cross</th><th class="scan-num">vs SPY's ↑</th><th class="scan-num">Crosses</th></tr></thead>
