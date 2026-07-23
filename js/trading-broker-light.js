@@ -606,31 +606,11 @@
     });
   });
 
-  const ext = { wins: [], losses: [] };
-  $$('.ytd-lane', raw).forEach(lane => {
-    const kind = lane.classList.contains('ytd-lane--wins') ? 'wins' : 'losses';
-    $$('.ytd-row', lane).forEach(row => {
-      const action = ($('.ytd-action', row) || {}).textContent || '';
-      const typeTxt = (($('.ytd-type', row) || {}).textContent || '').trim();
-      const pnlEl = $('.ytd-pnl', row);
-      const pnlTxt = pnlEl ? (pnlEl.textContent.match(/[+−\-][\d.]+%/) || ['—'])[0] : '—';
-      ext[kind].push({
-        iso: ($('.ytd-date', row) || {}).getAttribute ? $('.ytd-date', row).getAttribute('datetime') : '',
-        dateTxt: (($('.ytd-date', row) || {}).textContent || '').trim(),
-        sym: (action.trim().split(/\s+/)[0] || '').toUpperCase(),
-        kindTxt: (action.replace(typeTxt, '').trim().split(/\s+/).slice(1).join(' ') || '').toLowerCase(),
-        pnl: parseFloat(pnlTxt.replace(/[+%]/g, '').replace('−', '-')),
-        pnlTxt,
-      });
-    });
-  });
-
   /* ── state ────────────────────────────────────────────────────────── */
   const state = {
     q: '', asset: 'All', status: 'All',
     posSort: { key: 'sym', dir: 1 },
     tradeSort: { key: 'date', dir: -1 },
-    extBy: 'pct',
   };
   let openPositionToggle = null;
 
@@ -659,9 +639,6 @@
       ...tr('buy').map(row => ({ ...row, side: 'buy' })),
       ...tr('sell').map(row => ({ ...row, side: 'sell' })),
     ].sort((a, b) => b.iso.localeCompare(a.iso) || a.sym.localeCompare(b.sym)).slice(0, 8);
-    const wins = ext.wins.filter(r => matchSym(r.sym)).sort((a, b) => b.pnl - a.pnl).slice(0, 3);
-    const losses = ext.losses.filter(r => matchSym(r.sym)).sort((a, b) => a.pnl - b.pnl).slice(0, 3);
-
     const portfolioCards = [...grouped].map(([sym, instruments]) => {
       const symbol = htmlSafe(sym);
       const detailId = `position-chart-${sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
@@ -686,26 +663,14 @@
       <span class="activity-side">${row.side} · ${htmlSafe(row.asset)}</span>
       <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
     </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
-    const outcomeRows = rows => rows.map(row => `<div class="activity-row-compact">
-      <span class="mono mut">${htmlSafe(row.dateTxt)}</span>
-      <span><b class="sym">${htmlSafe(row.sym)}</b> <span class="mut">${htmlSafe(row.kindTxt)}</span></span>
-      <span class="activity-side">closed</span>
-      <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
-    </div>`).join('') || '<div class="bl-empty">Nothing matches.</div>';
-
     const positiveMarks = [...grouped.values()].filter(items => items.some(item => parseFloat(item.since.replace('−', '-')) > 0)).length;
     built.innerHTML = `
       <p class="trading-takeaway">${grouped.size} symbols · ${pos.length} instruments · ${positiveMarks} positive mark${positiveMarks === 1 ? '' : 's'}.</p>
       <div class="portfolio-grid">${portfolioCards}</div>`;
-    logBuilt.innerHTML = `
-      <div class="bl-card"><div class="bl-card-title">Recent activity <span>· latest 8 · broker fills consolidated</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-feed">${activityRows}</div></div>
-      <div class="extreme-grid">
-        <div class="bl-card"><div class="bl-card-title">Top 3 wins <span>· closed</span></div><div class="activity-feed">${outcomeRows(wins)}</div></div>
-        <div class="bl-card"><div class="bl-card-title">Top 3 losses <span>· closed</span></div><div class="activity-feed">${outcomeRows(losses)}</div></div>
-      </div>`;
+    logBuilt.innerHTML = `<div class="bl-card"><div class="bl-card-title">Recent activity <span>· latest 8 · broker fills consolidated</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-feed">${activityRows}</div></div>`;
 
     const active = q || state.asset !== 'All' || state.status !== 'All';
-    const visible = grouped.size + activity.length + wins.length + losses.length;
+    const visible = grouped.size + activity.length;
     const note = $('#bl-match');
     if (note) { note.hidden = !active; note.textContent = `${visible} item${visible === 1 ? '' : 's'} match`; }
   }
@@ -740,7 +705,6 @@
     if (ps) { const k = ps.dataset.sortPos; state.posSort = { key: k, dir: state.posSort.key === k ? -state.posSort.dir : 1 }; return render(); }
     const ts = e.target.closest('[data-sort-trade]');
     if (ts) { const k = ts.dataset.sortTrade; state.tradeSort = { key: k, dir: state.tradeSort.key === k ? -state.tradeSort.dir : -1 }; return render(); }
-    if (e.target.closest('[data-ext-toggle]')) { state.extBy = state.extBy === 'pct' ? 'date' : 'pct'; return render(); }
   };
   [built, logBuilt].forEach(element => element.addEventListener('click', handleBuiltClick));
   $$('.bl-chip[data-g]').forEach(chip => chip.addEventListener('click', () => {
