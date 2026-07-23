@@ -35,6 +35,14 @@
     parked.forEach(([placeholder, svg]) => placeholder.replaceWith(svg));
     parkedPanelSvgs.delete(panel);
   };
+  const cloneWithParkedSvg = (source, panel) => {
+    const clone = source.cloneNode(true);
+    if ($('svg', clone)) return clone;
+    const pair = (parkedPanelSvgs.get(panel) || []).find(([placeholder]) => placeholder.parentNode === source);
+    const clonePlaceholder = [...clone.childNodes].find(node => node.nodeType === Node.COMMENT_NODE && node.data === 'lazy-tab-svg');
+    if (pair && clonePlaceholder) clonePlaceholder.replaceWith(pair[1].cloneNode(true));
+    return clone;
+  };
   function activate(tab, push) {
     tabs.forEach(t => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
     const target = panelOf(tab);
@@ -91,6 +99,55 @@
     const signed = (value, suffix = '') => value == null ? '—' : `${value >= 0 ? '+' : '−'}${Math.abs(value).toFixed(2)}${suffix}`;
     const shortDate = iso => iso ? `${MONTHS[+iso.slice(5, 7) - 1]} ${+iso.slice(8, 10)}` : '—';
     const point = (x, y) => `${x.toFixed(1)},${y.toFixed(1)}`;
+
+    function wireVwapFigure(fig) {
+      if (!fig || fig.dataset.comparisonWired === 'true') return;
+      let d;
+      try { d = JSON.parse(fig.dataset.d); } catch (error) { console.error('Invalid sector chart data', error); return; }
+      const svg = $('svg', fig), tip = $('.vwap-tip', fig), crosshair = $('.vxh', fig);
+      if (!svg || !tip || !crosshair || !d?.dates?.length || d.close?.length !== d.dates.length || d.vwap?.length !== d.dates.length) return;
+      tip.setAttribute('aria-live', 'polite');
+      fig.dataset.comparisonWired = 'true';
+      svg.setAttribute('tabindex', '0');
+      const vb = svg.viewBox.baseVal, n = d.dates.length, leftPad = 10, rightPad = 58;
+      let activeIndex = n - 1;
+      const showPoint = (i, left, top) => {
+        activeIndex = Math.max(0, Math.min(n - 1, i));
+        const px = leftPad + activeIndex / (n - 1) * (vb.width - leftPad - rightPad);
+        crosshair.setAttribute('x1', px); crosshair.setAttribute('x2', px); crosshair.removeAttribute('visibility');
+        const diff = (d.close[activeIndex] / d.vwap[activeIndex] - 1) * 100;
+        const date = document.createElement('b'); date.textContent = d.dates[activeIndex];
+        tip.replaceChildren(date, document.createElement('br'), document.createTextNode(`close ${Number(d.close[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`vwap ${Number(d.vwap[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%`));
+        tip.hidden = false;
+        tip.style.left = `${Math.max(8, Math.min(fig.clientWidth - tip.offsetWidth - 8, left))}px`;
+        tip.style.top = `${top}px`;
+      };
+      svg.addEventListener('pointermove', event => {
+        const rect = svg.getBoundingClientRect();
+        const vx = (event.clientX - rect.left) / rect.width * vb.width;
+        const i = Math.max(0, Math.min(n - 1, Math.round((vx - leftPad) / (vb.width - leftPad - rightPad) * (n - 1))));
+        const figRect = fig.getBoundingClientRect();
+        let left = event.clientX - figRect.left + 14;
+        showPoint(i, left, event.clientY - figRect.top - 10);
+        if (left + tip.offsetWidth > figRect.width - 8) {
+          left = event.clientX - figRect.left - tip.offsetWidth - 14;
+          tip.style.left = `${Math.max(8, left)}px`;
+        }
+      });
+      svg.addEventListener('pointerleave', () => { if (document.activeElement !== svg) { tip.hidden = true; crosshair.setAttribute('visibility', 'hidden'); } });
+      svg.addEventListener('focus', () => showPoint(activeIndex, fig.clientWidth - 150, svg.offsetTop + 18));
+      svg.addEventListener('keydown', event => {
+        let next = null;
+        if (event.key === 'ArrowLeft') next = activeIndex - 1;
+        if (event.key === 'ArrowRight') next = activeIndex + 1;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = n - 1;
+        if (next == null) return;
+        event.preventDefault();
+        showPoint(next, leftPad + Math.max(0, Math.min(n - 1, next)) / (n - 1) * (fig.clientWidth - leftPad - rightPad) + 10, svg.offsetTop + 18);
+      });
+      svg.addEventListener('blur', () => { tip.hidden = true; crosshair.setAttribute('visibility', 'hidden'); });
+    }
 
     async function renderSetupChart(shell, symbol) {
       if (shell.dataset.rendered === 'true' || shell.dataset.loading === 'true') return;
@@ -185,7 +242,20 @@
       const badgeClass = ({ 'ENTER+': 'setup-b--long', ENTER: 'setup-b--long', 'SHORT+': 'setup-b--short', SHORT: 'setup-b--short', BREAKING: 'setup-b--break' })[rec.label] || 'setup-b--watch';
       const lastEarn = earnPoints.length ? earnPoints[earnPoints.length - 1][1] : null;
       const description = `${symbol} setup chart with ${n} daily candles from ${s.dates[0]} through ${s.dates[n - 1]}. Latest close ${s.c[n - 1].toFixed(2)}, YTD VWAP ${s.yv[n - 1].toFixed(2)}, earnings VWAP ${lastEarn == null ? 'unavailable' : lastEarn.toFixed(2)}, Spread Z ${lastSpread == null ? 'unavailable' : signed(lastSpread)}, and Dist Z ${lastDist == null ? 'unavailable' : signed(lastDist)}. Focus the chart and use Left and Right Arrow, Home, or End to inspect exact historical values.`;
-      shell.innerHTML = `<section class="setup-card scan-setup-card"><header><b id="${titleId}">${esc(symbol)}</b><span>${esc(rec.sector)}</span><span class="setup-b ${badgeClass}">${esc(rec.label)}</span><span class="setup-stats">spread Z <b>${signed(stats.spread_z)}</b> · dist Z <b>${signed(stats.dist_z)}</b> · vs earn VWAP <b>${signed(stats.evwap_pct, '%')}</b> (${side}) · next earnings ${shortDate(stats.next_earn)}</span></header><p class="setup-read">${esc(rec.read)}</p><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" tabindex="0" aria-labelledby="${titleId} ${descId}"><desc id="${descId}">${esc(description)}</desc>${parts.join('')}${axis.join('')}<line class="sx" x1="0" y1="0" x2="0" y2="${H - AXISH}" visibility="hidden"/></svg><div class="setup-tip" aria-live="polite" hidden></div></section>`;
+      const stockCard = `<section class="setup-card scan-setup-card"><header><b id="${titleId}">${esc(symbol)}</b><span>${esc(rec.sector)}</span><span class="setup-b ${badgeClass}">${esc(rec.label)}</span><span class="setup-stats">spread Z <b>${signed(stats.spread_z)}</b> · dist Z <b>${signed(stats.dist_z)}</b> · vs earn VWAP <b>${signed(stats.evwap_pct, '%')}</b> (${side}) · next earnings ${shortDate(stats.next_earn)}</span></header><p class="setup-read">${esc(rec.read)}</p><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" tabindex="0" aria-labelledby="${titleId} ${descId}"><desc id="${descId}">${esc(description)}</desc>${parts.join('')}${axis.join('')}<line class="sx" x1="0" y1="0" x2="0" y2="${H - AXISH}" visibility="hidden"/></svg><div class="setup-tip" aria-live="polite" hidden></div></section>`;
+      shell.innerHTML = `<div class="scan-comparison-grid"><div class="scan-stock-chart">${stockCard}</div></div>`;
+      const grid = $('.scan-comparison-grid', shell);
+      const sectorSource = $$('.vwap-chart', $('#vwap-panel')).find(fig => fig.dataset.sym === rec.sector_etf);
+      if (sectorSource) {
+        const sectorPane = document.createElement('div');
+        sectorPane.className = 'scan-sector-chart';
+        const sectorChart = cloneWithParkedSvg(sectorSource, $('#vwap-panel'));
+        sectorChart.classList.remove('vwap-chart--spy');
+        sectorChart.querySelector('.vwap-tip')?.replaceChildren();
+        sectorPane.append(sectorChart);
+        grid.append(sectorPane);
+        wireVwapFigure(sectorChart);
+      }
       const card = $('.scan-setup-card', shell), svg = $('svg', card), tip = $('.setup-tip', card), crosshair = $('.sx', card);
       let activeIndex = n - 1;
       const showPoint = (i, left, top) => {
@@ -243,7 +313,7 @@
       if (!toggle) return;
       const detail = document.getElementById(toggle.getAttribute('aria-controls'));
       toggle.setAttribute('aria-expanded', 'false');
-      toggle.setAttribute('aria-label', `Show ${toggle.closest('[data-scan-row]').dataset.scanSymbol} setup chart`);
+      toggle.setAttribute('aria-label', `Show ${toggle.closest('[data-scan-row]').dataset.scanSymbol} setup and sector charts`);
       toggle.closest('[data-scan-row]').classList.remove('is-open');
       if (detail) detail.hidden = true;
       if (openToggle === toggle) openToggle = null;
@@ -256,7 +326,7 @@
       const detail = document.getElementById(toggle.getAttribute('aria-controls'));
       if (!detail) return;
       toggle.setAttribute('aria-expanded', 'true');
-      toggle.setAttribute('aria-label', `Hide ${row.dataset.scanSymbol} setup chart`);
+      toggle.setAttribute('aria-label', `Hide ${row.dataset.scanSymbol} setup and sector charts`);
       row.classList.add('is-open');
       detail.hidden = false;
       renderSetupChart($('[data-scan-chart]', detail), row.dataset.scanSymbol);
@@ -413,7 +483,7 @@
     const posRows = pos.map((p, i) => {
       const symbol = htmlSafe(p.sym), detailId = `position-chart-${p.sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}-${i}`;
       return `<div class="bl-row g-pos" data-position-row data-position-symbol="${symbol}">
-      <span class="sym"><button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup chart"><span class="scan-row-chevron" aria-hidden="true">›</span>${symbol}</button></span><span>${htmlSafe(p.type)}</span>
+      <span class="sym"><button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>${symbol}</button></span><span>${htmlSafe(p.type)}</span>
       <span class="${sideCls(p.side)}">${htmlSafe(p.side)}</span>
       <span class="mono">${htmlSafe(p.strike)}</span><span class="mono mut">${htmlSafe(p.expiry)}</span>
       <span class="r mono ${p.since === '—' ? 'mut' : pnlCls(parseFloat(p.since.replace('−', '-')))}">${htmlSafe(p.since)}</span>
@@ -468,13 +538,13 @@
         const oldRow = openPositionToggle.closest('[data-position-row]');
         const oldDetail = document.getElementById(openPositionToggle.getAttribute('aria-controls'));
         openPositionToggle.setAttribute('aria-expanded', 'false');
-        openPositionToggle.setAttribute('aria-label', `Show ${oldRow.dataset.positionSymbol} setup chart`);
+        openPositionToggle.setAttribute('aria-label', `Show ${oldRow.dataset.positionSymbol} setup and sector charts`);
         oldRow.classList.remove('is-open');
         if (oldDetail) oldDetail.hidden = true;
       }
       const opening = toggle.getAttribute('aria-expanded') !== 'true';
       toggle.setAttribute('aria-expanded', String(opening));
-      toggle.setAttribute('aria-label', `${opening ? 'Hide' : 'Show'} ${row.dataset.positionSymbol} setup chart`);
+      toggle.setAttribute('aria-label', `${opening ? 'Hide' : 'Show'} ${row.dataset.positionSymbol} setup and sector charts`);
       row.classList.toggle('is-open', opening); detail.hidden = !opening;
       if (opening) {
         renderSetupChartForSymbol($('[data-position-chart-shell]', detail), row.dataset.positionSymbol);
