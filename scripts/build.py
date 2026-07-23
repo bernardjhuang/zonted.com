@@ -527,7 +527,7 @@ LLMS_OUTRO = """## Sections
 - [All posts](https://zonted.com/posts/): Complete archive — {count} essays, updated regularly
 - [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
 - [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
-- [Portfolio](https://zonted.com/portfolio/): Companies built or in-build with AI agents
+- [Projects](https://zonted.com/portfolio/): Companies built or in-build with AI agents
 - [Trading](https://zonted.com/trading/): Quantity-free position log — current holdings, recent large trades, research watchlist
 - [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
 - [About](https://zonted.com/about/): Background, current focus, how to get in touch
