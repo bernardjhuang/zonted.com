@@ -373,6 +373,8 @@ def parse_brief_body(raw):
                     break
                 if re.match(r"^#{1,3}\s+(Dropped|Merged|Technical|Underpricing|FINRA|Process)", nxt, re.I):
                     break
+                if re.match(r"^#{1,3}\s+Section\s+\d", nxt, re.I):
+                    break
                 if re.match(r"^(Dropped|Merged|Technical\s+details|Underpricing|FINRA|Process)\s*[:/]", nxt, re.I):
                     break
                 body.append(lines[i])
@@ -397,8 +399,11 @@ def parse_brief_body(raw):
                     i += 1
                 output.append(render_collapsed_section(section_title, body))
                 continue
-            # Non-collapsible header → render as h3
-            output.append(f'<h3 class="brief-section-header">{safe_inline(section_title)}</h3>')
+            # Section divider header (e.g. "Section 1: ...", "Section 2: ...")
+            if re.match(r'Section\s+\d', section_title, re.I):
+                output.append(f'<h3 class="brief-section-divider">{safe_inline(section_title)}</h3>')
+            else:
+                output.append(f'<h3 class="brief-section-header">{safe_inline(section_title)}</h3>')
             i += 1
             continue
 
@@ -490,6 +495,7 @@ def build_brief_css():
         .brief-signals li, .brief-bullets li { margin: 3px 0; font-size: 13px; }
         .brief-para { margin: 6px 0; }
         .brief-section-header { font-size: 14px; font-weight: 600; margin: 16px 0 4px; color: var(--bl-muted); }
+        .brief-section-divider { font-size: 18px; font-weight: 700; margin: 24px 0 12px; padding: 10px 0; border-top: 2px solid var(--bl-border); border-bottom: 1px solid var(--bl-divider, #eee); color: var(--bl-ink); }
         .brief-table-wrap { overflow-x: auto; margin: 10px 0; }
         .brief-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--bl-border); font-size: 12.5px; }
         .brief-table th { background: var(--bl-rowhead, #f5f5f5); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 10px; border-bottom: 0; white-space: nowrap; }
