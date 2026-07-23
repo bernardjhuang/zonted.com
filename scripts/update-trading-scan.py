@@ -18,6 +18,7 @@ import math
 import os
 import re
 import sys
+from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
@@ -56,7 +57,16 @@ def earn_cell(row):
     return f'{fmt_date(row["next_earn"])} ({d}d){flag}'
 
 
-def setup_table(rows, aria, table_id):
+def price_cell(quote):
+    price = quote["price"]
+    day_pct = quote["day_pct"]
+    day_class = "scan-z-pos" if day_pct > 0 else "scan-z-neg" if day_pct < 0 else "scan-null"
+    direction = "up" if day_pct > 0 else "down" if day_pct < 0 else "unchanged"
+    return (f'<span class="scan-price-value">${price:,.2f}</span> '
+            f'<span class="{day_class}" aria-label="{direction} {abs(day_pct):.2f} percent today">{day_pct:+.2f}%</span>')
+
+
+def setup_table(rows, aria, table_id, quotes):
     cells = []
     for r in rows:
         label, key = signal(r)
@@ -67,6 +77,7 @@ def setup_table(rows, aria, table_id):
         cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{safe_sym}">
                         <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{safe_sym}</span></button></td>
                         <td class="scan-sec">{safe_sector}</td>
+                        <td class="scan-num scan-price">{price_cell(quotes[sym])}</td>
                         <td class="scan-num">{znum(r.get('spread_z'))}</td>
                         <td class="scan-num">{znum(r.get('dist_z'))}</td>
                         <td class="scan-num">{znum(r.get('evwap_pct'), '%')}</td>
@@ -74,11 +85,11 @@ def setup_table(rows, aria, table_id):
                         <td><span class="scan-signal scan-signal--{key}">{label}</span></td>
                     </tr>
                     <tr class="scan-detail-row" id="{detail_id}" data-scan-detail data-scan-symbol="{safe_sym}" hidden>
-                        <td colspan="7"><div class="scan-setup-chart" data-scan-chart="{safe_sym}"></div></td>
+                        <td colspan="8"><div class="scan-setup-chart" data-scan-chart="{safe_sym}"></div></td>
                     </tr>""")
     return f"""                <div class="scan-table-wrap">
                 <table class="scan-table scan-accordion-table" aria-label="{aria}">
-                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Price · Day</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
                     <tbody>
 {os.linesep.join(cells)}
                     </tbody>
@@ -147,6 +158,36 @@ def main():
             if isinstance(value, float) and not math.isfinite(value):
                 sys.exit(f"{symbol} chart stats contain a non-finite value")
         chart_map[symbol] = record
+    quotes = {}
+    for symbol, record in chart_map.items():
+        closes = record["series"]["c"]
+        if len(closes) < 2 or closes[-1] is None or closes[-2] in (None, 0):
+            sys.exit(f"{symbol} needs two valid closes for price and day change")
+        quotes[symbol] = {
+            "price": float(closes[-1]),
+            "day_pct": (float(closes[-1]) / float(closes[-2]) - 1) * 100,
+        }
+    quote_stamp = None
+    if len(sys.argv) > 3:
+        quote_payload = json.load(open(sys.argv[3]))
+        quote_rows = quote_payload.get("quotes") or {}
+        if set(quote_rows) != symbols:
+            missing = sorted(symbols - set(quote_rows))
+            extra = sorted(set(quote_rows) - symbols)
+            sys.exit(f"Live quote symbols must match the scan exactly (missing={missing}, extra={extra})")
+        for symbol, quote in quote_rows.items():
+            price, day_pct = quote.get("price"), quote.get("day_pct")
+            if (isinstance(price, bool) or not isinstance(price, (int, float)) or not math.isfinite(price) or price <= 0
+                    or isinstance(day_pct, bool) or not isinstance(day_pct, (int, float)) or not math.isfinite(day_pct)):
+                sys.exit(f"{symbol} live quote is invalid")
+            quotes[symbol] = {"price": float(price), "day_pct": float(day_pct)}
+        try:
+            generated = dt.datetime.fromisoformat(str(quote_payload["generated_at"]))
+            if generated.tzinfo is None:
+                raise ValueError("timezone required")
+        except (KeyError, TypeError, ValueError):
+            sys.exit("Live quote generated_at must be a timezone-aware ISO timestamp")
+        quote_stamp = generated.astimezone(ZoneInfo("America/Chicago")).strftime("%b %-d, %-I:%M %p CT")
     asset_json = json.dumps({"last_bar": p["last_bar"], "charts": chart_map}, separators=(",", ":"), allow_nan=False)
     asset_hash = hashlib.sha256(asset_json.encode()).hexdigest()[:12]
     chart_config = json.dumps({"url": f"/trading/scan-charts.json?v={asset_hash}"}, separators=(",", ":"), allow_nan=False)
@@ -166,11 +207,12 @@ def main():
     all_rows = sorted(p["rows"], key=lambda r: r["symbol"])
     spy = p["spy"]
     regime = f"SPY {spy['close']:.2f}, {'above' if spy['above_sma50'] else 'below'} its 50-day average"
+    price_freshness = f"Prices {quote_stamp}" if quote_stamp else f"Prices {last_bar} close"
 
     panel = f"""            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
                 <div class="position-head">
                     <h2 id="scan-heading">Momentum scan</h2>
-                    <span>{last_bar} close · daily</span>
+                    <span>Signals {last_bar} close · {price_freshness}</span>
                 </div>
                 <p class="scan-intro">A mechanical relative-strength screen across the {len(all_rows)}-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
                 <p class="scan-chart-hint">Click any ticker row to open its full setup chart beside the matching sector ETF's YTD VWAP chart. Only one comparison stays open at a time.</p>
@@ -179,19 +221,19 @@ def main():
                 </ul>
                 <div class="position-group">
                     <h3>Long setups · {len(longs)}</h3>
-{setup_table(longs, "Long setups from the momentum scan", "long")}
+{setup_table(longs, "Long setups from the momentum scan", "long", quotes)}
                 </div>
                 <div class="position-group">
                     <h3>Short setups · {len(shorts)}</h3>
-{setup_table(shorts, "Short setups from the momentum scan", "short")}
+{setup_table(shorts, "Short setups from the momentum scan", "short", quotes)}
                 </div>
                 <div class="position-group">
                     <h3>Full scan · {len(all_rows)} symbols</h3>
                     <p class="scan-skip-full"><a href="#scan-method">Skip past the {len(all_rows)}-row table</a></p>
-{setup_table(all_rows, "Full momentum scan of the tracked universe", "full")}
+{setup_table(all_rows, "Full momentum scan of the tracked universe", "full", quotes)}
                 </div>
                 <script type="application/json" id="scan-chart-config">{chart_config}</script>
-                <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. ⚠ marks earnings within ~9 days. This is the raw output of a screen, refreshed daily after the close — not positions, not predictions, and not investment advice.</p>
+                <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. Intraday price/day marks use Alpaca IEX latest trades, with Yahoo fallback for those four OTC ADRs, and refresh hourly from 9 AM CT through the regular close. ⚠ marks earnings within ~9 days. This is the raw output of a daily screen with intraday marks — not positions, not predictions, and not investment advice.</p>
             </section>"""
 
     page = open(PAGE).read()
