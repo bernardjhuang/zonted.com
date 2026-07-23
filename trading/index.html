@@ -264,7 +264,7 @@
         <header class="bl-header">
             <div class="bl-header-row">
                 <span class="bl-title">Trading</span>
-                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 22, 2026</span> · quantity-free</span>
+                <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 23, 2026</span> · quantity-free</span>
                 <div class="bl-tools">
                     <input type="search" id="bl-q" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol">
                     <button type="button" id="bl-export" class="bl-btn">Export</button>
@@ -328,7 +328,7 @@
                     <h2 id="activity-heading">Recent large trades</h2>
                     <span>5 buys + 5 sells · $2K+ each</span>
                 </div>
-                <p class="activity-policy">Same-day round trips excluded · Same-symbol fills consolidated by date</p>
+                <p class="activity-policy">Closing sells included · Same-symbol broker fills consolidated by date</p>
                 <div class="activity-columns">
                     <section class="activity-lane activity-lane--buy" aria-labelledby="buys-heading">
                         <h3 id="buys-heading">Buys</h3>
@@ -365,28 +365,28 @@
                         <ol class="activity-list" aria-label="Last 5 qualifying Robinhood sells">
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <div><span class="activity-action">TSLA shares</span><span class="activity-type">Equity · 4 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−2.7%</span><span class="activity-status">Realized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <div><span class="activity-action">TSLA call</span><span class="activity-type">Option · 5 fills</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−12.5%</span><span class="activity-status">Realized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <div><span class="activity-action">HOOD call</span><span class="activity-type">Option</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+20.6%</span><span class="activity-status">Realized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
                                 <div><span class="activity-action">XOM shares</span><span class="activity-type">Equity</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+2.7%</span><span class="activity-status">Realized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
-                                <div><span class="activity-action">NET put</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−3.3%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-15">Jul 15</time>
-                                <div><span class="activity-action">FIG call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+10.5%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-15">Jul 15</time>
-                                <div><span class="activity-action">META call</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+86.2%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-15">Jul 15</time>
-                                <div><span class="activity-action">BMNR call</span><span class="activity-type">Option · 3 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+27.2%</span><span class="activity-status">Realized</span></div>
+                                <div><span class="activity-action">CEG shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−0.1%</span><span class="activity-status">Realized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -408,7 +408,7 @@
                         <p>Overall Robinhood portfolio · Realized + unrealized · Open positions included</p>
                     </div>
                     <div class="ytd-account-result">
-                        <strong class="positive">+353.1%</strong>
+                        <strong class="positive">+347.6%</strong>
                         <span>Portfolio-wide · Live snapshot</span>
                     </div>
                 </section>
