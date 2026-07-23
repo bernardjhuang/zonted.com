@@ -45,6 +45,7 @@
         .trading-tabs { display: flex; gap: 24px; border: 0; padding: 0; overflow-x: auto; }
         .trading-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 0 12px; font: 500 13.5px var(--bl-sans); color: var(--bl-muted); cursor: pointer; white-space: nowrap; letter-spacing: 0; text-transform: none; }
         .trading-tab:hover { color: var(--bl-ink); }
+        .trading-tab:focus-visible, .bl-btn:focus-visible, .bl-chip:focus-visible, .bl-reset:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
         .trading-tab[aria-selected="true"] { color: var(--bl-ink); border-bottom-color: var(--bl-accent); }
         .trading-tab-count { background: none; color: var(--bl-faint); font-size: 12px; padding: 0; margin-left: 4px; min-width: 0; }
         .bl-filters { display: flex; align-items: center; gap: 8px; padding: 16px 40px; flex-wrap: wrap; }
@@ -55,10 +56,12 @@
         .bl-reset { font-size: 12.5px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; padding: 6px; }
         .bl-match { margin-left: auto; font-size: 12px; color: var(--bl-faint); }
         .bl-body { padding: 4px 40px 40px; display: grid; gap: 18px; }
-        #bl-built { min-width: 0; display: grid; gap: 18px; }
+        #bl-built, #bl-log-built { min-width: 0; display: grid; gap: 18px; }
         .bl-card { min-width: 0; background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 8px; overflow-x: auto; }
         .bl-card-title { padding: 16px 20px 12px; font-size: 15px; font-weight: 600; }
         .bl-card-title span { font-size: 12.5px; font-weight: 400; color: var(--bl-muted); }
+        .bl-card-title a { margin-left: 8px; color: var(--bl-accent); font-size: 12px; font-weight: 500; text-underline-offset: 2px; }
+        .bl-card-title .bl-swipe-hint { display: none; }
         .bl-card-title .bl-tgl { float: right; font-size: 12px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; }
         .bl-thead { display: grid; background: var(--bl-rowhead); padding: 7px 20px; font: 600 11px var(--bl-sans); color: var(--bl-muted); letter-spacing: .3px; text-transform: uppercase; }
         .bl-thead > button { all: unset; cursor: pointer; font: inherit; color: inherit; text-align: left; }
@@ -81,12 +84,25 @@
         .bl-empty { padding: 14px 20px; font-size: 13px; color: var(--bl-faint); }
         .bl-pair { min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
         @media (max-width: 1100px) { .bl-pair { grid-template-columns: 1fr; } }
-        .g-pos { grid-template-columns: 110px 110px 110px 130px 1fr 140px; min-width: 720px; }
+        .g-pos { grid-template-columns: 86px 70px 64px 80px 100px 84px minmax(230px, 1.2fr) minmax(210px, 1fr); min-width: 1080px; column-gap: 10px; align-items: start; }
+        .g-pos .bl-plan { color: var(--bl-ink2); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+        .g-pos .bl-invalidation { color: var(--bl-loss); }
         .g-trade { grid-template-columns: 80px 1fr 60px 110px; min-width: 380px; }
         .g-ext { grid-template-columns: 34px 70px 1fr 100px; padding-top: 6.5px; padding-bottom: 6.5px; }
         .g-ext { border-top: 1px solid var(--bl-rowhead); }
         .bl-foot { font-size: 12px; color: var(--bl-faint); max-width: 900px; }
         .bl [hidden] { display: none !important; }
+        @media (max-width: 600px) {
+            .g-trade { grid-template-columns: 52px minmax(100px, 1fr) 70px; grid-template-rows: auto auto; min-width: 0; column-gap: 4px; }
+            .g-trade > :nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+            .g-trade > :nth-child(2) { grid-column: 2; grid-row: 1; }
+            .g-trade > :nth-child(3) { grid-column: 2; grid-row: 2; }
+            .g-trade > :nth-child(4) { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+            .bl-thead.g-trade { grid-template-rows: auto; }
+            .bl-thead.g-trade > :nth-child(1), .bl-thead.g-trade > :nth-child(2), .bl-thead.g-trade > :nth-child(4) { grid-row: 1; }
+            .bl-thead.g-trade > :nth-child(3) { display: none; }
+            .bl-card-title .bl-swipe-hint { display: block; margin: 4px 0 0; }
+        }
         /* raw cron markup hidden once enhanced (kept in DOM for the nightly cron) */
         .bl-enhanced #bl-raw { display: none; }
         /* ── legacy fallback + other-tab reskin (classes emitted by cron & injectors) ── */
@@ -268,12 +284,13 @@
                 <span class="bl-title">Trading</span>
                 <span class="bl-meta">Public position log · <span class="trading-stamp">Snapshot · July 23, 2026</span> · quantity-free</span>
                 <div class="bl-tools">
-                    <input type="search" id="bl-q" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol">
+                    <input type="search" id="bl-q" name="symbol" class="bl-search" placeholder="Search symbol…" aria-label="Search symbol" autocomplete="off" spellcheck="false">
                     <button type="button" id="bl-export" class="bl-btn">Export</button>
                 </div>
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
-                <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions &amp; trades</button>
+                <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Positions</button>
+                <button class="trading-tab" id="log-tab" type="button" role="tab" aria-selected="false" aria-controls="log-panel">Log</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum scan <span class="trading-tab-count" id="scan-tab-count">4</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">YTD VWAP <span class="trading-tab-count">22</span></button>
                 <button class="trading-tab" id="setups-tab" type="button" role="tab" aria-selected="false" aria-controls="setups-panel">Setup charts <span class="trading-tab-count" id="setups-tab-count">4</span></button>
@@ -397,7 +414,7 @@
             <!-- AUTO:TRADES:END -->
 
                     <!-- AUTO:YTD:START -->
-            <section class="trading-panel ytd-panel" id="ytd-panel" role="tabpanel" tabindex="0" aria-labelledby="ytd-tab" hidden>
+            <section class="ytd-panel" aria-labelledby="ytd-heading" hidden>
                 <div class="position-head">
                     <h2 id="ytd-heading">2026 biggest wins &amp; losses</h2>
                     <span>10 wins · 10 losses</span>
@@ -530,6 +547,12 @@
             </section>
             <!-- AUTO:YTD:END -->
                 </div>
+            </div>
+        </section>
+
+        <section class="trading-panel" id="log-panel" role="tabpanel" tabindex="0" aria-labelledby="log-tab" hidden>
+            <div class="bl-body">
+                <div id="bl-log-built"></div>
                 <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Rankings are based on closed-trade percentage return, not dollar impact. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
             </div>
         </section>
@@ -3921,6 +3944,6 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-23-same-day-v1"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-23-log-tab-v1"></script>
 </body>
 </html>
