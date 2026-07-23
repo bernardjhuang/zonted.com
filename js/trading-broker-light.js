@@ -116,8 +116,11 @@
         const px = leftPad + activeIndex / (n - 1) * (vb.width - leftPad - rightPad);
         crosshair.setAttribute('x1', px); crosshair.setAttribute('x2', px); crosshair.removeAttribute('visibility');
         const diff = (d.close[activeIndex] / d.vwap[activeIndex] - 1) * 100;
+        const z = d.z50?.[activeIndex];
         const date = document.createElement('b'); date.textContent = d.dates[activeIndex];
-        tip.replaceChildren(date, document.createElement('br'), document.createTextNode(`close ${Number(d.close[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`vwap ${Number(d.vwap[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%`));
+        const nodes = [date, document.createElement('br'), document.createTextNode(`close ${Number(d.close[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`vwap ${Number(d.vwap[activeIndex]).toFixed(2)}`), document.createElement('br'), document.createTextNode(`${diff >= 0 ? '+' : ''}${diff.toFixed(2)}%`)];
+        if (z != null) nodes.push(document.createElement('br'), document.createTextNode(`50d z ${z >= 0 ? '+' : ''}${Number(z).toFixed(2)}`));
+        tip.replaceChildren(...nodes);
         tip.hidden = false;
         tip.style.left = `${Math.max(8, Math.min(fig.clientWidth - tip.offsetWidth - 8, left))}px`;
         tip.style.top = `${top}px`;

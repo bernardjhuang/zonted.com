@@ -12,6 +12,7 @@ Run from the repo root.
 import datetime as dt
 import glob
 import json
+import math
 import os
 import re
 import sys
@@ -23,19 +24,25 @@ SCAN_GLOB = os.path.expanduser("~/Documents/trading/scans/sector-vwap-*.json")
 W, H = 560, 240
 ML, MR, MT, MB = 10, 58, 12, 26
 COUNTRY_ETFS = {"INDA", "EWY", "EWZ", "MCHI", "KWEB", "EWG", "EZA", "EWJ", "THD", "VNM"}
+SECTOR_ETFS = {"XLK", "XLY", "XLV", "XLF", "XLI", "XLE", "XLP", "XLC", "XLU", "XLRE", "XLB"}
 
 
 def fmt(d):
     return dt.date.fromisoformat(d).strftime("%b %-d")
 
 
-def chart(sym, name, dates, close, vwap, w, h):
+def chart(sym, name, dates, close, vwap, w, h, z50=None):
     lo = min(min(close), min(vwap))
     hi = max(max(close), max(vwap))
     pad = (hi - lo) * 0.06 or 1
     lo, hi = lo - pad, hi + pad
     iw, ih = w - ML - MR, h - MT - MB
     n = len(dates)
+    if z50 is not None and len(z50) != n:
+        raise ValueError(f"{sym} z50 length does not match price history")
+    has_z = z50 is not None
+    total_h = h + 92 if has_z else h
+    z_top, z_bottom = h + 10, total_h - MB
     months = [dt.date.fromisoformat(d).month for d in dates]
 
     def x(i):
@@ -48,8 +55,10 @@ def chart(sym, name, dates, close, vwap, w, h):
     for i in range(1, n):
         if months[i] != months[i - 1]:
             lbl = dt.date.fromisoformat(dates[i]).strftime("%b")
-            ticks.append(f'<line x1="{x(i):.1f}" y1="{MT}" x2="{x(i):.1f}" y2="{MT + ih}" class="vg"/>'
-                         f'<text x="{x(i):.1f}" y="{h - 8}" class="va" text-anchor="middle">{lbl}</text>')
+            ticks.append(f'<line x1="{x(i):.1f}" y1="{MT}" x2="{x(i):.1f}" y2="{MT + ih}" class="vg"/>')
+            if has_z:
+                ticks.append(f'<line x1="{x(i):.1f}" y1="{z_top}" x2="{x(i):.1f}" y2="{z_bottom}" class="vg"/>')
+            ticks.append(f'<text x="{x(i):.1f}" y="{total_h - 8}" class="va" text-anchor="middle">{lbl}</text>')
     for k in range(4):
         v = lo + (hi - lo) * k / 3
         f = f"{v:.0f}" if hi >= 100 else f"{v:.1f}"
@@ -81,17 +90,68 @@ def chart(sym, name, dates, close, vwap, w, h):
 
     price = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(close))
     vw = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(vwap))
+    z_markup = ""
+    if has_z:
+        finite_z = [value for value in z50 if value is not None]
+        if not finite_z:
+            raise ValueError(f"{sym} z50 history is empty")
+        z_limit = max(2.0, max(abs(value) for value in finite_z) * 1.08)
+
+        def zy(value):
+            return z_top + (z_limit - value) / (2 * z_limit) * (z_bottom - z_top)
+
+        threshold_lines = []
+        for value, label in ((1, "+1"), (0, "0"), (-1, "−1")):
+            threshold_lines.append(
+                f'<line x1="{ML}" y1="{zy(value):.1f}" x2="{ML + iw}" y2="{zy(value):.1f}" class="vzt"/>'
+                f'<text x="{ML + iw + 6}" y="{zy(value) + 3.5:.1f}" class="va">{label}</text>')
+
+        def z_class(value):
+            return "vzp" if value >= 1 else "vzn" if value <= -1 else "vzm"
+
+        runs, points, active_class = [], [], None
+        for i, value in enumerate(z50):
+            if value is None:
+                if len(points) > 1:
+                    runs.append((active_class, points))
+                points, active_class = [], None
+                continue
+            cls = z_class(value)
+            if active_class is None:
+                active_class, points = cls, [(i, value)]
+            elif cls == active_class:
+                points.append((i, value))
+            else:
+                points.append((i, value))
+                if len(points) > 1:
+                    runs.append((active_class, points))
+                active_class, points = cls, [(i, value)]
+        if len(points) > 1:
+            runs.append((active_class, points))
+        z_paths = "".join(
+            f'<polyline points="{" ".join(f"{x(i):.1f},{zy(value):.1f}" for i, value in points)}" class="{cls}"/>'
+            for cls, points in runs)
+        last_z = finite_z[-1]
+        last_cls = "scan-z-pos" if last_z >= 1 else "scan-z-neg" if last_z <= -1 else "scan-sec"
+        z_markup = (f'<text x="{ML}" y="{z_top - 4}" class="vzl">50D Z SCORE</text>'
+                    f'<text x="{ML + iw + 6}" y="{z_top - 4}" class="vzl {last_cls}">{last_z:+.2f}</text>'
+                    f'{"".join(threshold_lines)}{z_paths}')
+
     side = diff[-1] >= 0
     pct = (close[-1] / vwap[-1] - 1) * 100
-    data = json.dumps({"dates": dates, "close": close, "vwap": vwap}, separators=(",", ":"))
+    data_obj = {"dates": dates, "close": close, "vwap": vwap}
+    if has_z:
+        data_obj["z50"] = z50
+    data = json.dumps(data_obj, separators=(",", ":"))
+    aria = f"{sym} 2026 price versus year-to-date VWAP" + (" with 50-session z-score history" if has_z else "")
     return f"""                <figure class="vwap-chart{' vwap-chart--spy' if sym == 'SPY' else ''}" data-sym="{sym}" data-d='{data}'>
                     <figcaption><b>{sym}</b> <span>{name}</span><em class="{'scan-z-pos' if side else 'scan-z-neg'}">{pct:+.1f}% {'above' if side else 'below'}</em></figcaption>
-                    <svg viewBox="0 0 {w} {h}" preserveAspectRatio="none" role="img" aria-label="{sym} 2026 price versus year-to-date VWAP">
+                    <svg viewBox="0 0 {w} {total_h}" preserveAspectRatio="none" role="img" aria-label="{aria}">
                     {''.join(ticks)}{''.join(fills)}
                     <polyline points="{vw}" class="vlv"/>
                     <polyline points="{price}" class="vlp"/>
-                    {''.join(marks)}
-                    <line class="vxh" x1="0" y1="{MT}" x2="0" y2="{MT + ih}" visibility="hidden"/>
+                    {''.join(marks)}{z_markup}
+                    <line class="vxh" x1="0" y1="{MT}" x2="0" y2="{z_bottom if has_z else MT + ih}" visibility="hidden"/>
                     </svg>
                     <div class="vwap-tip" hidden></div>
                 </figure>"""
@@ -122,8 +182,31 @@ def main():
     ordered = sorted(summary, key=lambda s: (s["sym"] != "SPY", -s["pct"]))
     us_summary = [s for s in ordered if s["sym"] not in COUNTRY_ETFS]
     country_summary = [s for s in ordered if s["sym"] in COUNTRY_ETFS]
+    expected_symbols = {"SPY"} | SECTOR_ETFS | COUNTRY_ETFS
     if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
         sys.exit("Expected SPY + 11 US sector ETFs and all 10 country ETFs")
+    if set(series) != expected_symbols or {s["sym"] for s in summary} != expected_symbols:
+        sys.exit("VWAP summary/series symbols do not match the exact 22-symbol contract")
+    summary_by_symbol = {s["sym"]: s for s in summary}
+    for sym, values in series.items():
+        dates, close, vwap = values.get("dates"), values.get("close"), values.get("vwap")
+        if not dates or len(dates) < 2 or len(dates) != len(close or []) or len(dates) != len(vwap or []):
+            sys.exit(f"{sym} VWAP history is empty or misaligned")
+        if dates != sorted(dates) or len(dates) != len(set(dates)):
+            sys.exit(f"{sym} VWAP dates are not strictly increasing")
+        if any(not math.isfinite(float(value)) for value in [*(close or []), *(vwap or [])]):
+            sys.exit(f"{sym} VWAP history contains a non-finite value")
+        z_values = values.get("z50")
+        if sym in SECTOR_ETFS:
+            if not isinstance(z_values, list) or len(z_values) != len(dates):
+                sys.exit(f"{sym} 50-session Z history is missing or misaligned")
+            if any(value is not None and not math.isfinite(float(value)) for value in z_values):
+                sys.exit(f"{sym} 50-session Z history contains a non-finite value")
+            finite_z = [float(value) for value in z_values if value is not None]
+            if not finite_z or round(finite_z[-1], 2) != summary_by_symbol[sym].get("z"):
+                sys.exit(f"{sym} current 50-session Z does not match its summary")
+        elif z_values is not None:
+            sys.exit(f"{sym} unexpectedly contains sector Z history")
 
     def render_rows(items):
         return "\n".join(
@@ -142,7 +225,8 @@ def main():
         return "\n".join(
             chart(s["sym"], s["name"], series[s["sym"]]["dates"],
                   series[s["sym"]]["close"], series[s["sym"]]["vwap"],
-                  *((1152, 300) if s["sym"] == "SPY" else (W, H)))
+                  *((1152, 300) if s["sym"] == "SPY" else (W, H)),
+                  z50=series[s["sym"]].get("z50"))
             for s in items)
 
     us_rows, country_rows = render_rows(us_summary), render_rows(country_summary)
@@ -153,7 +237,7 @@ def main():
                     <h2 id="vwap-heading">YTD VWAP</h2>
                     <span>{last_bar} close · anchor Jan 2, 2026</span>
                 </div>
-                <p class="scan-intro">The year-anchored VWAP is the average cost basis of every share traded in 2026. Price holding above it means the average year-to-date short seller is underwater — stay long while it holds; price holding below means the average buyer is trapped. The cross is the regime flip, and sectors often flip a day or two before SPY does. Solid line is the close, dashed line the YTD VWAP; ▲▼ mark crosses; hover for exact values.</p>
+                <p class="scan-intro">The year-anchored VWAP is the average cost basis of every share traded in 2026. Price holding above it means the average year-to-date short seller is underwater — stay long while it holds; price holding below means the average buyer is trapped. The cross is the regime flip, and sectors often flip a day or two before SPY does. Solid line is the close, dashed line the YTD VWAP; ▲▼ mark crosses. Sector charts add the same smoothed 50-session Z-score used by the momentum screen: green above +1, red below −1, gray between. Hover for exact values.</p>
                 <section class="vwap-section" aria-labelledby="vwap-us-heading">
                 <div class="position-group"><h3 id="vwap-us-heading">US Market &amp; Sector ETFs · {len(us_summary)}</h3></div>
                 <div class="scan-table-wrap">
@@ -195,8 +279,11 @@ def main():
                             i = Math.max(0, Math.min(n - 1, Math.round((vx - ML) / (vb.width - ML - MR) * (n - 1)))),
                             px = ML + i / (n - 1) * (vb.width - ML - MR);
                         xh.setAttribute('x1', px); xh.setAttribute('x2', px); xh.removeAttribute('visibility');
-                        const diff = (d.close[i] / d.vwap[i] - 1) * 100;
-                        tip.innerHTML = `<b>${{d.dates[i]}}</b><br>close ${{d.close[i]}}<br>vwap ${{d.vwap[i].toFixed(2)}}<br><span class="${{diff >= 0 ? 'scan-z-pos' : 'scan-z-neg'}}">${{diff >= 0 ? '+' : ''}}${{diff.toFixed(2)}}%</span>`;
+                        const diff = (d.close[i] / d.vwap[i] - 1) * 100,
+                            z = d.z50?.[i],
+                            zClass = z >= 1 ? 'scan-z-pos' : z <= -1 ? 'scan-z-neg' : 'scan-sec';
+                        tip.innerHTML = `<b>${{d.dates[i]}}</b><br>close ${{d.close[i]}}<br>vwap ${{d.vwap[i].toFixed(2)}}<br><span class="${{diff >= 0 ? 'scan-z-pos' : 'scan-z-neg'}}">${{diff >= 0 ? '+' : ''}}${{diff.toFixed(2)}}%</span>` +
+                            (z == null ? '' : `<br><span class="${{zClass}}">50d z ${{z >= 0 ? '+' : ''}}${{z.toFixed(2)}}</span>`);
                         tip.hidden = false;
                         const fr = fig.getBoundingClientRect();
                         let lx = e.clientX - fr.left + 14;
