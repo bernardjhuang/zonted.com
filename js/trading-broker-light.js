@@ -514,7 +514,7 @@
         <div class="bl-thead g-pos">${posHead}</div>${posRows}
       </div>
       <div class="bl-pair">
-        <div class="bl-card"><div class="bl-card-title">Recent buys <span>· $2K+ · same-day round trips excluded</span></div>
+        <div class="bl-card"><div class="bl-card-title">Recent buys <span>· $2K+ · fills consolidated by date</span></div>
           <div class="bl-thead g-trade">${tradeHead}</div>${tradeRows(buys)}</div>
         <div class="bl-card"><div class="bl-card-title">Recent sells <span>· $2K+ · fills consolidated by date</span></div>
           <div class="bl-thead g-trade">${tradeHead}</div>${tradeRows(sells)}</div>
