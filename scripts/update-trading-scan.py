@@ -105,6 +105,17 @@ def setup_table(rows, aria, table_id, quotes):
                 </div>"""
 
 
+def setup_links(rows, label):
+    """Render the qualified subset once without duplicating full chart accordions."""
+    if not rows:
+        return f'<p class="bl-empty">No qualified {label.lower()} today.</p>'
+    links = " · ".join(
+        f'<a href="?chart={html.escape(row["symbol"], quote=True)}#scan" translate="no">{html.escape(row["symbol"])}</a>'
+        for row in rows
+    )
+    return f'<p class="scan-qualified-links"><b>{html.escape(label)}</b> · {links}</p>'
+
+
 def main():
     if len(sys.argv) > 1:
         path = sys.argv[1]
@@ -232,7 +243,7 @@ def main():
     sector_names = sorted({str(r["sector"]) for r in [*longs, *shorts]})
     sector_clause = f" across {', '.join(sector_names)}" if sector_names else ""
     takeaway = f"{setup_summary}{sector_clause}. {regime}."
-    short_block = setup_table(shorts, "Short setups from the momentum scan", "short", quotes) if shorts else '<p class="bl-empty">No qualified shorts today.</p>'
+    short_block = setup_links(shorts, "Short setups")
 
     universe_rows = []
     for row in all_rows:
@@ -270,7 +281,7 @@ def main():
                 <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
                 <div class="position-group">
                     <h3>Long setups · {len(longs)}</h3>
-{setup_table(longs, "Long setups from the momentum scan", "long", quotes)}
+{setup_links(longs, "Long setups")}
                 </div>
                 <div class="position-group">
                     <h3>Short setups · {len(shorts)}</h3>
