@@ -27,6 +27,7 @@ def main() -> None:
     parser.add_argument("--chrome", default=os.environ.get("CHROME_BIN"))
     args = parser.parse_args()
     executable = args.chrome or (str(MAC_CHROME) if MAC_CHROME.exists() else None)
+    query_separator = '&' if '?' in args.url else '?'
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True, executable_path=executable)
@@ -75,6 +76,15 @@ def main() -> None:
         desktop.locator("[data-universe-sort-day]").click()
         day_changes = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number(row.dataset.dayPct))")
         check(day_changes == sorted(day_changes), "momentum universe day-change sort did not toggle ascending")
+        desktop.locator("[data-universe-sort-strength]").click()
+        relative_strength = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number.parseFloat(row.dataset.strength)).filter(Number.isFinite)")
+        check(relative_strength == sorted(relative_strength, reverse=True), "momentum universe relative-strength sort did not start descending")
+        check(desktop.locator("#scan-universe-shell tr.scan-data-row").last.get_attribute("data-strength") == "", "missing relative strength did not sort last")
+        check(desktop.locator("[data-universe-sort-strength]").locator("xpath=..").get_attribute("aria-sort") == "descending", "relative-strength sort state is not exposed")
+        desktop.locator("[data-universe-sort-strength]").click()
+        relative_strength = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number.parseFloat(row.dataset.strength)).filter(Number.isFinite)")
+        check(relative_strength == sorted(relative_strength), "momentum universe relative-strength sort did not toggle ascending")
+        check(desktop.locator("#scan-universe-shell tr.scan-data-row").last.get_attribute("data-strength") == "", "missing relative strength did not stay last")
         first_symbol = desktop.locator("#scan-universe-shell tr.scan-data-row").first.get_attribute("data-scan-symbol")
         desktop.locator("#scan-universe-q").fill(first_symbol or "")
         check(desktop.locator("#scan-universe-shell tr.scan-data-row").count() >= 1, "universe search did not scope results")
@@ -85,7 +95,7 @@ def main() -> None:
             setup_toggle.click()
             desktop.wait_for_function("id => document.querySelectorAll(`#${id} svg`).length === 2", arg=detail_id)
 
-        desktop.goto(args.url + "?vwap=EWY#vwap", wait_until="networkidle")
+        desktop.goto(f"{args.url}{query_separator}vwap=EWY#vwap", wait_until="networkidle")
         check(desktop.locator("#vwap-chart-grid .vwap-chart").count() == 12, "expected SPY plus eleven US sector charts")
         check(desktop.locator("#vwap-country-chart-grid .vwap-chart").count() == 10, "expected ten separate country charts")
         check(desktop.locator("#vwap-chart-grid .vwap-chart").first.get_attribute("data-sym") == "SPY", "country deep link leaked into the US sector gallery")
@@ -109,7 +119,7 @@ def main() -> None:
         cards.nth(1).locator("summary").click()
         check(not cards.nth(0).evaluate("node => node.open") and cards.nth(1).evaluate("node => node.open"), "manager accordion allows multiple open cards")
 
-        desktop.goto(args.url + "?crypto=ETH#crypto", wait_until="networkidle")
+        desktop.goto(f"{args.url}{query_separator}crypto=ETH#crypto", wait_until="networkidle")
         check(desktop.locator("#crypto-chart-grid .crypto-card").count() == 7, "expected all seven crypto charts")
         check(desktop.locator("#crypto-chart-grid .crypto-card").first.get_attribute("data-symbol") == "ETH", "Crypto deep-linked chart was not promoted first")
         check(desktop.locator("#crypto-panel th", has_text="Spread Z vs BTC").count() == 1, "Crypto table is missing the explicit Z-score column")
