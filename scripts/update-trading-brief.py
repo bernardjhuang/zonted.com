@@ -4,10 +4,11 @@
 Reads ALL briefs from tail-risk-scanner/briefs/*.md, renders them newest-first
 as a running log inside the Brief tab.
 
-Each brief is transformed from raw markdown into clean, ELI5 card-based HTML:
-- Numbered risk items become "risk cards" with score badges, ticker chips,
-  evidence tags, and labeled sections for disconfirmation / action / signals.
-- Process notes, FINRA tables, underpricing checklists collapse into a details block.
+Supports two brief formats:
+- v1.x structured format: numbered items with indented Score/Evidence/Levers fields
+- v1.3+ rich markdown format: ## headers, **bold** sections, markdown tables, bullet lists
+
+The newest brief is fully expanded; older briefs are collapsed behind a disclosure triangle.
 """
 import datetime as dt
 import glob
@@ -27,15 +28,16 @@ def esc(s):
 
 
 def safe_inline(text):
-    """Escape HTML first, then apply inline formatting (bold, code)."""
+    """Escape HTML first, then apply inline formatting."""
     text = esc(text)
     text = re.sub(r"\*\*(.+?)\*\*", r"<strong>\1</strong>", text)
+    text = re.sub(r"(?<!\w)_([^_]+?)_(?!\w)", r"<em>\1</em>", text)
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
+    text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
     return text
 
 
 def score_color(score):
-    """Return a severity color based on composite score."""
     try:
         s = float(score)
     except (ValueError, TypeError):
@@ -49,7 +51,6 @@ def score_color(score):
 
 
 def evidence_color(level):
-    """Return color for evidence level."""
     level = level.upper()
     if level == "HIGH":
         return "var(--bl-loss)"
@@ -59,336 +60,376 @@ def evidence_color(level):
         return "var(--bl-faint)"
 
 
-def parse_score_line(line):
-    """Extract composite score and breakdown from Score: line."""
-    # Score: I5 (...) | U3 (...) | A5 (...) → 4.3
-    m = re.search(r"→\s*([\d.]+)", line)
-    composite = m.group(1) if m else "?"
-    # Extract the I/U/A breakdown (everything between Score: and →)
-    m2 = re.match(r"\s*Score:\s*(.+?)\s*→", line)
-    breakdown = m2.group(1).strip() if m2 else ""
-    return composite, breakdown
+# ---------------------------------------------------------------------------
+# Markdown block parsers (table, bullet list)
+# ---------------------------------------------------------------------------
+
+def parse_table_block(lines, start_idx):
+    """Parse consecutive lines starting with | into a table. Returns (html, end_idx)."""
+    rows = []
+    i = start_idx
+    while i < len(lines):
+        line = lines[i].strip()
+        if not line.startswith("|"):
+            break
+        # Skip separator lines (|---|---|)
+        if re.match(r"^\|[\s\-:|]+\|$", line):
+            i += 1
+            continue
+        cells = [c.strip() for c in line.strip("|").split("|")]
+        rows.append(cells)
+        i += 1
+
+    if not rows:
+        return "", start_idx
+
+    header = rows[0]
+    data_rows = rows[1:]
+
+    parts = ['<div class="brief-table-wrap"><table class="brief-table"><thead><tr>']
+    for cell in header:
+        parts.append(f"<th>{safe_inline(cell)}</th>")
+    parts.append("</tr></thead><tbody>")
+    for row in data_rows:
+        parts.append("<tr>")
+        for cell in row:
+            parts.append(f"<td>{safe_inline(cell)}</td>")
+        parts.append("</tr>")
+    parts.append("</tbody></table></div>")
+    return "".join(parts), i
 
 
-def parse_evidence_line(line):
-    """Extract evidence level and sources."""
-    # Evidence: HIGH · Sources: ...
-    m = re.match(r"\s*Evidence:\s*(\w+)\s*·\s*Sources:\s*(.+)", line)
-    if m:
-        return m.group(1).upper(), m.group(2).strip()
-    m2 = re.match(r"\s*Evidence:\s*(\w+)", line)
-    if m2:
-        return m2.group(1).upper(), ""
-    return "", ""
+def parse_bullet_list(lines, start_idx):
+    """Parse consecutive bullet lines into a <ul>. Returns (html, end_idx)."""
+    items = []
+    i = start_idx
+    while i < len(lines):
+        line = lines[i].strip()
+        m = re.match(r"^[-•]\s+(.+)", line)
+        if not m:
+            break
+        items.append(m.group(1))
+        i += 1
 
-
-def parse_levers_line(line):
-    """Extract ticker list from Levers: line."""
-    m = re.match(r"\s*Levers:\s*(.+)", line)
-    if not m:
-        return []
-    raw = m.group(1).strip()
-    # Split on commas, clean up
-    tickers = [t.strip() for t in raw.split(",") if t.strip()]
-    return tickers
-
-
-def render_ticker_chips(tickers):
-    """Render ticker list as code chips."""
-    if not tickers:
-        return ""
-    chips = "".join(f'<code class="brief-ticker">{esc(t)}</code>' for t in tickers)
-    return f'<div class="brief-levers">{chips}</div>'
-
-
-def render_watch_line(line):
-    """Render the Watch: line as a bulleted signals list."""
-    m = re.match(r"\s*Watch:\s*(.+)", line)
-    if not m:
-        return ""
-    items = [s.strip() for s in re.split(r";\s*", m.group(1)) if s.strip()]
     if not items:
-        return ""
-    bullets = "".join(f"<li>{safe_inline(item)}</li>" for item in items)
-    return f'<div class="brief-section brief-signals"><span class="brief-label">📊 Key signals to watch:</span><ul>{bullets}</ul></div>'
+        return "", start_idx
+
+    lis = "".join(f"<li>{safe_inline(item)}</li>" for item in items)
+    return f'<ul class="brief-bullets">{lis}</ul>', i
 
 
-def render_risk_card(num, title, fields, extra_lines):
-    """Render a single risk item as a card."""
-    composite = fields.get("composite", "?")
-    breakdown = fields.get("breakdown", "")
-    evidence_level = fields.get("evidence_level", "")
-    evidence_sources = fields.get("evidence_sources", "")
-    levers = fields.get("levers", [])
-    disconfirm = fields.get("disconfirm", "")
-    if_true = fields.get("if_true", "")
-    watch_html = fields.get("watch_html", "")
+# ---------------------------------------------------------------------------
+# Card / section renderers
+# ---------------------------------------------------------------------------
 
-    sev_color = score_color(composite)
-    ev_color = evidence_color(evidence_level)
+def render_risk_card(num, title, body_lines):
+    """Render a risk item as a card. Handles both old (field-based) and new (markdown) formats."""
+    parts = ['<div class="brief-risk-card">']
 
-    parts = [f'<div class="brief-risk-card">']
+    # Pre-scan for Score line to extract score badge
+    score = "?"
+    score_breakdown = ""
+    score_line_idx = None
+    for idx, line in enumerate(body_lines):
+        if re.match(r"\s*Score:", line):
+            m_score = re.search(r"→\s*\*{0,2}([\d.]+)\*{0,2}", line)
+            if m_score:
+                score = m_score.group(1)
+            m_bd = re.match(r"\s*Score:\s*(.+?)\s*→", line)
+            if m_bd:
+                score_breakdown = m_bd.group(1).strip()
+            score_line_idx = idx
+            break
 
-    # Title row
+    sev_color = score_color(score)
+
+    # Title + score badge
     parts.append(
         f'<div class="brief-card-header">'
-        f'<h4 class="brief-risk-title"><span class="brief-num">{num}.</span> {safe_inline(title)}</h4>'
-        f'<span class="brief-score-badge" style="background:{sev_color}">⚠️ {esc(composite)}</span>'
+        f'<h4 class="brief-risk-title"><span class="brief-num">{esc(num)}.</span> {safe_inline(title)}</h4>'
+        f'<span class="brief-score-badge" style="background:{sev_color}">⚠️ {esc(score)}</span>'
         f'</div>'
     )
 
-    # Score breakdown
-    if breakdown:
-        parts.append(f'<small class="brief-score-detail">{safe_inline(breakdown)}</small>')
+    if score_breakdown:
+        # Convert pipe separators to middots for cleaner display
+        bd = score_breakdown.replace("|", "·")
+        parts.append(f'<small class="brief-score-detail">{safe_inline(bd)}</small>')
 
-    # Evidence tag + sources
-    if evidence_level:
-        parts.append(
-            f'<div class="brief-section">'
-            f'<span class="brief-evidence-tag" style="background:{ev_color}">{esc(evidence_level)}</span>'
-            + (f'<small class="brief-sources">{safe_inline(evidence_sources)}</small>' if evidence_sources else "")
-            + '</div>'
-        )
+    # Process body lines
+    i = 0
+    while i < len(body_lines):
+        line = body_lines[i]
+        stripped = line.strip()
 
-    # Ticker chips
-    if levers:
-        parts.append(render_ticker_chips(levers))
+        # Score line already rendered
+        if i == score_line_idx:
+            i += 1
+            continue
 
-    # Disconfirm
-    if disconfirm:
-        parts.append(
-            f'<div class="brief-section">'
-            f'<span class="brief-label">❌ <strong>What would prove this wrong:</strong></span> {safe_inline(disconfirm)}'
-            f'</div>'
-        )
+        if not stripped or stripped == "---":
+            i += 1
+            continue
 
-    # If true
-    if if_true:
-        parts.append(
-            f'<div class="brief-section">'
-            f'<span class="brief-label">✅ <strong>If this plays out:</strong></span> {safe_inline(if_true)}'
-            f'</div>'
-        )
+        # Old structured format: Evidence
+        m_ev = re.match(r"\s*Evidence:\s*(\w+)\s*·\s*Sources:\s*(.+)", line)
+        if m_ev:
+            level = m_ev.group(1).upper()
+            sources = m_ev.group(2).strip()
+            ev_color = evidence_color(level)
+            parts.append(
+                f'<div class="brief-section">'
+                f'<span class="brief-evidence-tag" style="background:{ev_color}">{esc(level)}</span>'
+                f'<small class="brief-sources">{safe_inline(sources)}</small>'
+                f'</div>'
+            )
+            i += 1
+            continue
 
-    # Watch
-    if watch_html:
-        parts.append(watch_html)
+        m_ev2 = re.match(r"\s*Evidence:\s*(\w+)", line)
+        if m_ev2:
+            level = m_ev2.group(1).upper()
+            ev_color = evidence_color(level)
+            parts.append(
+                f'<div class="brief-section">'
+                f'<span class="brief-evidence-tag" style="background:{ev_color}">{esc(level)}</span>'
+                f'</div>'
+            )
+            i += 1
+            continue
 
-    # Extra lines (Merged legs etc.) collapsed
-    if extra_lines:
-        extra_html = "".join(f"<p>{safe_inline(l)}</p>" for l in extra_lines)
-        parts.append(
-            f'<details class="brief-details"><summary>Technical details</summary>'
-            f'<div class="brief-details-body">{extra_html}</div></details>'
-        )
+        # Old structured format: Levers
+        m_lev = re.match(r"\s*Levers:\s*(.+)", line)
+        if m_lev:
+            tickers = [t.strip() for t in m_lev.group(1).split(",") if t.strip()]
+            if tickers:
+                chips = "".join(f'<code class="brief-ticker">{esc(t)}</code>' for t in tickers)
+                parts.append(f'<div class="brief-levers">{chips}</div>')
+            i += 1
+            continue
+
+        # Old structured format: Merged legs
+        m_ml = re.match(r"\s*Merged legs:\s*(.+)", line)
+        if m_ml:
+            parts.append(
+                f'<details class="brief-details"><summary>Technical details</summary>'
+                f'<div class="brief-details-body"><p>{safe_inline(m_ml.group(1).strip())}</p></div></details>'
+            )
+            i += 1
+            continue
+
+        # Old structured format: Disconfirm
+        m_dc = re.match(r"\s*Disconfirm:\s*(.+)", line)
+        if m_dc:
+            parts.append(
+                f'<div class="brief-section">'
+                f'<span class="brief-label">❌ What would prove this wrong:</span>'
+                f' {safe_inline(m_dc.group(1).strip())}'
+                f'</div>'
+            )
+            i += 1
+            continue
+
+        # Old structured format: If true
+        m_it = re.match(r"\s*If true\s*→\s*(.+)", line)
+        if m_it:
+            parts.append(
+                f'<div class="brief-section">'
+                f'<span class="brief-label">✅ If this plays out:</span>'
+                f' {safe_inline(m_it.group(1).strip())}'
+                f'</div>'
+            )
+            i += 1
+            continue
+
+        # Old structured format: Watch
+        m_w = re.match(r"\s*Watch:\s*(.+)", line)
+        if m_w:
+            watch_items = [s.strip() for s in re.split(r";\s*", m_w.group(1)) if s.strip()]
+            if watch_items:
+                bullets = "".join(f"<li>{safe_inline(item)}</li>" for item in watch_items)
+                parts.append(
+                    f'<div class="brief-section brief-signals">'
+                    f'<span class="brief-label">📊 Key signals to watch:</span>'
+                    f'<ul>{bullets}</ul>'
+                    f'</div>'
+                )
+            i += 1
+            continue
+
+        # Markdown table
+        if stripped.startswith("|"):
+            table_html, new_i = parse_table_block(body_lines, i)
+            if table_html:
+                parts.append(table_html)
+                i = new_i
+                continue
+            # Fall through if table parse failed
+
+        # Bullet list
+        if re.match(r"^[-•]\s+", stripped):
+            list_html, new_i = parse_bullet_list(body_lines, i)
+            if list_html:
+                parts.append(list_html)
+                i = new_i
+                continue
+
+        # Regular paragraph (handles **bold:** labels, plain text, links)
+        parts.append(f'<p class="brief-para">{safe_inline(stripped)}</p>')
+        i += 1
 
     parts.append('</div>')
     return "\n".join(parts)
 
 
-def parse_brief_body(raw):
-    """Parse raw brief markdown into structured HTML.
+def render_collapsed_section(title, body_lines):
+    """Render a collapsed <details> section (Dropped/merged, Process, Technical details, etc.)."""
+    label_map = {
+        "dropped": "🗑️ Dropped / merged items",
+        "merged": "🗑️ Dropped / merged items",
+        "underpricing": "📋 Underpricing checklist",
+        "finra": "📊 FINRA short volume",
+        "process": "⚙️ Process notes",
+        "technical": "⚙️ Technical details",
+    }
+    label = "Technical details"
+    for key, val in label_map.items():
+        if key in title.lower():
+            label = val
+            break
 
-    Returns HTML string for the brief entry body.
-    """
-    lines = raw.split("\n")
-    output = []
-    in_numbered_item = False
-    current_num = None
-    current_title = None
-    current_fields = {}
-    current_extra = []
+    parts = [f'<details class="brief-details"><summary>{esc(label)}</summary><div class="brief-details-body">']
 
-    def flush_item():
-        nonlocal in_numbered_item, current_num, current_title, current_fields, current_extra
-        if in_numbered_item and current_title:
-            output.append(render_risk_card(current_num, current_title, current_fields, current_extra))
-        in_numbered_item = False
-        current_num = None
-        current_title = None
-        current_fields = {}
-        current_extra = []
-
-    in_details_block = False
-    details_lines = []
-
-    def flush_details(label):
-        nonlocal in_details_block, details_lines
-        if in_details_block and details_lines:
-            body = "".join(f"<p>{safe_inline(l)}</p>" for l in details_lines if l.strip())
-            output.append(
-                f'<details class="brief-details"><summary>{esc(label)}</summary>'
-                f'<div class="brief-details-body">{body}</div></details>'
-            )
-        in_details_block = False
-        details_lines = []
-
-    for i, raw_line in enumerate(lines):
-        line = raw_line.rstrip()
-
-        # Skip metadata header lines
-        if line.startswith("Date:") or line.startswith("Tail-Risk Brief v"):
-            continue
-
-        # Detect section headers for non-numbered content
-        # "Dropped / merged:" / "Underpricing checklist:" / "FINRA short volume" / "Process:"
+    i = 0
+    while i < len(body_lines):
+        line = body_lines[i]
         stripped = line.strip()
 
-        # Numbered risk item title
-        m = re.match(r"^(\d+)\.\s+(.+)", line)
-        if m:
-            flush_item()
-            in_numbered_item = True
-            current_num = m.group(1)
-            current_title = m.group(2).strip()
-            current_fields = {}
-            current_extra = []
+        # Filter out raw <details>/< /details> HTML tags from markdown
+        if stripped in ("<details>", "</details>"):
+            i += 1
             continue
 
-        # If we're inside a numbered item, parse field lines
-        if in_numbered_item:
-            # Score line
-            if re.match(r"\s+Score:", line):
-                composite, breakdown = parse_score_line(line)
-                current_fields["composite"] = composite
-                current_fields["breakdown"] = breakdown
-                continue
-            # Evidence line
-            if re.match(r"\s+Evidence:", line):
-                level, sources = parse_evidence_line(line)
-                current_fields["evidence_level"] = level
-                current_fields["evidence_sources"] = sources
-                continue
-            # Levers line
-            if re.match(r"\s+Levers:", line):
-                current_fields["levers"] = parse_levers_line(line)
-                continue
-            # Disconfirm line
-            m_dc = re.match(r"\s+Disconfirm:\s*(.+)", line)
-            if m_dc:
-                current_fields["disconfirm"] = m_dc.group(1).strip()
-                continue
-            # If true line
-            m_it = re.match(r"\s+If true\s*→\s*(.+)", line)
-            if m_it:
-                current_fields["if_true"] = m_it.group(1).strip()
-                continue
-            # Watch line
-            m_w = re.match(r"\s+Watch:\s*(.+)", line)
-            if m_w:
-                current_fields["watch_html"] = render_watch_line(line)
-                continue
-            # Merged legs line — goes to extra/details
-            if re.match(r"\s+Merged legs:", line):
-                current_extra.append(line.strip())
-                continue
-            # Blank line inside item — skip
-            if not stripped:
-                continue
-            # Any other non-blank line inside item before next numbered item
-            # could be continuation — put in extra
-            current_extra.append(stripped)
-            continue
-
-        # Outside numbered items: handle section blocks
-
-        # Blank line
         if not stripped:
+            i += 1
             continue
 
-        # Section headers for collapsed details
-        if re.match(r"^(Dropped\s*/\s*merged|Underpricing\s+checklist|FINRA\s+short\s+volume|Process)\s*:", stripped, re.I):
-            flush_item()
-            # Determine label
-            label_map = {
-                "dropped": "🗑️ Dropped / merged items",
-                "underpricing": "📋 Underpricing checklist",
-                "finra": "📊 FINRA short volume",
-                "process": "⚙️ Process notes",
-            }
-            label = "Technical details"
-            for key, val in label_map.items():
-                if key in stripped.lower():
-                    label = val
+        # Table
+        if stripped.startswith("|"):
+            table_html, new_i = parse_table_block(body_lines, i)
+            if table_html:
+                parts.append(table_html)
+                i = new_i
+                continue
+
+        # Bullet list
+        if re.match(r"^[-•]\s+", stripped):
+            list_html, new_i = parse_bullet_list(body_lines, i)
+            if list_html:
+                parts.append(list_html)
+                i = new_i
+                continue
+
+        parts.append(f'<p>{safe_inline(stripped)}</p>')
+        i += 1
+
+    parts.append('</div></details>')
+    return "\n".join(parts)
+
+
+# ---------------------------------------------------------------------------
+# Main brief body parser
+# ---------------------------------------------------------------------------
+
+def parse_brief_body(raw):
+    """Parse raw brief markdown into structured HTML."""
+    lines = raw.split("\n")
+    output = []
+
+    i = 0
+    while i < len(lines):
+        line = lines[i]
+        stripped = line.strip()
+
+        # Skip metadata header lines
+        if stripped.startswith("Date:") or stripped.startswith("Tail-Risk Brief") or stripped.startswith("Note:"):
+            i += 1
+            continue
+
+        if not stripped or stripped == "---":
+            i += 1
+            continue
+
+        # Numbered item header: ## N. Title or N. Title
+        m_num = re.match(r"^#{0,2}\s*(\d+)\.\s+(.+)", stripped)
+        if m_num:
+            num = m_num.group(1)
+            title = m_num.group(2).strip()
+            body = []
+            i += 1
+            while i < len(lines):
+                nxt = lines[i].strip()
+                if re.match(r"^#{0,2}\s*\d+\.\s+", nxt):
                     break
-
-            # The header line itself may have content after the colon
-            colon_content = stripped.split(":", 1)
-            if len(colon_content) > 1 and colon_content[1].strip():
-                details_lines.append(colon_content[1].strip())
-
-            # Collect lines until next blank-blank or numbered item or EOF
-            in_details_block = True
-            # We need to consume subsequent lines
-            # But since we're in a for loop, we'll set a flag and accumulate
-            # Actually, let me use a different approach - collect inline
+                if re.match(r"^#{1,3}\s+(Dropped|Merged|Technical|Underpricing|FINRA|Process)", nxt, re.I):
+                    break
+                if re.match(r"^(Dropped|Merged|Technical\s+details|Underpricing|FINRA|Process)\s*[:/]", nxt, re.I):
+                    break
+                body.append(lines[i])
+                i += 1
+            output.append(render_risk_card(num, title, body))
             continue
 
-        # If we're in a details block, accumulate lines
-        if in_details_block:
-            # Check if this line starts a new section or numbered item
-            if re.match(r"^\d+\.\s+", line) or re.match(r"^(Dropped|Underpricing|FINRA|Process)\s*[:/]", stripped, re.I):
-                flush_details("Technical details")
-                # Re-process this line
-                # It's a new section or numbered item
-                if re.match(r"^\d+\.\s+", line):
-                    in_numbered_item = True
-                    m_num = re.match(r"^(\d+)\.\s+(.+)", line)
-                    current_num = m_num.group(1)
-                    current_title = m_num.group(2).strip()
-                    current_fields = {}
-                    current_extra = []
-                    continue
-                else:
-                    # New section header - loop will handle it
-                    # Actually we need to handle it here
-                    label_map = {
-                        "dropped": "🗑️ Dropped / merged items",
-                        "underpricing": "📋 Underpricing checklist",
-                        "finra": "📊 FINRA short volume",
-                        "process": "⚙️ Process notes",
-                    }
-                    label = "Technical details"
-                    for key, val in label_map.items():
-                        if key in stripped.lower():
-                            label = val
-                            break
-                    colon_content = stripped.split(":", 1)
-                    if len(colon_content) > 1 and colon_content[1].strip():
-                        details_lines.append(colon_content[1].strip())
-                    in_details_block = True
-                    continue
-
-            details_lines.append(stripped)
+        # ## Section header for collapsible content
+        m_hd = re.match(r"^#{1,3}\s+(.+)", stripped)
+        if m_hd:
+            section_title = m_hd.group(1)
+            if re.match(r"(Dropped|Merged|Technical|Underpricing|FINRA|Process)", section_title, re.I):
+                body = []
+                i += 1
+                while i < len(lines):
+                    nxt = lines[i].strip()
+                    if re.match(r"^#{1,3}\s+", nxt):
+                        break
+                    if re.match(r"^#{0,2}\s*\d+\.\s+", nxt):
+                        break
+                    body.append(lines[i])
+                    i += 1
+                output.append(render_collapsed_section(section_title, body))
+                continue
+            # Non-collapsible header → render as h3
+            output.append(f'<h3 class="brief-section-header">{safe_inline(section_title)}</h3>')
+            i += 1
             continue
 
-        # Bullet items outside numbered items and details blocks
-        m_bullet = re.match(r"^[-•]\s+(.+)", stripped)
-        if m_bullet:
-            # Could be part of a details section that hasn't been started
-            # Or standalone bullets - collapse into details
-            if not in_details_block:
-                in_details_block = True
-                details_lines = []
-            details_lines.append(stripped)
+        # Old format section header without ## (Dropped:, Process:, etc.)
+        m_old = re.match(r"^(Dropped|Merged|Technical\s+details|Underpricing|FINRA|Process)\s*[:/]", stripped, re.I)
+        if m_old:
+            section_title = m_old.group(1)
+            body = []
+            i += 1
+            while i < len(lines):
+                nxt = lines[i].strip()
+                if re.match(r"^#{1,3}\s+", nxt):
+                    break
+                if re.match(r"^#{0,2}\s*\d+\.\s+", nxt):
+                    break
+                body.append(lines[i])
+                i += 1
+            output.append(render_collapsed_section(section_title, body))
             continue
 
-        # Other standalone lines
-        if stripped:
-            if not in_details_block:
-                in_details_block = True
-                details_lines = []
-            details_lines.append(stripped)
-
-    # Flush any remaining content
-    flush_item()
-    flush_details("Technical details")
+        # Other standalone content — skip
+        i += 1
 
     return "\n".join(output)
 
 
+# ---------------------------------------------------------------------------
+# Entry / CSS rendering
+# ---------------------------------------------------------------------------
+
 def format_date_human(date_str):
-    """Convert 2026-07-23 to 'July 23, 2026'."""
     try:
         d = dt.datetime.strptime(date_str.strip(), "%Y-%m-%d")
         return d.strftime("%B %-d, %Y")
@@ -396,36 +437,43 @@ def format_date_human(date_str):
         return date_str
 
 
-def render_brief_entry(path):
+def render_brief_entry(path, is_newest=False):
     """Render a single brief .md file as an HTML <article> block."""
     raw = open(path).read()
 
-    # Extract date
     m = re.search(r"^Date:\s*(.+)$", raw, re.M)
-    if m:
-        brief_date = m.group(1).strip()
-    else:
-        brief_date = os.path.basename(path).replace(".md", "")
+    brief_date = m.group(1).strip() if m else os.path.basename(path).replace(".md", "")
 
     date_display = format_date_human(brief_date)
     body_html = parse_brief_body(raw)
 
-    return (
-        f'                <article class="brief-entry" id="brief-{esc(brief_date)}">\n'
-        f'                    <details open>\n'
-        f'                        <summary><time datetime="{esc(brief_date)}">{esc(date_display)}</time></summary>\n'
-        f'                        <div class="brief-entry-body">\n'
-        f'{body_html}\n'
-        f'                        </div>\n'
-        f'                    </details>\n'
-        f'                </article>'
-    )
+    if is_newest:
+        return (
+            f'                <article class="brief-entry brief-entry-today" id="brief-{esc(brief_date)}">\n'
+            f'                    <div class="brief-entry-header">\n'
+            f'                        <h3>{esc(date_display)} — Morning Brief</h3>\n'
+            f'                    </div>\n'
+            f'                    <div class="brief-entry-body">\n'
+            f'{body_html}\n'
+            f'                    </div>\n'
+            f'                </article>'
+        )
+    else:
+        return (
+            f'                <article class="brief-entry" id="brief-{esc(brief_date)}">\n'
+            f'                    <details>\n'
+            f'                        <summary><time datetime="{esc(brief_date)}">{esc(date_display)}</time></summary>\n'
+            f'                        <div class="brief-entry-body">\n'
+            f'{body_html}\n'
+            f'                        </div>\n'
+            f'                    </details>\n'
+            f'                </article>'
+        )
 
 
 def build_brief_css():
-    """Return CSS for brief cards."""
-    return """
-        .brief-entry-body { padding: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: var(--bl-ink); }
+    """Return CSS for brief cards, tables, and layout."""
+    return """        .brief-entry-body { padding: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: var(--bl-ink); }
         .brief-risk-card { border: 1px solid var(--bl-border); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--bl-card); }
         .brief-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
         .brief-risk-title { font-size: 15px; font-weight: 600; margin: 0 0 4px; line-height: 1.35; }
@@ -438,27 +486,37 @@ def build_brief_css():
         .brief-ticker { font: 500 12px var(--bl-mono); background: var(--bl-chipbg); color: var(--bl-accent); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--bl-chipbd); }
         .brief-section { margin: 8px 0; }
         .brief-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--bl-muted); margin-bottom: 3px; }
-        .brief-signals ul { margin: 4px 0 6px; padding-left: 20px; }
-        .brief-signals li { margin: 3px 0; font-size: 13px; }
-        .brief-details { margin-top: 10px; border-top: 1px dashed var(--bl-divider); padding-top: 8px; }
+        .brief-signals ul, .brief-bullets { margin: 4px 0 6px; padding-left: 20px; }
+        .brief-signals li, .brief-bullets li { margin: 3px 0; font-size: 13px; }
+        .brief-para { margin: 6px 0; }
+        .brief-section-header { font-size: 14px; font-weight: 600; margin: 16px 0 4px; color: var(--bl-muted); }
+        .brief-table-wrap { overflow-x: auto; margin: 10px 0; }
+        .brief-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--bl-border); font-size: 12.5px; }
+        .brief-table th { background: var(--bl-rowhead, #f5f5f5); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 10px; border-bottom: 0; white-space: nowrap; }
+        .brief-table td { padding: 7px 10px; border-top: 1px solid var(--bl-divider, #eee); border-bottom: 0; white-space: normal; line-height: 1.5; font-variant-numeric: tabular-nums; }
+        .brief-table tr:hover td { background: var(--bl-hover, #f9f9f9); }
+        .brief-entry-today { border-left: 3px solid var(--bl-accent, #6366f1); padding-left: 12px; margin-left: -12px; }
+        .brief-entry-header h3 { font-size: 17px; font-weight: 700; margin: 16px 0 4px; color: var(--bl-ink); }
+        .brief-entry-header { border-bottom: 1px solid var(--bl-divider, #eee); padding-bottom: 8px; margin-bottom: 4px; }
+        .brief-details { margin-top: 10px; border-top: 1px dashed var(--bl-divider, #ddd); padding-top: 8px; }
         .brief-details > summary { cursor: pointer; font-size: 12px; color: var(--bl-faint); list-style: none; }
         .brief-details > summary::before { content: '▸ '; }
         .brief-details[open] > summary::before { content: '▾ '; }
         .brief-details-body { padding: 6px 0; font-size: 12px; color: var(--bl-muted); }
         .brief-details-body p { margin: 3px 0; }
-"""
+        .brief-details-body .brief-bullets { font-size: 12px; }
+        .brief-details-body .brief-bullets li { font-size: 12px; }"""
 
 
 def main():
-    # Collect all brief files from both locations, dedupe, sort newest-first
-    all_paths = set(glob.glob(BRIEF_GLOB_PRIMARY) + glob.glob(BRIEF_GLOB_FALLBACK))
-    all_paths = sorted(all_paths, reverse=True)  # newest filename first (YYYY-MM-DD.md)
+    # Collect all brief files, newest first
+    all_paths = sorted(set(glob.glob(BRIEF_GLOB_PRIMARY) + glob.glob(BRIEF_GLOB_FALLBACK)), reverse=True)
 
     if not all_paths:
         sys.exit("No brief *.md found")
 
-    # Render each brief as an article, newest first
-    entries = [render_brief_entry(p) for p in all_paths]
+    # Render each brief — newest is fully expanded, rest are collapsed
+    entries = [render_brief_entry(p, is_newest=(idx == 0)) for idx, p in enumerate(all_paths)]
     entries_html = "\n\n".join(entries)
 
     latest_date = os.path.basename(all_paths[0]).replace(".md", "")
@@ -471,7 +529,7 @@ def main():
         '                    <h2 id="brief-heading">Morning Brief</h2>',
         f'                    <span>{entry_count} briefs · latest {esc(latest_display)} · pre-market CT</span>',
         '                </div>',
-        '                <p class="trading-takeaway">Daily tail-risk research in plain English. Each card breaks down what\'s happening, what could prove it wrong, and what to watch. Newest first.</p>',
+        "                <p class=\"trading-takeaway\">Daily tail-risk research in plain English. Each card breaks down what's happening, what could prove it wrong, and what to watch. Newest first.</p>",
         '                <div class="brief-log">',
         entries_html,
         '                </div>',
@@ -482,7 +540,7 @@ def main():
 
     page = open(PAGE).read()
 
-    # Ensure tab button exists (after portfolio tab)
+    # Ensure tab button exists
     if 'id="brief-tab"' not in page:
         page = page.replace(
             '<button class="trading-tab" id="scan-tab"',
@@ -498,41 +556,26 @@ def main():
             1,
         )
 
-    # Update brief CSS: replace old brief-entry-body / brief-content CSS with new card CSS
+    # --- CSS management ---
     brief_css = build_brief_css()
 
-    # Remove old brief CSS lines and inject new ones
-    # We replace from .brief-entry-body through .brief-content .brief-num block
-    old_css_pattern = r"(\.brief-entry-body\s*\{[^}]+\}(?:\s*\n\s*\.brief-entry-body[^}]+\}[^}]*\}?)*)"
-    # Actually, let's be more targeted - replace the old CSS block between markers
-    # The old CSS spans from line ~175 to ~190. Let's replace specific selectors.
-
-    # Remove old .brief-entry-body and .brief-content style blocks
-    old_blocks = [
-        # brief-entry-body block (lines 175-182)
-        r'\.brief-entry-body\s*\{[^}]+\}\s*\n(\.brief-entry-body[^}]+\}[^}]*\}\s*\n)*',
-        # brief-content block (lines 183-190)
-        r'\.brief-content\s*\{[^}]+\}\s*\n(\.brief-content[^}]+\}[^}]*\}\s*\n)*',
-    ]
-
-    # Simpler: just inject new CSS right before the first old brief CSS line
-    # Find the old CSS and replace it
-    old_css_regex = re.compile(
-        r'\.brief-entry-body\s*\{.*?\.brief-content\s+\.brief-num\s*\{[^}]+\}',
-        re.S
+    # Replace everything between the summary-time anchor and the vwap-grid anchor
+    # This cleanly handles old/duplicated CSS from prior runs
+    css_anchor_start = ".brief-entry > details > summary time { font-variant-numeric: tabular-nums; }"
+    css_anchor_end = ".bl .vwap-grid"
+    css_re = re.compile(
+        re.escape(css_anchor_start) + r".*?" + re.escape(css_anchor_end),
+        re.S,
     )
-
-    if old_css_regex.search(page):
-        page = old_css_regex.sub(brief_css.strip(), page, count=1)
+    if css_re.search(page):
+        page = css_re.sub(
+            css_anchor_start + "\n" + brief_css + "\n\n        " + css_anchor_end,
+            page,
+            count=1,
+        )
     else:
-        # If old CSS not found, inject after .brief-entry summary CSS
-        inject_point = ".brief-entry > details > summary time"
-        if inject_point in page:
-            page = page.replace(
-                inject_point + " { font-variant-numeric: tabular-nums; }",
-                inject_point + " { font-variant-numeric: tabular-nums; }\n" + brief_css,
-                1,
-            )
+        # Fallback: inject before vwap-grid if anchor not found
+        page = page.replace(css_anchor_end, brief_css + "\n\n        " + css_anchor_end, 1)
 
     # Inject panel between markers
     new = re.sub(
