@@ -368,6 +368,29 @@
       }
     });
 
+    $$('[data-scan-sort-day]', scanPanel).forEach(button => {
+      button.addEventListener('click', () => {
+        const table = button.closest('table'), tbody = $('tbody', table), header = button.closest('th');
+        const direction = button.dataset.sortDirection === 'descending' ? 'ascending' : 'descending';
+        const pairs = $$('tr.scan-data-row', tbody).map(row => ({
+          row,
+          detail: row.nextElementSibling?.matches('[data-scan-detail]') ? row.nextElementSibling : null,
+          dayPct: Number(row.dataset.dayPct),
+          symbol: row.dataset.scanSymbol || '',
+        }));
+        pairs.sort((a, b) => {
+          const byDay = direction === 'descending' ? b.dayPct - a.dayPct : a.dayPct - b.dayPct;
+          return byDay || a.symbol.localeCompare(b.symbol);
+        });
+        const fragment = document.createDocumentFragment();
+        pairs.forEach(({ row, detail }) => { fragment.append(row); if (detail) fragment.append(detail); });
+        tbody.append(fragment);
+        button.dataset.sortDirection = direction;
+        header.setAttribute('aria-sort', direction);
+        $('span', button).textContent = direction === 'descending' ? '▼' : '▲';
+      });
+    });
+
     const initialSymbol = new URL(location.href).searchParams.get('chart');
     if (initialSymbol) {
       const initialDetail = $$('[data-scan-detail]', scanPanel).find(detail => detail.dataset.scanSymbol === initialSymbol.toUpperCase());

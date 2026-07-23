@@ -74,7 +74,7 @@ def setup_table(rows, aria, table_id, quotes):
         safe_sym = html.escape(sym, quote=True)
         safe_sector = html.escape(str(r["sector"]), quote=True)
         detail_id = f"scan-detail-{table_id}-{re.sub(r'[^a-z0-9-]+', '-', sym.lower()).strip('-')}"
-        cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{safe_sym}">
+        cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{safe_sym}" data-day-pct="{quotes[sym]['day_pct']:.8f}">
                         <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{safe_sym}</span></button></td>
                         <td class="scan-sec">{safe_sector}</td>
                         <td class="scan-num scan-price">{price_cell(quotes[sym])}</td>
@@ -89,7 +89,7 @@ def setup_table(rows, aria, table_id, quotes):
                     </tr>""")
     return f"""                <div class="scan-table-wrap">
                 <table class="scan-table scan-accordion-table" aria-label="{aria}">
-                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num">Price · Day</th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num" aria-sort="none"><button type="button" class="scan-sort" data-scan-sort-day>Price · Day <span aria-hidden="true">⇅</span></button></th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
                     <tbody>
 {os.linesep.join(cells)}
                     </tbody>
