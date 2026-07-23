@@ -272,10 +272,10 @@ def main():
                     <h3>Short setups · {len(shorts)}</h3>
 {short_block}
                 </div>
-                <details class="scan-universe-disclosure" id="scan-universe">
+                <details class="scan-universe-disclosure" id="scan-universe" open>
                     <summary>Browse full universe · {len(all_rows)} symbols</summary>
                     <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v={universe_hash}"><p class="bl-empty">Open to load the universe.</p></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v={universe_hash}"><p class="bl-empty">Loading universe…</p></div>
                 </details>
                 <script type="application/json" id="scan-chart-config">{chart_config}</script>
                 <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>

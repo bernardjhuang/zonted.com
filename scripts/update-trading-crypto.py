@@ -204,7 +204,7 @@ def main():
 
     rows = "\n".join(
         f"""                    <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="{html.escape(c['sym'], quote=True)}">{html.escape(c['sym'])}</button><span class="bl-tag">{html.escape(c['name'])}</span></td>
+                        <td class="scan-sym"><span translate="no">{html.escape(c['sym'])}</span><span class="bl-tag">{html.escape(c['name'])}</span></td>
                         <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">{c['spread']:+.2f}</span></td>
                         <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
                         <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
@@ -220,15 +220,12 @@ def main():
     below_leaders = [c["sym"] for c in coins if c["spread"] >= 0 and not vwap_by_symbol[c["sym"]]["side"]]
     middle = f" {', '.join(below_leaders)} {'is' if len(below_leaders) == 1 else 'are'} improving versus BTC but remain below YTD VWAP." if below_leaders else ""
     takeaway = f"{leaders[0]} leads BTC.{middle} {', '.join(laggards[:2])} lag."
-    chips = "".join(f'<button type="button" class="bl-chip" data-crypto-select="{c["sym"]}">{c["sym"]}</button>' for c in coins)
-
     panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
                 <div class="position-head">
                     <h2 id="crypto-heading">Crypto</h2>
                     <span>{fmt(p['last_bar'])} UTC close · BTC {'' if not p.get('btc') else f"${p['btc']['price']:,.0f} · z {p['btc']['z']:+.2f}"}</span>
                 </div>
                 <p class="trading-takeaway">{html.escape(takeaway)}</p>
-                <div class="quick-select" aria-label="Select crypto chart">{chips}</div>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
                     <thead><tr><th>Coin</th><th class="scan-num">vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
@@ -237,8 +234,8 @@ def main():
                     </tbody>
                 </table>
                 </div>
-                <section class="selected-chart" id="crypto-selected-chart" data-url="/trading/crypto-charts.json?v={asset_hash}" data-default="{default_symbol}" aria-live="polite">
-                    <p class="bl-empty">Select a coin to load one chart.</p>
+                <section class="crypto-chart-grid" id="crypto-chart-grid" data-url="/trading/crypto-charts.json?v={asset_hash}" aria-live="polite">
+                    <p class="bl-empty">Loading all 7 charts…</p>
                 </section>
                 <details class="trading-method"><summary>How this works</summary><p>Spread Z compares each coin's 50-day trend with BTC's. Positive means relative leadership; negative means lagging. YTD VWAP estimates the year's volume-weighted cost basis on Hyperliquid perpetual markets. Both axes matter: a coin can be above its own VWAP while weakening versus BTC. Descriptive market data, not a recommendation.</p></details>
             </section>"""

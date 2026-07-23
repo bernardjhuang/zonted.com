@@ -18,13 +18,14 @@ class TradingUiContractTest(unittest.TestCase):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
 
-    def test_six_answer_first_tabs(self):
+    def test_seven_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "scan", "vwap", "congress", "whales", "crypto"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "brief", "scan", "vwap", "congress", "whales", "crypto"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
-        self.assertRegex(labels[1], r"^Momentum \d+$")
-        self.assertEqual(labels[2:], ["VWAP", "Congress", "13F", "Crypto"])
+        self.assertEqual(labels[1], "Brief")
+        self.assertRegex(labels[2], r"^Momentum \d+$")
+        self.assertEqual(labels[3:], ["VWAP", "Congress", "13F", "Crypto"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_heading_and_scoped_controls(self):
@@ -33,6 +34,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('id="bl-tools"', self.html)
         self.assertIn('Download positions CSV', self.html)
         self.assertRegex(self.js, r"tools\.hidden\s*=\s*target\.id\s*!==\s*'positions-panel'")
+        self.assertNotIn('id="bl-filters"', self.html)
+        self.assertNotIn("positive mark", self.js)
 
     def test_legacy_deep_links_survive(self):
         self.assertIn("'#watchlist': '#scan'", self.js)
@@ -51,6 +54,10 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn('<details class="trading-method"', block, panel)
         self.assertIn('No qualified shorts today.', self.html)
         self.assertIn('id="scan-universe"', self.html)
+        self.assertIn('<details class="scan-universe-disclosure" id="scan-universe" open>', self.html)
+        self.assertIn('data-universe-sort-day', self.js)
+        self.assertIn('let universeSortDir = -1;', self.js)
+        self.assertIn('if (universe.open) loadUniverse();', self.js)
         self.assertNotIn('aria-label="Full momentum scan of the tracked universe"', self.html)
 
     def test_chart_payloads_are_external_and_small_shell(self):
@@ -77,6 +84,38 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(len(crypto["charts"]), 7)
         self.assertEqual(vwap["default"], "SPY")
         self.assertIn(crypto["default"], crypto["charts"])
+
+    def test_vwap_shows_every_chart_without_picker_controls(self):
+        self.assertIn('id="vwap-chart-grid"', self.html)
+        self.assertIn('data-url="/trading/vwap-charts.json?', self.html)
+        self.assertNotIn('id="vwap-selected-chart"', self.html)
+        self.assertNotIn('data-vwap-select', self.html)
+        self.assertNotIn('data-vwap-scope-button', self.html)
+        self.assertNotIn('data-vwap-scope="countries" hidden', self.html)
+        self.assertIn("initChartGallery('#vwap-chart-grid'", self.js)
+        self.assertNotIn("initChartPicker('#vwap-selected-chart'", self.js)
+
+    def test_crypto_shows_every_chart_without_picker_controls(self):
+        self.assertIn('id="crypto-chart-grid"', self.html)
+        self.assertIn('data-url="/trading/crypto-charts.json?', self.html)
+        self.assertNotIn('id="crypto-selected-chart"', self.html)
+        self.assertNotIn('data-crypto-select', self.html)
+        self.assertIn("initChartGallery('#crypto-chart-grid'", self.js)
+
+    def test_13f_consensus_generates_top_twenty_per_side(self):
+        generator = (ROOT / "scripts" / "update-trading-whales.py").read_text()
+        self.assertIn("p['top_bought'][:20]", generator)
+        self.assertIn("p['top_sold'][:20]", generator)
+        self.assertIn("Most bought across offices · top 20", generator)
+        self.assertIn("Most sold across offices · top 20", generator)
+        whales_match = re.search(r'<!-- AUTO:WHALES:START -->(.*?)<!-- AUTO:WHALES:END -->', self.html, re.S)
+        self.assertIsNotNone(whales_match)
+        whales = whales_match.group(1) if whales_match else ""
+        for label in ("Most bought across offices · top 20", "Most sold across offices · top 20"):
+            body = re.search(re.escape(label) + r".*?<tbody>(.*?)</tbody>", whales, re.S)
+            self.assertIsNotNone(body, label)
+            rows = body.group(1) if body else ""
+            self.assertEqual(rows.count("<tr>"), 20, label)
 
 
 if __name__ == "__main__":

@@ -3,8 +3,8 @@
 
 Reads the newest ~/trading/scans/sector-vwap-*.json (or a path
 specified as argv[1]) emitted by ~/trading/src/sector_vwap_charts.py
-and renders the "VWAP" tab: an answer-first summary table plus one selected
-chart loaded on demand from trading/vwap-charts.json.
+and renders the "VWAP" tab: an answer-first summary table plus all 22 charts
+loaded together from trading/vwap-charts.json.
 
 Usage: python3 scripts/update-trading-vwap.py [path/to/sector-vwap-YYYY-MM-DD.json]
 Run from the repo root.
@@ -207,8 +207,8 @@ def main():
 
     def render_rows(items, scope):
         return "\n".join(
-            f"""                    <tr data-vwap-scope="{scope}"{' hidden' if scope == 'countries' else ''}>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="{html.escape(s['sym'], quote=True)}">{html.escape(s['sym'])}</button></td>
+            f"""                    <tr data-vwap-scope="{scope}">
+                        <td class="scan-sym"><span translate="no">{html.escape(s['sym'])}</span></td>
                         <td class="scan-sec">{html.escape(s['name'])}</td>
                         <td class="scan-num"><span class="{'scan-z-pos' if s['pct'] >= 0 else 'scan-z-neg'}">{s['pct']:+.1f}%</span></td>
                         <td class="scan-num">{'▲' if s['side'] else '▼'} since {fmt(s['since'])} ({s['held']}d)</td>
@@ -227,10 +227,6 @@ def main():
     us_above = sum(bool(s["side"]) for s in us_summary)
     leaders = sorted(sector_summary, key=lambda s: (-s["z"], s["sym"]))[:2]
     laggards = sorted(sector_summary, key=lambda s: (s["z"], s["sym"]))[:2]
-    quick_symbols = ["SPY", *[s["sym"] for s in leaders], *[s["sym"] for s in laggards]]
-    quick_chips = "".join(
-        f'<button type="button" class="bl-chip" data-vwap-select="{sym}">{sym}</button>'
-        for sym in quick_symbols)
     rows = render_rows(us_summary, "us") + "\n" + render_rows(country_summary, "countries")
     takeaway = (f"{us_above} of {len(us_summary)} US markets are above YTD VWAP. "
                 f"{leaders[0]['name']} leads the 50-day trend; {laggards[0]['name']} lags.")
@@ -241,13 +237,6 @@ def main():
                     <span>{last_bar} close · anchor Jan 2, 2026</span>
                 </div>
                 <p class="trading-takeaway">{html.escape(takeaway)}</p>
-                <div class="data-toolbar">
-                    <div class="segmented" role="group" aria-label="VWAP market group">
-                        <button type="button" class="on" data-vwap-scope-button="us">US markets</button>
-                        <button type="button" data-vwap-scope-button="countries">Countries</button>
-                    </div>
-                    <div class="quick-select" aria-label="Quick chart selection">{quick_chips}</div>
-                </div>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Year-to-date VWAP market summary">
                     <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
@@ -256,8 +245,8 @@ def main():
                     </tbody>
                 </table>
                 </div>
-                <section class="selected-chart" id="vwap-selected-chart" data-url="/trading/vwap-charts.json?v={asset_hash}" data-default="SPY" aria-live="polite">
-                    <p class="bl-empty">Select a symbol to load one chart.</p>
+                <section class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v={asset_hash}" aria-live="polite">
+                    <p class="bl-empty">Loading all 22 charts…</p>
                 </section>
                 <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector charts also show the smoothed 50-session Z-score used by Momentum. Descriptive market data, not investment advice.</p></details>
             </section>"""
