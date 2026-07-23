@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Inject latest tail-risk brief into trading/index.html (AUTO:BRIEF block)."""
+"""Inject tail-risk brief log into trading/index.html (AUTO:BRIEF block).
+
+Reads ALL briefs from tail-risk-scanner/briefs/*.md, renders them newest-first
+as a running log inside the Brief tab.
+"""
 import datetime as dt
 import glob
 import html
@@ -26,7 +30,7 @@ def safe_inline(text):
 
 
 def md_to_html(text):
-    """Simple regex-based markdown → HTML converter for brief content."""
+    """Simple regex-based markdown to HTML converter for brief content."""
     lines = text.split("\n")
     out = []
     in_ul = False
@@ -40,35 +44,34 @@ def md_to_html(text):
     for raw_line in lines:
         line = raw_line.rstrip()
 
-        # Skip metadata header lines
+        # Skip metadata header lines (Date: and Tail-Risk Brief v...)
         if line.startswith("Date:") or line.startswith("Tail-Risk Brief v"):
             continue
 
-        # Blank line → <br>
+        # Blank line
         if not line.strip():
             close_ul()
-            out.append("<br>")
             continue
 
-        # ## heading → <h3>
+        # ## heading
         m = re.match(r"^##\s+(.*)", line)
         if m:
             close_ul()
-            out.append(f"<h3>{esc(m.group(1))}</h3>")
+            out.append(f"<h4>{esc(m.group(1))}</h4>")
             continue
 
-        # ### heading → <h4>
+        # ### heading
         m = re.match(r"^###\s+(.*)", line)
         if m:
             close_ul()
             out.append(f"<h4>{esc(m.group(1))}</h4>")
             continue
 
-        # # heading → <h3>
+        # # heading
         m = re.match(r"^#\s+(.*)", line)
         if m:
             close_ul()
-            out.append(f"<h3>{esc(m.group(1))}</h3>")
+            out.append(f"<h4>{esc(m.group(1))}</h4>")
             continue
 
         # Bullet lines: - or •
@@ -81,13 +84,13 @@ def md_to_html(text):
             out.append(f"<li>{content}</li>")
             continue
 
-        # Numbered list lines: "1. Title..." → section heading
+        # Numbered list lines: "1. Title..." → subsection heading
         m = re.match(r"^(\d+)\.\s+(.*)", line)
         if m:
             close_ul()
             num = m.group(1)
             content = safe_inline(m.group(2))
-            out.append(f'<h3><span class="brief-num">{num}.</span> {content}</h3>')
+            out.append(f'<h4 class="brief-item"><span class="brief-num">{num}.</span> {content}</h4>')
             continue
 
         # Regular paragraph line
@@ -98,18 +101,11 @@ def md_to_html(text):
     return "\n".join(out)
 
 
-def main():
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-    else:
-        paths = sorted(glob.glob(BRIEF_GLOB_PRIMARY) + glob.glob(BRIEF_GLOB_FALLBACK))
-        if not paths:
-            sys.exit("No brief *.md found")
-        path = paths[-1]
-
+def render_brief_entry(path):
+    """Render a single brief .md file as an HTML <article> block."""
     raw = open(path).read()
 
-    # Extract date from the brief or filename
+    # Extract date
     m = re.search(r"^Date:\s*(.+)$", raw, re.M)
     if m:
         brief_date = m.group(1).strip()
@@ -118,14 +114,42 @@ def main():
 
     body_html = md_to_html(raw)
 
+    return (
+        f'                <article class="brief-entry" id="brief-{esc(brief_date)}">\n'
+        f'                    <details open>\n'
+        f'                        <summary><time datetime="{esc(brief_date)}">{esc(brief_date)}</time></summary>\n'
+        f'                        <div class="brief-entry-body">\n'
+        f'{body_html}\n'
+        f'                        </div>\n'
+        f'                    </details>\n'
+        f'                </article>'
+    )
+
+
+def main():
+    # Collect all brief files from both locations, dedupe, sort newest-first
+    all_paths = set(glob.glob(BRIEF_GLOB_PRIMARY) + glob.glob(BRIEF_GLOB_FALLBACK))
+    all_paths = sorted(all_paths, reverse=True)  # newest filename first (YYYY-MM-DD.md)
+
+    if not all_paths:
+        sys.exit("No brief *.md found")
+
+    # Render each brief as an article, newest first
+    entries = [render_brief_entry(p) for p in all_paths]
+    entries_html = "\n\n".join(entries)
+
+    latest_date = os.path.basename(all_paths[0]).replace(".md", "")
+    entry_count = len(all_paths)
+
     panel_lines = [
         '            <section class="trading-panel brief-panel" id="brief-panel" role="tabpanel" tabindex="0" aria-labelledby="brief-tab" hidden>',
         '                <div class="position-head">',
         '                    <h2 id="brief-heading">Morning Brief</h2>',
-        f'                    <span>{esc(brief_date)} · pre-market CT</span>',
+        f'                    <span>{entry_count} briefs · latest {esc(latest_date)} · pre-market CT</span>',
         '                </div>',
-        '                <div class="brief-content">',
-        body_html,
+        '                <p class="trading-takeaway">Daily tail-risk + event-catalyst research brief. Newest first. Each entry is collapsible.</p>',
+        '                <div class="brief-log">',
+        entries_html,
         '                </div>',
         '                <p class="trading-note">Research and idea generation only. Not trade recommendations or investment advice.</p>',
         '            </section>',
@@ -142,7 +166,7 @@ def main():
             1,
         )
 
-    # Ensure AUTO:BRIEF markers exist (between CONGRESS:END and WHALES:START)
+    # Ensure AUTO:BRIEF markers exist
     if "<!-- AUTO:BRIEF:START -->" not in page:
         page = page.replace(
             "<!-- AUTO:WHALES:START -->",
@@ -159,11 +183,11 @@ def main():
     )
 
     if new == open(PAGE).read():
-        print(f"[brief] already current: {os.path.basename(path)}")
+        print(f"[brief] already current: {entry_count} briefs, latest {latest_date}")
         return
 
     open(PAGE, "w").write(new)
-    print(f"[brief] injected {os.path.basename(path)} ({brief_date})")
+    print(f"[brief] injected {entry_count} briefs, latest {latest_date}")
 
 
 if __name__ == "__main__":
