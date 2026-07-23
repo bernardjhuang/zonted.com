@@ -23,6 +23,7 @@ from zoneinfo import ZoneInfo
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
 CHART_ASSET = os.path.join(ROOT, "trading", "scan-charts.json")
+UNIVERSE_ASSET = os.path.join(ROOT, "trading", "scan-universe.json")
 SCAN_GLOB = os.path.expanduser("~/trading/scans/vwap-scan-*.json")
 
 
@@ -68,6 +69,16 @@ def price_cell(quote):
 
 def setup_table(rows, aria, table_id, quotes):
     cells = []
+    gloss = {
+        "ENTER+": "qualified + persistent",
+        "ENTER": "qualified",
+        "SHORT+": "short + persistent",
+        "SHORT": "short qualified",
+        "BREAKING": "fresh short break",
+        "WATCH": "watch",
+        "AVOID": "not qualified",
+        "NO DATA": "insufficient data",
+    }
     for r in rows:
         label, key = signal(r)
         sym = r["symbol"]
@@ -75,21 +86,18 @@ def setup_table(rows, aria, table_id, quotes):
         safe_sector = html.escape(str(r["sector"]), quote=True)
         detail_id = f"scan-detail-{table_id}-{re.sub(r'[^a-z0-9-]+', '-', sym.lower()).strip('-')}"
         cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{safe_sym}" data-day-pct="{quotes[sym]['day_pct']:.8f}">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{safe_sym}</span></button></td>
-                        <td class="scan-sec">{safe_sector}</td>
+                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">{safe_sym}</span><span class="bl-tag">{safe_sector}</span></span></button></td>
                         <td class="scan-num scan-price">{price_cell(quotes[sym])}</td>
                         <td class="scan-num">{znum(r.get('spread_z'))}</td>
-                        <td class="scan-num">{znum(r.get('dist_z'))}</td>
-                        <td class="scan-num">{znum(r.get('evwap_pct'), '%')}</td>
                         <td class="scan-num">{earn_cell(r)}</td>
-                        <td><span class="scan-signal scan-signal--{key}">{label}</span></td>
+                        <td><span class="scan-signal scan-signal--{key}" title="{html.escape(gloss[label], quote=True)}">{label}</span></td>
                     </tr>
                     <tr class="scan-detail-row" id="{detail_id}" data-scan-detail data-scan-symbol="{safe_sym}" hidden>
-                        <td colspan="8"><div class="scan-setup-chart" data-scan-chart="{safe_sym}"></div></td>
+                        <td colspan="5"><div class="scan-setup-chart" data-scan-chart="{safe_sym}"></div></td>
                     </tr>""")
     return f"""                <div class="scan-table-wrap">
-                <table class="scan-table scan-accordion-table" aria-label="{aria}">
-                    <thead><tr><th>Ticker</th><th>Sector</th><th class="scan-num" aria-sort="none"><button type="button" class="scan-sort" data-scan-sort-day>Price · Day <span aria-hidden="true">⇅</span></button></th><th class="scan-num">Spread Z</th><th class="scan-num">Dist Z</th><th class="scan-num">vs Earn VWAP</th><th class="scan-num">Next earnings</th><th>Signal</th></tr></thead>
+                <table class="scan-table scan-accordion-table scan-table--decision" aria-label="{aria}">
+                    <thead><tr><th>Ticker</th><th class="scan-num" aria-sort="none"><button type="button" class="scan-sort" data-scan-sort-day>Price · Day <span aria-hidden="true">⇅</span></button></th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead>
                     <tbody>
 {os.linesep.join(cells)}
                     </tbody>
@@ -200,40 +208,77 @@ def main():
                                r.get("spread_z") or 0))
     n_setups = len(longs) + len(shorts)
 
+    ranked_sectors = sorted(p["sectors"], key=lambda s: s["rank"])
+    leading = ranked_sectors[:2]
+    lagging = ranked_sectors[-2:]
     sectors = "\n".join(
-        f"""                    <li class="scan-sector{' scan-sector--hot' if s['hot'] else ''}{' scan-sector--cold' if s['cold'] else ''}"><b>{html.escape(str(s['etf']))}</b>{html.escape(str(s['name']))}<br>{znum(s['z'])} · #{s['rank']}</li>"""
-        for s in p["sectors"])
+        f"""                        <li class="scan-sector{' scan-sector--hot' if s['hot'] else ''}{' scan-sector--cold' if s['cold'] else ''}"><b>{html.escape(str(s['etf']))}</b>{html.escape(str(s['name']))}<br>{znum(s['z'])} · #{s['rank']}</li>"""
+        for s in ranked_sectors)
 
     all_rows = sorted(p["rows"], key=lambda r: r["symbol"])
     spy = p["spy"]
     regime = f"SPY {spy['close']:.2f}, {'above' if spy['above_sma50'] else 'below'} its 50-day average"
     price_freshness = f"Prices {quote_stamp}" if quote_stamp else f"Prices {last_bar} close"
+    setup_parts = []
+    if longs:
+        setup_parts.append(f"{len(longs)} qualified long{'s' if len(longs) != 1 else ''}")
+    if shorts:
+        setup_parts.append(f"{len(shorts)} qualified short{'s' if len(shorts) != 1 else ''}")
+    setup_summary = " and ".join(setup_parts) if setup_parts else "No qualified setups"
+    sector_names = sorted({str(r["sector"]) for r in [*longs, *shorts]})
+    sector_clause = f" across {', '.join(sector_names)}" if sector_names else ""
+    takeaway = f"{setup_summary}{sector_clause}. {regime}."
+    short_block = setup_table(shorts, "Short setups from the momentum scan", "short", quotes) if shorts else '<p class="bl-empty">No qualified shorts today.</p>'
+
+    universe_rows = []
+    for row in all_rows:
+        label, key = signal(row)
+        universe_rows.append({
+            "symbol": row["symbol"],
+            "sector": row["sector"],
+            "price": quotes[row["symbol"]]["price"],
+            "day_pct": quotes[row["symbol"]]["day_pct"],
+            "spread_z": row.get("spread_z"),
+            "dist_z": row.get("dist_z"),
+            "evwap_pct": row.get("evwap_pct"),
+            "next_earn": row.get("next_earn"),
+            "days_to_earn": row.get("days_to_earn"),
+            "signal": label,
+            "signal_key": key,
+        })
+    universe_json = json.dumps({"last_bar": p["last_bar"], "rows": universe_rows}, separators=(",", ":"), allow_nan=False)
+    universe_hash = hashlib.sha256(universe_json.encode()).hexdigest()[:12]
 
     panel = f"""            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
                 <div class="position-head">
-                    <h2 id="scan-heading">Momentum scan</h2>
+                    <h2 id="scan-heading">Momentum</h2>
                     <span>Signals {last_bar} close · {price_freshness}</span>
                 </div>
-                <p class="scan-intro">A mechanical relative-strength screen across the {len(all_rows)}-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
-                <p class="scan-chart-hint">Click any ticker row to open its full setup chart beside the matching sector ETF's YTD VWAP chart. Only one comparison stays open at a time.</p>
-                <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
+                <p class="trading-takeaway">{html.escape(takeaway)}</p>
+                <p class="signal-legend"><b>ENTER+</b> = qualified + persistent · <b>ENTER</b> = qualified · <b>WATCH</b> = watch · <b>AVOID</b> = not qualified</p>
+                <div class="sector-summary">
+                    <span><b>Leading</b> {' · '.join(html.escape(str(s['name'])) for s in leading)}</span>
+                    <span><b>Lagging</b> {' · '.join(html.escape(str(s['name'])) for s in reversed(lagging))}</span>
+                    <details><summary>View all sectors</summary><ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
 {sectors}
-                </ul>
+                    </ul></details>
+                </div>
+                <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
                 <div class="position-group">
                     <h3>Long setups · {len(longs)}</h3>
 {setup_table(longs, "Long setups from the momentum scan", "long", quotes)}
                 </div>
                 <div class="position-group">
                     <h3>Short setups · {len(shorts)}</h3>
-{setup_table(shorts, "Short setups from the momentum scan", "short", quotes)}
+{short_block}
                 </div>
-                <div class="position-group">
-                    <h3>Full scan · {len(all_rows)} symbols</h3>
-                    <p class="scan-skip-full"><a href="#scan-method">Skip past the {len(all_rows)}-row table</a></p>
-{setup_table(all_rows, "Full momentum scan of the tracked universe", "full", quotes)}
-                </div>
+                <details class="scan-universe-disclosure" id="scan-universe">
+                    <summary>Browse full universe · {len(all_rows)} symbols</summary>
+                    <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v={universe_hash}"><p class="bl-empty">Open to load the universe.</p></div>
+                </details>
                 <script type="application/json" id="scan-chart-config">{chart_config}</script>
-                <p class="trading-note" id="scan-method" tabindex="-1">Method: sector strength is the 50-session z-score of the sector ETF — the top three with z &gt; 1 are hot, the bottom three with z &lt; −1 freezing. Spread Z is the stock's 50-session z-score minus SPY's. Dist Z is the distance from the year-anchored VWAP in z units. ENTER needs a hot sector, spread Z &gt; 1, and price above its earnings-anchored VWAP; the "+" adds persistence above the yearly VWAP. SHORT is the exact mirror in a freezing sector with a confirmed break (5+ sessions below the earnings VWAP); BREAKING means the break is fresh. AVOID = lagging SPY or 5+ sessions below the earnings VWAP. NO DATA = fewer than 60 completed sessions. Bars are Alpaca SIP adjusted; BYDDY, MPNGY, NTDOY, and TCEHY use Yahoo adjusted-bar fallback. Intraday price/day marks use Alpaca IEX latest trades, with Yahoo fallback for those four OTC ADRs, and refresh hourly from 9 AM CT through the regular close. ⚠ marks earnings within ~9 days. This is the raw output of a daily screen with intraday marks — not positions, not predictions, and not investment advice.</p>
+                <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
             </section>"""
 
     page = open(PAGE).read()
@@ -243,14 +288,19 @@ def main():
     new = re.sub(r'(<span class="trading-tab-count" id="scan-tab-count">)[^<]*(</span>)',
                  lambda m: f"{m.group(1)}{n_setups}{m.group(2)}", new)
     old_asset = open(CHART_ASSET).read() if os.path.exists(CHART_ASSET) else None
-    page_changed, asset_changed = new != page, old_asset != asset_json
-    if not page_changed and not asset_changed:
+    old_universe = open(UNIVERSE_ASSET).read() if os.path.exists(UNIVERSE_ASSET) else None
+    page_changed = new != page
+    asset_changed = old_asset != asset_json
+    universe_changed = old_universe != universe_json
+    if not page_changed and not asset_changed and not universe_changed:
         print(f"[scan] already current: {os.path.basename(path)}, {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
         return
     if page_changed:
         open(PAGE, "w").write(new)
     if asset_changed:
         open(CHART_ASSET, "w").write(asset_json)
+    if universe_changed:
+        open(UNIVERSE_ASSET, "w").write(universe_json)
     print(f"[scan] injected {os.path.basename(path)}: {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
 
 

@@ -50,21 +50,21 @@
     parked.forEach(([placeholder, svg]) => placeholder.replaceWith(svg));
     parkedPanelSvgs.delete(panel);
   };
-  const cloneWithParkedSvg = (source, panel) => {
-    const clone = source.cloneNode(true);
-    if ($('svg', clone)) return clone;
-    const pair = (parkedPanelSvgs.get(panel) || []).find(([placeholder]) => placeholder.parentNode === source);
-    const clonePlaceholder = [...clone.childNodes].find(node => node.nodeType === Node.COMMENT_NODE && node.data === 'lazy-tab-svg');
-    if (pair && clonePlaceholder) clonePlaceholder.replaceWith(pair[1].cloneNode(true));
-    return clone;
-  };
   function activate(tab, push) {
     tabs.forEach(t => { const on = t === tab; t.setAttribute('aria-selected', String(on)); t.tabIndex = on ? 0 : -1; });
     const target = panelOf(tab);
     restorePanelSvgs(target);
     panels.forEach(p => { p.hidden = p !== target; });
     const filters = $('#bl-filters');
-    if (filters) filters.hidden = !['positions-panel', 'log-panel'].includes(target.id);
+    if (filters) filters.hidden = target.id !== 'positions-panel';
+    const tools = $('#bl-tools');
+    if (tools) tools.hidden = target.id !== 'positions-panel';
+    const tabStrip = tab.parentElement;
+    if (tabStrip.scrollWidth > tabStrip.clientWidth) {
+      const left = tab.offsetLeft - (tabStrip.clientWidth - tab.offsetWidth) / 2;
+      tabStrip.scrollTo({ left, behavior: push ? 'smooth' : 'auto' });
+    }
+    target.dispatchEvent(new CustomEvent('panelactivate'));
     if (push) {
       const hash = tab.id === 'positions-tab' ? '' : '#' + tab.id.replace(/-tab$/, '');
       history.replaceState(null, '', location.pathname + location.search + hash);
@@ -83,10 +83,16 @@
     });
   });
   const fromHash = () => {
-    const hash = location.hash === '#watchlist' ? '#scan' : location.hash;
+    const redirects = { '#watchlist': '#scan', '#log': '' };
+    const hash = Object.prototype.hasOwnProperty.call(redirects, location.hash) ? redirects[location.hash] : location.hash;
     const exact = tabs.find(t => hash === '#' + t.id.replace(/-tab$/, ''));
     if (exact) return exact;
-    if (!hash && new URL(location.href).searchParams.has('chart')) return $('#scan-tab') || tabs[0];
+    if (!hash) {
+      const params = new URL(location.href).searchParams;
+      if (params.has('chart')) return $('#scan-tab') || tabs[0];
+      if (params.has('vwap')) return $('#vwap-tab') || tabs[0];
+      if (params.has('crypto')) return $('#crypto-tab') || tabs[0];
+    }
     const anchoredPanel = hash && document.getElementById(hash.slice(1))?.closest('[role="tabpanel"]');
     return tabs.find(t => panelOf(t) === anchoredPanel) || tabs[0];
   };
@@ -97,6 +103,7 @@
   const scanPanel = $('#scan-panel');
   const chartConfigSource = $('#scan-chart-config');
   let renderSetupChartForSymbol = null;
+  let wireVwapChart = () => {};
   if (scanPanel && chartConfigSource) {
     let chartConfig = {};
     try { chartConfig = JSON.parse(chartConfigSource.textContent); } catch (error) { console.error('Invalid scan chart config', error); }
@@ -107,6 +114,18 @@
         .then(payload => payload.charts || {})
         .catch(error => { chartDataPromise = null; throw error; });
       return chartDataPromise;
+    };
+    let vwapChartDataPromise = null;
+    const loadVwapChartData = () => {
+      if (!vwapChartDataPromise) {
+        const source = $('#vwap-selected-chart');
+        const url = source?.dataset.url || '/trading/vwap-charts.json';
+        vwapChartDataPromise = fetch(url, { credentials: 'same-origin' })
+          .then(response => { if (!response.ok) throw new Error(`VWAP chart data HTTP ${response.status}`); return response.json(); })
+          .then(payload => payload.charts || {})
+          .catch(error => { vwapChartDataPromise = null; throw error; });
+      }
+      return vwapChartDataPromise;
     };
     let openToggle = null;
     const W = 1120, PXH = 280, SUBH = 78, GAP = 14, AXISH = 22, ML = 8, MR = 66;
@@ -168,6 +187,7 @@
       });
       svg.addEventListener('blur', () => { tip.hidden = true; crosshair.setAttribute('visibility', 'hidden'); });
     }
+    wireVwapChart = wireVwapFigure;
 
     async function renderSetupChart(shell, symbol) {
       if (shell.dataset.rendered === 'true' || shell.dataset.loading === 'true') return;
@@ -265,16 +285,21 @@
       const stockCard = `<section class="setup-card scan-setup-card"><header><b id="${titleId}">${esc(symbol)}</b><span>${esc(rec.sector)}</span><span class="setup-b ${badgeClass}">${esc(rec.label)}</span><span class="setup-stats">spread Z <b>${signed(stats.spread_z)}</b> · dist Z <b>${signed(stats.dist_z)}</b> · vs earn VWAP <b>${signed(stats.evwap_pct, '%')}</b> (${side}) · next earnings ${shortDate(stats.next_earn)}</span></header><p class="setup-read">${esc(rec.read)}</p><svg viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" tabindex="0" aria-labelledby="${titleId} ${descId}"><desc id="${descId}">${esc(description)}</desc>${parts.join('')}${axis.join('')}<line class="sx" x1="0" y1="0" x2="0" y2="${H - AXISH}" visibility="hidden"/></svg><div class="setup-tip" aria-live="polite" hidden></div></section>`;
       shell.innerHTML = `<div class="scan-comparison-grid"><div class="scan-stock-chart">${stockCard}</div></div>`;
       const grid = $('.scan-comparison-grid', shell);
-      const sectorSource = $$('.vwap-chart', $('#vwap-panel')).find(fig => fig.dataset.sym === rec.sector_etf);
-      if (sectorSource) {
-        const sectorPane = document.createElement('div');
-        sectorPane.className = 'scan-sector-chart';
-        const sectorChart = cloneWithParkedSvg(sectorSource, $('#vwap-panel'));
-        sectorChart.classList.remove('vwap-chart--spy');
-        sectorChart.querySelector('.vwap-tip')?.replaceChildren();
-        sectorPane.append(sectorChart);
-        grid.append(sectorPane);
-        wireVwapFigure(sectorChart);
+      try {
+        const vwapCharts = await loadVwapChartData();
+        const sectorMarkup = vwapCharts[rec.sector_etf];
+        if (sectorMarkup) {
+          const sectorPane = document.createElement('div');
+          sectorPane.className = 'scan-sector-chart';
+          sectorPane.innerHTML = sectorMarkup;
+          const sectorChart = $('.vwap-chart', sectorPane);
+          sectorChart?.classList.remove('vwap-chart--spy');
+          sectorPane.querySelector('.vwap-tip')?.replaceChildren();
+          grid.append(sectorPane);
+          wireVwapFigure(sectorChart);
+        }
+      } catch (error) {
+        console.error('Unable to load matching sector chart', error);
       }
       const card = $('.scan-setup-card', shell), svg = $('svg', card), tip = $('.setup-tip', card), crosshair = $('.sx', card);
       let activeIndex = n - 1;
@@ -402,6 +427,133 @@
     }
   }
 
+  /* ── on-demand universe and selected charts ───────────────────────── */
+  const universe = $('#scan-universe');
+  const universeShell = $('#scan-universe-shell');
+  const universeInput = $('#scan-universe-q');
+  if (universe && universeShell) {
+    let universeRows = null;
+    const signed = value => value == null ? '—' : `${value >= 0 ? '+' : '−'}${Math.abs(Number(value)).toFixed(2)}`;
+    const earnText = row => {
+      if (!row.next_earn) return '—';
+      const warning = row.days_to_earn != null && row.days_to_earn <= 9 ? ' ⚠' : '';
+      return `${fmtISO(row.next_earn).replace(/ \d{4}$/, '')}${warning}`;
+    };
+    const renderUniverse = () => {
+      if (!universeRows) return;
+      const query = (universeInput?.value || '').trim().toUpperCase();
+      const visible = universeRows.filter(row => !query || `${row.symbol} ${row.sector} ${row.signal}`.toUpperCase().includes(query));
+      const rows = visible.map(row => {
+        const symbol = htmlSafe(row.symbol);
+        const detailId = `scan-detail-universe-${row.symbol.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
+        const dayClass = row.day_pct >= 0 ? 'scan-z-pos' : 'scan-z-neg';
+        const day = `${row.day_pct >= 0 ? '+' : '−'}${Math.abs(Number(row.day_pct)).toFixed(2)}%`;
+        return `<tr class="scan-data-row" data-scan-row data-scan-symbol="${symbol}" data-day-pct="${row.day_pct}">
+          <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">${symbol}</span><span class="bl-tag">${htmlSafe(row.sector)}</span></span></button></td>
+          <td class="scan-num scan-price"><span class="scan-price-value">$${Number(row.price).toFixed(2)}</span> <span class="${dayClass}">${day}</span></td>
+          <td class="scan-num"><span class="${row.spread_z >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${signed(row.spread_z)}</span></td>
+          <td class="scan-num">${earnText(row)}</td>
+          <td><span class="scan-signal scan-signal--${htmlSafe(row.signal_key)}">${htmlSafe(row.signal)}</span></td>
+        </tr><tr class="scan-detail-row" id="${detailId}" data-scan-detail data-scan-symbol="${symbol}" hidden><td colspan="5"><div class="scan-setup-chart" data-scan-chart="${symbol}"></div></td></tr>`;
+      }).join('');
+      universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num">Price · Day</th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
+      const initial = new URL(location.href).searchParams.get('chart')?.toUpperCase();
+      if (initial) {
+        const detail = $$('[data-scan-detail]', universeShell).find(item => item.dataset.scanSymbol === initial);
+        const toggle = detail?.previousElementSibling?.querySelector('[data-scan-toggle]');
+        if (toggle) toggle.click();
+      }
+    };
+    const loadUniverse = async () => {
+      if (universeRows) return renderUniverse();
+      universeShell.innerHTML = '<p class="bl-empty">Loading universe…</p>';
+      try {
+        const response = await fetch(universeShell.dataset.url, { credentials: 'same-origin' });
+        if (!response.ok) throw new Error(`Universe HTTP ${response.status}`);
+        const payload = await response.json();
+        universeRows = payload.rows || [];
+        renderUniverse();
+      } catch (error) {
+        console.error('Unable to load momentum universe', error);
+        universeShell.innerHTML = '<p class="bl-empty">Universe failed to load.</p>';
+      }
+    };
+    universe.addEventListener('toggle', () => { if (universe.open) loadUniverse(); });
+    universeInput?.addEventListener('input', renderUniverse);
+  }
+
+  function initChartPicker(shellSelector, buttonAttribute, queryKey, wireChart) {
+    const shell = $(shellSelector);
+    if (!shell) return;
+    const panel = shell.closest('[role="tabpanel"]');
+    let payloadPromise = null;
+    let current = null;
+    const loadPayload = () => {
+      if (!payloadPromise) payloadPromise = fetch(shell.dataset.url, { credentials: 'same-origin' })
+        .then(response => { if (!response.ok) throw new Error(`Chart asset HTTP ${response.status}`); return response.json(); })
+        .catch(error => { payloadPromise = null; throw error; });
+      return payloadPromise;
+    };
+    const select = async (symbol, updateUrl = true) => {
+      if (!symbol || symbol === current) return;
+      shell.innerHTML = `<p class="bl-empty">Loading ${htmlSafe(symbol)} chart…</p>`;
+      try {
+        const payload = await loadPayload();
+        const markup = payload.charts?.[symbol];
+        if (!markup) throw new Error(`Missing ${symbol} chart`);
+        shell.innerHTML = markup;
+        current = symbol;
+        const figure = $('.vwap-chart', shell);
+        if (wireChart && figure) wireChart(figure);
+        $$(`[${buttonAttribute}]`, panel).forEach(button => {
+          const on = button.getAttribute(buttonAttribute) === symbol;
+          button.classList.toggle('on', on);
+          if (on) button.setAttribute('aria-current', 'true'); else button.removeAttribute('aria-current');
+        });
+        if (updateUrl) {
+          const url = new URL(location.href);
+          url.searchParams.set(queryKey, symbol);
+          history.replaceState(null, '', url);
+        }
+      } catch (error) {
+        console.error(`Unable to load ${symbol} chart`, error);
+        shell.innerHTML = `<p class="bl-empty">${htmlSafe(symbol)} chart failed to load.</p>`;
+      }
+    };
+    panel.addEventListener('click', event => {
+      const button = event.target.closest(`[${buttonAttribute}]`);
+      if (button) select(button.getAttribute(buttonAttribute));
+    });
+    const activatePicker = () => {
+      const requested = new URL(location.href).searchParams.get(queryKey)?.toUpperCase();
+      if (requested) select(requested, false);
+    };
+    panel.addEventListener('panelactivate', activatePicker);
+    if (!panel.hidden) activatePicker();
+  }
+  initChartPicker('#vwap-selected-chart', 'data-vwap-select', 'vwap', wireVwapChart);
+  initChartPicker('#crypto-selected-chart', 'data-crypto-select', 'crypto');
+
+  const vwapPanel = $('#vwap-panel');
+  vwapPanel?.addEventListener('click', event => {
+    const button = event.target.closest('[data-vwap-scope-button]');
+    if (!button) return;
+    const scope = button.dataset.vwapScopeButton;
+    $$('[data-vwap-scope]', vwapPanel).forEach(row => { row.hidden = row.dataset.vwapScope !== scope; });
+    $$('[data-vwap-scope-button]', vwapPanel).forEach(item => item.classList.toggle('on', item === button));
+    const firstSymbol = $(`[data-vwap-scope="${scope}"] [data-vwap-select]`, vwapPanel);
+    firstSymbol?.click();
+  });
+
+  $$('.whale-flow-grid').forEach(whaleGrid => {
+    whaleGrid.addEventListener('click', event => {
+      const summary = event.target.closest('details.whale-card > summary');
+      const opening = summary?.parentElement;
+      if (!opening || opening.open) return;
+      $$('details.whale-card', whaleGrid).forEach(card => { if (card !== opening) card.open = false; });
+    });
+  });
+
   /* ── parse cron markup ────────────────────────────────────────────── */
   const raw = $('#bl-raw'), built = $('#bl-built'), logBuilt = $('#bl-log-built');
   if (!raw || !built || !logBuilt) return;
@@ -491,87 +643,71 @@
     const q = state.q.trim().toUpperCase();
     const matchSym = sym => !q || sym.includes(q);
     const matchAsset = a => state.asset === 'All' || a === state.asset;
-    let visible = 0;
 
     const pos = positions
       .filter(p => matchSym(p.sym) && matchAsset(p.type === 'Option' ? 'Options' : 'Equities'))
-      .sort((a, b) => {
-        const k = state.posSort.key, d = state.posSort.dir;
-        const va = k === 'strike' ? a.strikeN : k === 'expiry' ? a.expiryISO : a[k];
-        const vb = k === 'strike' ? b.strikeN : k === 'expiry' ? b.expiryISO : b[k];
-        return (va < vb ? -1 : va > vb ? 1 : 0) * d;
-      });
-    visible += pos.length;
+      .sort((a, b) => a.sym.localeCompare(b.sym) || a.type.localeCompare(b.type));
+    const grouped = new Map();
+    pos.forEach(position => {
+      if (!grouped.has(position.sym)) grouped.set(position.sym, []);
+      grouped.get(position.sym).push(position);
+    });
 
     const tr = kind => trades[kind]
-      .filter(t => matchSym(t.sym) && matchAsset(t.asset) && (state.status === 'All' || t.status === state.status))
-      .sort((a, b) => {
-        const k = state.tradeSort.key, d = state.tradeSort.dir;
-        const va = k === 'date' ? a.iso : a.pnl, vb = k === 'date' ? b.iso : b.pnl;
-        return (va < vb ? -1 : va > vb ? 1 : 0) * d;
-      });
-    const buys = tr('buy'), sells = tr('sell');
-    visible += buys.length + sells.length;
+      .filter(t => matchSym(t.sym) && matchAsset(t.asset) && (state.status === 'All' || t.status === state.status));
+    const activity = [
+      ...tr('buy').map(row => ({ ...row, side: 'buy' })),
+      ...tr('sell').map(row => ({ ...row, side: 'sell' })),
+    ].sort((a, b) => b.iso.localeCompare(a.iso) || a.sym.localeCompare(b.sym)).slice(0, 8);
+    const wins = ext.wins.filter(r => matchSym(r.sym)).sort((a, b) => b.pnl - a.pnl).slice(0, 3);
+    const losses = ext.losses.filter(r => matchSym(r.sym)).sort((a, b) => a.pnl - b.pnl).slice(0, 3);
 
-    const exts = kind => {
-      const rows = ext[kind].filter(r => matchSym(r.sym));
-      if (state.extBy === 'date') return rows.slice().sort((a, b) => (a.iso < b.iso ? 1 : -1));
-      return rows.slice().sort((a, b) => kind === 'wins' ? b.pnl - a.pnl : a.pnl - b.pnl);
-    };
-    const wins = exts('wins'), losses = exts('losses');
-    visible += wins.length + losses.length;
+    const portfolioCards = [...grouped].map(([sym, instruments]) => {
+      const symbol = htmlSafe(sym);
+      const detailId = `position-chart-${sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
+      const plan = TRADE_PLANS[sym] || {};
+      const liveMark = instruments.map(item => item.since).find(value => value !== '—') || '—';
+      const instrumentText = instruments.map(item => {
+        if (item.type === 'Equity') return `${htmlSafe(item.side)} shares`;
+        return `${htmlSafe(item.side)} $${htmlSafe(item.strike)} · ${htmlSafe(item.expiry)}`;
+      }).join(' · ');
+      return `<article class="portfolio-card" data-position-row data-position-symbol="${symbol}">
+        <div class="portfolio-card-head"><h2>${symbol}</h2><span class="mono ${liveMark === '—' ? 'mut' : pnlCls(parseFloat(liveMark.replace('−', '-')))}">${htmlSafe(liveMark)}</span></div>
+        <p class="portfolio-instruments">${instrumentText}</p>
+        <p class="portfolio-label">Thesis</p><p class="portfolio-copy">${htmlSafe(plan.setup || 'No written thesis yet.')}</p>
+        <p class="portfolio-label">Invalidation / next test</p><p class="portfolio-copy portfolio-risk">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</p>
+        <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>View setup</button>
+      </article><div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}" hidden><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
+    }).join('') || '<div class="bl-empty">No portfolio symbols match the current filters.</div>';
 
-    const posHead = ['sym|Symbol', 'type|Type', 'side|Side', 'strike|Strike', 'expiry|Expiry', 'since|Since entry|r']
-      .map(c => { const [k, label, r] = c.split('|'); return `<button data-sort-pos="${k}" class="${r || ''}">${label}${arrow(state.posSort, k)}</button>`; }).join('') + '<span>Setup</span><span>Invalidation / next test</span>';
-    const posRows = pos.map((p, i) => {
-      const symbol = htmlSafe(p.sym), detailId = `position-chart-${p.sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}-${i}`;
-      const plan = TRADE_PLANS[p.sym] || {};
-      return `<div class="bl-row g-pos" data-position-row data-position-symbol="${symbol}">
-      <span class="sym"><button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>${symbol}</button></span><span>${htmlSafe(p.type)}</span>
-      <span class="${sideCls(p.side)}">${htmlSafe(p.side)}</span>
-      <span class="mono">${htmlSafe(p.strike)}</span><span class="mono mut">${htmlSafe(p.expiry)}</span>
-      <span class="r mono ${p.since === '—' ? 'mut' : pnlCls(parseFloat(p.since.replace('−', '-')))}">${htmlSafe(p.since)}</span>
-      <span class="bl-plan">${htmlSafe(plan.setup || 'No written setup yet.')}</span>
-      <span class="bl-plan bl-invalidation">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</span>
-    </div><div class="bl-position-chart-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}" hidden><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
-    }).join('') || '<div class="bl-empty">No positions match the current filters.</div>';
-
-    const tradeHead = `<button data-sort-trade="date">Date${arrow(state.tradeSort, 'date')}</button><span>Instrument</span><span>Fills</span><button data-sort-trade="pnl" class="r">P&amp;L${arrow(state.tradeSort, 'pnl')}</button>`;
-    const tradeRows = rows => rows.map(t => `<div class="bl-row g-trade">
-      <span class="mono mut">${t.dateTxt}</span><span class="sym">${t.inst}</span>
-      <span class="mono mut">×${t.fills}</span>
-      <span class="r mono ${pnlCls(t.pnl)}">${t.pnlTxt}<span class="bl-tag">${t.status}</span></span>
-    </div>`).join('') || '<div class="bl-empty">No trades match the current filters.</div>';
-
-    const extRows = rows => rows.map((r, i) => `<div class="bl-row g-ext">
-      <span class="mono" style="color:var(--bl-faint);font-size:11px">${i + 1}</span>
-      <span class="mut" style="font-size:12px">${r.dateTxt}</span>
-      <span><span class="sym">${r.sym}</span> <span class="mut" style="font-size:11.5px">${r.kindTxt}</span></span>
-      <span class="r mono ${pnlCls(r.pnl)}">${r.pnlTxt}</span>
+    const activityRows = activity.map(row => `<div class="activity-row-compact">
+      <span class="mono mut">${htmlSafe(row.dateTxt)}</span>
+      <span><b class="sym">${htmlSafe(row.sym)}</b> <span class="mut">${htmlSafe(row.inst.replace(row.sym, '').trim())}</span></span>
+      <span class="activity-side">${row.side} · ${htmlSafe(row.asset)}</span>
+      <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
+    </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
+    const outcomeRows = rows => rows.map(row => `<div class="activity-row-compact">
+      <span class="mono mut">${htmlSafe(row.dateTxt)}</span>
+      <span><b class="sym">${htmlSafe(row.sym)}</b> <span class="mut">${htmlSafe(row.kindTxt)}</span></span>
+      <span class="activity-side">closed</span>
+      <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
     </div>`).join('') || '<div class="bl-empty">Nothing matches.</div>';
 
-    const tgl = state.extBy === 'pct' ? 'By % ▾' : 'By date ▾';
+    const positiveMarks = [...grouped.values()].filter(items => items.some(item => parseFloat(item.since.replace('−', '-')) > 0)).length;
     built.innerHTML = `
-      <div class="bl-card">
-        <div class="bl-card-title">Open positions <span>· Robinhood · ${pos.length}</span><a href="${TRADE_LOG_URL}">Trade Log 7/22 source</a><span class="bl-swipe-hint">Swipe table →</span></div>
-        <div class="bl-thead g-pos">${posHead}</div>${posRows}
-      </div>`;
-
+      <p class="trading-takeaway">${grouped.size} symbols · ${pos.length} instruments · ${positiveMarks} positive mark${positiveMarks === 1 ? '' : 's'}.</p>
+      <div class="portfolio-grid">${portfolioCards}</div>`;
     logBuilt.innerHTML = `
-      <div class="bl-pair">
-        <div class="bl-card"><div class="bl-card-title">Recent buys <span>· $2K+ · fills consolidated by date</span></div>
-          <div class="bl-thead g-trade">${tradeHead}</div>${tradeRows(buys)}</div>
-        <div class="bl-card"><div class="bl-card-title">Recent sells <span>· $2K+ · fills consolidated by date</span></div>
-          <div class="bl-thead g-trade">${tradeHead}</div>${tradeRows(sells)}</div>
-      </div>
-      <div class="bl-pair" id="bl-ext">
-        <div class="bl-card"><div class="bl-card-title">Top 10 wins <span>· closed · by ${state.extBy === 'pct' ? '% return' : 'date'}</span><button class="bl-tgl" data-ext-toggle>${tgl}</button></div>${extRows(wins)}</div>
-        <div class="bl-card"><div class="bl-card-title">Top 10 losses <span>· closed · by ${state.extBy === 'pct' ? '% return' : 'date'}</span><button class="bl-tgl" data-ext-toggle>${tgl}</button></div>${extRows(losses)}</div>
+      <div class="bl-card"><div class="bl-card-title">Recent activity <span>· latest 8 · broker fills consolidated</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-feed">${activityRows}</div></div>
+      <div class="extreme-grid">
+        <div class="bl-card"><div class="bl-card-title">Top 3 wins <span>· closed</span></div><div class="activity-feed">${outcomeRows(wins)}</div></div>
+        <div class="bl-card"><div class="bl-card-title">Top 3 losses <span>· closed</span></div><div class="activity-feed">${outcomeRows(losses)}</div></div>
       </div>`;
 
     const active = q || state.asset !== 'All' || state.status !== 'All';
+    const visible = grouped.size + activity.length + wins.length + losses.length;
     const note = $('#bl-match');
-    if (note) { note.hidden = !active; note.textContent = `${visible} row${visible === 1 ? '' : 's'} match`; }
+    if (note) { note.hidden = !active; note.textContent = `${visible} item${visible === 1 ? '' : 's'} match`; }
   }
 
   /* ── events ───────────────────────────────────────────────────────── */
@@ -607,7 +743,7 @@
     if (e.target.closest('[data-ext-toggle]')) { state.extBy = state.extBy === 'pct' ? 'date' : 'pct'; return render(); }
   };
   [built, logBuilt].forEach(element => element.addEventListener('click', handleBuiltClick));
-  $$('.bl-chip').forEach(chip => chip.addEventListener('click', () => {
+  $$('.bl-chip[data-g]').forEach(chip => chip.addEventListener('click', () => {
     const g = chip.dataset.g;
     state[g] = chip.dataset.v;
     $$(`.bl-chip[data-g="${g}"]`).forEach(c => c.classList.toggle('on', c === chip));
@@ -619,20 +755,18 @@
   if (reset) reset.addEventListener('click', () => {
     state.q = ''; state.asset = 'All'; state.status = 'All';
     if (qInput) qInput.value = '';
-    $$('.bl-chip').forEach(c => c.classList.toggle('on', c.dataset.v === 'All' || c.dataset.v === 'All assets' || c.textContent.startsWith('All')));
+    $$('.bl-chip[data-g]').forEach(c => c.classList.toggle('on', c.dataset.v === 'All' || c.dataset.v === 'All assets' || c.textContent.startsWith('All')));
     render();
   });
   const exportBtn = $('#bl-export');
   if (exportBtn) exportBtn.addEventListener('click', () => {
     const esc = v => `"${String(v).replace(/"/g, '""')}"`;
-    const lines = [['table', 'symbol', 'type', 'side', 'strike', 'expiry', 'since_entry'].join(',')];
-    positions.forEach(p => lines.push(['position', p.sym, p.type, p.side, p.strike, p.expiry, p.since].map(esc).join(',')));
-    ['buy', 'sell'].forEach(k => trades[k].forEach(t =>
-      lines.push([k, t.sym, t.asset, t.inst, '×' + t.fills, t.pnlTxt, t.status].map(esc).join(','))));
+    const lines = [['symbol', 'type', 'side', 'strike', 'expiry', 'since_entry'].join(',')];
+    positions.forEach(p => lines.push([p.sym, p.type, p.side, p.strike, p.expiry, p.since].map(esc).join(',')));
     const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = 'zonted-trading-snapshot.csv';
+    a.download = 'zonted-positions.csv';
     a.click();
     URL.revokeObjectURL(a.href);
   });
