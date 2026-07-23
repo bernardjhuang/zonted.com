@@ -1,7 +1,7 @@
 /* Broker Light behavior for /trading/ (design handoff 2026-07-21).
-   Parses the cron-emitted markup in #bl-raw (positions chips, activity rows,
-   YTD extremes) into sortable/filterable tables. The raw markup stays in the
-   DOM (hidden) so the nightly snapshot cron keeps working unchanged. */
+   Parses the cron-emitted markup in #bl-raw (positions chips and activity rows)
+   into sortable/filterable tables. The raw markup stays in the DOM (hidden)
+   so the nightly snapshot cron keeps working unchanged. */
 (() => {
   'use strict';
   const $ = (s, r) => (r || document).querySelector(s);
