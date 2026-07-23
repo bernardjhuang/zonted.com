@@ -31,6 +31,27 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
+    def test_hypotheses_are_explicit_and_scannable(self):
+        self.assertIn('Hypotheses <span class="trading-tab-count">3</span>', self.html)
+        self.assertEqual(self.html.count('data-hypothesis-symbol='), 3)
+        details = {
+            symbol.upper(): block
+            for symbol, block in re.findall(
+                r'<article class="hypothesis-detail" id="hypothesis-([a-z]+)-setup"(.*?)</article>',
+                self.html,
+                re.S,
+            )
+        }
+        self.assertEqual(set(details), {"ABT", "HIMS", "HOOD"})
+        for symbol, block in details.items():
+            self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
+            self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
+            self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
+        self.assertIn('Exact Sciences', details["ABT"])
+        self.assertIn('Libre Assist', details["ABT"])
+        self.assertIn('Robinhood Chain', details["HOOD"])
+        self.assertIn('Agentic Trading', details["HOOD"])
+
     def test_results_is_ytd_percentage_only(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
         self.assertIsNotNone(match)
@@ -92,7 +113,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('aria-label="Full momentum scan of the tracked universe"', self.html)
 
     def test_chart_payloads_are_external_and_small_shell(self):
-        self.assertLess(PAGE.stat().st_size, 205_000)
+        # Thesis copy stays server-rendered for no-JS access; charts remain external.
+        self.assertLess(PAGE.stat().st_size, 220_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json"):

@@ -369,6 +369,10 @@
         .hypothesis-block h4 { margin: 0 0 5px; color: var(--bl-muted); font: 700 10.5px var(--bl-sans); letter-spacing: .04em; text-transform: uppercase; }
         .hypothesis-block p { margin: 0; color: var(--bl-ink2); font-size: 13px; }
         .hypothesis-block strong { color: var(--bl-ink); }
+        .hypothesis-block ul { margin: 0; padding-left: 18px; color: var(--bl-ink2); font-size: 13px; }
+        .hypothesis-block li + li { margin-top: 4px; }
+        .hypothesis-block--benefit { border-color: rgba(8, 122, 66, .28); }
+        .hypothesis-block--threat { border-color: rgba(201, 58, 74, .28); }
         .hypothesis-sources { margin: 14px 0 0; color: var(--bl-faint); font-size: 12px; }
         .hypothesis-sources a { color: var(--bl-accent); text-underline-offset: 2px; }
         .activity-disclosure { overflow: hidden; }
@@ -468,7 +472,7 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
-                <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">1</span></button>
+                <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">3</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">18</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
@@ -758,14 +762,36 @@
             <section class="trading-panel hypothesis-panel" id="hypotheses-panel" role="tabpanel" tabindex="0" aria-labelledby="hypotheses-tab" hidden>
                 <div class="position-head">
                     <h2 id="hypotheses-heading">Ticker hypotheses</h2>
-                    <span>1 research candidate · updated July 23, 2026</span>
+                    <span>3 active theses · updated July 23, 2026</span>
                 </div>
-                <p class="trading-takeaway">Ideas being built before they become positions. The trigger, catalyst, and kill conditions have to be explicit.</p>
+                <p class="trading-takeaway">Theses being built and monitored before and after entry. The trigger, catalyst, and kill conditions have to be explicit.</p>
                 <div class="portfolio-grid" aria-label="Ticker hypotheses">
+                    <article class="portfolio-card hypothesis-card is-open" data-hypothesis-symbol="ABT">
+                        <div class="portfolio-card-head">
+                            <h2>ABT</h2>
+                            <span class="hypothesis-status">Owned · core compounder</span>
+                        </div>
+                        <p class="hypothesis-price"><strong>$100.79 close</strong><span>$100.15 after hours · July 23</span></p>
+                        <p class="portfolio-label">Thesis</p>
+                        <p class="portfolio-copy">Buy a high-quality healthcare compounder at a reset multiple: Libre supplies the durable base growth while Exact Sciences adds oncology-diagnostics upside.</p>
+                        <p class="portfolio-label">Monitoring</p>
+                        <p class="portfolio-copy">Exact integration and Libre momentum matter most. Watch Diabetes Care quality closely.</p>
+                    </article>
+                    <article class="portfolio-card hypothesis-card is-open" data-hypothesis-symbol="HOOD">
+                        <div class="portfolio-card-head">
+                            <h2>HOOD</h2>
+                            <span class="hypothesis-status">Owned · moderately bullish</span>
+                        </div>
+                        <p class="hypothesis-price"><strong>$101.58 close</strong><span>$101.26 after hours · July 23</span></p>
+                        <p class="portfolio-label">Thesis</p>
+                        <p class="portfolio-copy">Robinhood is becoming a multi-product financial platform; resilient retail activity funds the base while Chain and Agentic Trading add high-upside optionality.</p>
+                        <p class="portfolio-label">Monitoring</p>
+                        <p class="portfolio-copy">Volumes, regulatory tone, Chain activity quality, Gold growth, and net deposits decide whether the thesis compounds or snaps.</p>
+                    </article>
                     <article class="portfolio-card hypothesis-card is-open" data-hypothesis-symbol="HIMS">
                         <div class="portfolio-card-head">
                             <h2>HIMS</h2>
-                            <span class="hypothesis-status">Watch · starter only</span>
+                            <span class="hypothesis-status">Owned · starter only</span>
                         </div>
                         <p class="hypothesis-price"><strong>$32.75 close</strong><span>$33.00 after hours · July 23</span></p>
                         <p class="portfolio-label">Thesis</p>
@@ -775,6 +801,94 @@
                     </article>
                 </div>
                 <div class="portfolio-details">
+                    <article class="hypothesis-detail" id="hypothesis-abt-setup" aria-labelledby="hypothesis-abt-title">
+                        <div class="hypothesis-detail-head">
+                            <h3 id="hypothesis-abt-title">ABT setup</h3>
+                            <span class="hypothesis-status">Unfolded · active thesis</span>
+                        </div>
+                        <p class="hypothesis-bottom-line">Abbott is a defensive healthcare compounder trading near 18.2× the midpoint of raised 2026 adjusted EPS guidance. Libre is the base engine; Exact Sciences execution is the swing factor that determines whether the growth upgrade earns a better multiple.</p>
+                        <div class="hypothesis-grid">
+                            <section class="hypothesis-block">
+                                <h4>Core thesis</h4>
+                                <p>Diversified Devices, Diagnostics, Nutrition, and Established Pharma cash flows support mid-to-high single-digit growth, dividends, and buybacks. The 2025–2026 de-rating created a cleaner entry than the elevated multiples of prior years.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Libre engine</h4>
+                                <p>FreeStyle Libre still has runway in Type 2 diabetes, international adoption, and broader metabolic monitoring. Libre Assist adds a data-and-software layer by using meal photos and AI to predict glucose impact before eating.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Exact Sciences swing factor</h4>
+                                <p>Abbott completed the acquisition on March 23. Exact is expected to add roughly <strong>$3B of 2026 sales</strong>, led by Cologuard and precision-oncology products. The deal is expected to dilute adjusted EPS by about $0.20 in 2026 and $0.16 in 2027 before turning accretive in 2028.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Valuation &amp; base case</h4>
+                                <p>At $100.79 against raised adjusted EPS guidance of $5.45–$5.60, ABT trades at roughly <strong>18.0–18.5× forward earnings</strong>. The working base case is 6.5–7.5% comparable sales growth, gradual margin recovery, and capital returns—enough for mid-teens annualized upside over 2–3 years if execution holds.</p>
+                            </section>
+                            <section class="hypothesis-block hypothesis-block--benefit" data-thesis-scan="benefit">
+                                <h4>Benefits to scan daily</h4>
+                                <ul>
+                                    <li>Cologuard volume, oncology launches, or Exact synergy delivery beats expectations.</li>
+                                    <li>Libre Type 2 and international adoption stays strong; Libre Assist improves engagement.</li>
+                                    <li>Dual glucose/ketone sensor advances through launch and reimbursement milestones.</li>
+                                    <li>Diagnostics recovery, screening utilization, or defensive healthcare flows accelerate.</li>
+                                </ul>
+                            </section>
+                            <section class="hypothesis-block hypothesis-block--threat" data-thesis-scan="threat">
+                                <h4>Threats to scan daily</h4>
+                                <ul>
+                                    <li>Exact growth, integration, or synergy shortfalls; this is the biggest thesis breaker.</li>
+                                    <li>Libre share loss, reimbursement pressure, slower Type 2 uptake, or stronger Dexcom competition.</li>
+                                    <li>New FDA, recall, or manufacturing-quality escalation in Diabetes Care.</li>
+                                    <li>Organic growth below guidance, Nutrition weakness, hospital-budget pressure, or further medtech multiple compression.</li>
+                                </ul>
+                            </section>
+                        </div>
+                        <p class="hypothesis-sources">Sources: <a href="https://www.abbott.com/en-us/corpnewsroom/strategy-and-strength/abbotts-Q2-2026-earnings-call" rel="noopener" target="_blank">Abbott Q2 2026 earnings recap</a> · <a href="https://abbott.mediaroom.com/2026-03-20-Abbott-acquisition-of-Exact-Sciences-set-to-close-on-March-23,-2026" rel="noopener" target="_blank">Exact Sciences closing notice</a> · <a href="https://www.abbottinvestor.com/static-files/0956bb8a-8371-41a1-ba6b-0c4f4362e915" rel="noopener" target="_blank">Exact acquisition presentation</a> · <a href="https://www.abbott.com/en-us/corpnewsroom/diabetes-care/how-does-libre-assist-work" rel="noopener" target="_blank">Libre Assist</a> · <a href="https://www.fda.gov/inspections-compliance-enforcement-and-criminal-investigations/warning-letters/abbott-diabetes-care-inc-722046-01232026" rel="noopener" target="_blank">FDA warning letter</a> · <a href="https://www.fda.gov/medical-devices/medical-device-recalls-and-early-alerts/glucose-monitor-sensor-recall-abbott-diabetes-care-removes-certain-freestyle-libre-3-and-freestyle" rel="noopener" target="_blank">FDA sensor recall</a>. Price is a timestamped Robinhood quote. The mid-teens return case is a thesis target, not guidance.</p>
+                    </article>
+                    <article class="hypothesis-detail" id="hypothesis-hood-setup" aria-labelledby="hypothesis-hood-title">
+                        <div class="hypothesis-detail-head">
+                            <h3 id="hypothesis-hood-title">HOOD setup</h3>
+                            <span class="hypothesis-status">Unfolded · 6–18 month thesis</span>
+                        </div>
+                        <p class="hypothesis-bottom-line">Robinhood’s hard numbers support the core business; Chain and Agentic Trading supply the optionality. The thesis works if retail engagement stays resilient and at least one new product converts into measurable fees or stickiness. Next hard test: July 29 earnings after the close.</p>
+                        <div class="hypothesis-grid">
+                            <section class="hypothesis-block">
+                                <h4>Retail engine</h4>
+                                <p>2025 equity notional rose 68% to <strong>$710B</strong>, options contracts rose 38% to <strong>659M</strong>, and event contracts exceeded 12B. By May 2026 Robinhood had 27.7M funded customers and $377B of platform assets, while net deposits remained strong.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Robinhood Chain</h4>
+                                <p>The Arbitrum-based L2 mainnet launched July 1 for Stock Tokens, tokenized real-world assets, and DeFi. Early DEX volume and TVL are meaningful, but the economic test is whether activity becomes durable, non-meme RWA usage that generates fees.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Agentic &amp; product breadth</h4>
+                                <p>Agentic Trading now lets customers connect third-party AI agents to dedicated accounts. Gold, prediction markets, retirement, Strategies, banking, futures, index options, crypto, and international Stock Tokens broaden revenue beyond commission-free equities.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Positioning &amp; thesis test</h4>
+                                <p><strong>Bias:</strong> constructive but high beta. The four variables that matter most are trading-volume trends, regulatory tone, Chain activity quality, and Gold plus net-deposit momentum. New products need to produce measurable fees, engagement, or customer growth—not just narrative heat.</p>
+                            </section>
+                            <section class="hypothesis-block hypothesis-block--benefit" data-thesis-scan="benefit">
+                                <h4>Benefits to scan daily</h4>
+                                <ul>
+                                    <li>Equity/options/event volumes, net deposits, platform assets, Gold subscribers, or ARPU accelerate.</li>
+                                    <li>Chain adds quality RWA activity, Stock Token usage, TVL, durable DEX volume, or disclosed fees.</li>
+                                    <li>Agentic Account adoption or agent-driven trading volume becomes measurable.</li>
+                                    <li>International expansion and newer products reduce revenue dependence on retail equity cycles.</li>
+                                </ul>
+                            </section>
+                            <section class="hypothesis-block hypothesis-block--threat" data-thesis-scan="threat">
+                                <h4>Threats to scan daily</h4>
+                                <ul>
+                                    <li>Regulators restrict prediction markets, Stock Tokens, crypto, or Agentic Trading.</li>
+                                    <li>Equity/options volumes and net deposits weaken together; that breaks the base engine.</li>
+                                    <li>Chain remains meme-heavy and fails to produce durable RWA usage or fees after several quarters.</li>
+                                    <li>Gold growth or ARPU deteriorates, rates pressure net interest income, or a risk-off market crushes retail engagement and the valuation.</li>
+                                </ul>
+                            </section>
+                        </div>
+                        <p class="hypothesis-sources">Sources: <a href="https://investors.robinhood.com/news-releases/news-release-details/robinhood-reports-fourth-quarter-and-full-year-2025-results/" rel="noopener" target="_blank">Robinhood FY2025 results</a> · <a href="https://investors.robinhood.com/news-releases/news-release-details/robinhood-markets-inc-reports-may-2026-operating-data" rel="noopener" target="_blank">May 2026 operating data</a> · <a href="https://robinhood.com/us/en/newsroom/robinhood-accelerates-global-expansion-robinhood-chain-mainnet-stock-tokens-agentic-trading/" rel="noopener" target="_blank">Chain and Agentic launch</a> · <a href="https://robinhood.com/us/en/agentic-trading" rel="noopener" target="_blank">Agentic Trading product page</a> · <a href="https://defillama.com/chain/robinhood-chain" rel="noopener" target="_blank">Robinhood Chain market activity</a>. Price is a timestamped Robinhood quote; Q2 earnings timing is verified by Robinhood market data.</p>
+                    </article>
                     <article class="hypothesis-detail" id="hypothesis-hims-setup" aria-labelledby="hypothesis-hims-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-hims-title">HIMS setup</h3>
@@ -794,23 +908,33 @@
                                 <h4>Regulatory path</h4>
                                 <p>The July 23–24 FDA advisory meeting covers seven peptide-related substances. Early meeting coverage reports an <strong>8–6 PCAC recommendation for BPC-157 free base</strong>, but the vote is non-binding. FDA rulemaking and state-level restrictions still stand between a recommendation and durable commercial access.</p>
                             </section>
-                            <section class="hypothesis-block">
-                                <h4>Sector tailwind</h4>
-                                <p>Healthcare momentum is supportive: XLV gained about <strong>6.1% over the last month</strong> versus roughly <strong>0.6% for SPY</strong>. HIMS itself was roughly flat over that window, so the sector is helping more than the stock.</p>
+                            <section class="hypothesis-block hypothesis-block--benefit" data-thesis-scan="benefit">
+                                <h4>Benefits to scan daily</h4>
+                                <ul>
+                                    <li>FDA or PCAC progress expands the 503A path for BPC-157 or other peptides.</li>
+                                    <li>Hims discloses compliant manufacturing, R&amp;D, partnership, or launch milestones.</li>
+                                    <li>August earnings strengthens the subscriber, margin, or weight-loss execution story.</li>
+                                    <li>Healthcare momentum remains supportive; XLV recently outpaced SPY.</li>
+                                </ul>
                             </section>
                             <section class="hypothesis-block">
                                 <h4>Position plan</h4>
                                 <p><strong>Now:</strong> starter-size only if exposure is wanted before earnings. <strong>Build:</strong> share price at or below $30. Do not confuse a favorable committee vote with FDA drug approval.</p>
                             </section>
-                            <section class="hypothesis-block">
-                                <h4>What breaks it</h4>
-                                <p>FDA declines or indefinitely stalls formal inclusion; state boards block access; Hims fails to turn its facility into compliant supply; or August earnings weakens the core subscriber, margin, or weight-loss execution story.</p>
+                            <section class="hypothesis-block hypothesis-block--threat" data-thesis-scan="threat">
+                                <h4>Threats to scan daily</h4>
+                                <ul>
+                                    <li>FDA declines or indefinitely stalls formal inclusion.</li>
+                                    <li>State boards restrict access or enforcement risk increases.</li>
+                                    <li>Hims fails to turn its operating facility into compliant commercial supply.</li>
+                                    <li>August earnings weakens the core subscriber, margin, or weight-loss execution story.</li>
+                                </ul>
                             </section>
                         </div>
                         <p class="hypothesis-sources">Sources: <a href="https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx" rel="noopener" target="_blank">Hims earnings notice</a> · <a href="https://s27.q4cdn.com/787306631/files/doc_financials/2025/q3/Hims-Hers-Third-Quarter-2025-Earnings-Call-Transcript.pdf" rel="noopener" target="_blank">Q3 2025 call transcript</a> · <a href="https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026" rel="noopener" target="_blank">FDA PCAC calendar</a> · <a href="https://www.sec.gov/Archives/edgar/data/1773751/000177375126000022/hims-20251231.htm" rel="noopener" target="_blank">2025 Form 10-K</a> · preliminary vote coverage via <a href="https://x.com/DisclosedLabs/status/2080332714973225433" rel="noopener" target="_blank">Disclosed Labs</a>. Market prices are timestamped Robinhood quotes; momentum uses regular-session daily bars. The 12–24+ month rulemaking range is a working assumption, not an FDA timetable.</p>
                     </article>
                 </div>
-                <p class="trading-note">Research hypothesis, not a current holding or trade recommendation. Prices and regulatory status can change quickly.</p>
+                <p class="trading-note">Research framework, not a trade recommendation. Current holdings appear in Portfolio; prices and regulatory status can change quickly.</p>
             </section>
 
             <!-- AUTO:SCAN:START -->
