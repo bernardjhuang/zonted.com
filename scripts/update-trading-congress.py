@@ -89,7 +89,7 @@ def main():
 
     office_cards = "\n".join(member_card(m) for m in cards)
 
-    def tick_rows(rows, n=5):
+    def tick_rows(rows, n=25):
         out = []
         for r in rows[:n]:
             net = r.get("net", 0)
@@ -141,12 +141,12 @@ def main():
         '                <div class="position-group"><h3>Most bought tickers</h3><div class="scan-table-wrap">',
         '                <table class="scan-table" aria-label="Most bought tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>',
         '                <tbody>',
-        tick_rows(p.get("top_bought") or []),
+        tick_rows(p.get("top_bought") or [], 25),
         '                </tbody></table></div></div>',
         '                <div class="position-group"><h3>Most sold tickers</h3><div class="scan-table-wrap">',
         '                <table class="scan-table" aria-label="Most sold tickers by Congress YTD"><thead><tr><th>Ticker</th><th class="scan-num">Members ▲/▼</th><th class="scan-num">Net $</th></tr></thead>',
         '                <tbody>',
-        tick_rows(p.get("top_sold") or []),
+        tick_rows(p.get("top_sold") or [], 25),
         '                </tbody></table></div></div>',
         '                </div>',
         '                <div class="whale-flow-head"><h3>Member flows</h3><p>Top 5 net buyers and sellers · open a member for details</p></div>',
