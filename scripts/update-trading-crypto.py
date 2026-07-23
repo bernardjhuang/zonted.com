@@ -196,52 +196,32 @@ def main():
                         <td class="scan-sym">{html.escape(c['sym'])}</td>
                         <td class="scan-sec">{html.escape(c['name'])}</td>
                         <td class="scan-num">{fmt_price(c['price'])}</td>
+                        <td class="scan-num">{fmt_price(b['vwap'])}</td>
+                        <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
+                        <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
                         <td class="scan-num"><span class="{'scan-z-pos' if c['z'] >= 0 else 'scan-z-neg'}">{c['z']:+.2f}</span></td>
                         <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">{c['spread']:+.2f}</span></td>
                         <td class="scan-num">{'▲' if c['spread'] >= 0 else '▼'} {c['days_side']}d</td>
                         <td class="scan-num"><span class="{'scan-z-pos' if c['ratio_ytd_chg'] >= 0 else 'scan-z-neg'}">{c['ratio_ytd_chg']:+.1f}%</span></td>
                     </tr>"""
-        for c in coins)
+        for c in coins for b in [vwap_by_symbol[c["sym"]]])
     charts = "\n".join(combined_chart(c, vwap_by_symbol[c["sym"]]) for c in coins)
-
-    vw_rows = "\n".join(
-        f"""                    <tr>
-                        <td class="scan-sym">{html.escape(b['sym'])}</td>
-                        <td class="scan-sec">{html.escape(b['name'])}</td>
-                        <td class="scan-num">{fmt_price(b['price'])}</td>
-                        <td class="scan-num">{fmt_price(b['vwap'])}</td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
-                        <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
-                    </tr>"""
-        for b in vwaps)
-    vwap_section = f"""
-                <div class="position-group"><h3>YTD VWAP metrics · ranked by Spread Z</h3>
-                <p class="scan-intro">The year's average cost basis per coin, volume-weighted on Hyperliquid's perp markets — the native venue where these names' price discovery lives. Same read as the equity tabs: above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
-                <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Crypto year-to-date VWAPs">
-                    <thead><tr><th>Symbol</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">Side</th></tr></thead>
-                    <tbody>
-{vw_rows}
-                    </tbody>
-                </table>
-                </div>
-                </div>""" if vwaps else ""
 
     panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
                 <div class="position-head">
                     <h2 id="crypto-heading">Crypto spread</h2>
                     <span>{fmt(p['last_bar'])} UTC close · daily · benchmark BTC {'' if not p.get('btc') else f"${p['btc']['price']:,.0f} · z {p['btc']['z']:+.2f}"}</span>
                 </div>
-                <p class="scan-intro">Altcoin relative strength measured the way the equity scan measures stocks against SPY: each coin's 50-day EMA z-score minus bitcoin's. Positive and green = the alt is more extended above its own trend than BTC is (vol-adjusted leadership); negative and red = it's lagging the benchmark. Each combined card puts price versus YTD VWAP on top and Spread Z versus BTC below, ranked by current Spread Z descending. All data is daily UTC perp candles from Hyperliquid; the last bar is the most recent complete day.</p>
+                <p class="scan-intro">Altcoin relative strength measured the way the equity scan measures stocks against SPY: each coin's 50-day EMA z-score minus bitcoin's. Positive and green = the alt is more extended above its own trend than BTC is (vol-adjusted leadership); negative and red = it's lagging the benchmark. The table and combined charts are ranked by current Spread Z descending. All data is daily UTC perp candles from Hyperliquid; the last bar is the most recent complete day.</p>
+                <p class="scan-intro">YTD VWAP is the year's average cost basis per coin, volume-weighted on Hyperliquid's perp markets. Above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Altcoin spread Z versus BTC">
-                    <thead><tr><th>Coin</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">Coin Z</th><th class="scan-num">Spread vs BTC</th><th class="scan-num">Side</th><th class="scan-num">Alt/BTC YTD</th></tr></thead>
+                <table class="scan-table" aria-label="Altcoin spread Z versus BTC and year-to-date VWAPs">
+                    <thead><tr><th>Coin</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">VWAP side</th><th class="scan-num">Coin Z</th><th class="scan-num">Spread vs BTC</th><th class="scan-num">Spread side</th><th class="scan-num">Alt/BTC YTD</th></tr></thead>
                     <tbody>
 {rows}
                     </tbody>
                 </table>
                 </div>
-{vwap_section}
                 <div class="position-group"><h3>Combined charts · ranked by Spread Z</h3></div>
                 <div class="crypto-grid">
 {charts}

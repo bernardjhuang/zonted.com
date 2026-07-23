@@ -3697,15 +3697,19 @@
                     <h2 id="crypto-heading">Crypto spread</h2>
                     <span>Jul 22 UTC close · daily · benchmark BTC $66,086 · z +0.17</span>
                 </div>
-                <p class="scan-intro">Altcoin relative strength measured the way the equity scan measures stocks against SPY: each coin's 50-day EMA z-score minus bitcoin's. Positive and green = the alt is more extended above its own trend than BTC is (vol-adjusted leadership); negative and red = it's lagging the benchmark. Each combined card puts price versus YTD VWAP on top and Spread Z versus BTC below, ranked by current Spread Z descending. All data is daily UTC perp candles from Hyperliquid; the last bar is the most recent complete day.</p>
+                <p class="scan-intro">Altcoin relative strength measured the way the equity scan measures stocks against SPY: each coin's 50-day EMA z-score minus bitcoin's. Positive and green = the alt is more extended above its own trend than BTC is (vol-adjusted leadership); negative and red = it's lagging the benchmark. The table and combined charts are ranked by current Spread Z descending. All data is daily UTC perp candles from Hyperliquid; the last bar is the most recent complete day.</p>
+                <p class="scan-intro">YTD VWAP is the year's average cost basis per coin, volume-weighted on Hyperliquid's perp markets. Above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
                 <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Altcoin spread Z versus BTC">
-                    <thead><tr><th>Coin</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">Coin Z</th><th class="scan-num">Spread vs BTC</th><th class="scan-num">Side</th><th class="scan-num">Alt/BTC YTD</th></tr></thead>
+                <table class="scan-table" aria-label="Altcoin spread Z versus BTC and year-to-date VWAPs">
+                    <thead><tr><th>Coin</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">VWAP side</th><th class="scan-num">Coin Z</th><th class="scan-num">Spread vs BTC</th><th class="scan-num">Spread side</th><th class="scan-num">Alt/BTC YTD</th></tr></thead>
                     <tbody>
                     <tr>
                         <td class="scan-sym">ZEC</td>
                         <td class="scan-sec">Zcash</td>
                         <td class="scan-num">$515.37</td>
+                        <td class="scan-num">$426.68</td>
+                        <td class="scan-num"><span class="scan-z-pos">+20.8%</span></td>
+                        <td class="scan-num">▲ 21d</td>
                         <td class="scan-num"><span class="scan-z-pos">+0.59</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.41</span></td>
                         <td class="scan-num">▲ 84d</td>
@@ -3715,6 +3719,9 @@
                         <td class="scan-sym">ETH</td>
                         <td class="scan-sec">Ethereum</td>
                         <td class="scan-num">$1,933.40</td>
+                        <td class="scan-num">$2,168.66</td>
+                        <td class="scan-num"><span class="scan-z-neg">-10.8%</span></td>
+                        <td class="scan-num">▼ 73d</td>
                         <td class="scan-num"><span class="scan-z-pos">+0.56</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.38</span></td>
                         <td class="scan-num">▲ 36d</td>
@@ -3724,6 +3731,9 @@
                         <td class="scan-sym">SOL</td>
                         <td class="scan-sec">Solana</td>
                         <td class="scan-num">$77.92</td>
+                        <td class="scan-num">$89.04</td>
+                        <td class="scan-num"><span class="scan-z-neg">-12.5%</span></td>
+                        <td class="scan-num">▼ 72d</td>
                         <td class="scan-num"><span class="scan-z-pos">+0.18</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.00</span></td>
                         <td class="scan-num">▲ 3d</td>
@@ -3733,6 +3743,9 @@
                         <td class="scan-sym">XRP</td>
                         <td class="scan-sec">XRP</td>
                         <td class="scan-num">$1.1414</td>
+                        <td class="scan-num">$1.4631</td>
+                        <td class="scan-num"><span class="scan-z-neg">-22.0%</span></td>
+                        <td class="scan-num">▼ 190d</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.13</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.31</span></td>
                         <td class="scan-num">▼ 16d</td>
@@ -3742,6 +3755,9 @@
                         <td class="scan-sym">HYPE</td>
                         <td class="scan-sec">Hyperliquid</td>
                         <td class="scan-num">$59.34</td>
+                        <td class="scan-num">$45.33</td>
+                        <td class="scan-num"><span class="scan-z-pos">+30.9%</span></td>
+                        <td class="scan-num">▲ 145d</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.33</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.51</span></td>
                         <td class="scan-num">▼ 5d</td>
@@ -3751,6 +3767,9 @@
                         <td class="scan-sym">BNB</td>
                         <td class="scan-sec">BNB</td>
                         <td class="scan-num">$570.80</td>
+                        <td class="scan-num">$664.41</td>
+                        <td class="scan-num"><span class="scan-z-neg">-14.1%</span></td>
+                        <td class="scan-num">▼ 51d</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.47</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.64</span></td>
                         <td class="scan-num">▼ 35d</td>
@@ -3760,6 +3779,9 @@
                         <td class="scan-sym">DOGE</td>
                         <td class="scan-sec">Dogecoin</td>
                         <td class="scan-num">$0.0730</td>
+                        <td class="scan-num">$0.1021</td>
+                        <td class="scan-num"><span class="scan-z-neg">-28.5%</span></td>
+                        <td class="scan-num">▼ 66d</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.66</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.84</span></td>
                         <td class="scan-num">▼ 38d</td>
@@ -3767,73 +3789,6 @@
                     </tr>
                     </tbody>
                 </table>
-                </div>
-
-                <div class="position-group"><h3>YTD VWAP metrics · ranked by Spread Z</h3>
-                <p class="scan-intro">The year's average cost basis per coin, volume-weighted on Hyperliquid's perp markets — the native venue where these names' price discovery lives. Same read as the equity tabs: above the line, the year's buyers are in profit and defend dips; below it, rallies meet trapped sellers.</p>
-                <div class="scan-table-wrap">
-                <table class="scan-table" aria-label="Crypto year-to-date VWAPs">
-                    <thead><tr><th>Symbol</th><th>Name</th><th class="scan-num">Price</th><th class="scan-num">YTD VWAP</th><th class="scan-num">vs VWAP</th><th class="scan-num">Side</th></tr></thead>
-                    <tbody>
-                    <tr>
-                        <td class="scan-sym">ZEC</td>
-                        <td class="scan-sec">Zcash</td>
-                        <td class="scan-num">$515.37</td>
-                        <td class="scan-num">$426.68</td>
-                        <td class="scan-num"><span class="scan-z-pos">+20.8%</span></td>
-                        <td class="scan-num">▲ 21d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">ETH</td>
-                        <td class="scan-sec">Ethereum</td>
-                        <td class="scan-num">$1,933.40</td>
-                        <td class="scan-num">$2,168.66</td>
-                        <td class="scan-num"><span class="scan-z-neg">-10.8%</span></td>
-                        <td class="scan-num">▼ 73d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">SOL</td>
-                        <td class="scan-sec">Solana</td>
-                        <td class="scan-num">$77.92</td>
-                        <td class="scan-num">$89.04</td>
-                        <td class="scan-num"><span class="scan-z-neg">-12.5%</span></td>
-                        <td class="scan-num">▼ 72d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">XRP</td>
-                        <td class="scan-sec">XRP</td>
-                        <td class="scan-num">$1.1414</td>
-                        <td class="scan-num">$1.4631</td>
-                        <td class="scan-num"><span class="scan-z-neg">-22.0%</span></td>
-                        <td class="scan-num">▼ 190d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">HYPE</td>
-                        <td class="scan-sec">Hyperliquid</td>
-                        <td class="scan-num">$59.34</td>
-                        <td class="scan-num">$45.33</td>
-                        <td class="scan-num"><span class="scan-z-pos">+30.9%</span></td>
-                        <td class="scan-num">▲ 145d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">BNB</td>
-                        <td class="scan-sec">BNB</td>
-                        <td class="scan-num">$570.80</td>
-                        <td class="scan-num">$664.41</td>
-                        <td class="scan-num"><span class="scan-z-neg">-14.1%</span></td>
-                        <td class="scan-num">▼ 51d</td>
-                    </tr>
-                    <tr>
-                        <td class="scan-sym">DOGE</td>
-                        <td class="scan-sec">Dogecoin</td>
-                        <td class="scan-num">$0.0730</td>
-                        <td class="scan-num">$0.1021</td>
-                        <td class="scan-num"><span class="scan-z-neg">-28.5%</span></td>
-                        <td class="scan-num">▼ 66d</td>
-                    </tr>
-                    </tbody>
-                </table>
-                </div>
                 </div>
                 <div class="position-group"><h3>Combined charts · ranked by Spread Z</h3></div>
                 <div class="crypto-grid">
