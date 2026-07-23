@@ -8,6 +8,21 @@
   const $$ = (s, r) => [...(r || document).querySelectorAll(s)];
   const htmlSafe = value => String(value ?? '').replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]));
   const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  const TRADE_LOG_URL = '/posts/trade-log-2026-07-22/';
+  const TRADE_PLANS = {
+    ABT: {
+      setup: 'Healthcare strength plus a reclaim of the earnings and YTD VWAPs after a strong report.',
+      invalidation: 'About 1 week under $100 weakens the momentum thesis; a close below roughly $99 kills it.',
+    },
+    HOOD: {
+      setup: 'Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis.',
+      invalidation: 'July 29 earnings fails to back the fee-growth story. No hard price level was recorded.',
+    },
+    V: {
+      setup: 'Financial-sector leadership expressed through Visa’s steady payments-tollbooth uptrend.',
+      invalidation: 'July 28 earnings is the next test. No hard invalidation was recorded in the July 22 log.',
+    },
+  };
   const fmtISO = iso => {
     const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(iso || '');
     return m ? `${MONTHS[+m[2] - 1]} ${+m[3]} ${m[1]}` : '—';
@@ -49,7 +64,7 @@
     restorePanelSvgs(target);
     panels.forEach(p => { p.hidden = p !== target; });
     const filters = $('#bl-filters');
-    if (filters) filters.hidden = target.id !== 'positions-panel';
+    if (filters) filters.hidden = !['positions-panel', 'log-panel'].includes(target.id);
     if (push) {
       const hash = tab.id === 'positions-tab' ? '' : '#' + tab.id.replace(/-tab$/, '');
       history.replaceState(null, '', location.pathname + location.search + hash);
@@ -61,6 +76,8 @@
       let next = null;
       if (e.key === 'ArrowRight') next = tabs[(i + 1) % tabs.length];
       if (e.key === 'ArrowLeft') next = tabs[(i - 1 + tabs.length) % tabs.length];
+      if (e.key === 'Home') next = tabs[0];
+      if (e.key === 'End') next = tabs[tabs.length - 1];
       if (!next) return;
       e.preventDefault(); activate(next, true); next.focus();
     });
@@ -363,8 +380,8 @@
   }
 
   /* ── parse cron markup ────────────────────────────────────────────── */
-  const raw = $('#bl-raw'), built = $('#bl-built');
-  if (!raw || !built) return;
+  const raw = $('#bl-raw'), built = $('#bl-built'), logBuilt = $('#bl-log-built');
+  if (!raw || !built || !logBuilt) return;
 
   const trades = { buy: [], sell: [] };
   $$('.activity-lane', raw).forEach(lane => {
@@ -482,14 +499,17 @@
     visible += wins.length + losses.length;
 
     const posHead = ['sym|Symbol', 'type|Type', 'side|Side', 'strike|Strike', 'expiry|Expiry', 'since|Since entry|r']
-      .map(c => { const [k, label, r] = c.split('|'); return `<button data-sort-pos="${k}" class="${r || ''}">${label}${arrow(state.posSort, k)}</button>`; }).join('');
+      .map(c => { const [k, label, r] = c.split('|'); return `<button data-sort-pos="${k}" class="${r || ''}">${label}${arrow(state.posSort, k)}</button>`; }).join('') + '<span>Setup</span><span>Invalidation / next test</span>';
     const posRows = pos.map((p, i) => {
       const symbol = htmlSafe(p.sym), detailId = `position-chart-${p.sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}-${i}`;
+      const plan = TRADE_PLANS[p.sym] || {};
       return `<div class="bl-row g-pos" data-position-row data-position-symbol="${symbol}">
       <span class="sym"><button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>${symbol}</button></span><span>${htmlSafe(p.type)}</span>
       <span class="${sideCls(p.side)}">${htmlSafe(p.side)}</span>
       <span class="mono">${htmlSafe(p.strike)}</span><span class="mono mut">${htmlSafe(p.expiry)}</span>
       <span class="r mono ${p.since === '—' ? 'mut' : pnlCls(parseFloat(p.since.replace('−', '-')))}">${htmlSafe(p.since)}</span>
+      <span class="bl-plan">${htmlSafe(plan.setup || 'No written setup yet.')}</span>
+      <span class="bl-plan bl-invalidation">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</span>
     </div><div class="bl-position-chart-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}" hidden><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
     }).join('') || '<div class="bl-empty">No positions match the current filters.</div>';
 
@@ -510,9 +530,11 @@
     const tgl = state.extBy === 'pct' ? 'By % ▾' : 'By date ▾';
     built.innerHTML = `
       <div class="bl-card">
-        <div class="bl-card-title">Open positions <span>· Robinhood · ${pos.length}</span></div>
+        <div class="bl-card-title">Open positions <span>· Robinhood · ${pos.length}</span><a href="${TRADE_LOG_URL}">Trade Log 7/22 source</a><span class="bl-swipe-hint">Swipe table →</span></div>
         <div class="bl-thead g-pos">${posHead}</div>${posRows}
-      </div>
+      </div>`;
+
+    logBuilt.innerHTML = `
       <div class="bl-pair">
         <div class="bl-card"><div class="bl-card-title">Recent buys <span>· $2K+ · fills consolidated by date</span></div>
           <div class="bl-thead g-trade">${tradeHead}</div>${tradeRows(buys)}</div>
@@ -530,7 +552,7 @@
   }
 
   /* ── events ───────────────────────────────────────────────────────── */
-  built.addEventListener('click', e => {
+  const handleBuiltClick = e => {
     const positionToggle = e.target.closest('[data-position-chart-toggle]');
     const positionRow = e.target.closest('[data-position-row]');
     if (positionToggle || (positionRow && !e.target.closest('a, button, input, select, textarea'))) {
@@ -560,7 +582,8 @@
     const ts = e.target.closest('[data-sort-trade]');
     if (ts) { const k = ts.dataset.sortTrade; state.tradeSort = { key: k, dir: state.tradeSort.key === k ? -state.tradeSort.dir : -1 }; return render(); }
     if (e.target.closest('[data-ext-toggle]')) { state.extBy = state.extBy === 'pct' ? 'date' : 'pct'; return render(); }
-  });
+  };
+  [built, logBuilt].forEach(element => element.addEventListener('click', handleBuiltClick));
   $$('.bl-chip').forEach(chip => chip.addEventListener('click', () => {
     const g = chip.dataset.g;
     state[g] = chip.dataset.v;
