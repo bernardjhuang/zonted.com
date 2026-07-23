@@ -65,7 +65,7 @@ def setup_table(rows, aria, table_id):
         safe_sector = html.escape(str(r["sector"]), quote=True)
         detail_id = f"scan-detail-{table_id}-{re.sub(r'[^a-z0-9-]+', '-', sym.lower()).strip('-')}"
         cells.append(f"""                    <tr class="scan-data-row" data-scan-row data-scan-symbol="{safe_sym}">
-                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup chart"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{safe_sym}</span></button></td>
+                        <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="{detail_id}" aria-label="Show {safe_sym} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span translate="no">{safe_sym}</span></button></td>
                         <td class="scan-sec">{safe_sector}</td>
                         <td class="scan-num">{znum(r.get('spread_z'))}</td>
                         <td class="scan-num">{znum(r.get('dist_z'))}</td>
@@ -135,7 +135,9 @@ def main():
             sys.exit(f"{symbol} full setup chart contains a non-finite value")
         source_row = rows_by_symbol[symbol]
         expected_label = source_row.get("short_verdict") if source_row.get("short_verdict") in ("SHORT+", "SHORT", "BREAKING") else source_row["verdict"]
-        if record.get("sector") != source_row.get("sector") or record.get("label") != expected_label:
+        if (record.get("sector") != source_row.get("sector")
+                or record.get("sector_etf") != source_row.get("etf")
+                or record.get("label") != expected_label):
             sys.exit(f"{symbol} chart metadata does not match the momentum scan")
         stats = record.get("stats") or {}
         for key in ("spread_z", "dist_z", "evwap_pct", "evwap_side", "evwap_streak", "earn_anchor", "next_earn", "days_to_earn"):
@@ -171,7 +173,7 @@ def main():
                     <span>{last_bar} close · daily</span>
                 </div>
                 <p class="scan-intro">A mechanical relative-strength screen across the {len(all_rows)}-symbol universe: sector 50-session z-scores find the hot (and freezing) ponds, a stock-vs-SPY spread z-score finds the strongest and weakest fish in them, and earnings-anchored VWAP does the timing. Regime: {regime}. Method notes at the bottom.</p>
-                <p class="scan-chart-hint">Click any ticker row to open the same full chart used in Setup Charts: YTD candles, earnings and YTD VWAPs, Spread Z, Dist Z, and the rule-based read. Only one chart stays open at a time.</p>
+                <p class="scan-chart-hint">Click any ticker row to open its full setup chart beside the matching sector ETF's YTD VWAP chart. Only one comparison stays open at a time.</p>
                 <ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
 {sectors}
                 </ul>

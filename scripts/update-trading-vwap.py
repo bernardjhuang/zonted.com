@@ -83,7 +83,8 @@ def chart(sym, name, dates, close, vwap, w, h):
     vw = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(vwap))
     side = diff[-1] >= 0
     pct = (close[-1] / vwap[-1] - 1) * 100
-    return f"""                <figure class="vwap-chart{' vwap-chart--spy' if sym == 'SPY' else ''}" data-sym="{sym}">
+    data = json.dumps({"dates": dates, "close": close, "vwap": vwap}, separators=(",", ":"))
+    return f"""                <figure class="vwap-chart{' vwap-chart--spy' if sym == 'SPY' else ''}" data-sym="{sym}" data-d='{data}'>
                     <figcaption><b>{sym}</b> <span>{name}</span><em class="{'scan-z-pos' if side else 'scan-z-neg'}">{pct:+.1f}% {'above' if side else 'below'}</em></figcaption>
                     <svg viewBox="0 0 {w} {h}" preserveAspectRatio="none" role="img" aria-label="{sym} 2026 price versus year-to-date VWAP">
                     {''.join(ticks)}{''.join(fills)}
@@ -147,9 +148,6 @@ def main():
     us_rows, country_rows = render_rows(us_summary), render_rows(country_summary)
     us_charts, country_charts = render_charts(us_summary), render_charts(country_summary)
 
-    tip_data = json.dumps({s: {"dates": v["dates"], "close": v["close"], "vwap": v["vwap"]}
-                           for s, v in series.items()})
-
     panel = f"""            <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
                 <div class="position-head">
                     <h2 id="vwap-heading">YTD VWAP</h2>
@@ -187,9 +185,8 @@ def main():
                 <p class="trading-note">Price and VWAP are computed from consolidated daily bars (typical price × volume, anchored January 2, 2026). Refreshed daily after the close alongside the momentum scan. Descriptive market data, not investment advice.</p>
                 <script>
                 (() => {{
-                const VD = {tip_data};
                 document.querySelectorAll('.vwap-chart').forEach((fig) => {{
-                    const d = VD[fig.dataset.sym], svg = fig.querySelector('svg'),
+                    const d = JSON.parse(fig.dataset.d), svg = fig.querySelector('svg'),
                         tip = fig.querySelector('.vwap-tip'), xh = fig.querySelector('.vxh'),
                         vb = svg.viewBox.baseVal, n = d.dates.length, ML = 10, MR = 58;
                     svg.addEventListener('mousemove', (e) => {{
