@@ -18,6 +18,10 @@
       setup: 'Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis.',
       invalidation: 'July 29 earnings fails to back the fee-growth story. No hard price level was recorded.',
     },
+    HIMS: {
+      setup: 'Operating peptide-manufacturing capacity positions Hims to benefit if FDA support expands lawful 503A compounding; regulation, not facility readiness, is the bottleneck.',
+      invalidation: 'Build at $30 or lower. The thesis breaks if FDA rulemaking stalls, states restrict access, or August 10 earnings weakens the core subscriber, margin, or weight-loss story.',
+    },
     V: {
       setup: 'Financial-sector leadership expressed through Visa’s steady payments-tollbooth uptrend.',
       invalidation: 'July 28 earnings is the next test. No hard invalidation was recorded in the July 22 log.',
@@ -646,13 +650,13 @@
         if (item.type === 'Equity') return `${htmlSafe(item.side)} shares`;
         return `${htmlSafe(item.side)} $${htmlSafe(item.strike)} · ${htmlSafe(item.expiry)}`;
       }).join(' · ');
-      const card = `<article class="portfolio-card is-open" data-position-row data-position-symbol="${symbol}">
+      const card = `<article class="portfolio-card" data-position-row data-position-symbol="${symbol}">
         <div class="portfolio-card-head"><h2>${symbol}</h2><span class="mono ${liveMark === '—' ? 'mut' : pnlCls(parseFloat(liveMark.replace('−', '-')))}">${htmlSafe(liveMark)}</span></div>
         <p class="portfolio-instruments">${instrumentText}</p>
         <p class="portfolio-label">Thesis</p><p class="portfolio-copy">${htmlSafe(plan.setup || 'No written thesis yet.')}</p>
         <p class="portfolio-label">Invalidation / next test</p><p class="portfolio-copy portfolio-risk">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</p>
-        <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="true" aria-controls="${detailId}" aria-label="Hide ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>Hide setup</button>
-        <div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}"><div class="scan-setup-chart" data-position-chart-shell></div></div>
+        <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>View setup</button>
+        <div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}" hidden><div class="scan-setup-chart" data-position-chart-shell></div></div>
       </article>`;
       return card;
     });
@@ -666,10 +670,6 @@
     </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
     built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div>`;
     logBuilt.innerHTML = `<details class="bl-card activity-disclosure"><summary class="bl-card-title">Recent activity <span>· latest ${activity.length} · direction / type / P&amp;L</span></summary><div class="activity-disclosure-body"><div class="activity-source"><span>Broker fills consolidated by trade date.</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-columns-head" aria-hidden="true"><span>Date</span><span>Trade</span><span>Direction · Type</span><span>P&amp;L</span></div><div class="activity-feed">${activityRows}</div></div></details>`;
-    $$('[data-position-chart-detail]', built).forEach(detail => {
-      renderSetupChartForSymbol($('[data-position-chart-shell]', detail), detail.dataset.positionSymbol);
-    });
-
     const active = q || state.asset !== 'All' || state.status !== 'All';
     const visible = grouped.size + activity.length;
     const note = $('#bl-match');

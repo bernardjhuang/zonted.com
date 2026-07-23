@@ -168,10 +168,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('>Spread Z vs BTC</th>', self.html)
         self.assertIn("initChartGallery('#crypto-chart-grid'", self.js)
 
-    def test_live_setups_open_and_recent_activity_folded(self):
-        self.assertIn('aria-expanded="true" aria-controls="${detailId}"', self.js)
-        self.assertIn('>Hide setup</button>', self.js)
+    def test_live_setups_collapsed_and_recent_activity_folded(self):
+        self.assertIn('aria-expanded="false" aria-controls="${detailId}"', self.js)
+        self.assertIn('>View setup</button>', self.js)
+        self.assertIn('data-position-symbol="${symbol}" hidden>', self.js)
         self.assertIn("renderSetupChartForSymbol($('[data-position-chart-shell]', detail)", self.js)
+        self.assertIn('Operating peptide-manufacturing capacity positions Hims', self.js)
+        self.assertIn('Build at $30 or lower.', self.js)
         self.assertIn('#positions-panel .portfolio-grid { grid-template-columns: 1fr; }', self.html)
         self.assertRegex(self.js, r'<article class="portfolio-card[\s\S]*?<div class="bl-position-chart-detail[\s\S]*?</article>')
         self.assertNotIn('class="portfolio-details"', self.js)
