@@ -212,7 +212,11 @@ def main():
     leading = ranked_sectors[:2]
     lagging = ranked_sectors[-2:]
     sectors = "\n".join(
-        f"""                        <li class="scan-sector{' scan-sector--hot' if s['hot'] else ''}{' scan-sector--cold' if s['cold'] else ''}"><b>{html.escape(str(s['etf']))}</b>{html.escape(str(s['name']))}<br>{znum(s['z'])} · #{s['rank']}</li>"""
+        f"""                        <li class="scan-sector{' scan-sector--hot' if s['hot'] else ''}{' scan-sector--cold' if s['cold'] else ''}">
+                            <span class="scan-sector-head"><b>{html.escape(str(s['etf']))}</b><span>#{s['rank']}</span></span>
+                            <span class="scan-sector-name">{html.escape(str(s['name']))}</span>
+                            <span class="scan-sector-score">{znum(s['z'])} <small>50D Z</small></span>
+                        </li>"""
         for s in ranked_sectors)
 
     all_rows = sorted(p["rows"], key=lambda r: r["symbol"])
@@ -259,7 +263,7 @@ def main():
                 <div class="sector-summary">
                     <span><b>Leading</b> {' · '.join(html.escape(str(s['name'])) for s in leading)}</span>
                     <span><b>Lagging</b> {' · '.join(html.escape(str(s['name'])) for s in reversed(lagging))}</span>
-                    <details><summary>View all sectors</summary><ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
+                    <details open><summary>All sectors · 50-day Z-score</summary><ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
 {sectors}
                     </ul></details>
                 </div>

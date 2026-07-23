@@ -505,11 +505,14 @@
         const response = await fetch(shell.dataset.url, { credentials: 'same-origin' });
         if (!response.ok) throw new Error(`Chart asset HTTP ${response.status}`);
         const payload = await response.json();
-        let charts = Object.entries(payload.charts || {});
+        const requestedSymbols = (shell.dataset.symbols || '').split(',').map(symbol => symbol.trim()).filter(Boolean);
+        let charts = requestedSymbols.length
+          ? requestedSymbols.map(symbol => [symbol, payload.charts?.[symbol]]).filter(([, markup]) => markup)
+          : Object.entries(payload.charts || {});
         if (!charts.length) throw new Error(`${queryKey} chart asset is empty`);
         const requested = new URL(location.href).searchParams.get(queryKey)?.toUpperCase();
-        if (requested && payload.charts?.[requested]) {
-          charts = [[requested, payload.charts[requested]], ...charts.filter(([symbol]) => symbol !== requested)];
+        if (requested && charts.some(([symbol]) => symbol === requested)) {
+            charts = [[requested, payload.charts[requested]], ...charts.filter(([symbol]) => symbol !== requested)];
         }
         shell.innerHTML = charts.map(([, markup]) => markup).join('');
         if (wireChart) $$(itemSelector, shell).forEach(wireChart);
@@ -523,6 +526,7 @@
     if (!panel.hidden) load();
   }
   initChartGallery('#vwap-chart-grid', 'vwap', '.vwap-chart', wireVwapChart);
+  initChartGallery('#vwap-country-chart-grid', 'vwap', '.vwap-chart', wireVwapChart);
   initChartGallery('#crypto-chart-grid', 'crypto', '.crypto-card');
 
   $$('.whale-flow-grid').forEach(whaleGrid => {
@@ -592,14 +596,11 @@
     posSort: { key: 'sym', dir: 1 },
     tradeSort: { key: 'date', dir: -1 },
   };
-  let openPositionToggle = null;
-
   const arrow = (sort, key) => sort.key === key ? (sort.dir > 0 ? ' ▲' : ' ▼') : ' ⇅';
   const pnlCls = v => v > 0 ? 'bl-gain' : v < 0 ? 'bl-loss' : '';
   const sideCls = s => /long|call/i.test(s) ? 'bl-gain' : /short|put/i.test(s) ? 'bl-loss' : '';
 
   function render() {
-    openPositionToggle = null;
     const q = state.q.trim().toUpperCase();
     const matchSym = sym => !q || sym.includes(q);
     const matchAsset = a => state.asset === 'All' || a === state.asset;
@@ -618,8 +619,8 @@
     const activity = [
       ...tr('buy').map(row => ({ ...row, side: 'buy' })),
       ...tr('sell').map(row => ({ ...row, side: 'sell' })),
-    ].sort((a, b) => b.iso.localeCompare(a.iso) || a.sym.localeCompare(b.sym)).slice(0, 8);
-    const portfolioCards = [...grouped].map(([sym, instruments]) => {
+    ].sort((a, b) => b.iso.localeCompare(a.iso) || a.sym.localeCompare(b.sym)).slice(0, 20);
+    const portfolioItems = [...grouped].map(([sym, instruments]) => {
       const symbol = htmlSafe(sym);
       const detailId = `position-chart-${sym.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
       const plan = TRADE_PLANS[sym] || {};
@@ -628,23 +629,30 @@
         if (item.type === 'Equity') return `${htmlSafe(item.side)} shares`;
         return `${htmlSafe(item.side)} $${htmlSafe(item.strike)} · ${htmlSafe(item.expiry)}`;
       }).join(' · ');
-      return `<article class="portfolio-card" data-position-row data-position-symbol="${symbol}">
+      const card = `<article class="portfolio-card is-open" data-position-row data-position-symbol="${symbol}">
         <div class="portfolio-card-head"><h2>${symbol}</h2><span class="mono ${liveMark === '—' ? 'mut' : pnlCls(parseFloat(liveMark.replace('−', '-')))}">${htmlSafe(liveMark)}</span></div>
         <p class="portfolio-instruments">${instrumentText}</p>
         <p class="portfolio-label">Thesis</p><p class="portfolio-copy">${htmlSafe(plan.setup || 'No written thesis yet.')}</p>
         <p class="portfolio-label">Invalidation / next test</p><p class="portfolio-copy portfolio-risk">${htmlSafe(plan.invalidation || 'No written invalidation yet.')}</p>
-        <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>View setup</button>
-      </article><div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}" hidden><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
-    }).join('') || '<div class="bl-empty">No portfolio symbols match the current filters.</div>';
+        <button type="button" class="bl-position-chart-toggle" data-position-chart-toggle aria-expanded="true" aria-controls="${detailId}" aria-label="Hide ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span>Hide setup</button>
+      </article>`;
+      const detail = `<div class="bl-position-chart-detail portfolio-detail" id="${detailId}" data-position-chart-detail data-position-symbol="${symbol}"><div class="scan-setup-chart" data-position-chart-shell></div></div>`;
+      return { card, detail };
+    });
+    const portfolioCards = portfolioItems.map(item => item.card).join('') || '<div class="bl-empty">No portfolio symbols match the current filters.</div>';
+    const portfolioDetails = portfolioItems.map(item => item.detail).join('');
 
     const activityRows = activity.map(row => `<div class="activity-row-compact">
-      <span class="mono mut">${htmlSafe(row.dateTxt)}</span>
-      <span><b class="sym">${htmlSafe(row.sym)}</b> <span class="mut">${htmlSafe(row.inst.replace(row.sym, '').trim())}</span></span>
+      <span class="activity-date-compact mono mut">${htmlSafe(row.dateTxt)}</span>
+      <span class="activity-trade"><b class="sym">${htmlSafe(row.sym)}</b> <span class="mut">${htmlSafe(row.inst.replace(row.sym, '').trim())}</span></span>
       <span class="activity-side">${row.side} · ${htmlSafe(row.asset)}</span>
-      <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
+      <span class="activity-pnl-compact r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
     </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
-    built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div>`;
-    logBuilt.innerHTML = `<div class="bl-card"><div class="bl-card-title">Recent activity <span>· latest 8 · broker fills consolidated</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-feed">${activityRows}</div></div>`;
+    built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div><div class="portfolio-details">${portfolioDetails}</div>`;
+    logBuilt.innerHTML = `<details class="bl-card activity-disclosure"><summary class="bl-card-title">Recent activity <span>· latest ${activity.length} · direction / type / P&amp;L</span></summary><div class="activity-disclosure-body"><div class="activity-source"><span>Broker fills consolidated by trade date.</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-columns-head" aria-hidden="true"><span>Date</span><span>Trade</span><span>Direction · Type</span><span>P&amp;L</span></div><div class="activity-feed">${activityRows}</div></div></details>`;
+    $$('[data-position-chart-detail]', built).forEach(detail => {
+      renderSetupChartForSymbol($('[data-position-chart-shell]', detail), detail.dataset.positionSymbol);
+    });
 
     const active = q || state.asset !== 'All' || state.status !== 'All';
     const visible = grouped.size + activity.length;
@@ -660,22 +668,14 @@
       const toggle = positionToggle || $('[data-position-chart-toggle]', positionRow);
       const row = toggle.closest('[data-position-row]'), detail = document.getElementById(toggle.getAttribute('aria-controls'));
       if (!detail || !renderSetupChartForSymbol) return;
-      if (openPositionToggle && openPositionToggle !== toggle) {
-        const oldRow = openPositionToggle.closest('[data-position-row]');
-        const oldDetail = document.getElementById(openPositionToggle.getAttribute('aria-controls'));
-        openPositionToggle.setAttribute('aria-expanded', 'false');
-        openPositionToggle.setAttribute('aria-label', `Show ${oldRow.dataset.positionSymbol} setup and sector charts`);
-        oldRow.classList.remove('is-open');
-        if (oldDetail) oldDetail.hidden = true;
-      }
       const opening = toggle.getAttribute('aria-expanded') !== 'true';
       toggle.setAttribute('aria-expanded', String(opening));
       toggle.setAttribute('aria-label', `${opening ? 'Hide' : 'Show'} ${row.dataset.positionSymbol} setup and sector charts`);
+      toggle.lastChild.textContent = opening ? 'Hide setup' : 'View setup';
       row.classList.toggle('is-open', opening); detail.hidden = !opening;
       if (opening) {
         renderSetupChartForSymbol($('[data-position-chart-shell]', detail), row.dataset.positionSymbol);
-        openPositionToggle = toggle;
-      } else if (openPositionToggle === toggle) openPositionToggle = null;
+      }
       return;
     }
     const ps = e.target.closest('[data-sort-pos]');

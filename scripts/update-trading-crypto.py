@@ -205,7 +205,7 @@ def main():
     rows = "\n".join(
         f"""                    <tr>
                         <td class="scan-sym"><span translate="no">{html.escape(c['sym'])}</span><span class="bl-tag">{html.escape(c['name'])}</span></td>
-                        <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">{c['spread']:+.2f}</span></td>
+                        <td class="scan-num"><span class="{'scan-z-pos' if c['spread'] >= 0 else 'scan-z-neg'}">z {c['spread']:+.2f}</span></td>
                         <td class="scan-num"><span class="{'scan-z-pos' if b['side'] else 'scan-z-neg'}">{b['pct']:+.1f}%</span></td>
                         <td class="scan-num">{'▲' if b['side'] else '▼'} {b['held']}d</td>
                         <td>{html.escape(status_text(c, b))}</td>
@@ -228,7 +228,7 @@ def main():
                 <p class="trading-takeaway">{html.escape(takeaway)}</p>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
-                    <thead><tr><th>Coin</th><th class="scan-num">vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
+                    <thead><tr><th>Coin</th><th class="scan-num">Spread Z vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
                     <tbody>
 {rows}
                     </tbody>
