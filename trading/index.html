@@ -172,22 +172,27 @@
         .brief-entry > details > summary::before { content: '▾'; font-size: 12px; color: var(--bl-muted); transition: transform 0.15s; }
         .brief-entry > details:not([open]) > summary::before { transform: rotate(-90deg); }
         .brief-entry > details > summary time { font-variant-numeric: tabular-nums; }
-        .brief-entry-body { padding: 0 0 16px; font-size: 13.5px; line-height: 1.65; color: var(--bl-ink); }
-        .brief-entry-body h3 { font-size: 15px; font-weight: 600; margin: 14px 0 6px; }
-        .brief-entry-body h4 { font-size: 14px; font-weight: 600; margin: 10px 0 4px; }
-        .brief-entry-body p { margin: 4px 0; }
-        .brief-entry-body ul { margin: 4px 0 8px; padding-left: 20px; }
-        .brief-entry-body li { margin: 2px 0; }
-        .brief-entry-body code { font: 500 12.5px var(--bl-mono); background: var(--bl-surface-2, #f5f5f5); padding: 1px 4px; border-radius: 3px; }
-        .brief-entry-body .brief-num { color: var(--bl-faint); margin-right: 4px; }
-        .brief-content { padding: 4px 20px 8px; max-width: 980px; font-size: 14px; line-height: 1.6; color: var(--bl-ink); }
-        .brief-content h3 { font-size: 15px; font-weight: 600; margin: 16px 0 6px; }
-        .brief-content h4 { font-size: 14px; font-weight: 600; margin: 12px 0 4px; }
-        .brief-content p { margin: 4px 0; }
-        .brief-content ul { margin: 4px 0 8px; padding-left: 20px; }
-        .brief-content li { margin: 2px 0; }
-        .brief-content code { font: 500 12.5px var(--bl-mono); background: var(--bl-surface-2, #f5f5f5); padding: 1px 4px; border-radius: 3px; }
-        .brief-content .brief-num { color: var(--bl-faint); margin-right: 4px; }
+        .brief-entry-body { padding: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: var(--bl-ink); }
+        .brief-risk-card { border: 1px solid var(--bl-border); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--bl-card); }
+        .brief-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .brief-risk-title { font-size: 15px; font-weight: 600; margin: 0 0 4px; line-height: 1.35; }
+        .brief-num { color: var(--bl-faint); margin-right: 4px; }
+        .brief-score-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font: 600 13px var(--bl-sans); color: #fff; white-space: nowrap; flex-shrink: 0; }
+        .brief-score-detail { display: block; font: 400 11.5px var(--bl-mono); color: var(--bl-faint); margin: 2px 0 8px; }
+        .brief-evidence-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font: 600 11px var(--bl-sans); color: #fff; text-transform: uppercase; letter-spacing: .03em; }
+        .brief-sources { color: var(--bl-muted); margin-left: 8px; }
+        .brief-levers { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0 10px; }
+        .brief-ticker { font: 500 12px var(--bl-mono); background: var(--bl-chipbg); color: var(--bl-accent); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--bl-chipbd); }
+        .brief-section { margin: 8px 0; }
+        .brief-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--bl-muted); margin-bottom: 3px; }
+        .brief-signals ul { margin: 4px 0 6px; padding-left: 20px; }
+        .brief-signals li { margin: 3px 0; font-size: 13px; }
+        .brief-details { margin-top: 10px; border-top: 1px dashed var(--bl-divider); padding-top: 8px; }
+        .brief-details > summary { cursor: pointer; font-size: 12px; color: var(--bl-faint); list-style: none; }
+        .brief-details > summary::before { content: '▸ '; }
+        .brief-details[open] > summary::before { content: '▾ '; }
+        .brief-details-body { padding: 6px 0; font-size: 12px; color: var(--bl-muted); }
+        .brief-details-body p { margin: 3px 0; }
         .bl .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
         .bl .vwap-chart { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0; }
         .bl .vwap-chart--spy { grid-column: 1 / -1; }
@@ -394,10 +399,10 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
+                <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">4</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
                 <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>
-                <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F</button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
             </div>
@@ -892,95 +897,63 @@
             <section class="trading-panel brief-panel" id="brief-panel" role="tabpanel" tabindex="0" aria-labelledby="brief-tab" hidden>
                 <div class="position-head">
                     <h2 id="brief-heading">Morning Brief</h2>
-                    <span>2 briefs · latest 2026-07-23 · pre-market CT</span>
+                    <span>2 briefs · latest July 23, 2026 · pre-market CT</span>
                 </div>
-                <p class="trading-takeaway">Daily tail-risk + event-catalyst research brief. Newest first. Each entry is collapsible.</p>
+                <p class="trading-takeaway">Daily tail-risk research in plain English. Each card breaks down what's happening, what could prove it wrong, and what to watch. Newest first.</p>
                 <div class="brief-log">
                 <article class="brief-entry" id="brief-2026-07-23">
                     <details open>
-                        <summary><time datetime="2026-07-23">2026-07-23</time></summary>
+                        <summary><time datetime="2026-07-23">July 23, 2026</time></summary>
                         <div class="brief-entry-body">
-<h4 class="brief-item"><span class="brief-num">1.</span> Houthi tanker hits + Iran-responsible doctrine while equity vol still only half-awake</h4>
-<p> Score: I5 (Hormuz/Red Sea chokepoint + infrastructure ladder can non-linear SPY/VIX) | U3 (WTI/USO ripping and yields at year highs, but VIX~19 still contango, HYG calm, SPY only ~-1% pre-m vs oil gap) | A5 (overnight Houthi Saudi-tanker strikes + Trump &quot;hold Iran responsible&quot;/major-strike threat; multi-handle concurrence) → 4.3</p>
-<p> Evidence: HIGH · Sources: X Kobeissi/zerohedge/LiveSquawk/DeItaone; wires; RH pre-m USO/XLE/SPY; yahoo CL; Polymarket ceasefire ladder; FR/WH not primary</p>
-<p> Levers: SPY, VIX, USO, XLE, GLD, QQQ, HOOD, TSLA</p>
-<p> Merged legs: Houthi strike on 2 Saudi vessels in Red Sea; Trump Iran-responsible + major military response frame; IRGC Hormuz southern route mined / tanker-on-fire traffic; prior infrastructure retaliation doctrine still live; oil gap (USO ~+5% pre-m, WTI print ~+$7-8); Israel-Iran ceasefire-through-Jul-25 YES ~71.5% (-7pp 1d)</p>
-<p> Disconfirm: Oil reverses hard (USO/WTI give back gap), VIX fades sub-18 with term steepening, ceasefire odds rebound, no further ship/infra hits into US open</p>
-<p> If true → cut beta (SPY/QQQ/HOOD/TSLA); keep/add crash convexity while VIX term contango persists; prefer XLE/USO over index longs; treat gold chop as secondary to oil/vol</p>
-<p> Watch: VIX&gt;22 with 9D/3M flatten or invert; SPY&lt;-1.5% on open/hold; USO holds gap; ceasefire YES Jul-25 &lt;60%; fresh Hormuz transit halt confirmation</p>
-<h4 class="brief-item"><span class="brief-num">2.</span> Oil inflation impulse keeps juicing July hike tail into FOMC week</h4>
-<p> Score: I3 (duration, financials, high-beta — not pure crash path alone) | U3 (partially in PM + front-end/10Y year-high; equities only soft pre-m, credit still mute) | A4 (no-change -10pp 1d / -23pp 1w; 25bp hike +10pp 1d / +22pp 1w; Lagarde energy-shock language; claims ultra-low) → 3.3</p>
-<p> Evidence: MED · Sources: Polymarket July Fed; TNX/TLT; FirstSquawk Lagarde; zerohedge claims/yields; RH pre-m</p>
-<p> Levers: SPY, TLT, XLF, HOOD, QQQ</p>
-<p> Disconfirm: no-change reclaims &gt;85%, 10Y backs off sub-4.5, oil mean-reverts without sticky inflation talk, Warsh presser leans patient</p>
-<p> If true → shorten duration; fade high-beta on hike-odds up days; HOOD/TSLA as beta expression not idio; watch XLF lag vs SPY</p>
-<p> Watch: no-change &lt;70% or hike &gt;30%; TLT break + XLF underperforms; 2s10s / real yields keep grinding higher into meeting</p>
-<p>Dropped / merged:</p>
-<ul>
-<li>Canada Section 338 50% tariffs (autos/dairy/alcohol) + aluminum 232 + defense-supply EO — real FR/WH prints today, but known since Mon, long-fuse trade shock, composite ~2.5–2.7</li>
-<li>Standalone Polymarket oil ladder — merged into #1</li>
-<li>Generic-drug tariff path — still long fuse, &lt;3.0</li>
-<li>Credit stress — no item (HYG/LQD calm; short ratio HYG ~0.42)</li>
-<li>China/Taiwan — no fresh priority-handle acceleration overnight</li>
-</ul>
-<p>Underpricing checklist:</p>
-<ul>
-<li>VIX term: VIX9D 16.85 / VIX 18.87–18.95 / VIX3M 20.54 — still contango (front-back ~-1.7); d1 VIX +13% yesterday, pre-m ~19</li>
-<li>Credit: HYG d1 -0.16 / LQD -0.17 — no stress signal</li>
-<li>Equity beta: SPY d1 ~flat close then ~-0.9% pre-m; QQQ ~-1.3% pre-m vs USO ~+5% / WTI ~+9% print — gap remains</li>
-<li>Sector: XLE +1.2% d1 / +4.8% 5d; SMH soft pre-m; XLF soft</li>
-<li>PM Δp: Fed hike odds +10pp 1d while spot equities only soft; ceasefire -7pp</li>
-<li>SPY tech (prior close): RSI14 51.3; MACD hist -0.60; price near BB mid 746.6</li>
-</ul>
-<p>FINRA short volume (2026-07-22 print):</p>
-<ul>
-<li>SPY short ratio 0.51 · QQQ 0.63 · HYG 0.42 · TLT 0.69</li>
-<li>QQQ/TLT elevated vs SPY/HYG on single print; multi-day jump not confirmed (tool is single-day)</li>
-</ul>
-<p>Process:</p>
-<ul>
-<li>Prediction markets: Polymarket-only (Kalshi open feed empty/non-macro on catalyst_data queries)</li>
-<li>X: retail/virality ignored; A from wire-grade handles + new Houthi/Trump frame, not war existence alone</li>
-<li>Official: FR Canada 338 + aluminum 232 + defense supply-chain EO logged; not top items</li>
-<li>DoD/SAM: no sudden emergency award spike (routine + cyber OT exercise / supplemental testimony noise)</li>
-<li>Earnings tape: busy (INTC pm, CMCSA/TMUS/HON/RTX/LMT am, etc.) — idiosyncratic, not gray-swan driver unless oil/Fed path dominates beta</li>
-</ul>
+<div class="brief-risk-card">
+<div class="brief-card-header"><h4 class="brief-risk-title"><span class="brief-num">1.</span> Houthi tanker hits + Iran-responsible doctrine while equity vol still only half-awake</h4><span class="brief-score-badge" style="background:var(--bl-loss)">⚠️ 4.3</span></div>
+<small class="brief-score-detail">I5 (Hormuz/Red Sea chokepoint + infrastructure ladder can non-linear SPY/VIX) | U3 (WTI/USO ripping and yields at year highs, but VIX~19 still contango, HYG calm, SPY only ~-1% pre-m vs oil gap) | A5 (overnight Houthi Saudi-tanker strikes + Trump &quot;hold Iran responsible&quot;/major-strike threat; multi-handle concurrence)</small>
+<div class="brief-section"><span class="brief-evidence-tag" style="background:var(--bl-loss)">HIGH</span><small class="brief-sources">X Kobeissi/zerohedge/LiveSquawk/DeItaone; wires; RH pre-m USO/XLE/SPY; yahoo CL; Polymarket ceasefire ladder; FR/WH not primary</small></div>
+<div class="brief-levers"><code class="brief-ticker">SPY</code><code class="brief-ticker">VIX</code><code class="brief-ticker">USO</code><code class="brief-ticker">XLE</code><code class="brief-ticker">GLD</code><code class="brief-ticker">QQQ</code><code class="brief-ticker">HOOD</code><code class="brief-ticker">TSLA</code></div>
+<div class="brief-section"><span class="brief-label">❌ <strong>What would prove this wrong:</strong></span> Oil reverses hard (USO/WTI give back gap), VIX fades sub-18 with term steepening, ceasefire odds rebound, no further ship/infra hits into US open</div>
+<div class="brief-section"><span class="brief-label">✅ <strong>If this plays out:</strong></span> cut beta (SPY/QQQ/HOOD/TSLA); keep/add crash convexity while VIX term contango persists; prefer XLE/USO over index longs; treat gold chop as secondary to oil/vol</div>
+<div class="brief-section brief-signals"><span class="brief-label">📊 Key signals to watch:</span><ul><li>VIX&gt;22 with 9D/3M flatten or invert</li><li>SPY&lt;-1.5% on open/hold</li><li>USO holds gap</li><li>ceasefire YES Jul-25 &lt;60%</li><li>fresh Hormuz transit halt confirmation</li></ul></div>
+<details class="brief-details"><summary>Technical details</summary><div class="brief-details-body"><p>Merged legs: Houthi strike on 2 Saudi vessels in Red Sea; Trump Iran-responsible + major military response frame; IRGC Hormuz southern route mined / tanker-on-fire traffic; prior infrastructure retaliation doctrine still live; oil gap (USO ~+5% pre-m, WTI print ~+$7-8); Israel-Iran ceasefire-through-Jul-25 YES ~71.5% (-7pp 1d)</p></div></details>
+</div>
+<div class="brief-risk-card">
+<div class="brief-card-header"><h4 class="brief-risk-title"><span class="brief-num">2.</span> Oil inflation impulse keeps juicing July hike tail into FOMC week</h4><span class="brief-score-badge" style="background:#c97a1d">⚠️ 3.3</span></div>
+<small class="brief-score-detail">I3 (duration, financials, high-beta — not pure crash path alone) | U3 (partially in PM + front-end/10Y year-high; equities only soft pre-m, credit still mute) | A4 (no-change -10pp 1d / -23pp 1w; 25bp hike +10pp 1d / +22pp 1w; Lagarde energy-shock language; claims ultra-low)</small>
+<div class="brief-section"><span class="brief-evidence-tag" style="background:#c97a1d">MED</span><small class="brief-sources">Polymarket July Fed; TNX/TLT; FirstSquawk Lagarde; zerohedge claims/yields; RH pre-m</small></div>
+<div class="brief-levers"><code class="brief-ticker">SPY</code><code class="brief-ticker">TLT</code><code class="brief-ticker">XLF</code><code class="brief-ticker">HOOD</code><code class="brief-ticker">QQQ</code></div>
+<div class="brief-section"><span class="brief-label">❌ <strong>What would prove this wrong:</strong></span> no-change reclaims &gt;85%, 10Y backs off sub-4.5, oil mean-reverts without sticky inflation talk, Warsh presser leans patient</div>
+<div class="brief-section"><span class="brief-label">✅ <strong>If this plays out:</strong></span> shorten duration; fade high-beta on hike-odds up days; HOOD/TSLA as beta expression not idio; watch XLF lag vs SPY</div>
+<div class="brief-section brief-signals"><span class="brief-label">📊 Key signals to watch:</span><ul><li>no-change &lt;70% or hike &gt;30%</li><li>TLT break + XLF underperforms</li><li>2s10s / real yields keep grinding higher into meeting</li></ul></div>
+<details class="brief-details"><summary>Technical details</summary><div class="brief-details-body"><p>Dropped / merged:</p><p>- Canada Section 338 50% tariffs (autos/dairy/alcohol) + aluminum 232 + defense-supply EO — real FR/WH prints today, but known since Mon, long-fuse trade shock, composite ~2.5–2.7</p><p>- Standalone Polymarket oil ladder — merged into #1</p><p>- Generic-drug tariff path — still long fuse, &lt;3.0</p><p>- Credit stress — no item (HYG/LQD calm; short ratio HYG ~0.42)</p><p>- China/Taiwan — no fresh priority-handle acceleration overnight</p><p>Underpricing checklist:</p><p>- VIX term: VIX9D 16.85 / VIX 18.87–18.95 / VIX3M 20.54 — still contango (front-back ~-1.7); d1 VIX +13% yesterday, pre-m ~19</p><p>- Credit: HYG d1 -0.16 / LQD -0.17 — no stress signal</p><p>- Equity beta: SPY d1 ~flat close then ~-0.9% pre-m; QQQ ~-1.3% pre-m vs USO ~+5% / WTI ~+9% print — gap remains</p><p>- Sector: XLE +1.2% d1 / +4.8% 5d; SMH soft pre-m; XLF soft</p><p>- PM Δp: Fed hike odds +10pp 1d while spot equities only soft; ceasefire -7pp</p><p>- SPY tech (prior close): RSI14 51.3; MACD hist -0.60; price near BB mid 746.6</p><p>FINRA short volume (2026-07-22 print):</p><p>- SPY short ratio 0.51 · QQQ 0.63 · HYG 0.42 · TLT 0.69</p><p>- QQQ/TLT elevated vs SPY/HYG on single print; multi-day jump not confirmed (tool is single-day)</p><p>Process:</p><p>- Prediction markets: Polymarket-only (Kalshi open feed empty/non-macro on catalyst_data queries)</p><p>- X: retail/virality ignored; A from wire-grade handles + new Houthi/Trump frame, not war existence alone</p><p>- Official: FR Canada 338 + aluminum 232 + defense supply-chain EO logged; not top items</p><p>- DoD/SAM: no sudden emergency award spike (routine + cyber OT exercise / supplemental testimony noise)</p><p>- Earnings tape: busy (INTC pm, CMCSA/TMUS/HON/RTX/LMT am, etc.) — idiosyncratic, not gray-swan driver unless oil/Fed path dominates beta</p></div></details>
+</div>
                         </div>
                     </details>
                 </article>
 
                 <article class="brief-entry" id="brief-2026-07-22">
                     <details open>
-                        <summary><time datetime="2026-07-22">2026-07-22</time></summary>
+                        <summary><time datetime="2026-07-22">July 22, 2026</time></summary>
                         <div class="brief-entry-body">
-<p>Note: Midday calibration reprint using v1.1 rules. Not a true pre-open print.</p>
-<h4 class="brief-item"><span class="brief-num">1.</span> Hormuz tit-for-tat infrastructure ladder while equity vol sleeps</h4>
-<p> Score: I5 (chokepoint + infrastructure war can non-linear SPY/VIX) | U4 (oil/PM up, VIX contango + SPY green + HYG calm) | A4 (new explicit US formula + Iran energy-site counterthreat today; war itself is multi-week) → 4.3</p>
-<p> Evidence: HIGH · Sources: X DeItaone/zerohedge concurrence; wires; Polymarket WTI ladder; yahoo cross-asset</p>
-<p> Levers: SPY, VIX, USO, XLE, GLD, HOOD, TSLA</p>
-<p> Merged legs: Trump bridge/power-plant doctrine + Iran threatens regional energy sites if US hits power plants + WTI PM ladder + oil/gold/XLE vs mute equities</p>
-<p> Disconfirm: WTI/USO reverse hard, VIX stays sub-18 into close/next open, ceasefire odds rise, no further infrastructure targeting</p>
-<p> If true → reduce beta; prefer XLE/USO/GLD over SPY; treat un-repriced VIX as cheap crash convexity rather than all-clear</p>
-<p> Watch: VIX&gt;20 with term flatten/invert; SPY&lt;-1% on oil gap; PM WTI100&gt;25%; Iran/Israel ceasefire YES keeps falling</p>
-<h4 class="brief-item"><span class="brief-num">2.</span> Oil impulse reopens July hike tail</h4>
-<p> Score: I3 (duration/financials/high-beta, not index-crash alone) | U3 (partially in PM + 10Y; equities only soft) | A4 (~11pp no-change down / ~10pp hike up in 1d) → 3.3</p>
-<p> Evidence: MED · Sources: Polymarket July Fed; TNX/TLT</p>
-<p> Levers: SPY, TLT, XLF, HOOD, QQQ</p>
-<p> Disconfirm: no-change reclaims &gt;85%, 10Y backs off, oil mean-reverts without sticky inflation talk</p>
-<p> If true → shorten duration; fade high-beta on hike-odds up days; HOOD/TSLA as beta expression not idiosyncratic</p>
-<p> Watch: no-change &lt;70% or hike &gt;30%; TLT break + XLF lag SPY</p>
-<p>Dropped:</p>
-<ul>
-<li>Generic-drug tariff path (2.7 &lt; 3.0; long fuse)</li>
-<li>AMD/Anthropic chip deal (risk-on, not tail)</li>
-<li>Standalone Polymarket oil ladder (merged into #1)</li>
-</ul>
-<p>Process:</p>
-<ul>
-<li>Prediction markets: Polymarket-only (Kalshi open feed still sports-dominated)</li>
-<li>Credit: no item (HYG/LQD calm)</li>
-<li>X: retail ignored; acceleration from wire-grade concurrence + new formula, not war existence</li>
-</ul>
+<div class="brief-risk-card">
+<div class="brief-card-header"><h4 class="brief-risk-title"><span class="brief-num">1.</span> Hormuz tit-for-tat infrastructure ladder while equity vol sleeps</h4><span class="brief-score-badge" style="background:var(--bl-loss)">⚠️ 4.3</span></div>
+<small class="brief-score-detail">I5 (chokepoint + infrastructure war can non-linear SPY/VIX) | U4 (oil/PM up, VIX contango + SPY green + HYG calm) | A4 (new explicit US formula + Iran energy-site counterthreat today; war itself is multi-week)</small>
+<div class="brief-section"><span class="brief-evidence-tag" style="background:var(--bl-loss)">HIGH</span><small class="brief-sources">X DeItaone/zerohedge concurrence; wires; Polymarket WTI ladder; yahoo cross-asset</small></div>
+<div class="brief-levers"><code class="brief-ticker">SPY</code><code class="brief-ticker">VIX</code><code class="brief-ticker">USO</code><code class="brief-ticker">XLE</code><code class="brief-ticker">GLD</code><code class="brief-ticker">HOOD</code><code class="brief-ticker">TSLA</code></div>
+<div class="brief-section"><span class="brief-label">❌ <strong>What would prove this wrong:</strong></span> WTI/USO reverse hard, VIX stays sub-18 into close/next open, ceasefire odds rise, no further infrastructure targeting</div>
+<div class="brief-section"><span class="brief-label">✅ <strong>If this plays out:</strong></span> reduce beta; prefer XLE/USO/GLD over SPY; treat un-repriced VIX as cheap crash convexity rather than all-clear</div>
+<div class="brief-section brief-signals"><span class="brief-label">📊 Key signals to watch:</span><ul><li>VIX&gt;20 with term flatten/invert</li><li>SPY&lt;-1% on oil gap</li><li>PM WTI100&gt;25%</li><li>Iran/Israel ceasefire YES keeps falling</li></ul></div>
+<details class="brief-details"><summary>Technical details</summary><div class="brief-details-body"><p>Merged legs: Trump bridge/power-plant doctrine + Iran threatens regional energy sites if US hits power plants + WTI PM ladder + oil/gold/XLE vs mute equities</p></div></details>
+</div>
+<div class="brief-risk-card">
+<div class="brief-card-header"><h4 class="brief-risk-title"><span class="brief-num">2.</span> Oil impulse reopens July hike tail</h4><span class="brief-score-badge" style="background:#c97a1d">⚠️ 3.3</span></div>
+<small class="brief-score-detail">I3 (duration/financials/high-beta, not index-crash alone) | U3 (partially in PM + 10Y; equities only soft) | A4 (~11pp no-change down / ~10pp hike up in 1d)</small>
+<div class="brief-section"><span class="brief-evidence-tag" style="background:#c97a1d">MED</span><small class="brief-sources">Polymarket July Fed; TNX/TLT</small></div>
+<div class="brief-levers"><code class="brief-ticker">SPY</code><code class="brief-ticker">TLT</code><code class="brief-ticker">XLF</code><code class="brief-ticker">HOOD</code><code class="brief-ticker">QQQ</code></div>
+<div class="brief-section"><span class="brief-label">❌ <strong>What would prove this wrong:</strong></span> no-change reclaims &gt;85%, 10Y backs off, oil mean-reverts without sticky inflation talk</div>
+<div class="brief-section"><span class="brief-label">✅ <strong>If this plays out:</strong></span> shorten duration; fade high-beta on hike-odds up days; HOOD/TSLA as beta expression not idiosyncratic</div>
+<div class="brief-section brief-signals"><span class="brief-label">📊 Key signals to watch:</span><ul><li>no-change &lt;70% or hike &gt;30%</li><li>TLT break + XLF lag SPY</li></ul></div>
+<details class="brief-details"><summary>Technical details</summary><div class="brief-details-body"><p>Dropped:</p><p>- Generic-drug tariff path (2.7 &lt; 3.0; long fuse)</p><p>- AMD/Anthropic chip deal (risk-on, not tail)</p><p>- Standalone Polymarket oil ladder (merged into #1)</p><p>Process:</p><p>- Prediction markets: Polymarket-only (Kalshi open feed still sports-dominated)</p><p>- Credit: no item (HYG/LQD calm)</p><p>- X: retail ignored; acceleration from wire-grade concurrence + new formula, not war existence</p></div></details>
+</div>
+<details class="brief-details"><summary>Technical details</summary><div class="brief-details-body"><p>Note: Midday calibration reprint using v1.1 rules. Not a true pre-open print.</p></div></details>
                         </div>
                     </details>
                 </article>
