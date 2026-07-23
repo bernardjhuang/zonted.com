@@ -35,7 +35,7 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 6, "expected six tabs")
+        check(desktop.locator(".trading-tab").count() == 7, "expected seven tabs")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
 
         desktop.evaluate("scrollTo(0, 0)")
@@ -44,8 +44,13 @@ def main() -> None:
         check(desktop.locator("#bl-tools").is_hidden(), "portfolio tools leaked into Momentum")
         check(desktop.locator("#scan-panel").is_visible(), "Momentum panel did not activate")
 
-        desktop.locator("#scan-universe > summary").click()
+        check(desktop.locator("#scan-universe").evaluate("node => node.open"), "momentum universe is not expanded by default")
         desktop.wait_for_function("document.querySelectorAll('#scan-universe-shell tr.scan-data-row').length > 0")
+        day_changes = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number(row.dataset.dayPct))")
+        check(day_changes == sorted(day_changes, reverse=True), "momentum universe is not sorted by day change descending")
+        desktop.locator("[data-universe-sort-day]").click()
+        day_changes = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number(row.dataset.dayPct))")
+        check(day_changes == sorted(day_changes), "momentum universe day-change sort did not toggle ascending")
         first_symbol = desktop.locator("#scan-universe-shell tr.scan-data-row").first.get_attribute("data-scan-symbol")
         desktop.locator("#scan-universe-q").fill(first_symbol or "")
         check(desktop.locator("#scan-universe-shell tr.scan-data-row").count() >= 1, "universe search did not scope results")
@@ -56,13 +61,10 @@ def main() -> None:
             setup_toggle.click()
             desktop.wait_for_function("id => document.querySelectorAll(`#${id} svg`).length === 2", arg=detail_id)
 
-        desktop.goto(args.url + "#vwap", wait_until="networkidle")
-        check(desktop.locator("#vwap-selected-chart .vwap-chart").count() == 0, "VWAP chart loaded before a user selection")
-        desktop.locator('[data-vwap-select="SPY"]').first.click()
-        desktop.wait_for_function("document.querySelector('#vwap-selected-chart .vwap-chart')?.dataset.sym === 'SPY'")
-        desktop.locator('[data-vwap-scope-button="countries"]').click()
-        desktop.wait_for_function("document.querySelector('#vwap-selected-chart .vwap-chart')?.dataset.sym === 'EWY'")
-        check("vwap=EWY" in desktop.url, "VWAP selected chart missing from URL")
+        desktop.goto(args.url + "?vwap=EWY#vwap", wait_until="networkidle")
+        check(desktop.locator("#vwap-chart-grid .vwap-chart").count() == 22, "expected all 22 VWAP charts")
+        check(desktop.locator("#vwap-chart-grid .vwap-chart").first.get_attribute("data-sym") == "EWY", "VWAP deep-linked chart was not promoted first")
+        check(desktop.locator("[data-vwap-select], [data-vwap-scope-button]").count() == 0, "retired VWAP picker controls remain")
 
         desktop.goto(args.url + "#congress", wait_until="networkidle")
         congress_cards = desktop.locator("#congress-panel details.whale-card")
@@ -78,13 +80,10 @@ def main() -> None:
         cards.nth(1).locator("summary").click()
         check(not cards.nth(0).evaluate("node => node.open") and cards.nth(1).evaluate("node => node.open"), "manager accordion allows multiple open cards")
 
-        desktop.goto(args.url + "#crypto", wait_until="networkidle")
-        check(desktop.locator("#crypto-selected-chart .crypto-card").count() == 0, "Crypto chart loaded before a user selection")
-        desktop.locator('[data-crypto-select="ZEC"]').first.click()
-        desktop.wait_for_function("document.querySelector('#crypto-selected-chart .crypto-card')?.dataset.symbol === 'ZEC'")
-        desktop.locator('[data-crypto-select="ETH"]').first.click()
-        desktop.wait_for_function("document.querySelector('#crypto-selected-chart .crypto-card')?.dataset.symbol === 'ETH'")
-        check("crypto=ETH" in desktop.url, "Crypto selected chart missing from URL")
+        desktop.goto(args.url + "?crypto=ETH#crypto", wait_until="networkidle")
+        check(desktop.locator("#crypto-chart-grid .crypto-card").count() == 7, "expected all seven crypto charts")
+        check(desktop.locator("#crypto-chart-grid .crypto-card").first.get_attribute("data-symbol") == "ETH", "Crypto deep-linked chart was not promoted first")
+        check(desktop.locator("[data-crypto-select]").count() == 0, "retired Crypto picker controls remain")
 
         desktop.goto(args.url + "#log", wait_until="networkidle")
         check(desktop.locator("#positions-tab").get_attribute("aria-selected") == "true", "legacy #log did not land on Portfolio")
@@ -92,10 +91,12 @@ def main() -> None:
         desktop.goto(args.url, wait_until="networkidle")
         desktop.locator("#positions-tab").focus()
         desktop.keyboard.press("ArrowRight")
+        check(desktop.locator("#brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Brief")
+        desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#scan", "#vwap", "#congress", "#whales", "#crypto"):
+        for route in ("", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -110,7 +111,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (6 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (7 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":

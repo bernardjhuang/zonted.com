@@ -321,7 +321,11 @@
         .selected-chart { min-height: 260px; margin: 14px 20px 18px; }
         .selected-chart .vwap-chart, .selected-chart .crypto-card { margin: 0; }
         .selected-chart .crypto-card { padding: 16px; }
-        .portfolio-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+        .vwap-chart-grid, .crypto-chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 20px 18px; }
+        .vwap-chart-grid .vwap-chart { min-width: 0; margin: 0; }
+        .vwap-chart-grid .vwap-chart--spy { grid-column: auto; }
+        .crypto-chart-grid .crypto-card { min-width: 0; margin: 0; padding: 16px; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
         .portfolio-grid > .portfolio-detail { grid-column: 1 / -1; min-width: 0; overflow-x: auto; }
         .portfolio-card { min-width: 0; padding: 15px 16px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
         .portfolio-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
@@ -345,7 +349,7 @@
         .whale-card:not([open]) { padding-bottom: 15px; }
         .whale-card:not([open]) > :not(summary) { display: none; }
         .data-disclosure > .scan-table-wrap { margin-top: 12px; }
-        @media (max-width: 900px) { .portfolio-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .portfolio-grid, .vwap-chart-grid, .crypto-chart-grid { grid-template-columns: 1fr; } }
         @media (max-width: 720px) {
             .bl-header, .bl-filters, .bl-body { padding-left: 16px; padding-right: 16px; }
             .bl-header-row { align-items: flex-start; }
@@ -356,7 +360,7 @@
             .trading-tabs { gap: 18px; scroll-padding-inline: 16px; -webkit-overflow-scrolling: touch; }
             .trading-tab { min-height: 44px; }
             .trading-takeaway { margin-left: 16px; margin-right: 16px; font-size: 15px; }
-            .data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .trading-method, .data-disclosure, .scan-universe-disclosure { margin-left: 16px; margin-right: 16px; }
+            .data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .vwap-chart-grid, .crypto-chart-grid, .trading-method, .data-disclosure, .scan-universe-disclosure { margin-left: 16px; margin-right: 16px; }
             .scan-table-wrap { margin-left: 0; margin-right: 0; }
             .selected-chart { min-height: 200px; }
             .activity-row-compact { grid-template-columns: 58px minmax(100px, 1fr) 78px; gap: 8px; }
@@ -408,18 +412,6 @@
             </div>
         </header>
 
-        <div class="bl-filters" id="bl-filters">
-            <span class="bl-fl">Asset</span>
-            <button class="bl-chip on" data-g="asset" data-v="All">All assets</button>
-            <button class="bl-chip" data-g="asset" data-v="Options">Options</button>
-            <button class="bl-chip" data-g="asset" data-v="Equities">Equities</button>
-            <span class="bl-fl" style="margin-left:10px">Status</span>
-            <button class="bl-chip on" data-g="status" data-v="All">All</button>
-            <button class="bl-chip" data-g="status" data-v="Realized">Realized</button>
-            <button class="bl-chip" data-g="status" data-v="Unrealized">Unrealized</button>
-            <button class="bl-reset" id="bl-reset">Reset</button>
-            <span class="bl-match" id="bl-match" hidden></span>
-        </div>
 
         <section class="trading-panel" id="positions-panel" role="tabpanel" tabindex="0" aria-labelledby="positions-tab">
             <div class="bl-body">
@@ -436,7 +428,6 @@
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span></li>
-                        <li class="ticker"><span class="ticker-symbol">V</span></li>
                     </ul>
                 </div>
                 <div class="position-group">
@@ -444,7 +435,6 @@
                     <ul class="ticker-list" aria-label="Robinhood option positions">
                         <li class="ticker"><span class="ticker-symbol">ABT</span><span class="ticker-name">Call 120.0000 2027-01-15</span></li>
                         <li class="ticker"><span class="ticker-symbol">HOOD</span><span class="ticker-name">Call 125.0000 2027-01-15</span></li>
-                        <li class="ticker"><span class="ticker-symbol">V</span><span class="ticker-name">Call 400.0000 2027-01-15</span></li>
                     </ul>
                 </div>
             </section>
@@ -453,8 +443,8 @@
                     <!-- AUTO:TRADES:START -->
             <section class="position-section" aria-labelledby="activity-heading">
                 <div class="position-head">
-                    <h2 id="activity-heading">Recent large trades</h2>
-                    <span>10 buys + 10 sells · $2K+ each</span>
+                    <h2 id="activity-heading">Recent trades</h2>
+                    <span>10 buys + 10 sells · buys $2K+ · all sells</span>
                 </div>
                 <p class="activity-policy">Buys and sells both shown · Same-symbol broker fills consolidated by date</p>
                 <div class="activity-columns">
@@ -474,7 +464,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
                                 <div><span class="activity-action">HOOD call</span><span class="activity-type">Option · 4 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−2.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−12.9%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
@@ -489,7 +479,7 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">V call</span><span class="activity-type">Option · 2 fills</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−16.0%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−24.4%</span><span class="activity-status">Realized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
@@ -504,18 +494,28 @@
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-21">Jul 21</time>
                                 <div><span class="activity-action">WTS shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl negative">−0.5%</span><span class="activity-status">Unrealized</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+0.1%</span><span class="activity-status">Unrealized</span></div>
                             </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-20">Jul 20</time>
                                 <div><span class="activity-action">HOOD call</span><span class="activity-type">Option</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+19.1%</span><span class="activity-status">Mixed</span></div>
+                                <div class="activity-result"><span class="activity-pnl positive">+12.6%</span><span class="activity-status">Mixed</span></div>
                             </li>
                         </ol>
                     </section>
                     <section class="activity-lane activity-lane--sell" aria-labelledby="sells-heading">
                         <h3 id="sells-heading">Sells</h3>
                         <ol class="activity-list" aria-label="Last 10 qualifying Robinhood sells">
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-23">Jul 23</time>
+                                <div><span class="activity-action">V shares</span><span class="activity-type">Equity</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−2.5%</span><span class="activity-status">Realized</span></div>
+                            </li>
+                            <li class="activity-row">
+                                <time class="activity-date" datetime="2026-07-23">Jul 23</time>
+                                <div><span class="activity-action">V call</span><span class="activity-type">Option</span></div>
+                                <div class="activity-result"><span class="activity-pnl negative">−24.4%</span><span class="activity-status">Realized</span></div>
+                            </li>
                             <li class="activity-row">
                                 <time class="activity-date" datetime="2026-07-22">Jul 22</time>
                                 <div><span class="activity-action">TSLA shares</span><span class="activity-type">Equity · 4 fills</span></div>
@@ -532,8 +532,7 @@
                                 <div class="activity-result"><span class="activity-pnl positive">+20.6%</span><span class="activity-status">Realized</span></div>
                             </li>
                             <li class="activity-row">
-
-501|                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
+                                <time class="activity-date" datetime="2026-07-22">Jul 22</time>
                                 <div><span class="activity-action">XOM shares</span><span class="activity-type">Equity</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+2.7%</span><span class="activity-status">Realized</span></div>
                             </li>
@@ -556,16 +555,6 @@
                                 <time class="activity-date" datetime="2026-07-17">Jul 17</time>
                                 <div><span class="activity-action">GRAB call</span><span class="activity-type">Option · 12 fills</span></div>
                                 <div class="activity-result"><span class="activity-pnl positive">+0.0%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-17">Jul 17</time>
-                                <div><span class="activity-action">WEN shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.9%</span><span class="activity-status">Realized</span></div>
-                            </li>
-                            <li class="activity-row">
-                                <time class="activity-date" datetime="2026-07-17">Jul 17</time>
-                                <div><span class="activity-action">GRAB shares</span><span class="activity-type">Equity</span></div>
-                                <div class="activity-result"><span class="activity-pnl positive">+0.1%</span><span class="activity-status">Realized</span></div>
                             </li>
                         </ol>
                     </section>
@@ -660,10 +649,10 @@
                     <h3>Short setups · 0</h3>
 <p class="bl-empty">No qualified shorts today.</p>
                 </div>
-                <details class="scan-universe-disclosure" id="scan-universe">
+                <details class="scan-universe-disclosure" id="scan-universe" open>
                     <summary>Browse full universe · 168 symbols</summary>
                     <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=f5942ee32fad"><p class="bl-empty">Open to load the universe.</p></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=f5942ee32fad"><p class="bl-empty">Loading universe…</p></div>
                 </details>
                 <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=48a9c290fba1"}</script>
                 <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
@@ -967,7 +956,7 @@
                     <h2 id="whales-heading">13F</h2>
                     <span>Q1 2026 filings · quarterly</span>
                 </div><p class="trading-takeaway">Tracked managers sold $33.09B net; 3 of 14 were net buyers.</p><p class="data-meta">Combined AUM $390.23B · Gross bought +$36.38B · Gross sold −$69.47B</p><div class="whale-cols whale-consensus">
-                <div class="position-group"><h3>Most bought across offices</h3>
+                <div class="position-group"><h3>Most bought across offices · top 20</h3>
                 <table aria-label="Most bought issuers across offices" class="scan-table"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
                 <tbody>
                     <tr><td class="scan-sym" style="white-space:normal">Alphabet Inc</td>
@@ -985,13 +974,54 @@
                     <tr><td class="scan-sym" style="white-space:normal">New York Times Co Mtn Be</td>
                         <td class="scan-num">1▲ / 1▼</td>
                         <td class="scan-num"><span class="scan-z-pos">+$838M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Asml Hldg Nv</td>
+                        <td class="scan-num">3▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$665M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Broadcom Inc</td>
+                        <td class="scan-num">6▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$528M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Uber Technologies Inc</td>
+                        <td class="scan-num">2▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$366M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Micron Technology Inc</td>
+                        <td class="scan-num">5▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$319M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Lennar Corp</td>
+                        <td class="scan-num">2▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$270M</span></td></tr>
 
-
-
-
-
+                    <tr><td class="scan-sym" style="white-space:normal">Amazon Com Inc</td>
+                        <td class="scan-num">4▲ / 7▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$234M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Sandisk Corp</td>
+                        <td class="scan-num">3▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$185M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Coreweave Inc</td>
+                        <td class="scan-num">3▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$162M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Linde Plc</td>
+                        <td class="scan-num">2▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$129M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Solstice Advanced Matls Inc</td>
+                        <td class="scan-num">2▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$126M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Jd.Com Inc</td>
+                        <td class="scan-num">1▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$109M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Electronic Arts Inc</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$108M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Bill Holdings Inc</td>
+                        <td class="scan-num">1▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$106M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Equipmentshare Com Inc</td>
+                        <td class="scan-num">2▲ / 0▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$96M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Qualcomm Inc</td>
+                        <td class="scan-num">2▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-pos">+$96M</span></td></tr>
                 </tbody></table></div>
-                <div class="position-group"><h3>Most sold across offices</h3>
+                <div class="position-group"><h3>Most sold across offices · top 20</h3>
                 <table aria-label="Most sold issuers across offices" class="scan-table"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
                 <tbody>
                     <tr><td class="scan-sym" style="white-space:normal">Chevron Corporation</td>
@@ -1009,11 +1039,52 @@
                     <tr><td class="scan-sym" style="white-space:normal">Constellation Brands Inc</td>
                         <td class="scan-num">0▲ / 2▼</td>
                         <td class="scan-num"><span class="scan-z-neg">−$1.71B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Dominos Pizza Inc</td>
+                        <td class="scan-num">1▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.39B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Microsoft Corp</td>
+                        <td class="scan-num">2▲ / 6▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.33B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Ishares Tr</td>
+                        <td class="scan-num">3▲ / 7▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.14B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Reddit Inc</td>
+                        <td class="scan-num">1▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.10B</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Aon Plc</td>
+                        <td class="scan-num">2▲ / 1▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$1.02B</span></td></tr>
 
-
-
-
-
+                    <tr><td class="scan-sym" style="white-space:normal">Oracle Corp</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$907M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Ge Vernova Inc</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$898M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Hilton Worldwide Hldgs Inc</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$881M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Flutter Entmt Plc</td>
+                        <td class="scan-num">0▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$881M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Alphabet Inc</td>
+                        <td class="scan-num">3▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$809M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Take-Two Interactive Softwar</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$765M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Pool Corp</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$703M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Adobe Inc</td>
+                        <td class="scan-num">0▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$616M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Tesla Inc</td>
+                        <td class="scan-num">1▲ / 2▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$589M</span></td></tr>
+                    <tr><td class="scan-sym" style="white-space:normal">Doordash Inc</td>
+                        <td class="scan-num">1▲ / 3▼</td>
+                        <td class="scan-num"><span class="scan-z-neg">−$576M</span></td></tr>
                 </tbody></table></div>
                 </div><div class="whale-flow-head"><h3>Manager flows</h3><p>Sorted by net flow · open a manager for details</p></div><section aria-label="Quarterly flows by investment office" class="whale-flow-grid">
                 <details class="whale-card">
@@ -1229,7 +1300,7 @@
                         <td class="scan-sym" style="white-space:normal">Ishares Inc</td>
                         <td class="agg-cell"><span class="agg-bar" style="width:1.5%"></span></td>
                         <td class="scan-num">$870M</td>
-1001|                        <td class="scan-num">0.2%</td>
+                        <td class="scan-num">0.2%</td>
                         <td class="scan-num">8</td>
                         <td class="scan-sec" style="white-space:normal">Appaloosa</td></tr>
                     <tr><td class="scan-num scan-sec">5</td>
@@ -1391,145 +1462,138 @@
                     <span>July 22, 2026 close · anchor Jan 2, 2026</span>
                 </div>
                 <p class="trading-takeaway">10 of 12 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
-                <div class="data-toolbar">
-                    <div class="segmented" role="group" aria-label="VWAP market group">
-                        <button type="button" class="on" data-vwap-scope-button="us">US markets</button>
-                        <button type="button" data-vwap-scope-button="countries">Countries</button>
-                    </div>
-                    <div class="quick-select" aria-label="Quick chart selection"><button type="button" class="bl-chip" data-vwap-select="SPY">SPY</button><button type="button" class="bl-chip" data-vwap-select="XLE">XLE</button><button type="button" class="bl-chip" data-vwap-select="XLF">XLF</button><button type="button" class="bl-chip" data-vwap-select="XLY">XLY</button><button type="button" class="bl-chip" data-vwap-select="XLC">XLC</button></div>
-                </div>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Year-to-date VWAP market summary">
                     <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
                     <tbody>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="SPY">SPY</button></td>
+                        <td class="scan-sym"><span translate="no">SPY</span></td>
                         <td class="scan-sec">S&amp;P 500</td>
                         <td class="scan-num"><span class="scan-z-pos">+7.6%</span></td>
                         <td class="scan-num">▲ since Apr 8 (73d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLE">XLE</button></td>
+                        <td class="scan-sym"><span translate="no">XLE</span></td>
                         <td class="scan-sec">Energy</td>
                         <td class="scan-num"><span class="scan-z-pos">+7.9%</span></td>
                         <td class="scan-num">▲ since Jul 8 (11d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLF">XLF</button></td>
+                        <td class="scan-sym"><span translate="no">XLF</span></td>
                         <td class="scan-sec">Financials</td>
                         <td class="scan-num"><span class="scan-z-pos">+7.9%</span></td>
                         <td class="scan-num">▲ since Jun 4 (33d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLRE">XLRE</button></td>
+                        <td class="scan-sym"><span translate="no">XLRE</span></td>
                         <td class="scan-sec">Real Estate</td>
                         <td class="scan-num"><span class="scan-z-pos">+6.5%</span></td>
                         <td class="scan-num">▲ since Apr 6 (75d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLV">XLV</button></td>
+                        <td class="scan-sym"><span translate="no">XLV</span></td>
                         <td class="scan-sec">Health Care</td>
                         <td class="scan-num"><span class="scan-z-pos">+4.9%</span></td>
                         <td class="scan-num">▲ since Jun 23 (21d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLU">XLU</button></td>
+                        <td class="scan-sym"><span translate="no">XLU</span></td>
                         <td class="scan-sec">Utilities</td>
                         <td class="scan-num"><span class="scan-z-pos">+2.7%</span></td>
                         <td class="scan-num">▲ since Jun 22 (22d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLP">XLP</button></td>
+                        <td class="scan-sym"><span translate="no">XLP</span></td>
                         <td class="scan-sec">Staples</td>
                         <td class="scan-num"><span class="scan-z-pos">+1.3%</span></td>
                         <td class="scan-num">▲ since Jul 10 (9d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLI">XLI</button></td>
+                        <td class="scan-sym"><span translate="no">XLI</span></td>
                         <td class="scan-sec">Industrials</td>
                         <td class="scan-num"><span class="scan-z-pos">+5.1%</span></td>
                         <td class="scan-num">▲ since Apr 8 (73d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLK">XLK</button></td>
+                        <td class="scan-sym"><span translate="no">XLK</span></td>
                         <td class="scan-sec">Technology</td>
                         <td class="scan-num"><span class="scan-z-pos">+16.6%</span></td>
                         <td class="scan-num">▲ since Apr 8 (73d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLB">XLB</button></td>
+                        <td class="scan-sym"><span translate="no">XLB</span></td>
                         <td class="scan-sec">Materials</td>
                         <td class="scan-num"><span class="scan-z-pos">+0.9%</span></td>
                         <td class="scan-num">▲ since Jul 22 (1d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLC">XLC</button></td>
+                        <td class="scan-sym"><span translate="no">XLC</span></td>
                         <td class="scan-sec">Comm Services</td>
                         <td class="scan-num"><span class="scan-z-neg">-4.1%</span></td>
                         <td class="scan-num">▼ since Jun 2 (35d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="XLY">XLY</button></td>
+                        <td class="scan-sym"><span translate="no">XLY</span></td>
                         <td class="scan-sec">Consumer Disc</td>
                         <td class="scan-num"><span class="scan-z-neg">-1.9%</span></td>
                         <td class="scan-num">▼ since Jul 17 (4d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="EWY">EWY</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWY</span></td>
                         <td class="scan-sec">South Korea</td>
                         <td class="scan-num"><span class="scan-z-pos">+9.7%</span></td>
                         <td class="scan-num">▲ since Apr 8 (73d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="THD">THD</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">THD</span></td>
                         <td class="scan-sec">Thailand</td>
                         <td class="scan-num"><span class="scan-z-pos">+8.2%</span></td>
                         <td class="scan-num">▲ since Mar 30 (79d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="EWJ">EWJ</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWJ</span></td>
                         <td class="scan-sec">Japan</td>
                         <td class="scan-num"><span class="scan-z-pos">+4.8%</span></td>
                         <td class="scan-num">▲ since Apr 30 (57d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="EWG">EWG</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWG</span></td>
                         <td class="scan-sec">Germany</td>
                         <td class="scan-num"><span class="scan-z-pos">+0.5%</span></td>
                         <td class="scan-num">▲ since Jul 21 (2d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="EWZ">EWZ</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWZ</span></td>
                         <td class="scan-sec">Brazil</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.3%</span></td>
                         <td class="scan-num">▼ since May 13 (48d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="INDA">INDA</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">INDA</span></td>
                         <td class="scan-sec">India</td>
                         <td class="scan-num"><span class="scan-z-neg">-3.2%</span></td>
                         <td class="scan-num">▼ since Jun 23 (21d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="MCHI">MCHI</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">MCHI</span></td>
                         <td class="scan-sec">China</td>
                         <td class="scan-num"><span class="scan-z-neg">-6.0%</span></td>
                         <td class="scan-num">▼ since May 14 (47d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="EZA">EZA</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EZA</span></td>
                         <td class="scan-sec">South Africa</td>
                         <td class="scan-num"><span class="scan-z-neg">-9.2%</span></td>
                         <td class="scan-num">▼ since Apr 21 (64d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="VNM">VNM</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">VNM</span></td>
                         <td class="scan-sec">Vietnam</td>
                         <td class="scan-num"><span class="scan-z-neg">-9.9%</span></td>
                         <td class="scan-num">▼ since Jul 6 (13d)</td>
                     </tr>
-                    <tr data-vwap-scope="countries" hidden>
-                        <td class="scan-sym"><button type="button" class="data-select" data-vwap-select="KWEB">KWEB</button></td>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">KWEB</span></td>
                         <td class="scan-sec">China Internet</td>
                         <td class="scan-num"><span class="scan-z-neg">-12.0%</span></td>
                         <td class="scan-num">▼ since Jan 30 (119d)</td>
@@ -1537,8 +1601,8 @@
                     </tbody>
                 </table>
                 </div>
-                <section class="selected-chart" id="vwap-selected-chart" data-url="/trading/vwap-charts.json?v=3fe80a6035be" data-default="SPY" aria-live="polite">
-                    <p class="bl-empty">Select a symbol to load one chart.</p>
+                <section class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=3fe80a6035be" aria-live="polite">
+                    <p class="bl-empty">Loading all 22 charts…</p>
                 </section>
                 <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector charts also show the smoothed 50-session Z-score used by Momentum. Descriptive market data, not investment advice.</p></details>
             </section>
@@ -1551,55 +1615,54 @@
                     <span>Jul 22 UTC close · BTC $66,086 · z +0.17</span>
                 </div>
                 <p class="trading-takeaway">ZEC leads BTC. ETH, SOL are improving versus BTC but remain below YTD VWAP. DOGE, BNB lag.</p>
-                <div class="quick-select" aria-label="Select crypto chart"><button type="button" class="bl-chip" data-crypto-select="ZEC">ZEC</button><button type="button" class="bl-chip" data-crypto-select="ETH">ETH</button><button type="button" class="bl-chip" data-crypto-select="SOL">SOL</button><button type="button" class="bl-chip" data-crypto-select="XRP">XRP</button><button type="button" class="bl-chip" data-crypto-select="HYPE">HYPE</button><button type="button" class="bl-chip" data-crypto-select="BNB">BNB</button><button type="button" class="bl-chip" data-crypto-select="DOGE">DOGE</button></div>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
                     <thead><tr><th>Coin</th><th class="scan-num">vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
                     <tbody>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="ZEC">ZEC</button><span class="bl-tag">Zcash</span></td>
+                        <td class="scan-sym"><span translate="no">ZEC</span><span class="bl-tag">Zcash</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.41</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+20.8%</span></td>
                         <td class="scan-num">▲ 21d</td>
                         <td>Strong trend, leading BTC</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="ETH">ETH</button><span class="bl-tag">Ethereum</span></td>
+                        <td class="scan-sym"><span translate="no">ETH</span><span class="bl-tag">Ethereum</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.38</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-10.8%</span></td>
                         <td class="scan-num">▼ 73d</td>
                         <td>Improving vs BTC, below VWAP</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="SOL">SOL</button><span class="bl-tag">Solana</span></td>
+                        <td class="scan-sym"><span translate="no">SOL</span><span class="bl-tag">Solana</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+0.00</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-12.5%</span></td>
                         <td class="scan-num">▼ 72d</td>
                         <td>Improving vs BTC, below VWAP</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="XRP">XRP</button><span class="bl-tag">XRP</span></td>
+                        <td class="scan-sym"><span translate="no">XRP</span><span class="bl-tag">XRP</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.31</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-22.0%</span></td>
                         <td class="scan-num">▼ 190d</td>
                         <td>Weak trend, lagging BTC</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="HYPE">HYPE</button><span class="bl-tag">Hyperliquid</span></td>
+                        <td class="scan-sym"><span translate="no">HYPE</span><span class="bl-tag">Hyperliquid</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.51</span></td>
                         <td class="scan-num"><span class="scan-z-pos">+30.9%</span></td>
                         <td class="scan-num">▲ 145d</td>
                         <td>Strong trend, weakening vs BTC</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="BNB">BNB</button><span class="bl-tag">BNB</span></td>
+                        <td class="scan-sym"><span translate="no">BNB</span><span class="bl-tag">BNB</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.64</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-14.1%</span></td>
                         <td class="scan-num">▼ 51d</td>
                         <td>Weak trend, lagging BTC</td>
                     </tr>
                     <tr>
-                        <td class="scan-sym"><button type="button" class="data-select" data-crypto-select="DOGE">DOGE</button><span class="bl-tag">Dogecoin</span></td>
+                        <td class="scan-sym"><span translate="no">DOGE</span><span class="bl-tag">Dogecoin</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-0.84</span></td>
                         <td class="scan-num"><span class="scan-z-neg">-28.5%</span></td>
                         <td class="scan-num">▼ 66d</td>
@@ -1608,8 +1671,8 @@
                     </tbody>
                 </table>
                 </div>
-                <section class="selected-chart" id="crypto-selected-chart" data-url="/trading/crypto-charts.json?v=c0fa685b2cfc" data-default="ZEC" aria-live="polite">
-                    <p class="bl-empty">Select a coin to load one chart.</p>
+                <section class="crypto-chart-grid" id="crypto-chart-grid" data-url="/trading/crypto-charts.json?v=c0fa685b2cfc" aria-live="polite">
+                    <p class="bl-empty">Loading all 7 charts…</p>
                 </section>
                 <details class="trading-method"><summary>How this works</summary><p>Spread Z compares each coin's 50-day trend with BTC's. Positive means relative leadership; negative means lagging. YTD VWAP estimates the year's volume-weighted cost basis on Hyperliquid perpetual markets. Both axes matter: a coin can be above its own VWAP while weakening versus BTC. Descriptive market data, not a recommendation.</p></details>
             </section>
@@ -1633,6 +1696,6 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-23-decision-surface-v3"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-23-decision-surface-v5"></script>
 </body>
 </html>

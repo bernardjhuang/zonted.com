@@ -127,15 +127,15 @@ def main():
                 <p class="data-meta">Combined AUM {money(combined_aum).lstrip('+')} · gross bought {money(gross_bought)} · gross sold {money(-gross_sold)}</p>
                 {stale_foot}
                 <div class="whale-cols whale-consensus">
-                <div class="position-group"><h3>Most bought across offices</h3>
+                <div class="position-group"><h3>Most bought across offices · top 20</h3>
                 <table class="scan-table" aria-label="Most bought issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
                 <tbody>
-{cons_rows(p['top_bought'][:5])}
+{cons_rows(p['top_bought'][:20])}
                 </tbody></table></div>
-                <div class="position-group"><h3>Most sold across offices</h3>
+                <div class="position-group"><h3>Most sold across offices · top 20</h3>
                 <table class="scan-table" aria-label="Most sold issuers across offices"><thead><tr><th>Issuer</th><th class="scan-num">Offices ▲/▼</th><th class="scan-num">Net $</th></tr></thead>
                 <tbody>
-{cons_rows(p['top_sold'][:5])}
+{cons_rows(p['top_sold'][:20])}
                 </tbody></table></div>
                 </div>
                 <div class="whale-flow-head"><h3>Manager flows</h3><p>Sorted by net flow · open a manager for details</p></div>

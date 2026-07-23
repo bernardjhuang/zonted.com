@@ -433,6 +433,7 @@
   const universeInput = $('#scan-universe-q');
   if (universe && universeShell) {
     let universeRows = null;
+    let universeSortDir = -1;
     const signed = value => value == null ? '—' : `${value >= 0 ? '+' : '−'}${Math.abs(Number(value)).toFixed(2)}`;
     const earnText = row => {
       if (!row.next_earn) return '—';
@@ -442,7 +443,9 @@
     const renderUniverse = () => {
       if (!universeRows) return;
       const query = (universeInput?.value || '').trim().toUpperCase();
-      const visible = universeRows.filter(row => !query || `${row.symbol} ${row.sector} ${row.signal}`.toUpperCase().includes(query));
+      const visible = universeRows
+        .filter(row => !query || `${row.symbol} ${row.sector} ${row.signal}`.toUpperCase().includes(query))
+        .sort((a, b) => (Number(a.day_pct) - Number(b.day_pct)) * universeSortDir || a.symbol.localeCompare(b.symbol));
       const rows = visible.map(row => {
         const symbol = htmlSafe(row.symbol);
         const detailId = `scan-detail-universe-${row.symbol.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
@@ -456,7 +459,9 @@
           <td><span class="scan-signal scan-signal--${htmlSafe(row.signal_key)}">${htmlSafe(row.signal)}</span></td>
         </tr><tr class="scan-detail-row" id="${detailId}" data-scan-detail data-scan-symbol="${symbol}" hidden><td colspan="5"><div class="scan-setup-chart" data-scan-chart="${symbol}"></div></td></tr>`;
       }).join('');
-      universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num">Price · Day</th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
+      const daySort = universeSortDir < 0 ? 'descending' : 'ascending';
+      const dayArrow = universeSortDir < 0 ? '▼' : '▲';
+      universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num" aria-sort="${daySort}"><button type="button" class="scan-sort" data-universe-sort-day>Price · Day <span aria-hidden="true">${dayArrow}</span></button></th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
       const initial = new URL(location.href).searchParams.get('chart')?.toUpperCase();
       if (initial) {
         const detail = $$('[data-scan-detail]', universeShell).find(item => item.dataset.scanSymbol === initial);
@@ -479,71 +484,46 @@
       }
     };
     universe.addEventListener('toggle', () => { if (universe.open) loadUniverse(); });
+    universeShell.addEventListener('click', event => {
+      if (!event.target.closest('[data-universe-sort-day]')) return;
+      universeSortDir *= -1;
+      renderUniverse();
+    });
     universeInput?.addEventListener('input', renderUniverse);
+    if (universe.open) loadUniverse();
   }
 
-  function initChartPicker(shellSelector, buttonAttribute, queryKey, wireChart) {
+  function initChartGallery(shellSelector, queryKey, itemSelector, wireChart) {
     const shell = $(shellSelector);
     if (!shell) return;
     const panel = shell.closest('[role="tabpanel"]');
-    let payloadPromise = null;
-    let current = null;
-    const loadPayload = () => {
-      if (!payloadPromise) payloadPromise = fetch(shell.dataset.url, { credentials: 'same-origin' })
-        .then(response => { if (!response.ok) throw new Error(`Chart asset HTTP ${response.status}`); return response.json(); })
-        .catch(error => { payloadPromise = null; throw error; });
-      return payloadPromise;
-    };
-    const select = async (symbol, updateUrl = true) => {
-      if (!symbol || symbol === current) return;
-      shell.innerHTML = `<p class="bl-empty">Loading ${htmlSafe(symbol)} chart…</p>`;
+    let loaded = false;
+    const load = async () => {
+      if (loaded) return;
+      shell.innerHTML = `<p class="bl-empty">${htmlSafe(shell.dataset.loading || 'Loading all charts…')}</p>`;
       try {
-        const payload = await loadPayload();
-        const markup = payload.charts?.[symbol];
-        if (!markup) throw new Error(`Missing ${symbol} chart`);
-        shell.innerHTML = markup;
-        current = symbol;
-        const figure = $('.vwap-chart', shell);
-        if (wireChart && figure) wireChart(figure);
-        $$(`[${buttonAttribute}]`, panel).forEach(button => {
-          const on = button.getAttribute(buttonAttribute) === symbol;
-          button.classList.toggle('on', on);
-          if (on) button.setAttribute('aria-current', 'true'); else button.removeAttribute('aria-current');
-        });
-        if (updateUrl) {
-          const url = new URL(location.href);
-          url.searchParams.set(queryKey, symbol);
-          history.replaceState(null, '', url);
+        const response = await fetch(shell.dataset.url, { credentials: 'same-origin' });
+        if (!response.ok) throw new Error(`Chart asset HTTP ${response.status}`);
+        const payload = await response.json();
+        let charts = Object.entries(payload.charts || {});
+        if (!charts.length) throw new Error(`${queryKey} chart asset is empty`);
+        const requested = new URL(location.href).searchParams.get(queryKey)?.toUpperCase();
+        if (requested && payload.charts?.[requested]) {
+          charts = [[requested, payload.charts[requested]], ...charts.filter(([symbol]) => symbol !== requested)];
         }
+        shell.innerHTML = charts.map(([, markup]) => markup).join('');
+        if (wireChart) $$(itemSelector, shell).forEach(wireChart);
+        loaded = true;
       } catch (error) {
-        console.error(`Unable to load ${symbol} chart`, error);
-        shell.innerHTML = `<p class="bl-empty">${htmlSafe(symbol)} chart failed to load.</p>`;
+        console.error(`Unable to load ${queryKey} charts`, error);
+        shell.innerHTML = `<p class="bl-empty">${htmlSafe(queryKey.toUpperCase())} charts failed to load.</p>`;
       }
     };
-    panel.addEventListener('click', event => {
-      const button = event.target.closest(`[${buttonAttribute}]`);
-      if (button) select(button.getAttribute(buttonAttribute));
-    });
-    const activatePicker = () => {
-      const requested = new URL(location.href).searchParams.get(queryKey)?.toUpperCase();
-      if (requested) select(requested, false);
-    };
-    panel.addEventListener('panelactivate', activatePicker);
-    if (!panel.hidden) activatePicker();
+    panel.addEventListener('panelactivate', load);
+    if (!panel.hidden) load();
   }
-  initChartPicker('#vwap-selected-chart', 'data-vwap-select', 'vwap', wireVwapChart);
-  initChartPicker('#crypto-selected-chart', 'data-crypto-select', 'crypto');
-
-  const vwapPanel = $('#vwap-panel');
-  vwapPanel?.addEventListener('click', event => {
-    const button = event.target.closest('[data-vwap-scope-button]');
-    if (!button) return;
-    const scope = button.dataset.vwapScopeButton;
-    $$('[data-vwap-scope]', vwapPanel).forEach(row => { row.hidden = row.dataset.vwapScope !== scope; });
-    $$('[data-vwap-scope-button]', vwapPanel).forEach(item => item.classList.toggle('on', item === button));
-    const firstSymbol = $(`[data-vwap-scope="${scope}"] [data-vwap-select]`, vwapPanel);
-    firstSymbol?.click();
-  });
+  initChartGallery('#vwap-chart-grid', 'vwap', '.vwap-chart', wireVwapChart);
+  initChartGallery('#crypto-chart-grid', 'crypto', '.crypto-card');
 
   $$('.whale-flow-grid').forEach(whaleGrid => {
     whaleGrid.addEventListener('click', event => {
@@ -663,10 +643,7 @@
       <span class="activity-side">${row.side} · ${htmlSafe(row.asset)}</span>
       <span class="r mono ${pnlCls(row.pnl)}">${htmlSafe(row.pnlTxt)}</span>
     </div>`).join('') || '<div class="bl-empty">No activity matches the current filters.</div>';
-    const positiveMarks = [...grouped.values()].filter(items => items.some(item => parseFloat(item.since.replace('−', '-')) > 0)).length;
-    built.innerHTML = `
-      <p class="trading-takeaway">${grouped.size} symbols · ${pos.length} instruments · ${positiveMarks} positive mark${positiveMarks === 1 ? '' : 's'}.</p>
-      <div class="portfolio-grid">${portfolioCards}</div>`;
+    built.innerHTML = `<div class="portfolio-grid">${portfolioCards}</div>`;
     logBuilt.innerHTML = `<div class="bl-card"><div class="bl-card-title">Recent activity <span>· latest 8 · broker fills consolidated</span><a href="${TRADE_LOG_URL}">Source log</a></div><div class="activity-feed">${activityRows}</div></div>`;
 
     const active = q || state.asset !== 'All' || state.status !== 'All';
