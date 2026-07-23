@@ -35,7 +35,7 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 7, "expected seven tabs")
+        check(desktop.locator(".trading-tab").count() == 8, "expected eight tabs")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         position_toggles = desktop.locator("#bl-built [data-position-chart-toggle]")
         check(position_toggles.count() >= 1, "expected at least one live position setup")
@@ -47,6 +47,13 @@ def main() -> None:
         check(activity.evaluate("node => node.open"), "Recent activity did not expand")
         check(activity.locator(".activity-row-compact").count() == 20, "Recent activity does not show the latest 20 trades")
         check(activity.locator(".activity-side").count() == 20 and activity.locator(".activity-pnl-compact").count() == 20, "Recent activity is missing direction/type/P&L")
+
+        desktop.goto(args.url + "#hypotheses", wait_until="networkidle")
+        check(desktop.locator("#hypotheses-tab").get_attribute("aria-selected") == "true", "Hypotheses deep link did not activate")
+        check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='HIMS']").count() == 1, "HIMS hypothesis is missing")
+        check(desktop.locator("#hypothesis-hims-setup").is_visible(), "HIMS setup is not unfolded")
+        check(desktop.locator("#hypothesis-hims-setup .hypothesis-block").count() == 6, "HIMS setup is incomplete")
+        check("$30 or lower" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS build zone is missing")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
@@ -109,12 +116,14 @@ def main() -> None:
         desktop.goto(args.url, wait_until="networkidle")
         desktop.locator("#positions-tab").focus()
         desktop.keyboard.press("ArrowRight")
+        check(desktop.locator("#hypotheses-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Hypotheses")
+        desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Brief")
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto"):
+        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -129,7 +138,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (7 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (8 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":

@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fafaf8">
     <title>Trading Dashboard — Zonted</title>
-    <meta name="description" content="A quantity-free public portfolio with momentum, VWAP, 13F, and crypto market views.">
+    <meta name="description" content="A quantity-free public portfolio with ticker hypotheses, momentum, VWAP, 13F, and crypto market views.">
     <link rel="canonical" href="https://zonted.com/trading/">
     <meta property="og:title" content="Trading Dashboard — Zonted">
-    <meta property="og:description" content="A quantity-free public portfolio with momentum, VWAP, 13F, and crypto market views.">
+    <meta property="og:description" content="A quantity-free public portfolio with ticker hypotheses, momentum, VWAP, 13F, and crypto market views.">
     <meta property="og:url" content="https://zonted.com/trading/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
@@ -356,6 +356,22 @@
         .portfolio-copy { margin: 0; color: var(--bl-ink2); font-size: 13.5px; }
         .portfolio-risk { color: var(--bl-loss); }
         .portfolio-card .bl-position-chart-toggle { margin-top: 12px; color: var(--bl-accent); font: 600 13px var(--bl-sans); }
+        .hypothesis-panel .portfolio-grid { margin-top: 12px; }
+        .hypothesis-card { border-color: var(--bl-chipbd); background: var(--bl-chipbg); }
+        .hypothesis-status { color: var(--bl-accent); font: 600 11px var(--bl-mono); text-transform: uppercase; letter-spacing: .04em; }
+        .hypothesis-price { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin: 4px 0 12px; color: var(--bl-muted); font-size: 13px; }
+        .hypothesis-price strong { color: var(--bl-ink); font: 600 14px var(--bl-mono); }
+        .hypothesis-detail { min-width: 0; padding: 18px 20px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .hypothesis-detail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .hypothesis-detail h3 { margin: 0; font: 700 15px var(--bl-mono); }
+        .hypothesis-bottom-line { max-width: 980px; margin: 8px 0 16px; color: var(--bl-ink); font-size: 15px; font-weight: 600; text-wrap: pretty; }
+        .hypothesis-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .hypothesis-block { min-width: 0; padding: 13px 14px; border: 1px solid var(--bl-divider); border-radius: 7px; background: var(--bl-hover); }
+        .hypothesis-block h4 { margin: 0 0 5px; color: var(--bl-muted); font: 700 10.5px var(--bl-sans); letter-spacing: .04em; text-transform: uppercase; }
+        .hypothesis-block p { margin: 0; color: var(--bl-ink2); font-size: 13px; }
+        .hypothesis-block strong { color: var(--bl-ink); }
+        .hypothesis-sources { margin: 14px 0 0; color: var(--bl-faint); font-size: 12px; }
+        .hypothesis-sources a { color: var(--bl-accent); text-underline-offset: 2px; }
         .activity-disclosure { overflow: hidden; }
         .activity-disclosure > summary { display: flex; align-items: baseline; gap: 8px; cursor: pointer; list-style: none; }
         .activity-disclosure > summary::-webkit-details-marker { display: none; }
@@ -380,7 +396,7 @@
         .whale-card:not([open]) { padding-bottom: 15px; }
         .whale-card:not([open]) > :not(summary) { display: none; }
         .data-disclosure > .scan-table-wrap { margin-top: 12px; }
-        @media (max-width: 900px) { .portfolio-grid, .vwap-chart-grid, .crypto-chart-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .portfolio-grid, .hypothesis-grid, .vwap-chart-grid, .crypto-chart-grid { grid-template-columns: 1fr; } }
         @media (max-width: 720px) {
             .bl-header, .bl-filters, .bl-body { padding-left: 16px; padding-right: 16px; }
             .bl-header-row { align-items: flex-start; }
@@ -438,6 +454,7 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
+                <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">1</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">4</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
@@ -703,6 +720,64 @@
         </section>
 
         <div class="bl-body">
+
+            <section class="trading-panel hypothesis-panel" id="hypotheses-panel" role="tabpanel" tabindex="0" aria-labelledby="hypotheses-tab" hidden>
+                <div class="position-head">
+                    <h2 id="hypotheses-heading">Ticker hypotheses</h2>
+                    <span>1 research candidate · updated July 23, 2026</span>
+                </div>
+                <p class="trading-takeaway">Ideas being built before they become positions. The trigger, catalyst, and kill conditions have to be explicit.</p>
+                <div class="portfolio-grid" aria-label="Ticker hypotheses">
+                    <article class="portfolio-card hypothesis-card is-open" data-hypothesis-symbol="HIMS">
+                        <div class="portfolio-card-head">
+                            <h2>HIMS</h2>
+                            <span class="hypothesis-status">Watch · starter only</span>
+                        </div>
+                        <p class="hypothesis-price"><strong>$32.75 close</strong><span>$33.00 after hours · July 23</span></p>
+                        <p class="portfolio-label">Thesis</p>
+                        <p class="portfolio-copy">Hims owns operating peptide-manufacturing capacity before the regulatory door is fully open, positioning it to benefit if more peptides become eligible for lawful 503A compounding.</p>
+                        <p class="portfolio-label">Entry plan</p>
+                        <p class="portfolio-copy">A small starter is optional here. Build the position when the share price is <strong>$30 or lower</strong>.</p>
+                    </article>
+                </div>
+                <div class="portfolio-details">
+                    <article class="hypothesis-detail" id="hypothesis-hims-setup" aria-labelledby="hypothesis-hims-title">
+                        <div class="hypothesis-detail-head">
+                            <h3 id="hypothesis-hims-title">HIMS setup</h3>
+                            <span class="hypothesis-status">Unfolded · active research</span>
+                        </div>
+                        <p class="hypothesis-bottom-line">The physical capability is largely ready; regulation is the bottleneck. The peptide optionality is real, but not yet clean revenue—and at $32.75 HIMS is still about 9% above the build zone.</p>
+                        <div class="hypothesis-grid">
+                            <section class="hypothesis-block">
+                                <h4>Next catalyst</h4>
+                                <p><strong>Q2 earnings: August 10, 2026, after market close.</strong> The call is scheduled for 5:00 PM ET.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Facility edge</h4>
+                                <p>Hims acquired the California peptide facility in February 2025. Management said it was “up and running and operating” while onshoring R&amp;D. That removes much of the physical-readiness lag if regulation turns favorable.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Regulatory path</h4>
+                                <p>The July 23–24 FDA advisory meeting covers seven peptide-related substances. Early meeting coverage reports an <strong>8–6 PCAC recommendation for BPC-157 free base</strong>, but the vote is non-binding. FDA rulemaking and state-level restrictions still stand between a recommendation and durable commercial access.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Sector tailwind</h4>
+                                <p>Healthcare momentum is supportive: XLV gained about <strong>6.1% over the last month</strong> versus roughly <strong>0.6% for SPY</strong>. HIMS itself was roughly flat over that window, so the sector is helping more than the stock.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>Position plan</h4>
+                                <p><strong>Now:</strong> starter-size only if exposure is wanted before earnings. <strong>Build:</strong> share price at or below $30. Do not confuse a favorable committee vote with FDA drug approval.</p>
+                            </section>
+                            <section class="hypothesis-block">
+                                <h4>What breaks it</h4>
+                                <p>FDA declines or indefinitely stalls formal inclusion; state boards block access; Hims fails to turn its facility into compliant supply; or August earnings weakens the core subscriber, margin, or weight-loss execution story.</p>
+                            </section>
+                        </div>
+                        <p class="hypothesis-sources">Sources: <a href="https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx" rel="noopener" target="_blank">Hims earnings notice</a> · <a href="https://s27.q4cdn.com/787306631/files/doc_financials/2025/q3/Hims-Hers-Third-Quarter-2025-Earnings-Call-Transcript.pdf" rel="noopener" target="_blank">Q3 2025 call transcript</a> · <a href="https://www.fda.gov/advisory-committees/advisory-committee-calendar/july-23-24-2026-meeting-pharmacy-compounding-advisory-committee-07232026" rel="noopener" target="_blank">FDA PCAC calendar</a> · <a href="https://www.sec.gov/Archives/edgar/data/1773751/000177375126000022/hims-20251231.htm" rel="noopener" target="_blank">2025 Form 10-K</a> · preliminary vote coverage via <a href="https://x.com/DisclosedLabs/status/2080332714973225433" rel="noopener" target="_blank">Disclosed Labs</a>. Market prices are timestamped Robinhood quotes; momentum uses regular-session daily bars. The 12–24+ month rulemaking range is a working assumption, not an FDA timetable.</p>
+                    </article>
+                </div>
+                <p class="trading-note">Research hypothesis, not a current holding or trade recommendation. Prices and regulatory status can change quickly.</p>
+            </section>
 
             <!-- AUTO:SCAN:START -->
             <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
