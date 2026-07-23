@@ -386,6 +386,12 @@
         .activity-row-compact { padding: 10px 14px; border-top: 1px solid var(--bl-divider); }
         .activity-row-compact:first-child { border-top: 0; }
         .activity-side { color: var(--bl-muted); font-size: 12px; text-transform: capitalize; }
+        .results-panel { min-height: min(560px, 62vh); place-items: center; }
+        .results-panel:not([hidden]) { display: grid; }
+        .results-only { width: min(680px, 100%); padding: clamp(42px, 8vw, 88px) 20px; text-align: center; }
+        .results-kicker { color: var(--bl-muted); font: 700 12px var(--bl-mono); letter-spacing: .12em; text-transform: uppercase; }
+        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(64px, 15vw, 148px)/.9 var(--bl-mono); letter-spacing: -.08em; }
+        .results-only p { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
         .whale-card > summary { cursor: pointer; list-style: none; }
         .whale-card > summary::-webkit-details-marker { display: none; }
         .whale-card > summary::before { content: '›'; flex: 0 0 auto; color: var(--bl-faint); font: 700 18px/1 var(--bl-sans); transition: transform 140ms ease; }
@@ -454,6 +460,7 @@
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
+                <button class="trading-tab" id="results-tab" type="button" role="tab" aria-selected="false" aria-controls="results-panel">Results</button>
                 <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">1</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">18</span></button>
@@ -719,6 +726,16 @@
                 <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
             </div>
         </section>
+
+            <!-- AUTO:RESULTS:START -->
+            <section class="trading-panel results-panel" id="results-panel" role="tabpanel" tabindex="0" aria-labelledby="results-tab" hidden>
+                <div class="results-only" aria-labelledby="results-heading">
+                    <span class="results-kicker">Robinhood · YTD</span>
+                    <h2 id="results-heading">+335.12%</h2>
+                    <p class="positive">YTD portfolio performance</p>
+                </div>
+            </section>
+            <!-- AUTO:RESULTS:END -->
 
         <div class="bl-body">
 
@@ -2008,6 +2025,6 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-23-decision-surface-v6"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-23-results-v1"></script>
 </body>
 </html>

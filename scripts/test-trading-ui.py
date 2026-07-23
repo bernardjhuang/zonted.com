@@ -18,16 +18,27 @@ class TradingUiContractTest(unittest.TestCase):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
 
-    def test_eight_answer_first_tabs(self):
+    def test_nine_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "results", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
-        self.assertRegex(labels[1], r"^Hypotheses \d+$")
-        self.assertEqual(labels[2], "Brief")
-        self.assertRegex(labels[3], r"^Momentum \d+$")
-        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto"])
+        self.assertEqual(labels[1], "Results")
+        self.assertRegex(labels[2], r"^Hypotheses \d+$")
+        self.assertEqual(labels[3], "Brief")
+        self.assertRegex(labels[4], r"^Momentum \d+$")
+        self.assertEqual(labels[5:], ["VWAP", "Congress", "13F", "Crypto"])
         self.assertNotIn('id="log-tab"', self.html)
+
+    def test_results_is_ytd_percentage_only(self):
+        match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
+        self.assertIsNotNone(match)
+        block = match.group(1) if match else ""
+        self.assertRegex(block, r'<h2 id="results-heading">[+−]\d+\.\d{2}%</h2>')
+        self.assertIn('Robinhood · YTD', block)
+        self.assertIn('YTD portfolio performance', block)
+        for forbidden in ('$', 'balance', 'buying power', 'position', 'trade'):
+            self.assertNotIn(forbidden, block.casefold())
 
     def test_heading_and_scoped_controls(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
