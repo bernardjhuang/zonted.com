@@ -433,6 +433,7 @@
   const universeInput = $('#scan-universe-q');
   if (universe && universeShell) {
     let universeRows = null;
+    let universeSortKey = 'day_pct';
     let universeSortDir = -1;
     const signed = value => value == null ? '—' : `${value >= 0 ? '+' : '−'}${Math.abs(Number(value)).toFixed(2)}`;
     const earnText = row => {
@@ -445,13 +446,22 @@
       const query = (universeInput?.value || '').trim().toUpperCase();
       const visible = universeRows
         .filter(row => !query || `${row.symbol} ${row.sector} ${row.signal}`.toUpperCase().includes(query))
-        .sort((a, b) => (Number(a.day_pct) - Number(b.day_pct)) * universeSortDir || a.symbol.localeCompare(b.symbol));
+        .sort((a, b) => {
+          const aRaw = a[universeSortKey];
+          const bRaw = b[universeSortKey];
+          const aValue = Number(aRaw);
+          const bValue = Number(bRaw);
+          const aMissing = aRaw == null || !Number.isFinite(aValue);
+          const bMissing = bRaw == null || !Number.isFinite(bValue);
+          if (aMissing !== bMissing) return aMissing ? 1 : -1;
+          return (aValue - bValue) * universeSortDir || a.symbol.localeCompare(b.symbol);
+        });
       const rows = visible.map(row => {
         const symbol = htmlSafe(row.symbol);
         const detailId = `scan-detail-universe-${row.symbol.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
         const dayClass = row.day_pct >= 0 ? 'scan-z-pos' : 'scan-z-neg';
         const day = `${row.day_pct >= 0 ? '+' : '−'}${Math.abs(Number(row.day_pct)).toFixed(2)}%`;
-        return `<tr class="scan-data-row" data-scan-row data-scan-symbol="${symbol}" data-day-pct="${row.day_pct}">
+        return `<tr class="scan-data-row" data-scan-row data-scan-symbol="${symbol}" data-day-pct="${row.day_pct}" data-strength="${row.spread_z ?? ''}">
           <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">${symbol}</span><span class="bl-tag">${htmlSafe(row.sector)}</span></span></button></td>
           <td class="scan-num scan-price"><span class="scan-price-value">$${Number(row.price).toFixed(2)}</span> <span class="${dayClass}">${day}</span></td>
           <td class="scan-num"><span class="${row.spread_z >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${signed(row.spread_z)}</span></td>
@@ -459,9 +469,10 @@
           <td><span class="scan-signal scan-signal--${htmlSafe(row.signal_key)}">${htmlSafe(row.signal)}</span></td>
         </tr><tr class="scan-detail-row" id="${detailId}" data-scan-detail data-scan-symbol="${symbol}" hidden><td colspan="5"><div class="scan-setup-chart" data-scan-chart="${symbol}"></div></td></tr>`;
       }).join('');
-      const daySort = universeSortDir < 0 ? 'descending' : 'ascending';
-      const dayArrow = universeSortDir < 0 ? '▼' : '▲';
-      universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num" aria-sort="${daySort}"><button type="button" class="scan-sort" data-universe-sort-day>Price · Day <span aria-hidden="true">${dayArrow}</span></button></th><th class="scan-num">Rel. strength</th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
+      const sortDirection = universeSortDir < 0 ? 'descending' : 'ascending';
+      const sortArrow = key => universeSortKey === key ? (universeSortDir < 0 ? '▼' : '▲') : '↕';
+      const sortAria = key => universeSortKey === key ? ` aria-sort="${sortDirection}"` : '';
+      universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num"${sortAria('day_pct')}><button type="button" class="scan-sort" data-universe-sort-key="day_pct" data-universe-sort-day>Price · Day <span aria-hidden="true">${sortArrow('day_pct')}</span></button></th><th class="scan-num"${sortAria('spread_z')}><button type="button" class="scan-sort" data-universe-sort-key="spread_z" data-universe-sort-strength>Rel. strength <span aria-hidden="true">${sortArrow('spread_z')}</span></button></th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
       const initial = new URL(location.href).searchParams.get('chart')?.toUpperCase();
       if (initial) {
         const detail = $$('[data-scan-detail]', universeShell).find(item => item.dataset.scanSymbol === initial);
@@ -485,8 +496,14 @@
     };
     universe.addEventListener('toggle', () => { if (universe.open) loadUniverse(); });
     universeShell.addEventListener('click', event => {
-      if (!event.target.closest('[data-universe-sort-day]')) return;
-      universeSortDir *= -1;
+      const button = event.target.closest('[data-universe-sort-key]');
+      if (!button) return;
+      const nextKey = button.dataset.universeSortKey;
+      if (nextKey === universeSortKey) universeSortDir *= -1;
+      else {
+        universeSortKey = nextKey;
+        universeSortDir = -1;
+      }
       renderUniverse();
     });
     universeInput?.addEventListener('input', renderUniverse);
