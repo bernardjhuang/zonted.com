@@ -34,6 +34,30 @@ def fmt(d):
     return dt.date.fromisoformat(d).strftime("%b %-d")
 
 
+def ewm(values, span):
+    """Small dependency-free equivalent of pandas ewm(adjust=False).mean()."""
+    alpha = 2 / (span + 1)
+    state = None
+    out = []
+    for value in values:
+        if value is None:
+            out.append(state)
+            continue
+        state = float(value) if state is None else alpha * float(value) + (1 - alpha) * state
+        out.append(state)
+    return out
+
+
+def z50(values):
+    """TradingView-parity EMA mean/RMS z-score with 3-session smoothing."""
+    center = ewm(values, 50)
+    diff = [float(value) - mean for value, mean in zip(values, center)]
+    variance = ewm([value * value for value in diff], 50)
+    raw = [None if value <= 0 else delta / math.sqrt(value)
+           for delta, value in zip(diff, variance)]
+    return ewm(raw, 3)
+
+
 def chart(sym, name, dates, close, vwap, w, h, z50=None):
     lo = min(min(close), min(vwap))
     hi = max(max(close), max(vwap))
@@ -94,6 +118,7 @@ def chart(sym, name, dates, close, vwap, w, h, z50=None):
     price = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(close))
     vw = " ".join(f"{x(i):.1f},{y(v):.1f}" for i, v in enumerate(vwap))
     z_markup = ""
+    last_z = None
     if has_z:
         finite_z = [value for value in z50 if value is not None]
         if not finite_z:
@@ -147,8 +172,10 @@ def chart(sym, name, dates, close, vwap, w, h, z50=None):
         data_obj["z50"] = z50
     data = json.dumps(data_obj, separators=(",", ":"))
     aria = f"{sym} 2026 price versus year-to-date VWAP" + (" with 50-session z-score history" if has_z else "")
+    z_badge = (f'<strong class="vwap-z-badge {"scan-z-pos" if last_z >= 0 else "scan-z-neg"}">· 50D Z {last_z:+.2f}</strong>'
+               if last_z is not None else "")
     return f"""                <figure class="vwap-chart{' vwap-chart--spy' if sym == 'SPY' else ''}" data-sym="{sym}" data-d='{data}'>
-                    <figcaption><b>{sym}</b> <span>{name}</span><em class="{'scan-z-pos' if side else 'scan-z-neg'}">{pct:+.1f}% {'above' if side else 'below'}</em></figcaption>
+                    <figcaption><b>{sym}</b> <span>{name}</span><em class="{'scan-z-pos' if side else 'scan-z-neg'}">{pct:+.1f}% {'above' if side else 'below'}</em>{z_badge}</figcaption>
                     <svg viewBox="0 0 {w} {total_h}" preserveAspectRatio="none" role="img" aria-label="{aria}">
                     {''.join(ticks)}{''.join(fills)}
                     <polyline points="{vw}" class="vlv"/>
@@ -176,9 +203,12 @@ def main():
     sector_summary = [s for s in summary if s["sym"] in SECTOR_ETFS]
     if len(spy_summary) != 1 or len(sector_summary) != 11 or any(s.get("z") is None for s in sector_summary):
         sys.exit("Expected SPY plus 11 sector summaries with current Z scores")
-    us_summary = spy_summary + sorted(sector_summary, key=lambda s: (-s["z"], s["sym"]))
+    spy_z50 = z50(series["SPY"]["close"])
+    series["SPY"]["z50"] = [round(value, 6) if value is not None else None for value in spy_z50]
+    spy_summary[0]["z"] = round(next(value for value in reversed(spy_z50) if value is not None), 2)
+    us_summary = sorted([*spy_summary, *sector_summary], key=lambda s: (-s["z"], s["sym"]))
     country_summary = sorted((s for s in summary if s["sym"] in COUNTRY_ETFS),
-                             key=lambda s: (-s["pct"], s["sym"]))
+                             key=lambda s: (-s["z"], s["sym"]))
     expected_symbols = {"SPY"} | SECTOR_ETFS | COUNTRY_ETFS
     if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
         sys.exit("Expected SPY + 11 US sector ETFs and all 10 country ETFs")
@@ -196,7 +226,7 @@ def main():
         if any(not math.isfinite(float(value)) for value in [*(close or []), *(vwap or [])]):
             sys.exit(f"{sym} VWAP history contains a non-finite value")
         z_values = values.get("z50")
-        if sym in SECTOR_ETFS | COUNTRY_ETFS:
+        if sym in expected_symbols:
             if not isinstance(z_values, list) or len(z_values) != len(dates):
                 sys.exit(f"{sym} 50-session Z history is missing or misaligned")
             if any(value is not None and not math.isfinite(float(value)) for value in z_values):
@@ -204,8 +234,6 @@ def main():
             finite_z = [float(value) for value in z_values if value is not None]
             if not finite_z or round(finite_z[-1], 2) != summary_by_symbol[sym].get("z"):
                 sys.exit(f"{sym} current 50-session Z does not match its summary")
-        elif z_values is not None:
-            sys.exit(f"{sym} unexpectedly contains Z history")
 
     def z_cell(item):
         value = item.get("z")
@@ -219,9 +247,9 @@ def main():
             f"""                    <tr data-vwap-scope="{scope}">
                         <td class="scan-sym"><span translate="no">{html.escape(s['sym'])}</span></td>
                         <td class="scan-sec">{html.escape(s['name'])}</td>
+                        <td class="scan-num">{z_cell(s)}</td>
                         <td class="scan-num"><span class="{'scan-z-pos' if s['pct'] >= 0 else 'scan-z-neg'}">{s['pct']:+.1f}%</span></td>
                         <td class="scan-num">{'▲' if s['side'] else '▼'} since {fmt(s['since'])} ({s['held']}d)</td>
-                        <td class="scan-num">{z_cell(s)}</td>
                     </tr>"""
             for s in items)
 
@@ -258,7 +286,7 @@ def main():
                 <h3 id="vwap-us-heading">US market + sectors</h3>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="US market and sector year-to-date VWAP summary">
-                    <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th class="scan-num">50D Z</th></tr></thead>
+                    <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
                     <tbody>
 {us_rows}
                     </tbody>
@@ -270,10 +298,10 @@ def main():
                 </section>
                 <section class="vwap-market-section vwap-country-section" aria-labelledby="vwap-countries-heading">
                 <h3 id="vwap-countries-heading">Country markets</h3>
-                <p class="data-meta">Country ETFs are separated from US sectors and ranked by distance from YTD VWAP.</p>
+                <p class="data-meta">Country ETFs are separated from US sectors and ranked by 50-day Z-score, descending.</p>
                 <div class="scan-table-wrap">
                 <table class="scan-table scan-table--compact" aria-label="Country market year-to-date VWAP summary">
-                    <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th class="scan-num">50D Z</th></tr></thead>
+                    <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
                     <tbody>
 {country_rows}
                     </tbody>

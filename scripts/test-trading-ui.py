@@ -11,6 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
+YOUTUBE = ROOT / "trading" / "youtube-sentiment.json"
 
 
 class TradingUiContractTest(unittest.TestCase):
@@ -19,16 +20,17 @@ class TradingUiContractTest(unittest.TestCase):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
         cls.results = json.loads(RESULTS.read_text())
+        cls.youtube = json.loads(YOUTUBE.read_text())
 
-    def test_nine_answer_first_tabs(self):
+    def test_ten_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto", "results", "youtube"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
         self.assertRegex(labels[3], r"^Momentum \d+$")
-        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto", "Performance"])
+        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto", "Performance", "YouTube"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_hypotheses_are_explicit_and_scannable(self):
@@ -93,7 +95,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("'#log': ''", self.js)
 
     def test_answer_first_and_progressive_disclosure(self):
-        for panel in ("scan", "vwap", "congress", "whales", "crypto"):
+        for panel in ("scan", "vwap", "congress", "whales", "crypto", "youtube"):
             match = re.search(
                 rf'<!-- AUTO:{panel.upper()}:START -->(.*?)<!-- AUTO:{panel.upper()}:END -->',
                 self.html,
@@ -120,7 +122,7 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_chart_payloads_are_external_and_small_shell(self):
         # Thesis copy stays server-rendered for no-JS access; charts remain external.
-        self.assertLess(PAGE.stat().st_size, 220_000)
+        self.assertLess(PAGE.stat().st_size, 285_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json"):
@@ -144,8 +146,28 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(vwap["default"], "SPY")
         self.assertEqual(len(vwap["groups"]["us"]), 12)
         self.assertEqual(len(vwap["groups"]["countries"]), 10)
-        self.assertTrue(all("z50" in vwap["charts"][symbol] for symbol in vwap["groups"]["countries"]))
+        self.assertTrue(all('"z50"' in chart for chart in vwap["charts"].values()))
+        self.assertTrue(all("50D Z SCORE" in chart and "vwap-z-badge" in chart for chart in vwap["charts"].values()))
+        us_z = [json.loads(re.findall(r"data-d='([^']+)'", vwap["charts"][symbol])[0])["z50"][-1]
+                for symbol in vwap["groups"]["us"]]
+        country_z = [json.loads(re.findall(r"data-d='([^']+)'", vwap["charts"][symbol])[0])["z50"][-1]
+                     for symbol in vwap["groups"]["countries"]]
+        self.assertEqual(us_z, sorted(us_z, reverse=True))
+        self.assertEqual(country_z, sorted(country_z, reverse=True))
         self.assertIn(crypto["default"], crypto["charts"])
+
+    def test_youtube_snapshot_contract(self):
+        self.assertEqual(self.youtube["summary"]["channels"], 25)
+        self.assertEqual(self.youtube["summary"]["videos_targeted"], 125)
+        self.assertEqual(self.youtube["summary"]["videos_with_transcripts"], 119)
+        self.assertEqual(self.youtube["summary"]["organic_mentions"], 2855)
+        self.assertEqual(len(self.youtube["tickers"]), 141)
+        self.assertEqual(len(self.youtube["creators"]), 25)
+        self.assertEqual(len(self.youtube["videos"]), 125)
+        self.assertTrue(all(row["url"].startswith("https://www.youtube.com/watch?v=") for row in self.youtube["videos"]))
+        self.assertIn('id="youtube-panel"', self.html)
+        self.assertIn('/js/trading-youtube.js?', self.html)
+        self.assertIn('/trading/youtube-sentiment.json?', self.html)
 
     def test_vwap_shows_every_chart_without_picker_controls(self):
         self.assertIn('id="vwap-chart-grid"', self.html)
@@ -155,6 +177,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertLess(self.html.index('id="vwap-chart-grid"'), self.html.index('id="vwap-countries-heading"'))
         self.assertIn('data-url="/trading/vwap-charts.json?', self.html)
         self.assertEqual(self.html.count('>50D Z</th>'), 2)
+        self.assertEqual(self.html.count('<th>Market</th><th class="scan-num">50D Z</th>'), 1)
+        self.assertEqual(self.html.count('<th>Country</th><th class="scan-num">50D Z</th>'), 1)
         self.assertNotIn('id="vwap-selected-chart"', self.html)
         self.assertNotIn('data-vwap-select', self.html)
         self.assertNotIn('data-vwap-scope-button', self.html)
