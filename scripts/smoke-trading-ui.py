@@ -53,7 +53,8 @@ def main() -> None:
         check("View setup" in first_position_toggle.inner_text(), "collapsed position setup did not expose the view action")
         hims_card = desktop.locator("#bl-built [data-position-row][data-position-symbol='HIMS']")
         check("peptide-manufacturing capacity" in hims_card.inner_text(), "HIMS home-page thesis is missing")
-        check("$30 or lower" in hims_card.inner_text(), "HIMS home-page build level is missing")
+        check("$25 or below" in hims_card.inner_text(), "HIMS home-page entry target is missing")
+        check("post-vote selloff" in hims_card.inner_text(), "HIMS post-PCAC rationale is missing")
         activity = desktop.locator("#bl-log-built details.activity-disclosure")
         check(activity.count() == 1 and not activity.evaluate("node => node.open"), "Recent activity is not folded by default")
         activity.locator("summary").click()
@@ -74,7 +75,7 @@ def main() -> None:
             check(desktop.locator(f"#hypothesis-{symbol}-setup .hypothesis-block").count() == 6, f"{symbol.upper()} setup is incomplete")
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='benefit']").count() == 1, f"{symbol.upper()} benefit scan is missing")
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='threat']").count() == 1, f"{symbol.upper()} threat scan is missing")
-        check("$30 or lower" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS build zone is missing")
+        check("$25 or below" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS entry target is missing")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
