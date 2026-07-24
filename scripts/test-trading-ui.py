@@ -49,8 +49,11 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
         self.assertIn('Exact Sciences', details["ABT"])
         self.assertIn('Libre Assist', details["ABT"])
-        self.assertIn('Robinhood Chain', details["HOOD"])
-        self.assertIn('Agentic Trading', details["HOOD"])
+        self.assertIn('Slightly underpriced', details["HOOD"])
+        self.assertIn('$940–980B', details["HOOD"])
+        self.assertIn('$69.1B', details["HOOD"])
+        self.assertIn('Monthly operating metrics', details["HOOD"])
+        self.assertIn('June 2026 month-to-date trading update', details["HOOD"])
 
     def test_results_is_ytd_percentage_only(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
