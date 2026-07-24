@@ -24,13 +24,13 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_ten_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "crypto", "results", "youtube"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
         self.assertRegex(labels[3], r"^Momentum \d+$")
-        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "Crypto", "Performance", "YouTube"])
+        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_hypotheses_are_explicit_and_scannable(self):
@@ -214,8 +214,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('>View setup</button>', self.js)
         self.assertIn('data-position-symbol="${symbol}" hidden>', self.js)
         self.assertIn("renderSetupChartForSymbol($('[data-position-chart-shell]', detail)", self.js)
-        self.assertIn('Operating peptide-manufacturing capacity and mostly positive PCAC votes', self.js)
-        self.assertIn('Target entry at $25 or below.', self.js)
+        self.assertIn('Monitor FDA’s formal peptide-action schedule and the next PCAC meeting date', self.js)
+        self.assertIn('Wait for HIMS to sink below $25 before adding.', self.js)
         self.assertIn('#positions-panel .portfolio-grid { grid-template-columns: 1fr; }', self.html)
         self.assertRegex(self.js, r'<article class="portfolio-card[\s\S]*?<div class="bl-position-chart-detail[\s\S]*?</article>')
         self.assertNotIn('class="portfolio-details"', self.js)

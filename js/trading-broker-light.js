@@ -19,8 +19,8 @@
       invalidation: 'July 29 earnings fails to back the fee-growth story. No hard price level was recorded.',
     },
     HIMS: {
-      setup: 'Operating peptide-manufacturing capacity and mostly positive PCAC votes support Hims’ long-term compounding thesis, but the post-vote selloff says the near-term catalyst was priced in and final FDA action remains a long way off.',
-      invalidation: 'Target entry at $25 or below. The thesis breaks if FDA rulemaking stalls, states restrict access, or August 10 earnings weakens the core subscriber, margin, or weight-loss story.',
+      setup: 'Monitor FDA’s formal peptide-action schedule and the next PCAC meeting date; constructive committee votes are non-binding and final access remains a long way off.',
+      invalidation: 'Wait for HIMS to sink below $25 before adding. Reassess if FDA rulemaking stalls, states restrict access, or August 10 earnings weakens the core subscriber, margin, or weight-loss story.',
     },
     V: {
       setup: 'Financial-sector leadership expressed through Visa’s steady payments-tollbooth uptrend.',
