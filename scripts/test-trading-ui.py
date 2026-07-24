@@ -97,12 +97,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(match.group(1) if match else "", latest)
         self.assertIn(f'data-results-points="{len(points)}"', self.html)
 
-    def test_heading_and_scoped_controls(self):
+    def test_heading_without_portfolio_tools(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
         self.assertIn('<h1 class="bl-title">Trading</h1>', self.html)
-        self.assertIn('id="bl-tools"', self.html)
-        self.assertIn('Download positions CSV', self.html)
-        self.assertRegex(self.js, r"tools\.hidden\s*=\s*target\.id\s*!==\s*'positions-panel'")
+        self.assertNotIn('id="bl-tools"', self.html)
+        self.assertNotIn('id="bl-q"', self.html)
+        self.assertNotIn('id="bl-export"', self.html)
+        self.assertNotIn("$('#bl-export')", self.js)
         self.assertNotIn('id="bl-filters"', self.html)
         self.assertNotIn("positive mark", self.js)
 
@@ -214,10 +215,18 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("initChartGallery('#crypto-chart-grid'", self.js)
 
     def test_live_setups_collapsed_and_recent_activity_folded(self):
+        combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
+        self.assertEqual(len(combined_pnl_rows), 4)
+        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, {"ABT", "HOOD"})
+        for symbol in {symbol for _, symbol in combined_pnl_rows}:
+            values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
+            self.assertEqual(len(values), 1, symbol)
+            self.assertRegex(next(iter(values)), r"^[+−]\d+\.\d%$")
         self.assertIn('aria-expanded="false" aria-controls="${detailId}"', self.js)
         self.assertIn('>View setup</button>', self.js)
         self.assertIn('data-position-symbol="${symbol}" hidden>', self.js)
         self.assertIn("renderSetupChartForSymbol($('[data-position-chart-shell]', detail)", self.js)
+        self.assertIn("const combinedPnl = t.dataset.symbolPnl || '—';", self.js)
         self.assertIn('Monitor FDA’s formal peptide-action schedule and the next PCAC meeting date', self.js)
         self.assertIn('Wait for HIMS to sink below $25 before adding.', self.js)
         self.assertIn('#positions-panel .portfolio-grid { grid-template-columns: 1fr; }', self.html)

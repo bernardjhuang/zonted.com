@@ -37,16 +37,12 @@
         .bl-meta { font-size: 13px; color: var(--bl-muted); text-wrap: pretty; }
         .bl-meta .trading-stamp { display: inline; padding: 0; border: 0; margin: 0; font: inherit; color: inherit; text-transform: none; letter-spacing: normal; }
         .bl-meta .trading-stamp::before { content: none; }
-        .bl-tools { margin-left: auto; display: flex; gap: 8px; }
-        .bl-search { width: 200px; border: 1px solid var(--bl-input); border-radius: 6px; padding: 8px 12px; font: 400 13px var(--bl-sans); color: var(--bl-ink); background: var(--bl-card); }
-        .bl-search::placeholder { color: var(--bl-faint); }
-        .bl-btn { border: 1px solid var(--bl-input); border-radius: 6px; padding: 8px 12px; background: var(--bl-card); font: 500 13px var(--bl-sans); color: var(--bl-ink2); cursor: pointer; }
-        .bl-btn:hover { background: var(--bl-rowhead); }
+
         .bl button, .bl summary { touch-action: manipulation; -webkit-tap-highlight-color: rgba(47, 95, 179, .14); }
         .trading-tabs { display: flex; gap: 24px; border: 0; padding: 0; overflow-x: auto; }
         .trading-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 0 12px; font: 500 13.5px var(--bl-sans); color: var(--bl-muted); cursor: pointer; white-space: nowrap; letter-spacing: 0; text-transform: none; }
         .trading-tab:hover { color: var(--bl-ink); }
-        .trading-tab:focus-visible, .bl-btn:focus-visible, .bl-chip:focus-visible, .bl-reset:focus-visible, .data-select:focus-visible, .segmented button:focus-visible, .bl summary:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
+        .trading-tab:focus-visible, .bl-chip:focus-visible, .bl-reset:focus-visible, .data-select:focus-visible, .segmented button:focus-visible, .bl summary:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
         .trading-tab[aria-selected="true"] { color: var(--bl-ink); border-bottom-color: var(--bl-accent); }
         .trading-tab-count { background: none; color: var(--bl-faint); font-size: 12px; padding: 0; margin-left: 4px; min-width: 0; }
         .bl-filters { display: flex; align-items: center; gap: 8px; padding: 16px 40px; flex-wrap: wrap; }
@@ -429,9 +425,7 @@
             .bl-header, .bl-filters, .bl-body { padding-left: 16px; padding-right: 16px; }
             .bl-header-row { align-items: flex-start; }
             .bl-meta { flex: 1 1 calc(100% - 90px); }
-            .bl-tools { order: 3; width: 100%; margin-left: 0; }
-            .bl-search { flex: 1 1 auto; width: auto; min-width: 0; }
-            .bl-search, .bl-btn, .bl-chip, .bl-reset, .segmented button, .data-select { min-height: 44px; }
+            .bl-chip, .bl-reset, .segmented button, .data-select { min-height: 44px; }
             .trading-tabs { gap: 18px; scroll-padding-inline: 16px; -webkit-overflow-scrolling: touch; }
             .trading-tab { min-height: 44px; }
             .trading-takeaway { margin-left: 16px; margin-right: 16px; font-size: 15px; }
@@ -509,10 +503,7 @@
             <div class="bl-header-row">
                 <h1 class="bl-title">Trading</h1>
                 <span class="bl-meta">Public portfolio · <span class="trading-stamp">Snapshot · July 24, 2026</span> · quantity-free</span>
-                <div class="bl-tools" id="bl-tools">
-                    <input type="search" id="bl-q" name="symbol" class="bl-search" placeholder="Find a portfolio symbol…" aria-label="Find a portfolio symbol" autocomplete="off" spellcheck="false">
-                    <button type="button" id="bl-export" class="bl-btn">Download positions CSV</button>
-                </div>
+
             </div>
             <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
@@ -542,15 +533,15 @@
                 <div class="position-group">
                     <h3>Equities</h3>
                     <ul class="ticker-list" aria-label="Robinhood equity positions">
-                        <li class="ticker"><span class="ticker-symbol">ABT</span></li>
-                        <li class="ticker"><span class="ticker-symbol">HOOD</span></li>
+                        <li class="ticker" data-symbol-pnl="+15.0%"><span class="ticker-symbol">ABT</span></li>
+                        <li class="ticker" data-symbol-pnl="−10.0%"><span class="ticker-symbol">HOOD</span></li>
                     </ul>
                 </div>
                 <div class="position-group">
                     <h3>Options</h3>
                     <ul class="ticker-list" aria-label="Robinhood option positions">
-                        <li class="ticker"><span class="ticker-symbol">ABT</span><span class="ticker-name">Call 120.0000 2027-01-15</span></li>
-                        <li class="ticker"><span class="ticker-symbol">HOOD</span><span class="ticker-name">Call 125.0000 2027-01-15</span></li>
+                        <li class="ticker" data-symbol-pnl="+15.0%"><span class="ticker-symbol">ABT</span><span class="ticker-name">Call 120.0000 2027-01-15</span></li>
+                        <li class="ticker" data-symbol-pnl="−10.0%"><span class="ticker-symbol">HOOD</span><span class="ticker-name">Call 125.0000 2027-01-15</span></li>
                     </ul>
                 </div>
             </section>
@@ -2634,7 +2625,7 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-24-hims-monitoring"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-24-combined-position-pnl"></script>
     <script src="/js/trading-youtube.js?v=2026-07-24-v1"></script>
 </body>
 </html>
