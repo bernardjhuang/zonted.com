@@ -36,7 +36,7 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 9, "expected nine tabs")
+        check(desktop.locator(".trading-tab").count() == 10, "expected ten tabs")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         position_toggles = desktop.locator("#bl-built [data-position-chart-toggle]")
         check(position_toggles.count() >= 1, "expected at least one live position setup")
@@ -110,11 +110,17 @@ def main() -> None:
         desktop.goto(f"{args.url}{query_separator}vwap=EWY#vwap", wait_until="networkidle")
         check(desktop.locator("#vwap-chart-grid .vwap-chart").count() == 12, "expected SPY plus eleven US sector charts")
         check(desktop.locator("#vwap-country-chart-grid .vwap-chart").count() == 10, "expected ten separate country charts")
-        check(desktop.locator("#vwap-chart-grid .vwap-chart").first.get_attribute("data-sym") == "SPY", "country deep link leaked into the US sector gallery")
+        us_first = desktop.locator("#vwap-panel table").nth(0).locator("tbody tr").first.locator("td").first.inner_text()
+        check(desktop.locator("#vwap-chart-grid .vwap-chart").first.get_attribute("data-sym") == us_first, "US chart order does not match the 50D Z table ranking")
+        us_z = desktop.locator("#vwap-panel table").nth(0).locator("tbody tr td:nth-child(3)").evaluate_all("cells => cells.map(cell => Number.parseFloat(cell.textContent))")
+        country_z = desktop.locator("#vwap-panel table").nth(1).locator("tbody tr td:nth-child(3)").evaluate_all("cells => cells.map(cell => Number.parseFloat(cell.textContent))")
+        check(us_z == sorted(us_z, reverse=True) and country_z == sorted(country_z, reverse=True), "VWAP tables are not sorted by 50D Z descending")
         check(desktop.locator("#vwap-country-chart-grid .vwap-chart").first.get_attribute("data-sym") == "EWY", "country deep-linked chart was not promoted first")
         check(desktop.locator("#vwap-panel table").count() == 2, "expected separate US and country VWAP tables")
         check(desktop.locator("#vwap-panel th", has_text="50D Z").count() == 2, "VWAP tables are missing 50D Z columns")
-        check(desktop.locator("#vwap-country-chart-grid .vwap-chart svg[aria-label*='z-score']").count() == 10, "country charts are missing Z-score panels")
+        check(desktop.locator("#vwap-panel table").evaluate_all("tables => tables.every(table => table.tHead.rows[0].cells[2].textContent.trim() === '50D Z')"), "50D Z is not centered in both VWAP tables")
+        check(desktop.locator("#vwap-panel .vwap-chart svg[aria-label*='z-score']").count() == 22, "not every VWAP chart has a Z-score panel")
+        check(desktop.locator("#vwap-panel .vwap-z-badge").count() == 22, "not every VWAP chart has a visible 50D Z value")
         check(desktop.locator("[data-vwap-select], [data-vwap-scope-button]").count() == 0, "retired VWAP picker controls remain")
 
         desktop.goto(args.url + "#congress", wait_until="networkidle")
@@ -137,6 +143,13 @@ def main() -> None:
         check(desktop.locator("#crypto-panel th", has_text="Spread Z vs BTC").count() == 1, "Crypto table is missing the explicit Z-score column")
         check(desktop.locator("[data-crypto-select]").count() == 0, "retired Crypto picker controls remain")
 
+        desktop.goto(args.url + "#youtube", wait_until="networkidle")
+        check(desktop.locator("#youtube-tab").get_attribute("aria-selected") == "true", "YouTube deep link did not activate")
+        check(desktop.locator("#youtube-tickers-shell tbody tr").count() == 141, "YouTube ticker table is incomplete")
+        check(desktop.locator("#youtube-creators-shell tbody tr").count() == 25, "YouTube creator table is incomplete")
+        check(desktop.locator("#youtube-videos-shell tbody tr").count() == 125, "YouTube source-video table is incomplete")
+        check(desktop.locator("#youtube-videos-shell a[href*='youtube.com/watch']").count() == 125, "YouTube source links are incomplete")
+
         desktop.goto(args.url + "#log", wait_until="networkidle")
         check(desktop.locator("#positions-tab").get_attribute("aria-selected") == "true", "legacy #log did not land on Portfolio")
 
@@ -150,7 +163,7 @@ def main() -> None:
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#results"):
+        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#results", "#youtube"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -165,7 +178,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (9 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (10 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":
