@@ -45,6 +45,10 @@ class TradingUiContractTest(unittest.TestCase):
             )
         }
         self.assertEqual(set(details), {"ABT", "BYDDY", "HIMS", "HOOD", "NTDOY", "RBLX"})
+        self.assertIn('<span class="hypothesis-status">Watch · thesis only</span>', self.html)
+        self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
+        self.assertIn('<strong>No position.</strong>', details["HIMS"])
+        self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
         for symbol, block in details.items():
             self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
