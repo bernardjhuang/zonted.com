@@ -40,6 +40,10 @@ def main() -> None:
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
         check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
+        check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
+        source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
+        card_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-built [data-position-row]')].map(row => [row.dataset.positionSymbol, row.querySelector('.portfolio-card-head .mono').textContent.trim()]))""")
+        check(source_pnl == card_pnl and set(card_pnl) == {"ABT", "HOOD"}, "portfolio cards do not show combined equity + option P&L")
         position_toggles = desktop.locator("#bl-built [data-position-chart-toggle]")
         check(position_toggles.count() >= 1, "expected at least one live position setup")
         check(position_toggles.evaluate_all("nodes => nodes.every(node => node.getAttribute('aria-expanded') === 'false')"), "live position setups are not collapsed by default")
@@ -83,7 +87,6 @@ def main() -> None:
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
         check(desktop.evaluate("scrollY") == 0, "tab switch moved the page vertically")
-        check(desktop.locator("#bl-tools").is_hidden(), "portfolio tools leaked into Momentum")
         check(desktop.locator("#scan-panel").is_visible(), "Momentum panel did not activate")
         check(desktop.locator("#scan-panel .sector-summary details").evaluate("node => node.open"), "Momentum sectors are not expanded by default")
         check(desktop.locator("#scan-panel .scan-sector").count() == 11, "expected eleven formatted sector cards")
@@ -180,9 +183,6 @@ def main() -> None:
             widths = mobile.evaluate("({body: document.body.scrollWidth, html: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth})")
             check(widths["body"] <= widths["viewport"] and widths["html"] <= widths["viewport"], f"page-level overflow on {route or 'Portfolio'}: {widths}")
             check(mobile.locator(".trading-tab").first.evaluate("node => node.getBoundingClientRect().height") >= 44, "mobile tab target below 44px")
-            if not route:
-                check(mobile.locator("#bl-q").evaluate("node => node.getBoundingClientRect().height") >= 44, "mobile search target below 44px")
-                check(mobile.locator("#bl-export").evaluate("node => node.getBoundingClientRect().height") >= 44, "mobile download target below 44px")
             check(not mobile_errors, f"mobile JavaScript errors on {route or 'Portfolio'}: {mobile_errors}")
             mobile.close()
 

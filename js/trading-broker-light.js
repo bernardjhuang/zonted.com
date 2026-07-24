@@ -61,8 +61,7 @@
     panels.forEach(p => { p.hidden = p !== target; });
     const filters = $('#bl-filters');
     if (filters) filters.hidden = target.id !== 'positions-panel';
-    const tools = $('#bl-tools');
-    if (tools) tools.hidden = target.id !== 'positions-panel';
+
     const tabStrip = tab.parentElement;
     if (tabStrip.scrollWidth > tabStrip.clientWidth) {
       // Instant scrollLeft assignment: behavior:'smooth' silently no-ops in some
@@ -599,18 +598,19 @@
       const sym = (($('.ticker-symbol', t) || {}).textContent || '').trim();
       if (!sym) return;
       const name = (($('.ticker-name', t) || {}).textContent || '').trim();
+      const combinedPnl = t.dataset.symbolPnl || '—';
       if (/^Options$/i.test(h)) {
         const m = name.match(/(Call|Put)\s+([\d.]+)\s+(\d{4}-\d{2}-\d{2})/i);
         positions.push({
           sym, type: 'Option', side: m ? m[1] : '—',
           strike: m ? (+m[2]).toFixed(2) : '—', strikeN: m ? +m[2] : -1,
           expiry: m ? fmtISO(m[3]) : '—', expiryISO: m ? m[3] : '',
-          since: sinceEntry[(sym + ' ' + (m ? m[1].toLowerCase() : '')).toLowerCase()] || '—',
+          since: combinedPnl !== '—' ? combinedPnl : sinceEntry[(sym + ' ' + (m ? m[1].toLowerCase() : '')).toLowerCase()] || '—',
         });
       } else {
         const side = /short/i.test(h) || /short/i.test(name) ? 'Short' : 'Long';
         positions.push({ sym, type: 'Equity', side, strike: '—', strikeN: -1, expiry: '—', expiryISO: '',
-          since: sinceEntry[(sym + ' shares').toLowerCase()] || '—' });
+          since: combinedPnl !== '—' ? combinedPnl : sinceEntry[(sym + ' shares').toLowerCase()] || '—' });
       }
     });
   });
@@ -710,27 +710,7 @@
     $$(`.bl-chip[data-g="${g}"]`).forEach(c => c.classList.toggle('on', c === chip));
     render();
   }));
-  const qInput = $('#bl-q');
-  if (qInput) qInput.addEventListener('input', () => { state.q = qInput.value; render(); });
-  const reset = $('#bl-reset');
-  if (reset) reset.addEventListener('click', () => {
-    state.q = ''; state.asset = 'All'; state.status = 'All';
-    if (qInput) qInput.value = '';
-    $$('.bl-chip[data-g]').forEach(c => c.classList.toggle('on', c.dataset.v === 'All' || c.dataset.v === 'All assets' || c.textContent.startsWith('All')));
-    render();
-  });
-  const exportBtn = $('#bl-export');
-  if (exportBtn) exportBtn.addEventListener('click', () => {
-    const esc = v => `"${String(v).replace(/"/g, '""')}"`;
-    const lines = [['symbol', 'type', 'side', 'strike', 'expiry', 'since_entry'].join(',')];
-    positions.forEach(p => lines.push([p.sym, p.type, p.side, p.strike, p.expiry, p.since].map(esc).join(',')));
-    const blob = new Blob([lines.join('\n')], { type: 'text/csv' });
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'zonted-positions.csv';
-    a.click();
-    URL.revokeObjectURL(a.href);
-  });
+
 
   /* ── mobile affordances: tab-strip edge fades, table scroll hints, brief collapse ── */
   function stripEdges() {
