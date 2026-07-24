@@ -34,8 +34,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_hypotheses_are_explicit_and_scannable(self):
-        self.assertIn('Hypotheses <span class="trading-tab-count">3</span>', self.html)
-        self.assertEqual(self.html.count('data-hypothesis-symbol='), 3)
+        self.assertIn('Hypotheses <span class="trading-tab-count">6</span>', self.html)
+        self.assertEqual(self.html.count('data-hypothesis-symbol='), 6)
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
@@ -44,7 +44,7 @@ class TradingUiContractTest(unittest.TestCase):
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "HIMS", "HOOD"})
+        self.assertEqual(set(details), {"ABT", "BYDDY", "HIMS", "HOOD", "NTDOY", "RBLX"})
         for symbol, block in details.items():
             self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
@@ -56,6 +56,18 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('$69.1B', details["HOOD"])
         self.assertIn('Monthly operating metrics', details["HOOD"])
         self.assertIn('June 2026 month-to-date trading update', details["HOOD"])
+        self.assertIn('403,472 June NEV sales', details["BYDDY"])
+        self.assertIn('175,349 exports', details["BYDDY"])
+        self.assertIn('humanoid development', details["BYDDY"])
+        self.assertIn('July production and sales volume', details["BYDDY"])
+        self.assertIn('19.86M Switch 2 units', details["NTDOY"])
+        self.assertIn('16.50M units', details["NTDOY"])
+        self.assertIn('August 6, 2026', details["NTDOY"])
+        self.assertIn('$449.99 to $499.99', details["NTDOY"])
+        self.assertIn('35% to 132M', details["RBLX"])
+        self.assertIn('monetized over 50% better', details["RBLX"])
+        self.assertIn('July 30, 2026', details["RBLX"])
+        self.assertIn('$596M', details["RBLX"])
 
     def test_results_is_ytd_percentage_only(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
@@ -122,7 +134,7 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_chart_payloads_are_external_and_small_shell(self):
         # Thesis copy stays server-rendered for no-JS access; charts remain external.
-        self.assertLess(PAGE.stat().st_size, 285_000)
+        self.assertLess(PAGE.stat().st_size, 300_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json"):

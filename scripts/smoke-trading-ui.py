@@ -66,7 +66,10 @@ def main() -> None:
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='HIMS']").count() == 1, "HIMS hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='ABT']").count() == 1, "ABT hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='HOOD']").count() == 1, "HOOD hypothesis is missing")
-        for symbol in ("abt", "hood", "hims"):
+        check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='BYDDY']").count() == 1, "BYDDY hypothesis is missing")
+        check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='NTDOY']").count() == 1, "NTDOY hypothesis is missing")
+        check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='RBLX']").count() == 1, "RBLX hypothesis is missing")
+        for symbol in ("abt", "hood", "hims", "byddy", "ntdoy", "rblx"):
             check(desktop.locator(f"#hypothesis-{symbol}-setup").is_visible(), f"{symbol.upper()} setup is not unfolded")
             check(desktop.locator(f"#hypothesis-{symbol}-setup .hypothesis-block").count() == 6, f"{symbol.upper()} setup is incomplete")
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='benefit']").count() == 1, f"{symbol.upper()} benefit scan is missing")
