@@ -9,8 +9,8 @@
 #   RESEND_API_KEY=re_xxx ./scripts/send-newsletter.sh broadcast
 set -euo pipefail
 
-HTML_FILE="$(dirname "$0")/../_newsletters/2026-07-17-bernard-lm.html"
-SUBJECT="I trained a GPT on 15 years of my life"
+HTML_FILE="$(dirname "$0")/../_newsletters/2026-07-24-hims-chase.html"
+SUBJECT="The panel said yes. The stock said you're late."
 FROM="Bernard Huang <bernard@zonted.com>"
 TEST_TO="psyduckler@gmail.com"
 AUDIENCE_ID="3282e3a7-f68b-45fb-99fa-4f203f203892"   # "General" audience (same as subscribe.js fallback)
