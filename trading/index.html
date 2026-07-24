@@ -2321,11 +2321,11 @@
                     <h2 id="vwap-heading">VWAP</h2>
                     <span>July 23, 2026 close · anchor Jan 2, 2026</span>
                 </div>
-                <p class="trading-takeaway">8 of 12 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
+                <p class="trading-takeaway">8 of 13 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
                 <section class="vwap-market-section" aria-labelledby="vwap-us-heading">
-                <h3 id="vwap-us-heading">US market + sectors</h3>
+                <h3 id="vwap-us-heading">US market + sectors + themes</h3>
                 <div class="scan-table-wrap">
-                <table class="scan-table scan-table--compact" aria-label="US market and sector year-to-date VWAP summary">
+                <table class="scan-table scan-table--compact" aria-label="US market, sector, and theme year-to-date VWAP summary">
                     <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
                     <tbody>
                     <tr data-vwap-scope="us">
@@ -2392,6 +2392,13 @@
                         <td class="scan-num">▼ since Jul 23 (1d)</td>
                     </tr>
                     <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">ESPO</span></td>
+                        <td class="scan-sec">Gaming</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.39</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-7.4%</span></td>
+                        <td class="scan-num">▼ since Jan 30 (120d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
                         <td class="scan-sym"><span translate="no">XLB</span></td>
                         <td class="scan-sec">Materials</td>
                         <td class="scan-num"><span class="scan-z-neg">-0.50</span></td>
@@ -2415,8 +2422,8 @@
                     </tbody>
                 </table>
                 </div>
-                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=5c16b43296ba" data-symbols="XLE,XLF,XLU,XLV,XLRE,XLI,SPY,XLK,XLP,XLB,XLC,XLY" aria-live="polite">
-                    <p class="bl-empty">Loading SPY and 11 sector charts…</p>
+                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=68495de8fc62" data-symbols="XLE,XLF,XLU,XLV,XLRE,XLI,SPY,XLK,XLP,ESPO,XLB,XLC,XLY" aria-live="polite">
+                    <p class="bl-empty">Loading SPY, 11 sector charts, and ESPO Gaming…</p>
                 </div>
                 </section>
                 <section class="vwap-market-section vwap-country-section" aria-labelledby="vwap-countries-heading">
@@ -2499,11 +2506,11 @@
                     </tbody>
                 </table>
                 </div>
-                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=5c16b43296ba" data-symbols="THD,EWZ,KWEB,EWJ,MCHI,EWY,EWG,INDA,EZA,VNM" aria-live="polite">
+                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=68495de8fc62" data-symbols="THD,EWZ,KWEB,EWJ,MCHI,EWY,EWG,INDA,EZA,VNM" aria-live="polite">
                     <p class="bl-empty">Loading 10 country charts…</p>
                 </div>
                 </section>
-                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
+                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector, theme, and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
             </section>
             <!-- AUTO:VWAP:END -->
 

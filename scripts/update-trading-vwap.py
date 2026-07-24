@@ -3,7 +3,7 @@
 
 Reads the newest ~/trading/scans/sector-vwap-*.json (or a path
 specified as argv[1]) emitted by ~/trading/src/sector_vwap_charts.py
-and renders the "VWAP" tab: US market/sector charts first, followed by a
+and renders the "VWAP" tab: US market/sector/theme charts first, followed by a
 separate country section, loaded from trading/vwap-charts.json.
 
 Usage: python3 scripts/update-trading-vwap.py [path/to/sector-vwap-YYYY-MM-DD.json]
@@ -28,6 +28,7 @@ W, H = 560, 240
 ML, MR, MT, MB = 10, 58, 12, 26
 COUNTRY_ETFS = {"INDA", "EWY", "EWZ", "MCHI", "KWEB", "EWG", "EZA", "EWJ", "THD", "VNM"}
 SECTOR_ETFS = {"XLK", "XLY", "XLV", "XLF", "XLI", "XLE", "XLP", "XLC", "XLU", "XLRE", "XLB"}
+THEMATIC_ETFS = {"ESPO": "Gaming"}
 
 
 def fmt(d):
@@ -201,21 +202,26 @@ def main():
 
     spy_summary = [s for s in summary if s["sym"] == "SPY"]
     sector_summary = [s for s in summary if s["sym"] in SECTOR_ETFS]
+    thematic_summary = [s for s in summary if s["sym"] in THEMATIC_ETFS]
     if len(spy_summary) != 1 or len(sector_summary) != 11 or any(s.get("z") is None for s in sector_summary):
         sys.exit("Expected SPY plus 11 sector summaries with current Z scores")
+    if ({s["sym"] for s in thematic_summary} != set(THEMATIC_ETFS)
+            or any(s.get("z") is None or s.get("name") != THEMATIC_ETFS[s["sym"]]
+                   for s in thematic_summary)):
+        sys.exit("Expected ESPO Gaming theme summary with a current Z score")
     spy_z50 = z50(series["SPY"]["close"])
     series["SPY"]["z50"] = [round(value, 6) if value is not None else None for value in spy_z50]
     spy_summary[0]["z"] = round(next(value for value in reversed(spy_z50) if value is not None), 2)
-    us_summary = sorted([*spy_summary, *sector_summary], key=lambda s: (-s["z"], s["sym"]))
+    us_summary = sorted([*spy_summary, *sector_summary, *thematic_summary], key=lambda s: (-s["z"], s["sym"]))
     country_summary = sorted((s for s in summary if s["sym"] in COUNTRY_ETFS),
                              key=lambda s: (-s["z"], s["sym"]))
-    expected_symbols = {"SPY"} | SECTOR_ETFS | COUNTRY_ETFS
-    if len(us_summary) != 12 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
-        sys.exit("Expected SPY + 11 US sector ETFs and all 10 country ETFs")
+    expected_symbols = {"SPY"} | SECTOR_ETFS | set(THEMATIC_ETFS) | COUNTRY_ETFS
+    if len(us_summary) != 13 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
+        sys.exit("Expected SPY + 11 US sector ETFs + ESPO and all 10 country ETFs")
     if any(s.get("z") is None for s in country_summary):
         sys.exit("Expected all 10 country summaries to include current Z scores")
     if set(series) != expected_symbols or {s["sym"] for s in summary} != expected_symbols:
-        sys.exit("VWAP summary/series symbols do not match the exact 22-symbol contract")
+        sys.exit("VWAP summary/series symbols do not match the exact 23-symbol contract")
     summary_by_symbol = {s["sym"]: s for s in summary}
     for sym, values in series.items():
         dates, close, vwap = values.get("dates"), values.get("close"), values.get("vwap")
@@ -283,9 +289,9 @@ def main():
                 </div>
                 <p class="trading-takeaway">{html.escape(takeaway)}</p>
                 <section class="vwap-market-section" aria-labelledby="vwap-us-heading">
-                <h3 id="vwap-us-heading">US market + sectors</h3>
+                <h3 id="vwap-us-heading">US market + sectors + themes</h3>
                 <div class="scan-table-wrap">
-                <table class="scan-table scan-table--compact" aria-label="US market and sector year-to-date VWAP summary">
+                <table class="scan-table scan-table--compact" aria-label="US market, sector, and theme year-to-date VWAP summary">
                     <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
                     <tbody>
 {us_rows}
@@ -293,7 +299,7 @@ def main():
                 </table>
                 </div>
                 <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v={asset_hash}" data-symbols="{','.join(us_symbols)}" aria-live="polite">
-                    <p class="bl-empty">Loading SPY and 11 sector charts…</p>
+                    <p class="bl-empty">Loading SPY, 11 sector charts, and ESPO Gaming…</p>
                 </div>
                 </section>
                 <section class="vwap-market-section vwap-country-section" aria-labelledby="vwap-countries-heading">
@@ -311,7 +317,7 @@ def main():
                     <p class="bl-empty">Loading 10 country charts…</p>
                 </div>
                 </section>
-                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
+                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector, theme, and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
             </section>"""
 
     page = open(PAGE).read()

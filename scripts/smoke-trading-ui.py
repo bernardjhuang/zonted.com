@@ -111,8 +111,10 @@ def main() -> None:
             desktop.wait_for_function("id => document.querySelectorAll(`#${id} svg`).length === 2", arg=detail_id)
 
         desktop.goto(f"{args.url}{query_separator}vwap=EWY#vwap", wait_until="networkidle")
-        check(desktop.locator("#vwap-chart-grid .vwap-chart").count() == 12, "expected SPY plus eleven US sector charts")
+        check(desktop.locator("#vwap-chart-grid .vwap-chart").count() == 13, "expected SPY, eleven US sector charts, and ESPO Gaming")
         check(desktop.locator("#vwap-country-chart-grid .vwap-chart").count() == 10, "expected ten separate country charts")
+        check(desktop.locator("#vwap-chart-grid .vwap-chart[data-sym='ESPO']").count() == 1, "ESPO Gaming chart is missing")
+        check(desktop.locator("#vwap-panel table").nth(0).locator("tbody tr", has_text="ESPO").count() == 1, "ESPO Gaming summary row is missing")
         us_first = desktop.locator("#vwap-panel table").nth(0).locator("tbody tr").first.locator("td").first.inner_text()
         check(desktop.locator("#vwap-chart-grid .vwap-chart").first.get_attribute("data-sym") == us_first, "US chart order does not match the 50D Z table ranking")
         us_z = desktop.locator("#vwap-panel table").nth(0).locator("tbody tr td:nth-child(3)").evaluate_all("cells => cells.map(cell => Number.parseFloat(cell.textContent))")
@@ -122,8 +124,8 @@ def main() -> None:
         check(desktop.locator("#vwap-panel table").count() == 2, "expected separate US and country VWAP tables")
         check(desktop.locator("#vwap-panel th", has_text="50D Z").count() == 2, "VWAP tables are missing 50D Z columns")
         check(desktop.locator("#vwap-panel table").evaluate_all("tables => tables.every(table => table.tHead.rows[0].cells[2].textContent.trim() === '50D Z')"), "50D Z is not centered in both VWAP tables")
-        check(desktop.locator("#vwap-panel .vwap-chart svg[aria-label*='z-score']").count() == 22, "not every VWAP chart has a Z-score panel")
-        check(desktop.locator("#vwap-panel .vwap-z-badge").count() == 22, "not every VWAP chart has a visible 50D Z value")
+        check(desktop.locator("#vwap-panel .vwap-chart svg[aria-label*='z-score']").count() == 23, "not every VWAP chart has a Z-score panel")
+        check(desktop.locator("#vwap-panel .vwap-z-badge").count() == 23, "not every VWAP chart has a visible 50D Z value")
         check(desktop.locator("[data-vwap-select], [data-vwap-scope-button]").count() == 0, "retired VWAP picker controls remain")
 
         desktop.goto(args.url + "#congress", wait_until="networkidle")

@@ -153,11 +153,13 @@ class TradingUiContractTest(unittest.TestCase):
     def test_generated_asset_contracts(self):
         vwap = json.loads((ROOT / "trading" / "vwap-charts.json").read_text())
         crypto = json.loads((ROOT / "trading" / "crypto-charts.json").read_text())
-        self.assertEqual(len(vwap["charts"]), 22)
+        self.assertEqual(len(vwap["charts"]), 23)
         self.assertEqual(len(crypto["charts"]), 7)
         self.assertEqual(vwap["default"], "SPY")
-        self.assertEqual(len(vwap["groups"]["us"]), 12)
+        self.assertEqual(len(vwap["groups"]["us"]), 13)
         self.assertEqual(len(vwap["groups"]["countries"]), 10)
+        self.assertIn("ESPO", vwap["groups"]["us"])
+        self.assertIn("<span>Gaming</span>", vwap["charts"]["ESPO"])
         self.assertTrue(all('"z50"' in chart for chart in vwap["charts"].values()))
         self.assertTrue(all("50D Z SCORE" in chart and "vwap-z-badge" in chart for chart in vwap["charts"].values()))
         us_z = [json.loads(re.findall(r"data-d='([^']+)'", vwap["charts"][symbol])[0])["z50"][-1]
@@ -184,7 +186,7 @@ class TradingUiContractTest(unittest.TestCase):
     def test_vwap_shows_every_chart_without_picker_controls(self):
         self.assertIn('id="vwap-chart-grid"', self.html)
         self.assertIn('id="vwap-country-chart-grid"', self.html)
-        self.assertIn('id="vwap-us-heading">US market + sectors', self.html)
+        self.assertIn('id="vwap-us-heading">US market + sectors + themes', self.html)
         self.assertIn('id="vwap-countries-heading">Country markets', self.html)
         self.assertLess(self.html.index('id="vwap-chart-grid"'), self.html.index('id="vwap-countries-heading"'))
         self.assertIn('data-url="/trading/vwap-charts.json?', self.html)
