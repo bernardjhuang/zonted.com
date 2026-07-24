@@ -65,9 +65,13 @@
     if (tools) tools.hidden = target.id !== 'positions-panel';
     const tabStrip = tab.parentElement;
     if (tabStrip.scrollWidth > tabStrip.clientWidth) {
-      const left = tab.offsetLeft - (tabStrip.clientWidth - tab.offsetWidth) / 2;
-      tabStrip.scrollTo({ left, behavior: push ? 'smooth' : 'auto' });
+      // Instant scrollLeft assignment: behavior:'smooth' silently no-ops in some
+      // WebKit builds, and offsetLeft is body-relative here (strip is unpositioned).
+      const tr = tab.getBoundingClientRect(), sr = tabStrip.getBoundingClientRect();
+      tabStrip.scrollLeft += tr.left - sr.left - (tabStrip.clientWidth - tr.width) / 2;
     }
+    stripEdges();
+    markScrollableWraps(target);
     target.dispatchEvent(new CustomEvent('panelactivate'));
     if (push) {
       const hash = tab.id === 'positions-tab' ? '' : '#' + tab.id.replace(/-tab$/, '');
@@ -727,6 +731,39 @@
     a.click();
     URL.revokeObjectURL(a.href);
   });
+
+  /* ── mobile affordances: tab-strip edge fades, table scroll hints, brief collapse ── */
+  function stripEdges() {
+    const strip = $('.trading-tabs');
+    if (!strip) return;
+    strip.classList.toggle('tabs-fade-l', strip.scrollLeft > 4);
+    strip.classList.toggle('tabs-fade-r', strip.scrollLeft + strip.clientWidth < strip.scrollWidth - 4);
+  }
+  function markScrollableWraps(root) {
+    $$('.scan-table-wrap, .brief-table-wrap, .bl-card, .bl-position-chart-detail', root || document)
+      .forEach(w => w.classList.toggle('is-scrollable', w.scrollWidth > w.clientWidth + 4));
+  }
+  const tabStripEl = $('.trading-tabs');
+  if (tabStripEl) tabStripEl.addEventListener('scroll', stripEdges, { passive: true });
+  addEventListener('resize', () => { stripEdges(); markScrollableWraps(document); });
+  stripEdges();
+  markScrollableWraps(document);
+
+  // Brief tab on small screens: 20k+ px of expanded risk cards is unreadable.
+  // Show the first three per entry; the rest stay in-DOM behind one button.
+  if (matchMedia('(max-width: 720px)').matches) {
+    $$('#brief-panel .brief-entry').forEach(entry => {
+      const cards = $$('.brief-risk-card', entry);
+      if (cards.length <= 4) return;
+      cards.forEach((c, i) => { if (i >= 3) c.hidden = true; });
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'brief-more-btn';
+      btn.textContent = `Show all ${cards.length} risks`;
+      cards[2].after(btn);
+      btn.addEventListener('click', () => { cards.forEach(c => { c.hidden = false; }); btn.remove(); });
+    });
+  }
 
   document.querySelector('main.bl').classList.add('bl-enhanced');
   render();

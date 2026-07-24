@@ -447,6 +447,38 @@
             .activity-side { grid-area: side; display: block; }
             .activity-pnl-compact { grid-area: pnl; }
             .whale-flow-grid { padding-left: 16px; padding-right: 16px; }
+            /* keep the leading (ticker) column pinned while wide tables scroll sideways */
+            .bl .scan-table th:first-child, .bl .scan-table td:first-child:not([colspan]),
+            .brief-table th:first-child, .brief-table td:first-child:not([colspan]) {
+                position: sticky; left: 0; z-index: 2; background: var(--bl-card);
+                box-shadow: 1px 0 0 var(--bl-border);
+                max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            }
+            /* skip offscreen layout/paint inside the long panels */
+            .brief-risk-card, .hypothesis-block, .whale-card { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+        }
+        /* right-edge fade on regions that actually scroll sideways (class set by enhancer) */
+        .scan-table-wrap.is-scrollable, .brief-table-wrap.is-scrollable, .bl-card.is-scrollable, .bl-position-chart-detail.is-scrollable {
+            -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);
+        }
+        /* tab strip: fade the edge that has more tabs hiding behind it */
+        .trading-tabs.tabs-fade-r {
+            -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+        }
+        .trading-tabs.tabs-fade-l {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000);
+            mask-image: linear-gradient(90deg, transparent, #000 28px, #000);
+        }
+        .trading-tabs.tabs-fade-l.tabs-fade-r {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+        }
+        .brief-more-btn {
+            display: block; width: calc(100% - 32px); margin: 14px 16px; padding: 12px; min-height: 44px;
+            font: 600 13.5px var(--bl-sans); color: var(--bl-ink); background: var(--bl-card);
+            border: 1px solid var(--bl-border); border-radius: 8px; cursor: pointer;
         }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
@@ -2429,7 +2461,7 @@
             </span>
         </div>
     </footer>
-    <script src="/js/trading-broker-light.js?v=2026-07-23-hims-thesis-collapsed-v1"></script>
+    <script src="/js/trading-broker-light.js?v=2026-07-24-mobile-polish-v1"></script>
     <script src="/js/trading-youtube.js?v=2026-07-24-v1"></script>
 </body>
 </html>
