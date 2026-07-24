@@ -212,9 +212,14 @@ def main():
     spy_z50 = z50(series["SPY"]["close"])
     series["SPY"]["z50"] = [round(value, 6) if value is not None else None for value in spy_z50]
     spy_summary[0]["z"] = round(next(value for value in reversed(spy_z50) if value is not None), 2)
-    us_summary = sorted([*spy_summary, *sector_summary, *thematic_summary], key=lambda s: (-s["z"], s["sym"]))
+    def latest_exact_z(item):
+        values = series[item["sym"]].get("z50") or []
+        return next(float(value) for value in reversed(values) if value is not None)
+
+    us_summary = sorted([*spy_summary, *sector_summary, *thematic_summary],
+                        key=lambda s: (-latest_exact_z(s), s["sym"]))
     country_summary = sorted((s for s in summary if s["sym"] in COUNTRY_ETFS),
-                             key=lambda s: (-s["z"], s["sym"]))
+                             key=lambda s: (-latest_exact_z(s), s["sym"]))
     expected_symbols = {"SPY"} | SECTOR_ETFS | set(THEMATIC_ETFS) | COUNTRY_ETFS
     if len(us_summary) != 13 or {s["sym"] for s in country_summary} != COUNTRY_ETFS:
         sys.exit("Expected SPY + 11 US sector ETFs + ESPO and all 10 country ETFs")
