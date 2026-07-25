@@ -73,7 +73,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('July 30, 2026', details["RBLX"])
         self.assertIn('$596M', details["RBLX"])
 
-    def test_results_is_ytd_percentage_only(self):
+    def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
         self.assertIsNotNone(match)
         block = match.group(1) if match else ""
@@ -82,6 +82,23 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('YTD portfolio performance', block)
         self.assertIn('class="results-chart"', block)
         self.assertIn('Daily EOD snapshots', block)
+        self.assertIn('Quantity-free YTD outcome statistics', block)
+        self.assertIn('Positive outcomes', block)
+        self.assertIn('Last 30 days', block)
+        self.assertRegex(block, r'Current (wins|losses|none) streak')
+        self.assertIn('Quantities and dollar amounts are ignored', block)
+        stats = re.search(
+            r'data-results-wins="(\d+)" data-results-losses="(\d+)" '
+            r'data-results-breakevens="(\d+)" data-results-decided="(\d+)" '
+            r'data-results-win-rate="([\d.]+)"',
+            block,
+        )
+        if stats is None:
+            self.fail("quantity-free results data attributes are missing")
+        wins, losses, _breakevens, decided = map(int, stats.groups()[:4])
+        win_rate = float(stats.group(5))
+        self.assertEqual(decided, wins + losses)
+        self.assertAlmostEqual(win_rate, wins / decided * 100, places=1)
         for forbidden in ('$', 'balance', 'buying power', 'position', 'trade'):
             self.assertNotIn(forbidden, block.casefold())
 

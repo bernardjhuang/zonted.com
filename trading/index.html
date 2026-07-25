@@ -386,13 +386,23 @@
         .activity-row-compact { padding: 10px 14px; border-top: 1px solid var(--bl-divider); }
         .activity-row-compact:first-child { border-top: 0; }
         .activity-side { color: var(--bl-muted); font-size: 12px; text-transform: capitalize; }
-        .results-panel { min-height: min(680px, 72vh); place-items: center; }
+        .results-panel { min-height: min(760px, 78vh); place-items: center; }
         .results-panel:not([hidden]) { display: grid; }
-        .results-only { width: min(860px, 100%); padding: clamp(34px, 6vw, 68px) 20px; text-align: center; }
+        .results-only { box-sizing: border-box; width: min(920px, 100%); padding: clamp(34px, 5vw, 58px) 20px; text-align: center; }
         .results-kicker { color: var(--bl-muted); font: 700 12px var(--bl-mono); letter-spacing: .12em; text-transform: uppercase; }
-        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(58px, 13vw, 122px)/.9 var(--bl-mono); letter-spacing: -.08em; }
-        .results-only > p:not(.results-history) { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
-        .results-chart { display: block; width: 100%; height: auto; margin: 32px auto 12px; overflow: visible; }
+        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(54px, 11vw, 104px)/.9 var(--bl-mono); letter-spacing: -.08em; }
+        .results-only > p.positive, .results-only > p.negative { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
+        .results-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 30px 0 0; border-block: 1px solid var(--bl-divider); text-align: left; }
+        .results-stat { min-width: 0; padding: 16px; border-left: 1px solid var(--bl-divider); }
+        .results-stat:first-child { border-left: 0; }
+        .results-stat strong, .results-stat span, .results-stat small { display: block; }
+        .results-stat strong { color: var(--bl-ink); font: 700 25px var(--bl-mono); font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+        .results-stat-primary strong { color: var(--bl-gain); }
+        .results-stat span { margin-top: 4px; color: var(--bl-ink2); font: 700 11px var(--bl-sans); letter-spacing: .05em; text-transform: uppercase; }
+        .results-stat small { margin-top: 4px; color: var(--bl-faint); font: 500 11px/1.35 var(--bl-sans); }
+        .results-statline { margin: 13px 0 0; color: var(--bl-muted); font: 600 12px var(--bl-mono); }
+        .results-method { max-width: 720px; margin: 7px auto 0; color: var(--bl-faint); font: 500 12px/1.5 var(--bl-sans); }
+        .results-chart { display: block; width: 100%; height: auto; margin: 26px auto 12px; overflow: visible; }
         .results-grid { stroke: var(--bl-divider); stroke-width: 1; vector-effect: non-scaling-stroke; }
         .results-axis { fill: var(--bl-faint); font: 600 11px var(--bl-mono); }
         .results-area { fill: color-mix(in srgb, var(--bl-gain) 12%, transparent); }
@@ -430,7 +440,10 @@
             .trading-tab { min-height: 44px; }
             .trading-takeaway { margin-left: 16px; margin-right: 16px; font-size: 15px; }
             .data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .vwap-chart-grid, .crypto-chart-grid, .trading-method, .data-disclosure, .scan-universe-disclosure { margin-left: 16px; margin-right: 16px; }
-            .youtube-summary-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: 16px; margin-right: 16px; }
+            .youtube-summary-grid, .results-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: 16px; margin-right: 16px; }
+            .results-stat:nth-child(3) { border-left: 0; border-top: 1px solid var(--bl-divider); }
+            .results-stat:nth-child(4) { border-top: 1px solid var(--bl-divider); }
+            .results-statline, .results-method { margin-left: 16px; margin-right: 16px; }
             .youtube-download { margin-left: 16px; margin-right: 16px; }
             .scan-table-wrap { margin-left: 0; margin-right: 0; }
             .selected-chart { min-height: 200px; }
@@ -780,6 +793,14 @@
                     <span class="results-kicker">Robinhood · YTD</span>
                     <h2 id="results-heading">+284.20%</h2>
                     <p class="positive">YTD portfolio performance</p>
+                    <div class="results-stats" aria-label="Quantity-free YTD outcome statistics" data-results-wins="108" data-results-losses="97" data-results-breakevens="2" data-results-decided="205" data-results-win-rate="52.7">
+                        <div class="results-stat results-stat-primary"><strong>52.7%</strong><span>Win rate</span><small>108 wins · 97 losses</small></div>
+                        <div class="results-stat"><strong>108 / 205</strong><span>Positive outcomes</span><small>Every closed outcome counts once</small></div>
+                        <div class="results-stat"><strong>47.6%</strong><span>Last 30 days</span><small>39 wins · 82 decided</small></div>
+                        <div class="results-stat"><strong>9</strong><span>Current losses streak</span><small>Longest win 12 · loss 16</small></div>
+                    </div>
+                    <p class="results-statline">Outcome-majority days: 27 of 52 · 2 breakeven · 4 unavailable</p>
+                    <p class="results-method">Each broker realized-P&amp;L record counts once. Quantities and dollar amounts are ignored; breakevens are excluded from win rate.</p>
                     <svg class="results-chart" viewBox="0 0 720 270" role="img" aria-labelledby="results-chart-title results-chart-desc" data-results-points="2" data-results-sign="positive">
                         <title id="results-chart-title">Robinhood YTD performance over time</title>
                         <desc id="results-chart-desc">Daily end-of-day YTD percentage snapshots from July 23, 2026 through July 24, 2026.</desc>
