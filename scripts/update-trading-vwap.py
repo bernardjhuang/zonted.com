@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inject the YTD VWAP charts into trading/index.html (AUTO:VWAP block).
+"""Inject YTD sector/country VWAP into classic and routed VWAP surfaces.
 
 Reads the newest ~/trading/scans/sector-vwap-*.json (or a path
 specified as argv[1]) emitted by ~/trading/src/sector_vwap_charts.py
@@ -18,6 +18,8 @@ import math
 import os
 import re
 import sys
+
+from sync_trading_desk import sync_sections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
@@ -332,13 +334,14 @@ def main():
     old_asset = open(CHART_ASSET).read() if os.path.exists(CHART_ASSET) else None
     page_changed = new != page
     asset_changed = old_asset != asset_json
-    if not page_changed and not asset_changed:
-        print(f"[vwap] already current: {os.path.basename(path)}, {len(summary)} charts, last bar {p['last_bar']}")
-        return
     if page_changed:
         open(PAGE, "w").write(new)
     if asset_changed:
         open(CHART_ASSET, "w").write(asset_json)
+    routed_changed = bool(sync_sections(["vwap"]))
+    if not page_changed and not asset_changed and not routed_changed:
+        print(f"[vwap] already current: {os.path.basename(path)}, {len(summary)} charts, last bar {p['last_bar']}")
+        return
     print(f"[vwap] injected {os.path.basename(path)}: {len(summary)} charts, last bar {p['last_bar']}")
 
 
