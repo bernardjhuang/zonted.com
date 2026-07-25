@@ -36,9 +36,9 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 12, "expected twelve tabs")
+        check(desktop.locator(".trading-tab").count() == 9, "expected nine tabs")
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
-        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
+        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "scan-tab", "vwap-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
@@ -87,8 +87,10 @@ def main() -> None:
         desktop.goto(args.url + "#gpt-brief", wait_until="networkidle")
         check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "GPT brief deep link did not activate")
         check(desktop.locator("#gpt-brief-panel [data-event-id]").count() >= 1, "GPT brief has no event cards")
-        check("Market-wide focus" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is not market-wide")
+        check("Small-cap binary focus" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is not small-cap/binary focused")
         check("not by current holdings" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief still implies portfolio-centered selection")
+        check("White swan" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is missing white-swan outcomes")
+        check("Black swan" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is missing black-swan outcomes")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
@@ -141,32 +143,11 @@ def main() -> None:
         check(desktop.locator("#vwap-panel .vwap-z-badge").count() == 23, "not every VWAP chart has a visible 50D Z value")
         check(desktop.locator("[data-vwap-select], [data-vwap-scope-button]").count() == 0, "retired VWAP picker controls remain")
 
-        desktop.goto(args.url + "#congress", wait_until="networkidle")
-        congress_cards = desktop.locator("#congress-panel details.whale-card")
-        check(congress_cards.count() >= 2, "expected at least two Congress member disclosures")
-        congress_cards.nth(0).locator("summary").click()
-        congress_cards.nth(1).locator("summary").click()
-        check(not congress_cards.nth(0).evaluate("node => node.open") and congress_cards.nth(1).evaluate("node => node.open"), "Congress accordion allows multiple open cards")
-
-        desktop.goto(args.url + "#whales", wait_until="networkidle")
-        cards = desktop.locator("#whales-panel details.whale-card")
-        check(cards.count() >= 2, "expected at least two manager disclosures")
-        cards.nth(0).locator("summary").click()
-        cards.nth(1).locator("summary").click()
-        check(not cards.nth(0).evaluate("node => node.open") and cards.nth(1).evaluate("node => node.open"), "manager accordion allows multiple open cards")
-
         desktop.goto(f"{args.url}{query_separator}crypto=ETH#crypto", wait_until="networkidle")
         check(desktop.locator("#crypto-chart-grid .crypto-card").count() == 7, "expected all seven crypto charts")
         check(desktop.locator("#crypto-chart-grid .crypto-card").first.get_attribute("data-symbol") == "ETH", "Crypto deep-linked chart was not promoted first")
         check(desktop.locator("#crypto-panel th", has_text="Spread Z vs BTC").count() == 1, "Crypto table is missing the explicit Z-score column")
         check(desktop.locator("[data-crypto-select]").count() == 0, "retired Crypto picker controls remain")
-
-        desktop.goto(args.url + "#youtube", wait_until="networkidle")
-        check(desktop.locator("#youtube-tab").get_attribute("aria-selected") == "true", "YouTube deep link did not activate")
-        check(desktop.locator("#youtube-tickers-shell tbody tr").count() == 141, "YouTube ticker table is incomplete")
-        check(desktop.locator("#youtube-creators-shell tbody tr").count() == 25, "YouTube creator table is incomplete")
-        check(desktop.locator("#youtube-videos-shell tbody tr").count() == 125, "YouTube source-video table is incomplete")
-        check(desktop.locator("#youtube-videos-shell a[href*='youtube.com/watch']").count() == 125, "YouTube source links are incomplete")
 
         desktop.goto(args.url + "#risk", wait_until="networkidle")
         check(desktop.locator("#risk-tab").get_attribute("aria-selected") == "true", "Risk deep link did not activate")
@@ -207,7 +188,7 @@ def main() -> None:
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#risk", "#results", "#youtube"):
+        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#scan", "#vwap", "#crypto", "#risk", "#results"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -219,7 +200,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (12 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (9 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":

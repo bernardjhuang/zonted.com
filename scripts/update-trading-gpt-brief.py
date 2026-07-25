@@ -36,8 +36,8 @@ def validate(data: dict) -> None:
         raise ValueError("universe must be a non-empty list")
     if not isinstance(data["events"], list) or not data["events"]:
         raise ValueError("events must be a non-empty list")
-    if data["scope"] != "market-wide":
-        raise ValueError("GPT brief scope must be market-wide")
+    if data["scope"] != "market-wide-small-cap-binary":
+        raise ValueError("GPT brief scope must be market-wide-small-cap-binary")
     window_start = dt.date.fromisoformat(data["window_start"])
     window_end = dt.date.fromisoformat(data["window_end"])
     if not 35 <= (window_end - window_start).days <= 42:
@@ -45,11 +45,13 @@ def validate(data: dict) -> None:
     if len(data["events"]) > 8:
         raise ValueError("GPT brief must rank at most eight events")
     ids: set[str] = set()
+    primary_tickers: set[str] = set()
     for event in data["events"]:
         event_required = {
-            "id", "date", "date_status", "horizon", "tier", "category", "tickers",
-            "title", "confidence", "implication", "direction", "magnitude", "action",
-            "invalidation", "watch", "sources",
+            "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade",
+            "date", "date_status", "horizon", "tier", "category", "tickers", "title",
+            "confidence", "trigger", "implication", "white_swan", "base_case", "black_swan",
+            "why_mispriced", "magnitude", "action", "invalidation", "watch", "sources",
         }
         absent = event_required - event.keys()
         if absent:
@@ -57,6 +59,13 @@ def validate(data: dict) -> None:
         if event["id"] in ids:
             raise ValueError(f"duplicate event id: {event['id']}")
         ids.add(event["id"])
+        if event["primary_ticker"] in primary_tickers:
+            raise ValueError(f"duplicate primary ticker: {event['primary_ticker']}")
+        primary_tickers.add(event["primary_ticker"])
+        if event["primary_ticker"] not in event["tickers"]:
+            raise ValueError(f"primary ticker missing from tickers: {event['id']}")
+        if float(event["market_cap_usd"]) <= 0 or float(event["reference_price"]) <= 0:
+            raise ValueError(f"invalid market snapshot: {event['id']}")
         confidence = float(event["confidence"])
         if not 0 <= confidence <= 1:
             raise ValueError(f"invalid confidence for {event['id']}")
@@ -65,6 +74,8 @@ def validate(data: dict) -> None:
         for source in event["sources"]:
             if not valid_url(source.get("url", "")):
                 raise ValueError(f"invalid source URL for {event['id']}")
+    if sum(float(event["market_cap_usd"]) < 10_000_000_000 for event in data["events"]) < 6:
+        raise ValueError("at least six events must focus on sub-$10B companies")
 
 
 def render_panel(data: dict) -> str:

@@ -1,265 +1,255 @@
 {
-  "as_of": "2026-07-25T11:19:30-05:00",
-  "scope": "market-wide",
+  "as_of": "2026-07-25T11:37:15-05:00",
+  "scope": "market-wide-small-cap-binary",
   "window_start": "2026-07-25",
   "window_end": "2026-09-05",
-  "summary": "This is a market-wide six-week radar, not a portfolio brief. The highest-impact chain is mega-cap earnings at the end of July, the GLP-1 leaders on August 5, Walmart's consumer read on August 20, NVIDIA on August 26, Jackson Hole on August 27–29, and the August jobs report on September 4.",
-  "universe": [
-    "SPY",
-    "QQQ",
-    "TLT",
-    "MSFT",
-    "META",
-    "AAPL",
-    "AMZN",
-    "NVDA",
-    "AMD",
-    "AVGO",
-    "TSM",
-    "LLY",
-    "NVO",
-    "XLV",
-    "XBI",
-    "WMT",
-    "TGT",
-    "COST",
-    "HD",
-    "LOW",
-    "COIN",
-    "PYPL",
-    "SQ"
-  ],
+  "summary": "This is a ticker-specific binary-event radar, not an earnings calendar. Six of the eight names are below $10 billion in market value; CAPR, REPL, LGVN, RARE, and TENX carry genuine approval-or-collapse paths inside the next six weeks.",
+  "universe": ["CAPR", "REPL", "MRNA", "LNTH", "LGVN", "RARE", "JAZZ", "TENX"],
   "events": [
     {
-      "id": "fomc-2026-07-29",
-      "date": "July 29, 2026 · 2:00 PM ET",
+      "id": "capr-deramiocel-adcom-pdufa-2026",
+      "primary_ticker": "CAPR",
+      "market_cap_usd": 1163752052,
+      "reference_price": 19.75,
+      "binary_grade": "Extreme",
+      "date": "July 29 AdCom · August 22 PDUFA",
       "date_status": "confirmed",
-      "horizon": "week 1",
+      "horizon": "weeks 1 and 5",
       "tier": "Tier 1",
-      "category": "Macro / FOMC",
-      "tickers": ["SPY", "QQQ", "TLT", "XLF"],
-      "title": "Federal Reserve rate decision and press conference",
+      "category": "FDA / Cell therapy",
+      "tickers": ["CAPR"],
+      "title": "Deramiocel for Duchenne cardiomyopathy",
       "confidence": 1.0,
-      "implication": "The decision sets the discount-rate backdrop for the entire six-week window and lands hours before the first mega-cap earnings cluster. Rates, banks, high-duration technology, and housing-sensitive stocks can all reprice together.",
-      "direction": "Hawkish guidance is bearish duration and bonds; a dovish read is supportive unless the shift reflects a sharp growth scare.",
-      "magnitude": "No single-stock percentage is defensible for a macro event. Use the 2-year yield, TLT, QQQ, and breadth to measure the actual shock.",
-      "action": "Record the statement, vote, and Powell's inflation/growth language before interpreting same-day earnings reactions.",
-      "invalidation": "A fully expected decision with unchanged guidance and a muted rates response.",
-      "watch": "2-year Treasury yield, QQQ versus XLF, TLT, and whether the first 30-minute move holds.",
+      "trigger": "FDA's cell-and-gene-therapy committee votes July 29 after reviewing BLA 125842; the final action date is August 22. The committee packet is due no later than two business days before the meeting.",
+      "implication": "Deramiocel is Capricor's value-defining asset and would be the first therapy aimed specifically at DMD cardiomyopathy. HOPE-3 met its PUL v2.0 primary endpoint and key LVEF cardiac endpoint, but the committee must still accept efficacy durability, manufacturing comparability, and the cell-therapy package.",
+      "white_swan": "A clearly positive vote followed by approval with a broad DMD-cardiomyopathy label and no launch-blocking manufacturing conditions. That validates the platform, activates the Nippon Shinyaku commercialization path, and can reopen the prior 52-week high near $40.",
+      "base_case": "The committee acknowledges efficacy but splits on durability, endpoint interpretation, or CMC. FDA either approves with a narrower label/post-marketing burden or delays for additional manufacturing commitments.",
+      "black_swan": "A negative vote or Complete Response Letter citing inadequate evidence, product consistency, or inspection/CMC deficiencies. Because deramiocel dominates CAPR's valuation, the stock can revisit single digits rather than trade like a diversified biotech.",
+      "why_mispriced": "The clinical headline is positive, but the regulatory event is actually two-dimensional: efficacy and the manufacturability of an allogeneic cell product. FDA briefing documents can change the probability tree before the vote, while the stock already sits far above its $4.30 52-week low.",
+      "magnitude": "At July 24 marks, the September 18 $20 straddle was about $17.25, roughly ±87% around $19.75. The expiry includes extra time and spreads were wide, so this is a volatility bracket—not a fair-value target.",
+      "action": "Read FDA and sponsor briefing books line by line when posted. Build a matrix for efficacy population, PUL/LVEF effect, missing data, durability, CMC comparability, inspection status, vote wording, and label scope.",
+      "invalidation": "FDA postpones the meeting or extends the action date; either change breaks the current timing and makes the quoted option bracket stale.",
+      "watch": "FDA briefing-document tone, exact voting question, manufacturing/inspection language, panel vote, and whether labeling discussions are disclosed before August 22.",
       "sources": [
-        {
-          "label": "Federal Reserve FOMC calendar",
-          "url": "https://www.federalreserve.gov/monetarypolicy/fomccalendars.htm"
-        },
-        {
-          "label": "Federal Reserve July calendar",
-          "url": "https://www.federalreserve.gov/newsevents/2026-july.htm"
-        }
+        {"label": "FDA July 29 committee notice", "url": "https://www.fda.gov/advisory-committees/advisory-committee-calendar/cellular-tissue-and-gene-therapies-advisory-committee-july-29-2026-meeting-announcement-updated"},
+        {"label": "Capricor committee announcement", "url": "https://www.capricor.com/investors/news-events/press-releases/detail/348/capricor-therapeutics-announces-fda-advisory-committee"},
+        {"label": "HOPE-3 topline results", "url": "https://www.capricor.com/investors/news-events/press-releases/detail/331/capricor-therapeutics-announces-positive-topline-results"}
       ]
     },
     {
-      "id": "mega-cap-tech-2026-07-29-30",
-      "date": "July 29–30, 2026 · after market close",
+      "id": "repl-rp1-adcom-pdufa-2026",
+      "primary_ticker": "REPL",
+      "market_cap_usd": 832334917,
+      "reference_price": 9.819,
+      "binary_grade": "Extreme",
+      "date": "July 30 AdCom · August 2 PDUFA",
       "date_status": "confirmed",
       "horizon": "week 1",
       "tier": "Tier 1",
-      "category": "Earnings / Mega-cap technology",
-      "tickers": ["MSFT", "META", "AAPL", "AMZN", "QQQ", "NVDA"],
-      "title": "Microsoft, Meta, Apple, and Amazon earnings cluster",
+      "category": "FDA / Oncology",
+      "tickers": ["REPL"],
+      "title": "RP1 plus nivolumab in anti-PD-1-failed melanoma",
       "confidence": 1.0,
-      "implication": "Four index heavyweights report inside roughly 25 hours. Their cloud growth, AI capex, ad demand, consumer spending, and device commentary can reset expectations across software, semiconductors, digital ads, and e-commerce.",
-      "direction": "Bullish if cloud and ad growth absorb AI spending while margins and guidance hold; bearish if capex rises faster than monetization or consumer/device demand softens.",
-      "magnitude": "A single basket move is not defensible because each stock has a separate earnings distribution. Treat cross-company agreement as the market signal, not the first headline beat.",
-      "action": "Build one comparison sheet: Azure/AWS growth, Meta ad pricing and capex, Apple services and device demand, and each company's forward capex/margin guidance.",
-      "invalidation": "Mixed reports with company-specific moves and no common signal in QQQ, cloud, ads, or semiconductors.",
-      "watch": "Whether all four point the same way on AI returns, data-center capacity, and consumer demand; disagreement means less index-level information.",
+      "trigger": "FDA's cell-and-gene-therapy committee reviews BLA 125827 on July 30, followed by the August 2 action date. This is a repeat regulatory attempt after prior Complete Response Letters.",
+      "implication": "REPL is trying to convert a 34% response rate and 24.8-month median duration into accelerated approval using a single-arm program. The key question is not whether responses occurred; it is whether FDA accepts their attribution, durability, historical-control framework, and RP1's contribution over nivolumab.",
+      "white_swan": "A positive vote and accelerated approval with a workable confirmatory-trial requirement. That turns REPL from a repeatedly rejected developer into a commercial oncology company and validates the oncolytic-immunotherapy platform.",
+      "base_case": "A divided committee: durable responses look real, but FDA demands tighter evidence on contribution and control selection. A narrow approval, delayed action, or onerous confirmatory requirement produces a less explosive outcome.",
+      "black_swan": "Another negative vote or CRL because the uncontrolled dataset cannot establish contribution or because FDA still finds the evidence uninterpretable. A third failure would damage both RP1 and platform credibility and could send the stock back toward the post-CRL zone near its $1.50 52-week low.",
+      "why_mispriced": "The same 34% response statistic supports both narratives: extraordinary activity in refractory melanoma and selection/attribution risk in a single-arm study. A repeated-review setup also makes precedent less useful than the actual July 30 voting question.",
+      "magnitude": "The August 7 $10 straddle marked about $6.05, implying roughly ±62% around $9.82 and a crude $3.77–$15.87 bracket. Bid/ask spreads were enormous; use only as confirmation that the market sees a binary event.",
+      "action": "Compare sponsor and FDA analyses of evaluable population, independent review, complete-response rate, duration, prior anti-PD-1 exposure, nivolumab contribution, and confirmatory-trial feasibility.",
+      "invalidation": "FDA delays the committee or action date, or publishes briefing documents showing the vote is not on approvability/contribution.",
+      "watch": "FDA briefing books, vote wording, panel discussion of historical controls, and any requirement for randomized evidence before approval.",
       "sources": [
-        {
-          "label": "Microsoft FY26 Q4 event",
-          "url": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4"
-        },
-        {
-          "label": "Meta Q2 2026 announcement",
-          "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-to-Announce-Second-Quarter-2026-Results/default.aspx"
-        },
-        {
-          "label": "Apple investor relations",
-          "url": "https://investor.apple.com/investor-relations/default.aspx"
-        },
-        {
-          "label": "Amazon Q2 2026 event",
-          "url": "https://ir.aboutamazon.com/events/event-details/2026/Q2-2026-Amazoncom-Inc-Earnings-Conference-Call/default.aspx"
-        }
+        {"label": "FDA July 30 committee notice", "url": "https://www.fda.gov/advisory-committees/advisory-committee-calendar/cellular-tissue-and-gene-therapies-advisory-committee-july-30-2026-meeting-announcement-updated"},
+        {"label": "Replimune resubmission acceptance", "url": "https://ir.replimune.com/news-releases/news-release-details/replimune-announces-fda-acceptance-rp1-biologics-license/"},
+        {"label": "FDA April 2026 CRL", "url": "https://download.open.fda.gov/crl/CRL_BLA125827_20260410.pdf"}
       ]
     },
     {
-      "id": "glp1-leaders-2026-08-05",
-      "date": "August 5, 2026 · 7:00 AM and 10:00 AM ET",
+      "id": "mrna-mflusiva-pdufa-2026",
+      "primary_ticker": "MRNA",
+      "market_cap_usd": 21446283300,
+      "reference_price": 53.98,
+      "binary_grade": "High",
+      "date": "August 5, 2026",
       "date_status": "confirmed",
       "horizon": "week 2",
       "tier": "Tier 1",
-      "category": "Earnings / Obesity drugs",
-      "tickers": ["LLY", "NVO", "XLV", "XBI", "HIMS"],
-      "title": "Novo Nordisk and Eli Lilly report on the same morning",
+      "category": "FDA / Vaccine platform",
+      "tickers": ["MRNA"],
+      "title": "mFlusiva seasonal influenza vaccine",
       "confidence": 1.0,
-      "implication": "The two GLP-1 leaders can reset obesity-drug demand, pricing, supply, oral-drug expectations, and the competitive outlook for biotech, pharmacies, medtech, and telehealth names.",
-      "direction": "Bullish on durable volume, improving supply, strong next-generation data, and pricing discipline; bearish on share loss, weaker persistence, reimbursement pressure, or capacity bottlenecks.",
-      "magnitude": "At July 24 marks, the August 7 $1,200 LLY straddle implied about ±8.3% and the August 7 $49 NVO straddle about ±8.6%. Both are indicative midpoint estimates, not executable fills.",
-      "action": "Compare volumes, price/mix, manufacturing capacity, oral and next-generation pipeline timing, and management commentary on compounding and reimbursement.",
-      "invalidation": "Company-specific noise with no shared read-through on category growth, supply, or pricing.",
-      "watch": "LLY versus NVO relative performance and whether HIMS, XLV, and XBI confirm the category signal.",
+      "trigger": "FDA action on mRNA-1010 for adults 50 and older after a June 18 advisory panel voted 9-0 that benefits outweigh risks.",
+      "implication": "The Phase 3 efficacy study showed 26.6% relative vaccine efficacy versus a licensed standard-dose flu vaccine. Approval matters beyond one product: it validates Moderna's non-COVID respiratory platform and supports future flu/COVID combination economics.",
+      "white_swan": "A clean 50-plus label with no material manufacturing or post-marketing surprise and credible timing for the next commercial flu season. The platform read-through is more valuable than first-year vaccine revenue.",
+      "base_case": "Approval is likely after the unanimous panel vote and is partly priced. Stock response depends on label breadth, commercial timing, and whether management can translate efficacy into payer and pharmacy adoption.",
+      "black_swan": "A CRL, delay, unexpectedly narrow label, or safety/manufacturing condition despite the vote. That would damage confidence in Moderna's effort to diversify beyond COVID and make the pipeline discount harder to close.",
+      "why_mispriced": "The approval probability looks high, so the genuine surprise is in the label and launch timing—not the binary headline. Traders treating '9-0' as equivalent to guaranteed commercial success may be pricing the wrong branch.",
+      "magnitude": "The August 7 $55 straddle marked about $8.43, implying roughly ±15.6% around $53.98. It is liquid enough to be informative but also spans other company/news risk.",
+      "action": "Check indication age, strain coverage, safety language, post-marketing commitments, manufacturing language, and earliest commercial availability. Separate FDA success from revenue impact.",
+      "invalidation": "FDA extends the review or publishes a materially changed action date.",
+      "watch": "Approval language, label age range, 2026–27 season timing, payer access, and management's combination-vaccine timeline.",
       "sources": [
-        {
-          "label": "Novo Nordisk financial calendar",
-          "url": "https://www.novonordisk.com/investors/financial-calendar.html"
-        },
-        {
-          "label": "Lilly Q2 2026 earnings event",
-          "url": "https://investor.lilly.com/events/event-details/q2-2026-earnings-call"
-        }
+        {"label": "FDA June 18 panel notice and materials", "url": "https://www.fda.gov/advisory-committees/advisory-committee-calendar/vaccines-and-related-biological-products-advisory-committee-june-18-2026-meeting-announcement"},
+        {"label": "FDA mFlusiva efficacy review", "url": "https://www.fda.gov/media/193130/download"},
+        {"label": "Moderna Q1 2026 SEC exhibit", "url": "https://www.sec.gov/Archives/edgar/data/1682852/000168285226000057/exhibit9912026q1pressrelea.htm"}
       ]
     },
     {
-      "id": "cpi-2026-08-12",
-      "date": "August 12, 2026 · 8:30 AM ET",
+      "id": "lnth-mk6240-pdufa-2026",
+      "primary_ticker": "LNTH",
+      "market_cap_usd": 6824421402,
+      "reference_price": 104.99,
+      "binary_grade": "High",
+      "date": "August 13, 2026",
       "date_status": "confirmed",
       "horizon": "week 3",
       "tier": "Tier 1",
-      "category": "Macro / Inflation",
-      "tickers": ["SPY", "QQQ", "TLT", "XLF"],
-      "title": "July Consumer Price Index",
+      "category": "FDA / Alzheimer's diagnostics",
+      "tickers": ["LNTH"],
+      "title": "MK-6240 tau PET imaging agent",
       "confidence": 1.0,
-      "implication": "This is the first major inflation check after the July FOMC meeting and can rapidly reprice September policy odds across equities, bonds, banks, housing, and rate-sensitive growth stocks.",
-      "direction": "Hot core inflation is bearish duration; cooler inflation is supportive unless it arrives with a sharp growth scare.",
-      "magnitude": "Macro event; no unsupported ticker-specific percentage is assigned.",
-      "action": "Compare headline, core, shelter, and services inflation with the 2-year yield and market breadth.",
-      "invalidation": "A near-consensus print with offsetting components and little change in September rate odds.",
-      "watch": "2-year yield, TLT, QQQ/SPY breadth, and rate-sensitive sector leadership.",
+      "trigger": "PDUFA action on MK-6240, an F-18 PET tracer intended to detect tau neurofibrillary tangles in adults evaluated for Alzheimer's disease.",
+      "implication": "Two pivotal studies met primary endpoints, but commercial value depends on label breadth, reader reproducibility, manufacturing/distribution logistics, reimbursement, and whether tau imaging becomes useful alongside expanding anti-amyloid treatment.",
+      "white_swan": "Broad approval with clean interpretation language and no onerous distribution constraint. That gives LNTH another differentiated Alzheimer's diagnostic and a credible growth leg beyond its prostate-imaging franchise.",
+      "base_case": "Approval with a useful but bounded label. Clinical adoption builds gradually because reimbursement, scanner workflow, and physician education matter as much as FDA status.",
+      "black_swan": "CRL or a label narrowed by image-reader variability, manufacturing, or clinical-interpretation concerns. At a 52-week high and roughly 25× earnings, even a non-existential setback can compress the growth multiple.",
+      "why_mispriced": "The event is less binary than a pre-revenue biotech approval but more important than a routine label expansion. The stock's near-high valuation leaves asymmetric disappointment risk while the listed options are thin.",
+      "magnitude": "The August 21 $105 straddle marked about $15.55, roughly ±14.8% around $104.99. Open interest was only 19 calls and 3 puts with wide spreads, so confidence in the estimate is low.",
+      "action": "Read the label for intended population, positive/negative scan interpretation, reader-training requirements, image-acquisition constraints, and any post-marketing study.",
+      "invalidation": "Action date extension or evidence that the final decision has already been incorporated into a prior announcement.",
+      "watch": "Label breadth, reimbursement commentary, launch timing, distribution capacity, and management's adoption assumptions.",
       "sources": [
-        {
-          "label": "BLS CPI release schedule",
-          "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
-        },
-        {
-          "label": "BLS August 2026 schedule",
-          "url": "https://www.bls.gov/schedule/2026/08_sched.htm"
-        }
+        {"label": "Lantheus NDA acceptance", "url": "https://lantheusholdings.gcs-web.com/news-releases/news-release-details/lantheus-announces-fda-acceptance-new-drug-application-mk-6240"},
+        {"label": "Lantheus pivotal-study update", "url": "https://lantheusholdings.gcs-web.com/news-releases/news-release-details/lantheus-reports-second-quarter-2025-financial-results-and"}
       ]
     },
     {
-      "id": "wmt-q2-fy27-2026-08-20",
-      "date": "August 20, 2026 · before market open",
-      "date_status": "confirmed",
-      "horizon": "week 4",
+      "id": "lgvn-elpis2-topline-2026",
+      "primary_ticker": "LGVN",
+      "market_cap_usd": 18961903,
+      "reference_price": 0.608,
+      "binary_grade": "Extreme",
+      "date": "August 2026 · exact day not announced",
+      "date_status": "window",
+      "horizon": "weeks 2–5",
       "tier": "Tier 1",
-      "category": "Earnings / Consumer",
-      "tickers": ["WMT", "TGT", "COST", "HD", "LOW", "XLY"],
-      "title": "Walmart Q2 FY2027 earnings",
+      "category": "Phase 2b / Pediatric cell therapy",
+      "tickers": ["LGVN"],
+      "title": "ELPIS II laromestrocel topline in HLHS infants",
+      "confidence": 0.85,
+      "trigger": "Topline 12-month results from a randomized, controlled, 40-patient Phase 2b study across 12 pediatric centers. The independent monitor recommended completing the trial, but efficacy remains blinded until release.",
+      "implication": "LGVN is a roughly $19 million microcap with a Nasdaq noncompliance flag and no listed options. A credible efficacy signal in hypoplastic left heart syndrome could validate laromestrocel and unlock partnering; a miss leaves financing and listing risk in control.",
+      "white_swan": "Statistically and clinically convincing improvement in the prespecified cardiac/growth or event endpoints with balanced safety, plus FDA alignment on a pivotal path. For a company this small, partnership economics can matter more than conventional valuation math.",
+      "base_case": "Mixed directional benefit in only 40 infants: enough to justify another study but not enough to support a clear registration path. The stock spikes, then financing needs dominate.",
+      "black_swan": "No efficacy separation, safety imbalance, endpoint ambiguity, or delayed readout. With a $0.61 reference price, low liquidity, and exchange noncompliance, failed data can become a capital-structure event rather than a normal drawdown.",
+      "why_mispriced": "There is no options market and very little institutional price discovery. The positive monitoring-committee review speaks to safety/futility monitoring, not proof of efficacy; retail narratives can confuse those two facts.",
+      "magnitude": "No defensible option-implied range exists. The 52-week range was approximately $0.48–$1.75, and ordinary percentage targets are misleading for a thin $19 million microcap.",
+      "action": "Before the release, extract the protocol's exact primary/secondary endpoints, multiplicity, missing-data treatment, baseline balance, and FDA Type C feedback. Do not equate IDMC continuation with efficacy.",
+      "invalidation": "Company shifts guidance beyond August or changes the analysis population/endpoints before disclosure.",
+      "watch": "Exact release date, endpoint hierarchy, 12-month cardiac function, transplant/mortality events, serious adverse events, FDA path, cash runway, and financing language.",
+      "sources": [
+        {"label": "Longeveron FDA Type C update", "url": "https://investors.longeveron.com/news/News/news-details/2026/Longeveron-Announces-Constructive-Type-C-Meeting-with-U-S--FDA-Ahead-of-Data-Readout-for-ELPIS-II-Phase-2b-Clinical-Trial-Evaluating-Treatment-for-Hypoplastic-Left-Heart-Syndrome-HLHS/default.aspx"},
+        {"label": "Longeveron IDMC review", "url": "https://investors.longeveron.com/news/News/news-details/2026/Longeveron-Announces-Independent-Data-Monitoring-Committee-Positive-Review-and-Recommendation-to-Complete-Phase-2b-Stem-Cell-Therapy-Clinical-Trial-in-Hypoplastic-Left-Heart-Syndrome-HLHS/default.aspx"},
+        {"label": "Longeveron SEC exhibit", "url": "https://www.sec.gov/Archives/edgar/data/1721484/000121390026053902/ea028985301ex99-1.htm"}
+      ]
+    },
+    {
+      "id": "rare-dtx401-pdufa-2026",
+      "primary_ticker": "RARE",
+      "market_cap_usd": 2650344372,
+      "reference_price": 26.90,
+      "binary_grade": "Extreme",
+      "date": "August 23, 2026",
+      "date_status": "confirmed",
+      "horizon": "week 5",
+      "tier": "Tier 1",
+      "category": "FDA / Gene therapy",
+      "tickers": ["RARE"],
+      "title": "DTX401 gene therapy for GSDIa",
+      "confidence": 1.0,
+      "trigger": "Priority-review action on one-time AAV8 gene therapy DTX401 for glycogen storage disease type Ia, where no pharmacologic treatment addresses the underlying cause.",
+      "implication": "Phase 3 patients reduced daily cornstarch use 41.3% versus 10.3% on placebo at week 48 while maintaining glucose control (p<0.0001). FDA must still clear AAV safety, durability, CMC, and label questions.",
+      "white_swan": "Approval with a broad eligible population, manageable monitoring, and no restrictive safety language. It creates a first disease-modifying GSDIa therapy and validates RARE's liver-directed gene-therapy engine after sector-wide skepticism.",
+      "base_case": "Approval with conservative monitoring/eligibility and a deliberate launch. Strong trial statistics support efficacy, but rare-disease identification and gene-therapy logistics slow revenue realization.",
+      "black_swan": "CRL or delay for CMC, vector safety, durability, or inspection issues despite the efficacy win. The rejection would contaminate confidence in RARE's second September gene-therapy decision as well as DTX401.",
+      "why_mispriced": "The efficacy endpoint looks unusually clean, so the residual tail risk is mostly non-efficacy FDA risk. Options price a huge move because the September expiry also captures the separate UX111 PDUFA after this brief's window.",
+      "magnitude": "The September 18 $27.50 straddle marked about $15.15, roughly ±56% around $26.90. This overstates the isolated August 23 event because the same expiry includes another RARE PDUFA on September 19 and spreads were wide.",
+      "action": "Separate efficacy probability from CMC/inspection risk. Check label population, steroid/immunosuppression regimen, durability language, liver safety, post-marketing studies, and launch capacity.",
+      "invalidation": "PDUFA extension or confirmation that an inspection/CMC issue will move the action outside the window.",
+      "watch": "FDA action timing, label breadth, safety monitoring, rare-pediatric voucher status, launch timing, and read-through to UX111.",
+      "sources": [
+        {"label": "Ultragenyx priority-review announcement", "url": "https://ir.ultragenyx.com/news-releases/news-release-details/ultragenyx-announces-us-fda-acceptance-and-priority-review"},
+        {"label": "DTX401 Phase 3 topline", "url": "https://ir.ultragenyx.com/news-releases/news-release-details/ultragenyx-announces-positive-top-line-results-phase-3-study"},
+        {"label": "Ultragenyx SEC filing", "url": "https://ir.ultragenyx.com/node/18476/html"}
+      ]
+    },
+    {
+      "id": "jazz-zanidatamab-pdufa-2026",
+      "primary_ticker": "JAZZ",
+      "market_cap_usd": 16430104776,
+      "reference_price": 253.87,
+      "binary_grade": "High",
+      "date": "August 25, 2026",
+      "date_status": "confirmed",
+      "horizon": "week 5",
+      "tier": "Tier 1",
+      "category": "FDA / Oncology expansion",
+      "tickers": ["JAZZ"],
+      "title": "Zanidatamab first-line HER2-positive gastric cancer",
+      "confidence": 1.0,
+      "trigger": "Priority-review action on first-line zanidatamab combinations supported by HERIZON-GEA-01; the application uses FDA Real-Time Oncology Review and Breakthrough Therapy pathways.",
+      "implication": "The pivotal combinations produced progression-free-survival hazard ratios of roughly 0.63–0.65 and a statistically significant overall-survival benefit. The decision determines whether Jazz can move Ziihera from a later-line niche toward a first-line standard.",
+      "white_swan": "Broad first-line approval across the studied population with commercially clean combination language. That expands Ziihera's addressable market and strengthens Jazz's oncology diversification as legacy sleep-drug economics mature.",
+      "base_case": "Approval is expected from strong Phase 3 data but may be bounded by biomarker, regimen, or safety language. The stock reaction is therefore more label/commercial than existential.",
+      "black_swan": "Unexpected CRL, delay, or materially narrow label tied to manufacturing, regimen interpretation, or safety. The damage is less terminal than in a single-asset biotech but would puncture a stock sitting at a 52-week high.",
+      "why_mispriced": "Headline efficacy is strong and approval probability appears high. The asymmetry comes from expectations: a clean approval may be priced, while an operational or label surprise can hit a $16 billion company trading at its high.",
+      "magnitude": "The September 18 $250 straddle marked about $33.35, roughly ±13.1% around $253.87. The expiry contains several weeks of ordinary market risk and the put had zero open interest, so the isolated event move is smaller and uncertain.",
+      "action": "Read the exact line of therapy, biomarker definition, combination regimens, survival/safety wording, post-marketing commitments, and launch timing. Model label quality—not merely approval.",
+      "invalidation": "FDA extends the review or the company discloses a major manufacturing issue before August 25.",
+      "watch": "Label breadth, reimbursement positioning, launch inventory, regimen uptake, and whether approval changes 2026/2027 guidance.",
+      "sources": [
+        {"label": "Jazz priority-review announcement", "url": "https://investor.jazzpharma.com/news-releases/news-release-details/jazz-pharmaceuticals-announces-fda-acceptance-and-priority-0/"},
+        {"label": "HERIZON-GEA-01 results", "url": "https://investor.jazzpharma.com/news-releases/news-release-details/phase-3-herizon-gea-01-results-published-new-england-journal/"},
+        {"label": "Jazz Q1 2026 filing", "url": "https://investor.jazzpharma.com/static-files/5bed1714-eb0a-4e71-b7bf-9594b1fe303f"}
+      ]
+    },
+    {
+      "id": "tenx-level-phase3-2026",
+      "primary_ticker": "TENX",
+      "market_cap_usd": 385543782,
+      "reference_price": 14.53,
+      "binary_grade": "Extreme",
+      "date": "August topline · August 29 ESC presentation",
+      "date_status": "window",
+      "horizon": "weeks 2–5",
+      "tier": "Tier 1",
+      "category": "Phase 3 / Cardiopulmonary",
+      "tickers": ["TENX"],
+      "title": "LEVEL Phase 3 oral levosimendan in PH-HFpEF",
       "confidence": 0.9,
-      "implication": "Walmart is the cleanest large-cap read on value-seeking behavior, grocery inflation, general merchandise demand, e-commerce economics, and the health of the mass-market consumer.",
-      "direction": "Bullish retail if traffic, discretionary mix, e-commerce margins, and guidance improve; bearish if shoppers trade down harder, general merchandise weakens, or margin pressure returns.",
-      "magnitude": "No option-implied move is published here; the date is confirmed by the earnings calendar, but the official event page was not yet indexed.",
-      "action": "Compare traffic versus ticket, grocery versus general merchandise, advertising, e-commerce profitability, inventory, and full-year guidance.",
-      "invalidation": "A Walmart-specific result driven by share gains that does not match TGT, COST, HD, LOW, or consumer data.",
-      "watch": "Retail breadth, XLY, and whether management describes resilient demand or broad trade-down behavior.",
+      "trigger": "TENX says topline from the registrational LEVEL trial will arrive in August before a late-breaking European Society of Cardiology presentation on August 29. More than 230 patients were enrolled.",
+      "implication": "LEVEL tests TNX-103 in pulmonary hypertension with heart failure and preserved ejection fraction, an area without an approved therapy. The single-asset valuation means the primary efficacy result, safety, and FDA path dominate the equity.",
+      "white_swan": "Statistically persuasive improvement on the prespecified exercise-capacity endpoint, coherent secondary endpoints, and clean safety, followed by an ESC dataset that supports registration and partnership interest.",
+      "base_case": "A nominally positive primary endpoint with mixed secondary endpoints or modest effect size. The program advances, but FDA may still require the planned second Phase 3 study and the valuation rerates less than the option market implies.",
+      "black_swan": "Primary-endpoint miss, clinically trivial effect, safety signal, or a data delay past ESC. For a roughly $386 million single-asset company, that can erase most development value and force financing on ugly terms.",
+      "why_mispriced": "The September options imply an absurdly wide range, but that does not mean the binary is understood. The crucial distinction is 'statistically positive' versus 'registration-quality effect with supportive secondary endpoints.'",
+      "magnitude": "The September 18 $15 straddle marked about $17.20—roughly ±118% around $14.53. Because the downside cannot go below zero and spreads remain wide, this is proof of extreme skew, not a probabilistic forecast.",
+      "action": "Pre-register the scorecard: primary endpoint, effect size, p-value, missing data, subgroup consistency, safety/discontinuations, secondary endpoints, and whether FDA still requires a second pivotal study.",
+      "invalidation": "Company moves topline beyond August or the ESC presentation no longer contains LEVEL results.",
+      "watch": "Topline release date, database lock, exact primary endpoint and effect size, ESC abstract details, FDA meeting guidance, cash runway, and financing language.",
       "sources": [
-        {
-          "label": "Walmart investor relations",
-          "url": "https://stock.walmart.com/"
-        },
-        {
-          "label": "Walmart SEC filings",
-          "url": "https://stock.walmart.com/sec-filings/all-sec-filings"
-        }
-      ]
-    },
-    {
-      "id": "nvda-q2-fy27-2026-08-26",
-      "date": "August 26, 2026 · after market close",
-      "date_status": "confirmed",
-      "horizon": "week 5",
-      "tier": "Tier 1",
-      "category": "Earnings / AI infrastructure",
-      "tickers": ["NVDA", "AMD", "AVGO", "TSM", "QQQ", "SMH"],
-      "title": "NVIDIA Q2 FY2027 financial results",
-      "confidence": 1.0,
-      "implication": "NVIDIA is the highest-information checkpoint for AI infrastructure demand, accelerator supply, networking, hyperscaler capex, sovereign AI, and the semiconductor complex.",
-      "direction": "Bullish if data-center growth, gross margin, supply visibility, and forward demand beat elevated expectations; bearish if capacity, export controls, product transitions, or customer digestion weaken the outlook.",
-      "magnitude": "The August 28 $205 call-plus-put marked about $23.20 at the July 24 close, implying roughly ±11.2% around a $206.80 after-hours stock mark. Indicative, not an executable fill.",
-      "action": "Track data-center revenue, networking, gross margin, next-platform shipments, China/export commentary, and hyperscaler demand visibility.",
-      "invalidation": "A large NVDA move that is driven by company-specific supply timing and does not confirm in AMD, AVGO, TSM, SMH, or QQQ.",
-      "watch": "Semiconductor breadth and whether AI beneficiaries outside NVDA confirm the guidance signal.",
-      "sources": [
-        {
-          "label": "NVIDIA Q2 FY27 event",
-          "url": "https://investor.nvidia.com/events-and-presentations/events-and-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/default.aspx"
-        },
-        {
-          "label": "NVIDIA events calendar",
-          "url": "https://investor.nvidia.com/events-and-presentations/events-and-presentations/default.aspx"
-        }
-      ]
-    },
-    {
-      "id": "jackson-hole-2026-08-27",
-      "date": "August 27–29, 2026",
-      "date_status": "confirmed",
-      "horizon": "week 5",
-      "tier": "Tier 1",
-      "category": "Macro / Payments policy",
-      "tickers": ["SPY", "QQQ", "TLT", "XLF", "COIN", "PYPL", "SQ"],
-      "title": "Jackson Hole: Financial Innovation, Payments, and Policy",
-      "confidence": 1.0,
-      "implication": "The 2026 theme directly links monetary policy with payments and financial innovation. Central-bank language can move rates broadly and create specific read-throughs for banks, fintech, stablecoins, and crypto infrastructure.",
-      "direction": "Hawkish policy language is bearish duration; constructive payments or innovation policy can support fintech and crypto, while restrictive language does the opposite.",
-      "magnitude": "Speech-driven event; no defensible move estimate exists before the agenda and speakers are published.",
-      "action": "Preload the agenda when released and prioritize speeches on inflation, payments, stablecoins, bank competition, and transmission of monetary policy.",
-      "invalidation": "Academic discussion without new policy signals or market-moving central-bank guidance.",
-      "watch": "2-year yield, TLT, banks versus fintech, and COIN/PYPL/SQ reaction to payment-policy language.",
-      "sources": [
-        {
-          "label": "Kansas City Fed symposium",
-          "url": "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/"
-        },
-        {
-          "label": "Jackson Hole 2026 details",
-          "url": "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/about-jackson-hole-economic-symposium/"
-        }
-      ]
-    },
-    {
-      "id": "jobs-2026-09-04",
-      "date": "September 4, 2026 · 8:30 AM ET",
-      "date_status": "confirmed",
-      "horizon": "week 6",
-      "tier": "Tier 1",
-      "category": "Macro / Employment",
-      "tickers": ["SPY", "QQQ", "TLT", "XLF", "XLY"],
-      "title": "August Employment Situation",
-      "confidence": 1.0,
-      "implication": "This closes the six-week window with a direct read on labor demand, wages, consumption capacity, and the path into the September FOMC meeting.",
-      "direction": "Hot wages and payrolls can revive rate pressure; orderly cooling is supportive; abrupt deterioration is risk-off despite lower yields.",
-      "magnitude": "Macro reaction only; no unsupported single-stock percentage is assigned.",
-      "action": "Record payrolls, unemployment, wage growth, participation, and revisions, then separate the rates response from the growth response.",
-      "invalidation": "A consensus-like release with small revisions and little bond-market movement.",
-      "watch": "2-year yield, TLT, QQQ versus XLF/XLY, and whether market breadth confirms the first move.",
-      "sources": [
-        {
-          "label": "BLS Employment Situation schedule",
-          "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
-        },
-        {
-          "label": "BLS 2026 release calendar",
-          "url": "https://www.bls.gov/schedule/news_release/current_year.asp"
-        }
+        {"label": "Tenax late-breaking ESC announcement", "url": "https://investors.tenaxthera.com/news-releases/news-release-details/tenax-therapeutics-announces-late-breaking-presentation-level"},
+        {"label": "LEVEL trial registration", "url": "https://clinicaltrials.gov/study/NCT05983250"}
       ]
     }
   ],
   "context": [
-    "Selection is market-wide: events were ranked by expected index, sector, or cross-company information value—not by Bernard's holdings.",
-    "The scan covered confirmed high-market-cap earnings plus official Fed, BLS, company IR, and sector-policy calendars from July 25 through September 5, 2026.",
-    "Exact dates are separated from tentative dates. Tentative earnings were excluded from the top eight unless an official source corroborated them.",
-    "Option-implied ranges use July 24 closing marks on the first liquid expiration after each event and are labeled indicative."
+    "Selection is intentionally skewed toward smaller, ticker-specific binary events: six of eight names are below $10 billion in market value and four are near or below $1.2 billion.",
+    "Confidence scores describe source/date confidence, not probability of regulatory or clinical success. White/base/black outcomes are explicit scenarios—not hidden price targets.",
+    "Market caps, reference prices, 52-week ranges, and option marks are from Robinhood data as of the July 24 close. Thin chains and wide spreads are called out instead of treated as precision.",
+    "Exact FDA dates use company and FDA sources. LGVN and TENX are company-guided August windows; their exact topline days remain unannounced."
   ],
-  "methodology": "Scan the full US-listed market over a rolling 42-day horizon. Rank catalysts by index weight, sector read-through, binary regulatory impact, breadth of affected tickers, and source confidence. Use primary-source dates first, verified earnings calendars second, and social/news only for discovery. Publish the eight highest-information events with bull/bear logic, measurable watch signals, and no portfolio bias."
+  "methodology": "Scan a rolling 42-day market-wide universe for PDUFA dates, FDA advisory committees, pivotal readouts, legal/regulatory decisions, and other discrete events capable of creating a ticker-specific discontinuity. Prefer sub-$10 billion companies and single-asset or concentrated-value setups. Rank by enterprise-value concentration, binary decision force, credible information edge, source quality, and outcome dispersion. For every finalist, separate source confidence from success probability, define the exact trigger, and write white-swan, base-case, and black-swan branches before looking at price targets."
 }
