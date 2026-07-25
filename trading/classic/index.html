@@ -525,6 +525,7 @@
                 <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">6</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
                 <button class="trading-tab" id="gpt-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="gpt-brief-panel">GPT brief</button>
+                <button class="trading-tab" id="horizon-tab" type="button" role="tab" aria-selected="false" aria-controls="horizon-panel">Horizon</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">20</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
@@ -1619,6 +1620,14 @@
             </section>
             <!-- AUTO:GPT_BRIEF:END -->
 
+            <!-- AUTO:HORIZON:START -->
+            <section class="trading-panel brief-panel" id="horizon-panel" role="tabpanel" tabindex="0" aria-labelledby="horizon-tab" hidden>
+                <div id="horizon-shell" data-url="/trading/horizon.json?v=754f7cfca617">
+                    <p class="trading-note">Loading the latest cross-agency horizon scan…</p>
+                </div>
+            </section>
+            <!-- AUTO:HORIZON:END -->
+
 
             <!-- AUTO:VWAP:START -->
             <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
@@ -1910,5 +1919,6 @@
     <script src="/js/trading-broker-light.js?v=68c18f340228"></script>
     <script src="/js/trading-risk.js?v=e357c62e6412"></script>
     <script src="/js/trading-gpt-brief.js?v=ba6d5f3754df"></script>
+    <script src="/js/trading-horizon.js?v=9c27d8ffc9cd"></script>
 </body>
 </html>

@@ -387,3 +387,15 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 /* the copied mobile rule made these containment candidates globally —
    inside closed <details> that combination can zero heights; undo it */
 .brief-risk-card,.hypothesis-block,.whale-card{content-visibility:visible;contain-intrinsic-size:unset}
+
+/* ── horizon theses ───────────────────────────────────────────────── */
+.horizon-thesis-card{margin-top:16px}
+.horizon-secondary{color:var(--bl-muted);font-size:12.5px}
+.horizon-chain{margin:12px 0;padding:12px 14px;border:1px solid var(--bl-divider);border-radius:8px;background:var(--bl-rowhead)}
+.horizon-chain h4{margin:0 0 8px;font:700 11px var(--bl-sans);letter-spacing:.07em;text-transform:uppercase;color:var(--bl-faint)}
+.horizon-chain-list{margin:0;padding:0;list-style:none;display:grid;gap:8px}
+.horizon-chain-list li{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;line-height:1.45;color:var(--bl-ink2)}
+.horizon-step{flex:0 0 auto;min-width:1.5rem;font:600 12px var(--bl-mono);color:var(--bl-accent)}
+@media (prefers-reduced-motion: reduce){
+  .horizon-thesis-card{transition:none}
+}

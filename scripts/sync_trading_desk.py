@@ -20,6 +20,7 @@ CLASSIC = ROOT / "trading" / "classic" / "index.html"
 DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
 GPT_SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
+HORIZON_SCRIPT = ROOT / "js" / "trading-horizon.js"
 
 
 @dataclass(frozen=True)
@@ -44,6 +45,13 @@ ROUTES = {
         "The sector-diverse six-week catalyst radar, loaded from the latest scheduled GPT brief payload.",
         ("GPT_BRIEF",),
         (GPT_SCRIPT,),
+    ),
+    "horizon": Route(
+        ROOT / "trading" / "horizon" / "index.html",
+        "Horizon",
+        "Cross-agency deep research on dated catalysts still early enough to own — FDA, DEA, CFTC, SEC, DOD, WHO, and the Federal Register.",
+        ("HORIZON",),
+        (HORIZON_SCRIPT,),
     ),
     "momentum": Route(
         ROOT / "trading" / "momentum" / "index.html",
