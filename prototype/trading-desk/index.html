@@ -8,64 +8,66 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/prototype/trading-desk/desk.css">
+<link rel="stylesheet" href="/prototype/trading-desk/desk.css?v=3">
 </head>
 <body>
-<div class="note"><div class="wrap"><b>Layout prototype</b><span>Proposed replacement for /trading/ — real positions and data from the Friday Jul 24 close. Charts are placeholders.</span></div></div>
+<div class="note"><div class="wrap"><b>Layout prototype</b><span>Proposed replacement for /trading/ — real positions and market data from the Friday Jul 24 close.</span></div></div>
 <div class="status"><div class="wrap">
-    <span class="brand">Trading</span>
-    <span class="stamp">Fri Jul 24 close · updated 4:15pm CT</span>
+    <a class="brand" href="/prototype/trading-desk/">Trading</a>
+    <span class="stamp">Fri Jul 24 close · 4:15pm CT</span>
     <div class="status-metrics">
       <a class="chip" href="/prototype/trading-desk/brief/"><span class="dot"></span>Risk: Watchful 30</a>
       <span class="metric"><span class="k">SPY</span>738.85 <span class="up">+0.1%</span></span>
       <span class="metric"><span class="k">VIX</span>18.58</span>
+      <span class="metric"><span class="k">Open</span>2</span>
     </div>
   </div></div>
-
+<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/prototype/trading-desk/" aria-current="page">Desk</a><a href="/prototype/trading-desk/momentum/">Momentum</a><a href="/prototype/trading-desk/vwap/">VWAP</a><a href="/prototype/trading-desk/crypto/">Crypto</a><a href="/prototype/trading-desk/brief/">Brief</a><a href="/prototype/trading-desk/hypotheses/">Hypotheses</a><a href="/prototype/trading-desk/performance/">Performance</a></div></nav>
 <div class="wrap">
 
 <div class="desk">
   <section class="desk-main">
-    <div class="col-h"><h2>Positions</h2><span class="sub">2 open</span></div>
+    <div class="col-h"><h2>Positions</h2><span class="sub">2 open · 60d spark</span></div>
 
     <article class="pos">
       <div class="pos-top">
         <div><div class="pos-sym">HOOD</div>
           <div class="pos-instr">301 shares @ $95.46 · 15× Jan 2027 $125 call @ $12.61</div></div>
+        <svg class="spark" viewBox="0 0 132 34" width="132" height="34" role="img" aria-hidden="true"><polygon points="3,31 3.0,29.6 5.9,29.5 8.7,31.0 11.6,30.7 14.5,29.3 17.3,23.9 20.2,17.8 23.0,20.1 25.9,21.7 28.8,25.1 31.6,21.6 34.5,25.4 37.4,23.7 40.2,24.5 43.1,22.9 46.0,19.1 48.8,18.5 51.7,15.4 54.5,16.3 57.4,10.9 60.3,9.0 63.1,10.5 66.0,12.1 68.9,16.0 71.7,18.4 74.6,15.0 77.5,13.0 80.3,14.0 83.2,8.7 86.0,6.1 88.9,3.0 91.8,6.0 94.6,5.6 97.5,4.6 100.4,6.6 103.2,7.9 106.1,5.6 109.0,4.3 111.8,10.4 114.7,14.2 117.5,14.7 120.4,10.1 123.3,11.3 126.1,13.2 129.0,17.4 129,31" fill="rgba(8,122,66,.09)"/><polyline points="3.0,29.6 5.9,29.5 8.7,31.0 11.6,30.7 14.5,29.3 17.3,23.9 20.2,17.8 23.0,20.1 25.9,21.7 28.8,25.1 31.6,21.6 34.5,25.4 37.4,23.7 40.2,24.5 43.1,22.9 46.0,19.1 48.8,18.5 51.7,15.4 54.5,16.3 57.4,10.9 60.3,9.0 63.1,10.5 66.0,12.1 68.9,16.0 71.7,18.4 74.6,15.0 77.5,13.0 80.3,14.0 83.2,8.7 86.0,6.1 88.9,3.0 91.8,6.0 94.6,5.6 97.5,4.6 100.4,6.6 103.2,7.9 106.1,5.6 109.0,4.3 111.8,10.4 114.7,14.2 117.5,14.7 120.4,10.1 123.3,11.3 126.1,13.2 129.0,17.4" fill="none" stroke="#087a42" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
         <div class="pos-price">94.91<div class="pos-day down">−6.6%</div></div>
       </div>
       <div class="pos-grid">
         <div class="cell"><span class="k">Shares P&amp;L</span><span class="v down">−0.6%</span></div>
         <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+3.2%</span></div>
         <div class="cell"><span class="k">Spread Z</span><span class="v">−0.06</span></div>
+        <div class="cell"><span class="k">Sector</span><span class="v">XLF +1.03</span></div>
       </div>
       <div class="track-none"><b>No invalidation level set.</b> The thesis names an event (Jul 29 earnings)
         but no price that ends the trade — the only open position without a floor.</div>
       <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis.</p>
-      <div class="pos-actions"><a class="btn" href="/prototype/trading-desk/momentum/">View setup chart</a><a class="btn ghost" href="#">Set a level</a></div>
+      <div class="pos-actions"><a class="btn" href="/prototype/trading-desk/momentum/">Setup chart</a><a class="btn ghost" href="#">Set a level</a></div>
     </article>
 
     <article class="pos">
       <div class="pos-top">
         <div><div class="pos-sym">ABT</div>
           <div class="pos-instr">1 share @ $101.61 · 70× Jan 2027 $120 call @ $2.69</div></div>
+        <svg class="spark" viewBox="0 0 132 34" width="132" height="34" role="img" aria-hidden="true"><polygon points="3,31 3.0,26.7 5.9,27.7 8.7,28.2 11.6,29.3 14.5,30.9 17.3,29.9 20.2,31.0 23.0,27.6 25.9,28.9 28.8,28.9 31.6,23.0 34.5,22.6 37.4,23.5 40.2,22.3 43.1,25.5 46.0,24.8 48.8,27.0 51.7,26.3 54.5,23.3 57.4,26.5 60.3,26.7 63.1,27.6 66.0,23.4 68.9,23.5 71.7,19.2 74.6,17.9 77.5,20.1 80.3,23.1 83.2,20.9 86.0,15.9 88.9,15.6 91.8,15.2 94.6,16.2 97.5,17.5 100.4,18.2 103.2,21.0 106.1,25.8 109.0,24.4 111.8,9.6 114.7,6.7 117.5,5.2 120.4,8.3 123.3,6.9 126.1,6.6 129.0,3.0 129,31" fill="rgba(8,122,66,.09)"/><polyline points="3.0,26.7 5.9,27.7 8.7,28.2 11.6,29.3 14.5,30.9 17.3,29.9 20.2,31.0 23.0,27.6 25.9,28.9 28.8,28.9 31.6,23.0 34.5,22.6 37.4,23.5 40.2,22.3 43.1,25.5 46.0,24.8 48.8,27.0 51.7,26.3 54.5,23.3 57.4,26.5 60.3,26.7 63.1,27.6 66.0,23.4 68.9,23.5 71.7,19.2 74.6,17.9 77.5,20.1 80.3,23.1 83.2,20.9 86.0,15.9 88.9,15.6 91.8,15.2 94.6,16.2 97.5,17.5 100.4,18.2 103.2,21.0 106.1,25.8 109.0,24.4 111.8,9.6 114.7,6.7 117.5,5.2 120.4,8.3 123.3,6.9 126.1,6.6 129.0,3.0" fill="none" stroke="#087a42" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/></svg>
         <div class="pos-price">103.06<div class="pos-day up">+2.3%</div></div>
       </div>
       <div class="pos-grid">
         <div class="cell"><span class="k">Shares P&amp;L</span><span class="v up">+1.4%</span></div>
         <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+2.7%</span></div>
         <div class="cell"><span class="k">Spread Z</span><span class="v up">+1.19</span></div>
+        <div class="cell"><span class="k">Sector</span><span class="v">XLV +0.98</span></div>
       </div>
       <div class="track">
         <div class="track-h"><span>Kill $99</span><span>Room to invalidation: 3.9%</span></div>
-        <div class="track-bar">
-          <span class="track-mark entry" style="left:26%"></span>
-          <span class="track-mark" style="left:41%"></span>
-        </div>
+        <div class="track-bar"><span class="track-mark entry" style="left:26%"></span><span class="track-mark" style="left:41%"></span></div>
         <div class="track-lbl"><span>99.00</span><span>entry 101.61 · now 103.06</span><span>107.00</span></div>
       </div>
       <p class="pos-thesis">Healthcare strength plus a reclaim of the earnings and YTD VWAPs after a strong report.</p>
-      <div class="pos-actions"><a class="btn" href="/prototype/trading-desk/momentum/">View setup chart</a></div>
+      <div class="pos-actions"><a class="btn" href="/prototype/trading-desk/momentum/">Setup chart</a></div>
     </article>
   </section>
 
@@ -73,23 +75,29 @@
     <div class="col-h"><h2>Needs attention</h2></div>
     <div class="rail-card">
       <div class="alert"><span class="when now">4 days</span><span class="body"><b>HOOD earnings — Wed Jul 29</b>
-        <span>Your largest position, into a print, with no price-based exit defined.</span></span></div>
+        <span>Largest position, into a print, with no price-based exit defined.</span></span></div>
       <div class="alert"><span class="when now">Friday</span><span class="body"><b>HOOD fell 6.6%, now under cost</b>
-        <span>$94.91 vs $95.46 average. Spread Z crossed to −0.06: no longer leading the market.</span></span></div>
+        <span>$94.91 vs $95.46 average. Spread Z crossed to −0.06 — no longer leading the market.</span></span></div>
       <div class="alert"><span class="when ok">Holding</span><span class="body"><b>ABT 3.9% above its kill level</b>
-        <span>Above both VWAPs, spread Z +1.19. Nothing to do.</span></span></div>
+        <span>Above both VWAPs, spread Z +1.19, sector XLV +0.98. Nothing to do.</span></span></div>
+      <div class="alert"><span class="when">Next wk</span><span class="body"><b>4 qualified longs report next week</b>
+        <span>VTR Jul 29, WELL Jul 27, VLO Jul 30, CVX/XOM Jul 31 — entering any of them buys event risk.</span></span></div>
     </div>
+
     <div class="rail-card">
       <h3>Market</h3>
-      <div class="mkt"><span class="lbl">Regime</span><span class="v">Watchful 30/100</span></div>
-      <div class="mkt"><span class="lbl">Leading</span><span class="v">Energy · Real Estate</span></div>
-      <div class="mkt"><span class="lbl">Lagging</span><span class="v">Consumer Disc</span></div>
-      <div class="mkt"><span class="lbl">Above YTD VWAP</span><span class="v">10 of 13</span></div>
-      <div class="mkt"><span class="lbl">New signals</span><span class="v">10 long · 10 short</span></div>
+      <div class="mkt"><span class="lbl">Risk regime</span><span class="v">Watchful 30/100</span></div>
+      <div class="mkt"><span class="lbl">VIX · curve</span><span class="v">18.58 · contango +0.75</span></div>
+      <div class="mkt"><span class="lbl">Leading</span><span class="v">XLE +1.34 · XLRE +1.21</span></div>
+      <div class="mkt"><span class="lbl">Lagging</span><span class="v">XLY −2.04 · XLC −1.36</span></div>
+      <div class="mkt"><span class="lbl">Above YTD VWAP</span><span class="v">10 of 13 US</span></div>
+      <div class="mkt"><span class="lbl">Signals today</span><span class="v">10 long · 10 short</span></div>
     </div>
+
     <div class="rail-card">
       <h3>Recent activity</h3>
-      <div class="mkt"><span class="lbl">Jul 24 · HIMS</span><span class="v down">closed −11%</span></div>
+      <div class="mkt"><span class="lbl">Jul 24 · HIMS shares</span><span class="v down">closed −11%</span></div>
+      <div class="mkt"><span class="lbl">Jul 24 · HIMS call</span><span class="v down">closed −22%</span></div>
       <div class="mkt"><span class="lbl">Jul 24 · HOOD call</span><span class="v down">−5.5%</span></div>
       <div class="mkt"><span class="lbl">Jul 22 · ABT call</span><span class="v up">+5.1%</span></div>
     </div>
@@ -99,23 +107,23 @@
 <div class="col-h"><h2>Research</h2><span class="sub">each opens its own page — nothing loads until you ask for it</span></div>
 <div class="res-grid"><a class="res-link" href="/prototype/trading-desk/momentum/">
       <span class="rl-top"><span class="rl-name">Momentum</span><span class="rl-count">20 signals</span></span>
-      <span class="rl-take">10 qualified longs and 10 shorts. Energy and Real Estate lead; Consumer Discretionary lags.</span>
-      <span class="rl-go">Open Momentum &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/vwap/">
-      <span class="rl-top"><span class="rl-name">VWAP</span><span class="rl-count">13 markets</span></span>
-      <span class="rl-take">10 of 13 US markets above their YTD VWAP. Energy leads the 50-day trend.</span>
-      <span class="rl-go">Open VWAP &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/crypto/">
+      <span class="rl-take">10 qualified longs, 10 shorts. Energy and Real Estate lead; Consumer Discretionary lags hard at −2.04.</span>
+      <span class="rl-go">Open &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/vwap/">
+      <span class="rl-top"><span class="rl-name">VWAP</span><span class="rl-count">23 markets</span></span>
+      <span class="rl-take">10 of 13 US markets above YTD VWAP. Technology +13.7% but momentum has rolled to −0.08.</span>
+      <span class="rl-go">Open &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/crypto/">
       <span class="rl-top"><span class="rl-name">Crypto</span><span class="rl-count">7 coins</span></span>
-      <span class="rl-take">ETH leads BTC but sits below its YTD VWAP. DOGE and BNB lag badly.</span>
-      <span class="rl-go">Open Crypto &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/brief/">
+      <span class="rl-take">ETH leads BTC but sits 13.4% below its own YTD VWAP. ZEC is the only coin strong on both axes.</span>
+      <span class="rl-go">Open &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/brief/">
       <span class="rl-top"><span class="rl-name">Brief</span><span class="rl-count">3 briefs</span></span>
-      <span class="rl-take">Daily tail-risk research and forward regulatory catalysts, newest first.</span>
-      <span class="rl-go">Open Brief &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/hypotheses/">
-      <span class="rl-top"><span class="rl-name">Hypotheses</span><span class="rl-count">6 open</span></span>
-      <span class="rl-take">Theses being built before entry — trigger, catalyst, and kill conditions.</span>
-      <span class="rl-go">Open Hypotheses &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/performance/">
-      <span class="rl-top"><span class="rl-name">Performance</span><span class="rl-count">YTD</span></span>
-      <span class="rl-take">Realized and unrealized P&L, quantity-free.</span>
-      <span class="rl-go">Open Performance &rarr;</span></a></div>
+      <span class="rl-take">Tail-risk research and forward regulatory catalysts. Today: Hormuz, long-end rates, tariff pass-through.</span>
+      <span class="rl-go">Open &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/hypotheses/">
+      <span class="rl-top"><span class="rl-name">Hypotheses</span><span class="rl-count">5 open</span></span>
+      <span class="rl-take">Theses staged before entry — HOOD, HIMS, BYDDY, NTDOY, RBLX. Trigger, catalyst, kill condition.</span>
+      <span class="rl-go">Open &rarr;</span></a><a class="res-link" href="/prototype/trading-desk/performance/">
+      <span class="rl-top"><span class="rl-name">Performance</span><span class="rl-count">+335% YTD</span></span>
+      <span class="rl-take">Realized and unrealized P&L for the public book, quantity-free.</span>
+      <span class="rl-go">Open &rarr;</span></a></div>
 
 </div>
 </body>

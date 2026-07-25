@@ -60,7 +60,7 @@ a{color:inherit}
 .pos-price{font-family:var(--bl-mono);font-size:19px;margin-left:auto;text-align:right}
 .pos-day{font-family:var(--bl-mono);font-size:13px;font-weight:600}
 .pos-instr{font-size:12.5px;color:var(--bl-muted);margin-top:3px}
-.pos-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bl-divider)}
+.pos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bl-divider)}
 .cell .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);display:block;margin-bottom:3px}
 .cell .v{font-family:var(--bl-mono);font-size:14px}
 .track{margin-top:14px}
@@ -106,7 +106,13 @@ a{color:inherit}
 
 /* ── data table ─────────────────────────────────────── */
 .card{background:var(--bl-card);border:1px solid var(--bl-border);border-radius:10px;overflow:hidden;margin-bottom:18px}
-.card > h2{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:13px 18px;background:var(--bl-rowhead);border-bottom:1px solid var(--bl-border)}
+.card > h2{display:flex;align-items:baseline;gap:12px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;
+  padding:13px 18px;background:var(--bl-rowhead);border-bottom:1px solid var(--bl-border)}
+.card > h2 .card-r{margin-left:auto;font-weight:500;text-transform:none;letter-spacing:0;font-size:12px;color:var(--bl-muted)}
+.card > h2 .card-r a{color:var(--bl-accent);text-decoration:none;font-weight:600}
+
+/* position sparkline */
+.spark{flex-shrink:0;align-self:center;margin:0 4px}
 .tw{overflow-x:auto}
 table{border-collapse:collapse;width:100%;font-size:13px;min-width:520px}
 th{text-align:left;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);font-weight:600;
@@ -121,6 +127,7 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 .tag.enter{background:#e4f2ea;color:var(--bl-gain)}
 .tag.enterp{background:#cfe9db;color:#056234}
 .tag.watch{background:#f3eee4;color:var(--bl-warn)}
+.tag.short{background:#fbe9ec;color:var(--bl-loss)}
 .tag.avoid{background:#f1f0ee;color:var(--bl-faint)}
 .warnflag{color:var(--bl-warn);font-weight:600}
 
