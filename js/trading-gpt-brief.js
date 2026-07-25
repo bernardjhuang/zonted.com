@@ -26,7 +26,7 @@
     const confidence = Number(event.confidence);
     return `<article class="brief-risk-card gpt-catalyst-card" data-event-id="${esc(event.id)}" data-tier="${esc(event.tier)}" data-primary-ticker="${esc(event.primary_ticker)}">
       <div class="brief-card-header"><h3 class="brief-risk-title">${esc(event.date)} · ${esc(event.title)}</h3><span class="brief-score-badge" style="background:${confidenceColor(confidence)}">source ${Math.round(confidence * 100)}%</span></div>
-      <small class="brief-score-detail">${esc(event.tier)} · ${esc(event.category)} · ${esc(event.date_status)} · ${esc(event.horizon)}</small>
+      <small class="brief-score-detail">${esc(event.tier)} · ${esc(event.sector)} · ${esc(event.category)} · ${esc(event.date_status)} · ${esc(event.horizon)}</small>
       <div class="brief-levers">${tickers}</div>
       <p class="brief-para"><strong>${esc(event.primary_ticker)} snapshot:</strong> ${formatMarketCap(event.market_cap_usd)} market cap · $${Number(event.reference_price).toFixed(2)} reference · ${esc(event.binary_grade)} binary grade</p>
       <p class="brief-para"><strong>Exact trigger:</strong> ${esc(event.trigger)}</p>
@@ -47,10 +47,11 @@
       return response.json();
     })
     .then(data => {
+      const sectorCount = new Set(data.events.map(event => event.sector)).size;
       shell.innerHTML = `
-        <div class="position-head"><h2 id="gpt-brief-heading">GPT Swan Catalyst Brief</h2><span>${data.events.length} binary events · ${formatDate(data.window_start)} → ${formatDate(data.window_end)} · 6:30 AM CT cadence</span></div>
+        <div class="position-head"><h2 id="gpt-brief-heading">GPT Swan Catalyst Brief</h2><span>${data.events.length} binary events · ${sectorCount} sectors · ${formatDate(data.window_start)} → ${formatDate(data.window_end)} · 6:30 AM CT cadence</span></div>
         <p class="trading-takeaway">${esc(data.summary)}</p>
-        <p class="scan-intro"><strong>Small-cap binary focus:</strong> ${data.universe.map(esc).join(' · ')}. Events are selected for ticker-specific outcome dispersion—not by current holdings.</p>
+        <p class="scan-intro"><strong>Sector-diverse binary focus:</strong> ${data.universe.map(esc).join(' · ')}. Events are selected for ticker-specific outcome dispersion and cross-sector variety—not by current holdings.</p>
         <div class="brief-log" data-gpt-brief-as-of="${esc(data.as_of)}">${data.events.map(renderEvent).join('')}</div>
         <details class="trading-method"><summary>Context and method</summary><ul class="brief-bullets">${data.context.map(item => `<li>${esc(item)}</li>`).join('')}</ul><p>${esc(data.methodology)}</p></details>
         <p class="trading-note">Research and monitoring only. Option-implied ranges are indicative marks, not executable fills or recommendations.</p>`;
