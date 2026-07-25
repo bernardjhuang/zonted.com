@@ -10,6 +10,8 @@ import pathlib
 import re
 from urllib.parse import urlparse
 
+from sync_trading_desk import sync_sections
+
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
 DATA = ROOT / "trading" / "gpt-brief.json"
@@ -131,10 +133,13 @@ def main() -> None:
         count=1,
         flags=re.S,
     )
-    if new == PAGE.read_text():
+    page_changed = new != PAGE.read_text()
+    if page_changed:
+        PAGE.write_text(new)
+    routed_changed = bool(sync_sections(["gpt-brief"]))
+    if not page_changed and not routed_changed:
         print(f"[gpt-brief] already current: {len(data['events'])} events")
         return
-    PAGE.write_text(new)
     print(f"[gpt-brief] rendered {len(data['events'])} events as of {data['as_of']}")
 
 

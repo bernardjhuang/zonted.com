@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inject tail-risk brief log into trading/index.html (AUTO:BRIEF block).
+"""Inject the tail-risk brief into classic and routed brief surfaces.
 
 Reads ALL briefs from tail-risk-scanner/briefs/*.md, renders them newest-first
 as a running log inside the Brief tab.
@@ -16,6 +16,8 @@ import html
 import os
 import re
 import sys
+
+from sync_trading_desk import sync_sections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
@@ -608,11 +610,13 @@ def main():
         flags=re.S,
     )
 
-    if new == open(PAGE).read():
+    page_changed = new != open(PAGE).read()
+    if page_changed:
+        open(PAGE, "w").write(new)
+    routed_changed = bool(sync_sections(["brief"]))
+    if not page_changed and not routed_changed:
         print(f"[brief] already current: {entry_count} briefs, latest {latest_date}")
         return
-
-    open(PAGE, "w").write(new)
     print(f"[brief] injected {entry_count} briefs, latest {latest_date}")
 
 

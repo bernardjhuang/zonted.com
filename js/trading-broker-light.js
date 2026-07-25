@@ -103,8 +103,12 @@
     const anchoredPanel = hash && document.getElementById(hash.slice(1))?.closest('[role="tabpanel"]');
     return tabs.find(t => panelOf(t) === anchoredPanel) || tabs[0];
   };
-  activate(fromHash());
-  addEventListener('hashchange', () => activate(fromHash()));
+  const initialTab = fromHash();
+  if (initialTab) activate(initialTab);
+  addEventListener('hashchange', () => {
+    const tab = fromHash();
+    if (tab) activate(tab);
+  });
 
   /* ── momentum-scan full setup-chart accordions ───────────────────── */
   const scanPanel = $('#scan-panel');

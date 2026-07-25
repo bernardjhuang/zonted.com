@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Inject the latest momentum scan into trading/index.html (AUTO:SCAN block).
+"""Inject the latest momentum scan into classic and routed dashboard surfaces.
 
 Reads the newest ~/trading/scans/vwap-scan-*.json (or a path given
 as argv[1]) plus its matching scan-charts JSON emitted by setup_vwap_charts.py, renders the
@@ -22,6 +22,8 @@ import os
 import re
 import sys
 from zoneinfo import ZoneInfo
+
+from sync_trading_desk import sync_sections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
@@ -489,15 +491,16 @@ def main():
     page_changed = new != page
     asset_changed = old_asset != asset_json
     universe_changed = old_universe != universe_json
-    if not page_changed and not asset_changed and not universe_changed:
-        print(f"[scan] already current: {os.path.basename(path)}, {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
-        return
     if page_changed:
         open(PAGE, "w").write(new)
     if asset_changed:
         open(CHART_ASSET, "w").write(asset_json)
     if universe_changed:
         open(UNIVERSE_ASSET, "w").write(universe_json)
+    routed_changed = bool(sync_sections(["momentum"]))
+    if not page_changed and not asset_changed and not universe_changed and not routed_changed:
+        print(f"[scan] already current: {os.path.basename(path)}, {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
+        return
     print(f"[scan] injected {os.path.basename(path)}: {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
 
 
