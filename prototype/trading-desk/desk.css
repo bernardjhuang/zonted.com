@@ -6,6 +6,7 @@
   --bl-ink:#1c1e22; --bl-ink2:#34373d; --bl-muted:#5c5f66; --bl-faint:#666a70;
   --bl-accent:#2f5fb3; --bl-chipbg:#e9eef8; --bl-chipbd:#c4d2ec;
   --bl-gain:#087a42; --bl-loss:#c93a4a; --bl-warn:#9a621d; --bl-warnbg:#fdf6ec;
+  --bl-vwap:#9a621d; --bl-spark:#8fa4c9;
   --bl-sans:'IBM Plex Sans',system-ui,sans-serif; --bl-mono:'IBM Plex Mono',ui-monospace,monospace;
 }
 *{box-sizing:border-box;margin:0;padding:0}
@@ -149,3 +150,63 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
   .res-grid{grid-template-columns:1fr}
   .phead h1{font-size:21px}
 }
+
+
+/* ── embedded live charts (markup + rules lifted from /trading/) ───── */
+.bl .scan-sec{color: var(--bl-muted);}
+.bl .scan-z-pos{color: var(--bl-gain);}
+.bl .scan-z-neg{color: var(--bl-loss);}
+.bl .scan-comparison-grid .setup-card, .bl .scan-comparison-grid .vwap-chart{margin: 0;}
+.bl .vwap-chart{border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0;}
+.bl .vwap-chart figcaption{display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px;}
+.bl .vwap-chart figcaption b{font: 600 13px var(--bl-mono);}
+.bl .vwap-chart figcaption span{font-size: 12px; color: var(--bl-muted);}
+.bl .vwap-chart figcaption em{margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal;}
+.bl .vwap-chart figcaption .vwap-z-badge{font: 600 11px var(--bl-mono); white-space: nowrap;}
+.bl .vwap-chart svg{display: block; width: 100%; height: auto;}
+.bl .vg{stroke: var(--bl-divider);}
+.bl .va{fill: var(--bl-faint); font: 10px var(--bl-mono);}
+.bl .vlp{fill: none; stroke: var(--bl-accent); stroke-width: 2;}
+.bl .vlv{fill: none; stroke: var(--bl-vwap); stroke-width: 1.5; stroke-dasharray: 5 4;}
+.bl .vfp{fill: rgba(47, 95, 179, 0.06);}
+.bl .vfn{fill: rgba(201, 58, 74, 0.07);}
+.bl .vmu{fill: var(--bl-gain);}
+.bl .vmd{fill: var(--bl-loss);}
+.bl .vxh{stroke: var(--bl-faint); stroke-dasharray: 2 3;}
+.bl .vzt{stroke: var(--bl-divider); stroke-dasharray: 3 4;}
+.bl .vzp, .bl .vzn, .bl .vzm{fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;}
+.bl .vzp{stroke: var(--bl-gain);}
+.bl .vzn{stroke: var(--bl-loss);}
+.bl .vzm{stroke: var(--bl-faint);}
+.bl .vzl{fill: var(--bl-faint); font: 10px var(--bl-mono); letter-spacing: .04em;}
+.bl .vzl.scan-z-pos{fill: var(--bl-gain);}
+.bl .vzl.scan-z-neg{fill: var(--bl-loss);}
+.bl .vzl.scan-sec{fill: var(--bl-muted);}
+.bl .vwap-tip, .bl .setup-tip{position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 6px; font: 400 11px var(--bl-mono); color: var(--bl-muted);}
+.bl .vwap-tip b, .bl .setup-tip b{color: var(--bl-ink);}
+.crypto-grid{display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px;}
+.crypto-grid{grid-template-columns: repeat(2, minmax(0, 1fr));}
+.crypto-grid{grid-template-columns: 1fr;}
+.crypto-card{border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; margin: 0;}
+.crypto-card figcaption{display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px;}
+.crypto-card figcaption b{font: 600 13px var(--bl-mono);}
+.crypto-card figcaption span{font-size: 12px; color: var(--bl-muted);}
+.crypto-card figcaption em{margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal;}
+.crypto-card svg{display: block; width: 100%; height: auto;}
+.selected-chart .vwap-chart, .selected-chart .crypto-card{margin: 0;}
+.selected-chart .crypto-card{padding: 16px;}
+.vwap-chart-grid, .crypto-chart-grid{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 20px 18px;}
+.vwap-chart-grid .vwap-chart{min-width: 0; margin: 0;}
+.vwap-chart-grid .vwap-chart--spy{grid-column: auto;}
+.crypto-chart-grid .crypto-card{min-width: 0; margin: 0; padding: 16px;}
+.portfolio-grid, .hypothesis-grid, .vwap-chart-grid, .crypto-chart-grid{grid-template-columns: 1fr;}
+.data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .vwap-chart-grid, .crypto-chart-grid, .trading-method, .data-disclosure, .scan-universe-disclosure{margin-left: 16px; margin-right: 16px;}
+.chart-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;margin-bottom:18px}
+.chart-grid .vwap-chart,.chart-grid .crypto-card{margin:0}
+.crypto-card{border:1px solid var(--bl-border);border-radius:8px;background:var(--bl-card);padding:14px 14px 8px}
+.crypto-card figcaption{display:flex;gap:8px;align-items:baseline;margin-bottom:8px}
+.crypto-card figcaption b{font:600 13px var(--bl-mono)}
+.crypto-card figcaption span{font-size:12px;color:var(--bl-muted)}
+.crypto-card svg{display:block;width:100%;height:auto}
+@media(max-width:1040px){.chart-grid{grid-template-columns:1fr}}
+@media(min-width:1041px) and (max-width:1300px){.chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
