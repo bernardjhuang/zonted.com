@@ -20,7 +20,7 @@ CLASSIC = ROOT / "trading" / "classic" / "index.html"
 DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
 GPT_SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
-HORIZON_SCRIPT = ROOT / "js" / "trading-horizon.js"
+GROK_BRIEF_SCRIPT = ROOT / "js" / "trading-grok-brief.js"
 
 
 @dataclass(frozen=True)
@@ -46,12 +46,12 @@ ROUTES = {
         ("GPT_BRIEF",),
         (GPT_SCRIPT,),
     ),
-    "horizon": Route(
-        ROOT / "trading" / "horizon" / "index.html",
-        "Horizon",
-        "Cross-agency deep research on dated catalysts still early enough to own — FDA, DEA, CFTC, SEC, DOD, WHO, and the Federal Register.",
-        ("HORIZON",),
-        (HORIZON_SCRIPT,),
+    "grok-brief": Route(
+        ROOT / "trading" / "grok-brief" / "index.html",
+        "Grok brief",
+        "Grok deep research on dated catalysts still early enough to own — FDA, DEA, CFTC, SEC, DOD, WHO, and the Federal Register.",
+        ("GROK_BRIEF",),
+        (GROK_BRIEF_SCRIPT,),
     ),
     "momentum": Route(
         ROOT / "trading" / "momentum" / "index.html",

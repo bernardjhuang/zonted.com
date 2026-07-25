@@ -38,7 +38,7 @@ def main() -> None:
         desktop.goto(args.url, wait_until="networkidle")
         check(desktop.locator(".trading-tab").count() == 10, "expected ten tabs")
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
-        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "horizon-tab", "scan-tab", "vwap-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
+        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "grok-brief-tab", "scan-tab", "vwap-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
@@ -92,12 +92,12 @@ def main() -> None:
         check("not by current holdings" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief still implies portfolio-centered selection")
         check("White swan" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is missing white-swan outcomes")
         check("Black swan" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is missing black-swan outcomes")
-        desktop.goto(args.url + "#horizon", wait_until="networkidle")
-        check(desktop.locator("#horizon-tab").get_attribute("aria-selected") == "true", "Horizon deep link did not activate")
-        check(desktop.locator("#horizon-panel [data-thesis-id]").count() >= 1, "Horizon has no thesis cards")
-        check("Catalyst chain" in desktop.locator("#horizon-panel").inner_text(), "Horizon is missing catalyst chains")
-        check("Agencies scanned" in desktop.locator("#horizon-panel").inner_text(), "Horizon is missing agency scan summary")
-        check("Transmission:" in desktop.locator("#horizon-panel").inner_text(), "Horizon is missing transmission sections")
+        desktop.goto(args.url + "#grok-brief", wait_until="networkidle")
+        check(desktop.locator("#grok-brief-tab").get_attribute("aria-selected") == "true", "Grok brief deep link did not activate")
+        check(desktop.locator("#grok-brief-panel [data-thesis-id]").count() >= 1, "Grok brief has no thesis cards")
+        check("Catalyst chain" in desktop.locator("#grok-brief-panel").inner_text(), "Grok brief is missing catalyst chains")
+        check("Agencies scanned" in desktop.locator("#grok-brief-panel").inner_text(), "Grok brief is missing agency scan summary")
+        check("Transmission:" in desktop.locator("#grok-brief-panel").inner_text(), "Grok brief is missing transmission sections")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
@@ -215,12 +215,12 @@ def main() -> None:
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped GPT brief")
         desktop.keyboard.press("ArrowRight")
-        check(desktop.locator("#horizon-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Horizon")
+        check(desktop.locator("#grok-brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Grok brief")
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#horizon", "#scan", "#vwap", "#crypto", "#risk", "#results"):
+        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#grok-brief", "#scan", "#vwap", "#crypto", "#risk", "#results"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))

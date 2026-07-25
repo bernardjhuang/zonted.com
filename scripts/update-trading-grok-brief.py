@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate trading/horizon.json and sync it into the Horizon tab."""
+"""Validate trading/grok-brief.json and sync it into the Grok brief tab."""
 from __future__ import annotations
 
 import hashlib
@@ -13,10 +13,10 @@ from sync_trading_desk import sync_sections
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
-DATA = ROOT / "trading" / "horizon.json"
-SCRIPT = ROOT / "js" / "trading-horizon.js"
-START = "<!-- AUTO:HORIZON:START -->"
-END = "<!-- AUTO:HORIZON:END -->"
+DATA = ROOT / "trading" / "grok-brief.json"
+SCRIPT = ROOT / "js" / "trading-grok-brief.js"
+START = "<!-- AUTO:GROK_BRIEF:START -->"
+END = "<!-- AUTO:GROK_BRIEF:END -->"
 
 REQUIRED_ROOT = {
     "as_of",
@@ -69,17 +69,17 @@ def valid_url(value: str) -> bool:
 def validate(data: dict) -> None:
     missing = REQUIRED_ROOT - data.keys()
     if missing:
-        raise ValueError(f"missing horizon fields: {sorted(missing)}")
-    if data["scope"] != "cross-agency-horizon-theses":
-        raise ValueError("horizon scope must be cross-agency-horizon-theses")
+        raise ValueError(f"missing grok-brief fields: {sorted(missing)}")
+    if data["scope"] != "cross-agency-grok-brief-theses":
+        raise ValueError("grok-brief scope must be cross-agency-grok-brief-theses")
     if "06:30" not in str(data["cadence"]):
-        raise ValueError("horizon cadence must mention 06:30")
+        raise ValueError("grok-brief cadence must mention 06:30")
     if not isinstance(data["agencies_scanned"], list) or len(data["agencies_scanned"]) < 5:
         raise ValueError("agencies_scanned must list at least five agencies")
     if not isinstance(data["theses"], list) or not data["theses"]:
         raise ValueError("theses must be a non-empty list")
     if len(data["theses"]) > 10:
-        raise ValueError("horizon must rank at most ten theses")
+        raise ValueError("grok-brief must rank at most ten theses")
 
     ids: set[str] = set()
     agencies: set[str] = set()
@@ -115,30 +115,30 @@ def validate(data: dict) -> None:
         agencies.add(str(thesis["agency"]).strip())
 
     if len(agencies) < 4:
-        raise ValueError("horizon must cover at least four agencies")
+        raise ValueError("grok-brief must cover at least four agencies")
     if sum(1 for thesis in data["theses"] if thesis["agency"] == "FDA") > 4:
         raise ValueError("FDA may not occupy more than four theses")
     if sum(1 for thesis in data["theses"] if thesis["narrative_stage"] == "early") < 1:
-        raise ValueError("horizon needs at least one early-stage thesis")
+        raise ValueError("grok-brief needs at least one early-stage thesis")
 
 
 def render_panel(data: dict) -> str:
     data_version = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
-    return f'''            <section class="trading-panel brief-panel" id="horizon-panel" role="tabpanel" tabindex="0" aria-labelledby="horizon-tab" hidden>
-                <div id="horizon-shell" data-url="/trading/horizon.json?v={data_version}">
-                    <p class="trading-note">Loading the latest cross-agency horizon scan…</p>
+    return f'''            <section class="trading-panel brief-panel" id="grok-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="grok-brief-tab" hidden>
+                <div id="grok-brief-shell" data-url="/trading/grok-brief.json?v={data_version}">
+                    <p class="trading-note">Loading the latest Grok catalyst brief…</p>
                 </div>
             </section>'''
 
 
 def ensure_tab(page: str) -> str:
-    if 'id="horizon-tab"' in page:
+    if 'id="grok-brief-tab"' in page:
         return page
     gpt_button = '<button class="trading-tab" id="gpt-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="gpt-brief-panel">GPT brief</button>'
-    horizon_button = '<button class="trading-tab" id="horizon-tab" type="button" role="tab" aria-selected="false" aria-controls="horizon-panel">Horizon</button>'
+    grok_button = '<button class="trading-tab" id="grok-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="grok-brief-panel">Grok brief</button>'
     if gpt_button not in page:
         raise ValueError("GPT brief tab anchor not found")
-    return page.replace(gpt_button, gpt_button + "\n                " + horizon_button, 1)
+    return page.replace(gpt_button, gpt_button + "\n                " + grok_button, 1)
 
 
 def ensure_markers(page: str) -> str:
@@ -152,10 +152,10 @@ def ensure_markers(page: str) -> str:
 
 def ensure_script(page: str) -> str:
     script_version = hashlib.sha256(SCRIPT.read_bytes()).hexdigest()[:12]
-    script_tag = f'<script src="/js/trading-horizon.js?v={script_version}"></script>'
-    if "/js/trading-horizon.js?v=" in page:
+    script_tag = f'<script src="/js/trading-grok-brief.js?v={script_version}"></script>'
+    if "/js/trading-grok-brief.js?v=" in page:
         return re.sub(
-            r'\s*<script src="/js/trading-horizon\.js\?v=[^"]+"></script>',
+            r'\s*<script src="/js/trading-grok-brief\.js\?v=[^"]+"></script>',
             f"\n    {script_tag}",
             page,
             count=1,
@@ -182,11 +182,11 @@ def main() -> None:
     page_changed = new != PAGE.read_text()
     if page_changed:
         PAGE.write_text(new)
-    routed_changed = bool(sync_sections(["horizon"]))
+    routed_changed = bool(sync_sections(["grok-brief"]))
     if not page_changed and not routed_changed:
-        print(f"[horizon] already current: {len(data['theses'])} theses")
+        print(f"[grok-brief] already current: {len(data['theses'])} theses")
         return
-    print(f"[horizon] rendered {len(data['theses'])} theses as of {data['as_of']}")
+    print(f"[grok-brief] rendered {len(data['theses'])} theses as of {data['as_of']}")
 
 
 if __name__ == "__main__":
