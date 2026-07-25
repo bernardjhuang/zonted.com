@@ -1,26 +1,26 @@
-# Horizon scanner — trading-day catalyst research
+# Grok brief scanner — trading-day catalyst research
 
 ## Why this exists
 
 GPT brief owns the next **six weeks of binary events** (PDUFA/AdCom-style resolution risk).
 
-Horizon owns the **HIMS-April pattern**: a regulator just committed to deciding something material, on a date weeks or months out, while the equity narrative is still incomplete. The edge is announcement-day asymmetry, not resolution-day chase.
+Grok brief owns the **HIMS-April pattern**: a regulator just committed to deciding something material, on a date weeks or months out, while the equity narrative is still incomplete. The edge is announcement-day asymmetry, not resolution-day chase.
 
 ## Cadence
 
 - **When:** 06:30 America/Chicago on NYSE trading days
-- **Cron wrapper:** `scripts/cron-publish-horizon.sh`
-- **Renderer:** `scripts/update-trading-horizon.py`
-- **Payload:** `trading/horizon.json`
-- **Surfaces:** classic `#horizon` tab + routed `/trading/horizon/`
+- **Cron wrapper:** `scripts/cron-publish-grok-brief.sh`
+- **Renderer:** `scripts/update-trading-grok-brief.py`
+- **Payload:** `trading/grok-brief.json`
+- **Surfaces:** classic `#grok-brief` tab + routed `/trading/grok-brief/`
 
 ## Agent job (openclaw)
 
 1. Scan primary sources across FDA, DEA, CFTC, SEC, DOD, WHO, USDA, NRC, FCC, and the Federal Register.
 2. Keep only events with the shape: *dated or dateable public decision + mappable public-company leverage*.
 3. Prefer niches outside PDUFA muscle memory (compounding policy, event contracts, critical minerals, procurement plumbing, listing standards).
-4. Rewrite `trading/horizon.json` with at most ten theses.
-5. Run `python3 scripts/update-trading-horizon.py` (or let the cron wrapper do it).
+4. Rewrite `trading/grok-brief.json` with at most ten theses.
+5. Run `python3 scripts/update-trading-grok-brief.py` (or let the cron wrapper do it).
 6. Push via the cron script when the working tree changes.
 
 ## Required thesis fields
@@ -43,9 +43,9 @@ Also required: `narrative_stage` ∈ {early, building, crowded}, `priority` ∈ 
 
 ## Validation gates
 
-Enforced by `update-trading-horizon.py`:
+Enforced by `update-trading-grok-brief.py`:
 
-- `scope` must be `cross-agency-horizon-theses`
+- `scope` must be `cross-agency-grok-brief-theses`
 - cadence must mention `06:30`
 - ≥5 agencies scanned, ≥4 agencies represented in theses
 - ≤10 theses, ≤4 FDA theses
@@ -58,6 +58,6 @@ Enforced by `update-trading-horizon.py`:
 |---|---|
 | `/trading/brief/` | Daily desk brief / positions / macro |
 | `/trading/gpt-brief/` | Six-week sector-diverse binaries |
-| `/trading/horizon/` | Longer-dated cross-agency deep theses |
+| `/trading/grok-brief/` | Longer-dated cross-agency deep theses |
 
-Do not dump near-term CAPR/REPL-style binaries into Horizon unless unused multi-stage runway remains.
+Do not dump near-term CAPR/REPL-style binaries into this tab unless unused multi-stage runway remains.
