@@ -2,6 +2,8 @@
 """Render trading/gpt-brief.json into the GPT brief tab."""
 from __future__ import annotations
 
+import datetime as dt
+import hashlib
 import html
 import json
 import pathlib
@@ -11,6 +13,7 @@ from urllib.parse import urlparse
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "index.html"
 DATA = ROOT / "trading" / "gpt-brief.json"
+SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
 START = "<!-- AUTO:GPT_BRIEF:START -->"
 END = "<!-- AUTO:GPT_BRIEF:END -->"
 
@@ -25,7 +28,7 @@ def valid_url(value: str) -> bool:
 
 
 def validate(data: dict) -> None:
-    required = {"as_of", "summary", "universe", "events", "context", "methodology"}
+    required = {"as_of", "scope", "window_start", "window_end", "summary", "universe", "events", "context", "methodology"}
     missing = required - data.keys()
     if missing:
         raise ValueError(f"missing GPT brief fields: {sorted(missing)}")
@@ -33,6 +36,14 @@ def validate(data: dict) -> None:
         raise ValueError("universe must be a non-empty list")
     if not isinstance(data["events"], list) or not data["events"]:
         raise ValueError("events must be a non-empty list")
+    if data["scope"] != "market-wide":
+        raise ValueError("GPT brief scope must be market-wide")
+    window_start = dt.date.fromisoformat(data["window_start"])
+    window_end = dt.date.fromisoformat(data["window_end"])
+    if not 35 <= (window_end - window_start).days <= 42:
+        raise ValueError("GPT brief window must span 5–6 weeks")
+    if len(data["events"]) > 8:
+        raise ValueError("GPT brief must rank at most eight events")
     ids: set[str] = set()
     for event in data["events"]:
         event_required = {
@@ -57,8 +68,9 @@ def validate(data: dict) -> None:
 
 
 def render_panel(data: dict) -> str:
+    data_version = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
     return f'''            <section class="trading-panel brief-panel" id="gpt-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="gpt-brief-tab" hidden>
-                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={esc(str(data['as_of'])[:10].replace('-', ''))}">
+                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={data_version}">
                     <p class="trading-note">Loading the latest future catalyst scan…</p>
                 </div>
             </section>'''
@@ -82,7 +94,8 @@ def main() -> None:
             raise ValueError("Brief panel marker not found")
         page = page.replace(brief_end, brief_end + f"\n\n            {START}\n            {END}", 1)
 
-    script_tag = '<script src="/js/trading-gpt-brief.js?v=20260725"></script>'
+    script_version = hashlib.sha256(SCRIPT.read_bytes()).hexdigest()[:12]
+    script_tag = f'<script src="/js/trading-gpt-brief.js?v={script_version}"></script>'
     page = re.sub(
         r'\s*<script src="/js/trading-gpt-brief\.js\?v=[^"]+"></script>',
         f"\n    {script_tag}",

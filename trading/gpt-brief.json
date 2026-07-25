@@ -1,32 +1,51 @@
 {
-  "as_of": "2026-07-25T10:56:41-05:00",
-  "summary": "The next 18 days are unusually dense: the Fed decision lands one day before HOOD earnings, then jobs, HIMS earnings, and CPI follow. HOOD and HIMS options are already pricing violent two-sided moves. ABT has no confirmed hard catalyst inside the eight-week window, which makes it the quiet name in a loud tape.",
+  "as_of": "2026-07-25T11:19:30-05:00",
+  "scope": "market-wide",
+  "window_start": "2026-07-25",
+  "window_end": "2026-09-05",
+  "summary": "This is a market-wide six-week radar, not a portfolio brief. The highest-impact chain is mega-cap earnings at the end of July, the GLP-1 leaders on August 5, Walmart's consumer read on August 20, NVIDIA on August 26, Jackson Hole on August 27–29, and the August jobs report on September 4.",
   "universe": [
-    "HIMS",
-    "HOOD",
-    "ABT",
     "SPY",
     "QQQ",
+    "TLT",
+    "MSFT",
+    "META",
+    "AAPL",
+    "AMZN",
+    "NVDA",
+    "AMD",
+    "AVGO",
+    "TSM",
+    "LLY",
+    "NVO",
     "XLV",
-    "XBI"
+    "XBI",
+    "WMT",
+    "TGT",
+    "COST",
+    "HD",
+    "LOW",
+    "COIN",
+    "PYPL",
+    "SQ"
   ],
   "events": [
     {
       "id": "fomc-2026-07-29",
       "date": "July 29, 2026 · 2:00 PM ET",
       "date_status": "confirmed",
-      "horizon": "4 days",
+      "horizon": "week 1",
       "tier": "Tier 1",
       "category": "Macro / FOMC",
-      "tickers": ["HOOD", "HIMS", "ABT", "SPY", "QQQ"],
+      "tickers": ["SPY", "QQQ", "TLT", "XLF"],
       "title": "Federal Reserve rate decision and press conference",
       "confidence": 1.0,
-      "implication": "This sets the discount-rate backdrop hours before HOOD reports. A hawkish surprise would hit high-duration HOOD and HIMS harder than defensive ABT; a dovish read reverses that pressure.",
-      "direction": "Two-sided; hawkish is bearish HOOD/HIMS and relatively supportive for ABT, while dovish is the mirror image.",
-      "magnitude": "Broad-market event; no ticker-specific move estimate is claimed. Treat the HOOD earnings straddle separately because the two events overlap.",
-      "action": "Do not read the HOOD earnings setup without first recording the statement, vote, and Powell's inflation/growth language.",
-      "invalidation": "A fully expected decision with unchanged guidance and a muted rates reaction.",
-      "watch": "2-year and 10-year Treasury yields, QQQ reaction, and whether rate-sensitive equities hold the first 30-minute move.",
+      "implication": "The decision sets the discount-rate backdrop for the entire six-week window and lands hours before the first mega-cap earnings cluster. Rates, banks, high-duration technology, and housing-sensitive stocks can all reprice together.",
+      "direction": "Hawkish guidance is bearish duration and bonds; a dovish read is supportive unless the shift reflects a sharp growth scare.",
+      "magnitude": "No single-stock percentage is defensible for a macro event. Use the 2-year yield, TLT, QQQ, and breadth to measure the actual shock.",
+      "action": "Record the statement, vote, and Powell's inflation/growth language before interpreting same-day earnings reactions.",
+      "invalidation": "A fully expected decision with unchanged guidance and a muted rates response.",
+      "watch": "2-year Treasury yield, QQQ versus XLF, TLT, and whether the first 30-minute move holds.",
       "sources": [
         {
           "label": "Federal Reserve FOMC calendar",
@@ -39,83 +58,64 @@
       ]
     },
     {
-      "id": "hood-q2-2026",
-      "date": "July 29, 2026 · after market close",
+      "id": "mega-cap-tech-2026-07-29-30",
+      "date": "July 29–30, 2026 · after market close",
       "date_status": "confirmed",
-      "horizon": "4 days",
+      "horizon": "week 1",
       "tier": "Tier 1",
-      "category": "Earnings",
-      "tickers": ["HOOD"],
-      "title": "Robinhood Q2 2026 earnings",
+      "category": "Earnings / Mega-cap technology",
+      "tickers": ["MSFT", "META", "AAPL", "AMZN", "QQQ", "NVDA"],
+      "title": "Microsoft, Meta, Apple, and Amazon earnings cluster",
       "confidence": 1.0,
-      "implication": "The print tests whether net deposits and platform assets are making growth durable enough to justify a roughly 51× trailing P/E, rather than leaving the story dependent on volatile trading revenue.",
-      "direction": "Bullish on strong net deposits, assets, volumes, crypto economics, and a clean outlook; bearish if activity or monetization weakens while expenses rise.",
-      "magnitude": "The July 31 $95 call-plus-put marked about $10.88 at the July 24 close, implying roughly ±11.5% around a $94.61 after-hours stock mark. Indicative, not an executable fill.",
-      "action": "Monitor the release and call. Compare net deposits, platform assets, equity/options/crypto volumes, Gold growth, revenue mix, and expense guidance before changing the thesis.",
-      "invalidation": "A low-information quarter where headline beats are driven by transient market activity but durable deposit and asset trends do not improve.",
-      "watch": "Whether the first reaction survives the call; FOMC headlines earlier that day can contaminate the move.",
+      "implication": "Four index heavyweights report inside roughly 25 hours. Their cloud growth, AI capex, ad demand, consumer spending, and device commentary can reset expectations across software, semiconductors, digital ads, and e-commerce.",
+      "direction": "Bullish if cloud and ad growth absorb AI spending while margins and guidance hold; bearish if capex rises faster than monetization or consumer/device demand softens.",
+      "magnitude": "A single basket move is not defensible because each stock has a separate earnings distribution. Treat cross-company agreement as the market signal, not the first headline beat.",
+      "action": "Build one comparison sheet: Azure/AWS growth, Meta ad pricing and capex, Apple services and device demand, and each company's forward capex/margin guidance.",
+      "invalidation": "Mixed reports with company-specific moves and no common signal in QQQ, cloud, ads, or semiconductors.",
+      "watch": "Whether all four point the same way on AI returns, data-center capacity, and consumer demand; disagreement means less index-level information.",
       "sources": [
         {
-          "label": "Robinhood investor relations",
-          "url": "https://investors.robinhood.com/"
+          "label": "Microsoft FY26 Q4 event",
+          "url": "https://www.microsoft.com/en-us/investor/events/fy-2026/earnings-fy-2026-q4"
         },
         {
-          "label": "Robinhood earnings calendar data",
-          "url": "https://robinhood.com/us/en/stocks/HOOD/"
+          "label": "Meta Q2 2026 announcement",
+          "url": "https://investor.atmeta.com/investor-news/press-release-details/2026/Meta-to-Announce-Second-Quarter-2026-Results/default.aspx"
+        },
+        {
+          "label": "Apple investor relations",
+          "url": "https://investor.apple.com/investor-relations/default.aspx"
+        },
+        {
+          "label": "Amazon Q2 2026 event",
+          "url": "https://ir.aboutamazon.com/events/event-details/2026/Q2-2026-Amazoncom-Inc-Earnings-Conference-Call/default.aspx"
         }
       ]
     },
     {
-      "id": "jobs-2026-08-07",
-      "date": "August 7, 2026 · 8:30 AM ET",
+      "id": "glp1-leaders-2026-08-05",
+      "date": "August 5, 2026 · 7:00 AM and 10:00 AM ET",
       "date_status": "confirmed",
-      "horizon": "13 days",
+      "horizon": "week 2",
       "tier": "Tier 1",
-      "category": "Macro / Employment",
-      "tickers": ["HOOD", "HIMS", "ABT", "SPY", "QQQ"],
-      "title": "July Employment Situation",
+      "category": "Earnings / Obesity drugs",
+      "tickers": ["LLY", "NVO", "XLV", "XBI", "HIMS"],
+      "title": "Novo Nordisk and Eli Lilly report on the same morning",
       "confidence": 1.0,
-      "implication": "A hot report can revive rate pressure; a weak report can help duration but raise recession risk. HOOD is the highest-beta read-through, while ABT is the defensive relative-value name.",
-      "direction": "Hot wages/jobs: usually bearish duration. Soft but orderly: usually supportive. Abrupt deterioration: risk-off despite lower yields.",
-      "magnitude": "Macro reaction only; no unsupported single-stock percentage is assigned.",
-      "action": "Record payrolls, unemployment, wage growth, and revisions. Separate the rates response from the growth response.",
-      "invalidation": "A consensus-like release with small revisions and little bond-market movement.",
-      "watch": "2-year yield, QQQ versus XLV, and whether HOOD confirms or rejects the macro move.",
+      "implication": "The two GLP-1 leaders can reset obesity-drug demand, pricing, supply, oral-drug expectations, and the competitive outlook for biotech, pharmacies, medtech, and telehealth names.",
+      "direction": "Bullish on durable volume, improving supply, strong next-generation data, and pricing discipline; bearish on share loss, weaker persistence, reimbursement pressure, or capacity bottlenecks.",
+      "magnitude": "At July 24 marks, the August 7 $1,200 LLY straddle implied about ±8.3% and the August 7 $49 NVO straddle about ±8.6%. Both are indicative midpoint estimates, not executable fills.",
+      "action": "Compare volumes, price/mix, manufacturing capacity, oral and next-generation pipeline timing, and management commentary on compounding and reimbursement.",
+      "invalidation": "Company-specific noise with no shared read-through on category growth, supply, or pricing.",
+      "watch": "LLY versus NVO relative performance and whether HIMS, XLV, and XBI confirm the category signal.",
       "sources": [
         {
-          "label": "BLS Employment Situation",
-          "url": "https://www.bls.gov/news.release/empsit.nr0.htm"
+          "label": "Novo Nordisk financial calendar",
+          "url": "https://www.novonordisk.com/investors/financial-calendar.html"
         },
         {
-          "label": "BLS August 2026 release schedule",
-          "url": "https://www.bls.gov/schedule/2026/08_sched.htm"
-        }
-      ]
-    },
-    {
-      "id": "hims-q2-2026",
-      "date": "August 10, 2026 · 5:00 PM ET call",
-      "date_status": "confirmed",
-      "horizon": "16 days",
-      "tier": "Tier 1",
-      "category": "Earnings / Regulatory",
-      "tickers": ["HIMS", "XBI", "XLV"],
-      "title": "Hims & Hers Q2 2026 earnings",
-      "confidence": 1.0,
-      "implication": "This is the first clean management checkpoint after the July PCAC meeting and amid continuing GLP-1 compounding uncertainty. Revenue quality, guidance, and the legal/regulatory path matter more than a one-quarter EPS print.",
-      "direction": "Bullish if revenue lands above the $680M–$700M guide, margins hold, and management gives a credible compliant growth path; bearish if GLP-1 pressure, churn, or regulatory exposure forces a guide cut.",
-      "magnitude": "The August 14 $28 call-plus-put marked about $6.23 at the July 24 close, implying roughly ±22.3% around a $27.99 after-hours stock mark. Liquidity was uneven, so treat this as indicative.",
-      "action": "Monitor subscribers, revenue per subscriber, gross margin, adjusted EBITDA, weight-loss mix, guidance, and every answer on compounding and FDA compliance. No pre-commitment to direction.",
-      "invalidation": "A headline beat without evidence that the post-shortage product mix is durable or compliant.",
-      "watch": "Any pre-earnings FDA/Federal Register action can supersede the normal earnings setup.",
-      "sources": [
-        {
-          "label": "Hims & Hers earnings announcement",
-          "url": "https://investors.hims.com/news/news-details/2026/Hims--Hers-to-Announce-Second-Quarter-2026-Financial-Results-on-August-10-2026/default.aspx"
-        },
-        {
-          "label": "Hims & Hers event calendar",
-          "url": "https://investors.hims.com/events-and-presentations/events-calendar/event-details/2026/Hims--Hers-Second-Quarter-2026-Earnings-Call/default.aspx"
+          "label": "Lilly Q2 2026 earnings event",
+          "url": "https://investor.lilly.com/events/event-details/q2-2026-earnings-call"
         }
       ]
     },
@@ -123,62 +123,143 @@
       "id": "cpi-2026-08-12",
       "date": "August 12, 2026 · 8:30 AM ET",
       "date_status": "confirmed",
-      "horizon": "18 days",
+      "horizon": "week 3",
       "tier": "Tier 1",
-      "category": "Macro / CPI",
-      "tickers": ["HOOD", "HIMS", "ABT", "SPY", "QQQ"],
+      "category": "Macro / Inflation",
+      "tickers": ["SPY", "QQQ", "TLT", "XLF"],
       "title": "July Consumer Price Index",
       "confidence": 1.0,
-      "implication": "This is the first major inflation check after the July FOMC meeting and can rapidly reprice September policy odds. HOOD and HIMS carry more duration sensitivity than ABT.",
-      "direction": "Hot core CPI is bearish high-duration equities; cooler inflation is supportive unless paired with a sharp growth scare.",
-      "magnitude": "Macro event; use the rates and index reaction rather than inventing a ticker-specific expected move.",
-      "action": "Compare headline, core, shelter, and services inflation with the bond move. Do not trade the first number in isolation.",
+      "implication": "This is the first major inflation check after the July FOMC meeting and can rapidly reprice September policy odds across equities, bonds, banks, housing, and rate-sensitive growth stocks.",
+      "direction": "Hot core inflation is bearish duration; cooler inflation is supportive unless it arrives with a sharp growth scare.",
+      "magnitude": "Macro event; no unsupported ticker-specific percentage is assigned.",
+      "action": "Compare headline, core, shelter, and services inflation with the 2-year yield and market breadth.",
       "invalidation": "A near-consensus print with offsetting components and little change in September rate odds.",
-      "watch": "2-year yield, QQQ/SPY breadth, XLV relative strength, and revisions to the post-FOMC narrative.",
+      "watch": "2-year yield, TLT, QQQ/SPY breadth, and rate-sensitive sector leadership.",
       "sources": [
         {
           "label": "BLS CPI release schedule",
           "url": "https://www.bls.gov/schedule/news_release/cpi.htm"
         },
         {
-          "label": "BLS August 2026 release schedule",
+          "label": "BLS August 2026 schedule",
           "url": "https://www.bls.gov/schedule/2026/08_sched.htm"
         }
       ]
     },
     {
-      "id": "hims-503b-glp1-watch",
-      "date": "Date not announced",
-      "date_status": "unscheduled watch",
-      "horizon": "could occur without notice",
-      "tier": "Tier 2",
-      "category": "FDA / Compounding",
-      "tickers": ["HIMS"],
-      "title": "FDA follow-through on GLP-1 bulk-drug policy",
-      "confidence": 0.65,
-      "implication": "Formal FDA action affecting semaglutide, tirzepatide, or liraglutide compounding would be immediately material to the HIMS narrative, but there is no confirmed release date. This belongs on the watchlist, not the calendar.",
-      "direction": "Restrictions or enforcement are bearish HIMS; a clearer lawful personalization pathway is bullish.",
-      "magnitude": "No defensible percentage without a dated action and exact scope. The HIMS earnings straddle shows the market already expects high volatility.",
-      "action": "Check FDA and Federal Register publications every trading morning for named-drug and 503A/503B actions; alert only on a new primary-source document.",
-      "invalidation": "A notice that does not change HIMS' actual legal or operating pathway, or merely repeats existing policy.",
-      "watch": "Final scope, effective date, enforcement discretion, and whether the action applies to 503A pharmacies, 503B outsourcing facilities, or both.",
+      "id": "wmt-q2-fy27-2026-08-20",
+      "date": "August 20, 2026 · before market open",
+      "date_status": "confirmed",
+      "horizon": "week 4",
+      "tier": "Tier 1",
+      "category": "Earnings / Consumer",
+      "tickers": ["WMT", "TGT", "COST", "HD", "LOW", "XLY"],
+      "title": "Walmart Q2 FY2027 earnings",
+      "confidence": 0.9,
+      "implication": "Walmart is the cleanest large-cap read on value-seeking behavior, grocery inflation, general merchandise demand, e-commerce economics, and the health of the mass-market consumer.",
+      "direction": "Bullish retail if traffic, discretionary mix, e-commerce margins, and guidance improve; bearish if shoppers trade down harder, general merchandise weakens, or margin pressure returns.",
+      "magnitude": "No option-implied move is published here; the date is confirmed by the earnings calendar, but the official event page was not yet indexed.",
+      "action": "Compare traffic versus ticket, grocery versus general merchandise, advertising, e-commerce profitability, inventory, and full-year guidance.",
+      "invalidation": "A Walmart-specific result driven by share gains that does not match TGT, COST, HD, LOW, or consumer data.",
+      "watch": "Retail breadth, XLY, and whether management describes resilient demand or broad trade-down behavior.",
       "sources": [
         {
-          "label": "FDA pharmacy compounding hub",
-          "url": "https://www.fda.gov/drugs/human-drug-compounding"
+          "label": "Walmart investor relations",
+          "url": "https://stock.walmart.com/"
         },
         {
-          "label": "Federal Register FDA documents",
-          "url": "https://www.federalregister.gov/agencies/food-and-drug-administration"
+          "label": "Walmart SEC filings",
+          "url": "https://stock.walmart.com/sec-filings/all-sec-filings"
+        }
+      ]
+    },
+    {
+      "id": "nvda-q2-fy27-2026-08-26",
+      "date": "August 26, 2026 · after market close",
+      "date_status": "confirmed",
+      "horizon": "week 5",
+      "tier": "Tier 1",
+      "category": "Earnings / AI infrastructure",
+      "tickers": ["NVDA", "AMD", "AVGO", "TSM", "QQQ", "SMH"],
+      "title": "NVIDIA Q2 FY2027 financial results",
+      "confidence": 1.0,
+      "implication": "NVIDIA is the highest-information checkpoint for AI infrastructure demand, accelerator supply, networking, hyperscaler capex, sovereign AI, and the semiconductor complex.",
+      "direction": "Bullish if data-center growth, gross margin, supply visibility, and forward demand beat elevated expectations; bearish if capacity, export controls, product transitions, or customer digestion weaken the outlook.",
+      "magnitude": "The August 28 $205 call-plus-put marked about $23.20 at the July 24 close, implying roughly ±11.2% around a $206.80 after-hours stock mark. Indicative, not an executable fill.",
+      "action": "Track data-center revenue, networking, gross margin, next-platform shipments, China/export commentary, and hyperscaler demand visibility.",
+      "invalidation": "A large NVDA move that is driven by company-specific supply timing and does not confirm in AMD, AVGO, TSM, SMH, or QQQ.",
+      "watch": "Semiconductor breadth and whether AI beneficiaries outside NVDA confirm the guidance signal.",
+      "sources": [
+        {
+          "label": "NVIDIA Q2 FY27 event",
+          "url": "https://investor.nvidia.com/events-and-presentations/events-and-presentations/event-details/2026/NVIDIA-2nd-Quarter-FY27-Financial-Results/default.aspx"
+        },
+        {
+          "label": "NVIDIA events calendar",
+          "url": "https://investor.nvidia.com/events-and-presentations/events-and-presentations/default.aspx"
+        }
+      ]
+    },
+    {
+      "id": "jackson-hole-2026-08-27",
+      "date": "August 27–29, 2026",
+      "date_status": "confirmed",
+      "horizon": "week 5",
+      "tier": "Tier 1",
+      "category": "Macro / Payments policy",
+      "tickers": ["SPY", "QQQ", "TLT", "XLF", "COIN", "PYPL", "SQ"],
+      "title": "Jackson Hole: Financial Innovation, Payments, and Policy",
+      "confidence": 1.0,
+      "implication": "The 2026 theme directly links monetary policy with payments and financial innovation. Central-bank language can move rates broadly and create specific read-throughs for banks, fintech, stablecoins, and crypto infrastructure.",
+      "direction": "Hawkish policy language is bearish duration; constructive payments or innovation policy can support fintech and crypto, while restrictive language does the opposite.",
+      "magnitude": "Speech-driven event; no defensible move estimate exists before the agenda and speakers are published.",
+      "action": "Preload the agenda when released and prioritize speeches on inflation, payments, stablecoins, bank competition, and transmission of monetary policy.",
+      "invalidation": "Academic discussion without new policy signals or market-moving central-bank guidance.",
+      "watch": "2-year yield, TLT, banks versus fintech, and COIN/PYPL/SQ reaction to payment-policy language.",
+      "sources": [
+        {
+          "label": "Kansas City Fed symposium",
+          "url": "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/"
+        },
+        {
+          "label": "Jackson Hole 2026 details",
+          "url": "https://www.kansascityfed.org/research/jackson-hole-economic-symposium/about-jackson-hole-economic-symposium/"
+        }
+      ]
+    },
+    {
+      "id": "jobs-2026-09-04",
+      "date": "September 4, 2026 · 8:30 AM ET",
+      "date_status": "confirmed",
+      "horizon": "week 6",
+      "tier": "Tier 1",
+      "category": "Macro / Employment",
+      "tickers": ["SPY", "QQQ", "TLT", "XLF", "XLY"],
+      "title": "August Employment Situation",
+      "confidence": 1.0,
+      "implication": "This closes the six-week window with a direct read on labor demand, wages, consumption capacity, and the path into the September FOMC meeting.",
+      "direction": "Hot wages and payrolls can revive rate pressure; orderly cooling is supportive; abrupt deterioration is risk-off despite lower yields.",
+      "magnitude": "Macro reaction only; no unsupported single-stock percentage is assigned.",
+      "action": "Record payrolls, unemployment, wage growth, participation, and revisions, then separate the rates response from the growth response.",
+      "invalidation": "A consensus-like release with small revisions and little bond-market movement.",
+      "watch": "2-year yield, TLT, QQQ versus XLF/XLY, and whether market breadth confirms the first move.",
+      "sources": [
+        {
+          "label": "BLS Employment Situation schedule",
+          "url": "https://www.bls.gov/schedule/news_release/empsit.htm"
+        },
+        {
+          "label": "BLS 2026 release calendar",
+          "url": "https://www.bls.gov/schedule/news_release/current_year.asp"
         }
       ]
     }
   ],
   "context": [
-    "Core universe is HIMS plus current Robinhood equity/option underlyings HOOD and ABT; no quantities or account identifiers are published.",
-    "ABT has no confirmed company-specific hard catalyst inside the next eight weeks. Its next Robinhood earnings date is October 14, 2026 and remains tentative, so it is excluded from the event list.",
-    "July 24 closing data showed unusually high event risk: the HOOD July 31 ATM straddle implied about 11.5%, while the HIMS August 14 ATM straddle implied about 22.3%.",
-    "Only material events scoring at least 0.40 are shown. Exact dates are separated from tentative windows and unscheduled watches."
+    "Selection is market-wide: events were ranked by expected index, sector, or cross-company information value—not by Bernard's holdings.",
+    "The scan covered confirmed high-market-cap earnings plus official Fed, BLS, company IR, and sector-policy calendars from July 25 through September 5, 2026.",
+    "Exact dates are separated from tentative dates. Tentative earnings were excluded from the top eight unless an official source corroborated them.",
+    "Option-implied ranges use July 24 closing marks on the first liquid expiration after each event and are labeled indicative."
   ],
-  "methodology": "Daily calendar preload across official company IR, SEC/FDA/Federal Register, Federal Reserve, BLS, Robinhood quotes/earnings/options, and high-signal news or X only when it adds information. Primary-source dates win. Each event is classified, scored for materiality, mapped to likely direction and an explicit monitoring action, and kept future-focused."
+  "methodology": "Scan the full US-listed market over a rolling 42-day horizon. Rank catalysts by index weight, sector read-through, binary regulatory impact, breadth of affected tickers, and source confidence. Use primary-source dates first, verified earnings calendars second, and social/news only for discovery. Publish the eight highest-information events with bull/bear logic, measurable watch signals, and no portfolio bias."
 }

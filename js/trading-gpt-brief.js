@@ -9,6 +9,10 @@
   })[char]);
 
   const confidenceColor = value => value >= .8 ? 'var(--bl-gain)' : value >= .6 ? 'var(--bl-vwap)' : 'var(--bl-faint)';
+  const formatDate = value => {
+    const date = new Date(`${value}T12:00:00Z`);
+    return Number.isNaN(date.valueOf()) ? value : date.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  };
 
   function renderEvent(event) {
     const tickers = event.tickers.map(symbol => `<code class="brief-ticker">${esc(symbol)}</code>`).join('');
@@ -34,12 +38,10 @@
       return response.json();
     })
     .then(data => {
-      const asOf = new Date(data.as_of);
-      const date = Number.isNaN(asOf.valueOf()) ? data.as_of.slice(0, 10) : asOf.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
       shell.innerHTML = `
-        <div class="position-head"><h2 id="gpt-brief-heading">GPT Event Catalyst Brief</h2><span>${data.events.length} material events · ${esc(date)} · 6:30 AM CT cadence</span></div>
+        <div class="position-head"><h2 id="gpt-brief-heading">GPT Market Catalyst Brief</h2><span>${data.events.length} material events · ${formatDate(data.window_start)} → ${formatDate(data.window_end)} · 6:30 AM CT cadence</span></div>
         <p class="trading-takeaway">${esc(data.summary)}</p>
-        <p class="scan-intro"><strong>Tracked universe:</strong> ${data.universe.map(esc).join(' · ')}. Future dates lead; unscheduled risks are labeled instead of dressed up as calendar facts.</p>
+        <p class="scan-intro"><strong>Market-wide focus:</strong> ${data.universe.map(esc).join(' · ')}. Events are ranked by index, sector, and cross-company impact—not by current holdings.</p>
         <div class="brief-log" data-gpt-brief-as-of="${esc(data.as_of)}">${data.events.map(renderEvent).join('')}</div>
         <details class="trading-method"><summary>Context and method</summary><ul class="brief-bullets">${data.context.map(item => `<li>${esc(item)}</li>`).join('')}</ul><p>${esc(data.methodology)}</p></details>
         <p class="trading-note">Research and monitoring only. Option-implied ranges are indicative marks, not executable fills or recommendations.</p>`;
