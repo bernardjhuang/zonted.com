@@ -87,7 +87,8 @@ def main() -> None:
         desktop.goto(args.url + "#gpt-brief", wait_until="networkidle")
         check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "GPT brief deep link did not activate")
         check(desktop.locator("#gpt-brief-panel [data-event-id]").count() >= 1, "GPT brief has no event cards")
-        check("Future dates lead" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is not future-focused")
+        check("Market-wide focus" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is not market-wide")
+        check("not by current holdings" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief still implies portfolio-centered selection")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()

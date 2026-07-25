@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import datetime as dt
 import pathlib
 import re
 import unittest
@@ -48,15 +49,22 @@ class TradingUiContractTest(unittest.TestCase):
         events = self.gpt_brief["events"]
         self.assertIn('id="gpt-brief-shell"', block)
         self.assertIn('/trading/gpt-brief.json?v=', block)
-        self.assertIn('/js/trading-gpt-brief.js?v=20260725', self.html)
-        self.assertIn('/trading/gpt-brief.json?v=20260725', block)
+        script_version = hashlib.sha256((ROOT / "js" / "trading-gpt-brief.js").read_bytes()).hexdigest()[:12]
+        data_version = hashlib.sha256(GPT_BRIEF.read_bytes()).hexdigest()[:12]
+        self.assertIn(f'/js/trading-gpt-brief.js?v={script_version}', self.html)
+        self.assertIn(f'/trading/gpt-brief.json?v={data_version}', block)
         self.assertEqual(len({row["id"] for row in events}), len(events))
-        self.assertEqual(self.gpt_brief["universe"][:3], ["HIMS", "HOOD", "ABT"])
+        self.assertEqual(self.gpt_brief["scope"], "market-wide")
+        window = dt.date.fromisoformat(self.gpt_brief["window_end"]) - dt.date.fromisoformat(self.gpt_brief["window_start"])
+        self.assertGreaterEqual(window.days, 35)
+        self.assertLessEqual(window.days, 42)
+        self.assertLessEqual(len(events), 8)
         self.assertTrue(all(0 <= float(row["confidence"]) <= 1 for row in events))
         self.assertTrue(all(row["sources"] for row in events))
         gpt_js = (ROOT / "js" / "trading-gpt-brief.js").read_text()
         self.assertIn('6:30 AM CT cadence', gpt_js)
-        self.assertIn('Future dates lead', gpt_js)
+        self.assertIn('Market-wide focus', gpt_js)
+        self.assertIn('not by current holdings', gpt_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
         self.assertIn('Hypotheses <span class="trading-tab-count">6</span>', self.html)
