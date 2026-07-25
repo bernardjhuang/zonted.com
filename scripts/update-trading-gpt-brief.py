@@ -58,7 +58,7 @@ def validate(data: dict) -> None:
 
 def render_panel(data: dict) -> str:
     return f'''            <section class="trading-panel brief-panel" id="gpt-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="gpt-brief-tab" hidden>
-                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={esc(str(data['as_of'])[:10])}">
+                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={esc(str(data['as_of'])[:10].replace('-', ''))}">
                     <p class="trading-note">Loading the latest future catalyst scan…</p>
                 </div>
             </section>'''
@@ -82,9 +82,13 @@ def main() -> None:
             raise ValueError("Brief panel marker not found")
         page = page.replace(brief_end, brief_end + f"\n\n            {START}\n            {END}", 1)
 
-    script_tag = '<script src="/js/trading-gpt-brief.js?v=2026-07-25"></script>'
-    if script_tag not in page:
-        page = page.replace("</body>", f"    {script_tag}\n</body>", 1)
+    script_tag = '<script src="/js/trading-gpt-brief.js?v=20260725"></script>'
+    page = re.sub(
+        r'\s*<script src="/js/trading-gpt-brief\.js\?v=[^"]+"></script>',
+        f"\n    {script_tag}",
+        page,
+        count=1,
+    ) if "/js/trading-gpt-brief.js?v=" in page else page.replace("</body>", f"    {script_tag}\n</body>", 1)
 
     panel = render_panel(data)
     new = re.sub(

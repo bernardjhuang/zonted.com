@@ -48,7 +48,8 @@ class TradingUiContractTest(unittest.TestCase):
         events = self.gpt_brief["events"]
         self.assertIn('id="gpt-brief-shell"', block)
         self.assertIn('/trading/gpt-brief.json?v=', block)
-        self.assertIn('/js/trading-gpt-brief.js?v=2026-07-25', self.html)
+        self.assertIn('/js/trading-gpt-brief.js?v=20260725', self.html)
+        self.assertIn('/trading/gpt-brief.json?v=20260725', block)
         self.assertEqual(len({row["id"] for row in events}), len(events))
         self.assertEqual(self.gpt_brief["universe"][:3], ["HIMS", "HOOD", "ABT"])
         self.assertTrue(all(0 <= float(row["confidence"]) <= 1 for row in events))
