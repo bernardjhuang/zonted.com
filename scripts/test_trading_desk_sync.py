@@ -56,6 +56,20 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.fail("missing gpt-brief-panel")
         self.assertNotIn(" hidden", panel.group(0))
 
+    def test_horizon_route_loads_the_current_payload(self) -> None:
+        page = (ROOT / "trading" / "horizon" / "index.html").read_text()
+        payload = ROOT / "trading" / "horizon.json"
+        payload_hash = hashlib.sha256(payload.read_bytes()).hexdigest()[:12]
+        script_hash = hashlib.sha256((ROOT / "js" / "trading-horizon.js").read_bytes()).hexdigest()[:12]
+        self.assertIn(f'/trading/horizon.json?v={payload_hash}', page)
+        self.assertIn(f'/js/trading-horizon.js?v={script_hash}', page)
+        self.assertIn('id="horizon-shell"', page)
+        self.assertIn('aria-current="page">Horizon</a>', page)
+        panel = re.search(r'<section[^>]+id="horizon-panel"[^>]*>', page)
+        if panel is None:
+            self.fail("missing horizon-panel")
+        self.assertNotIn(" hidden", panel.group(0))
+
     def test_performance_route_matches_classic_results_and_history(self) -> None:
         page = (ROOT / "trading" / "performance" / "index.html").read_text()
         source = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', CLASSIC, re.S)

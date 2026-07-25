@@ -17,6 +17,7 @@ RISK = ROOT / "trading" / "risk-ytd.json"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
 GPT_BRIEF = ROOT / "trading" / "gpt-brief.json"
+HORIZON = ROOT / "trading" / "horizon.json"
 
 
 class TradingUiContractTest(unittest.TestCase):
@@ -27,17 +28,19 @@ class TradingUiContractTest(unittest.TestCase):
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
         cls.gpt_brief = json.loads(GPT_BRIEF.read_text())
+        cls.horizon = json.loads(HORIZON.read_text())
 
     def test_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "scan", "vwap", "crypto", "risk", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "horizon", "scan", "vwap", "crypto", "risk", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
         self.assertEqual(labels[3], "GPT brief")
-        self.assertRegex(labels[4], r"^Momentum \d+$")
-        self.assertEqual(labels[5:], ["VWAP", "Crypto", "Risk", "Performance"])
+        self.assertEqual(labels[4], "Horizon")
+        self.assertRegex(labels[5], r"^Momentum \d+$")
+        self.assertEqual(labels[6:], ["VWAP", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_gpt_brief_is_future_focused_and_matches_json(self):
@@ -72,6 +75,36 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('not by current holdings', gpt_js)
         self.assertIn('White swan', gpt_js)
         self.assertIn('Black swan', gpt_js)
+
+    def test_horizon_is_cross_agency_and_matches_json(self):
+        block_match = re.search(r'<!-- AUTO:HORIZON:START -->(.*?)<!-- AUTO:HORIZON:END -->', self.html, re.S)
+        self.assertIsNotNone(block_match)
+        block = block_match.group(1) if block_match else ""
+        theses = self.horizon["theses"]
+        self.assertIn('id="horizon-shell"', block)
+        self.assertIn('/trading/horizon.json?v=', block)
+        script_version = hashlib.sha256((ROOT / "js" / "trading-horizon.js").read_bytes()).hexdigest()[:12]
+        data_version = hashlib.sha256(HORIZON.read_bytes()).hexdigest()[:12]
+        self.assertIn(f'/js/trading-horizon.js?v={script_version}', self.html)
+        self.assertIn(f'/trading/horizon.json?v={data_version}', block)
+        self.assertEqual(self.horizon["scope"], "cross-agency-horizon-theses")
+        self.assertIn("06:30", self.horizon["cadence"])
+        self.assertLessEqual(len(theses), 10)
+        self.assertGreaterEqual(len(self.horizon["agencies_scanned"]), 5)
+        agencies = {row["agency"] for row in theses}
+        self.assertGreaterEqual(len(agencies), 4)
+        self.assertLessEqual(sum(row["agency"] == "FDA" for row in theses), 4)
+        self.assertGreaterEqual(sum(row["narrative_stage"] == "early" for row in theses), 1)
+        self.assertEqual(len({row["id"] for row in theses}), len(theses))
+        self.assertTrue(all(row["primary_tickers"] for row in theses))
+        self.assertTrue(all(len(row["catalyst_chain"]) >= 3 for row in theses))
+        self.assertTrue(all(row["what_happened"] and row["transmission"] and row["asymmetry"] for row in theses))
+        self.assertTrue(all(row["sources"] for row in theses))
+        horizon_js = (ROOT / "js" / "trading-horizon.js").read_text()
+        self.assertIn('6:30 AM CT trading days', horizon_js)
+        self.assertIn('Catalyst chain', horizon_js)
+        self.assertIn('Transmission:', horizon_js)
+        self.assertIn('Asymmetry:', horizon_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
         self.assertIn('Hypotheses <span class="trading-tab-count">6</span>', self.html)
