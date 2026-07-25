@@ -6,9 +6,12 @@ as argv[1]) plus its matching scan-charts JSON emitted by setup_vwap_charts.py, 
 "Momentum scan" tab panel in house style, and rewrites the marker block plus
 the tab-count badge.
 
-Usage: python3 scripts/update-trading-scan.py [vwap-scan.json] [scan-charts.json]
+Usage: python3 scripts/update-trading-scan.py [vwap-scan.json] [scan-charts.json] [quotes.json] [--risk risk-ytd.json]
 Run from the repo root.
 """
+import argparse
+import copy
+from collections import Counter
 import datetime as dt
 import glob
 import hashlib
@@ -24,7 +27,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "index.html")
 CHART_ASSET = os.path.join(ROOT, "trading", "scan-charts.json")
 UNIVERSE_ASSET = os.path.join(ROOT, "trading", "scan-universe.json")
+DEFAULT_RISK_ASSET = os.path.join(ROOT, "trading", "risk-ytd.json")
 SCAN_GLOB = os.path.expanduser("~/trading/scans/vwap-scan-*.json")
+LONG_SIGNALS = ("ENTER+", "ENTER")
+SHORT_SIGNALS = ("SHORT+", "SHORT", "BREAKING")
 
 
 def znum(x, suffix="", dash="—"):
@@ -35,15 +41,107 @@ def znum(x, suffix="", dash="—"):
     return f'<span class="{cls}">{x:+.2f}{suffix}</span>'
 
 
-def signal(row):
+def signal(row, *, public=True):
     """Public signal label: short verdicts win over the long-side AVOID."""
     sv = row.get("short_verdict")
-    if sv in ("SHORT+", "SHORT", "BREAKING"):
+    if sv in SHORT_SIGNALS:
         return sv, "short"
-    v = row["verdict"]
+    v = row.get("public_verdict", row["verdict"]) if public else row["verdict"]
     key = {"ENTER+": "enter", "ENTER": "enter", "WATCH": "watch",
            "AVOID": "avoid", "NO DATA": "nodata"}[v]
     return v, key
+
+
+def load_risk_context(path, last_bar, *, allow_stale=False):
+    """Load and validate the public Stage-2 scanner policy without leaking local paths."""
+    if not os.path.exists(path):
+        raise ValueError(f"Missing risk policy artifact: {os.path.basename(path)}")
+    with open(path, "rb") as risk_file:
+        raw = risk_file.read()
+    payload = json.loads(raw)
+    policy = payload.get("scanner_policy") or {}
+    label = (payload.get("score") or {}).get("label")
+    score = (payload.get("score") or {}).get("total")
+    if payload.get("schema_version") != 2 or label not in ("Contained", "Watchful", "Elevated"):
+        raise ValueError("Risk policy artifact has an invalid schema or regime")
+    if isinstance(score, bool) or not isinstance(score, (int, float)) or not math.isfinite(score):
+        raise ValueError("Risk policy score must be finite")
+    required = {
+        "schema_version", "stage", "as_of", "watchful_action", "elevated_action",
+        "elevated_hard_gate_enabled", "stage1_bands_separate_from_unconditional_base_rate",
+    }
+    if not required <= set(policy) or policy["schema_version"] != 1 or policy["stage"] != "risk_v2_stage2":
+        raise ValueError("Risk scanner policy is incomplete")
+    fresh = payload.get("as_of") == last_bar and policy.get("as_of") == last_bar
+    if not fresh and not allow_stale:
+        raise ValueError(f"Risk policy must match scan session {last_bar}; pass --allow-stale-risk only for backfills")
+    hard_gate = bool(
+        fresh
+        and label == "Elevated"
+        and policy["elevated_hard_gate_enabled"]
+        and policy["stage1_bands_separate_from_unconditional_base_rate"]
+        and policy["elevated_action"] == "gate"
+    )
+    return {
+        "source": os.path.basename(path),
+        "source_digest": hashlib.sha256(raw).hexdigest()[:12],
+        "as_of": payload.get("as_of"),
+        "label": label,
+        "score": round(float(score), 2),
+        "fresh": fresh,
+        "policy": {
+            "watchful_action": policy["watchful_action"],
+            "elevated_action": policy["elevated_action"],
+            "elevated_hard_gate_enabled": hard_gate,
+            "stage1_bands_separate_from_unconditional_base_rate": bool(policy["stage1_bands_separate_from_unconditional_base_rate"]),
+        },
+    }
+
+
+def apply_risk_policy(source_rows, risk):
+    """Preserve raw signals, then add deterministic public verdicts and audit decisions."""
+    rows = []
+    counts = {name: 0 for name in ("none", "annotate_watchful", "shadow_elevated", "gated_elevated", "stale_risk_shadow")}
+    for source in source_rows:
+        row = copy.deepcopy(source)
+        public_verdict = row["verdict"]
+        action = "none"
+        hard_gate = False
+        would_gate = False
+        reason = "RISK_NO_ACTION"
+        gated_from = None
+        is_short = row.get("short_verdict") in SHORT_SIGNALS
+        is_long = not is_short and row.get("verdict") in LONG_SIGNALS
+        if is_long and not risk["fresh"]:
+            action = "stale_risk_shadow"
+            reason = "RISK_AS_OF_MISMATCH_NO_GATE"
+        elif is_long and risk["label"] == "Watchful":
+            action = "annotate_watchful"
+            reason = "RISK_WATCHFUL_HALF_SIZE"
+        elif is_long and risk["label"] == "Elevated":
+            would_gate = True
+            if risk["policy"]["elevated_hard_gate_enabled"]:
+                action = "gated_elevated"
+                hard_gate = True
+                gated_from = row["verdict"]
+                public_verdict = "WATCH"
+                reason = "RISK_ELEVATED_STAGE1_SEPARATED_GATE"
+            else:
+                action = "shadow_elevated"
+                reason = "RISK_ELEVATED_SHADOW_ONLY"
+        row["public_verdict"] = public_verdict
+        row["risk_decision"] = {
+            "regime": risk["label"],
+            "score": risk["score"],
+            "action": action,
+            "hard_gate": hard_gate,
+            "would_gate": would_gate,
+            "reason_code": reason,
+            "gated_from": gated_from,
+        }
+        counts[action] += 1
+        rows.append(row)
+    return rows, counts
 
 
 def fmt_date(iso):
@@ -116,9 +214,20 @@ def setup_links(rows, label):
     return f'<p class="scan-qualified-links"><b>{html.escape(label)}</b> · {links}</p>'
 
 
+def parse_args():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("scan", nargs="?", help="vwap-scan JSON; defaults to newest local artifact")
+    parser.add_argument("charts", nargs="?", help="matching full scan-charts JSON")
+    parser.add_argument("quotes", nargs="?", help="optional current quote JSON")
+    parser.add_argument("--risk", default=DEFAULT_RISK_ASSET, help="Risk v2 policy JSON")
+    parser.add_argument("--allow-stale-risk", action="store_true", help="Backfill only: shadow-log a mismatched risk date and never hard-gate")
+    return parser.parse_args()
+
+
 def main():
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
+    args = parse_args()
+    if args.scan:
+        path = args.scan
     else:
         paths = sorted(glob.glob(SCAN_GLOB))
         if not paths:
@@ -129,9 +238,16 @@ def main():
     row_symbols = [str(r.get("symbol") or "") for r in rows]
     if len(row_symbols) != len(set(row_symbols)) or any(not re.fullmatch(r"[A-Z][A-Z0-9.-]{0,14}", symbol) for symbol in row_symbols):
         sys.exit("Scan symbols must be unique, uppercase, and contain only letters, digits, dots, or hyphens")
+    try:
+        risk = load_risk_context(args.risk, p["last_bar"], allow_stale=args.allow_stale_risk)
+    except (OSError, ValueError, json.JSONDecodeError) as error:
+        sys.exit(str(error))
+    rows, risk_decision_counts = apply_risk_policy(rows, risk)
+    p = dict(p)
+    p["rows"] = rows
 
-    if len(sys.argv) > 2:
-        chart_path = sys.argv[2]
+    if args.charts:
+        chart_path = args.charts
     else:
         chart_path = os.path.join(os.path.dirname(path), os.path.basename(path).replace("vwap-scan-", "scan-charts-"))
     if not os.path.exists(chart_path):
@@ -176,6 +292,11 @@ def main():
         for value in stats.values():
             if isinstance(value, float) and not math.isfinite(value):
                 sys.exit(f"{symbol} chart stats contain a non-finite value")
+        public_label = signal(source_row)[0]
+        record = copy.deepcopy(record)
+        record["raw_label"] = expected_label
+        record["label"] = public_label
+        record["risk_decision"] = source_row["risk_decision"]
         chart_map[symbol] = record
     quotes = {}
     for symbol, record in chart_map.items():
@@ -187,8 +308,8 @@ def main():
             "day_pct": (float(closes[-1]) / float(closes[-2]) - 1) * 100,
         }
     quote_stamp = None
-    if len(sys.argv) > 3:
-        quote_payload = json.load(open(sys.argv[3]))
+    if args.quotes:
+        quote_payload = json.load(open(args.quotes))
         quote_rows = quote_payload.get("quotes") or {}
         if set(quote_rows) != symbols:
             missing = sorted(symbols - set(quote_rows))
@@ -207,14 +328,25 @@ def main():
         except (KeyError, TypeError, ValueError):
             sys.exit("Live quote generated_at must be a timezone-aware ISO timestamp")
         quote_stamp = generated.astimezone(ZoneInfo("America/Chicago")).strftime("%b %-d, %-I:%M %p CT")
-    asset_json = json.dumps({"last_bar": p["last_bar"], "charts": chart_map}, separators=(",", ":"), allow_nan=False)
+    counts_raw = dict(sorted(Counter(signal(row, public=False)[0] for row in rows).items()))
+    counts_public = dict(sorted(Counter(signal(row)[0] for row in rows).items()))
+    public_risk = copy.deepcopy(risk)
+    asset_json = json.dumps({
+        "schema_version": 2,
+        "last_bar": p["last_bar"],
+        "risk_regime": public_risk,
+        "counts_raw": counts_raw,
+        "counts_public": counts_public,
+        "risk_decision_counts": risk_decision_counts,
+        "charts": chart_map,
+    }, separators=(",", ":"), allow_nan=False)
     asset_hash = hashlib.sha256(asset_json.encode()).hexdigest()[:12]
     chart_config = json.dumps({"url": f"/trading/scan-charts.json?v={asset_hash}"}, separators=(",", ":"), allow_nan=False)
 
     last_bar = dt.date.fromisoformat(p["last_bar"]).strftime("%B %-d, %Y")
-    longs = [r for r in p["rows"] if r["verdict"] in ("ENTER+", "ENTER")]
-    longs.sort(key=lambda r: (r["verdict"] != "ENTER+", -(r.get("spread_z") or 0)))
-    shorts = [r for r in p["rows"] if r.get("short_verdict") in ("SHORT+", "SHORT", "BREAKING")]
+    longs = [r for r in p["rows"] if signal(r)[0] in LONG_SIGNALS]
+    longs.sort(key=lambda r: (signal(r)[0] != "ENTER+", -(r.get("spread_z") or 0)))
+    shorts = [r for r in p["rows"] if r.get("short_verdict") in SHORT_SIGNALS]
     shorts.sort(key=lambda r: ({"SHORT+": 0, "SHORT": 1, "BREAKING": 2}[r["short_verdict"]],
                                r.get("spread_z") or 0))
     n_setups = len(longs) + len(shorts)
@@ -248,6 +380,7 @@ def main():
     universe_rows = []
     for row in all_rows:
         label, key = signal(row)
+        raw_label, _ = signal(row, public=False)
         universe_rows.append({
             "symbol": row["symbol"],
             "sector": row["sector"],
@@ -258,11 +391,31 @@ def main():
             "evwap_pct": row.get("evwap_pct"),
             "next_earn": row.get("next_earn"),
             "days_to_earn": row.get("days_to_earn"),
+            "raw_signal": raw_label,
             "signal": label,
             "signal_key": key,
+            "risk_decision": row["risk_decision"],
         })
-    universe_json = json.dumps({"last_bar": p["last_bar"], "rows": universe_rows}, separators=(",", ":"), allow_nan=False)
+    universe_json = json.dumps({
+        "schema_version": 2,
+        "last_bar": p["last_bar"],
+        "risk_regime": public_risk,
+        "counts_raw": counts_raw,
+        "counts_public": counts_public,
+        "risk_decision_counts": risk_decision_counts,
+        "rows": universe_rows,
+    }, separators=(",", ":"), allow_nan=False)
     universe_hash = hashlib.sha256(universe_json.encode()).hexdigest()[:12]
+    if not risk["fresh"]:
+        overlay_copy = f"Risk input dated {risk['as_of']} does not match this scan; no hard gate was allowed."
+    elif risk["label"] == "Watchful":
+        overlay_copy = f"Risk {risk['label']} {risk['score']:.2f} · qualified longs stay public · half-size"
+    elif risk["label"] == "Elevated" and risk["policy"]["elevated_hard_gate_enabled"]:
+        overlay_copy = f"Risk Elevated {risk['score']:.2f} · qualified long entries are gated to WATCH; short signals are unchanged."
+    elif risk["label"] == "Elevated":
+        overlay_copy = f"Risk Elevated {risk['score']:.2f} · shadow logging only because the hard-gate evidence contract is not active."
+    else:
+        overlay_copy = f"Risk Contained {risk['score']:.2f} · no momentum overlay action."
 
     panel = f"""            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
                 <div class="position-head">
@@ -270,6 +423,7 @@ def main():
                     <span>Signals {last_bar} close · {price_freshness}</span>
                 </div>
                 <p class="trading-takeaway">{html.escape(takeaway)}</p>
+                <p class="scan-risk-overlay">{html.escape(overlay_copy)}</p>
                 <p class="signal-legend"><b>ENTER+</b> = qualified + persistent · <b>ENTER</b> = qualified · <b>WATCH</b> = watch · <b>AVOID</b> = not qualified</p>
                 <div class="sector-summary">
                     <span><b>Leading</b> {' · '.join(html.escape(str(s['name'])) for s in leading)}</span>
@@ -293,8 +447,36 @@ def main():
                     <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v={universe_hash}"><p class="bl-empty">Loading universe…</p></div>
                 </details>
                 <script type="application/json" id="scan-chart-config">{chart_config}</script>
-                <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
+                <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Watchful halves longs; validated Elevated gates them to WATCH; shorts stay. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
             </section>"""
+
+    for row in sorted(rows, key=lambda item: item["symbol"]):
+        decision = row["risk_decision"]
+        if decision["action"] == "none":
+            continue
+        print(json.dumps({
+            "event": "momentum_risk_decision",
+            "last_bar": p["last_bar"],
+            "risk_as_of": risk["as_of"],
+            "risk_label": risk["label"],
+            "risk_score": risk["score"],
+            "symbol": row["symbol"],
+            "raw_signal": signal(row, public=False)[0],
+            "public_signal": signal(row)[0],
+            "action": decision["action"],
+            "hard_gate": decision["hard_gate"],
+            "would_gate": decision["would_gate"],
+            "reason_code": decision["reason_code"],
+        }, sort_keys=True, separators=(",", ":")))
+    print(json.dumps({
+        "event": "momentum_risk_summary",
+        "last_bar": p["last_bar"],
+        "risk_as_of": risk["as_of"],
+        "risk_label": risk["label"],
+        "risk_score": risk["score"],
+        "fresh": risk["fresh"],
+        "counts": risk_decision_counts,
+    }, sort_keys=True, separators=(",", ":")))
 
     page = open(PAGE).read()
     new = re.sub(r"(<!-- AUTO:SCAN:START -->).*?(<!-- AUTO:SCAN:END -->)",

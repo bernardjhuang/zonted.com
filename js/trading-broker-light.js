@@ -468,12 +468,17 @@
         const detailId = `scan-detail-universe-${row.symbol.toLowerCase().replace(/[^a-z0-9-]+/g, '-')}`;
         const dayClass = row.day_pct >= 0 ? 'scan-z-pos' : 'scan-z-neg';
         const day = `${row.day_pct >= 0 ? '+' : '−'}${Math.abs(Number(row.day_pct)).toFixed(2)}%`;
+        const action = row.risk_decision?.action;
+        const riskNote = action === 'annotate_watchful' ? 'Risk Watchful · half-size'
+          : action === 'gated_elevated' ? `Risk Elevated · gated from ${row.raw_signal}`
+          : action === 'shadow_elevated' ? 'Risk Elevated · shadow only'
+          : action === 'stale_risk_shadow' ? 'Risk input stale · no gate' : '';
         return `<tr class="scan-data-row" data-scan-row data-scan-symbol="${symbol}" data-day-pct="${row.day_pct}" data-strength="${row.spread_z ?? ''}">
           <td class="scan-sym"><button class="scan-row-toggle" type="button" data-scan-toggle aria-expanded="false" aria-controls="${detailId}" aria-label="Show ${symbol} setup and sector charts"><span class="scan-row-chevron" aria-hidden="true">›</span><span><span translate="no">${symbol}</span><span class="bl-tag">${htmlSafe(row.sector)}</span></span></button></td>
           <td class="scan-num scan-price"><span class="scan-price-value">$${Number(row.price).toFixed(2)}</span> <span class="${dayClass}">${day}</span></td>
           <td class="scan-num"><span class="${row.spread_z >= 0 ? 'scan-z-pos' : 'scan-z-neg'}">${signed(row.spread_z)}</span></td>
           <td class="scan-num">${earnText(row)}</td>
-          <td><span class="scan-signal scan-signal--${htmlSafe(row.signal_key)}">${htmlSafe(row.signal)}</span></td>
+          <td><span class="scan-signal scan-signal--${htmlSafe(row.signal_key)}">${htmlSafe(row.signal)}</span>${riskNote ? `<span class="bl-tag scan-risk-note">${htmlSafe(riskNote)}</span>` : ''}</td>
         </tr><tr class="scan-detail-row" id="${detailId}" data-scan-detail data-scan-symbol="${symbol}" hidden><td colspan="5"><div class="scan-setup-chart" data-scan-chart="${symbol}"></div></td></tr>`;
       }).join('');
       const sortDirection = universeSortDir < 0 ? 'descending' : 'ascending';
