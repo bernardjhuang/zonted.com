@@ -24,7 +24,7 @@ import sys
 from zoneinfo import ZoneInfo
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "trading", "index.html")
+PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
 CHART_ASSET = os.path.join(ROOT, "trading", "scan-charts.json")
 UNIVERSE_ASSET = os.path.join(ROOT, "trading", "scan-universe.json")
 DEFAULT_RISK_ASSET = os.path.join(ROOT, "trading", "risk-ytd.json")

@@ -21,7 +21,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "trading", "index.html")
+PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
 CHART_ASSET = os.path.join(ROOT, "trading", "crypto-charts.json")
 SCAN_GLOB = os.path.expanduser("~/trading/scans/crypto-spread-*.json")
 
