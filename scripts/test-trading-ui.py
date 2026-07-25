@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import hashlib
 import pathlib
 import re
 import unittest
@@ -11,6 +12,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
+RISK = ROOT / "trading" / "risk-ytd.json"
+RISK_JS = ROOT / "js" / "trading-risk.js"
+RISK_CSS = ROOT / "css" / "trading-risk.css"
 YOUTUBE = ROOT / "trading" / "youtube-sentiment.json"
 
 
@@ -20,17 +24,18 @@ class TradingUiContractTest(unittest.TestCase):
         cls.html = PAGE.read_text()
         cls.js = JS.read_text()
         cls.results = json.loads(RESULTS.read_text())
+        cls.risk = json.loads(RISK.read_text())
         cls.youtube = json.loads(YOUTUBE.read_text())
 
-    def test_ten_answer_first_tabs(self):
+    def test_eleven_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "risk", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
         self.assertRegex(labels[3], r"^Momentum \d+$")
-        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Performance"])
+        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_hypotheses_are_explicit_and_scannable(self):
@@ -114,6 +119,26 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(match.group(1) if match else "", latest)
         self.assertIn(f'data-results-points="{len(points)}"', self.html)
 
+    def test_forward_risk_dashboard_contract(self):
+        block = re.search(r'<!-- AUTO:RISK:START -->(.*?)<!-- AUTO:RISK:END -->', self.html, re.S)
+        self.assertIsNotNone(block)
+        self.assertIn('id="risk-panel"', block.group(1) if block else "")
+        self.assertIn('/css/trading-risk.css?', self.html)
+        self.assertIn('/js/trading-risk.js?', self.html)
+        digest = hashlib.sha256(RISK.read_bytes()).hexdigest()[:12]
+        self.assertEqual(self.html.count(f'/trading/risk-ytd.json?v={digest}'), 2)
+        self.assertIn(f'/js/trading-risk.js?v={hashlib.sha256(RISK_JS.read_bytes()).hexdigest()[:12]}', self.html)
+        self.assertIn(f'/css/trading-risk.css?v={hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]}', self.html)
+        current = self.risk["current"]
+        score = self.risk["score"]
+        self.assertEqual(score["total"], sum(row["points"] for row in score["components"].values()))
+        self.assertEqual(sum(row["maximum"] for row in score["components"].values()), 100)
+        self.assertAlmostEqual(current["curve_spread"], current["m2"] - current["m1"], places=4)
+        self.assertIn("positive values correctly mean contango", self.risk["method"])
+        self.assertEqual([row["label"] for row in self.risk["curve"]], ["Spot", "M1", "M2", "M3", "M4", "M5", "M6"])
+        self.assertGreaterEqual(len(self.risk["commentary"]), 3)
+        self.assertLessEqual(len(self.risk["commentary"]), 5)
+
     def test_heading_without_portfolio_tools(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
         self.assertIn('<h1 class="bl-title">Trading</h1>', self.html)
@@ -159,7 +184,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertLess(PAGE.stat().st_size, 300_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
-        for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json"):
+        for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):
             path = ROOT / "trading" / name
             self.assertTrue(path.exists(), name)
             payload = json.loads(path.read_text())
