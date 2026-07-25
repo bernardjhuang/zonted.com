@@ -58,6 +58,9 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertLessEqual(window.days, 42)
         self.assertLessEqual(len(events), 8)
         self.assertGreaterEqual(sum(float(row["market_cap_usd"]) < 10_000_000_000 for row in events), 6)
+        sector_counts = {sector: sum(row["sector"] == sector for row in events) for sector in {row["sector"] for row in events}}
+        self.assertGreaterEqual(len(sector_counts), 4)
+        self.assertLessEqual(max(sector_counts.values()), 4)
         self.assertEqual(len({row["primary_ticker"] for row in events}), len(events))
         self.assertTrue(all(row["primary_ticker"] in row["tickers"] for row in events))
         self.assertTrue(all(row["white_swan"] and row["base_case"] and row["black_swan"] for row in events))
@@ -65,7 +68,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertTrue(all(row["sources"] for row in events))
         gpt_js = (ROOT / "js" / "trading-gpt-brief.js").read_text()
         self.assertIn('6:30 AM CT cadence', gpt_js)
-        self.assertIn('Small-cap binary focus', gpt_js)
+        self.assertIn('Sector-diverse binary focus', gpt_js)
         self.assertIn('not by current holdings', gpt_js)
         self.assertIn('White swan', gpt_js)
         self.assertIn('Black swan', gpt_js)

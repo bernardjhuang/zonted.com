@@ -46,9 +46,10 @@ def validate(data: dict) -> None:
         raise ValueError("GPT brief must rank at most eight events")
     ids: set[str] = set()
     primary_tickers: set[str] = set()
+    sectors: dict[str, int] = {}
     for event in data["events"]:
         event_required = {
-            "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade",
+            "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade", "sector",
             "date", "date_status", "horizon", "tier", "category", "tickers", "title",
             "confidence", "trigger", "implication", "white_swan", "base_case", "black_swan",
             "why_mispriced", "magnitude", "action", "invalidation", "watch", "sources",
@@ -64,6 +65,10 @@ def validate(data: dict) -> None:
         primary_tickers.add(event["primary_ticker"])
         if event["primary_ticker"] not in event["tickers"]:
             raise ValueError(f"primary ticker missing from tickers: {event['id']}")
+        sector = str(event["sector"]).strip()
+        if not sector:
+            raise ValueError(f"event has no sector: {event['id']}")
+        sectors[sector] = sectors.get(sector, 0) + 1
         if float(event["market_cap_usd"]) <= 0 or float(event["reference_price"]) <= 0:
             raise ValueError(f"invalid market snapshot: {event['id']}")
         confidence = float(event["confidence"])
@@ -76,6 +81,10 @@ def validate(data: dict) -> None:
                 raise ValueError(f"invalid source URL for {event['id']}")
     if sum(float(event["market_cap_usd"]) < 10_000_000_000 for event in data["events"]) < 6:
         raise ValueError("at least six events must focus on sub-$10B companies")
+    if len(sectors) < 4:
+        raise ValueError("GPT brief must cover at least four sectors")
+    if max(sectors.values(), default=0) > 4:
+        raise ValueError("no sector may occupy more than half the brief")
 
 
 def render_panel(data: dict) -> str:
