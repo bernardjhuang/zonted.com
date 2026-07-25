@@ -16,6 +16,7 @@ RISK = ROOT / "trading" / "risk-ytd.json"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
 YOUTUBE = ROOT / "trading" / "youtube-sentiment.json"
+GPT_BRIEF = ROOT / "trading" / "gpt-brief.json"
 
 
 class TradingUiContractTest(unittest.TestCase):
@@ -26,17 +27,35 @@ class TradingUiContractTest(unittest.TestCase):
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
         cls.youtube = json.loads(YOUTUBE.read_text())
+        cls.gpt_brief = json.loads(GPT_BRIEF.read_text())
 
-    def test_eleven_answer_first_tabs(self):
+    def test_twelve_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "risk", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "risk", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
-        self.assertRegex(labels[3], r"^Momentum \d+$")
-        self.assertEqual(labels[4:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Risk", "Performance"])
+        self.assertEqual(labels[3], "GPT brief")
+        self.assertRegex(labels[4], r"^Momentum \d+$")
+        self.assertEqual(labels[5:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
+
+    def test_gpt_brief_is_future_focused_and_matches_json(self):
+        block_match = re.search(r'<!-- AUTO:GPT_BRIEF:START -->(.*?)<!-- AUTO:GPT_BRIEF:END -->', self.html, re.S)
+        self.assertIsNotNone(block_match)
+        block = block_match.group(1) if block_match else ""
+        events = self.gpt_brief["events"]
+        self.assertIn('id="gpt-brief-shell"', block)
+        self.assertIn('/trading/gpt-brief.json?v=', block)
+        self.assertIn('/js/trading-gpt-brief.js?v=2026-07-25', self.html)
+        self.assertEqual(len({row["id"] for row in events}), len(events))
+        self.assertEqual(self.gpt_brief["universe"][:3], ["HIMS", "HOOD", "ABT"])
+        self.assertTrue(all(0 <= float(row["confidence"]) <= 1 for row in events))
+        self.assertTrue(all(row["sources"] for row in events))
+        gpt_js = (ROOT / "js" / "trading-gpt-brief.js").read_text()
+        self.assertIn('6:30 AM CT cadence', gpt_js)
+        self.assertIn('Future dates lead', gpt_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
         self.assertIn('Hypotheses <span class="trading-tab-count">6</span>', self.html)

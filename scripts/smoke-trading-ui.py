@@ -36,9 +36,9 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 11, "expected eleven tabs")
+        check(desktop.locator(".trading-tab").count() == 12, "expected twelve tabs")
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
-        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
+        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
@@ -83,6 +83,11 @@ def main() -> None:
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='benefit']").count() == 1, f"{symbol.upper()} benefit scan is missing")
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='threat']").count() == 1, f"{symbol.upper()} threat scan is missing")
         check("below $25" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS price trigger is missing")
+
+        desktop.goto(args.url + "#gpt-brief", wait_until="networkidle")
+        check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "GPT brief deep link did not activate")
+        check(desktop.locator("#gpt-brief-panel [data-event-id]").count() >= 1, "GPT brief has no event cards")
+        check("Future dates lead" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief is not future-focused")
 
         desktop.evaluate("scrollTo(0, 0)")
         desktop.locator("#scan-tab").click()
@@ -196,10 +201,12 @@ def main() -> None:
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Brief")
         desktop.keyboard.press("ArrowRight")
+        check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped GPT brief")
+        desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#risk", "#results", "#youtube"):
+        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#risk", "#results", "#youtube"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -211,7 +218,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (11 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (12 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":

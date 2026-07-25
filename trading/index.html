@@ -523,6 +523,7 @@
                 <button class="trading-tab" id="positions-tab" type="button" role="tab" aria-selected="true" aria-controls="positions-panel">Portfolio</button>
                 <button class="trading-tab" id="hypotheses-tab" type="button" role="tab" aria-selected="false" aria-controls="hypotheses-panel">Hypotheses <span class="trading-tab-count">6</span></button>
                 <button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>
+                <button class="trading-tab" id="gpt-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="gpt-brief-panel">GPT brief</button>
                 <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">20</span></button>
                 <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
                 <button class="trading-tab" id="congress-tab" type="button" role="tab" aria-selected="false" aria-controls="congress-panel">Congress</button>
@@ -1833,6 +1834,14 @@
             </section>
             <!-- AUTO:BRIEF:END -->
 
+            <!-- AUTO:GPT_BRIEF:START -->
+            <section class="trading-panel brief-panel" id="gpt-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="gpt-brief-tab" hidden>
+                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v=2026-07-25">
+                    <p class="trading-note">Loading the latest future catalyst scan…</p>
+                </div>
+            </section>
+            <!-- AUTO:GPT_BRIEF:END -->
+
             <!-- AUTO:WHALES:START -->
             <section aria-labelledby="whales-tab" class="trading-panel whales-panel" hidden="" id="whales-panel" role="tabpanel" tabindex="0"><div class="position-head">
                     <h2 id="whales-heading">13F</h2>
@@ -2658,5 +2667,6 @@
     <script src="/js/trading-broker-light.js?v=2026-07-24-combined-position-pnl"></script>
     <script src="/js/trading-risk.js?v=6618acd546a1"></script>
     <script src="/js/trading-youtube.js?v=2026-07-24-v1"></script>
+    <script src="/js/trading-gpt-brief.js?v=2026-07-25"></script>
 </body>
 </html>
