@@ -164,6 +164,9 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(self.html.count(f'/trading/risk-ytd.json?v={digest}'), 2)
         self.assertIn(f'/js/trading-risk.js?v={hashlib.sha256(RISK_JS.read_bytes()).hexdigest()[:12]}', self.html)
         self.assertIn(f'/css/trading-risk.css?v={hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]}', self.html)
+        self.assertIn('bindChartInteractions', RISK_JS.read_text())
+        self.assertIn('risk-chart-tooltip', RISK_JS.read_text())
+        self.assertIn('.risk-chart-tooltip', RISK_CSS.read_text())
         current = self.risk["current"]
         score = self.risk["score"]
         self.assertEqual(self.risk["schema_version"], 2)
