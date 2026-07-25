@@ -166,11 +166,19 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn(f'/css/trading-risk.css?v={hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]}', self.html)
         current = self.risk["current"]
         score = self.risk["score"]
-        self.assertEqual(score["total"], sum(row["points"] for row in score["components"].values()))
-        self.assertEqual(sum(row["maximum"] for row in score["components"].values()), 100)
+        self.assertEqual(self.risk["schema_version"], 2)
+        self.assertAlmostEqual(score["total"], sum(row["points"] for row in score["components"].values()), places=2)
+        self.assertAlmostEqual(sum(row["maximum"] for row in score["components"].values()), 100, places=2)
         self.assertAlmostEqual(current["curve_spread"], current["m2"] - current["m1"], places=4)
-        self.assertIn("positive values correctly mean contango", self.risk["method"])
+        self.assertIn("positive slope means contango", self.risk["method"])
         self.assertEqual([row["label"] for row in self.risk["curve"]], ["Spot", "M1", "M2", "M3", "M4", "M5", "M6"])
+        self.assertGreater(len(self.risk["history"]["score"]), 2_500)
+        self.assertEqual(self.risk["conditional_frequencies"]["horizons"], [21, 42])
+        self.assertIn("Conditions Score", RISK_JS.read_text())
+        self.assertIn("Historical outcome frequencies", RISK_JS.read_text())
+        self.assertIn("constant-maturity", RISK_JS.read_text())
+        self.assertIn("VIX9D / VIX", RISK_JS.read_text())
+        self.assertIn("stale · zero weight", RISK_JS.read_text())
         self.assertGreaterEqual(len(self.risk["commentary"]), 3)
         self.assertLessEqual(len(self.risk["commentary"]), 5)
 

@@ -439,6 +439,8 @@ def build(end: date | None = None) -> dict[str, Any]:
     credit_observations = fred_series("BAMLH0A0HYM2", HISTORY_START, env.get("FRED_API_KEY") or env.get("FRED_KEY"))
     sessions = [row["date"] for row in indices["vix"]]
     credit_available = core.lag_to_next_session(credit_observations, sessions)
+    vix9d_ratio = ratio_series(indices["vix9d"], indices["vix"])
+    vix3m_ratio = ratio_series(indices["vix"], indices["vix3m"])
 
     states = {
         "vvix": metric_states(indices["vvix"], sessions),
@@ -446,6 +448,11 @@ def build(end: date | None = None) -> dict[str, Any]:
         "move": metric_states(indices["move"], sessions),
         "skew": metric_states(indices["skew"], sessions),
         "hy_oas": metric_states(credit_available, sessions),
+    }
+    context_states = {
+        "vix": metric_states(indices["vix"], sessions),
+        "vix9d_vix": metric_states(vix9d_ratio, sessions),
+        "vix_vix3m": metric_states(vix3m_ratio, sessions),
     }
     dashboard_as_of = date.fromisoformat(indices["vix"][-1]["date"])
     as_of = dashboard_as_of.isoformat()
@@ -491,8 +498,6 @@ def build(end: date | None = None) -> dict[str, Any]:
 
     latest_future = max((row for row in futures if row["date"] <= as_of), key=lambda row: row["date"])
     curve = latest_curve(dashboard_as_of, float(indices["vix"][-1]["value"]), contracts)
-    vix9d_ratio = ratio_series(indices["vix9d"], indices["vix"])
-    vix3m_ratio = ratio_series(indices["vix"], indices["vix3m"])
     current: dict[str, Any] = {
         "vix": float(indices["vix"][-1]["value"]),
         "vvix": latest_metrics["vvix"]["value"],
@@ -516,6 +521,7 @@ def build(end: date | None = None) -> dict[str, Any]:
         "hy_oas_as_of": latest_metrics["hy_oas"]["observation_date"],
         "hy_oas_available_as_of": latest_metrics["hy_oas"]["source_date"],
         "metrics": latest_metrics,
+        "context_metrics": {name: rows[as_of] for name, rows in context_states.items()},
     }
     current["bands"] = {name: current_band(name, current[name]) for name in ("vix", "vvix", "move", "skew")}
     current["curve_band"] = "Contango" if current["curve_slope_percent"] > 0 else "Backwardation"
