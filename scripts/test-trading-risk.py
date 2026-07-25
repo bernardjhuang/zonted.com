@@ -187,6 +187,11 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertIsInstance(policy["hard_gate_enabled"], bool)
         self.assertIn(policy["elevated_action"], {"gate", "shadow_gate"})
         self.assertEqual(len(policy["evidence"]), 2)
+        scanner = self.payload["scanner_policy"]
+        self.assertEqual(scanner["stage"], "risk_v2_stage2")
+        self.assertEqual(scanner["as_of"], self.payload["as_of"])
+        self.assertEqual(scanner["elevated_hard_gate_enabled"], policy["hard_gate_enabled"])
+        self.assertEqual(scanner["watchful_action"], "annotate_half_size")
         self.assertEqual(self.payload["model_status"]["status"], "not_evaluated")
 
 

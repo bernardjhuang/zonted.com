@@ -239,10 +239,29 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("ENTER+", labels)
         self.assertTrue(labels <= {"ENTER+", "ENTER", "WATCH", "AVOID", "NO DATA", "SHORT+", "SHORT", "BREAKING"})
         self.assertIn("<b>ENTER+</b> = qualified", self.html)
+        self.assertEqual(universe["schema_version"], 2)
+        self.assertEqual(universe["risk_regime"]["as_of"], universe["last_bar"])
+        self.assertEqual(universe["risk_regime"]["label"], "Watchful")
+        self.assertEqual(universe["risk_decision_counts"]["annotate_watchful"], 10)
+        self.assertEqual(sum(universe["counts_public"].values()), len(universe["rows"]))
+        self.assertTrue(all({"raw_signal", "signal", "risk_decision"} <= set(row) for row in universe["rows"]))
+        self.assertTrue(all(row["signal"] == row["raw_signal"] for row in universe["rows"]))
+        self.assertIn('class="scan-risk-overlay"', self.html)
+        self.assertIn("qualified longs stay public · half-size", self.html)
+        self.assertIn("Risk Watchful · half-size", self.js)
 
     def test_generated_asset_contracts(self):
         vwap = json.loads((ROOT / "trading" / "vwap-charts.json").read_text())
         crypto = json.loads((ROOT / "trading" / "crypto-charts.json").read_text())
+        scan_charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())
+        universe = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        self.assertEqual(scan_charts["schema_version"], 2)
+        self.assertEqual(scan_charts["risk_regime"], universe["risk_regime"])
+        self.assertEqual(set(scan_charts["charts"]), {row["symbol"] for row in universe["rows"]})
+        self.assertTrue(all(
+            scan_charts["charts"][row["symbol"]]["risk_decision"] == row["risk_decision"]
+            for row in universe["rows"]
+        ))
         self.assertEqual(len(vwap["charts"]), 23)
         self.assertEqual(len(crypto["charts"]), 7)
         self.assertEqual(vwap["default"], "SPY")

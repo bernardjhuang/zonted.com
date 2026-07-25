@@ -18553,6 +18553,49 @@
     "status": "not_evaluated"
   },
   "period": "YTD",
+  "scanner_policy": {
+    "as_of": "2026-07-24",
+    "elevated_action": "gate",
+    "elevated_hard_gate_enabled": true,
+    "evidence": [
+      {
+        "horizons": [
+          {
+            "elevated_above_base": true,
+            "horizon": 21,
+            "monotonic": true
+          },
+          {
+            "elevated_above_base": true,
+            "horizon": 42,
+            "monotonic": true
+          }
+        ],
+        "qualifies": true,
+        "target": "vix_above_25"
+      },
+      {
+        "horizons": [
+          {
+            "elevated_above_base": true,
+            "horizon": 21,
+            "monotonic": true
+          },
+          {
+            "elevated_above_base": true,
+            "horizon": 42,
+            "monotonic": true
+          }
+        ],
+        "qualifies": true,
+        "target": "spy_drawdown_5"
+      }
+    ],
+    "schema_version": 1,
+    "stage": "risk_v2_stage2",
+    "stage1_bands_separate_from_unconditional_base_rate": true,
+    "watchful_action": "annotate_half_size"
+  },
   "schema_version": 2,
   "scorable_start": "2014-06-05",
   "score": {

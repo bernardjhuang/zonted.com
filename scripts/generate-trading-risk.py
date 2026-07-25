@@ -559,6 +559,16 @@ def build(end: date | None = None) -> dict[str, Any]:
         },
         "conditional_frequencies": frequencies,
         "gate_policy": policy,
+        "scanner_policy": {
+            "schema_version": 1,
+            "stage": "risk_v2_stage2",
+            "as_of": as_of,
+            "watchful_action": "annotate_half_size",
+            "elevated_action": "gate" if policy["hard_gate_enabled"] else "shadow_log",
+            "elevated_hard_gate_enabled": policy["hard_gate_enabled"],
+            "stage1_bands_separate_from_unconditional_base_rate": policy["hard_gate_enabled"],
+            "evidence": policy["evidence"],
+        },
         "curve": curve,
         "windows": {
             "vix_spikes": contiguous_windows(ytd(indices["vix"]), lambda value: value >= 25),

@@ -99,9 +99,11 @@ def main() -> None:
         check(desktop.locator("#scan-panel").is_visible(), "Momentum panel did not activate")
         check(desktop.locator("#scan-panel .sector-summary details").evaluate("node => node.open"), "Momentum sectors are not expanded by default")
         check(desktop.locator("#scan-panel .scan-sector").count() == 11, "expected eleven formatted sector cards")
+        check("qualified longs stay public · half-size" in desktop.locator("#scan-panel .scan-risk-overlay").inner_text(), "Watchful risk overlay is missing")
 
         check(desktop.locator("#scan-universe").evaluate("node => node.open"), "momentum universe is not expanded by default")
         desktop.wait_for_function("document.querySelectorAll('#scan-universe-shell tr.scan-data-row').length > 0")
+        check(desktop.locator("#scan-universe-shell .scan-risk-note").count() == 10, "Watchful risk annotations do not match qualified longs")
         day_changes = desktop.locator("#scan-universe-shell tr.scan-data-row").evaluate_all("rows => rows.map(row => Number(row.dataset.dayPct))")
         check(day_changes == sorted(day_changes, reverse=True), "momentum universe is not sorted by day change descending")
         desktop.locator("[data-universe-sort-day]").click()
