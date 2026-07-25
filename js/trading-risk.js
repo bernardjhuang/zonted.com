@@ -6,6 +6,9 @@
   const shell = document.getElementById('risk-content');
   const source = panel.dataset.url || '/trading/risk-ytd.json';
   let loaded = false;
+  let chartSequence = 0;
+  let sharedTooltipSeries = [];
+  const chartRegistry = new Map();
 
   const esc = value => String(value ?? '').replace(/[&<>"']/g, char => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;',
@@ -35,7 +38,80 @@
     return (rows || []).map(row => ({ date: row.date, value: Number(row[key]) })).filter(row => Number.isFinite(row.value));
   }
 
-  function linePanel({ name, series, current, band = '', domain, zones = [], thresholds = [], windows = [], accent = false, zero = false, asOf, startDate = null, startLabel = null }) {
+  const tooltipMetric = (key, label, series, places = 2, suffix = '', useSign = false) => ({ key, label, series, places, suffix, useSign });
+  const tooltipValue = (metric, value) => `${metric.useSign ? signed(value, metric.places) : fixed(value, metric.places)}${metric.suffix}`;
+
+  function nearestPoint(points, chartX) {
+    let low = 0, high = points.length - 1;
+    while (low < high) {
+      const middle = Math.floor((low + high) / 2);
+      if (points[middle].x < chartX) low = middle + 1;
+      else high = middle;
+    }
+    if (low > 0 && Math.abs(points[low - 1].x - chartX) <= Math.abs(points[low].x - chartX)) return low - 1;
+    return low;
+  }
+
+  function bindChartInteractions() {
+    shell.querySelectorAll('.risk-chart-svg[data-chart-id]').forEach(svg => {
+      const chart = chartRegistry.get(svg.dataset.chartId);
+      const host = svg.closest('.risk-chart-interactive') || svg.closest('.risk-line-panel');
+      const tooltip = host?.querySelector('.risk-chart-tooltip');
+      const marker = svg.querySelector('.risk-hover-marker');
+      if (!chart || !tooltip || !marker || !chart.points.length) return;
+      let selected = chart.points.length - 1;
+
+      const hide = () => {
+        marker.classList.remove('is-active');
+        tooltip.hidden = true;
+      };
+      const show = index => {
+        selected = Math.max(0, Math.min(chart.points.length - 1, index));
+        const point = chart.points[selected];
+        marker.querySelector('line').setAttribute('x1', point.x);
+        marker.querySelector('line').setAttribute('x2', point.x);
+        marker.querySelector('circle').setAttribute('cx', point.x);
+        marker.querySelector('circle').setAttribute('cy', point.y);
+        marker.classList.add('is-active');
+
+        const rows = chart.metrics.map(metric => {
+          const value = metric.values.get(point.date);
+          return Number.isFinite(value) ? `<div><span>${esc(metric.label)}</span><b>${esc(tooltipValue(metric, value))}</b></div>` : '';
+        }).filter(Boolean).join('');
+        tooltip.innerHTML = `<time datetime="${esc(point.date)}">${esc(point.title || longDay(point.date))}</time>${rows}`;
+        tooltip.hidden = false;
+        const svgRect = svg.getBoundingClientRect();
+        const desired = svgRect.left + point.x / chart.width * svgRect.width;
+        const half = tooltip.offsetWidth / 2;
+        tooltip.style.left = `${Math.max(half + 8, Math.min(window.innerWidth - half - 8, desired))}px`;
+        tooltip.style.top = `${Math.max(8, Math.min(window.innerHeight - tooltip.offsetHeight - 8, svgRect.top + 8))}px`;
+        svg.setAttribute('aria-label', `${chart.name}. ${tooltip.innerText.replaceAll('\n', ', ')}`);
+      };
+      const showFromPointer = event => {
+        const rect = svg.getBoundingClientRect();
+        const chartX = Math.max(0, Math.min(chart.width, (event.clientX - rect.left) / Math.max(1, rect.width) * chart.width));
+        show(nearestPoint(chart.points, chartX));
+      };
+
+      svg.addEventListener('pointerenter', showFromPointer);
+      svg.addEventListener('pointermove', showFromPointer);
+      svg.addEventListener('pointerdown', event => { svg.focus(); showFromPointer(event); });
+      svg.addEventListener('pointerleave', () => { if (document.activeElement !== svg) hide(); });
+      svg.addEventListener('focus', () => show(selected));
+      svg.addEventListener('blur', hide);
+      svg.addEventListener('keydown', event => {
+        if (!['ArrowLeft', 'ArrowRight', 'Home', 'End', 'Escape'].includes(event.key)) return;
+        event.preventDefault();
+        if (event.key === 'Escape') return hide();
+        if (event.key === 'Home') selected = 0;
+        else if (event.key === 'End') selected = chart.points.length - 1;
+        else selected += event.key === 'ArrowLeft' ? -1 : 1;
+        show(selected);
+      });
+    });
+  }
+
+  function linePanel({ name, series, current, band = '', domain, zones = [], thresholds = [], windows = [], accent = false, zero = false, asOf, startDate = null, startLabel = null, metric = null, tooltipSeries = sharedTooltipSeries }) {
     const W = 720, H = 82, left = 3, right = 717, top = 3, bottom = 79;
     const startIso = startDate || `${asOf.slice(0, 4)}-01-01`;
     const start = parseDay(startIso), end = parseDay(asOf);
@@ -62,13 +138,27 @@
     const values = visible.map(row => row.value);
     const min = Math.min(...values), max = Math.max(...values);
     const tone = ['Contained', 'Watchful', 'Elevated', 'High', 'Moderate', 'Backwardation', 'Flattening'].includes(band) ? regimeClass(toneForBand(band)) : '';
+    const chartId = `risk-chart-${++chartSequence}`;
+    const primary = metric || tooltipSeries.find(row => row.series === series) || tooltipMetric(name, name.split(' · ')[0], series);
+    const metrics = [primary, ...tooltipSeries.filter(row => row.key !== primary.key)].map(row => row.values ? row : ({
+      ...row,
+      values: new Map(row.series.map(point => [point.date, point.value])),
+    }));
+    chartRegistry.set(chartId, {
+      name,
+      width: W,
+      points: visible.map(row => ({ date: row.date, value: row.value, x: x(row.date), y: clampY(row.value) })),
+      metrics,
+    });
     return `<div class="risk-line-panel">
       <div class="risk-line-head"><span class="risk-line-name">${esc(name)}</span><span class="risk-line-now ${tone}">${esc(current)}${band ? ` · ${esc(band)}` : ''}</span></div>
-      <svg class="risk-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="${esc(name)}, current ${current}, low ${fixed(min, 2)}, high ${fixed(max, 2)}">
+      <svg class="risk-chart-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" tabindex="0" data-chart-id="${chartId}" aria-label="${esc(name)}, current ${current}, low ${fixed(min, 2)}, high ${fixed(max, 2)}. Hover or focus for date values.">
         ${zoneMarkup}${windowMarkup}${thresholdMarkup}${zeroMarkup}
         <polyline class="risk-line ${accent ? 'risk-line-accent' : ''}" points="${points}"/>
         ${last ? `<circle class="risk-dot ${accent ? 'risk-dot-accent' : ''}" cx="${x(last.date).toFixed(2)}" cy="${clampY(last.value).toFixed(2)}" r="3"/>` : ''}
+        <g class="risk-hover-marker" aria-hidden="true"><line y1="${top}" y2="${bottom}"/><circle r="3.5"/></g>
       </svg>
+      <div class="risk-chart-tooltip" role="status" aria-live="polite" hidden></div>
       <div class="risk-axis-footer"><span>${esc(startLabel || shortDay(startIso))}</span><span>range ${fixed(min, 1)}–${fixed(max, 1)}</span><span>${esc(shortDay(asOf))}</span></div>
     </div>`;
   }
@@ -80,7 +170,7 @@
     return [min - spread * padding, max + spread * padding];
   }
 
-  function curveFigure(curve) {
+  function curveFigure(curve, asOf) {
     const W = 720, H = 160, left = 12, right = 708, top = 12, bottom = 148;
     const values = curve.map(row => Number(row.value));
     const min = Math.min(...values), max = Math.max(...values), pad = Math.max(.6, (max - min) * .18);
@@ -89,9 +179,24 @@
     const y = value => bottom - (value - low) / (high - low) * (bottom - top);
     const points = curve.map((row, index) => `${x(index).toFixed(2)},${y(Number(row.value)).toFixed(2)}`).join(' ');
     const dots = curve.map((row, index) => `<circle class="${index === 0 ? 'risk-dot' : 'risk-dot-accent'}" cx="${x(index).toFixed(2)}" cy="${y(Number(row.value)).toFixed(2)}" r="4"/>`).join('');
-    return `<svg class="risk-chart-svg risk-curve-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" aria-label="Current VIX curve from spot ${fixed(values[0])} through M6 ${fixed(values[values.length - 1])}">
+    const chartId = `risk-chart-${++chartSequence}`;
+    const curvePoints = curve.map((row, index) => ({
+      date: row.expiration || asOf,
+      title: row.expiration ? `${row.label} expires ${longDay(row.expiration)}` : `${row.label} · ${longDay(asOf)}`,
+      value: Number(row.value),
+      x: x(index),
+      y: y(Number(row.value)),
+    }));
+    chartRegistry.set(chartId, {
+      name: 'Current VIX curve',
+      width: W,
+      points: curvePoints,
+      metrics: [{ ...tooltipMetric('curve-point', 'VIX level', [], 2), values: new Map(curvePoints.map(row => [row.date, row.value])) }],
+    });
+    return `<div class="risk-chart-interactive"><svg class="risk-chart-svg risk-curve-chart" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none" role="img" tabindex="0" data-chart-id="${chartId}" aria-label="Current VIX curve from spot ${fixed(values[0])} through M6 ${fixed(values[values.length - 1])}. Hover or focus for contract values.">
       <polyline class="risk-line risk-line-accent" points="${points}"/>${dots}
-    </svg>
+      <g class="risk-hover-marker" aria-hidden="true"><line y1="${top}" y2="${bottom}"/><circle r="4.5"/></g>
+    </svg><div class="risk-chart-tooltip" role="status" aria-live="polite" hidden></div></div>
     <div class="risk-curve-labels">${curve.map(row => `<div class="risk-curve-label"><b>${esc(row.label)} · ${fixed(row.value, 2)}</b><span>${row.expiration ? esc(shortDay(row.expiration)) : 'cash index'}</span></div>`).join('')}</div>`;
   }
 
@@ -149,6 +254,18 @@
     const vix3mRatio = normalizeSeries(payload.series.vix_vix3m);
     const scoreHistory = normalizeSeries(payload.history.score, 'score');
     const asOf = payload.as_of;
+    chartSequence = 0;
+    chartRegistry.clear();
+    sharedTooltipSeries = [
+      tooltipMetric('vix', 'VIX', vix),
+      tooltipMetric('vvix', 'VVIX', vvix),
+      tooltipMetric('curve', '30→60d curve', slope, 2, '%', true),
+      tooltipMetric('move', 'MOVE', move),
+      tooltipMetric('skew', 'SKEW', skew),
+      tooltipMetric('score', 'Conditions Score', scoreHistory),
+      tooltipMetric('vix9d-vix', 'VIX9D / VIX', vix9dRatio, 3),
+      tooltipMetric('vix-vix3m', 'VIX / VIX3M', vix3mRatio, 3),
+    ].map(row => ({ ...row, values: new Map(row.series.map(point => [point.date, point.value])) }));
 
     const mainPanels = [
       linePanel({ name: 'VIX · current equity volatility', series: vix, current: fixed(c.vix), band: c.bands.vix, domain: dynamicDomain(vix, 10, 30), zones: [{ from: 0, to: 15, className: 'risk-zone-calm' }, { from: 15, to: 25, className: 'risk-zone-watch' }, { from: 25, to: 100, className: 'risk-zone-high' }], thresholds: [15, 20, 25], windows: payload.windows.vix_spikes, accent: true, asOf }),
@@ -193,11 +310,12 @@
         <section class="risk-card risk-card--wide" aria-labelledby="risk-main-heading"><div class="risk-card-head"><div><h3 id="risk-main-heading">YTD conditions stack</h3><p>Absolute levels remain readable; percentile ranks—not fixed levels—drive the score.</p></div><time datetime="${esc(asOf)}">Updated ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${mainPanels}</div><p class="risk-spike-key">Historical VIX ≥25 context</p></section>
         <section class="risk-card" aria-labelledby="risk-vvix-heading"><div class="risk-card-head"><div><h3 id="risk-vvix-heading">VVIX lead/confirmation</h3><p>Direction and percentile matter more than one static threshold.</p></div></div><div class="risk-stack">${vvixFocus}</div></section>
         <section class="risk-card" aria-labelledby="risk-ratios-heading"><div class="risk-card-head"><div><h3 id="risk-ratios-heading">Short-horizon curve ratios</h3><p>Ratios above 1 flag near-term volatility pricing above longer horizons.</p></div></div><div class="risk-stack">${ratioPanels}</div></section>
-        <section class="risk-card" aria-labelledby="risk-curve-heading"><div class="risk-card-head"><div><h3 id="risk-curve-heading">Term structure monitor</h3><p>Spot→M6 context plus roll-resistant constant-maturity slope.</p></div><time datetime="${esc(c.curve_as_of)}">Updated ${esc(shortDay(c.curve_as_of))}</time></div><div class="risk-curve-body">${curveFigure(payload.curve)}<div class="risk-traffic ${regimeClass(c.curve_band === 'Backwardation' ? 'Elevated' : 'Contained')}"><span class="risk-traffic-dot" aria-hidden="true"></span><strong>${esc(c.curve_band)}</strong><span>30→60d ${esc(signed(c.curve_slope_percent))}% · raw M2−M1 ${esc(signed(c.curve_spread))}</span></div>${slopePanel}</div></section>
+        <section class="risk-card" aria-labelledby="risk-curve-heading"><div class="risk-card-head"><div><h3 id="risk-curve-heading">Term structure monitor</h3><p>Spot→M6 context plus roll-resistant constant-maturity slope.</p></div><time datetime="${esc(c.curve_as_of)}">Updated ${esc(shortDay(c.curve_as_of))}</time></div><div class="risk-curve-body">${curveFigure(payload.curve, c.curve_as_of)}<div class="risk-traffic ${regimeClass(c.curve_band === 'Backwardation' ? 'Elevated' : 'Contained')}"><span class="risk-traffic-dot" aria-hidden="true"></span><strong>${esc(c.curve_band)}</strong><span>30→60d ${esc(signed(c.curve_slope_percent))}% · raw M2−M1 ${esc(signed(c.curve_spread))}</span></div>${slopePanel}</div></section>
         <section class="risk-card" aria-labelledby="risk-score-heading"><div class="risk-card-head"><div><h3 id="risk-score-heading">Conditions Score</h3><p>Percentile-based, stale-aware, and fully disclosed. Not a calibrated probability.</p></div><time datetime="${esc(asOf)}">Updated ${esc(shortDay(asOf))}</time></div>${scoreBody(payload.score)}</section>
       </div>
       <p class="risk-method">${esc(payload.method)} Public FRED HY OAS history currently begins ${esc(shortDay(payload.series.hy_oas[0].date))}; earlier scores normalize across available components. HY OAS ${fixed(c.hy_oas)}% observed ${shortDay(c.hy_oas_as_of)}, usable ${shortDay(c.hy_oas_available_as_of)}. Sources: <a href="https://finance.yahoo.com/quote/%5EVIX/" rel="noopener" target="_blank">Yahoo Finance</a>, <a href="https://www.cboe.com/markets/us/futures/market-statistics/historical-data/futures" rel="noopener" target="_blank">Cboe</a>, and <a href="https://fred.stlouisfed.org/series/BAMLH0A0HYM2" rel="noopener" target="_blank">FRED</a>.</p>
     </div>`;
+    bindChartInteractions();
   }
 
   async function load() {
