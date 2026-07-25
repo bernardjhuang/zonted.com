@@ -145,6 +145,34 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertIn("not a forecast", commentary[0])
         self.assertTrue(any("constant-maturity" in line for line in commentary))
 
+    def test_market_regime_classification_is_three_state_and_deterministic(self):
+        pillars = [
+            {"name": "Trend", "signal": "risk_on"},
+            {"name": "Breadth", "signal": "risk_on"},
+            {"name": "Credit", "signal": "risk_on"},
+            {"name": "Momentum", "signal": "risk_off"},
+            {"name": "Rates / cyclicals", "signal": "risk_off"},
+        ]
+        result = risk.classify_market_regime(pillars)
+        self.assertEqual(result["label"], "Neutral")
+        self.assertEqual(result["lean"], "leaning risk-on")
+        self.assertEqual(result["rating"], 6)
+
+    def test_market_regime_snapshot_is_current_and_auditable(self):
+        regime = self.payload["market_regime"]
+        self.assertEqual(regime["as_of"], self.payload["as_of"])
+        self.assertIn(regime["label"], {"Risk-on", "Neutral", "Risk-off"})
+        self.assertGreaterEqual(regime["rating"], 1)
+        self.assertLessEqual(regime["rating"], 10)
+        self.assertEqual(len(regime["pillars"]), 5)
+        self.assertEqual(
+            {row["name"] for row in regime["pillars"]},
+            {"Trend", "Breadth", "Credit", "Momentum", "Rates / cyclicals"},
+        )
+        self.assertTrue(all(row["signal"] in {"risk_on", "neutral", "risk_off"} for row in regime["pillars"]))
+        self.assertGreaterEqual(len(regime["why"]), 4)
+        self.assertIn("dgs10", regime["source_dates"])
+
     def test_stage_one_history_is_long_and_falsifiable(self):
         self.assertEqual(self.payload["schema_version"], 2)
         history = self.payload["history"]["score"]

@@ -87,6 +87,29 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.fail("missing results-panel")
         self.assertNotIn(" hidden", panel.group(0))
 
+    def test_risk_route_leads_with_regime_analysis_and_restores_history_charts(self) -> None:
+        page = (ROOT / "trading" / "risk" / "index.html").read_text()
+        script = (ROOT / "trading" / "desk.js").read_text()
+        styles = (ROOT / "trading" / "desk.css").read_text()
+        self.assertIn('id="risk-live"', page)
+        self.assertIn("market-regime", script)
+        self.assertIn("risk-chart-grid", script)
+        self.assertIn("Conditions Score", script)
+        self.assertIn("HY OAS", script)
+        self.assertIn('role="img"', script)
+        self.assertIn(".market-regime", styles)
+        self.assertIn(".risk-history-chart", styles)
+
+    def test_trading_nav_has_home_logo_and_vwap_uses_three_columns(self) -> None:
+        styles = (ROOT / "trading" / "desk.css").read_text()
+        pages = [ROOT / "trading" / "index.html", *[route.path for route in sync.ROUTES.values()], ROOT / "trading" / "risk" / "index.html", ROOT / "trading" / "hypotheses" / "index.html", ROOT / "trading" / "grok-brief" / "index.html"]
+        for path in pages:
+            page = path.read_text()
+            self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
+            self.assertIn('aria-label="Zonted homepage"', page, path.as_posix())
+        self.assertIn(".trade-z-logo", styles)
+        self.assertIn(".vwap-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
+
 
 if __name__ == "__main__":
     unittest.main()

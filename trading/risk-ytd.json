@@ -20558,6 +20558,163 @@
     ]
   },
   "history_start": "2013-01-01",
+  "market_regime": {
+    "as_of": "2026-07-24",
+    "bottom_line": "Market plumbing is healthy, but leadership, momentum, or cyclicals are soft enough to keep the overall stance neutral.",
+    "counts": {
+      "neutral": 0,
+      "risk_off": 2,
+      "risk_on": 3
+    },
+    "label": "Neutral",
+    "lean": "leaning risk-on",
+    "method": "Five deterministic pillars: long-term trend, breadth, credit, short-term leadership, and rates/cyclicals. Three or two risk-on pillars can still be Neutral when two pillars actively disagree.",
+    "metrics": {
+      "dgs10": {
+        "one_month_change_bps": 21.0,
+        "value": 4.71
+      },
+      "equities": {
+        "hyg": {
+          "close": 79.23,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -2.4,
+          "one_month_percent": -0.78,
+          "three_month_percent": -1.42,
+          "vs_200dma_percent": -1.3,
+          "vs_50dma_percent": -0.68,
+          "ytd_percent": -1.79
+        },
+        "iwm": {
+          "close": 291.17,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -3.09,
+          "one_month_percent": -1.86,
+          "three_month_percent": 5.68,
+          "vs_200dma_percent": 10.02,
+          "vs_50dma_percent": -0.01,
+          "ytd_percent": 17.04
+        },
+        "qqq": {
+          "close": 684.23,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -8.3,
+          "one_month_percent": -3.71,
+          "three_month_percent": 5.04,
+          "vs_200dma_percent": 6.38,
+          "vs_50dma_percent": -4.74,
+          "ytd_percent": 11.6
+        },
+        "rsp": {
+          "close": 213.57,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -0.69,
+          "one_month_percent": 1.52,
+          "three_month_percent": 5.49,
+          "vs_200dma_percent": 7.34,
+          "vs_50dma_percent": 1.67,
+          "ytd_percent": 10.74
+        },
+        "smh": {
+          "close": 561.19,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -16.1,
+          "one_month_percent": -9.33,
+          "three_month_percent": 16.47,
+          "vs_200dma_percent": 25.92,
+          "vs_50dma_percent": -6.29,
+          "ytd_percent": 50.33
+        },
+        "spy": {
+          "close": 738.93,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -2.72,
+          "one_month_percent": 0.78,
+          "three_month_percent": 4.3,
+          "vs_200dma_percent": 5.78,
+          "vs_50dma_percent": -0.82,
+          "ytd_percent": 8.16
+        },
+        "tlt": {
+          "close": 83.25,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -8.34,
+          "one_month_percent": -4.73,
+          "three_month_percent": -3.81,
+          "vs_200dma_percent": -4.78,
+          "vs_50dma_percent": -2.15,
+          "ytd_percent": -4.34
+        },
+        "xlp": {
+          "close": 84.13,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -6.53,
+          "one_month_percent": -0.37,
+          "three_month_percent": 0.78,
+          "vs_200dma_percent": 2.4,
+          "vs_50dma_percent": -0.05,
+          "ytd_percent": 8.29
+        },
+        "xly": {
+          "close": 109.41,
+          "date": "2026-07-24",
+          "from_ytd_high_percent": -12.13,
+          "one_month_percent": -4.92,
+          "three_month_percent": -7.07,
+          "vs_200dma_percent": -6.64,
+          "vs_50dma_percent": -6.11,
+          "ytd_percent": -7.55
+        }
+      },
+      "relative_strength": {
+        "hyg_tlt_1m_percent": 4.15,
+        "iwm_spy_3m_percent": 1.31,
+        "rsp_spy_1m_percent": 0.73,
+        "xly_xlp_3m_percent": -7.79
+      }
+    },
+    "pillars": [
+      {
+        "detail": "SPY +5.8%, QQQ +6.4%, and IWM +10.0% versus their 200-day averages.",
+        "name": "Trend",
+        "signal": "risk_on"
+      },
+      {
+        "detail": "RSP/SPY is +0.7% over one month; IWM/SPY is +1.3% over three months.",
+        "name": "Breadth",
+        "signal": "risk_on"
+      },
+      {
+        "detail": "High-yield OAS is 2.77%; HYG/TLT is +4.2% over one month.",
+        "name": "Credit",
+        "signal": "risk_on"
+      },
+      {
+        "detail": "SPY is -0.8% and QQQ -4.7% versus 50-day averages; SMH is -16.1% from its YTD high.",
+        "name": "Momentum",
+        "signal": "risk_off"
+      },
+      {
+        "detail": "The 10-year yield is 4.71% (+21 bp over about one month); XLY/XLP is -7.8% over three months.",
+        "name": "Rates / cyclicals",
+        "signal": "risk_off"
+      }
+    ],
+    "rating": 6,
+    "source_dates": {
+      "cboe_curve": "2026-07-24",
+      "dgs10": "2026-07-23",
+      "hy_oas": "2026-07-23",
+      "yahoo": "2026-07-24"
+    },
+    "why": [
+      "SPY +5.8%, QQQ +6.4%, and IWM +10.0% versus their 200-day averages.",
+      "RSP/SPY is +0.7% over one month; IWM/SPY is +1.3% over three months.",
+      "High-yield OAS is 2.77%; HYG/TLT is +4.2% over one month.",
+      "SPY is -0.8% and QQQ -4.7% versus 50-day averages; SMH is -16.1% from its YTD high.",
+      "The 10-year yield is 4.71% (+21 bp over about one month); XLY/XLP is -7.8% over three months."
+    ]
+  },
   "method": "The Conditions Score uses trailing three-year empirical percentiles, a constant-maturity 30-to-60-day VIX futures slope where a positive slope means contango, lagged credit, and zero weight for stale inputs. It is a falsifiable conditions heuristic, not a calibrated probability or trading signal.",
   "model_status": {
     "endpoints_passed": 0,
@@ -26250,7 +26407,8 @@
   "sources": {
     "credit": "FRED BAMLH0A0HYM2 shifted to next completed session for T+1 availability",
     "futures": "Cboe official VX monthly contract settlement files (detailed archive begins 2013)",
-    "indices": "Yahoo Finance daily closes (^VIX, ^VVIX, ^MOVE, ^SKEW, ^VIX9D, ^VIX3M, SPY)"
+    "indices": "Yahoo Finance daily closes for volatility indexes plus SPY, QQQ, IWM, RSP, HYG, TLT, XLY, XLP, and SMH",
+    "rates": "FRED DGS10 Treasury constant-maturity yield"
   },
   "thresholds": {
     "display_only": true,

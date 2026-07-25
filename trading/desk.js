@@ -41,29 +41,73 @@
     svg.addEventListener('pointerleave', () => { tip.hidden = true; });
   });
 
-  /* ── risk page: render live risk-ytd + the gauntlet verdict ──────── */
+  /* ── risk page: top-line regime, history charts, score + receipts ─── */
   const riskRoot = $('#risk-live');
   if (riskRoot) {
+    const historyChart = (title, rows, key = 'value', suffix = '', domain = null) => {
+      const series = (rows || []).map(row => ({ date: row.date, value: Number(row[key]) })).filter(row => row.date && Number.isFinite(row.value));
+      if (series.length < 2) return '';
+      const W = 640, H = 190, left = 44, right = 14, top = 16, bottom = 30;
+      const values = series.map(row => row.value);
+      let lo = domain ? domain[0] : Math.min(...values), hi = domain ? domain[1] : Math.max(...values);
+      if (!domain) {
+        const padding = Math.max((hi - lo) * .08, Math.abs(hi || 1) * .01);
+        lo -= padding; hi += padding;
+      }
+      const x = i => left + i / (series.length - 1) * (W - left - right);
+      const y = value => top + (hi - value) / (hi - lo || 1) * (H - top - bottom);
+      const points = series.map((row, i) => x(i).toFixed(2) + ',' + y(row.value).toFixed(2)).join(' ');
+      const last = series[series.length - 1];
+      const fmt = value => num(value, Math.abs(value) >= 100 ? 1 : 2) + suffix;
+      return '<figure class="risk-history-chart"><figcaption><b>' + esc(title) + '</b><span>' + esc(fmt(last.value)) + ' · ' + esc(last.date) + '</span></figcaption>' +
+        '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="' + esc(title + ' over time, latest ' + fmt(last.value) + ' on ' + last.date) + '">' +
+        '<line class="rh-grid" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(lo).toFixed(2) + '" y2="' + y(lo).toFixed(2) + '"></line>' +
+        '<line class="rh-grid" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(hi).toFixed(2) + '" y2="' + y(hi).toFixed(2) + '"></line>' +
+        '<text class="rh-axis" x="2" y="' + (y(hi) + 4).toFixed(2) + '">' + esc(fmt(hi)) + '</text>' +
+        '<text class="rh-axis" x="2" y="' + (y(lo) + 4).toFixed(2) + '">' + esc(fmt(lo)) + '</text>' +
+        '<polyline class="rh-line" points="' + points + '"></polyline>' +
+        '<circle class="rh-dot" cx="' + x(series.length - 1).toFixed(2) + '" cy="' + y(last.value).toFixed(2) + '" r="3.5"></circle>' +
+        '<text class="rh-axis" x="' + left + '" y="' + (H - 7) + '">' + esc(series[0].date) + '</text>' +
+        '<text class="rh-axis rh-axis-end" x="' + (W - right) + '" y="' + (H - 7) + '">' + esc(last.date) + '</text></svg></figure>';
+    };
     const evalData = fetch('/trading/risk-evaluation.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
     Promise.all([riskData, evalData]).then(([d, ev]) => {
       if (!d) { riskRoot.innerHTML = '<p class="footnote">Could not load /trading/risk-ytd.json — the live feed this page mirrors.</p>'; return; }
-      const rc = d.current, rs = d.score;
-      const ORDER = [['VVIX', 'vvix'], ['Curve M2−M1', 'curve'], ['MOVE', 'move'], ['SKEW', 'skew']];
+      const rc = d.current, rs = d.score, mr = d.market_regime;
+      const ORDER = [['VVIX', 'vvix'], ['30→60d curve', 'curve'], ['MOVE', 'move'], ['SKEW', 'skew'], ['HY OAS', 'hy_oas']];
       const bars = ORDER.map(([label, key]) => {
         const c = rs.components[key] || { points: 0, maximum: 0 };
         const pct = c.maximum ? c.points / c.maximum * 100 : 0;
         return '<div class="risk-bar"><span>' + label + '</span><span class="t"><span class="f" style="width:' + pct.toFixed(0) +
-          '%"></span></span><span class="n">' + num(c.points, 1).replace(/\.0$/, '') + '/' + c.maximum + '</span></div>';
+          '%"></span></span><span class="n">' + num(c.points, 1).replace(/\.0$/, '') + '/' + num(c.maximum, 1).replace(/\.0$/, '') + '</span></div>';
       }).join('');
       const gauges = [
         ['VIX', num(rc.vix), rc.bands.vix], ['VVIX', num(rc.vvix), rc.bands.vvix],
         ['MOVE', num(rc.move), rc.bands.move], ['SKEW', num(rc.skew), rc.bands.skew],
-        ['HY OAS', num(rc.hy_oas) + '%', 'Credit'], ['VIX curve M2−M1', signed(rc.curve_spread), rc.curve_band]
+        ['HY OAS', num(rc.hy_oas) + '%', 'Credit'], ['VIX curve 30→60d', signed(rc.curve_slope_percent, 2, '%'), rc.curve_band]
       ].map(g => '<tr><td class="sym">' + g[0] + '</td><td class="num">' + g[1] + '</td><td>' + esc(g[2]) + '</td></tr>').join('');
       const curve = (d.curve || []).map(x =>
         '<tr><td class="sym">' + esc(x.label) + '</td><td class="num">' + num(x.value) + '</td><td>' + esc(x.expiration || 'spot') + '</td></tr>').join('');
       const commentary = (d.commentary || []).map(c => '<div class="mkt"><span class="lbl">' + esc(c) + '</span></div>').join('');
       const rules = ((rs.rules) || []).map(r => '<div class="mkt"><span class="lbl">' + esc(r) + '</span></div>').join('');
+
+      const regime = mr ? '<section class="card market-regime"><h2>Market stance<span class="card-r">as of ' + esc(mr.as_of) + '</span></h2>' +
+        '<div class="market-regime-head"><div><span class="market-regime-label market-regime-' + esc(mr.label.toLowerCase().replace(/[^a-z]+/g, '-')) + '">' + esc(mr.label) + '</span>' +
+        (mr.lean ? '<span class="market-regime-lean">' + esc(mr.lean) + '</span>' : '') + '</div><b>' + esc(mr.rating) + '/10</b></div>' +
+        '<p class="market-regime-bottom">' + esc(mr.bottom_line) + '</p><div class="market-pillars">' + mr.pillars.map(p =>
+          '<article class="market-pillar market-pillar-' + esc(p.signal.replace('_', '-')) + '"><h3>' + esc(p.name) + '<span>' + esc(p.signal.replace('_', '-')) + '</span></h3><p>' + esc(p.detail) + '</p></article>').join('') +
+        '</div><p class="market-regime-method">' + esc(mr.method) + ' Sources: Yahoo ' + esc(mr.source_dates.yahoo) + ', FRED 10Y ' + esc(mr.source_dates.dgs10) + ', HY OAS ' + esc(mr.source_dates.hy_oas) + ', Cboe curve ' + esc(mr.source_dates.cboe_curve) + '.</p></section>' : '';
+
+      const ytdScores = (d.history?.score || []).filter(row => row.date >= d.year + '-01-01');
+      const charts = [
+        historyChart('Conditions Score', ytdScores, 'score', '', [0, 100]),
+        historyChart('VIX', d.series?.vix),
+        historyChart('VVIX', d.series?.vvix),
+        historyChart('VIX curve 30→60d slope', d.series?.curve_spread, 'slope_percent', '%'),
+        historyChart('MOVE', d.series?.move),
+        historyChart('SKEW', d.series?.skew),
+        historyChart('HY OAS', d.series?.hy_oas, 'value', '%')
+      ].join('');
 
       let gauntlet = '';
       if (ev && ev.model_status) {
@@ -77,7 +121,8 @@
           (ev.oos_predictions ? ev.oos_predictions.length : 0) + '</span></div></div>';
       }
 
-      riskRoot.innerHTML =
+      riskRoot.innerHTML = regime +
+        '<div class="card"><h2>Metrics over time<span class="card-r">YTD · daily closes</span></h2><div class="risk-chart-grid">' + charts + '</div></div>' +
         '<div class="card"><h2>Regime score<span class="card-r">as of ' + esc(d.as_of) + ' · live feed</span></h2>' +
         '<div style="padding:18px"><div class="risk-score"><div><div class="risk-dial">' + Math.round(rs.total) +
         '</div><div style="font-size:12px;color:var(--bl-muted)">of 100 · ' + esc(rs.label) + '</div></div>' +

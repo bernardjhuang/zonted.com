@@ -2,9 +2,10 @@
 """Generate Zonted's auditable forward-market-risk conditions dataset.
 
 Public sources:
-- Yahoo Finance chart API: VIX, VVIX, MOVE, SKEW, VIX9D, VIX3M, SPY
+- Yahoo Finance chart API: volatility indexes plus broad, breadth, credit,
+  cyclicals, duration, and technology ETFs
 - Cboe official monthly VX contract settlement files
-- FRED BAMLH0A0HYM2, shifted to its next-session publication availability
+- FRED BAMLH0A0HYM2 and DGS10; credit is shifted to next-session availability
 
 The output keeps YTD chart payloads small while carrying a 2013-present score
 history and frozen 21/42-session conditional outcome frequencies.
@@ -56,6 +57,14 @@ YAHOO_SYMBOLS = {
     "vix9d": "^VIX9D",
     "vix3m": "^VIX3M",
     "spy": "SPY",
+    "qqq": "QQQ",
+    "iwm": "IWM",
+    "rsp": "RSP",
+    "hyg": "HYG",
+    "tlt": "TLT",
+    "xly": "XLY",
+    "xlp": "XLP",
+    "smh": "SMH",
 }
 
 
@@ -390,6 +399,108 @@ def ratio_series(
     ]
 
 
+def _snapshot(rows: list[dict[str, Any]], as_of: str) -> dict[str, Any]:
+    eligible = [row for row in rows if row["date"] <= as_of]
+    values = [float(row["value"]) for row in eligible]
+    if len(values) < 200:
+        raise RuntimeError(f"market-regime series has only {len(values)} observations through {as_of}")
+    current = values[-1]
+    year_values = [float(row["value"]) for row in eligible if row["date"].startswith(as_of[:4] + "-")]
+    def pct(base: float) -> float:
+        return round((current / base - 1) * 100, 2)
+    return {
+        "date": eligible[-1]["date"],
+        "close": round(current, 4),
+        "ytd_percent": pct(year_values[0]),
+        "one_month_percent": pct(values[-22]),
+        "three_month_percent": pct(values[-64]),
+        "from_ytd_high_percent": pct(max(year_values)),
+        "vs_50dma_percent": pct(sum(values[-50:]) / 50),
+        "vs_200dma_percent": pct(sum(values[-200:]) / 200),
+    }
+
+
+def _relative_return(
+    numerator: list[dict[str, Any]], denominator: list[dict[str, Any]], as_of: str, sessions: int
+) -> float:
+    ratios = [row for row in ratio_series(numerator, denominator) if row["date"] <= as_of]
+    if len(ratios) <= sessions:
+        raise RuntimeError(f"relative-strength series has only {len(ratios)} observations")
+    return round((float(ratios[-1]["value"]) / float(ratios[-1 - sessions]["value"]) - 1) * 100, 2)
+
+
+def classify_market_regime(pillars: list[dict[str, Any]]) -> dict[str, Any]:
+    counts = {signal: sum(row["signal"] == signal for row in pillars) for signal in ("risk_on", "neutral", "risk_off")}
+    if counts["risk_on"] >= 4 and counts["risk_off"] <= 1:
+        label, lean = "Risk-on", ""
+    elif counts["risk_off"] >= 4 and counts["risk_on"] <= 1:
+        label, lean = "Risk-off", ""
+    else:
+        label = "Neutral"
+        lean = "leaning risk-on" if counts["risk_on"] > counts["risk_off"] else "leaning risk-off" if counts["risk_off"] > counts["risk_on"] else "balanced"
+    rating = max(1, min(10, round(5 + 0.5 * (counts["risk_on"] - counts["risk_off"]))))
+    return {"label": label, "lean": lean, "rating": rating, "counts": counts}
+
+
+def market_regime_snapshot(
+    indices: dict[str, list[dict[str, Any]]],
+    dgs10: list[dict[str, Any]],
+    current: dict[str, Any],
+    as_of: str,
+) -> dict[str, Any]:
+    snapshots = {name: _snapshot(indices[name], as_of) for name in ("spy", "qqq", "iwm", "rsp", "hyg", "tlt", "xly", "xlp", "smh")}
+    relative = {
+        "rsp_spy_1m_percent": _relative_return(indices["rsp"], indices["spy"], as_of, 21),
+        "iwm_spy_3m_percent": _relative_return(indices["iwm"], indices["spy"], as_of, 63),
+        "hyg_tlt_1m_percent": _relative_return(indices["hyg"], indices["tlt"], as_of, 21),
+        "xly_xlp_3m_percent": _relative_return(indices["xly"], indices["xlp"], as_of, 63),
+    }
+    rates = [row for row in dgs10 if row["date"] <= as_of]
+    if len(rates) < 22:
+        raise RuntimeError("DGS10 has insufficient observations for the market regime")
+    ten_year = float(rates[-1]["value"])
+    ten_year_change_bps = round((ten_year - float(rates[-22]["value"])) * 100, 1)
+
+    trend_on = all(snapshots[name]["vs_200dma_percent"] > 0 for name in ("spy", "qqq", "iwm"))
+    trend_off = sum(snapshots[name]["vs_200dma_percent"] < 0 for name in ("spy", "qqq", "iwm")) >= 2
+    breadth_on = relative["rsp_spy_1m_percent"] > 0 and relative["iwm_spy_3m_percent"] > 0
+    breadth_off = relative["rsp_spy_1m_percent"] < 0 and relative["iwm_spy_3m_percent"] < 0
+    credit_on = current["hy_oas"] < 4 and relative["hyg_tlt_1m_percent"] > 0
+    credit_off = current["hy_oas"] >= 5 or relative["hyg_tlt_1m_percent"] < -2
+    momentum_on = snapshots["spy"]["vs_50dma_percent"] > 0 and snapshots["qqq"]["vs_50dma_percent"] > 0 and snapshots["smh"]["from_ytd_high_percent"] > -10
+    momentum_off = snapshots["qqq"]["vs_50dma_percent"] < 0 and snapshots["smh"]["from_ytd_high_percent"] <= -10
+    macro_on = ten_year_change_bps <= 0 and relative["xly_xlp_3m_percent"] > 0
+    macro_off = ten_year_change_bps >= 20 and relative["xly_xlp_3m_percent"] < 0
+
+    def signal(is_on: bool, is_off: bool) -> str:
+        return "risk_on" if is_on else "risk_off" if is_off else "neutral"
+
+    pillars = [
+        {"name": "Trend", "signal": signal(trend_on, trend_off), "detail": f"SPY {snapshots['spy']['vs_200dma_percent']:+.1f}%, QQQ {snapshots['qqq']['vs_200dma_percent']:+.1f}%, and IWM {snapshots['iwm']['vs_200dma_percent']:+.1f}% versus their 200-day averages."},
+        {"name": "Breadth", "signal": signal(breadth_on, breadth_off), "detail": f"RSP/SPY is {relative['rsp_spy_1m_percent']:+.1f}% over one month; IWM/SPY is {relative['iwm_spy_3m_percent']:+.1f}% over three months."},
+        {"name": "Credit", "signal": signal(credit_on, credit_off), "detail": f"High-yield OAS is {current['hy_oas']:.2f}%; HYG/TLT is {relative['hyg_tlt_1m_percent']:+.1f}% over one month."},
+        {"name": "Momentum", "signal": signal(momentum_on, momentum_off), "detail": f"SPY is {snapshots['spy']['vs_50dma_percent']:+.1f}% and QQQ {snapshots['qqq']['vs_50dma_percent']:+.1f}% versus 50-day averages; SMH is {snapshots['smh']['from_ytd_high_percent']:.1f}% from its YTD high."},
+        {"name": "Rates / cyclicals", "signal": signal(macro_on, macro_off), "detail": f"The 10-year yield is {ten_year:.2f}% ({ten_year_change_bps:+.0f} bp over about one month); XLY/XLP is {relative['xly_xlp_3m_percent']:+.1f}% over three months."},
+    ]
+    verdict = classify_market_regime(pillars)
+    if verdict["label"] == "Risk-on":
+        bottom_line = "The broad tape, credit, and volatility structure support risk-taking; short-term damage is not broad enough to override them."
+    elif verdict["label"] == "Risk-off":
+        bottom_line = "Stress is broad enough that capital preservation matters more than buying dips."
+    else:
+        bottom_line = "Market plumbing is healthy, but leadership, momentum, or cyclicals are soft enough to keep the overall stance neutral."
+    return {
+        "as_of": as_of,
+        **verdict,
+        "bottom_line": bottom_line,
+        "pillars": pillars,
+        "why": [row["detail"] for row in pillars],
+        "metrics": {"equities": snapshots, "relative_strength": relative, "dgs10": {"value": ten_year, "one_month_change_bps": ten_year_change_bps}},
+        "source_dates": {"yahoo": snapshots["spy"]["date"], "dgs10": rates[-1]["date"], "hy_oas": current["hy_oas_as_of"], "cboe_curve": current["curve_as_of"]},
+        "method": "Five deterministic pillars: long-term trend, breadth, credit, short-term leadership, and rates/cyclicals. Three or two risk-on pillars can still be Neutral when two pillars actively disagree.",
+    }
+
+
 def current_band(metric: str, value: float) -> str:
     if metric == "vix":
         return "Low" if value < 15 else "Moderate" if value < 20 else "Elevated" if value < 25 else "High"
@@ -468,7 +579,12 @@ def build(end: date | None = None) -> dict[str, Any]:
     futures, contracts = futures_history(HISTORY_START, requested_end)
 
     env = load_env(Path.home() / ".hermes" / ".env")
-    credit_observations = fred_series("BAMLH0A0HYM2", HISTORY_START, env.get("FRED_API_KEY") or env.get("FRED_KEY"))
+    fred_key = env.get("FRED_API_KEY") or env.get("FRED_KEY")
+    with ThreadPoolExecutor(max_workers=2) as executor:
+        credit_job = executor.submit(fred_series, "BAMLH0A0HYM2", HISTORY_START, fred_key)
+        dgs10_job = executor.submit(fred_series, "DGS10", HISTORY_START, fred_key)
+        credit_observations = credit_job.result()
+        dgs10_observations = dgs10_job.result()
     sessions = [row["date"] for row in indices["vix"]]
     credit_available = core.lag_to_next_session(credit_observations, sessions)
     vix9d_ratio = ratio_series(indices["vix9d"], indices["vix"])
@@ -557,6 +673,7 @@ def build(end: date | None = None) -> dict[str, Any]:
     }
     current["bands"] = {name: current_band(name, current[name]) for name in ("vix", "vvix", "move", "skew")}
     current["curve_band"] = "Contango" if current["curve_slope_percent"] > 0 else "Backwardation"
+    market_regime = market_regime_snapshot(indices, dgs10_observations, current, as_of)
 
     ytd = lambda rows: [row for row in rows if row["date"] >= display_start.isoformat()]
     comparison_start = dashboard_as_of - timedelta(days=730)
@@ -571,10 +688,12 @@ def build(end: date | None = None) -> dict[str, Any]:
         "scorable_start": score_history[0]["date"],
         "comparison_start": comparison_start.isoformat(),
         "sources": {
-            "indices": "Yahoo Finance daily closes (^VIX, ^VVIX, ^MOVE, ^SKEW, ^VIX9D, ^VIX3M, SPY)",
+            "indices": "Yahoo Finance daily closes for volatility indexes plus SPY, QQQ, IWM, RSP, HYG, TLT, XLY, XLP, and SMH",
             "futures": "Cboe official VX monthly contract settlement files (detailed archive begins 2013)",
             "credit": "FRED BAMLH0A0HYM2 shifted to next completed session for T+1 availability",
+            "rates": "FRED DGS10 Treasury constant-maturity yield",
         },
+        "market_regime": market_regime,
         "current": current,
         "score": score,
         "commentary": commentary(current, score),
@@ -679,6 +798,8 @@ def main() -> int:
         "changed": changed,
         "score": payload["score"]["total"],
         "regime": payload["score"]["label"],
+        "market_regime": payload["market_regime"]["label"],
+        "market_regime_lean": payload["market_regime"]["lean"],
         "curve_slope_percent": payload["current"]["curve_slope_percent"],
         "scorable_start": payload["scorable_start"],
         "score_history_points": len(payload["history"]["score"]),
