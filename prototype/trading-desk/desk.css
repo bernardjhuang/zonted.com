@@ -210,3 +210,128 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 .crypto-card svg{display:block;width:100%;height:auto}
 @media(max-width:1040px){.chart-grid{grid-template-columns:1fr}}
 @media(min-width:1041px) and (max-width:1300px){.chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+
+/* ── crypto chart internals (polylines need explicit fill:none) ───── */
+.crypto-card{border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; margin: 0;}
+.crypto-card figcaption{display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px;}
+.crypto-card figcaption b{font: 600 13px var(--bl-mono);}
+.crypto-card figcaption span{font-size: 12px; color: var(--bl-muted);}
+.crypto-card figcaption em{margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal;}
+.crypto-card svg{display: block; width: 100%; height: auto;}
+.crypto-subtitle{fill: var(--bl-muted); font: 600 9px var(--bl-mono); letter-spacing: .06em;}
+.cg{stroke: var(--bl-divider);}
+.czero{stroke: #c8c5bd;}
+.clvl{stroke: #c8c5bd; stroke-dasharray: 2 3;}
+.ca{fill: var(--bl-faint); font: 10px var(--bl-mono);}
+.cpos{stroke: #0f8a4d;}
+.cneg{stroke: #c93a4a;}
+.ctag{font: 600 10.5px var(--bl-mono);}
+.cvlp{stroke: var(--bl-accent); stroke-width: 2;}
+.cvlv{stroke: #c9862f; stroke-width: 1.5; stroke-dasharray: 5 4;}
+.cvfp{fill: rgba(47, 95, 179, 0.06);}
+.cvfn{fill: rgba(201, 58, 74, 0.07);}
+.selected-chart .vwap-chart, .selected-chart .crypto-card{margin: 0;}
+.selected-chart .crypto-card{padding: 16px;}
+.crypto-chart-grid .crypto-card{min-width: 0; margin: 0; padding: 16px;}
+.cvlp,.cvlv,.cpos,.cneg{fill:none}
+.crypto-card .ctag{fill:var(--bl-ink)}
+
+/* ── hypothesis blocks (markup preserved from /trading/) ──────────── */
+.hypothesis-status{color: var(--bl-accent); font: 600 11px var(--bl-mono); text-transform: uppercase; letter-spacing: .04em;}
+.hypothesis-detail{min-width: 0; padding: 18px 20px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card);}
+.hypothesis-detail-head{display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap;}
+.hypothesis-detail h3{margin: 0; font: 700 15px var(--bl-mono);}
+.hypothesis-bottom-line{max-width: 980px; margin: 8px 0 16px; color: var(--bl-ink); font-size: 15px; font-weight: 600; text-wrap: pretty;}
+.hypothesis-grid{display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px;}
+.hypothesis-block{min-width: 0; padding: 13px 14px; border: 1px solid var(--bl-divider); border-radius: 7px; background: var(--bl-hover);}
+.hypothesis-block h4{margin: 0 0 5px; color: var(--bl-muted); font: 700 10.5px var(--bl-sans); letter-spacing: .04em; text-transform: uppercase;}
+.hypothesis-block p{margin: 0; color: var(--bl-ink2); font-size: 13px;}
+.hypothesis-block strong{color: var(--bl-ink);}
+.hypothesis-block ul{margin: 0; padding-left: 18px; color: var(--bl-ink2); font-size: 13px;}
+.hypothesis-block li + li{margin-top: 4px;}
+.portfolio-grid, .hypothesis-grid, .vwap-chart-grid, .crypto-chart-grid{grid-template-columns: 1fr;}
+/* skip offscreen layout/paint inside the long panels */
+            .brief-risk-card, .hypothesis-block, .whale-card{content-visibility: auto; contain-intrinsic-size: auto 600px;}
+.hyp-card{background:var(--bl-card);border:1px solid var(--bl-border);border-radius:10px;padding:18px 20px;margin-bottom:16px}
+.hyp-head{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:4px}
+.hyp-head h2{font:700 16px var(--bl-mono);letter-spacing:.01em}
+.hyp-card .hypothesis-grid{margin-top:14px}
+@media(max-width:820px){.hyp-card .hypothesis-grid{grid-template-columns:1fr}}
+
+/* ── brief content (markup preserved from /trading/) ──────────────── */
+.brief-log{padding: 0 20px; max-width: 980px;}
+.brief-entry{border-bottom: 1px solid var(--bl-border, #e5e5e5); padding: 0;}
+.brief-entry:last-child{border-bottom: 0;}
+.brief-entry > details > summary{cursor: pointer; padding: 12px 0; font-size: 14.5px; font-weight: 600; color: var(--bl-ink); list-style: none; display: flex; align-items: center; gap: 8px;}
+.brief-entry > details > summary::before{content: '▾'; font-size: 12px; color: var(--bl-muted); transition: transform 0.15s;}
+.brief-entry > details:not([open]) > summary::before{transform: rotate(-90deg);}
+.brief-entry > details > summary time{font-variant-numeric: tabular-nums;}
+.brief-entry-body{padding: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: var(--bl-ink);}
+.brief-risk-card{border: 1px solid var(--bl-border); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--bl-card);}
+.brief-card-header{display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap;}
+.brief-risk-title{font-size: 15px; font-weight: 600; margin: 0 0 4px; line-height: 1.35;}
+.brief-num{color: var(--bl-faint); margin-right: 4px;}
+.brief-score-badge{display: inline-block; padding: 3px 10px; border-radius: 20px; font: 600 13px var(--bl-sans); color: #fff; white-space: nowrap; flex-shrink: 0;}
+.brief-levers{display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0 10px;}
+.brief-section{margin: 8px 0;}
+.brief-signals ul, .brief-bullets{margin: 4px 0 6px; padding-left: 20px;}
+.brief-signals li, .brief-bullets li{margin: 3px 0; font-size: 13px;}
+.brief-para{margin: 6px 0;}
+.brief-section-header{font-size: 14px; font-weight: 600; margin: 16px 0 4px; color: var(--bl-muted);}
+.brief-section-divider{font-size: 18px; font-weight: 700; margin: 24px 0 12px; padding: 10px 0; border-top: 2px solid var(--bl-border); border-bottom: 1px solid var(--bl-divider, #eee); color: var(--bl-ink);}
+.brief-table-wrap{overflow-x: auto; margin: 10px 0;}
+.brief-table{width: 100%; border-collapse: collapse; border-top: 1px solid var(--bl-border); font-size: 12.5px;}
+.brief-table th{background: var(--bl-rowhead, #f5f5f5); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 10px; border-bottom: 0; white-space: nowrap;}
+.brief-table td{padding: 7px 10px; border-top: 1px solid var(--bl-divider, #eee); border-bottom: 0; white-space: normal; line-height: 1.5; font-variant-numeric: tabular-nums;}
+.brief-table tr:hover td{background: var(--bl-hover, #f9f9f9);}
+.brief-entry-today{border-left: 3px solid var(--bl-accent, #6366f1); padding-left: 12px; margin-left: -12px;}
+.brief-entry-header h3{font-size: 17px; font-weight: 700; margin: 16px 0 4px; color: var(--bl-ink);}
+.brief-entry-header{border-bottom: 1px solid var(--bl-divider, #eee); padding-bottom: 8px; margin-bottom: 4px;}
+.brief-details{margin-top: 10px; border-top: 1px dashed var(--bl-divider, #ddd); padding-top: 8px;}
+.brief-details > summary{cursor: pointer; font-size: 12px; color: var(--bl-faint); list-style: none;}
+.brief-details > summary::before{content: '▸ ';}
+.brief-details[open] > summary::before{content: '▾ ';}
+.brief-details-body{padding: 6px 0; font-size: 12px; color: var(--bl-muted);}
+.brief-details-body p{margin: 3px 0;}
+.brief-details-body .brief-bullets{font-size: 12px;}
+.brief-details-body .brief-bullets li{font-size: 12px;}
+.data-meta, .signal-legend{margin: -6px 20px 14px; color: var(--bl-muted); font-size: 13px;}
+.signal-legend b{color: var(--bl-ink); font-family: var(--bl-mono); font-size: 12px;}
+.data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .vwap-chart-grid, .crypto-chart-grid, .trading-method, .data-disclosure, .scan-universe-disclosure{margin-left: 16px; margin-right: 16px;}
+/* keep the leading (ticker) column pinned while wide tables scroll sideways */
+            .bl .scan-table th:first-child, .bl .scan-table td:first-child:not([colspan]),
+            .brief-table th:first-child, .brief-table td:first-child:not([colspan]){position: sticky; left: 0; z-index: 2; background: var(--bl-card);
+                box-shadow: 1px 0 0 var(--bl-border);
+                max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+/* skip offscreen layout/paint inside the long panels */
+            .brief-risk-card, .hypothesis-block, .whale-card{content-visibility: auto; contain-intrinsic-size: auto 600px;}
+/* right-edge fade on regions that actually scroll sideways (class set by enhancer) */
+        .scan-table-wrap.is-scrollable, .brief-table-wrap.is-scrollable, .bl-card.is-scrollable, .bl-position-chart-detail.is-scrollable{-webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);}
+.brief-more-btn{display: block; width: calc(100% - 32px); margin: 14px 16px; padding: 12px; min-height: 44px;
+            font: 600 13.5px var(--bl-sans); color: var(--bl-ink); background: var(--bl-card);
+            border: 1px solid var(--bl-border); border-radius: 8px; cursor: pointer;}
+.brief-log{padding:0}
+.brief-entry-body{padding-bottom:8px}
+
+/* ── risk page ────────────────────────────────────────────────────── */
+.risk-score{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
+.risk-dial{font:700 40px var(--bl-mono);line-height:1}
+.risk-bars{flex:1;min-width:260px;display:grid;gap:8px}
+.risk-bar{display:grid;grid-template-columns:64px 1fr 46px;align-items:center;gap:10px;font-size:12.5px}
+.risk-bar .t{width:100%;height:8px;border-radius:4px;background:var(--bl-divider);overflow:hidden}
+.risk-bar .f{height:100%;background:var(--bl-warn);border-radius:4px}
+.risk-bar .n{font-family:var(--bl-mono);text-align:right;color:var(--bl-muted)}
+
+.hypothesis-detail{margin-bottom:16px}
+.hypothesis-detail-head{margin-bottom:6px}
+.hyp-kill{border-color:#ecd9bb !important;background:var(--bl-warnbg) !important}
+.hyp-kill h4{color:var(--bl-warn) !important}
+
+/* the source rule came from inside a mobile media query — restore intent */
+.hypothesis-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+.hypothesis-grid .hyp-kill{grid-column:1/-1}
+@media(max-width:820px){.hypothesis-grid{grid-template-columns:1fr}}
+
+.risk-bar .t,.risk-bar .f{display:block}

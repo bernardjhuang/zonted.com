@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/prototype/trading-desk/desk.css?v=6">
+<link rel="stylesheet" href="/prototype/trading-desk/desk.css?v=9">
 </head>
 <body class="bl">
 <div class="note"><div class="wrap"><b>Layout prototype</b><span>Proposed replacement for /trading/ — live positions and market data, Friday Jul 24 close.</span></div></div>
@@ -22,7 +22,7 @@
     <span class="metric"><span class="k">Open</span>2</span>
   </div>
 </div></div>
-<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/prototype/trading-desk/" aria-current="page">Desk</a><a href="/prototype/trading-desk/hypotheses/">Hypotheses</a><a href="/prototype/trading-desk/brief/">Brief</a><a href="/prototype/trading-desk/gpt-brief/">GPT brief</a><a href="/prototype/trading-desk/momentum/">Momentum</a><a href="/prototype/trading-desk/vwap/">VWAP</a><a href="/prototype/trading-desk/performance/">Performance</a></div></nav>
+<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/prototype/trading-desk/" aria-current="page">Desk</a><a href="/prototype/trading-desk/hypotheses/">Hypotheses</a><a href="/prototype/trading-desk/brief/">Brief</a><a href="/prototype/trading-desk/gpt-brief/">GPT brief</a><a href="/prototype/trading-desk/momentum/">Momentum</a><a href="/prototype/trading-desk/vwap/">VWAP</a><a href="/prototype/trading-desk/risk/">Risk</a><a href="/prototype/trading-desk/performance/">Performance</a></div></nav>
 <div class="wrap">
 
 <div class="desk">
@@ -42,9 +42,12 @@
         <div class="cell"><span class="k">Spread Z</span><span class="v">−0.06</span></div>
         <div class="cell"><span class="k">Sector</span><span class="v">XLF +1.03</span></div>
       </div>
-      <div class="track-none"><b>No invalidation level set.</b> The thesis names an event (Jul 29 earnings)
-        but no price that ends the trade — the only open position without a floor.</div>
-      <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis.</p>
+      <div class="track">
+        <div class="track-h"><span>Kill $92</span><span>Room to invalidation: 3.1%</span></div>
+        <div class="track-bar"><span class="track-mark entry" style="left:43%"></span><span class="track-mark" style="left:32%"></span></div>
+        <div class="track-lbl"><span>92.00</span><span>now 94.91 · entry 95.46</span><span>101.00</span></div>
+      </div>
+      <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis. <b>Invalidated on a price breakdown below $92.</b></p>
       <div class="pos-actions"><a class="btn" href="/prototype/trading-desk/hypotheses/">Full thesis</a><a class="btn ghost" href="#">Set a level</a></div>
     </article>
 
@@ -75,7 +78,7 @@
     <div class="col-h"><h2>Needs attention</h2></div>
     <div class="rail-card">
       <div class="alert"><span class="when now">4 days</span><span class="body"><b>HOOD earnings — Wed Jul 29</b>
-        <span>Largest position, into a print, with no price-based exit defined.</span></span></div>
+        <span>Largest position into a print, and only 3.1% above the $92 breakdown level.</span></span></div>
       <div class="alert"><span class="when now">Friday</span><span class="body"><b>HOOD fell 6.6%, now under cost</b>
         <span>$94.91 vs $95.46 average. Spread Z crossed to −0.06 — no longer leading the market.</span></span></div>
       <div class="alert"><span class="when ok">Holding</span><span class="body"><b>ABT 3.9% above its kill level</b>
