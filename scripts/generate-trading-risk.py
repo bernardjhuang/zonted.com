@@ -559,6 +559,8 @@ def build(end: date | None = None) -> dict[str, Any]:
     current["curve_band"] = "Contango" if current["curve_slope_percent"] > 0 else "Backwardation"
 
     ytd = lambda rows: [row for row in rows if row["date"] >= display_start.isoformat()]
+    comparison_start = dashboard_as_of - timedelta(days=730)
+    comparison = lambda rows: [row for row in rows if row["date"] >= comparison_start.isoformat()]
     payload = {
         "schema_version": 2,
         "period": "YTD",
@@ -567,6 +569,7 @@ def build(end: date | None = None) -> dict[str, Any]:
         "generated_at": f"{as_of}T16:15:00-04:00",
         "history_start": HISTORY_START.isoformat(),
         "scorable_start": score_history[0]["date"],
+        "comparison_start": comparison_start.isoformat(),
         "sources": {
             "indices": "Yahoo Finance daily closes (^VIX, ^VVIX, ^MOVE, ^SKEW, ^VIX9D, ^VIX3M, SPY)",
             "futures": "Cboe official VX monthly contract settlement files (detailed archive begins 2013)",
@@ -587,6 +590,7 @@ def build(end: date | None = None) -> dict[str, Any]:
         },
         "history": {
             "score": score_history,
+            "spy": comparison(indices["spy"]),
             "vix_spikes": contiguous_windows(indices["vix"], lambda value: value >= 25),
         },
         "conditional_frequencies": frequencies,

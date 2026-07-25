@@ -155,6 +155,14 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertTrue(self.payload["history"]["vix_spikes"])
         self.assertTrue(all(0 <= row["score"] <= 100 for row in history))
 
+    def test_two_year_spy_context_is_published_without_truncating_score_history(self):
+        comparison_start = self.payload["comparison_start"]
+        spy = self.payload["history"]["spy"]
+        self.assertTrue(spy)
+        self.assertGreaterEqual(spy[0]["date"], comparison_start)
+        self.assertEqual(spy[-1]["date"], self.payload["as_of"])
+        self.assertLess(self.payload["scorable_start"], comparison_start)
+
     def test_current_metrics_publish_percentiles_deltas_and_staleness(self):
         metrics = self.payload["current"]["metrics"]
         self.assertEqual(set(metrics), set(core.COMPONENT_WEIGHTS))
