@@ -41,7 +41,7 @@ import trading_risk_core as core  # noqa: E402
 ROOT = SCRIPT_DIR.parent
 OUTPUT = ROOT / "trading" / "risk-ytd.json"
 EVALUATION = ROOT / "trading" / "risk-evaluation.json"
-PAGE = ROOT / "trading" / "index.html"
+PAGE = ROOT / "trading" / "classic" / "index.html"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
 ET = ZoneInfo("America/New_York")

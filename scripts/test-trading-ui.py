@@ -10,7 +10,7 @@ import re
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PAGE = ROOT / "trading" / "index.html"
+PAGE = ROOT / "trading" / "classic" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"

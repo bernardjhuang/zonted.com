@@ -2,7 +2,7 @@
 """Browser smoke for the generated trading decision surface.
 
 Requires Python Playwright. By default it uses the system Chrome on macOS and
-expects the repository to be served at http://127.0.0.1:8877/trading/.
+expects the repository to be served at http://127.0.0.1:8877/trading/classic/.
 """
 from __future__ import annotations
 
@@ -23,7 +23,7 @@ def check(condition: bool, message: str) -> None:
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--url", default="http://127.0.0.1:8877/trading/")
+    parser.add_argument("--url", default="http://127.0.0.1:8877/trading/classic/")
     parser.add_argument("--chrome", default=os.environ.get("CHROME_BIN"))
     args = parser.parse_args()
     executable = args.chrome or (str(MAC_CHROME) if MAC_CHROME.exists() else None)

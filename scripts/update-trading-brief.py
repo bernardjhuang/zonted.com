@@ -18,7 +18,7 @@ import re
 import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "trading", "index.html")
+PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
 BRIEF_GLOB_PRIMARY = os.path.join(os.path.dirname(ROOT), "tail-risk-scanner", "briefs", "*.md")
 BRIEF_GLOB_FALLBACK = os.path.expanduser("~/Documents/trading/briefs/*.md")
 
@@ -34,6 +34,8 @@ def safe_inline(text):
     text = re.sub(r"(?<!\w)_([^_]+?)_(?!\w)", r"<em>\1</em>", text)
     text = re.sub(r"`(.+?)`", r"<code>\1</code>", text)
     text = re.sub(r"!\[([^\]]*)\]\(([^)]+)\)", r'<img src="\2" alt="\1" style="max-width:100%;height:auto;border-radius:6px;margin:8px 0;display:block">', text)
+    # Brief sources use paths relative to /trading/; the page lives one level deeper now.
+    text = text.replace('src="charts/', 'src="/trading/charts/')
     text = re.sub(r"\[([^\]]+)\]\(([^)]+)\)", r'<a href="\2" target="_blank" rel="noopener">\1</a>', text)
     return text
 

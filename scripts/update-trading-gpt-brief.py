@@ -11,7 +11,7 @@ import re
 from urllib.parse import urlparse
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PAGE = ROOT / "trading" / "index.html"
+PAGE = ROOT / "trading" / "classic" / "index.html"
 DATA = ROOT / "trading" / "gpt-brief.json"
 SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
 START = "<!-- AUTO:GPT_BRIEF:START -->"
