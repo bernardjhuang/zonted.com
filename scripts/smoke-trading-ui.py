@@ -162,6 +162,17 @@ def main() -> None:
         check(desktop.locator("#youtube-videos-shell tbody tr").count() == 125, "YouTube source-video table is incomplete")
         check(desktop.locator("#youtube-videos-shell a[href*='youtube.com/watch']").count() == 125, "YouTube source links are incomplete")
 
+        desktop.goto(args.url + "#results", wait_until="networkidle")
+        check(desktop.locator("#results-tab").get_attribute("aria-selected") == "true", "Performance deep link did not activate")
+        results_stats = desktop.locator("#results-panel .results-stats")
+        check(results_stats.count() == 1 and results_stats.locator(".results-stat").count() == 4, "quantity-free result statistics are incomplete")
+        wins = int(results_stats.get_attribute("data-results-wins") or 0)
+        losses = int(results_stats.get_attribute("data-results-losses") or 0)
+        decided = int(results_stats.get_attribute("data-results-decided") or 0)
+        win_rate = float(results_stats.get_attribute("data-results-win-rate") or 0)
+        check(decided == wins + losses and round(wins / decided * 100, 1) == win_rate, "win-rate arithmetic is inconsistent")
+        check("Quantities and dollar amounts are ignored" in desktop.locator("#results-panel .results-method").inner_text(), "quantity-free method disclosure is missing")
+
         desktop.goto(args.url + "#log", wait_until="networkidle")
         check(desktop.locator("#positions-tab").get_attribute("aria-selected") == "true", "legacy #log did not land on Portfolio")
 
