@@ -553,15 +553,6 @@
   initChartGallery('#vwap-country-chart-grid', 'vwap', '.vwap-chart', wireVwapChart);
   initChartGallery('#crypto-chart-grid', 'crypto', '.crypto-card');
 
-  $$('.whale-flow-grid').forEach(whaleGrid => {
-    whaleGrid.addEventListener('click', event => {
-      const summary = event.target.closest('details.whale-card > summary');
-      const opening = summary?.parentElement;
-      if (!opening || opening.open) return;
-      $$('details.whale-card', whaleGrid).forEach(card => { if (card !== opening) card.open = false; });
-    });
-  });
-
   /* ── parse cron markup ────────────────────────────────────────────── */
   const raw = $('#bl-raw'), built = $('#bl-built'), logBuilt = $('#bl-log-built');
   if (!raw || !built || !logBuilt) return;

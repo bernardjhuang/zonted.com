@@ -16,7 +16,6 @@ RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
-YOUTUBE = ROOT / "trading" / "youtube-sentiment.json"
 GPT_BRIEF = ROOT / "trading" / "gpt-brief.json"
 
 
@@ -27,19 +26,18 @@ class TradingUiContractTest(unittest.TestCase):
         cls.js = JS.read_text()
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
-        cls.youtube = json.loads(YOUTUBE.read_text())
         cls.gpt_brief = json.loads(GPT_BRIEF.read_text())
 
-    def test_twelve_answer_first_tabs(self):
+    def test_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "scan", "vwap", "congress", "whales", "youtube", "crypto", "risk", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "scan", "vwap", "crypto", "risk", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
         self.assertEqual(labels[3], "GPT brief")
         self.assertRegex(labels[4], r"^Momentum \d+$")
-        self.assertEqual(labels[5:], ["VWAP", "Congress", "13F", "YouTube", "Crypto", "Risk", "Performance"])
+        self.assertEqual(labels[5:], ["VWAP", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
     def test_gpt_brief_is_future_focused_and_matches_json(self):
@@ -182,7 +180,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("'#log': ''", self.js)
 
     def test_answer_first_and_progressive_disclosure(self):
-        for panel in ("scan", "vwap", "congress", "whales", "crypto", "youtube"):
+        for panel in ("scan", "vwap", "crypto"):
             match = re.search(
                 rf'<!-- AUTO:{panel.upper()}:START -->(.*?)<!-- AUTO:{panel.upper()}:END -->',
                 self.html,
@@ -245,19 +243,6 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(country_z, sorted(country_z, reverse=True))
         self.assertIn(crypto["default"], crypto["charts"])
 
-    def test_youtube_snapshot_contract(self):
-        self.assertEqual(self.youtube["summary"]["channels"], 25)
-        self.assertEqual(self.youtube["summary"]["videos_targeted"], 125)
-        self.assertEqual(self.youtube["summary"]["videos_with_transcripts"], 119)
-        self.assertEqual(self.youtube["summary"]["organic_mentions"], 2855)
-        self.assertEqual(len(self.youtube["tickers"]), 141)
-        self.assertEqual(len(self.youtube["creators"]), 25)
-        self.assertEqual(len(self.youtube["videos"]), 125)
-        self.assertTrue(all(row["url"].startswith("https://www.youtube.com/watch?v=") for row in self.youtube["videos"]))
-        self.assertIn('id="youtube-panel"', self.html)
-        self.assertIn('/js/trading-youtube.js?', self.html)
-        self.assertIn('/trading/youtube-sentiment.json?', self.html)
-
     def test_vwap_shows_every_chart_without_picker_controls(self):
         self.assertIn('id="vwap-chart-grid"', self.html)
         self.assertIn('id="vwap-country-chart-grid"', self.html)
@@ -306,21 +291,6 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('<details class="bl-card activity-disclosure">', self.js)
         self.assertIn('direction / type / P&amp;L', self.js)
         self.assertEqual(self.html.count('class="activity-row"'), 40)
-
-    def test_13f_consensus_generates_top_twenty_per_side(self):
-        generator = (ROOT / "scripts" / "update-trading-whales.py").read_text()
-        self.assertIn("p['top_bought'][:20]", generator)
-        self.assertIn("p['top_sold'][:20]", generator)
-        self.assertIn("Most bought across offices · top 20", generator)
-        self.assertIn("Most sold across offices · top 20", generator)
-        whales_match = re.search(r'<!-- AUTO:WHALES:START -->(.*?)<!-- AUTO:WHALES:END -->', self.html, re.S)
-        self.assertIsNotNone(whales_match)
-        whales = whales_match.group(1) if whales_match else ""
-        for label in ("Most bought across offices · top 20", "Most sold across offices · top 20"):
-            body = re.search(re.escape(label) + r".*?<tbody>(.*?)</tbody>", whales, re.S)
-            self.assertIsNotNone(body, label)
-            rows = body.group(1) if body else ""
-            self.assertEqual(rows.count("<tr>"), 20, label)
 
 
 if __name__ == "__main__":
