@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Trading Desk — layout prototype</title>
+<meta name="robots" content="noindex, nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bl-page:#fafaf8; --bl-card:#fff; --bl-rowhead:#f6f5f1; --bl-border:#e6e4de; --bl-divider:#f0eee8;
+  --bl-ink:#1c1e22; --bl-ink2:#34373d; --bl-muted:#5c5f66; --bl-faint:#666a70;
+  --bl-accent:#2f5fb3; --bl-chipbg:#e9eef8; --bl-chipbd:#c4d2ec;
+  --bl-gain:#087a42; --bl-loss:#c93a4a; --bl-warn:#9a621d; --bl-warnbg:#fdf6ec;
+  --bl-sans:'IBM Plex Sans',system-ui,sans-serif; --bl-mono:'IBM Plex Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bl-page);color:var(--bl-ink);font:14px/1.5 var(--bl-sans);-webkit-font-smoothing:antialiased}
+.wrap{max-width:1340px;margin:0 auto;padding:0 24px}
+.note{background:#1c1e22;color:#fafaf8;font-size:12.5px;padding:9px 0}
+.note .wrap{display:flex;gap:10px;flex-wrap:wrap;align-items:baseline}
+.note b{font-weight:600}
+.note span{color:#b9bcc2}
+
+/* ── status bar ───────────────────────────────────────── */
+.status{background:var(--bl-card);border-bottom:1px solid var(--bl-border);position:sticky;top:0;z-index:20}
+.status .wrap{display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding-top:13px;padding-bottom:13px}
+h1{font-size:19px;font-weight:700;letter-spacing:-.01em}
+.stamp{font-size:12.5px;color:var(--bl-muted)}
+.status-metrics{margin-left:auto;display:flex;gap:18px;align-items:center;flex-wrap:wrap}
+.metric{display:flex;align-items:baseline;gap:6px;font-family:var(--bl-mono);font-size:13px}
+.metric .k{font-family:var(--bl-sans);font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint)}
+.chip{display:inline-flex;align-items:center;gap:6px;border-radius:999px;padding:4px 11px;font-size:12px;font-weight:600;
+  background:var(--bl-warnbg);color:var(--bl-warn);border:1px solid #ecd9bb}
+.chip .dot{width:7px;height:7px;border-radius:50%;background:currentColor}
+
+/* ── desk grid ────────────────────────────────────────── */
+.desk{display:grid;grid-template-columns:minmax(0,1.55fr) minmax(320px,.85fr);gap:24px;padding:24px 0 8px;align-items:start}
+.col-h{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+.col-h h2{font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:.08em}
+.col-h .sub{font-size:12.5px;color:var(--bl-muted)}
+
+/* ── position card ────────────────────────────────────── */
+.pos{background:var(--bl-card);border:1px solid var(--bl-border);border-radius:10px;padding:16px 18px;margin-bottom:14px}
+.pos-top{display:flex;align-items:flex-start;gap:12px}
+.pos-sym{font-family:var(--bl-mono);font-size:19px;font-weight:600;letter-spacing:.01em}
+.pos-price{font-family:var(--bl-mono);font-size:19px;margin-left:auto;text-align:right}
+.pos-day{font-family:var(--bl-mono);font-size:13px;font-weight:600}
+.up{color:var(--bl-gain)} .down{color:var(--bl-loss)}
+.pos-instr{font-size:12.5px;color:var(--bl-muted);margin-top:3px}
+.pos-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bl-divider)}
+.cell .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);display:block;margin-bottom:3px}
+.cell .v{font-family:var(--bl-mono);font-size:14px}
+
+/* invalidation track — the number that decides the trade, made visual */
+.track{margin-top:14px}
+.track-h{display:flex;justify-content:space-between;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);margin-bottom:6px}
+.track-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,#f3d5d9 0%,#f6ead0 42%,#dcefe2 100%)}
+.track-mark{position:absolute;top:-4px;width:2px;height:16px;background:var(--bl-ink);border-radius:1px}
+.track-mark.entry{background:var(--bl-muted);opacity:.55}
+.track-lbl{display:flex;justify-content:space-between;font-family:var(--bl-mono);font-size:11px;color:var(--bl-muted);margin-top:6px}
+.track-none{margin-top:14px;background:var(--bl-warnbg);border:1px solid #ecd9bb;border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--bl-warn)}
+.pos-thesis{font-size:13px;color:var(--bl-ink2);margin-top:13px;padding-top:12px;border-top:1px solid var(--bl-divider)}
+.pos-actions{margin-top:12px;display:flex;gap:10px}
+.btn{display:inline-flex;align-items:center;min-height:44px;padding:0 16px;border-radius:7px;border:1px solid var(--bl-chipbd);
+  background:var(--bl-chipbg);color:var(--bl-accent);font:600 12.5px var(--bl-sans);cursor:pointer;text-decoration:none}
+.btn.ghost{background:var(--bl-card);border-color:var(--bl-border);color:var(--bl-ink2)}
+
+/* ── rail ─────────────────────────────────────────────── */
+.rail-card{background:var(--bl-card);border:1px solid var(--bl-border);border-radius:10px;overflow:hidden;margin-bottom:14px}
+.rail-card h3{font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;padding:12px 16px;
+  background:var(--bl-rowhead);border-bottom:1px solid var(--bl-border)}
+.alert{display:flex;gap:11px;padding:13px 16px;border-bottom:1px solid var(--bl-divider);align-items:flex-start}
+.alert:last-child{border-bottom:0}
+.alert .when{font-family:var(--bl-mono);font-size:11px;font-weight:600;padding:3px 7px;border-radius:5px;white-space:nowrap;
+  background:#f3eee4;color:var(--bl-warn)}
+.alert .when.now{background:#fbe9ec;color:var(--bl-loss)}
+.alert .when.ok{background:#e7f3ec;color:var(--bl-gain)}
+.alert .body{font-size:13px;line-height:1.45}
+.alert .body b{font-weight:600}
+.alert .body span{display:block;color:var(--bl-muted);font-size:12px;margin-top:2px}
+.mkt{display:flex;justify-content:space-between;align-items:baseline;padding:10px 16px;border-bottom:1px solid var(--bl-divider);font-size:13px}
+.mkt:last-child{border-bottom:0}
+.mkt .v{font-family:var(--bl-mono);font-size:13px}
+.mkt .lbl{color:var(--bl-muted)}
+
+/* ── research ─────────────────────────────────────────── */
+.research{padding:6px 0 40px}
+.res{background:var(--bl-card);border:1px solid var(--bl-border);border-radius:10px;margin-bottom:10px}
+.res summary{list-style:none;cursor:pointer;padding:14px 18px;display:flex;gap:14px;align-items:baseline;min-height:52px}
+.res summary::-webkit-details-marker{display:none}
+.res summary::before{content:'›';font-size:17px;color:var(--bl-faint);transition:transform .18s;line-height:1}
+.res[open] summary::before{transform:rotate(90deg)}
+.res .name{font-weight:600;font-size:13.5px;white-space:nowrap}
+.res .take{color:var(--bl-muted);font-size:12.5px;line-height:1.45}
+.res .count{margin-left:auto;font-family:var(--bl-mono);font-size:12px;color:var(--bl-faint);white-space:nowrap}
+.res .panel{padding:2px 18px 18px;border-top:1px solid var(--bl-divider);color:var(--bl-muted);font-size:13px}
+
+@media(max-width:1040px){
+  .desk{grid-template-columns:1fr;gap:18px}
+  .desk-rail{order:-1}          /* attention first on small screens */
+  .wrap{padding:0 16px}
+  .status .wrap{gap:10px}
+  .status-metrics{margin-left:0;width:100%;gap:14px}
+  .pos-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .res summary{flex-wrap:wrap}
+  .res .count{margin-left:0;width:100%}
+}
+</style>
+</head>
+<body>
+
+<div class="note"><div class="wrap"><b>Layout prototype</b><span>Proposed replacement for /trading/ — real positions and data from Friday Jul 24 close. Static mock: research panels are stubs.</span></div></div>
+
+<div class="status"><div class="wrap">
+  <h1>Trading</h1>
+  <span class="stamp">Fri Jul 24 close · updated 4:15pm CT</span>
+  <div class="status-metrics">
+    <span class="chip"><span class="dot"></span>Risk: Watchful 30</span>
+    <span class="metric"><span class="k">SPY</span>738.85 <span class="up">+0.1%</span></span>
+    <span class="metric"><span class="k">VIX</span>18.58</span>
+  </div>
+</div></div>
+
+<div class="wrap">
+<div class="desk">
+
+  <!-- ── positions ─────────────────────────────────── -->
+  <section class="desk-main">
+    <div class="col-h"><h2>Positions</h2><span class="sub">2 open · both financials/healthcare</span></div>
+
+    <article class="pos">
+      <div class="pos-top">
+        <div>
+          <div class="pos-sym">HOOD</div>
+          <div class="pos-instr">301 shares @ $95.46 · 15× Jan 2027 $125 call @ $12.61</div>
+        </div>
+        <div class="pos-price">94.91 <div class="pos-day down">−6.6%</div></div>
+      </div>
+      <div class="pos-grid">
+        <div class="cell"><span class="k">Shares P&amp;L</span><span class="v down">−0.6%</span></div>
+        <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+3.2%</span></div>
+        <div class="cell"><span class="k">Spread Z</span><span class="v">−0.06</span></div>
+      </div>
+      <div class="track-none"><b>No invalidation level set.</b> The thesis names an event (Jul 29 earnings) but no price that ends the trade — the only open position without a floor.</div>
+      <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis.</p>
+      <div class="pos-actions"><a class="btn" href="#">View setup chart</a><a class="btn ghost" href="#">Set a level</a></div>
+    </article>
+
+    <article class="pos">
+      <div class="pos-top">
+        <div>
+          <div class="pos-sym">ABT</div>
+          <div class="pos-instr">1 share @ $101.61 · 70× Jan 2027 $120 call @ $2.69</div>
+        </div>
+        <div class="pos-price">103.06 <div class="pos-day up">+2.3%</div></div>
+      </div>
+      <div class="pos-grid">
+        <div class="cell"><span class="k">Shares P&amp;L</span><span class="v up">+1.4%</span></div>
+        <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+2.7%</span></div>
+        <div class="cell"><span class="k">Spread Z</span><span class="v up">+1.19</span></div>
+      </div>
+      <div class="track">
+        <div class="track-h"><span>Kill $99</span><span>Room to invalidation: 3.9%</span></div>
+        <div class="track-bar">
+          <span class="track-mark entry" style="left:26%" title="entry 101.61"></span>
+          <span class="track-mark" style="left:41%" title="now 103.06"></span>
+        </div>
+        <div class="track-lbl"><span>99.00</span><span>entry 101.61 · now 103.06</span><span>107.00</span></div>
+      </div>
+      <p class="pos-thesis">Healthcare strength plus a reclaim of the earnings and YTD VWAPs after a strong report.</p>
+      <div class="pos-actions"><a class="btn" href="#">View setup chart</a></div>
+    </article>
+
+    <details class="res" style="margin-top:16px">
+      <summary><span class="name">Recent activity</span><span class="take">HIMS closed Jul 24 · −11%</span><span class="count">4 events</span></summary>
+      <div class="panel">Consolidated fills, newest first.</div>
+    </details>
+  </section>
+
+  <!-- ── attention rail ────────────────────────────── -->
+  <aside class="desk-rail">
+    <div class="col-h"><h2>Needs attention</h2></div>
+
+    <div class="rail-card">
+      <div class="alert">
+        <span class="when now">4 days</span>
+        <span class="body"><b>HOOD earnings — Wed Jul 29</b>
+          <span>Your largest position, into a print, with no price-based exit defined.</span></span>
+      </div>
+      <div class="alert">
+        <span class="when now">Friday</span>
+        <span class="body"><b>HOOD fell 6.6%, now under cost</b>
+          <span>$94.91 vs $95.46 average. Spread Z crossed to −0.06: no longer leading the market.</span></span>
+      </div>
+      <div class="alert">
+        <span class="when ok">Holding</span>
+        <span class="body"><b>ABT 3.9% above its kill level</b>
+          <span>Above both VWAPs, spread Z +1.19. Nothing to do.</span></span>
+      </div>
+    </div>
+
+    <div class="rail-card">
+      <h3>Market</h3>
+      <div class="mkt"><span class="lbl">Regime</span><span class="v">Watchful 30/100</span></div>
+      <div class="mkt"><span class="lbl">Leading</span><span class="v">Energy · Financials</span></div>
+      <div class="mkt"><span class="lbl">Lagging</span><span class="v">Consumer Disc</span></div>
+      <div class="mkt"><span class="lbl">Above YTD VWAP</span><span class="v">10 of 13</span></div>
+      <div class="mkt"><span class="lbl">New signals</span><span class="v">10 long · 10 short</span></div>
+    </div>
+  </aside>
+</div>
+
+<!-- ── research, collapsed ─────────────────────────── -->
+<section class="research">
+  <div class="col-h"><h2>Research</h2><span class="sub">open only what you need — takeaways are always visible</span></div>
+
+  <details class="res"><summary><span class="name">Momentum</span>
+    <span class="take">10 qualified longs and 10 shorts across Comm Services, Consumer Disc, Energy, Real Estate, Utilities.</span>
+    <span class="count">170 symbols</span></summary>
+    <div class="panel">Qualified setups first; full universe behind a second disclosure, closed by default.</div></details>
+
+  <details class="res"><summary><span class="name">VWAP</span>
+    <span class="take">10 of 13 US markets above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</span>
+    <span class="count">23 charts</span></summary>
+    <div class="panel">Table selects one large chart instead of rendering all 23.</div></details>
+
+  <details class="res"><summary><span class="name">Crypto</span>
+    <span class="take">ETH leads BTC but remains below YTD VWAP. DOGE and BNB lag.</span>
+    <span class="count">7 coins</span></summary>
+    <div class="panel">Same row-selects-one-chart pattern.</div></details>
+
+  <details class="res"><summary><span class="name">Brief</span>
+    <span class="take">Daily tail-risk research and forward catalysts, newest first.</span>
+    <span class="count">3 briefs</span></summary>
+    <div class="panel">Merges today's Brief and GPT brief tabs — one surface, two sources.</div></details>
+
+  <details class="res"><summary><span class="name">Hypotheses</span>
+    <span class="take">Theses being built before entry — trigger, catalyst, and kill conditions.</span>
+    <span class="count">6 open</span></summary>
+    <div class="panel">One row each, expanding to the full write-up. Currently 36 blocks rendered at full height.</div></details>
+
+  <details class="res"><summary><span class="name">Performance</span>
+    <span class="take">Realized and unrealized P&amp;L, quantity-free.</span>
+    <span class="count">YTD</span></summary>
+    <div class="panel">Unchanged.</div></details>
+</section>
+</div>
+
+</body>
+</html>
