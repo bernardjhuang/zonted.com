@@ -18549,8 +18549,53 @@
   "history_start": "2013-01-01",
   "method": "The Conditions Score uses trailing three-year empirical percentiles, a constant-maturity 30-to-60-day VIX futures slope where a positive slope means contango, lagged credit, and zero weight for stale inputs. It is a falsifiable conditions heuristic, not a calibrated probability or trading signal.",
   "model_status": {
-    "message": "No fitted forecast is published until it beats unconditional and VIX-persistence baselines out of sample.",
-    "status": "not_evaluated"
+    "endpoints_passed": 0,
+    "endpoints_total": 4,
+    "evaluation_digest": "f9bb7ec3ffb1",
+    "evaluation_url": "/trading/risk-evaluation.json",
+    "live_probabilities": null,
+    "message": "Fitted probabilities are withheld because at least one frozen endpoint failed the persistence gauntlet.",
+    "reasons": [
+      "vix_above_25 21d: minimum_improvement, positive_and_calm_balance",
+      "vix_above_25 42d: minimum_improvement, bootstrap_probability_at_least_0_80, leave_one_positive_episode_out, positive_and_calm_balance",
+      "spy_drawdown_5 21d: beats_best_baseline, minimum_improvement, bootstrap_probability_at_least_0_80, leave_one_positive_episode_out, positive_and_calm_balance",
+      "spy_drawdown_5 42d: beats_best_baseline, minimum_improvement, bootstrap_probability_at_least_0_80, leave_one_positive_episode_out"
+    ],
+    "scores": [
+      {
+        "best_baseline": "vix_percentile",
+        "best_baseline_brier": 0.13620876,
+        "horizon": 21,
+        "model_brier": 0.13400934,
+        "passed": false,
+        "target": "vix_above_25"
+      },
+      {
+        "best_baseline": "vix_percentile",
+        "best_baseline_brier": 0.15132911,
+        "horizon": 42,
+        "model_brier": 0.15106409,
+        "passed": false,
+        "target": "vix_above_25"
+      },
+      {
+        "best_baseline": "unconditional",
+        "best_baseline_brier": 0.11332641,
+        "horizon": 21,
+        "model_brier": 0.1146762,
+        "passed": false,
+        "target": "spy_drawdown_5"
+      },
+      {
+        "best_baseline": "unconditional",
+        "best_baseline_brier": 0.12235676,
+        "horizon": 42,
+        "model_brier": 0.1236359,
+        "passed": false,
+        "target": "spy_drawdown_5"
+      }
+    ],
+    "status": "withheld"
   },
   "period": "YTD",
   "scanner_policy": {

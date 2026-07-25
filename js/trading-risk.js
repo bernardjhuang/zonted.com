@@ -130,6 +130,14 @@
     return `<div class="risk-frequency-wrap"><table class="risk-frequency"><thead><tr><th>Observed outcome</th><th>Base rate</th><th>Contained</th><th>Watchful</th><th>Elevated</th></tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
   }
 
+  function modelStatus(status) {
+    const endpointCopy = Number.isFinite(Number(status.endpoints_total))
+      ? `${status.endpoints_passed}/${status.endpoints_total} endpoints passed.` : '';
+    const receipt = status.evaluation_url && status.evaluation_digest
+      ? ` <a href="${esc(status.evaluation_url)}?v=${esc(status.evaluation_digest)}" target="_blank" rel="noopener">Full Brier receipt</a>` : '';
+    return `<div class="risk-model-status"><b>${esc(status.status.replaceAll('_', ' '))}</b><span>${esc(status.message)} ${esc(endpointCopy)}${receipt}</span></div>`;
+  }
+
   function render(payload) {
     const c = payload.current, dates = c.dates, metrics = c.metrics, context = c.context_metrics;
     const vix = normalizeSeries(payload.series.vix);
@@ -179,7 +187,7 @@
         ${metricCard('HY OAS', fixed(c.hy_oas), metrics.hy_oas.direction, metrics.hy_oas, '%')}
       </div>
       <ul class="risk-commentary">${payload.commentary.map(line => `<li>${esc(line)}</li>`).join('')}</ul>
-      <div class="risk-model-status"><b>${esc(payload.model_status.status.replaceAll('_', ' '))}</b><span>${esc(payload.model_status.message)}</span></div>
+      ${modelStatus(payload.model_status)}
       <div class="risk-grid">
         <section class="risk-card risk-card--wide" aria-labelledby="risk-evidence-heading"><div class="risk-card-head"><div><h3 id="risk-evidence-heading">What happened next?</h3><p>Score history begins ${esc(shortDay(payload.scorable_start))}, after the 252-observation warm-up. Red shading marks VIX ≥25 windows.</p></div><time datetime="${esc(asOf)}">Through ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${scorePanel}</div><div class="risk-frequency-section"><h4>Historical outcome frequencies</h4><p>Overlapping daily rows are descriptive, not independent episodes. Stage 3 uses blocked evaluation.</p>${frequencyTable(payload.conditional_frequencies)}</div><div class="risk-gate-note ${gateTone}"><b>Scanner policy · ${esc(payload.gate_policy.elevated_action.replace('_', ' '))}</b><span>${esc(payload.gate_policy.reason)}</span></div></section>
         <section class="risk-card risk-card--wide" aria-labelledby="risk-main-heading"><div class="risk-card-head"><div><h3 id="risk-main-heading">YTD conditions stack</h3><p>Absolute levels remain readable; percentile ranks—not fixed levels—drive the score.</p></div><time datetime="${esc(asOf)}">Updated ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${mainPanels}</div><p class="risk-spike-key">Historical VIX ≥25 context</p></section>

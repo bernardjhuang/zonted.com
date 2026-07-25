@@ -168,6 +168,9 @@ def main() -> None:
         check(desktop.locator("#risk-panel svg[role='img']").count() == 12, "Risk charts lack accessible SVG roles")
         check(desktop.locator("#risk-panel .risk-commentary li").count() >= 3, "Risk interpretation is incomplete")
         check(desktop.locator("#risk-panel .risk-model-status").count() == 1, "Risk model ship/withhold status is missing")
+        check("WITHHELD" in desktop.locator("#risk-panel .risk-model-status").inner_text(), "Failed Risk model was not withheld")
+        check("0/4 endpoints passed" in desktop.locator("#risk-panel .risk-model-status").inner_text(), "Risk persistence receipt summary is missing")
+        check(desktop.locator("#risk-panel .risk-model-status a[href*='risk-evaluation.json']").count() == 1, "Risk persistence receipt link is missing")
 
         desktop.goto(args.url + "#results", wait_until="networkidle")
         check(desktop.locator("#results-tab").get_attribute("aria-selected") == "true", "Performance deep link did not activate")

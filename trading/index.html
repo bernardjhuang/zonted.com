@@ -18,7 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
-    <link rel="stylesheet" href="/css/trading-risk.css?v=1d718a3bd0c3">
+    <link rel="stylesheet" href="/css/trading-risk.css?v=4720678eabea">
     <style>
         /* ── Broker Light (design handoff 2026-07-21) ─────────────────── */
         .bl {
@@ -789,9 +789,9 @@
         </section>
 
             <!-- AUTO:RISK:START -->
-            <section class="trading-panel risk-panel" id="risk-panel" role="tabpanel" tabindex="0" aria-labelledby="risk-tab" data-url="/trading/risk-ytd.json?v=512bd0e311fb" hidden>
+            <section class="trading-panel risk-panel" id="risk-panel" role="tabpanel" tabindex="0" aria-labelledby="risk-tab" data-url="/trading/risk-ytd.json?v=e42fccbae041" hidden>
                 <div id="risk-content" aria-live="polite"><p class="risk-loading">Loading forward market risk…</p></div>
-                <noscript><p>JavaScript is required for the risk charts. <a href="/trading/risk-ytd.json?v=512bd0e311fb">Download the YTD data</a>.</p></noscript>
+                <noscript><p>JavaScript is required for the risk charts. <a href="/trading/risk-ytd.json?v=e42fccbae041">Download the YTD data</a>.</p></noscript>
             </section>
             <!-- AUTO:RISK:END -->
 
@@ -1250,9 +1250,9 @@
                 <details class="scan-universe-disclosure" id="scan-universe" open>
                     <summary>Browse full universe · 170 symbols</summary>
                     <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=18d2807387b9"><p class="bl-empty">Loading universe…</p></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=4085e423107d"><p class="bl-empty">Loading universe…</p></div>
                 </details>
-                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=2826f796a78f"}</script>
+                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=9e85455ae64e"}</script>
                 <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Watchful halves longs; validated Elevated gates them to WATCH; shorts stay. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
             </section>
             <!-- AUTO:SCAN:END -->
@@ -1908,7 +1908,7 @@
         </div>
     </footer>
     <script src="/js/trading-broker-light.js?v=68c18f340228"></script>
-    <script src="/js/trading-risk.js?v=edf2124c195e"></script>
+    <script src="/js/trading-risk.js?v=545766c7a101"></script>
     <script src="/js/trading-gpt-brief.js?v=ba6d5f3754df"></script>
 </body>
 </html>

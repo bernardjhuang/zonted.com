@@ -40,7 +40,10 @@ import trading_risk_core as core  # noqa: E402
 
 ROOT = SCRIPT_DIR.parent
 OUTPUT = ROOT / "trading" / "risk-ytd.json"
+EVALUATION = ROOT / "trading" / "risk-evaluation.json"
 PAGE = ROOT / "trading" / "index.html"
+RISK_JS = ROOT / "js" / "trading-risk.js"
+RISK_CSS = ROOT / "css" / "trading-risk.css"
 ET = ZoneInfo("America/New_York")
 USER_AGENT = "zonted-risk-dashboard/2.0 hello@veracityapi.com"
 HISTORY_START = date(2013, 1, 1)
@@ -425,6 +428,35 @@ def commentary(current: dict[str, Any], score: dict[str, Any]) -> list[str]:
     ]
 
 
+def evaluation_status(as_of: str) -> dict[str, Any]:
+    if not EVALUATION.exists():
+        return {
+            "status": "not_evaluated",
+            "message": "No fitted forecast is published until it beats unconditional and VIX-persistence baselines out of sample.",
+        }
+    raw = EVALUATION.read_bytes()
+    payload = json.loads(raw)
+    if payload.get("schema_version") != 1 or payload.get("as_of") != as_of:
+        return {
+            "status": "not_evaluated",
+            "message": "The last persistence-gauntlet receipt does not match the current completed session.",
+        }
+    status = dict(payload["model_status"])
+    status["evaluation_digest"] = hashlib.sha256(raw).hexdigest()[:12]
+    status["evaluation_url"] = "/trading/risk-evaluation.json"
+    status["endpoints_passed"] = sum(bool(row["passed"]) for row in payload["scores"])
+    status["endpoints_total"] = len(payload["scores"])
+    status["scores"] = [{
+        "target": row["target"],
+        "horizon": row["horizon"],
+        "model_brier": row["episode_weighted_brier"]["model"],
+        "best_baseline": row["best_baseline"],
+        "best_baseline_brier": row["episode_weighted_brier"][row["best_baseline"]],
+        "passed": row["passed"],
+    } for row in payload["scores"]]
+    return status
+
+
 def build(end: date | None = None) -> dict[str, Any]:
     today = datetime.now(ET).date()
     requested_end = min(end or today, today)
@@ -582,10 +614,7 @@ def build(end: date | None = None) -> dict[str, Any]:
             "skew": [130, 145],
         },
         "method": "The Conditions Score uses trailing three-year empirical percentiles, a constant-maturity 30-to-60-day VIX futures slope where a positive slope means contango, lagged credit, and zero weight for stale inputs. It is a falsifiable conditions heuristic, not a calibrated probability or trading signal.",
-        "model_status": {
-            "status": "not_evaluated",
-            "message": "No fitted forecast is published until it beats unconditional and VIX-persistence baselines out of sample.",
-        },
+        "model_status": evaluation_status(as_of),
     }
     return payload
 
@@ -599,13 +628,18 @@ def update_asset_version(rendered: str) -> str:
     if not PAGE.exists() or 'id="risk-panel"' not in PAGE.read_text():
         return digest
     source = PAGE.read_text()
-    updated, count = re.subn(
-        r"/trading/risk-ytd\.json\?v=[a-f0-9]+",
-        f"/trading/risk-ytd.json?v={digest}",
-        source,
+    js_digest = hashlib.sha256(RISK_JS.read_bytes()).hexdigest()[:12]
+    css_digest = hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]
+    replacements = (
+        (r"/trading/risk-ytd\.json\?v=[a-f0-9]+", f"/trading/risk-ytd.json?v={digest}", 2, "risk data"),
+        (r"/js/trading-risk\.js\?v=[a-f0-9]+", f"/js/trading-risk.js?v={js_digest}", 1, "risk JS"),
+        (r"/css/trading-risk\.css\?v=[a-f0-9]+", f"/css/trading-risk.css?v={css_digest}", 1, "risk CSS"),
     )
-    if count != 2:
-        raise RuntimeError(f"expected two risk data asset URLs, found {count}")
+    updated = source
+    for pattern, replacement, expected, label in replacements:
+        updated, count = re.subn(pattern, replacement, updated)
+        if count != expected:
+            raise RuntimeError(f"expected {expected} {label} asset URLs, found {count}")
     if updated != source:
         temporary = PAGE.with_suffix(".html.tmp")
         temporary.write_text(updated)

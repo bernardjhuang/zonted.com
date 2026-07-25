@@ -192,7 +192,10 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertEqual(scanner["as_of"], self.payload["as_of"])
         self.assertEqual(scanner["elevated_hard_gate_enabled"], policy["hard_gate_enabled"])
         self.assertEqual(scanner["watchful_action"], "annotate_half_size")
-        self.assertEqual(self.payload["model_status"]["status"], "not_evaluated")
+        self.assertEqual(self.payload["model_status"]["status"], "withheld")
+        self.assertEqual(self.payload["model_status"]["endpoints_passed"], 0)
+        self.assertEqual(self.payload["model_status"]["endpoints_total"], 4)
+        self.assertIsNone(self.payload["model_status"]["live_probabilities"])
 
 
 if __name__ == "__main__":
