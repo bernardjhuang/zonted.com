@@ -253,6 +253,7 @@
     const vix9dRatio = normalizeSeries(payload.series.vix9d_vix);
     const vix3mRatio = normalizeSeries(payload.series.vix_vix3m);
     const scoreHistory = normalizeSeries(payload.history.score, 'score');
+    const spy = normalizeSeries(payload.history.spy);
     const asOf = payload.as_of;
     chartSequence = 0;
     chartRegistry.clear();
@@ -263,6 +264,7 @@
       tooltipMetric('move', 'MOVE', move),
       tooltipMetric('skew', 'SKEW', skew),
       tooltipMetric('score', 'Conditions Score', scoreHistory),
+      tooltipMetric('spy', 'S&P 500 (SPY)', spy),
       tooltipMetric('vix9d-vix', 'VIX9D / VIX', vix9dRatio, 3),
       tooltipMetric('vix-vix3m', 'VIX / VIX3M', vix3mRatio, 3),
     ].map(row => ({ ...row, values: new Map(row.series.map(point => [point.date, point.value])) }));
@@ -285,7 +287,9 @@
       linePanel({ name: 'VIX9D / VIX · near-term event pressure', series: vix9dRatio, current: fixed(context.vix9d_vix.value, 3), band: `P${Math.round(context.vix9d_vix.percentile)}`, domain: dynamicDomain(vix9dRatio, .65, 1.15), thresholds: [1], zero: false, asOf }),
       linePanel({ name: 'VIX / VIX3M · short-vs-quarterly stress', series: vix3mRatio, current: fixed(context.vix_vix3m.value, 3), band: `P${Math.round(context.vix_vix3m.percentile)}`, domain: dynamicDomain(vix3mRatio, .65, 1.15), thresholds: [1], zero: false, asOf }),
     ].join('');
-    const scorePanel = linePanel({ name: 'Conditions Score history', series: scoreHistory, current: fixed(payload.score.total, 2), band: payload.score.label, domain: [0, 100], zones: [{ from: 0, to: 25, className: 'risk-zone-calm' }, { from: 25, to: 50, className: 'risk-zone-watch' }, { from: 50, to: 100, className: 'risk-zone-high' }], thresholds: [25, 50], windows: payload.history.vix_spikes, accent: true, asOf, startDate: payload.scorable_start, startLabel: payload.scorable_start.slice(0, 4) });
+    const spyValues = spy.map(row => row.value);
+    const spyPanel = linePanel({ name: 'S&P 500 (SPY) · daily close', series: spy, current: fixed(spy[spy.length - 1].value, 2), domain: dynamicDomain(spy, Math.min(...spyValues), Math.max(...spyValues), .05), windows: payload.history.vix_spikes, asOf, startDate: payload.comparison_start, startLabel: payload.comparison_start.slice(0, 4) });
+    const scorePanel = linePanel({ name: 'Conditions Score history', series: scoreHistory, current: fixed(payload.score.total, 2), band: payload.score.label, domain: [0, 100], zones: [{ from: 0, to: 25, className: 'risk-zone-calm' }, { from: 25, to: 50, className: 'risk-zone-watch' }, { from: 50, to: 100, className: 'risk-zone-high' }], thresholds: [25, 50], windows: payload.history.vix_spikes, accent: true, asOf, startDate: payload.comparison_start, startLabel: payload.comparison_start.slice(0, 4) });
 
     const moveLag = metrics.move.stale ? ` · MOVE stale by ${metrics.move.age_sessions} sessions` : '';
     const gateTone = payload.gate_policy.hard_gate_enabled ? 'risk-elevated' : 'risk-watchful';
@@ -306,7 +310,7 @@
       <ul class="risk-commentary">${payload.commentary.map(line => `<li>${esc(line)}</li>`).join('')}</ul>
       ${modelStatus(payload.model_status)}
       <div class="risk-grid">
-        <section class="risk-card risk-card--wide" aria-labelledby="risk-evidence-heading"><div class="risk-card-head"><div><h3 id="risk-evidence-heading">What happened next?</h3><p>Score history begins ${esc(shortDay(payload.scorable_start))}, after the 252-observation warm-up. Red shading marks VIX ≥25 windows.</p></div><time datetime="${esc(asOf)}">Through ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${scorePanel}</div><div class="risk-frequency-section"><h4>Historical outcome frequencies</h4><p>Overlapping daily rows are descriptive, not independent episodes. Stage 3 uses blocked evaluation.</p>${frequencyTable(payload.conditional_frequencies)}</div><div class="risk-gate-note ${gateTone}"><b>Scanner policy · ${esc(payload.gate_policy.elevated_action.replace('_', ' '))}</b><span>${esc(payload.gate_policy.reason)}</span></div></section>
+        <section class="risk-card risk-card--wide" aria-labelledby="risk-evidence-heading"><div class="risk-card-head"><div><h3 id="risk-evidence-heading">What happened next?</h3><p>Trailing two years of SPY closes aligned with the Conditions Score. Red shading marks VIX ≥25 windows.</p></div><time datetime="${esc(asOf)}">Through ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${spyPanel}${scorePanel}</div><div class="risk-frequency-section"><h4>Historical outcome frequencies</h4><p>Overlapping daily rows are descriptive, not independent episodes. Stage 3 uses blocked evaluation.</p>${frequencyTable(payload.conditional_frequencies)}</div><div class="risk-gate-note ${gateTone}"><b>Scanner policy · ${esc(payload.gate_policy.elevated_action.replace('_', ' '))}</b><span>${esc(payload.gate_policy.reason)}</span></div></section>
         <section class="risk-card risk-card--wide" aria-labelledby="risk-main-heading"><div class="risk-card-head"><div><h3 id="risk-main-heading">YTD conditions stack</h3><p>Absolute levels remain readable; percentile ranks—not fixed levels—drive the score.</p></div><time datetime="${esc(asOf)}">Updated ${esc(shortDay(asOf))}</time></div><div class="risk-stack">${mainPanels}</div><p class="risk-spike-key">Historical VIX ≥25 context</p></section>
         <section class="risk-card" aria-labelledby="risk-vvix-heading"><div class="risk-card-head"><div><h3 id="risk-vvix-heading">VVIX lead/confirmation</h3><p>Direction and percentile matter more than one static threshold.</p></div></div><div class="risk-stack">${vvixFocus}</div></section>
         <section class="risk-card" aria-labelledby="risk-ratios-heading"><div class="risk-card-head"><div><h3 id="risk-ratios-heading">Short-horizon curve ratios</h3><p>Ratios above 1 flag near-term volatility pricing above longer horizons.</p></div></div><div class="risk-stack">${ratioPanels}</div></section>

@@ -182,6 +182,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(self.risk["model_status"]["endpoints_total"], 4)
         self.assertIsNone(self.risk["model_status"]["live_probabilities"])
         self.assertIn("Full Brier receipt", RISK_JS.read_text())
+        self.assertIn("S&P 500 (SPY)", RISK_JS.read_text())
+        self.assertIn("comparison_start", RISK_JS.read_text())
         self.assertIn("Conditions Score", RISK_JS.read_text())
         self.assertIn("Historical outcome frequencies", RISK_JS.read_text())
         self.assertIn("constant-maturity", RISK_JS.read_text())
