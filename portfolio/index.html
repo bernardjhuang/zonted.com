@@ -646,6 +646,56 @@
             background: rgba(42, 38, 34, 0.92); color: #d8d4cc;
             padding: 3px 8px; border-radius: 2px; text-transform: uppercase; opacity: 1;
         }
+    
+        /* ---------- Bonus stage: games ---------- */
+        .port-arcade {
+            padding: 8px 36px 72px;
+            background: linear-gradient(180deg, var(--tc-bg2), var(--tc-bg));
+            position: relative;
+        }
+        .port-arcade-inner { max-width: 1180px; margin-inline: auto; position: relative; z-index: 1; }
+        .port-arcade-head { text-align: center; margin-bottom: 28px; }
+        .port-arcade-eyebrow {
+            font-family: var(--tc-body); font-size: 0.72rem; font-weight: 700;
+            letter-spacing: 0.22em; text-transform: uppercase; color: var(--tc-gold);
+            margin: 0 0 8px;
+        }
+        .port-arcade-head h2 {
+            font-family: var(--tc-display); font-size: clamp(1.6rem, 4vw, 2.4rem);
+            color: var(--tc-text); margin: 0 0 10px; letter-spacing: 0.02em;
+        }
+        .port-arcade-dek {
+            font-family: var(--tc-body); font-size: 0.95rem; line-height: 1.6;
+            color: var(--tc-dim); margin: 0 auto; max-width: 54ch;
+        }
+        .port-arcade-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+        .arcade-card {
+            display: flex; flex-direction: column; text-decoration: none;
+            border: 1px solid rgba(251,191,36,0.28); border-radius: 14px; overflow: hidden;
+            background: rgba(255,255,255,0.03);
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+        .arcade-card:hover {
+            transform: translateY(-4px); border-color: var(--tc-gold);
+            box-shadow: 0 14px 34px rgba(0,0,0,0.45), 0 0 0 1px rgba(251,191,36,0.35);
+        }
+        .arcade-card:focus-visible { outline: 3px solid var(--tc-gold); outline-offset: 4px; }
+        .arcade-thumb {
+            aspect-ratio: 16 / 9; display: flex; align-items: center; justify-content: center;
+            font-size: 3.4rem; line-height: 1;
+        }
+        .arcade-body { padding: 16px 18px 18px; font-family: var(--tc-body); }
+        .arcade-eyebrow {
+            display: block; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.16em;
+            text-transform: uppercase; color: var(--tc-dim); margin-bottom: 6px;
+        }
+        .arcade-title {
+            display: block; font-family: var(--tc-display); font-size: 1.05rem;
+            color: var(--tc-text); margin-bottom: 8px; letter-spacing: 0.01em;
+        }
+        .arcade-dek { display: block; font-size: 0.87rem; line-height: 1.55; color: var(--tc-dim); margin-bottom: 12px; }
+        .arcade-play { display: block; font-size: 0.8rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--tc-gold); }
+        @media (max-width: 900px) { .port-arcade-grid { grid-template-columns: 1fr; } .port-arcade { padding: 8px 20px 56px; } }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -665,7 +715,6 @@
                 <a href="/posts/">Posts</a>
                 <a href="/portfolio/" class="active">Projects</a>
                 <a href="/trading/">Trading</a>
-                <a href="/games/">Games</a>
                 <a href="/metrics/">Metrics</a>
                 <a href="/about/">About</a>
                 <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
@@ -1338,6 +1387,45 @@
             </div>
         </section>
 
+    
+        <section class="port-arcade" aria-labelledby="port-arcade-heading">
+            <div class="port-arcade-inner">
+                <div class="port-arcade-head">
+                    <p class="port-arcade-eyebrow">Bonus stage</p>
+                    <h2 id="port-arcade-heading">Games</h2>
+                    <p class="port-arcade-dek">Browser toys built in the lab. No business model, no metrics, no thesis &mdash; just things that were fun to make. Playable in a tab.</p>
+                </div>
+                <div class="port-arcade-grid">
+                    <a class="arcade-card" href="/games/run-to-rebecca/" aria-label="Run to Rebecca — play">
+                        <div class="arcade-thumb" style="background:radial-gradient(120% 120% at 50% 0%, #2a2350, #0e1022);" aria-hidden="true">🏃💨</div>
+                        <div class="arcade-body">
+                            <span class="arcade-eyebrow">Endless runner</span>
+                            <span class="arcade-title">Run to Rebecca</span>
+                            <span class="arcade-dek">An Austin rooftop sprint. Run, jump, and dash across the skyline to reach Rebecca — don't miss the leap.</span>
+                            <span class="arcade-play">Play &rarr;</span>
+                        </div>
+                    </a>
+                    <a class="arcade-card" href="/games/graveyard/" aria-label="Graveyard Pacman — play">
+                        <div class="arcade-thumb" style="background:radial-gradient(circle at 50% 35%, #2a1f4d, #0a0420);" aria-hidden="true">🪦</div>
+                        <div class="arcade-body">
+                            <span class="arcade-eyebrow">Arcade maze</span>
+                            <span class="arcade-title">Graveyard Pacman</span>
+                            <span class="arcade-dek">A Pac-Man maze haunted by the ghosts of dead Zonted projects. Every dead idea brought us one run closer.</span>
+                            <span class="arcade-play">Play &rarr;</span>
+                        </div>
+                    </a>
+                    <a class="arcade-card" href="/games/life-of-fry/" aria-label="Life of Fry — play">
+                        <div class="arcade-thumb" style="background:radial-gradient(circle at 50% 30%, #c0392b, #7a1d15);" aria-hidden="true">🍟</div>
+                        <div class="arcade-body">
+                            <span class="arcade-eyebrow">First-person panic sim</span>
+                            <span class="arcade-title">Life of Fry</span>
+                            <span class="arcade-dek">You're a french fry. A giant human reaches into the basket to eat you. Hide behind the others, dodge the hand, survive until she's full.</span>
+                            <span class="arcade-play">Play &rarr;</span>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </section>
     </main>
 
 <footer class="zn-footer">
@@ -1347,7 +1435,6 @@
             <a href="/posts/">Posts</a>
             <a href="/portfolio/">Projects</a>
             <a href="/trading/">Trading</a>
-            <a href="/games/">Games</a>
             <a href="/metrics/">Metrics</a>
             <a href="/about/">About</a>
             <a href="/feed.xml">RSS</a>
