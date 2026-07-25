@@ -4,6 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <title>Does Google Trends Predict Stock Prices? A Five-Year Backtest</title>
     <meta name="description" content="I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.">
     <link rel="canonical" href="https://zonted.com/posts/google-trends-stock-attention/">
@@ -11,33 +15,139 @@
     <meta property="og:description" content="Search spikes predicted something. It just wasn't returns. The full backtest, failed alpha gate, and 51,372-row receipt trail.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png">
     <meta property="og:url" content="https://zonted.com/posts/google-trends-stock-attention/">
     <meta property="article:published_time" content="2026-07-25">
-    <meta property="article:section" content="Trading Research">
-    <meta name="author" content="Bernard Huang">
     <meta name="robots" content="index, follow, max-image-preview:large">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="I Backtested Five Years of Google Searches Against Stocks">
-    <meta name="twitter:description" content="Search spikes predicted something. It just wasn't returns.">
-    <meta name="twitter:image" content="https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png">
+
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&amp;display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"Article","headline":"I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/google-trends-stock-attention/","description":"I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.","image":"https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Google Trends Stock Backtest"}]}
     </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure > img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.8rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
 <body>
     <a href="#main" class="skip-link">Skip to content</a>
-
     <nav class="zn-nav">
         <div class="zn-nav-inner">
             <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
@@ -47,7 +157,6 @@
                 <a href="/posts/">Posts</a>
                 <a href="/portfolio/">Projects</a>
                 <a href="/trading/">Trading</a>
-                <a href="/games/">Games</a>
                 <a href="/metrics/">Metrics</a>
                 <a href="/about/">About</a>
                 <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
@@ -55,220 +164,237 @@
         </div>
     </nav>
 
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#question">The question was backwards</a></li>
+            <li><a href="#backtest">The honest backtest</a></li>
+            <li><a href="#results">Search is late</a></li>
+            <li><a href="#counter-signal">Almost a counter-signal</a></li>
+            <li><a href="#useful">The useful signal</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
     <main id="main">
-        <header class="zn-article-head">
-            <p class="zn-eyebrow zn-eyebrow--ox zn-article-eyebrow">7 min read</p>
-            <h1 class="zn-article-title">I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.</h1>
-            <p class="zn-article-dek">Search spikes predicted something. Just not the thing traders want them to predict.</p>
-            <div class="zn-article-byline">
-                <div class="zn-article-byline-left">
-                    <span class="zn-avatar-byline" style="background-image:url('https://img.zonted.com/about/bernard-huang-headshot.jpg');" aria-hidden="true"></span>
-                    <span>Bernard Huang</span>
-                    <span class="zn-article-byline-meta">July 25, 2026 &middot; 7 min read</span>
-                </div>
-                <div class="zn-article-byline-right">
-                    <a href="https://x.com/intent/tweet?text=I%20backtested%20five%20years%20of%20Google%20searches%20against%20stocks.%20The%20signal%20wasn%27t%20alpha.&amp;url=https://zonted.com/posts/google-trends-stock-attention/" target="_blank" rel="noopener">Share</a>
-                </div>
-            </div>
-        </header>
-
-        <div class="zn-article-grid">
-            <aside class="zn-article-rail" aria-label="Article sections">
-                <p class="zn-eyebrow zn-rail-eyebrow">In this letter</p>
-                <nav class="zn-rail-nav">
-                    <a class="zn-rail-item active" href="#question"><span class="zn-rail-num">01</span>The question</a>
-                    <a class="zn-rail-item" href="#backtest"><span class="zn-rail-num">02</span>The honest backtest</a>
-                    <a class="zn-rail-item" href="#results"><span class="zn-rail-num">03</span>Search is late</a>
-                    <a class="zn-rail-item" href="#counter-signal"><span class="zn-rail-num">04</span>Not a short button</a>
-                    <a class="zn-rail-item" href="#useful"><span class="zn-rail-num">05</span>The useful signal</a>
-                </nav>
-
-                <div class="zn-rail-numbers">
-                    <p class="zn-eyebrow zn-eyebrow--ox zn-rail-numbers-eyebrow">By the numbers</p>
-                    <div class="zn-rail-numbers-line"><strong>5 years</strong> tested</div>
-                    <div class="zn-rail-numbers-line"><strong>51,372</strong> aligned rows</div>
-                    <div class="zn-rail-numbers-line"><strong>85</strong> stable search series</div>
-                    <div class="zn-rail-numbers-line"><strong>0</strong> portfolios greenlit</div>
-                </div>
-            <!-- COPY_LINK -->
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#question">The question was backwards</a></li>
+            <li><a href="#backtest">The honest backtest</a></li>
+            <li><a href="#results">Search is late</a></li>
+            <li><a href="#counter-signal">Almost a counter-signal</a></li>
+            <li><a href="#useful">The useful signal</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">By the numbers</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:0.8rem;line-height:1.9;color:var(--text-muted);"><strong style="color:var(--text);">5 years</strong> tested<br><strong style="color:var(--text);">51,372</strong> aligned rows<br><strong style="color:var(--text);">85</strong> stable search series<br><strong style="color:var(--text);">0</strong> portfolios greenlit</div>
+    </div>
+<!-- COPY_LINK -->
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
     </div>
     <!-- /COPY_LINK -->
 </aside>
-
-            <article class="zn-article-body">
-                <p>There is a wonderfully simple trading idea hiding inside Google Trends: when everyone suddenly searches for a stock, buy it. Or short it. Honestly, traders will accept either answer as long as the chart goes up and to the right.</p>
-
-                <p>I wanted to know which story the data actually supported. So I built a five-year backtest across the hottest liquid stocks in each quarter, pulled Google search histories for both ticker symbols and company topics, delayed every signal so the model could not see tomorrow's data, and gave the final untouched period one job: grade the idea.</p>
-
-                <div class="tldr">
-                    <div class="tldr-label">TL;DR</div>
-                    <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. They reliably predict more trading activity. They do not reliably predict direction.</p>
-                    <ul>
-                        <li><strong>Past price move → next-day ticker searches:</strong> +0.194 rank correlation, statistically strong.</li>
-                        <li><strong>Ticker searches → next five-day volume:</strong> +0.268, the strongest result in the study.</li>
-                        <li><strong>Ticker searches → next five-day return:</strong> &minus;0.059. Interesting, mildly contrarian, but it failed the pre-registered multiple-testing gate.</li>
-                    </ul>
-                    <p class="tldr-tail">Translation: a search spike is a useful “the crowd is here” alarm. It is not a green buy button, and it is not a red short button.</p>
-                </div>
-
-                <figure>
-                    <img src="img/search-attention-results.png" width="1200" height="630" alt="Summary of the backtest: past price moves strongly predict next-day searches, search attention strongly predicts next five-day volume, and search attention has a small negative but statistically non-robust relationship with next five-day returns.">
-                    <figcaption>The whole result in three arrows. Rank correlations from the final untouched test period.</figcaption>
-                </figure>
-
-                <h2 id="question"><span class="zn-h2-num">1.</span> The question was backwards</h2>
-
-                <p>The obvious question is: <em>do searches predict stock moves?</em> But that assumes attention arrives first. Anyone who has watched a meme stock knows the opposite story is at least as plausible: the stock rips, screenshots spread, and then everyone Googles the ticker to figure out what they just missed.</p>
-
-                <p>So I tested both directions:</p>
-                <ul>
-                    <li>Does abnormal search attention predict future returns, volume, or volatility?</li>
-                    <li>Do prior price moves predict future search attention?</li>
-                </ul>
-
-                <p>That second question mattered more than it looked. If price reliably moves before searches rise, the supposed leading indicator is actually a rear-view mirror.</p>
-
-                <h2 id="backtest"><span class="zn-h2-num">2.</span> The honest backtest kept trying to lie</h2>
-
-                <p>The frozen window ran from July 25, 2021 through July 24, 2026. Every quarter, I ranked stocks by their trailing 126-session median dollar volume and kept the top 25. That produced 21 quarterly formations and 58 unique names. Raw prices ranked liquidity; adjusted prices measured returns. ETFs were excluded. Alphabet's two share classes could not both occupy a slot.</p>
-
-                <p>For each stock I pulled two independent Google Trends series: the ticker, where the ticker was not hopelessly ambiguous, and the company's Google topic. Each daily value was normalized against its own recent history. Then I imposed a two-calendar-day availability lag and traded, conceptually, at the next session's open. No same-day psychic data.</p>
-
-                <p>The outcome was the stock's next five-day return minus its sector ETF's return. Every day, stocks were ranked against the other stocks active that quarter. The research used train, validation, and final test periods, with a 40-session embargo before the test. Confidence intervals used block bootstrapping. Significance tests used Newey&ndash;West errors and false-discovery-rate correction.</p>
-
-                <p>That sounds fussy because it had to be. The pipeline caught three versions of a prettier, wrong answer:</p>
-                <ul>
-                    <li><strong>The first universe accidentally admitted QQQ, TQQQ, and SQQQ.</strong> Their names did not contain “ETF,” so a lazy filter treated them like companies. Rebuilt.</li>
-                    <li><strong>The first liquidity ranking used adjusted prices.</strong> Historical ranking should use the raw price and raw volume available then. Rebuilt again.</li>
-                    <li><strong>The first stability test passed 109 of 109 windows.</strong> Suspiciously perfect. SerpApi had cached the responses. I forced 109 fresh no-cache pulls; five failed the stability threshold and their entire term series were excluded.</li>
-                </ul>
-
-                <blockquote>Every time the backtest got less impressive, it got more useful.</blockquote>
-
-                <p>The final panel contained 51,372 aligned rows across 52 stocks and 85 stable search series. Eleven pipeline tests passed. Fifteen independent verification gates passed. The primary result was recomputed from the saved panel and matched.</p>
-
-                <h2 id="results"><span class="zn-h2-num">3.</span> Search is late</h2>
-
-                <p>The cleanest result was the reverse-direction test. Large prior stock moves predicted higher next-day search attention:</p>
-                <ul>
-                    <li><strong>Brand-topic searches:</strong> +0.110 rank correlation.</li>
-                    <li><strong>Ticker searches:</strong> +0.194.</li>
-                </ul>
-
-                <p>Both survived the full multiple-testing correction with effectively zero adjusted p-values. In plain English: when a stock makes an unusually large move, people search for it the next day. The ticker itself reacts more sharply than the general company topic, which is exactly what you would expect from traders chasing a moving symbol.</p>
-
-                <p>Search attention also predicted what came next&mdash;just not direction. High-attention names saw much heavier trading volume over the following five sessions:</p>
-                <ul>
-                    <li><strong>Brand-topic attention → volume:</strong> +0.194.</li>
-                    <li><strong>Ticker attention → volume:</strong> +0.268.</li>
-                </ul>
-
-                <p>Brand-topic attention also predicted higher realized volatility (+0.082). Ticker attention did not reliably predict volatility after correction. The broad picture is still obvious: searches are an activity signal. Something happened, people noticed, and the name stayed busy.</p>
-
-                <div class="zn-inline-subscribe">
-                    <p class="zn-inline-subscribe-headline">Get the next experiment by email.</p>
-                    <form class="zn-subscribe-form" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe &rarr;</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
-                </div>
-
-                <h2 id="counter-signal"><span class="zn-h2-num">4.</span> Is it a counter-signal? Almost. Not enough.</h2>
-
-                <p>This is where the result gets tempting.</p>
-
-                <p>High ticker-search attention had a <strong>&minus;0.059</strong> relationship with next-five-day sector-relative returns in the final test. The highest-attention quintile underperformed the lowest-attention quintile by <strong>0.57%</strong> over five sessions.</p>
-
-                <p>That sounds tradeable. It was not.</p>
-
-                <p>The confidence interval for the ticker correlation stayed below zero, and the ordinary p-value was 0.047. But I tested multiple outcomes, horizons, and term types. After the pre-registered false-discovery correction, the adjusted q-value was <strong>0.115</strong>&mdash;above the 0.10 gate. The quintile-spread confidence interval also touched zero. Brand-topic attention was weaker still: &minus;0.035 with an adjusted q-value of 0.199.</p>
-
-                <p>So the fair sentence is not “Google Trends is a short signal.” It is:</p>
-
-                <blockquote>Abnormally high ticker searching is an overheating warning. The crowd may be late, but this test does not prove that fading the crowd makes money.</blockquote>
-
-                <p>The negative return relationship is worth monitoring in new data. It is not strong enough to promote into a strategy. Because the leading-alpha gate failed, the portfolio simulator did not run. Zero portfolios greenlit is a result, not an omission.</p>
-
-                <figure>
-                    <img src="img/oos-ic-horizon.png" width="1440" height="810" loading="lazy" alt="Line chart showing mostly negative out-of-sample relationships between Google search attention and future sector-excess returns across one, three, five, ten, twenty, and forty-session horizons. Ticker attention is most negative around twenty sessions but none became validated alpha.">
-                    <figcaption>Attention leaned contrarian across several horizons, especially for ticker searches. The line is interesting; the evidence gate still said no.</figcaption>
-                </figure>
-
-                <h2 id="useful"><span class="zn-h2-num">5.</span> The useful signal is “don't chase”</h2>
-
-                <p>If I were putting this into an actual trading system, I would not let Google Trends choose longs or shorts. I would use it as a context flag:</p>
-                <ul>
-                    <li><strong>Position sizing:</strong> a search spike means the name is crowded and likely to trade heavily. Expect noisier execution and wider outcome dispersion.</li>
-                    <li><strong>Entry discipline:</strong> if the chart already ripped and searches just exploded, do not confuse public discovery with early information.</li>
-                    <li><strong>Risk monitoring:</strong> rising brand attention can warn that volatility and volume are about to stay elevated.</li>
-                    <li><strong>Research triage:</strong> search spikes are good at telling an agent which names deserve immediate context gathering. They are bad at telling it which side to take.</li>
-                </ul>
-
-                <p>The larger lesson is about alternative data. A dataset can be predictive and still have no directional edge. Search attention strongly predicted <em>activity</em>. If I had only tested returns, I would have called the experiment a failure. If I had stopped at the uncorrected negative return result, I would have called it alpha. Both conclusions would have been lazy.</p>
-
-                <p>Google Trends did contain a signal. It told me where the crowd had arrived, where volume would persist, and where chasing deserved extra skepticism.</p>
-
-                <p>It just did not tell me what to buy.</p>
-
-                <p><strong>Method note:</strong> Google Trends was accessed through SerpApi because Google's official API was not generally available. The full run required roughly 1,300 normalized Trends pulls plus 109 fresh stability re-pulls. The equity universe is reconstructed inside Alpaca's current active-and-inactive exchange-listed coverage; it is not a delisting-complete historical U.S. security master. Results should not be generalized to the entire market without that caveat.</p>
-
-                <p><strong>Disclosure:</strong> This is research, not investment advice. I hold and trade some securities that appeared in the study. No portfolio was deployed from this signal.</p>
-
-                <section class="zn-recommended" id="related">
-                    <p class="zn-recommended-label">Recommended reading</p>
-                    <ul class="zn-recommended-list">
-                        <li><a class="zn-recommended-title" href="/posts/vibe-trading/">What Is Vibe Trading? I Let 3 AIs Trade Real Money</a><p class="zn-recommended-dek">Three AIs, roughly 310 backtested strategies, one psychic data leak, and a very boring winner.</p></li>
-                        <li><a class="zn-recommended-title" href="/posts/back-to-the-tables/">From Online Poker to AI Trading: Why Markets Are My Next Chapter</a><p class="zn-recommended-dek">The longer arc behind these experiments: prove the edge, size it small, and publish the receipts.</p></li>
-                        <li><a class="zn-recommended-title" href="/posts/trade-log-2026-07-22/">Trade Log 7/22: Three Open Trades</a><p class="zn-recommended-dek">The live side of the research process: thesis, levels, invalidation, and no hindsight edits.</p></li>
-                    </ul>
-                </section>
-
-                <section class="zn-post-subscribe">
-                    <p class="zn-post-subscribe-label">Newsletter</p>
-                    <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
-                    <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
-                    <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
-                        <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
-                        <button type="submit">Subscribe &rarr;</button>
-                        <p class="zn-subscribe-status" data-subscribe-status hidden></p>
-                    </form>
-                </section>
-            </article>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">July 25, 2026 &middot; 7 min read</div>
+            </div>
         </div>
-    </main>
 
-    <footer class="zn-footer">
-        <div class="zn-container zn-footer-inner">
-            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
-            <span class="zn-footer-links">
-                <a href="/posts/">Posts</a>
-                <a href="/portfolio/">Projects</a>
-                <a href="/trading/">Trading</a>
-                <a href="/games/">Games</a>
-                <a href="/metrics/">Metrics</a>
-                <a href="/about/">About</a>
-                <a href="/feed.xml">RSS</a>
-                <a href="https://x.com/bernardjhuang">X</a>
-                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
-            </span>
+        <div class="article-body">
+
+            <p class="dropcap">There is a wonderfully simple trading idea hiding inside Google Trends: when everyone suddenly searches for a stock, buy it. Or short it. Honestly, traders will accept either answer as long as the chart goes up and to the right.</p>
+
+            <p>I wanted to know which story the data actually supported. So I built a five-year backtest across the hottest liquid stocks in each quarter, pulled Google search histories for both ticker symbols and company topics, delayed every signal so the model could not see tomorrow's data, and gave the final untouched period one job: grade the idea.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. They reliably predict more trading activity. They do not reliably predict direction.</p>
+                <ul>
+                    <li><strong>Past price move → next-day ticker searches:</strong> +0.194 rank correlation, statistically strong.</li>
+                    <li><strong>Ticker searches → next five-day volume:</strong> +0.268, the strongest result in the study.</li>
+                    <li><strong>Ticker searches → next five-day return:</strong> &minus;0.059. Interesting, mildly contrarian, but it failed the pre-registered multiple-testing gate.</li>
+                </ul>
+                <p class="tldr-tail">Translation: a search spike is a useful “the crowd is here” alarm. It is not a green buy button, and it is not a red short button.</p>
+            </div>
+
+            <figure>
+                <img src="img/search-attention-results.png" width="1200" height="630" alt="Summary of the backtest: past price moves strongly predict next-day searches, search attention strongly predicts next five-day volume, and search attention has a small negative but statistically non-robust relationship with next five-day returns.">
+                <figcaption>The whole result in three arrows. Rank correlations from the final untouched test period.</figcaption>
+            </figure>
+
+            <h2 id="question">The question was backwards</h2>
+
+            <p>The obvious question is: <em>do searches predict stock moves?</em> But that assumes attention arrives first. Anyone who has watched a meme stock knows the opposite story is at least as plausible: the stock rips, screenshots spread, and then everyone Googles the ticker to figure out what they just missed.</p>
+
+            <p>So I tested both directions:</p>
+            <ul>
+                <li>Does abnormal search attention predict future returns, volume, or volatility?</li>
+                <li>Do prior price moves predict future search attention?</li>
+            </ul>
+
+            <p>That second question mattered more than it looked. If price reliably moves before searches rise, the supposed leading indicator is actually a rear-view mirror.</p>
+
+            <h2 id="backtest">The honest backtest kept trying to lie</h2>
+
+            <p>The frozen window ran from July 25, 2021 through July 24, 2026. Every quarter, I ranked stocks by their trailing 126-session median dollar volume and kept the top 25. That produced 21 quarterly formations and 58 unique names. Raw prices ranked liquidity; adjusted prices measured returns. ETFs were excluded. Alphabet's two share classes could not both occupy a slot.</p>
+
+            <p>For each stock I pulled two independent Google Trends series: the ticker, where the ticker was not hopelessly ambiguous, and the company's Google topic. Each daily value was normalized against its own recent history. Then I imposed a two-calendar-day availability lag and traded, conceptually, at the next session's open. No same-day psychic data.</p>
+
+            <p>The outcome was the stock's next five-day return minus its sector ETF's return. Every day, stocks were ranked against the other stocks active that quarter. The research used train, validation, and final test periods, with a 40-session embargo before the test. Confidence intervals used block bootstrapping. Significance tests used Newey&ndash;West errors and false-discovery-rate correction.</p>
+
+            <p>That sounds fussy because it had to be. The pipeline caught three versions of a prettier, wrong answer:</p>
+            <ul>
+                <li><strong>The first universe accidentally admitted QQQ, TQQQ, and SQQQ.</strong> Their names did not contain “ETF,” so a lazy filter treated them like companies. Rebuilt.</li>
+                <li><strong>The first liquidity ranking used adjusted prices.</strong> Historical ranking should use the raw price and raw volume available then. Rebuilt again.</li>
+                <li><strong>The first stability test passed 109 of 109 windows.</strong> Suspiciously perfect. SerpApi had cached the responses. I forced 109 fresh no-cache pulls; five failed the stability threshold and their entire term series were excluded.</li>
+            </ul>
+
+            <blockquote>Every time the backtest got less impressive, it got more useful.</blockquote>
+
+            <p>The final panel contained 51,372 aligned rows across 52 stocks and 85 stable search series. Eleven pipeline tests passed. Fifteen independent verification gates passed. The primary result was recomputed from the saved panel and matched.</p>
+
+            <h2 id="results">Search is late</h2>
+
+            <p>The cleanest result was the reverse-direction test. Large prior stock moves predicted higher next-day search attention:</p>
+            <ul>
+                <li><strong>Brand-topic searches:</strong> +0.110 rank correlation.</li>
+                <li><strong>Ticker searches:</strong> +0.194.</li>
+            </ul>
+
+            <p>Both survived the full multiple-testing correction with effectively zero adjusted p-values. In plain English: when a stock makes an unusually large move, people search for it the next day. The ticker itself reacts more sharply than the general company topic, which is exactly what you would expect from traders chasing a moving symbol.</p>
+
+            <p>Search attention also predicted what came next&mdash;just not direction. High-attention names saw much heavier trading volume over the following five sessions:</p>
+            <ul>
+                <li><strong>Brand-topic attention → volume:</strong> +0.194.</li>
+                <li><strong>Ticker attention → volume:</strong> +0.268.</li>
+            </ul>
+
+            <p>Brand-topic attention also predicted higher realized volatility (+0.082). Ticker attention did not reliably predict volatility after correction. The broad picture is still obvious: searches are an activity signal. Something happened, people noticed, and the name stayed busy.</p>
+
+            <h2 id="counter-signal">Is it a counter-signal? Almost. Not enough.</h2>
+
+            <p>This is where the result gets tempting.</p>
+
+            <p>High ticker-search attention had a <strong>&minus;0.059</strong> relationship with next-five-day sector-relative returns in the final test. The highest-attention quintile underperformed the lowest-attention quintile by <strong>0.57%</strong> over five sessions.</p>
+
+            <p>That sounds tradeable. It was not.</p>
+
+            <p>The confidence interval for the ticker correlation stayed below zero, and the ordinary p-value was 0.047. But I tested multiple outcomes, horizons, and term types. After the pre-registered false-discovery correction, the adjusted q-value was <strong>0.115</strong>&mdash;above the 0.10 gate. The quintile-spread confidence interval also touched zero. Brand-topic attention was weaker still: &minus;0.035 with an adjusted q-value of 0.199.</p>
+
+            <p>So the fair sentence is not “Google Trends is a short signal.” It is:</p>
+
+            <blockquote>Abnormally high ticker searching is an overheating warning. The crowd may be late, but this test does not prove that fading the crowd makes money.</blockquote>
+
+            <p>The negative return relationship is worth monitoring in new data. It is not strong enough to promote into a strategy. Because the leading-alpha gate failed, the portfolio simulator did not run. Zero portfolios greenlit is a result, not an omission.</p>
+
+            <figure>
+                <img src="img/oos-ic-horizon.png" width="1440" height="810" loading="lazy" alt="Line chart showing mostly negative out-of-sample relationships between Google search attention and future sector-excess returns across one, three, five, ten, twenty, and forty-session horizons. Ticker attention is most negative around twenty sessions but none became validated alpha.">
+                <figcaption>Attention leaned contrarian across several horizons, especially for ticker searches. The line is interesting; the evidence gate still said no.</figcaption>
+            </figure>
+
+            <h2 id="useful">The useful signal is “don't chase”</h2>
+
+            <p>If I were putting this into an actual trading system, I would not let Google Trends choose longs or shorts. I would use it as a context flag:</p>
+            <ul>
+                <li><strong>Position sizing:</strong> a search spike means the name is crowded and likely to trade heavily. Expect noisier execution and wider outcome dispersion.</li>
+                <li><strong>Entry discipline:</strong> if the chart already ripped and searches just exploded, do not confuse public discovery with early information.</li>
+                <li><strong>Risk monitoring:</strong> rising brand attention can warn that volatility and volume are about to stay elevated.</li>
+                <li><strong>Research triage:</strong> search spikes are good at telling an agent which names deserve immediate context gathering. They are bad at telling it which side to take.</li>
+            </ul>
+
+            <p>The larger lesson is about alternative data. A dataset can be predictive and still have no directional edge. Search attention strongly predicted <em>activity</em>. If I had only tested returns, I would have called the experiment a failure. If I had stopped at the uncorrected negative return result, I would have called it alpha. Both conclusions would have been lazy.</p>
+
+            <p>Google Trends did contain a signal. It told me where the crowd had arrived, where volume would persist, and where chasing deserved extra skepticism.</p>
+
+            <p>It just did not tell me what to buy.</p>
+
+            <p><strong>Method note:</strong> Google Trends was accessed through SerpApi because Google's official API was not generally available. The full run required roughly 1,300 normalized Trends pulls plus 109 fresh stability re-pulls. The equity universe is reconstructed inside Alpaca's current active-and-inactive exchange-listed coverage; it is not a delisting-complete historical U.S. security master. Results should not be generalized to the entire market without that caveat.</p>
+
+            <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:2rem;">Disclosure: this is research, not investment advice. I hold and trade some securities that appeared in the study. No portfolio was deployed from this signal.</p>
+
         </div>
-    </footer>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/vibe-trading/">What Is Vibe Trading? I Let 3 AIs Trade Real Money</a><p class="zn-recommended-dek">I let three AIs research, backtest, and trade real money through Robinhood&#x27;s new agentic account. ~310 strategies later, buy-and-hold is still undefeated.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/trade-log-2026-07-22/">Trade Log 7/22: Three Open Trades</a><p class="zn-recommended-dek">A working trade journal: ABT, HOOD, and V — why I&#x27;m in each trade, where each one stands, and the exact levels where I&#x27;m out. Writing it down to…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/back-to-the-tables/">From Online Poker to AI Trading: Why Markets Are My Next Chapter</a><p class="zn-recommended-dek">I stepped away from Clearscope. Next: trading with AI analysts. The backstory: a burrito, a $10 PokerStars transfer, and the Chris Ferguson challenge.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
 
-    <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const sections = document.querySelectorAll('h2[id]');
-        const railLinks = document.querySelectorAll('.zn-rail-item');
-        if (!sections.length || !railLinks.length) return;
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    railLinks.forEach(a => a.classList.remove('active'));
-                    document.querySelectorAll(`.zn-rail-item[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
                 }
-            });
-        }, { rootMargin: '-80px 0px -70% 0px' });
-        sections.forEach(s => observer.observe(s));
-    });
-    </script>
-    <script defer src="/js/subscribe.js"></script>
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
 </body>
 </html>
