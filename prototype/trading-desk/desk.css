@@ -335,3 +335,55 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 @media(max-width:820px){.hypothesis-grid{grid-template-columns:1fr}}
 
 .risk-bar .t,.risk-bar .f{display:block}
+
+
+/* ── results panel (rules lifted from /trading/) ─────────────────── */
+.results-only{box-sizing: border-box; width: min(920px, 100%); padding: clamp(34px, 5vw, 58px) 20px; text-align: center;}
+.results-kicker{color: var(--bl-muted); font: 700 12px var(--bl-mono); letter-spacing: .12em; text-transform: uppercase;}
+.results-only h2{margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(54px, 11vw, 104px)/.9 var(--bl-mono); letter-spacing: -.08em;}
+.results-only > p.positive, .results-only > p.negative{margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans);}
+.results-stats{display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 30px 0 0; border-block: 1px solid var(--bl-divider); text-align: left;}
+.results-stat{min-width: 0; padding: 16px; border-left: 1px solid var(--bl-divider);}
+.results-stat:first-child{border-left: 0;}
+.results-stat strong, .results-stat span, .results-stat small{display: block;}
+.results-stat strong{color: var(--bl-ink); font: 700 25px var(--bl-mono); font-variant-numeric: tabular-nums; letter-spacing: -.04em;}
+.results-stat-primary strong{color: var(--bl-gain);}
+.results-stat span{margin-top: 4px; color: var(--bl-ink2); font: 700 11px var(--bl-sans); letter-spacing: .05em; text-transform: uppercase;}
+.results-stat small{margin-top: 4px; color: var(--bl-faint); font: 500 11px/1.35 var(--bl-sans);}
+.results-statline{margin: 13px 0 0; color: var(--bl-muted); font: 600 12px var(--bl-mono);}
+.results-method{max-width: 720px; margin: 7px auto 0; color: var(--bl-faint); font: 500 12px/1.5 var(--bl-sans);}
+.results-chart{display: block; width: 100%; height: auto; margin: 26px auto 12px; overflow: visible;}
+.results-grid{stroke: var(--bl-divider); stroke-width: 1; vector-effect: non-scaling-stroke;}
+.results-axis{fill: var(--bl-faint); font: 600 11px var(--bl-mono);}
+.results-area{fill: color-mix(in srgb, var(--bl-gain) 12%, transparent);}
+.results-line{fill: none; stroke: var(--bl-gain); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke;}
+.results-dot{fill: var(--bl-card); stroke: var(--bl-gain); stroke-width: 4; vector-effect: non-scaling-stroke;}
+.results-chart[data-results-sign="negative"] .results-area{fill: color-mix(in srgb, var(--bl-loss) 12%, transparent);}
+.results-chart[data-results-sign="negative"] .results-line, .results-chart[data-results-sign="negative"] .results-dot{stroke: var(--bl-loss);}
+.results-history{margin: 8px 0 0; color: var(--bl-faint); font: 600 11px var(--bl-mono); letter-spacing: .02em;}
+.youtube-summary-grid, .results-stats{grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: 16px; margin-right: 16px;}
+.results-stat:nth-child(3){border-left: 0; border-top: 1px solid var(--bl-divider);}
+.results-stat:nth-child(4){border-top: 1px solid var(--bl-divider);}
+.results-statline, .results-method{margin-left: 16px; margin-right: 16px;}
+
+/* ── sparkline hover ──────────────────────────────────────────────── */
+.spark-wrap{position:relative;flex-shrink:0;align-self:center;margin:0 4px;display:inline-block}
+.spark-wrap svg{display:block;cursor:crosshair}
+.spark-tip{position:absolute;left:0;top:calc(100% + 4px);z-index:5;white-space:nowrap;
+  background:var(--bl-ink);color:#fafaf8;font:500 11px var(--bl-mono);padding:5px 8px;border-radius:6px;
+  box-shadow:0 6px 16px rgba(0,0,0,.25)}
+.spark-tip .up{color:#7fd6a4}.spark-tip .down{color:#f2a0aa}
+
+/* ── hypothesis fold ──────────────────────────────────────────────── */
+.hyp-fold{margin-top:12px}
+.hyp-fold > summary{cursor:pointer;list-style:none;display:inline-flex;align-items:center;gap:7px;
+  min-height:40px;padding:0 14px;border:1px solid var(--bl-chipbd);border-radius:7px;
+  background:var(--bl-chipbg);color:var(--bl-accent);font:600 12.5px var(--bl-sans)}
+.hyp-fold > summary::-webkit-details-marker{display:none}
+.hyp-fold > summary::before{content:'›';font-size:15px;transition:transform .15s}
+.hyp-fold[open] > summary::before{transform:rotate(90deg)}
+.hyp-fold[open] > summary{margin-bottom:12px}
+
+/* the copied mobile rule made these containment candidates globally —
+   inside closed <details> that combination can zero heights; undo it */
+.brief-risk-card,.hypothesis-block,.whale-card{content-visibility:visible;contain-intrinsic-size:unset}

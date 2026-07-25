@@ -8,7 +8,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/prototype/trading-desk/desk.css?v=9">
+<link rel="stylesheet" href="/prototype/trading-desk/desk.css?v=12">
+<script defer src="/prototype/trading-desk/desk.js?v=12"></script>
 </head>
 <body class="bl">
 <div class="note"><div class="wrap"><b>Layout prototype</b><span>Proposed replacement for /trading/ — live positions and market data, Friday Jul 24 close.</span></div></div>
@@ -24,12 +25,7 @@
 </div></div>
 <nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/prototype/trading-desk/">Desk</a><a href="/prototype/trading-desk/hypotheses/">Hypotheses</a><a href="/prototype/trading-desk/brief/" aria-current="page">Brief</a><a href="/prototype/trading-desk/gpt-brief/">GPT brief</a><a href="/prototype/trading-desk/momentum/">Momentum</a><a href="/prototype/trading-desk/vwap/">VWAP</a><a href="/prototype/trading-desk/risk/">Risk</a><a href="/prototype/trading-desk/performance/">Performance</a></div></nav>
 <div class="wrap">
-<div class="phead"><h1>Brief</h1><p class="take">Daily tail-risk research in plain English. Each card states what is happening, what would prove it wrong, and what to watch — positions reviewed first, then the scenarios that could move them.</p><p class="meta">3 briefs · latest Jul 24 pre-market CT · risk regime Watchful 30/100</p></div><div class="brief-log"><section class="trading-panel brief-panel" id="brief-panel" role="tabpanel" tabindex="0" aria-labelledby="brief-tab" hidden>
-                <div class="position-head">
-                    <h2 id="brief-heading">Morning Brief</h2>
-                    <span>3 briefs · latest July 24, 2026 · pre-market CT</span>
-                </div>
-                <p class="trading-takeaway">Daily tail-risk research in plain English. Each card breaks down what's happening, what could prove it wrong, and what to watch. Newest first.</p>
+<div class="phead"><h1>Brief</h1><p class="take">Daily tail-risk research in plain English. The newest brief renders in full — positions reviewed first, then live scenarios, then the forward window. Older briefs stay collapsed below.</p><p class="meta">3 briefs · latest Jul 24 pre-market CT · full content, unabridged</p></div><div class="brief-log">
                 <div class="brief-log">
                 <article class="brief-entry brief-entry-today" id="brief-2026-07-24">
                     <div class="brief-entry-header">
@@ -252,7 +248,7 @@
                 </article>
 
                 <article class="brief-entry" id="brief-2026-07-23">
-                    <details open>
+                    <details>
                         <summary><time datetime="2026-07-23">July 23, 2026</time></summary>
                         <div class="brief-entry-body">
 <h3 class="brief-section-divider">Section 1: What&#x27;s Happening Right Now (This Week)</h3>
@@ -373,11 +369,7 @@
                 <p class="brief-sources-note">All sources are publicly accessible (free or freemium tiers). No proprietary or paid data feeds. Prediction market odds are publicly visible. Robinhood data is via authenticated API for quote/option snapshots only.</p>
                 </div></details>
                 <p class="trading-note">Research and idea generation only. Not trade recommendations or investment advice.</p>
-            </section>
-            <!-- AUTO:BRIEF:END -->
-
-            <!-- AUTO:GPT_BRIEF:START -->
-            </div><p class="footnote">Kept separate from the GPT catalyst radar — this is written analysis of live tail risks; the radar is a mechanical scan for dated binary events.</p>
+            </div>
 </div>
 </body>
 </html>
