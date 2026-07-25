@@ -18,6 +18,7 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <link rel="stylesheet" href="/css/trading-risk.css?v=e1ad1e70587d">
     <style>
         /* ── Broker Light (design handoff 2026-07-21) ─────────────────── */
         .bl {
@@ -528,6 +529,7 @@
                 <button class="trading-tab" id="whales-tab" type="button" role="tab" aria-selected="false" aria-controls="whales-panel">13F</button>
                 <button class="trading-tab" id="youtube-tab" type="button" role="tab" aria-selected="false" aria-controls="youtube-panel">YouTube</button>
                 <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
+                <button class="trading-tab" id="risk-tab" type="button" role="tab" aria-selected="false" aria-controls="risk-panel">Risk</button>
                 <button class="trading-tab" id="results-tab" type="button" role="tab" aria-selected="false" aria-controls="results-panel">Performance</button>
             </div>
         </header>
@@ -786,6 +788,13 @@
                 <p class="bl-foot">Point-in-time disclosure. P&amp;L percentages are realized for closed trades and mark-to-market unrealized estimates for open buys. Nothing here is investment advice, and a listed position or trade is not a recommendation.</p>
             </div>
         </section>
+
+            <!-- AUTO:RISK:START -->
+            <section class="trading-panel risk-panel" id="risk-panel" role="tabpanel" tabindex="0" aria-labelledby="risk-tab" data-url="/trading/risk-ytd.json?v=37b5748ee85a" hidden>
+                <div id="risk-content" aria-live="polite"><p class="risk-loading">Loading forward market risk…</p></div>
+                <noscript><p>JavaScript is required for the risk charts. <a href="/trading/risk-ytd.json?v=37b5748ee85a">Download the YTD data</a>.</p></noscript>
+            </section>
+            <!-- AUTO:RISK:END -->
 
             <!-- AUTO:RESULTS:START -->
             <section class="trading-panel results-panel" id="results-panel" role="tabpanel" tabindex="0" aria-labelledby="results-tab" hidden>
@@ -2647,6 +2656,7 @@
         </div>
     </footer>
     <script src="/js/trading-broker-light.js?v=2026-07-24-combined-position-pnl"></script>
+    <script src="/js/trading-risk.js?v=6618acd546a1"></script>
     <script src="/js/trading-youtube.js?v=2026-07-24-v1"></script>
 </body>
 </html>

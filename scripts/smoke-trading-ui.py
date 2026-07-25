@@ -36,9 +36,9 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 10, "expected ten tabs")
+        check(desktop.locator(".trading-tab").count() == 11, "expected eleven tabs")
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
-        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
+        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "scan-tab", "vwap-tab", "congress-tab", "whales-tab", "youtube-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
@@ -162,6 +162,19 @@ def main() -> None:
         check(desktop.locator("#youtube-videos-shell tbody tr").count() == 125, "YouTube source-video table is incomplete")
         check(desktop.locator("#youtube-videos-shell a[href*='youtube.com/watch']").count() == 125, "YouTube source links are incomplete")
 
+        desktop.goto(args.url + "#risk", wait_until="networkidle")
+        check(desktop.locator("#risk-tab").get_attribute("aria-selected") == "true", "Risk deep link did not activate")
+        desktop.wait_for_function("document.querySelectorAll('#risk-panel .risk-chart-svg').length === 9")
+        check(desktop.locator("#risk-panel .risk-card").count() == 4, "Risk dashboard is missing a chart card")
+        check(desktop.locator("#risk-panel .risk-metric").count() == 5, "Risk current-value strip is incomplete")
+        risk_score = int(desktop.locator("#risk-panel .risk-score-number").inner_text())
+        check(0 <= risk_score <= 100, "Risk score is outside its 0–100 contract")
+        check(desktop.locator("#risk-panel .risk-component").count() == 4, "Risk score components are incomplete")
+        check(desktop.locator("#risk-panel .risk-regime").inner_text() in {"Contained", "Watchful", "Elevated"}, "Risk regime is missing")
+        check("M2−M1" in desktop.locator("#risk-panel").inner_text(), "Risk curve definition is missing")
+        check(desktop.locator("#risk-panel svg[role='img']").count() == 9, "Risk charts lack accessible SVG roles")
+        check(desktop.locator("#risk-panel .risk-commentary li").count() >= 3, "Risk interpretation is incomplete")
+
         desktop.goto(args.url + "#results", wait_until="networkidle")
         check(desktop.locator("#results-tab").get_attribute("aria-selected") == "true", "Performance deep link did not activate")
         results_stats = desktop.locator("#results-panel .results-stats")
@@ -186,7 +199,7 @@ def main() -> None:
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#results", "#youtube"):
+        for route in ("", "#hypotheses", "#brief", "#scan", "#vwap", "#congress", "#whales", "#crypto", "#risk", "#results", "#youtube"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
@@ -198,7 +211,7 @@ def main() -> None:
             mobile.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (10 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (11 tabs, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":
