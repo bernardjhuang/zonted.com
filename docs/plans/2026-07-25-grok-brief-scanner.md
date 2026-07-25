@@ -9,12 +9,13 @@ Grok brief owns the **HIMS-April pattern**: a regulator just committed to decidi
 ## Cadence
 
 - **When:** 06:30 America/Chicago on NYSE trading days
-- **Cron wrapper:** `scripts/cron-publish-grok-brief.sh`
+- **Preferred scheduler:** Cursor Automation — paste-ready setup in [`grok-brief-automation-prompt.md`](./grok-brief-automation-prompt.md)
+- **Cron wrapper (openclaw fallback):** `scripts/cron-publish-grok-brief.sh`
 - **Renderer:** `scripts/update-trading-grok-brief.py`
 - **Payload:** `trading/grok-brief.json`
 - **Surfaces:** classic `#grok-brief` tab + routed `/trading/grok-brief/`
 
-## Agent job (openclaw)
+## Agent job
 
 1. Scan primary sources across FDA, DEA, CFTC, SEC, DOD, WHO, USDA, NRC, FCC, and the Federal Register.
 2. Keep only events with the shape: *dated or dateable public decision + mappable public-company leverage*.
