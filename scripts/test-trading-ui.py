@@ -140,8 +140,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Asymmetry:', grok_brief_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
-        self.assertIn('Hypotheses <span class="trading-tab-count">6</span>', self.html)
-        self.assertEqual(self.html.count('data-hypothesis-symbol='), 6)
+        self.assertIn('Hypotheses <span class="trading-tab-count">8</span>', self.html)
+        self.assertEqual(self.html.count('data-hypothesis-symbol='), 8)
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
@@ -150,7 +150,7 @@ class TradingUiContractTest(unittest.TestCase):
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "BYDDY", "HIMS", "HOOD", "NTDOY", "RBLX"})
+        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "HIMS", "HOOD", "NTDOY", "RDDT", "RBLX"})
         self.assertIn('<span class="hypothesis-status">Watch · thesis only</span>', self.html)
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
@@ -183,6 +183,14 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('monetized over 50% better', details["RBLX"])
         self.assertIn('July 30, 2026', details["RBLX"])
         self.assertIn('$596M', details["RBLX"])
+        self.assertIn('55 GW', details["CEG"])
+        self.assertIn('1,121 MW', details["CEG"])
+        self.assertIn('August 6, 2026', details["CEG"])
+        self.assertIn('$11.00–$12.00', details["CEG"])
+        self.assertIn('69% to $663M', details["RDDT"])
+        self.assertIn('126.8M', details["RDDT"])
+        self.assertIn('July 30, 2026', details["RDDT"])
+        self.assertIn('$715–725M', details["RDDT"])
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
