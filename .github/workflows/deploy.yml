@@ -14,6 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Build and verify hypothesis summary
+        run: |
+          python3 scripts/build-hypothesis-summary.py
+          python3 scripts/test-hypothesis-summary.py
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

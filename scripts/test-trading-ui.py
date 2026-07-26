@@ -140,8 +140,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Asymmetry:', grok_brief_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
-        self.assertIn('Hypotheses <span class="trading-tab-count">8</span>', self.html)
-        self.assertEqual(self.html.count('data-hypothesis-symbol='), 8)
+        self.assertIn('Hypotheses <span class="trading-tab-count">9</span>', self.html)
+        self.assertEqual(self.html.count('data-hypothesis-symbol='), 9)
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
@@ -150,7 +150,7 @@ class TradingUiContractTest(unittest.TestCase):
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "HIMS", "HOOD", "NTDOY", "RDDT", "RBLX"})
+        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "HIMS", "HOOD", "NTDOY", "RDDT", "RBLX", "TMO"})
         self.assertIn('<span class="hypothesis-status">Watch · thesis only</span>', self.html)
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
@@ -191,6 +191,10 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('126.8M', details["RDDT"])
         self.assertIn('July 30, 2026', details["RDDT"])
         self.assertIn('$715–725M', details["RDDT"])
+        self.assertIn('5% organic growth', details["TMO"])
+        self.assertIn('$1.68B', details["TMO"])
+        self.assertIn('October 21, 2026', details["TMO"])
+        self.assertIn('$193 bear / $275 base / $378 bull', details["TMO"])
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)

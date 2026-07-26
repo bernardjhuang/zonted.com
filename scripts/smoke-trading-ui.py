@@ -92,8 +92,8 @@ def main() -> None:
         check("below $25" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS price trigger is missing")
         desktop.goto(f"{origin}/trading/hypotheses/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
-        check(hypothesis_links.count() == 8, "not every public hypothesis links to its Momentum chart")
-        expected_hypothesis_hrefs = [f"/trading/watchlist/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT")]
+        check(hypothesis_links.count() == 9, "not every public hypothesis links to its Momentum chart")
+        expected_hypothesis_hrefs = [f"/trading/watchlist/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "TMO")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis Momentum chart links are incomplete or misordered")
         desktop.goto(f"{origin}/trading/watchlist/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
