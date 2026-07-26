@@ -19,7 +19,6 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 CLASSIC = ROOT / "trading" / "classic" / "index.html"
 DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
-GPT_SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
 GROK_BRIEF_SCRIPT = ROOT / "js" / "trading-grok-brief.js"
 
 
@@ -39,14 +38,6 @@ ROUTES = {
         "Brief",
         "The generated trading brief, refreshed from the same source used by the scheduled classic dashboard.",
         ("BRIEF",),
-    ),
-    "gpt-brief": Route(
-        ROOT / "trading" / "gpt-brief" / "index.html",
-        "GPT brief",
-        "Big stock-moving events, explained in plain English.",
-        ("GPT_BRIEF",),
-        (GPT_SCRIPT,),
-        meta="Updated automatically on weekdays at 6:30 AM CT.",
     ),
     "grok-brief": Route(
         ROOT / "trading" / "grok-brief" / "index.html",

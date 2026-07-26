@@ -30,7 +30,7 @@ Refresh the public Grok brief on zonted.com — deep, early-stage, cross-agency 
 
 ## Product boundary
 - Grok brief (`/trading/grok-brief/`, `trading/grok-brief.json`) = longer-dated announcement-day asymmetry across agencies (the HIMS-April pattern).
-- Do NOT dump six-week PDUFA/AdCom binaries here — that is GPT brief (`trading/gpt-brief.json`).
+- Do NOT dump six-week PDUFA/AdCom binaries here — the GPT brief is delivered only to Slack channel `C0AG3880KGU`.
 - Prefer niches outside FDA muscle memory when real dated catalysts exist (DEA, CFTC, SEC, DOD, WHO, USDA, NRC, FCC, Federal Register).
 
 ## Steps
