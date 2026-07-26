@@ -454,6 +454,11 @@
     };
     const renderUniverse = () => {
       if (!universeRows) return;
+      const requested = new URL(location.href).searchParams.get('chart')?.toUpperCase();
+      if (requested && !universeShell.dataset.deepLinkApplied) {
+        if (universeInput) universeInput.value = requested;
+        universeShell.dataset.deepLinkApplied = 'true';
+      }
       const query = (universeInput?.value || '').trim().toUpperCase();
       const visible = universeRows
         .filter(row => !query || `${row.symbol} ${row.sector} ${row.signal}`.toUpperCase().includes(query))
@@ -489,11 +494,16 @@
       const sortArrow = key => universeSortKey === key ? (universeSortDir < 0 ? '▼' : '▲') : '↕';
       const sortAria = key => universeSortKey === key ? ` aria-sort="${sortDirection}"` : '';
       universeShell.innerHTML = `<div class="scan-table-wrap"><table class="scan-table scan-accordion-table scan-table--decision" aria-label="Momentum universe"><thead><tr><th>Ticker</th><th class="scan-num"${sortAria('day_pct')}><button type="button" class="scan-sort" data-universe-sort-key="day_pct" data-universe-sort-day>Price · Day <span aria-hidden="true">${sortArrow('day_pct')}</span></button></th><th class="scan-num"${sortAria('spread_z')}><button type="button" class="scan-sort" data-universe-sort-key="spread_z" data-universe-sort-strength>Rel. strength <span aria-hidden="true">${sortArrow('spread_z')}</span></button></th><th class="scan-num">Earnings</th><th>Signal</th></tr></thead><tbody>${rows}</tbody></table></div><p class="data-meta">${visible.length} of ${universeRows.length} symbols</p>`;
-      const initial = new URL(location.href).searchParams.get('chart')?.toUpperCase();
-      if (initial) {
-        const detail = $$('[data-scan-detail]', universeShell).find(item => item.dataset.scanSymbol === initial);
+      if (requested) {
+        const detail = $$('[data-scan-detail]', universeShell).find(item => item.dataset.scanSymbol === requested);
         const toggle = detail?.previousElementSibling?.querySelector('[data-scan-toggle]');
-        if (toggle) toggle.click();
+        if (toggle) {
+          toggle.click();
+          requestAnimationFrame(() => {
+            toggle.closest('[data-scan-row]')?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+            toggle.focus({ preventScroll: true });
+          });
+        }
       }
     };
     const loadUniverse = async () => {

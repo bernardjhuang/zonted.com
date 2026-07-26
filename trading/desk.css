@@ -66,12 +66,12 @@ a{color:inherit}
 .pos-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;margin-top:14px;padding-top:13px;border-top:1px solid var(--bl-divider)}
 .cell .k{font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);display:block;margin-bottom:3px}
 .cell .v{font-family:var(--bl-mono);font-size:14px}
-.track{margin-top:14px}
-.track-h{display:flex;justify-content:space-between;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint);margin-bottom:6px}
-.track-bar{position:relative;height:8px;border-radius:4px;background:linear-gradient(90deg,#f3d5d9 0%,#f6ead0 42%,#dcefe2 100%)}
-.track-mark{position:absolute;top:-4px;width:2px;height:16px;background:var(--bl-ink);border-radius:1px}
-.track-mark.entry{background:var(--bl-muted);opacity:.55}
-.track-lbl{display:flex;justify-content:space-between;font-family:var(--bl-mono);font-size:11px;color:var(--bl-muted);margin-top:6px}
+.position-risk-chart{margin:14px 0 0;padding:12px 12px 6px;border:1px solid var(--bl-divider);border-radius:8px;background:var(--bl-hover)}
+.position-risk-chart figcaption{display:flex;justify-content:space-between;gap:12px;margin:0 2px 8px;color:var(--bl-faint);font:600 10.5px var(--bl-mono);text-transform:uppercase;letter-spacing:.05em}
+.position-risk-chart svg{display:block;width:100%;height:auto;overflow:visible}
+.prc-grid{stroke:var(--bl-divider);stroke-width:1}.prc-price{fill:none;stroke:var(--bl-accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.prc-invalidation{stroke:var(--bl-loss);stroke-width:1.5;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}.prc-entry{stroke:var(--bl-muted);stroke-width:1.4;stroke-dasharray:3 4;vector-effect:non-scaling-stroke}
+.prc-now{fill:var(--bl-card);stroke:var(--bl-accent);stroke-width:3;vector-effect:non-scaling-stroke}.prc-label,.prc-axis{fill:var(--bl-faint);font:600 10px var(--bl-mono)}.prc-label-kill{fill:var(--bl-loss)}.prc-label-entry{fill:var(--bl-muted)}.prc-label-now{fill:var(--bl-accent);text-anchor:end}.prc-axis-end{text-anchor:end}
 .track-none{margin-top:14px;background:var(--bl-warnbg);border:1px solid #ecd9bb;border-radius:8px;padding:10px 12px;font-size:12.5px;color:var(--bl-warn)}
 .pos-thesis{font-size:13px;color:var(--bl-ink2);margin-top:13px;padding-top:12px;border-top:1px solid var(--bl-divider)}
 .pos-actions{margin-top:12px;display:flex;gap:10px;flex-wrap:wrap}
@@ -317,31 +317,19 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 .brief-log{padding:0}
 .brief-entry-body{padding-bottom:8px}
 
-/* ── risk page ────────────────────────────────────────────────────── */
-.risk-score{display:flex;align-items:center;gap:20px;flex-wrap:wrap}
-.risk-dial{font:700 40px var(--bl-mono);line-height:1}
-.risk-bars{flex:1;min-width:260px;display:grid;gap:8px}
-.risk-bar{display:grid;grid-template-columns:64px 1fr 46px;align-items:center;gap:10px;font-size:12.5px}
-.risk-bar .t{width:100%;height:8px;border-radius:4px;background:var(--bl-divider);overflow:hidden}
-.risk-bar .f{height:100%;background:var(--bl-warn);border-radius:4px}
-.risk-bar .n{font-family:var(--bl-mono);text-align:right;color:var(--bl-muted)}
-.market-regime-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:20px 20px 0}
-.market-regime-head>div{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}.market-regime-head>b{font:700 22px var(--bl-mono)}
-.market-regime-label{font:700 clamp(28px,5vw,48px)/1 var(--bl-mono);letter-spacing:-.04em}.market-regime-risk-on{color:var(--bl-gain)}.market-regime-risk-off{color:var(--bl-loss)}.market-regime-neutral{color:var(--bl-warn)}
-.market-regime-lean{font:600 13px var(--bl-sans);color:var(--bl-muted)}
-.market-regime-bottom{margin:12px 20px 18px;max-width:900px;font-size:16px;line-height:1.5;color:var(--bl-ink)}
-.market-pillars{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border-top:1px solid var(--bl-divider)}
-.market-pillar{min-width:0;padding:14px 16px;border-left:1px solid var(--bl-divider)}.market-pillar:first-child{border-left:0}
-.market-pillar h3{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 0 7px;font:700 12px var(--bl-mono)}
-.market-pillar h3 span{font:600 9px var(--bl-sans);letter-spacing:.06em;text-transform:uppercase}.market-pillar-risk-on h3 span{color:var(--bl-gain)}.market-pillar-risk-off h3 span{color:var(--bl-loss)}.market-pillar-neutral h3 span{color:var(--bl-warn)}
-.market-pillar p{margin:0;color:var(--bl-muted);font-size:12px;line-height:1.5}
-.market-regime-method{margin:0;padding:12px 20px;border-top:1px solid var(--bl-divider);color:var(--bl-faint);font-size:11px;line-height:1.5}
-.risk-chart-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;padding:16px}
-.risk-history-chart{min-width:0;margin:0;padding:12px;border:1px solid var(--bl-divider);border-radius:8px;background:var(--bl-hover)}
-.risk-history-chart figcaption{display:flex;justify-content:space-between;gap:10px;align-items:baseline;margin-bottom:8px}.risk-history-chart figcaption b{font:700 12px var(--bl-mono)}.risk-history-chart figcaption span{color:var(--bl-muted);font:500 10px var(--bl-mono)}
-.risk-history-chart svg{display:block;width:100%;height:auto;overflow:visible}.rh-grid{stroke:var(--bl-divider);stroke-width:1}.rh-line{fill:none;stroke:var(--bl-accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.rh-dot{fill:var(--bl-card);stroke:var(--bl-accent);stroke-width:3;vector-effect:non-scaling-stroke}.rh-axis{fill:var(--bl-faint);font:9px var(--bl-mono)}.rh-axis-end{text-anchor:end}
-@media(max-width:980px){.market-pillars{grid-template-columns:repeat(2,minmax(0,1fr))}.market-pillar{border-top:1px solid var(--bl-divider)}.market-pillar:nth-child(odd){border-left:0}.risk-chart-grid{grid-template-columns:1fr}}
-@media(max-width:620px){.market-regime-head{align-items:flex-start}.market-regime-head>b{font-size:18px}.market-pillars{grid-template-columns:1fr}.market-pillar{border-left:0}.risk-chart-grid{padding:10px}.risk-history-chart figcaption{align-items:flex-start;flex-direction:column;gap:3px}}
+/* ── risk journal ─────────────────────────────────────────────────── */
+.risk-journal-entry{overflow:visible}.risk-journal-entry.is-latest{border-color:var(--bl-chipbd);box-shadow:0 10px 28px rgba(28,30,34,.05)}
+.risk-journal-head{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:18px 20px;border-bottom:1px solid var(--bl-divider);background:var(--bl-rowhead)}
+.risk-journal-head>div{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.risk-journal-head time{font:600 12px var(--bl-mono);color:var(--bl-muted)}
+.risk-journal-head>strong{font:700 22px var(--bl-mono);white-space:nowrap}.risk-journal-head>strong small{font:600 10px var(--bl-sans);color:var(--bl-faint);text-transform:uppercase;letter-spacing:.06em}
+.risk-journal-stamp{display:inline-flex;border-radius:999px;padding:4px 10px;border:1px solid currentColor;font:700 11px var(--bl-sans);text-transform:uppercase;letter-spacing:.06em}.risk-journal-risk-on{color:var(--bl-gain)}.risk-journal-risk-off{color:var(--bl-loss)}.risk-journal-neutral{color:var(--bl-warn)}
+.risk-journal-lean{font:600 12px var(--bl-sans);color:var(--bl-muted)}
+.risk-journal-body{padding:22px 20px}.risk-journal-body>h2{max-width:900px;margin:0 0 16px;font-size:clamp(22px,3vw,34px);line-height:1.15;letter-spacing:-.025em;text-transform:none}
+.risk-journal-prose{max-width:860px;display:grid;gap:12px}.risk-journal-prose p{font-size:15px;line-height:1.65;color:var(--bl-ink2)}
+.risk-journal-columns{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:22px}.risk-journal-columns section{padding:14px 16px;border:1px solid var(--bl-divider);border-radius:8px;background:var(--bl-hover)}.risk-journal-columns h3{margin:0 0 8px;font:700 11px var(--bl-sans);text-transform:uppercase;letter-spacing:.07em}.risk-journal-columns ul{margin:0;padding-left:18px;display:grid;gap:7px;color:var(--bl-muted);font-size:12.5px;line-height:1.5}
+.risk-journal-source{margin:18px 0 0;padding-top:14px;border-top:1px solid var(--bl-divider);color:var(--bl-faint);font-size:11px;line-height:1.55}
+@media(max-width:860px){.risk-journal-columns{grid-template-columns:1fr}}
+@media(max-width:620px){.risk-journal-head{align-items:flex-start}.risk-journal-head>strong{font-size:18px}.risk-journal-head>strong small{display:block;margin-top:3px}.risk-journal-body{padding:18px 16px}.position-risk-chart{padding:10px 8px 4px}.position-risk-chart figcaption{align-items:flex-start;flex-direction:column;gap:3px}}
 
 .hypothesis-detail{margin-bottom:16px}
 .hypothesis-detail-head{margin-bottom:6px}
@@ -528,6 +516,6 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 #scan-universe-shell{overflow-x:auto}
 #scan-universe-shell table{min-width:640px}
 /* Desktop VWAP density: three compact charts per row; collapse cleanly. */
-.vwap-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
-@media(max-width:1040px){.vwap-chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
-@media(max-width:680px){.vwap-chart-grid{grid-template-columns:1fr}}
+.vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:1040px){.vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:680px){.vwap-chart-grid,.crypto-chart-grid{grid-template-columns:1fr}}
