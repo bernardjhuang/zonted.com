@@ -28,7 +28,14 @@ VCLS = {"RISK-ON": "fr-on", "NEUTRAL": "fr-neutral", "RISK-OFF": "fr-off"}
 SCLS = {1: ("enter", "+1 on"), 0: ("watch", "0 neutral"), -1: ("short", "−1 off")}
 
 
+def rating_of(entry):
+    # 0–10 risk-appetite scale, derived from the rubric composite: (sum/n + 1) * 5.
+    # 0 = maximum risk-off, 10 = maximum risk-on, 5 = dead neutral.
+    return round((entry["score"] / entry["n_signals"] + 1) * 5, 1)
+
+
 def render(entry, open_=True):
+    rating = rating_of(entry)
     rows = ""
     for s in entry["signals"]:
         cls, label = SCLS[int(s["score"])]
@@ -40,6 +47,11 @@ def render(entry, open_=True):
 <div class="fr-verdict {VCLS[entry["verdict"]]}">
   <div class="fr-call">{entry["verdict"]}</div>
   <div class="fr-sub">{entry["subtitle"]} · signal sum {entry["score"]:+d} of {entry["n_signals"]} · composite {entry["composite"]}</div>
+  <div class="fr-rating" title="0 = maximum risk-off · 10 = maximum risk-on">
+    <span class="fr-rating-num">{rating:g}</span><span class="fr-rating-scale">/ 10</span>
+    <span class="fr-rating-bar"><span class="fr-rating-fill" style="width:{100 - rating * 10:g}%"></span></span>
+    <span class="fr-rating-cap">risk appetite</span>
+  </div>
 </div>
 {''.join(entry["narrative"])}
 <div class="card"><h2>Signal ledger<span class="card-r">rubric v1 · each −1 / 0 / +1</span></h2>
@@ -53,7 +65,7 @@ def render(entry, open_=True):
     return (f'<details class="fr-entry"{" open" if open_ else ""}>'
             f'<summary><time datetime="{entry["date"]}">{entry["date"]}</time>'
             f'<span class="fr-sumverdict {VCLS[entry["verdict"]]}">{entry["verdict"]}</span>'
-            f'<span class="fr-sumfor">assessment for {entry["assess_for"]}</span></summary>'
+            f'<span class="fr-sumfor">assessment for {entry["assess_for"]}</span><span class="fr-sumrating">{rating:g}/10</span></summary>'
             f'<div class="fr-body">{body}</div></details>')
 
 
@@ -62,6 +74,7 @@ def main():
     data = {"schema_version": 1, "entries": []}
     if os.path.exists(DATA):
         data = json.load(open(DATA))
+    entry["rating"] = rating_of(entry)
     data["entries"] = [e for e in data["entries"] if e["date"] != entry["date"]]
     data["entries"].insert(0, entry)
     json.dump(data, open(DATA, "w"), indent=1)
