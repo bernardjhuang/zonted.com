@@ -93,11 +93,16 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         journal = json.loads((ROOT / "trading" / "risk-journal.json").read_text())
         self.assertIn('id="risk-live"', page)
+        self.assertIn("<title>GPT Risk", page)
+        self.assertIn("<h1>GPT Risk</h1>", page)
         self.assertIn("risk-journal.json", script)
         self.assertIn("risk-journal-entry", script)
+        self.assertIn("risk-journal-author", script)
         self.assertIn(".risk-journal-entry", styles)
+        self.assertEqual(journal["author"], "GPT-5.6")
         self.assertGreaterEqual(len(journal["entries"]), 1)
         self.assertEqual(journal["entries"][0]["stance"], "Neutral")
+        self.assertTrue(all(entry["author"] == "GPT-5.6" for entry in journal["entries"]))
         for junk in ("Metrics over time", "VVIX", "SKEW", "HY OAS", "VIX futures curve", "risk-evaluation.json"):
             self.assertNotIn(junk, page)
             self.assertNotIn(junk, script)
@@ -109,8 +114,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn('class="track-bar"', page)
         self.assertEqual(page.count('class="position-risk-chart"'), 2)
         self.assertIn("prc-invalidation", script)
+        self.assertIn("prc-entry-level", script)
         self.assertIn("prc-entry", script)
+        self.assertIn("prc-tooltip", script)
+        self.assertIn("room to invalidation", script)
+        self.assertIn("ArrowLeft", script)
+        self.assertIn("pointermove", script)
         self.assertIn(".position-risk-chart", styles)
+        self.assertIn(".prc-entry-level", styles)
+        self.assertIn(".prc-tooltip", styles)
 
     def test_momentum_deep_link_filters_opens_and_scrolls_to_requested_ticker(self) -> None:
         script = (ROOT / "js" / "trading-broker-light.js").read_text()
@@ -119,6 +131,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("scrollIntoView({ block: 'start', behavior: 'smooth' })", script)
         self.assertIn("toggle.focus({ preventScroll: true })", script)
 
+    def test_public_route_names_match_their_new_jobs(self) -> None:
+        watchlist = (ROOT / "trading" / "momentum" / "index.html").read_text()
+        momentum = (ROOT / "trading" / "vwap" / "index.html").read_text()
+        self.assertIn("<title>Watchlist", watchlist)
+        self.assertIn('id="desk-route-heading">Watchlist</h1>', watchlist)
+        self.assertIn("<title>Momentum", momentum)
+        self.assertIn('id="desk-route-heading">Momentum</h1>', momentum)
+
     def test_trading_nav_has_home_logo_and_vwap_uses_three_columns(self) -> None:
         styles = (ROOT / "trading" / "desk.css").read_text()
         pages = [ROOT / "trading" / "index.html", *[route.path for route in sync.ROUTES.values()], ROOT / "trading" / "risk" / "index.html", ROOT / "trading" / "hypotheses" / "index.html", ROOT / "trading" / "grok-brief" / "index.html"]
@@ -126,8 +146,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
             self.assertIn('aria-label="Zonted homepage"', page, path.as_posix())
-            self.assertIn('/trading/desk.css?v=15', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=15', page, path.as_posix())
+            self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Watchlist</a>')
+            self.assertRegex(page, r'href="/trading/vwap/"[^>]*>Momentum</a>')
+            self.assertRegex(page, r'href="/trading/risk/"[^>]*>GPT Risk</a>')
+            self.assertIn('/trading/desk.css?v=16', page, path.as_posix())
+            self.assertIn('/trading/desk.js?v=16', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 

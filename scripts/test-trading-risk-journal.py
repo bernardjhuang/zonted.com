@@ -16,6 +16,7 @@ class RiskJournalContractTest(unittest.TestCase):
 
     def test_schema_and_subjective_method_are_explicit(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
+        self.assertEqual(self.payload["author"], "GPT-5.6")
         self.assertIn("subjective", self.payload["methodology"].lower())
 
     def test_entries_are_unique_and_newest_first(self) -> None:
@@ -33,6 +34,7 @@ class RiskJournalContractTest(unittest.TestCase):
             "what_changes_my_mind",
         )
         for entry in self.payload["entries"]:
+            self.assertEqual(entry["author"], "GPT-5.6")
             self.assertIn(entry["stance"], {"Risk-on", "Neutral", "Risk-off"})
             self.assertGreaterEqual(entry["risk_appetite"], 1)
             self.assertLessEqual(entry["risk_appetite"], 10)
