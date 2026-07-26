@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Watchlist — Trading Desk — Zonted</title>
+<title>Momentum — Trading Desk — Zonted</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/trading/desk.css?v=17">
-<script defer src="/trading/desk.js?v=17"></script>
+<link rel="stylesheet" href="/trading/desk.css?v=18">
+<script defer src="/trading/desk.js?v=18"></script>
+<script>if(/[?&]chart=/.test(location.search))location.replace("/trading/watchlist/"+location.search+"#scan");</script>
 </head>
 <body class="bl">
 <div class="status"><div class="wrap">
@@ -16,101 +17,279 @@
   <a class="brand" href="/trading/">Trading</a>
   <span class="stamp">Snapshot · July 24, 2026</span>
   <div class="status-metrics">
-    <a class="chip" href="/trading/brief/"><span class="dot"></span>Risk: Watchful 30</a>
+    <span class="chipset"><a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 6/10"><span class="dot"></span>GPT 6</a><a class="chip chip-grok chip-on" href="/trading/grok-risk/" title="Grok risk appetite — Risk On · 7/10"><span class="dot"></span>Grok 7</a><a class="chip chip-fable chip-neutral" href="/trading/fable-risk/" title="Fable risk appetite — NEUTRAL · 5.5/10"><span class="dot"></span>Fable 5.5</a></span>
     <span class="metric"><span class="k">SPY</span>738.85 <span class="up">+0.1%</span></span>
     <span class="metric"><span class="k">VIX</span>18.58</span>
     <span class="metric"><span class="k">Open</span>2</span>
   </div>
 </div></div>
-<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/hypotheses/">Hypotheses</a><a href="/trading/brief/">Brief</a><a href="/trading/gpt-brief/">GPT brief</a><a href="/trading/grok-brief/">Grok brief</a><a href="/trading/grok-risk/">Grok Risk</a><a href="/trading/momentum/" aria-current="page">Watchlist</a><a href="/trading/vwap/">Momentum</a><a href="/trading/risk/">GPT Risk</a><a href="/trading/fable-risk/">Fable Risk</a><a href="/trading/performance/">Performance</a></div></nav>
+<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/hypotheses/">Hypotheses</a><a href="/trading/brief/">Brief</a><a href="/trading/gpt-brief/">GPT brief</a><a href="/trading/grok-brief/">Grok brief</a><a href="/trading/watchlist/">Watchlist</a><a href="/trading/momentum/" aria-current="page">Momentum</a><a href="/trading/grok-risk/">Grok Risk</a><a href="/trading/gpt-risk/">GPT Risk</a><a href="/trading/fable-risk/">Fable Risk</a><a href="/trading/performance/">Performance</a></div></nav>
 <div class="wrap">
 <!-- AUTO:ROUTED_TRADING:START -->
-<div class="phead"><h1 id="desk-route-heading">Watchlist</h1><p class="take">The generated stock watchlist and setup-chart universe from the latest completed market session.</p><p class="meta">Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets</p></div>
-<section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="desk-route-heading">
+<div class="phead"><h1 id="desk-route-heading">Momentum</h1><p class="take">US sectors, country ETFs, and crypto momentum versus VWAP, refreshed together from the same after-close pipeline.</p><p class="meta">Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets</p></div>
+<section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="desk-route-heading">
                 <div class="position-head">
-                    <h2 id="scan-heading">Momentum</h2>
-                    <span>Signals July 24, 2026 close · Prices July 24, 2026 close</span>
+                    <h2 id="vwap-heading">VWAP</h2>
+                    <span>July 24, 2026 close · anchor Jan 2, 2026</span>
                 </div>
-                <p class="trading-takeaway">10 qualified longs and 10 qualified shorts across Comm Services, Consumer Disc, Energy, Real Estate, Utilities. SPY 738.93, below its 50-day average.</p>
-                <p class="scan-risk-overlay">Subjective risk journal only · no automated risk gate; momentum signals are published unchanged.</p>
-                <p class="signal-legend"><b>ENTER+</b> = qualified + persistent · <b>ENTER</b> = qualified · <b>WATCH</b> = watch · <b>AVOID</b> = not qualified</p>
-                <div class="sector-summary">
-                    <span><b>Leading</b> Energy · Real Estate</span>
-                    <span><b>Lagging</b> Consumer Disc · Comm Services</span>
-                    <details open><summary>All sectors · 50-day Z-score</summary><ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
-                        <li class="scan-sector scan-sector--hot">
-                            <span class="scan-sector-head"><b>XLE</b><span>#1</span></span>
-                            <span class="scan-sector-name">Energy</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.34</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector scan-sector--hot">
-                            <span class="scan-sector-head"><b>XLRE</b><span>#2</span></span>
-                            <span class="scan-sector-name">Real Estate</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.21</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector scan-sector--hot">
-                            <span class="scan-sector-head"><b>XLU</b><span>#3</span></span>
-                            <span class="scan-sector-name">Utilities</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.15</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLF</b><span>#4</span></span>
-                            <span class="scan-sector-name">Financials</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+1.03</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLV</b><span>#5</span></span>
-                            <span class="scan-sector-name">Health Care</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.98</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLI</b><span>#6</span></span>
-                            <span class="scan-sector-name">Industrials</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.72</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLP</b><span>#7</span></span>
-                            <span class="scan-sector-name">Staples</span>
-                            <span class="scan-sector-score"><span class="scan-z-pos">+0.13</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLB</b><span>#8</span></span>
-                            <span class="scan-sector-name">Materials</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-0.02</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector">
-                            <span class="scan-sector-head"><b>XLK</b><span>#9</span></span>
-                            <span class="scan-sector-name">Technology</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-0.08</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector scan-sector--cold">
-                            <span class="scan-sector-head"><b>XLC</b><span>#10</span></span>
-                            <span class="scan-sector-name">Comm Services</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-1.36</span> <small>50D Z</small></span>
-                        </li>
-                        <li class="scan-sector scan-sector--cold">
-                            <span class="scan-sector-head"><b>XLY</b><span>#11</span></span>
-                            <span class="scan-sector-name">Consumer Disc</span>
-                            <span class="scan-sector-score"><span class="scan-z-neg">-2.04</span> <small>50D Z</small></span>
-                        </li>
-                    </ul></details>
+                <p class="trading-takeaway">10 of 13 US markets are above YTD VWAP. Energy leads the 50-day trend; Consumer Disc lags.</p>
+                <section class="vwap-market-section" aria-labelledby="vwap-us-heading">
+                <h3 id="vwap-us-heading">US market + sectors + themes</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="US market, sector, and theme year-to-date VWAP summary">
+                    <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
+                    <tbody>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLE</span></td>
+                        <td class="scan-sec">Energy</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.34</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.6%</span></td>
+                        <td class="scan-num">▲ since Jul 8 (13d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLRE</span></td>
+                        <td class="scan-sec">Real Estate</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.21</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.7%</span></td>
+                        <td class="scan-num">▲ since Apr 6 (77d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLU</span></td>
+                        <td class="scan-sec">Utilities</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.15</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.5%</span></td>
+                        <td class="scan-num">▲ since Jun 22 (24d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLF</span></td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.03</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.3%</span></td>
+                        <td class="scan-num">▲ since Jun 4 (35d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLV</span></td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.98</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.9%</span></td>
+                        <td class="scan-num">▲ since Jun 23 (23d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLI</span></td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.72</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.3%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (75d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLP</span></td>
+                        <td class="scan-sec">Staples</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.13</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.0%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (1d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">SPY</span></td>
+                        <td class="scan-sec">S&amp;P 500</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.13</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.3%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (75d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLB</span></td>
+                        <td class="scan-sec">Materials</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.02</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.8%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (1d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLK</span></td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.08</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+13.7%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (75d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">ESPO</span></td>
+                        <td class="scan-sec">Gaming</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.51</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-7.0%</span></td>
+                        <td class="scan-num">▼ since Jan 30 (121d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLC</span></td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.36</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-6.5%</span></td>
+                        <td class="scan-num">▼ since Jun 2 (37d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLY</span></td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.04</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-5.8%</span></td>
+                        <td class="scan-num">▼ since Jul 17 (6d)</td>
+                    </tr>
+                    </tbody>
+                </table>
                 </div>
-                <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
-                <div class="position-group">
-                    <h3>Long setups · 10</h3>
-<p class="scan-qualified-links"><b>Long setups</b> · <a href="?chart=VTR#scan" translate="no">VTR</a> · <a href="?chart=EOG#scan" translate="no">EOG</a> · <a href="?chart=WELL#scan" translate="no">WELL</a> · <a href="?chart=PSX#scan" translate="no">PSX</a> · <a href="?chart=MPC#scan" translate="no">MPC</a> · <a href="?chart=O#scan" translate="no">O</a> · <a href="?chart=VLO#scan" translate="no">VLO</a> · <a href="?chart=DUK#scan" translate="no">DUK</a> · <a href="?chart=XOM#scan" translate="no">XOM</a> · <a href="?chart=CVX#scan" translate="no">CVX</a></p>
+                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=a18137cdbe1d" data-symbols="XLE,XLRE,XLU,XLF,XLV,XLI,XLP,SPY,XLB,XLK,ESPO,XLC,XLY" aria-live="polite">
+                    <p class="bl-empty">Loading SPY, 11 sector charts, and ESPO Gaming…</p>
                 </div>
-                <div class="position-group">
-                    <h3>Short setups · 10</h3>
-<p class="scan-qualified-links"><b>Short setups</b> · <a href="?chart=WBD#scan" translate="no">WBD</a> · <a href="?chart=DIS#scan" translate="no">DIS</a> · <a href="?chart=ASTS#scan" translate="no">ASTS</a> · <a href="?chart=MCD#scan" translate="no">MCD</a> · <a href="?chart=LOW#scan" translate="no">LOW</a> · <a href="?chart=CMCSA#scan" translate="no">CMCSA</a> · <a href="?chart=GOOGL#scan" translate="no">GOOGL</a> · <a href="?chart=DKNG#scan" translate="no">DKNG</a> · <a href="?chart=TSLA#scan" translate="no">TSLA</a> · <a href="?chart=GOOG#scan" translate="no">GOOG</a></p>
+                </section>
+                <section class="vwap-market-section vwap-country-section" aria-labelledby="vwap-countries-heading">
+                <h3 id="vwap-countries-heading">Country markets</h3>
+                <p class="data-meta">Country ETFs are separated from US sectors and ranked by 50-day Z-score, descending.</p>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="Country market year-to-date VWAP summary">
+                    <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
+                    <tbody>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">THD</span></td>
+                        <td class="scan-sec">Thailand</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.70</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.1%</span></td>
+                        <td class="scan-num">▲ since Mar 30 (81d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWZ</span></td>
+                        <td class="scan-sec">Brazil</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.24</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-2.7%</span></td>
+                        <td class="scan-num">▼ since May 13 (50d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">KWEB</span></td>
+                        <td class="scan-sec">China Internet</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.19</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-12.4%</span></td>
+                        <td class="scan-num">▼ since Jan 30 (121d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWJ</span></td>
+                        <td class="scan-sec">Japan</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.21</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.6%</span></td>
+                        <td class="scan-num">▲ since Apr 30 (59d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">MCHI</span></td>
+                        <td class="scan-sec">China</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.24</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-6.4%</span></td>
+                        <td class="scan-num">▼ since May 14 (49d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWG</span></td>
+                        <td class="scan-sec">Germany</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.50</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.1%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (1d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWY</span></td>
+                        <td class="scan-sec">South Korea</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.61</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.8%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (75d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">INDA</span></td>
+                        <td class="scan-sec">India</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.84</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.6%</span></td>
+                        <td class="scan-num">▼ since Jun 23 (23d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EZA</span></td>
+                        <td class="scan-sec">South Africa</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.19</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-11.7%</span></td>
+                        <td class="scan-num">▼ since Apr 21 (66d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">VNM</span></td>
+                        <td class="scan-sec">Vietnam</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.84</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-9.9%</span></td>
+                        <td class="scan-num">▼ since Jul 6 (15d)</td>
+                    </tr>
+                    </tbody>
+                </table>
                 </div>
-                <details class="scan-universe-disclosure" id="scan-universe" open>
-                    <summary>Browse full universe · 171 symbols</summary>
-                    <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=18d2e0d917ab"><p class="bl-empty">Loading universe…</p></div>
-                </details>
-                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=9991057cbf63"}</script>
-                <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Watchful halves longs; validated Elevated gates them to WATCH; shorts stay. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
+                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=a18137cdbe1d" data-symbols="THD,EWZ,KWEB,EWJ,MCHI,EWG,EWY,INDA,EZA,VNM" aria-live="polite">
+                    <p class="bl-empty">Loading 10 country charts…</p>
+                </div>
+                </section>
+                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector, theme, and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
+            </section>
+
+<section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="desk-route-heading">
+                <div class="position-head">
+                    <h2 id="crypto-heading">Crypto</h2>
+                    <span>Jul 23 UTC close · BTC $65,069 · z +0.08</span>
+                </div>
+                <p class="trading-takeaway">ETH leads BTC. ETH is improving versus BTC but remain below YTD VWAP. DOGE, BNB lag.</p>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
+                    <thead><tr><th>Coin</th><th class="scan-num">Spread Z vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">ETH</span><span class="bl-tag">Ethereum</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">z +0.34</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-13.4%</span></td>
+                        <td class="scan-num">▼ 74d</td>
+                        <td>Improving vs BTC, below VWAP</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">ZEC</span><span class="bl-tag">Zcash</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">z +0.33</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+18.2%</span></td>
+                        <td class="scan-num">▲ 22d</td>
+                        <td>Strong trend, leading BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">SOL</span><span class="bl-tag">Solana</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.07</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-14.8%</span></td>
+                        <td class="scan-num">▼ 73d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">XRP</span><span class="bl-tag">XRP</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.34</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-24.3%</span></td>
+                        <td class="scan-num">▼ 191d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">HYPE</span><span class="bl-tag">Hyperliquid</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.59</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+26.6%</span></td>
+                        <td class="scan-num">▲ 146d</td>
+                        <td>Strong trend, weakening vs BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">BNB</span><span class="bl-tag">BNB</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-14.6%</span></td>
+                        <td class="scan-num">▼ 52d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">DOGE</span><span class="bl-tag">Dogecoin</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.90</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-32.1%</span></td>
+                        <td class="scan-num">▼ 67d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <section class="crypto-chart-grid" id="crypto-chart-grid" data-url="/trading/crypto-charts.json?v=1fbba6f55ac5" aria-live="polite">
+                    <p class="bl-empty">Loading all 7 charts…</p>
+                </section>
+                <details class="trading-method"><summary>How this works</summary><p>Spread Z compares each coin's 50-day trend with BTC's. Positive means relative leadership; negative means lagging. YTD VWAP estimates the year's volume-weighted cost basis on Hyperliquid perpetual markets. Both axes matter: a coin can be above its own VWAP while weakening versus BTC. Descriptive market data, not a recommendation.</p></details>
             </section>
 <!-- AUTO:ROUTED_TRADING:END -->
 </div>

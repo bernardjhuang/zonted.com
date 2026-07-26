@@ -157,12 +157,12 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
         for symbol, block in details.items():
             self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
-            self.assertIn(f'href="/trading/momentum/?chart={symbol}#scan"', block)
+            self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', block)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
         hypotheses_route = (ROOT / "trading" / "hypotheses" / "index.html").read_text()
         for symbol in details:
-            self.assertIn(f'href="/trading/momentum/?chart={symbol}#scan"', hypotheses_route)
+            self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', hypotheses_route)
         self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(details))
         self.assertIn('Exact Sciences', details["ABT"])
         self.assertIn('Libre Assist', details["ABT"])
@@ -419,15 +419,18 @@ class TradingUiContractTest(unittest.TestCase):
         import glob
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
                  if "classic" not in p and "charts" not in p] + [str(ROOT / "trading" / "index.html")]
-        nav_sets, stamps = set(), set()
+        nav_sets, stamps, chips = set(), set(), set()
         for p in pages:
             s = pathlib.Path(p).read_text()
             nav = s[s.find("subnav"):s.find("</nav>")]
             nav_sets.add(tuple(re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', nav)))
             m = re.search(r'class="stamp">([^<]+)<', s)
+            chip = re.search(r'<span class="chipset">.*?</span></a></span>', s)
+            chips.add(chip.group(0) if chip else "missing")
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
         self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
         self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
+        self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
 

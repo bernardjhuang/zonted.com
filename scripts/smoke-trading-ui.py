@@ -90,9 +90,9 @@ def main() -> None:
         desktop.goto(f"{origin}/trading/hypotheses/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
         check(hypothesis_links.count() == 6, "not every public hypothesis links to its Momentum chart")
-        expected_hypothesis_hrefs = [f"/trading/momentum/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX")]
+        expected_hypothesis_hrefs = [f"/trading/watchlist/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis Momentum chart links are incomplete or misordered")
-        desktop.goto(f"{origin}/trading/momentum/?chart=RBLX#scan", wait_until="networkidle")
+        desktop.goto(f"{origin}/trading/watchlist/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
         check(desktop.locator("[data-scan-detail][data-scan-symbol='RBLX']").is_visible(), "RBLX hypothesis deep link did not unfold its chart")
 
