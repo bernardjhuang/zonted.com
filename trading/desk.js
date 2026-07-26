@@ -11,13 +11,30 @@
 
   const riskJournalData = fetch('/trading/risk-journal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-  /* ── status chip: always show the latest subjective stance ───────── */
+  /* ── status chips: three independent risk-appetite reads, all 0–10.
+     Each updates on its own; a failed fetch leaves that chip's static
+     fallback text in place. Stance color uses the Fable rubric bands
+     (≥6.25 on, ≤3.75 off) so all three are judged on the same scale. ── */
+  const setChip = (key, name, value, stanceText) => {
+    const chip = $('.chip-' + key);
+    if (!chip || !Number.isFinite(value)) return;
+    chip.classList.remove('chip-on', 'chip-off', 'chip-neutral');
+    chip.classList.add(value >= 6.25 ? 'chip-on' : value <= 3.75 ? 'chip-off' : 'chip-neutral');
+    chip.innerHTML = '<span class="dot"></span>' + name + ' ' + esc(Math.round(value * 10) / 10);
+    if (stanceText) chip.title = name + ' risk appetite — ' + stanceText + ' · ' + Math.round(value * 10) / 10 + '/10';
+  };
   riskJournalData.then(d => {
-    const chip = $('.chip');
     const latest = d && d.entries && d.entries[0];
-    if (!latest || !chip) return;
-    chip.innerHTML = '<span class="dot"></span>Risk: ' + esc(latest.stance) + ' ' + esc(latest.risk_appetite) + '/10';
-    chip.href = '/trading/risk/';
+    if (latest) setChip('gpt', 'GPT', Number(latest.risk_appetite), latest.stance);
+  });
+  fetch('/trading/fable-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
+    const latest = d && d.entries && d.entries[0];
+    if (latest) setChip('fable', 'Fable', Number(latest.rating), latest.verdict);
+  });
+  fetch('/trading/grok-risk/', { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').catch(() => '').then(html => {
+    const m = /Risk[\s-]*(On|Off|Neutral)\s*\((\d+(?:\.\d+)?)\s*\/\s*10\)/i.exec(html)
+      || /(?:^|[^\d.])(\d+(?:\.\d+)?)\s*\/\s*10\b/.exec(html);
+    if (m) setChip('grok', 'Grok', Number(m[2] !== undefined ? m[2] : m[1]), m[2] !== undefined ? 'Risk ' + m[1] : '');
   });
 
   /* ── position risk charts: levels + interactive metrics ─────────── */
@@ -148,7 +165,7 @@
     const splitRanks = rows => ({ leaders: rows.slice(0, 2), laggards: rows.slice(-2).reverse() });
     const rankGroup = (label, ranks, queryKey, hash) => {
       const chips = (rows, kind) => rows.map(row => {
-        const href = '/trading/vwap/?' + queryKey + '=' + encodeURIComponent(row.symbol) + '#' + hash;
+        const href = '/trading/momentum/?' + queryKey + '=' + encodeURIComponent(row.symbol) + '#' + hash;
         return '<a class="market-rank-chip ' + kind + '" href="' + href + '" title="' + esc(row.name) + '"><b>' + esc(row.symbol) + '</b><em>' + signed(row.z, 2) + 'z</em></a>';
       }).join('');
       return '<section class="market-rank-group"><h4>' + esc(label) + '</h4>' +

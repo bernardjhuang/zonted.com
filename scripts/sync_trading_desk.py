@@ -55,15 +55,18 @@ ROUTES = {
         ("GROK_BRIEF",),
         (GROK_BRIEF_SCRIPT,),
     ),
+    # Section keys are stable API for the generator scripts; the target paths
+    # moved when URLs were renamed to match page names (momentum -> watchlist,
+    # vwap -> momentum). Old URLs 301 via _redirects.
     "momentum": Route(
-        ROOT / "trading" / "momentum" / "index.html",
+        ROOT / "trading" / "watchlist" / "index.html",
         "Watchlist",
         "The generated stock watchlist and setup-chart universe from the latest completed market session.",
         ("SCAN",),
         (BROKER_SCRIPT,),
     ),
     "vwap": Route(
-        ROOT / "trading" / "vwap" / "index.html",
+        ROOT / "trading" / "momentum" / "index.html",
         "Momentum",
         "US sectors, country ETFs, and crypto momentum versus VWAP, refreshed together from the same after-close pipeline.",
         ("VWAP", "CRYPTO"),

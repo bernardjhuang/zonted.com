@@ -22,7 +22,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertGreaterEqual(current.count('<div class="wrap">'), 3, name)
 
     def test_vwap_route_contains_equity_country_and_crypto_surfaces(self) -> None:
-        page = (ROOT / "trading" / "vwap" / "index.html").read_text()
+        page = (ROOT / "trading" / "momentum" / "index.html").read_text()
         self.assertIn('id="vwap-panel"', page)
         self.assertIn('id="vwap-country-chart-grid"', page)
         self.assertIn('id="crypto-panel"', page)
@@ -94,7 +94,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn(" hidden", panel.group(0))
 
     def test_risk_route_is_a_subjective_running_journal_without_metric_dashboard(self) -> None:
-        page = (ROOT / "trading" / "risk" / "index.html").read_text()
+        page = (ROOT / "trading" / "gpt-risk" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
         journal = json.loads((ROOT / "trading" / "risk-journal.json").read_text())
@@ -157,8 +157,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("toggle.focus({ preventScroll: true })", script)
 
     def test_public_route_names_match_their_new_jobs(self) -> None:
-        watchlist = (ROOT / "trading" / "momentum" / "index.html").read_text()
-        momentum = (ROOT / "trading" / "vwap" / "index.html").read_text()
+        watchlist = (ROOT / "trading" / "watchlist" / "index.html").read_text()
+        momentum = (ROOT / "trading" / "momentum" / "index.html").read_text()
         self.assertIn("<title>Watchlist", watchlist)
         self.assertIn('id="desk-route-heading">Watchlist</h1>', watchlist)
         self.assertIn("<title>Momentum", momentum)
@@ -166,16 +166,16 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
     def test_trading_nav_has_home_logo_and_vwap_uses_three_columns(self) -> None:
         styles = (ROOT / "trading" / "desk.css").read_text()
-        pages = [ROOT / "trading" / "index.html", *[route.path for route in sync.ROUTES.values()], ROOT / "trading" / "risk" / "index.html", ROOT / "trading" / "hypotheses" / "index.html", ROOT / "trading" / "grok-brief" / "index.html"]
+        pages = [ROOT / "trading" / "index.html", *[route.path for route in sync.ROUTES.values()], ROOT / "trading" / "gpt-risk" / "index.html", ROOT / "trading" / "hypotheses" / "index.html", ROOT / "trading" / "grok-brief" / "index.html"]
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
             self.assertIn('aria-label="Zonted homepage"', page, path.as_posix())
-            self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Watchlist</a>')
-            self.assertRegex(page, r'href="/trading/vwap/"[^>]*>Momentum</a>')
-            self.assertRegex(page, r'href="/trading/risk/"[^>]*>GPT Risk</a>')
-            self.assertIn('/trading/desk.css?v=17', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=17', page, path.as_posix())
+            self.assertRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
+            self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
+            self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
+            self.assertIn('/trading/desk.css?v=18', page, path.as_posix())
+            self.assertIn('/trading/desk.js?v=18', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 
