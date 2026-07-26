@@ -66,19 +66,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         ):
             self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
-    def test_grok_brief_route_loads_the_current_payload(self) -> None:
-        page = (ROOT / "trading" / "grok-brief" / "index.html").read_text()
-        payload = ROOT / "trading" / "grok-brief.json"
-        payload_hash = hashlib.sha256(payload.read_bytes()).hexdigest()[:12]
-        script_hash = hashlib.sha256((ROOT / "js" / "trading-grok-brief.js").read_bytes()).hexdigest()[:12]
-        self.assertIn(f'/trading/grok-brief.json?v={payload_hash}', page)
-        self.assertIn(f'/js/trading-grok-brief.js?v={script_hash}', page)
-        self.assertIn('id="grok-brief-shell"', page)
-        self.assertIn('aria-current="page">Grok brief</a>', page)
-        panel = re.search(r'<section[^>]+id="grok-brief-panel"[^>]*>', page)
-        if panel is None:
-            self.fail("missing grok-brief-panel")
-        self.assertNotIn(" hidden", panel.group(0))
+    def test_public_brief_routes_are_retired(self) -> None:
+        self.assertNotIn("brief", sync.ROUTES)
+        self.assertNotIn("grok-brief", sync.ROUTES)
+        self.assertFalse((ROOT / "trading" / "brief" / "index.html").exists())
+        self.assertFalse((ROOT / "trading" / "grok-brief" / "index.html").exists())
+        redirects = (ROOT / "_redirects").read_text()
+        for retired_url in ("/trading/brief", "/trading/grok-brief", "/trading/horizon"):
+            self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
     def test_performance_route_matches_classic_results_and_history(self) -> None:
         page = (ROOT / "trading" / "performance" / "index.html").read_text()
@@ -194,7 +189,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
-        self.assertEqual(len(pages), 12)
+        self.assertEqual(len(pages), 10)
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
