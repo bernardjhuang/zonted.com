@@ -56,7 +56,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn("gpt-brief", sync.ROUTES)
         self.assertNotIn("AUTO:GPT_BRIEF", CLASSIC)
         self.assertNotIn('id="gpt-brief-tab"', CLASSIC)
-        self.assertIn("/trading/gpt-brief/* /trading/ 301", (ROOT / "_redirects").read_text())
+        redirects = (ROOT / "_redirects").read_text()
+        for retired_url in (
+            "/trading/gpt-brief/*",
+            "/trading/gpt-brief",
+            "/trading/gpt-brief.json",
+            "/trading/gpt-brief-charts.json",
+            "/js/trading-gpt-brief.js",
+        ):
+            self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
     def test_grok_brief_route_loads_the_current_payload(self) -> None:
         page = (ROOT / "trading" / "grok-brief" / "index.html").read_text()
