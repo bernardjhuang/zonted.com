@@ -18,6 +18,7 @@
 .fr-entry[open]>summary::before{transform:rotate(90deg)}
 .fr-entry>summary time{font:600 13.5px var(--bl-mono)}
 .fr-sumfor{font-size:12.5px;color:var(--bl-muted)}
+.fr-sumsession{font:600 10.5px var(--bl-sans);text-transform:uppercase;letter-spacing:.06em;color:var(--bl-faint);border:1px solid var(--bl-border);border-radius:5px;padding:2px 7px}
 .fr-sumverdict{font:700 11px var(--bl-mono);letter-spacing:.06em;padding:3px 9px;border-radius:5px}
 .fr-body{padding:2px 18px 16px;border-top:1px solid var(--bl-divider)}
 .fr-verdict{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;padding:16px 0 12px}
@@ -56,7 +57,7 @@
 <div class="phead"><h1>Fable Risk</h1>
 <p class="take">A daily call — <b>risk-on</b>, <b>risk-off</b>, or <b>neutral</b> — made by Claude Fable from a fixed,
 published rubric. Eleven signals, each scored −1/0/+1 against pre-set thresholds; the sum makes the call, not the mood.
-One entry per market day, kept forever, so the record can be graded.</p>
+Pre-market and post-close entries each market day, kept forever, so the record can be graded.</p>
 <p class="meta">Composite ≥ +0.25 → risk-on · ≤ −0.25 → risk-off · otherwise neutral · 0–10 rating = (composite + 1) × 5, so 0 is maximum risk-off, 5 dead neutral, 10 maximum risk-on · rubric v1, frozen 2026-07-25 · not investment advice</p></div>
 
 <details class="trading-method" id="fr-method"><summary>The rubric (v1)</summary>
@@ -71,7 +72,7 @@ SKEW is deliberately excluded (weak predictive value). Data: Alpaca SIP, Cboe se
 Hyperliquid perps, Yahoo FX. Rubric changes get logged here, never applied retroactively.</p></details>
 
 <!-- AUTO:FABLE_RISK:START -->
-<details class="fr-entry" open><summary><time datetime="2026-07-25">2026-07-25</time><span class="fr-sumverdict fr-neutral">NEUTRAL</span><span class="fr-sumfor">assessment for Mon Jul 27 open</span><span class="fr-sumrating">5.5/10</span></summary><div class="fr-body">
+<details class="fr-entry" open><summary><time datetime="2026-07-25">2026-07-25</time><span class="fr-sumverdict fr-neutral">NEUTRAL</span><span class="fr-sumsession">pre-market</span><span class="fr-sumfor">assessment for Mon Jul 27 open</span><span class="fr-sumrating">5.5/10</span></summary><div class="fr-body">
 <div class="fr-verdict fr-neutral">
   <div class="fr-call">NEUTRAL</div>
   <div class="fr-sub">calm gauges, defensive internals · signal sum +1 of 11 · composite +0.09</div>
