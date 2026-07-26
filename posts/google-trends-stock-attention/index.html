@@ -19,12 +19,13 @@
     <meta name="twitter:image" content="https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png">
     <meta property="og:url" content="https://zonted.com/posts/google-trends-stock-attention/">
     <meta property="article:published_time" content="2026-07-25">
+    <meta property="article:modified_time" content="2026-07-25">
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/google-trends-stock-attention/","description":"I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.","image":"https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-25","dateModified":"2026-07-25","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/google-trends-stock-attention/","description":"I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.","image":"https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Google Trends Stock Backtest"}]}
@@ -177,6 +178,7 @@
             <li><a href="#backtest">The honest backtest</a></li>
             <li><a href="#results">Search is late</a></li>
             <li><a href="#counter-signal">Almost a counter-signal</a></li>
+            <li><a href="#attention-unwind">When attention fades</a></li>
             <li><a href="#useful">The useful signal</a></li>
         </ul>
     </div>
@@ -192,6 +194,7 @@
             <li><a href="#backtest">The honest backtest</a></li>
             <li><a href="#results">Search is late</a></li>
             <li><a href="#counter-signal">Almost a counter-signal</a></li>
+            <li><a href="#attention-unwind">When attention fades</a></li>
             <li><a href="#useful">The useful signal</a></li>
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
@@ -215,7 +218,7 @@
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">July 25, 2026 &middot; 7 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">July 25, 2026 &middot; 9 min read</div>
             </div>
         </div>
 
@@ -227,13 +230,15 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. They reliably predict more trading activity. They do not reliably predict direction.</p>
+                <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. They reliably predict more trading activity. Falling attention predicts activity cooling off. Neither direction reliably predicts price direction.</p>
                 <ul>
                     <li><strong>Past price move → next-day ticker searches:</strong> +0.194 rank correlation, statistically strong.</li>
-                    <li><strong>Ticker searches → next five-day volume:</strong> +0.268, the strongest result in the study.</li>
+                    <li><strong>Ticker searches → next five-day volume:</strong> +0.268, the strongest result in the original study.</li>
                     <li><strong>Ticker searches → next five-day return:</strong> &minus;0.059. Interesting, mildly contrarian, but it failed the pre-registered multiple-testing gate.</li>
+                    <li><strong>Falling ticker attention → next five-day return:</strong> +0.032 after a recent attention high&mdash;the opposite of a sell-off signal.</li>
+                    <li><strong>Falling ticker attention → next five-day volume:</strong> &minus;0.255, a strong and stable contraction in participation.</li>
                 </ul>
-                <p class="tldr-tail">Translation: a search spike is a useful “the crowd is here” alarm. It is not a green buy button, and it is not a red short button.</p>
+                <p class="tldr-tail">Translation: Google Trends can tell me whether the crowd is arriving or leaving. It still cannot tell me which way price goes next.</p>
             </div>
 
             <figure>
@@ -311,6 +316,25 @@
                 <figcaption>Attention leaned contrarian across several horizons, especially for ticker searches. The line is interesting; the evidence gate still said no.</figcaption>
             </figure>
 
+            <h2 id="attention-unwind">What if attention falls instead?</h2>
+
+            <p>The original result raised the obvious follow-up: maybe a search spike does not cause the sell-off, but the crowd leaving does. So I froze a second test around an <em>attention unwind</em>: among stocks that had recently reached unusually high search attention, did a steeper decline in searches predict worse sector-relative returns over the next five sessions?</p>
+
+            <p>The extension reused the same frozen 51,372-row panel and made zero new Google Trends pulls. A qualifying stock had to exceed its trailing 80th percentile of attention during the prior 14 days. The decline signal compared the most recent seven calendar days with the preceding 21, kept the original two-day data lag, and left 1,011 eligible market dates. Because the old final period had already been inspected, this was historical evidence only&mdash;not a fresh untouched validation set.</p>
+
+            <p>The sell-off thesis failed. The pooled five-day rank correlation was <strong>+0.032</strong>, not negative. Discovery, validation, and historical replication were all positive: +0.009, +0.105, and +0.026. The steepest-decline quintile outperformed the shallowest-decline quintile by <strong>0.40%</strong> over five sessions.</p>
+
+            <p>I am not flipping that into a new “falling searches are bullish” strategy. The controlled Fama&ndash;MacBeth interaction was effectively noise (p=0.820). The event study showed +0.17% after five sessions, with p=0.482 and a 95% interval from &minus;0.25% to +0.72%. A 60-session placebo was also significant, which is another reason to refuse the prettier story.</p>
+
+            <blockquote>Rising attention predicts more participation. Falling attention predicts less participation. Neither reliably predicts price direction.</blockquote>
+
+            <p>The participation result was much cleaner. Declining ticker attention had a <strong>&minus;0.255</strong> relationship with next-five-day trading volume, and it stayed negative across discovery (&minus;0.265), validation (&minus;0.190), and replication (&minus;0.293). Twenty-two tests and 82 independent verification checks passed; network calls stayed at zero; the original study artifacts remained unchanged. The return gate still failed, so no portfolio or prospective collector was armed.</p>
+
+            <figure>
+                <img src="img/declining-attention-ic-by-horizon.png" width="1440" height="810" loading="lazy" alt="Line chart showing the relationship between declining Google ticker-search attention and forward sector-relative stock returns at one, three, five, ten, and twenty sessions. Validation and historical-replication values are positive at every horizon, while discovery is near zero or positive after three sessions.">
+                <figcaption>If falling attention predicted sell-offs, these lines should live below zero. They mostly did the opposite&mdash;without clearing the controls needed to call that a bullish signal.</figcaption>
+            </figure>
+
             <h2 id="useful">The useful signal is “don't chase”</h2>
 
             <p>If I were putting this into an actual trading system, I would not let Google Trends choose longs or shorts. I would use it as a context flag:</p>
@@ -323,9 +347,9 @@
 
             <p>The larger lesson is about alternative data. A dataset can be predictive and still have no directional edge. Search attention strongly predicted <em>activity</em>. If I had only tested returns, I would have called the experiment a failure. If I had stopped at the uncorrected negative return result, I would have called it alpha. Both conclusions would have been lazy.</p>
 
-            <p>Google Trends did contain a signal. It told me where the crowd had arrived, where volume would persist, and where chasing deserved extra skepticism.</p>
+            <p>Google Trends did contain a signal. It told me where the crowd had arrived and when participation was draining away. Rising attention meant volume would persist. Falling attention meant volume would contract.</p>
 
-            <p>It just did not tell me what to buy.</p>
+            <p>It still did not tell me what to buy or short.</p>
 
             <p><strong>Method note:</strong> Google Trends was accessed through SerpApi because Google's official API was not generally available. The full run required roughly 1,300 normalized Trends pulls plus 109 fresh stability re-pulls. The equity universe is reconstructed inside Alpaca's current active-and-inactive exchange-listed coverage; it is not a delisting-complete historical U.S. security master. Results should not be generalized to the entire market without that caveat.</p>
 

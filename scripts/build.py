@@ -148,14 +148,13 @@ def scan_articles():
             if os.path.isdir(article_dir) and os.path.isfile(index_file):
                 slug = f"posts/{name}"
                 meta = extract_metadata(index_file, slug)
-                meta['_mtime'] = os.path.getmtime(index_file)
                 articles.append(meta)
 
-    # Sort by date (newest first), tie-break by file mtime so two posts that
-    # publish on the same calendar day order by which was written most
-    # recently (instead of by os.listdir() filesystem order, which is
-    # undefined). Articles without dates go last.
-    articles.sort(key=lambda a: (a['date'] or '0000-00-00', a.get('_mtime', 0)), reverse=True)
+    # Sort by date (newest first), tie-break by slug. File mtime cannot be a
+    # stable tie-breaker because this build rewrites article files when it
+    # refreshes generated blocks, which made same-day posts swap order on
+    # every run.
+    articles.sort(key=lambda a: (a['date'] or '0000-00-00', a['slug']), reverse=True)
     return articles
 
 
