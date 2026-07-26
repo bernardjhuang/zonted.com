@@ -11,129 +11,244 @@
     .replaceAll('"', '&quot;')
     .replaceAll("'", '&#039;');
 
-  const score = (label, value, tone = '') => {
-    const missing = value === null || value === undefined || value === '';
-    const numeric = missing ? Number.NaN : Number(value);
-    return `<div class="theme-score ${tone}">
-      <span>${esc(label)}</span>
-      <strong>${Number.isFinite(numeric) ? `${numeric}/100` : 'Not scored'}</strong>
-      ${Number.isFinite(numeric) ? `<i aria-hidden="true"><b style="width:${Math.max(0, Math.min(100, numeric))}%"></b></i>` : ''}
+  const num = value => {
+    if (value === null || value === undefined || value === '') return null;
+    const parsed = Number(value);
+    return Number.isFinite(parsed) ? parsed : null;
+  };
+
+  const clamp = value => Math.max(0, Math.min(100, value));
+
+  const meter = (label, value, tone) => {
+    const parsed = num(value);
+    if (parsed === null) {
+      return `<div class="sat-row"><span class="sat-label">${esc(label)}</span><span class="sat-none">Not scored</span></div>`;
+    }
+    return `<div class="sat-row">
+      <span class="sat-label">${esc(label)}</span>
+      <i class="sat-track sat-${tone}" aria-hidden="true"><b style="width:${clamp(parsed)}%"></b></i>
+      <strong class="sat-value">${parsed}</strong>
     </div>`;
   };
 
-  const bullets = items => `<ul>${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
+  // Knowledge minus price is the actual signal: how much of a well-known
+  // story the market has not yet paid for.
+  const gapOf = (known, priced) => {
+    const k = num(known);
+    const p = num(priced);
+    return k === null || p === null ? null : k - p;
+  };
 
-  const renderModels = models => `<div class="theme-model-grid">${models.map(model => `
-    <article class="theme-model">
-      <div class="theme-model-head"><div><span>${esc(model.role)}</span><h3>${esc(model.model)}</h3></div></div>
-      <div class="theme-mini-scores">
-        ${score('Knowledge', model.knowledge_saturation)}
-        ${score('Price', model.price_saturation)}
+  const gapTone = gap => (gap >= 25 ? 'open' : gap >= 12 ? 'mid' : 'tight');
+
+  const gapNote = (known, priced) => {
+    const gap = gapOf(known, priced);
+    if (gap === null) return '';
+    const phrase = gap >= 25 ? 'Widely understood, not fully priced'
+      : gap >= 12 ? 'Understood, partly discounted'
+      : gap >= 0 ? 'Priced close to the story'
+      : 'Priced ahead of what is understood';
+    return `<p class="sat-gap tone-${gapTone(gap)}">
+      <strong>${gap > 0 ? '+' : ''}${gap}</strong>
+      <span>${esc(phrase)}</span>
+    </p>`;
+  };
+
+  const gapBadge = (known, priced) => {
+    const gap = gapOf(known, priced);
+    if (gap === null) return '';
+    return `<span class="layer-gap tone-${gapTone(gap)}" title="Knowledge saturation minus price saturation">
+      ${gap > 0 ? '+' : ''}${gap}<i>gap</i></span>`;
+  };
+
+  const bullets = items => `<ul class="theme-list">${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
+
+  const renderModels = models => `<div class="model-grid">${models.map(model => `
+    <article class="model-card">
+      <p class="model-role">${esc(model.role)}</p>
+      <h4>${esc(model.model)}</h4>
+      <div class="model-meters">
+        ${meter('Known', model.knowledge_saturation, 'known')}
+        ${meter('Priced', model.price_saturation, 'priced')}
       </div>
-      <p>${esc(model.verdict)}</p>
+      <p class="model-verdict">${esc(model.verdict)}</p>
     </article>`).join('')}</div>`;
 
-  const renderLayers = rows => `<div class="theme-table-wrap"><table class="theme-table">
-    <thead><tr><th>Layer</th><th>Public names</th><th class="num">Known</th><th class="num">Priced</th><th>Read</th></tr></thead>
-    <tbody>${rows.map(row => `<tr>
-      <td><strong>${esc(row.layer)}</strong></td>
-      <td class="mono">${esc(row.symbols)}</td>
-      <td class="num"><span class="theme-score-pill">${esc(row.knowledge_saturation)}</span></td>
-      <td class="num"><span class="theme-score-pill">${esc(row.price_saturation)}</span></td>
-      <td>${esc(row.read)}</td>
-    </tr>`).join('')}</tbody>
-  </table></div>`;
-
-  const renderBuckets = rows => `<div class="theme-bucket-grid">${rows.map(row => `
-    <article class="theme-bucket">
-      <span>${esc(row.bucket)}</span>
-      <h3>${esc(row.symbols)}</h3>
-      <p>${esc(row.why)}</p>
+  const renderLayers = rows => `<div class="layer-grid">${rows.map(row => `
+    <article class="layer-card">
+      <div class="layer-head">
+        <h4>${esc(row.layer)}</h4>
+        ${gapBadge(row.knowledge_saturation, row.price_saturation)}
+      </div>
+      <p class="layer-symbols">${esc(row.symbols)}</p>
+      <div class="layer-meters">
+        ${meter('Known', row.knowledge_saturation, 'known')}
+        ${meter('Priced', row.price_saturation, 'priced')}
+      </div>
+      <p class="layer-read">${esc(row.read)}</p>
     </article>`).join('')}</div>`;
 
-  const renderValuation = snapshot => `<div class="theme-table-wrap"><table class="theme-table theme-valuation">
-    <thead><tr><th>Symbol</th><th class="num">Price</th><th class="num">Trailing P/E</th><th class="num">Off 52-week high</th></tr></thead>
-    <tbody>${snapshot.rows.map(row => `<tr><td class="mono"><strong>${esc(row.symbol)}</strong></td><td class="num mono">${esc(row.price)}</td><td class="num mono">${esc(row.pe)}</td><td class="num mono">${esc(row.off_high)}</td></tr>`).join('')}</tbody>
-  </table><p class="theme-table-note">${esc(snapshot.source)} · ${esc(snapshot.date)} · ${esc(snapshot.note)}</p></div>`;
+  const renderBuckets = rows => `<div class="bucket-grid">${rows.map((row, index) => `
+    <article class="bucket-card bucket-${index + 1}">
+      <p class="bucket-label">${esc(row.bucket)}</p>
+      <p class="bucket-symbols">${esc(row.symbols)}</p>
+      <p class="bucket-why">${esc(row.why)}</p>
+    </article>`).join('')}</div>`;
+
+  const renderValuation = snapshot => `<div class="val-wrap">
+    <table class="val-table">
+      <thead><tr><th>Symbol</th><th class="num">Price</th><th class="num">Trailing P/E</th><th class="num">Off 52-wk high</th></tr></thead>
+      <tbody>${snapshot.rows.map(row => `<tr>
+        <td class="val-sym">${esc(row.symbol)}</td>
+        <td class="num">${esc(row.price)}</td>
+        <td class="num">${esc(row.pe)}</td>
+        <td class="num val-off">${esc(row.off_high)}</td>
+      </tr>`).join('')}</tbody>
+    </table>
+    <p class="val-note">${esc(snapshot.source)} · ${esc(snapshot.date)} · ${esc(snapshot.note)}</p>
+  </div>`;
 
   const renderAdversarial = review => {
     const columns = Array.isArray(review) ? review : [
       { title: 'Where Grok breaks', bullets: review.grok },
       { title: 'Where Fable breaks', bullets: review.fable },
     ];
-    return `<div class="theme-dual-review">${columns.map(column => `
-      <article><h3>${esc(column.title)}</h3>${bullets(column.bullets)}</article>`).join('')}</div>`;
+    return `<div class="attack-grid">${columns.map(column => `
+      <article class="attack-card">
+        <h4>${esc(column.title)}</h4>
+        ${bullets(column.bullets)}
+      </article>`).join('')}</div>`;
   };
+
+  const openSection = (id, title, blurb, body) => `
+    <section class="theme-section" id="${esc(id)}" aria-labelledby="${esc(id)}-h">
+      <div class="theme-section-head">
+        <h3 id="${esc(id)}-h">${esc(title)}</h3>
+        <p>${esc(blurb)}</p>
+      </div>
+      ${body}
+    </section>`;
+
+  const foldSection = (id, title, blurb, body) => `
+    <details class="theme-section theme-fold" id="${esc(id)}">
+      <summary>
+        <span class="fold-title">${esc(title)}</span>
+        <span class="fold-blurb">${esc(blurb)}</span>
+      </summary>
+      <div class="fold-body">${body}</div>
+    </details>`;
 
   const renderTheme = (theme, method) => {
     const sectionId = suffix => `${theme.id}-${suffix}`;
+    const { knowledge_saturation: known, price_saturation: priced } = theme.consensus_scores;
+
     return `<article class="theme-record" id="${esc(theme.id)}">
     <header class="theme-hero">
-      <div class="theme-kicker"><span>${esc(theme.category)}</span><span>${esc(theme.horizon)}</span><span>${esc(theme.status)}</span></div>
+      <div class="theme-kicker">
+        <span>${esc(theme.category)}</span><span>${esc(theme.horizon)}</span><span>${esc(theme.status)}</span>
+      </div>
       <h2>${esc(theme.title)}</h2>
       <p class="theme-belief">${esc(theme.owner_belief)}</p>
-      <p class="theme-conviction">${esc(theme.conviction)}</p>
-      <div class="theme-consensus" aria-label="Theme saturation scores">
-        ${score('Knowledge saturation', theme.consensus_scores.knowledge_saturation, 'knowledge')}
-        ${score('Price saturation', theme.consensus_scores.price_saturation, 'price')}
+      <div class="hero-scores">
+        <div class="hero-meters">
+          ${meter('Known', known, 'known')}
+          ${meter('Priced', priced, 'priced')}
+          ${gapNote(known, priced)}
+        </div>
+        <p class="theme-conviction">${esc(theme.conviction)}</p>
       </div>
-      <p class="theme-verdict"><strong>Final verdict</strong>${esc(theme.final_verdict)}</p>
+      <div class="theme-verdict">
+        <p class="verdict-label">Final verdict</p>
+        <p>${esc(theme.final_verdict)}</p>
+      </div>
     </header>
 
     <details class="theme-method">
-      <summary>How the scores work</summary>
-      <p><strong>Knowledge:</strong> ${esc(method.knowledge_saturation)}</p>
-      <p><strong>Price:</strong> ${esc(method.price_saturation)}</p>
-      <p><strong>Consensus:</strong> ${esc(method.consensus)}</p>
-      <p><strong>Important:</strong> ${esc(method.warning)}</p>
+      <summary>How to read these scores</summary>
+      <div class="method-body">
+        <p><strong>Known</strong> ${esc(method.knowledge_saturation)}</p>
+        <p><strong>Priced</strong> ${esc(method.price_saturation)}</p>
+        <p><strong>Gap</strong> Known minus priced. A wide gap flags a story the market understands but has not paid for; a narrow or negative gap flags one already discounted.</p>
+        <p><strong>Consensus</strong> ${esc(method.consensus)}</p>
+        <p class="method-warn"><strong>Important</strong> ${esc(method.warning)}</p>
+      </div>
     </details>
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('model-reviews-heading'))}">
-      <div class="theme-section-head"><span>01</span><div><h2 id="${esc(sectionId('model-reviews-heading'))}">Model reviews</h2><p>Missing reviewers stay missing; scores are never padded.</p></div></div>
-      ${renderModels(theme.model_reviews)}
-    </section>
+    ${openSection(sectionId('layers'), 'Saturation by layer',
+      'One theme, radically different prices. Sorted by the author; scan the gap column first.',
+      renderLayers(theme.layer_scorecard))}
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('layer-scorecard-heading'))}">
-      <div class="theme-section-head"><span>02</span><div><h2 id="${esc(sectionId('layer-scorecard-heading'))}">Saturation by layer</h2><p>One theme, radically different prices and economics.</p></div></div>
-      ${renderLayers(theme.layer_scorecard)}
-    </section>
+    ${openSection(sectionId('attack'), 'Adversarial review',
+      'The thesis and the stock map both get punched in the face.',
+      renderAdversarial(theme.adversarial_review))}
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('adversarial-heading'))}">
-      <div class="theme-section-head"><span>03</span><div><h2 id="${esc(sectionId('adversarial-heading'))}">Adversarial review</h2><p>The thesis and the stock map both get punched in the face.</p></div></div>
-      ${renderAdversarial(theme.adversarial_review)}
-    </section>
+    <div class="theme-two-up">
+      ${openSection(sectionId('survived'), 'What survives the attack',
+        'The parts strong enough to keep.', bullets(theme.what_survived))}
+      ${openSection(sectionId('edge'), 'Where edge may remain',
+        'Contracts and constraints, not the headline.', bullets(theme.residual_edge))}
+    </div>
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('survived-heading'))}">
-      <div class="theme-section-head"><span>04</span><div><h2 id="${esc(sectionId('survived-heading'))}">What survives the attack</h2><p>The parts strong enough to keep.</p></div></div>
-      <div class="theme-copy-card">${bullets(theme.what_survived)}</div>
-    </section>
+    ${openSection(sectionId('priority'), 'Research priority',
+      'A diligence queue, not a buy list.', renderBuckets(theme.research_priority))}
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('edge-heading'))}">
-      <div class="theme-section-head"><span>05</span><div><h2 id="${esc(sectionId('edge-heading'))}">Where edge may remain</h2><p>Contracts and constraints, not the headline.</p></div></div>
-      <div class="theme-copy-card theme-edge">${bullets(theme.residual_edge)}</div>
-    </section>
+    ${openSection(sectionId('models'), 'Model reviews',
+      'Missing reviewers stay missing; scores are never padded.',
+      renderModels(theme.model_reviews))}
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('priority-heading'))}">
-      <div class="theme-section-head"><span>06</span><div><h2 id="${esc(sectionId('priority-heading'))}">Research priority</h2><p>This is a diligence queue, not a buy list.</p></div></div>
-      ${renderBuckets(theme.research_priority)}
-    </section>
+    ${foldSection(sectionId('valuation'), 'Valuation snapshot',
+      `${theme.valuation_snapshot.rows.length} names · closing prices`,
+      renderValuation(theme.valuation_snapshot))}
 
-    <section class="theme-section" aria-labelledby="${esc(sectionId('valuation-heading'))}">
-      <div class="theme-section-head"><span>07</span><div><h2 id="${esc(sectionId('valuation-heading'))}">Valuation snapshot</h2><p>Friday close context for the market’s current grading.</p></div></div>
-      ${renderValuation(theme.valuation_snapshot)}
-    </section>
+    ${foldSection(sectionId('falsifiers'), 'Falsifiers',
+      `${theme.falsifiers.length} ways this thesis dies`, bullets(theme.falsifiers))}
 
-    <section class="theme-section theme-two-up" aria-label="Falsifiers and monitoring">
-      <article><div class="theme-section-head compact"><span>08</span><div><h2>Falsifiers</h2><p>Evidence that kills or weakens the thesis.</p></div></div>${bullets(theme.falsifiers)}</article>
-      <article><div class="theme-section-head compact"><span>09</span><div><h2>Watch next</h2><p>Evidence that updates the score.</p></div></div>${bullets(theme.watch_next)}</article>
-    </section>
+    ${foldSection(sectionId('watch'), 'Watch next',
+      `${theme.watch_next.length} signals that move the score`, bullets(theme.watch_next))}
 
-    <footer class="theme-sources">
-      <h2>Sources</h2>
-      <div>${theme.sources.map(source => `<a href="${esc(source.url)}" rel="noopener noreferrer">${esc(source.label)}</a>`).join('')}</div>
-      <p>Thematic research, not investment advice. Scores are judgments, not forecasts.</p>
-    </footer>
+    ${foldSection(sectionId('sources'), 'Sources',
+      `${theme.sources.length} primary references`,
+      `<div class="source-list">${theme.sources.map(source =>
+        `<a href="${esc(source.url)}" rel="noopener noreferrer" target="_blank">${esc(source.label)}</a>`).join('')}</div>
+       <p class="source-note">Thematic research, not investment advice. Scores are judgments, not forecasts.</p>`)}
   </article>`;
+  };
+
+  const renderNav = themes => `<nav class="theme-switch" aria-label="Jump to theme">
+    ${themes.map((theme, index) => {
+      const gap = gapOf(theme.consensus_scores.knowledge_saturation, theme.consensus_scores.price_saturation);
+      return `<a class="theme-pill${index === 0 ? ' is-current' : ''}" href="#${esc(theme.id)}" data-theme="${esc(theme.id)}">
+        <span class="pill-cat">${esc(theme.category)}</span>
+        <span class="pill-title">${esc(theme.title)}</span>
+        <span class="pill-scores">
+          <b>${esc(theme.consensus_scores.knowledge_saturation)}</b> known
+          <b>${esc(theme.consensus_scores.price_saturation)}</b> priced
+          ${gap === null ? '' : `<em class="tone-${gapTone(gap)}">${gap > 0 ? '+' : ''}${gap} gap</em>`}
+        </span>
+      </a>`;
+    }).join('')}
+  </nav>`;
+
+  // Keep the sticky theme switcher docked under the variable-height status bar.
+  const statusBar = document.querySelector('.status');
+  const syncStickyOffset = () => {
+    if (!statusBar) return;
+    document.documentElement.style.setProperty('--desk-top', `${statusBar.offsetHeight}px`);
+  };
+
+  const trackCurrentTheme = () => {
+    const pills = [...shell.querySelectorAll('.theme-pill')];
+    const records = [...shell.querySelectorAll('.theme-record')];
+    if (!pills.length || !records.length || !('IntersectionObserver' in window)) return;
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        pills.forEach(pill => pill.classList.toggle('is-current', pill.dataset.theme === entry.target.id));
+      });
+    }, { rootMargin: '-45% 0px -50% 0px' });
+
+    records.forEach(record => observer.observe(record));
   };
 
   fetch(shell.dataset.url, { cache: 'no-store' })
@@ -142,8 +257,13 @@
       return response.json();
     })
     .then(payload => {
-      shell.innerHTML = payload.themes.map(theme => renderTheme(theme, payload.method)).join('');
+      shell.innerHTML = renderNav(payload.themes)
+        + payload.themes.map(theme => renderTheme(theme, payload.method)).join('');
       shell.dataset.ready = 'true';
+      syncStickyOffset();
+      if (window.ResizeObserver && statusBar) new ResizeObserver(syncStickyOffset).observe(statusBar);
+      window.addEventListener('resize', syncStickyOffset);
+      trackCurrentTheme();
     })
     .catch(error => {
       shell.innerHTML = '<p class="theme-error">Themes could not be loaded. The previous research remains in the JSON source.</p>';

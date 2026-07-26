@@ -90,11 +90,8 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_frontier_intelligence_theme_is_complete_and_honest(self) -> None:
         theme = self.frontier
         self.assertEqual(theme["category"], "Frontier intelligence")
-        self.assertEqual(theme["consensus_scores"], {"knowledge_saturation": 88, "price_saturation": 65})
         self.assertEqual(len(theme["layer_scorecard"]), 11)
-        self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6"])
-        self.assertIn("cross-model review pending", theme["model_reviews"][0]["role"])
-        self.assertNotIn("Claude", " ".join(row["model"] for row in theme["model_reviews"]))
+        self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6", "Claude Fable"])
         self.assertNotIn("Gemini", " ".join(row["model"] for row in theme["model_reviews"]))
         self.assertIsInstance(theme["adversarial_review"], list)
         self.assertGreaterEqual(len(theme["what_survived"]), 6)
@@ -104,6 +101,37 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
         self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 10)
         self.assertIn("missing model scores are never invented", self.payload["method"]["consensus"])
+
+    def test_every_theme_consensus_is_the_median_of_scored_reviews(self) -> None:
+        for theme in self.payload["themes"]:
+            scored = [row for row in theme["model_reviews"] if row["knowledge_saturation"] is not None]
+            self.assertGreaterEqual(len(scored), 1, theme["id"])
+            for field in ("knowledge_saturation", "price_saturation"):
+                values = [row[field] for row in scored]
+                self.assertTrue(all(isinstance(value, int) and 0 <= value <= 100 for value in values))
+                self.assertEqual(theme["consensus_scores"][field], int(statistics.median(values)), theme["id"])
+
+    def test_frontier_adversarial_review_covers_the_stale_stock_map(self) -> None:
+        columns = self.frontier["adversarial_review"]
+        self.assertGreaterEqual(len(columns), 3)
+        fable = next(row for row in columns if "lap behind" in row["title"])
+        self.assertGreaterEqual(len(fable["bullets"]), 6)
+        prose = " ".join(fable["bullets"])
+        for claim in ("opening prints", "ICH M15", "Altaris", "vacancy"):
+            self.assertIn(claim, prose)
+
+    def test_valuation_snapshots_use_closing_prices_not_opens(self) -> None:
+        """Regression: the frontier table originally shipped Friday's opening prints."""
+        opens_that_shipped_by_mistake = {
+            "TMO": "$573.64", "TER": "$365.48", "RKLB": "$69.31",
+            "VEEV": "$182.00", "CDNS": "$335.24", "PGR": "$210.76",
+        }
+        closes = {row["symbol"]: row["price"] for row in self.frontier["valuation_snapshot"]["rows"]}
+        for symbol, stale in opens_that_shipped_by_mistake.items():
+            self.assertNotEqual(closes[symbol], stale, f"{symbol} reverted to the opening print")
+        self.assertEqual(closes["TMO"], "$568.27")
+        self.assertEqual(closes["RKLB"], "$63.92")
+        self.assertIn("closing prices", self.frontier["valuation_snapshot"]["note"].lower())
 
     def test_renderer_escapes_copy_and_exposes_all_sections(self) -> None:
         self.assertIn("const esc =", self.script)
