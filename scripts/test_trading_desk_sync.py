@@ -43,24 +43,20 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(len(vwap["groups"]["countries"]), 10)
         self.assertEqual(len(crypto["charts"]), 7)
 
-    def test_gpt_brief_route_loads_the_current_payload(self) -> None:
-        page = (ROOT / "trading" / "gpt-brief" / "index.html").read_text()
-        payload = ROOT / "trading" / "gpt-brief.json"
-        chart_payload = ROOT / "trading" / "gpt-brief-charts.json"
-        payload_hash = hashlib.sha256(payload.read_bytes()).hexdigest()[:12]
-        chart_hash = hashlib.sha256(chart_payload.read_bytes()).hexdigest()[:12]
-        script_hash = hashlib.sha256((ROOT / "js" / "trading-gpt-brief.js").read_bytes()).hexdigest()[:12]
-        self.assertIn(f'/trading/gpt-brief.json?v={payload_hash}', page)
-        self.assertIn(f'/trading/gpt-brief-charts.json?v={chart_hash}', page)
-        self.assertIn(f'/js/trading-gpt-brief.js?v={script_hash}', page)
-        self.assertIn('id="gpt-brief-shell"', page)
-        self.assertIn('Big stock-moving events, explained in plain English.', page)
-        self.assertIn('Updated automatically on weekdays at 6:30 AM CT.', page)
-        self.assertNotIn('source of truth: /trading/classic/', page)
-        panel = re.search(r'<section[^>]+id="gpt-brief-panel"[^>]*>', page)
-        if panel is None:
-            self.fail("missing gpt-brief-panel")
-        self.assertNotIn(" hidden", panel.group(0))
+    def test_gpt_brief_web_surface_is_retired(self) -> None:
+        retired = [
+            ROOT / "trading" / "gpt-brief" / "index.html",
+            ROOT / "trading" / "gpt-brief.json",
+            ROOT / "trading" / "gpt-brief-charts.json",
+            ROOT / "js" / "trading-gpt-brief.js",
+            ROOT / "scripts" / "update-trading-gpt-brief.py",
+            ROOT / "scripts" / "build-trading-gpt-brief-charts.py",
+        ]
+        self.assertTrue(all(not path.exists() for path in retired))
+        self.assertNotIn("gpt-brief", sync.ROUTES)
+        self.assertNotIn("AUTO:GPT_BRIEF", CLASSIC)
+        self.assertNotIn('id="gpt-brief-tab"', CLASSIC)
+        self.assertIn("/trading/gpt-brief/* /trading/ 301", (ROOT / "_redirects").read_text())
 
     def test_grok_brief_route_loads_the_current_payload(self) -> None:
         page = (ROOT / "trading" / "grok-brief" / "index.html").read_text()
@@ -190,7 +186,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
-        self.assertEqual(len(pages), 13)
+        self.assertEqual(len(pages), 12)
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())

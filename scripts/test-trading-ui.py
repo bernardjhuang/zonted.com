@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import json
 import hashlib
-import datetime as dt
 import pathlib
 import re
 import unittest
@@ -16,8 +15,6 @@ RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
-GPT_BRIEF = ROOT / "trading" / "gpt-brief.json"
-GPT_BRIEF_CHARTS = ROOT / "trading" / "gpt-brief-charts.json"
 GROK_BRIEF = ROOT / "trading" / "grok-brief.json"
 
 
@@ -28,80 +25,27 @@ class TradingUiContractTest(unittest.TestCase):
         cls.js = JS.read_text()
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
-        cls.gpt_brief = json.loads(GPT_BRIEF.read_text())
-        cls.gpt_brief_charts = json.loads(GPT_BRIEF_CHARTS.read_text())
         cls.grok_brief = json.loads(GROK_BRIEF.read_text())
 
     def test_answer_first_tabs(self):
         tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "gpt-brief", "grok-brief", "scan", "vwap", "crypto", "risk", "results"])
+        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "grok-brief", "scan", "vwap", "crypto", "risk", "results"])
         labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
         self.assertEqual(labels[0], "Portfolio")
         self.assertRegex(labels[1], r"^Hypotheses \d+$")
         self.assertEqual(labels[2], "Brief")
-        self.assertEqual(labels[3], "GPT brief")
-        self.assertEqual(labels[4], "Grok brief")
-        self.assertRegex(labels[5], r"^Momentum \d+$")
-        self.assertEqual(labels[6:], ["VWAP", "Crypto", "Risk", "Performance"])
+        self.assertEqual(labels[3], "Grok brief")
+        self.assertRegex(labels[4], r"^Momentum \d+$")
+        self.assertEqual(labels[5:], ["VWAP", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
-    def test_gpt_brief_is_future_focused_and_matches_json(self):
-        block_match = re.search(r'<!-- AUTO:GPT_BRIEF:START -->(.*?)<!-- AUTO:GPT_BRIEF:END -->', self.html, re.S)
-        self.assertIsNotNone(block_match)
-        block = block_match.group(1) if block_match else ""
-        events = self.gpt_brief["events"]
-        self.assertIn('id="gpt-brief-shell"', block)
-        self.assertIn('/trading/gpt-brief.json?v=', block)
-        script_version = hashlib.sha256((ROOT / "js" / "trading-gpt-brief.js").read_bytes()).hexdigest()[:12]
-        data_version = hashlib.sha256(GPT_BRIEF.read_bytes()).hexdigest()[:12]
-        chart_version = hashlib.sha256(GPT_BRIEF_CHARTS.read_bytes()).hexdigest()[:12]
-        self.assertIn(f'/js/trading-gpt-brief.js?v={script_version}', self.html)
-        self.assertIn(f'/trading/gpt-brief.json?v={data_version}', block)
-        self.assertIn(f'/trading/gpt-brief-charts.json?v={chart_version}', block)
-        self.assertEqual(len({row["id"] for row in events}), len(events))
-        self.assertEqual(self.gpt_brief["scope"], "market-wide-small-cap-binary")
-        window = dt.date.fromisoformat(self.gpt_brief["window_end"]) - dt.date.fromisoformat(self.gpt_brief["window_start"])
-        self.assertGreaterEqual(window.days, 35)
-        self.assertLessEqual(window.days, 42)
-        self.assertLessEqual(len(events), 8)
-        self.assertGreaterEqual(sum(float(row["market_cap_usd"]) < 10_000_000_000 for row in events), 6)
-        sector_counts = {sector: sum(row["sector"] == sector for row in events) for sector in {row["sector"] for row in events}}
-        self.assertGreaterEqual(len(sector_counts), 4)
-        self.assertLessEqual(max(sector_counts.values()), 4)
-        self.assertEqual(len({row["primary_ticker"] for row in events}), len(events))
-        self.assertTrue(all(row["primary_ticker"] in row["tickers"] for row in events))
-        self.assertTrue(all(row["white_swan"] and row["base_case"] and row["black_swan"] for row in events))
-        plain_fields = ("plain_summary", "plain_good", "plain_bad", "plain_watch")
-        self.assertTrue(all(all(0 < len(row[field]) <= 180 for field in plain_fields) for row in events))
-        self.assertTrue(all(0 <= float(row["confidence"]) <= 1 for row in events))
-        self.assertTrue(all(row["sources"] for row in events))
-        event_map = self.gpt_brief_charts["events"]
-        chart_series = self.gpt_brief_charts["series"]
-        self.assertEqual(set(event_map), {row["id"] for row in events})
-        expected_symbols = {row["primary_ticker"] for row in events} | {row["sector_etf"] for row in events}
-        self.assertEqual(set(chart_series), expected_symbols)
-        for event in events:
-            self.assertEqual(event_map[event["id"]]["stock"], event["primary_ticker"])
-            self.assertEqual(event_map[event["id"]]["sector"], event["sector_etf"])
-        for symbol, series in chart_series.items():
-            self.assertGreaterEqual(len(series["dates"]), 20, symbol)
-            self.assertEqual(len(series["dates"]), len(series["close"]), symbol)
-            self.assertEqual(len(series["dates"]), len(series["vwap"]), symbol)
-            self.assertEqual(len(series["dates"]), len(series["z50"]), symbol)
-            self.assertEqual(series["dates"], sorted(set(series["dates"])), symbol)
-            self.assertIsNotNone(series["latest"]["z50"], symbol)
-        gpt_js = (ROOT / "js" / "trading-gpt-brief.js").read_text()
-        self.assertIn('6:30 AM CT cadence', gpt_js)
-        self.assertIn('Quick read', gpt_js)
-        self.assertIn('Good news', gpt_js)
-        self.assertIn('Bad news', gpt_js)
-        self.assertIn('What to watch', gpt_js)
-        self.assertIn('Price context', gpt_js)
-        self.assertIn('50D Z-SCORE', gpt_js)
-        self.assertIn('data-gpt-charts', gpt_js)
-        self.assertIn('Full research', gpt_js)
-        self.assertIn('White swan', gpt_js)
-        self.assertIn('Black swan', gpt_js)
+    def test_gpt_brief_is_slack_only(self):
+        self.assertNotIn("AUTO:GPT_BRIEF", self.html)
+        self.assertNotIn('id="gpt-brief-tab"', self.html)
+        self.assertNotIn('/trading/gpt-brief/', self.html)
+        self.assertFalse((ROOT / "trading" / "gpt-brief.json").exists())
+        self.assertFalse((ROOT / "trading" / "gpt-brief-charts.json").exists())
+        self.assertFalse((ROOT / "js" / "trading-gpt-brief.js").exists())
 
     def test_trading_home_has_no_needs_attention_block(self):
         home = (ROOT / "trading" / "index.html").read_text()

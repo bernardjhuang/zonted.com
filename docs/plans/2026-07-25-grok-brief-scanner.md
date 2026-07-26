@@ -2,7 +2,7 @@
 
 ## Why this exists
 
-GPT brief owns the next **six weeks of binary events** (PDUFA/AdCom-style resolution risk).
+The Slack-only GPT brief owns the next **six weeks of binary events** (PDUFA/AdCom-style resolution risk).
 
 Grok brief owns the **HIMS-April pattern**: a regulator just committed to deciding something material, on a date weeks or months out, while the equity narrative is still incomplete. The edge is announcement-day asymmetry, not resolution-day chase.
 
@@ -58,7 +58,7 @@ Enforced by `update-trading-grok-brief.py`:
 | Surface | Job |
 |---|---|
 | `/trading/brief/` | Daily desk brief / positions / macro |
-| `/trading/gpt-brief/` | Six-week sector-diverse binaries |
+| Slack `C0AG3880KGU` | Six-week sector-diverse GPT binaries |
 | `/trading/grok-brief/` | Longer-dated cross-agency deep theses |
 
 Do not dump near-term CAPR/REPL-style binaries into this tab unless unused multi-stage runway remains.

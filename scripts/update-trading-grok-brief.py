@@ -134,20 +134,20 @@ def render_panel(data: dict) -> str:
 def ensure_tab(page: str) -> str:
     if 'id="grok-brief-tab"' in page:
         return page
-    gpt_button = '<button class="trading-tab" id="gpt-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="gpt-brief-panel">GPT brief</button>'
+    brief_button = '<button class="trading-tab" id="brief-tab" type="button" role="tab" aria-selected="false" aria-controls="brief-panel">Brief</button>'
     grok_button = '<button class="trading-tab" id="grok-brief-tab" type="button" role="tab" aria-selected="false" aria-controls="grok-brief-panel">Grok brief</button>'
-    if gpt_button not in page:
-        raise ValueError("GPT brief tab anchor not found")
-    return page.replace(gpt_button, gpt_button + "\n                " + grok_button, 1)
+    if brief_button not in page:
+        raise ValueError("Brief tab anchor not found")
+    return page.replace(brief_button, brief_button + "\n                " + grok_button, 1)
 
 
 def ensure_markers(page: str) -> str:
     if START in page:
         return page
-    gpt_end = "<!-- AUTO:GPT_BRIEF:END -->"
-    if gpt_end not in page:
-        raise ValueError("GPT brief panel marker not found")
-    return page.replace(gpt_end, gpt_end + f"\n\n            {START}\n            {END}", 1)
+    brief_end = "<!-- AUTO:BRIEF:END -->"
+    if brief_end not in page:
+        raise ValueError("Brief panel marker not found")
+    return page.replace(brief_end, brief_end + f"\n\n            {START}\n            {END}", 1)
 
 
 def ensure_script(page: str) -> str:

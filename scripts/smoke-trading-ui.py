@@ -31,7 +31,6 @@ def main() -> None:
     query_separator = '&' if '?' in args.url else '?'
     parsed_url = urlsplit(args.url)
     origin = f"{parsed_url.scheme}://{parsed_url.netloc}"
-    gpt_route = f"{origin}/trading/gpt-brief/"
     gemini_route = f"{origin}/trading/gemini-risk/"
 
     with sync_playwright() as playwright:
@@ -41,9 +40,9 @@ def main() -> None:
         errors: list[str] = []
         desktop.on("pageerror", lambda error: errors.append(str(error)))
         desktop.goto(args.url, wait_until="networkidle")
-        check(desktop.locator(".trading-tab").count() == 10, "expected ten tabs")
+        check(desktop.locator(".trading-tab").count() == 9, "expected nine tabs")
         tab_ids = desktop.locator(".trading-tab").evaluate_all("tabs => tabs.map(tab => tab.id)")
-        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "gpt-brief-tab", "grok-brief-tab", "scan-tab", "vwap-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
+        check(tab_ids == ["positions-tab", "hypotheses-tab", "brief-tab", "grok-brief-tab", "scan-tab", "vwap-tab", "crypto-tab", "risk-tab", "results-tab"], "trading tabs are not grouped correctly or Performance is not rightmost")
         check(desktop.locator("h1").inner_text() == "Trading", "missing Trading h1")
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
@@ -102,36 +101,6 @@ def main() -> None:
         desktop.goto(f"{origin}/trading/watchlist/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
         check(desktop.locator("[data-scan-detail][data-scan-symbol='RBLX']").is_visible(), "RBLX hypothesis deep link did not unfold its chart")
-
-        desktop.goto(args.url + "#gpt-brief", wait_until="networkidle")
-        check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "GPT brief deep link did not activate")
-        gpt_cards = desktop.locator("#gpt-brief-panel details[data-event-id]")
-        check(gpt_cards.count() >= 1, "GPT brief has no event cards")
-        check("5 sectors" in desktop.locator("#gpt-brief-panel").inner_text(), "GPT brief sector count is wrong")
-        check(gpt_cards.evaluate_all("cards => cards.every(card => !card.open)"), "GPT brief cards are not collapsed by default")
-        check(desktop.locator("#gpt-brief-panel .gpt-plain-summary").count() == gpt_cards.count(), "GPT brief cards are missing plain-English summaries")
-        check(desktop.locator("#gpt-brief-panel .gpt-market-chart").count() == 0, "GPT charts loaded before a card was opened")
-        gpt_cards.first.locator(":scope > summary").click()
-        check(gpt_cards.first.evaluate("card => card.open"), "GPT brief card did not open")
-        check(gpt_cards.first.locator(".gpt-plain-outcome").count() == 3, "GPT brief quick read is incomplete")
-        desktop.wait_for_function("card => card.querySelectorAll('.gpt-market-chart').length === 2", arg=gpt_cards.first.element_handle())
-        check(gpt_cards.first.locator(".gpt-market-chart").count() == 2, "GPT brief stock and sector charts are incomplete")
-        check(gpt_cards.first.locator(".gpt-market-chart svg[aria-label*='z-score']").count() == 2, "GPT brief charts are missing Z-score context")
-        check(gpt_cards.first.locator(".gpt-chart-z").count() >= 2, "GPT brief charts did not draw Z-score history")
-        check(gpt_cards.first.locator(".gpt-chart-price").count() == 2, "GPT brief charts did not draw both YTD price histories")
-        full_research = gpt_cards.first.locator("details.gpt-full-research")
-        check(full_research.count() == 1 and not full_research.evaluate("node => node.open"), "full GPT research is not folded by default")
-        full_research.locator("summary").click()
-        check("White swan" in full_research.inner_text(), "GPT brief is missing white-swan outcomes")
-        check("Black swan" in full_research.inner_text(), "GPT brief is missing black-swan outcomes")
-
-        desktop.goto(gpt_route, wait_until="networkidle")
-        routed_card = desktop.locator("#gpt-brief-panel details[data-event-id]").first
-        summary_geometry = routed_card.locator(":scope > summary").evaluate("node => { const main = node.querySelector('.gpt-summary-main'); const heading = node.querySelector('.gpt-summary-heading'); const plain = node.querySelector('.gpt-plain-summary'); return { layout: getComputedStyle(node).display, mainGap: parseFloat(getComputedStyle(main).rowGap), headingGap: parseFloat(getComputedStyle(heading).columnGap), plainDisplay: getComputedStyle(plain).display }; }")
-        check(summary_geometry["layout"] == "grid" and summary_geometry["mainGap"] >= 7 and summary_geometry["headingGap"] >= 8 and summary_geometry["plainDisplay"] == "block", "GPT brief typography hierarchy collapsed")
-        routed_card.locator(":scope > summary").click()
-        desktop.wait_for_function("card => card.querySelectorAll('.gpt-market-chart').length === 2", arg=routed_card.element_handle())
-        check(routed_card.locator(".gpt-chart-grid").evaluate("node => getComputedStyle(node).gridTemplateColumns.split(' ').length") == 2, "GPT stock and sector charts are not paired on desktop")
 
         desktop.goto(args.url + "#grok-brief", wait_until="networkidle")
         check(desktop.locator("#grok-brief-tab").get_attribute("aria-selected") == "true", "Grok brief deep link did not activate")
@@ -254,28 +223,20 @@ def main() -> None:
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Brief")
         desktop.keyboard.press("ArrowRight")
-        check(desktop.locator("#gpt-brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped GPT brief")
-        desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#grok-brief-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation skipped Grok brief")
         desktop.keyboard.press("ArrowRight")
         check(desktop.locator("#scan-tab").get_attribute("aria-selected") == "true", "keyboard tab navigation failed")
         check(not errors, f"browser JavaScript errors: {errors}")
 
-        for route in ("", "#hypotheses", "#brief", "#gpt-brief", "#grok-brief", "#scan", "#vwap", "#crypto", "#risk", "#results"):
+        for route in ("", "#hypotheses", "#brief", "#grok-brief", "#scan", "#vwap", "#crypto", "#risk", "#results"):
             mobile = browser.new_page(viewport={"width": 390, "height": 844})
             mobile_errors: list[str] = []
             mobile.on("pageerror", lambda error: mobile_errors.append(str(error)))
-            target_url = gpt_route if route == "#gpt-brief" else args.url + route
+            target_url = args.url + route
             mobile.goto(target_url, wait_until="networkidle")
-            if route == "#gpt-brief":
-                mobile_card = mobile.locator("#gpt-brief-panel details[data-event-id]").first
-                mobile_card.locator(":scope > summary").click()
-                mobile.wait_for_function("card => card.querySelectorAll('.gpt-market-chart').length === 2", arg=mobile_card.element_handle())
-                check(mobile_card.locator(".gpt-chart-grid").evaluate("node => getComputedStyle(node).gridTemplateColumns.split(' ').length") == 1, "GPT stock and sector charts do not stack on mobile")
             widths = mobile.evaluate("({body: document.body.scrollWidth, html: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth})")
             check(widths["body"] <= widths["viewport"] and widths["html"] <= widths["viewport"], f"page-level overflow on {route or 'Portfolio'}: {widths}")
-            if route != "#gpt-brief":
-                check(mobile.locator(".trading-tab").first.evaluate("node => node.getBoundingClientRect().height") >= 44, "mobile tab target below 44px")
+            check(mobile.locator(".trading-tab").first.evaluate("node => node.getBoundingClientRect().height") >= 44, "mobile tab target below 44px")
             check(not mobile_errors, f"mobile JavaScript errors on {route or 'Portfolio'}: {mobile_errors}")
             mobile.close()
 
@@ -295,7 +256,7 @@ def main() -> None:
             gemini.close()
 
         browser.close()
-    print("Trading browser smoke: PASS (10 tabs, routed Gemini Risk, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (9 tabs, routed Gemini Risk, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":
