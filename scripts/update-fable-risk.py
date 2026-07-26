@@ -7,7 +7,8 @@ and appends it to trading/fable-risk.json.
 
 Entry schema:
 {
-  "date": "2026-07-25", "assess_for": "Mon Jul 27 open",
+  "date": "2026-07-25", "session": "pre-market",       # or "post-close"; omitted = pre-market
+  "assess_for": "Mon Jul 27 open",
   "verdict": "NEUTRAL", "subtitle": "calm gauges, defensive internals",
   "score": 1, "n_signals": 11, "composite": "+0.09",
   "signals": [{"name","value","rule","score"}],          # score in -1/0/+1
@@ -26,6 +27,10 @@ DATA = os.path.join(ROOT, "trading", "fable-risk.json")
 START, END = "<!-- AUTO:FABLE_RISK:START -->", "<!-- AUTO:FABLE_RISK:END -->"
 VCLS = {"RISK-ON": "fr-on", "NEUTRAL": "fr-neutral", "RISK-OFF": "fr-off"}
 SCLS = {1: ("enter", "+1 on"), 0: ("watch", "0 neutral"), -1: ("short", "−1 off")}
+
+
+def session_of(entry):
+    return entry.get("session", "pre-market")
 
 
 def rating_of(entry):
@@ -65,7 +70,7 @@ def render(entry, open_=True):
     return (f'<details class="fr-entry"{" open" if open_ else ""}>'
             f'<summary><time datetime="{entry["date"]}">{entry["date"]}</time>'
             f'<span class="fr-sumverdict {VCLS[entry["verdict"]]}">{entry["verdict"]}</span>'
-            f'<span class="fr-sumfor">assessment for {entry["assess_for"]}</span><span class="fr-sumrating">{rating:g}/10</span></summary>'
+            f'<span class="fr-sumsession">{session_of(entry)}</span><span class="fr-sumfor">assessment for {entry["assess_for"]}</span><span class="fr-sumrating">{rating:g}/10</span></summary>'
             f'<div class="fr-body">{body}</div></details>')
 
 
@@ -75,7 +80,9 @@ def main():
     if os.path.exists(DATA):
         data = json.load(open(DATA))
     entry["rating"] = rating_of(entry)
-    data["entries"] = [e for e in data["entries"] if e["date"] != entry["date"]]
+    entry["session"] = session_of(entry)
+    data["entries"] = [e for e in data["entries"]
+                       if (e["date"], session_of(e)) != (entry["date"], entry["session"])]
     data["entries"].insert(0, entry)
     json.dump(data, open(DATA, "w"), indent=1)
 
