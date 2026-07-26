@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.css?v=2"
+CSS_HREF = "/trading/hypothesis-summary.css?v=3"
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
 END = "<!-- AUTO:HYPOTHESIS_SUMMARY:END -->"
 
@@ -141,11 +141,15 @@ def short_date(value: str) -> str:
     return dt.date.fromisoformat(value).strftime("%b %-d, %Y")
 
 
-def sparkline(symbol: str, chart: dict) -> str:
+def sparkline(symbol: str, chart: dict, levels: dict) -> str:
     dates = chart["dates"]
     values = [float(value) for value in chart["close"]]
+    entry_levels = {case: float(levels[case]) for case in ("bear", "base", "bull")}
     width, height, pad = 280.0, 76.0, 4.0
-    low, high = min(values), max(values)
+    domain = values + list(entry_levels.values())
+    raw_low, raw_high = min(domain), max(domain)
+    domain_pad = max((raw_high - raw_low) * 0.03, raw_high * 0.002, 0.01)
+    low, high = max(0.0, raw_low - domain_pad), raw_high + domain_pad
     spread = high - low or 1.0
 
     def x(index: int) -> float:
@@ -160,15 +164,23 @@ def sparkline(symbol: str, chart: dict) -> str:
     change_class = "down" if change < 0 else "up"
     aria = html.escape(
         f"{symbol} adjusted close from {short_date(dates[0])} to {short_date(dates[-1])}; "
-        f"{values[0]:.2f} to {values[-1]:.2f}, {change:+.1f} percent",
+        f"{values[0]:.2f} to {values[-1]:.2f}, {change:+.1f} percent; "
+        f"bear entry {money(entry_levels['bear'])}, base entry {money(entry_levels['base'])}, "
+        f"bull entry {money(entry_levels['bull'])}",
         quote=True,
     )
     grids = "".join(
         f'<line class="grid" x1="{pad}" y1="{level:.1f}" x2="{width - pad}" y2="{level:.1f}"/>'
         for level in (pad, height / 2, height - pad)
     )
+    entry_lines = "".join(
+        f'<line class="entry-line entry-line--{case}" data-entry-level="{case}" '
+        f'data-entry-price="{price:.2f}" x1="{pad}" y1="{y(price):.1f}" '
+        f'x2="{width - pad}" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
+        for case, price in entry_levels.items()
+    )
     return f'''<figure class="hyp-summary-chart {direction}">
-<svg viewBox="0 0 280 76" preserveAspectRatio="none" role="img" aria-label="{aria}">{grids}<polyline class="line" points="{points}"/><circle class="dot" cx="{x(len(values) - 1):.1f}" cy="{y(values[-1]):.1f}" r="3"/></svg>
+<svg viewBox="0 0 280 76" preserveAspectRatio="none" role="img" aria-label="{aria}">{grids}{entry_lines}<polyline class="line" points="{points}"/><circle class="dot" cx="{x(len(values) - 1):.1f}" cy="{y(values[-1]):.1f}" r="3"/></svg>
 <figcaption><span>{html.escape(short_date(dates[0]))}</span><b>${values[-1]:,.2f} <span class="{change_class}">{change:+.1f}%</span></b><span>{html.escape(short_date(dates[-1]))}</span></figcaption>
 </figure>'''
 
@@ -184,7 +196,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
         levels = record["entry_levels"]
         rows.append(f'''<tr data-hypothesis-summary-row="{symbol}">
 <td class="hyp-summary-symbol" data-label="Ticker"><a href="#hypothesis-{symbol.lower()}-setup">{symbol}</a><span title="{html.escape(record["method"], quote=True)}">{html.escape(record["confidence"])} confidence</span></td>
-<td class="hyp-summary-chart-cell" data-label="2-year stock chart">{sparkline(symbol, charts["charts"][symbol])}</td>
+<td class="hyp-summary-chart-cell" data-label="2-year stock chart">{sparkline(symbol, charts["charts"][symbol], levels)}</td>
 <td class="hyp-summary-metrics" data-label="Valuation">{metrics}</td>
 <td class="hyp-summary-level hyp-summary-level--bear" data-label="Bear">{money(levels["bear"])}</td>
 <td class="hyp-summary-level hyp-summary-level--base" data-label="Base">{money(levels["base"])}</td>
@@ -200,7 +212,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
-<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading; hover the confidence label for the method.</p>
+<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
 </section>
 {END}'''
 
@@ -217,7 +229,13 @@ def render_page(page: str, config: dict, charts: dict) -> str:
         page, count = re.subn(r'(<div class="phead">.*?</div>)', r"\1" + summary, page, count=1, flags=re.S)
         if count != 1:
             raise ValueError("Could not find hypothesis page heading")
-    if CSS_HREF not in page:
+    page, css_count = re.subn(
+        r'<link rel="stylesheet" href="/trading/hypothesis-summary\.css\?v=\d+">',
+        f'<link rel="stylesheet" href="{CSS_HREF}">',
+        page,
+        count=1,
+    )
+    if css_count == 0:
         page = page.replace(
             '<link rel="stylesheet" href="/trading/desk.css?v=19">',
             '<link rel="stylesheet" href="/trading/desk.css?v=19">\n'
