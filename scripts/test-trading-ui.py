@@ -17,6 +17,7 @@ RISK = ROOT / "trading" / "risk-ytd.json"
 RISK_JS = ROOT / "js" / "trading-risk.js"
 RISK_CSS = ROOT / "css" / "trading-risk.css"
 GPT_BRIEF = ROOT / "trading" / "gpt-brief.json"
+GPT_BRIEF_CHARTS = ROOT / "trading" / "gpt-brief-charts.json"
 GROK_BRIEF = ROOT / "trading" / "grok-brief.json"
 
 
@@ -28,6 +29,7 @@ class TradingUiContractTest(unittest.TestCase):
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
         cls.gpt_brief = json.loads(GPT_BRIEF.read_text())
+        cls.gpt_brief_charts = json.loads(GPT_BRIEF_CHARTS.read_text())
         cls.grok_brief = json.loads(GROK_BRIEF.read_text())
 
     def test_answer_first_tabs(self):
@@ -52,8 +54,10 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('/trading/gpt-brief.json?v=', block)
         script_version = hashlib.sha256((ROOT / "js" / "trading-gpt-brief.js").read_bytes()).hexdigest()[:12]
         data_version = hashlib.sha256(GPT_BRIEF.read_bytes()).hexdigest()[:12]
+        chart_version = hashlib.sha256(GPT_BRIEF_CHARTS.read_bytes()).hexdigest()[:12]
         self.assertIn(f'/js/trading-gpt-brief.js?v={script_version}', self.html)
         self.assertIn(f'/trading/gpt-brief.json?v={data_version}', block)
+        self.assertIn(f'/trading/gpt-brief-charts.json?v={chart_version}', block)
         self.assertEqual(len({row["id"] for row in events}), len(events))
         self.assertEqual(self.gpt_brief["scope"], "market-wide-small-cap-binary")
         window = dt.date.fromisoformat(self.gpt_brief["window_end"]) - dt.date.fromisoformat(self.gpt_brief["window_start"])
@@ -71,15 +75,39 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertTrue(all(all(0 < len(row[field]) <= 180 for field in plain_fields) for row in events))
         self.assertTrue(all(0 <= float(row["confidence"]) <= 1 for row in events))
         self.assertTrue(all(row["sources"] for row in events))
+        event_map = self.gpt_brief_charts["events"]
+        chart_series = self.gpt_brief_charts["series"]
+        self.assertEqual(set(event_map), {row["id"] for row in events})
+        expected_symbols = {row["primary_ticker"] for row in events} | {row["sector_etf"] for row in events}
+        self.assertEqual(set(chart_series), expected_symbols)
+        for event in events:
+            self.assertEqual(event_map[event["id"]]["stock"], event["primary_ticker"])
+            self.assertEqual(event_map[event["id"]]["sector"], event["sector_etf"])
+        for symbol, series in chart_series.items():
+            self.assertGreaterEqual(len(series["dates"]), 20, symbol)
+            self.assertEqual(len(series["dates"]), len(series["close"]), symbol)
+            self.assertEqual(len(series["dates"]), len(series["vwap"]), symbol)
+            self.assertEqual(len(series["dates"]), len(series["z50"]), symbol)
+            self.assertEqual(series["dates"], sorted(set(series["dates"])), symbol)
+            self.assertIsNotNone(series["latest"]["z50"], symbol)
         gpt_js = (ROOT / "js" / "trading-gpt-brief.js").read_text()
         self.assertIn('6:30 AM CT cadence', gpt_js)
         self.assertIn('Quick read', gpt_js)
         self.assertIn('Good news', gpt_js)
         self.assertIn('Bad news', gpt_js)
         self.assertIn('What to watch', gpt_js)
+        self.assertIn('Price context', gpt_js)
+        self.assertIn('50D Z-SCORE', gpt_js)
+        self.assertIn('data-gpt-charts', gpt_js)
         self.assertIn('Full research', gpt_js)
         self.assertIn('White swan', gpt_js)
         self.assertIn('Black swan', gpt_js)
+
+    def test_trading_home_has_no_needs_attention_block(self):
+        home = (ROOT / "trading" / "index.html").read_text()
+        self.assertNotIn("Needs attention", home)
+        self.assertNotIn('class="alert"', home)
+        self.assertIn('aria-label="Trading mentality reminders"', home)
 
     def test_grok_brief_is_cross_agency_and_matches_json(self):
         block_match = re.search(r'<!-- AUTO:GROK_BRIEF:START -->(.*?)<!-- AUTO:GROK_BRIEF:END -->', self.html, re.S)
@@ -129,8 +157,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
         for symbol, block in details.items():
             self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
+            self.assertIn(f'href="/trading/momentum/?chart={symbol}#scan"', block)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
+        hypotheses_route = (ROOT / "trading" / "hypotheses" / "index.html").read_text()
+        for symbol in details:
+            self.assertIn(f'href="/trading/momentum/?chart={symbol}#scan"', hypotheses_route)
+        self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(details))
         self.assertIn('Exact Sciences', details["ABT"])
         self.assertIn('Libre Assist', details["ABT"])
         self.assertIn('Slightly underpriced', details["HOOD"])
@@ -308,6 +341,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(scan_charts["schema_version"], 2)
         self.assertEqual(scan_charts["risk_regime"], universe["risk_regime"])
         self.assertEqual(set(scan_charts["charts"]), {row["symbol"] for row in universe["rows"]})
+        self.assertIn("RBLX", scan_charts["charts"])
+        self.assertTrue(any(row["symbol"] == "RBLX" for row in universe["rows"]))
         self.assertTrue(all(
             scan_charts["charts"][row["symbol"]]["risk_decision"] == row["risk_decision"]
             for row in universe["rows"]

@@ -15,6 +15,7 @@ from sync_trading_desk import sync_sections
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
 DATA = ROOT / "trading" / "gpt-brief.json"
+CHART_DATA = ROOT / "trading" / "gpt-brief-charts.json"
 SCRIPT = ROOT / "js" / "trading-gpt-brief.js"
 START = "<!-- AUTO:GPT_BRIEF:START -->"
 END = "<!-- AUTO:GPT_BRIEF:END -->"
@@ -51,7 +52,7 @@ def validate(data: dict) -> None:
     sectors: dict[str, int] = {}
     for event in data["events"]:
         event_required = {
-            "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade", "sector",
+            "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade", "sector", "sector_etf",
             "date", "date_status", "horizon", "tier", "category", "tickers", "title",
             "plain_summary", "plain_good", "plain_bad", "plain_watch",
             "confidence", "trigger", "implication", "white_swan", "base_case", "black_swan",
@@ -76,6 +77,8 @@ def validate(data: dict) -> None:
         if not sector:
             raise ValueError(f"event has no sector: {event['id']}")
         sectors[sector] = sectors.get(sector, 0) + 1
+        if event["sector_etf"] not in {"XLB", "XLC", "XLE", "XLF", "XLI", "XLK", "XLP", "XLRE", "XLU", "XLV", "XLY"}:
+            raise ValueError(f"invalid sector ETF for {event['id']}")
         if float(event["market_cap_usd"]) <= 0 or float(event["reference_price"]) <= 0:
             raise ValueError(f"invalid market snapshot: {event['id']}")
         confidence = float(event["confidence"])
@@ -94,10 +97,27 @@ def validate(data: dict) -> None:
         raise ValueError("no sector may occupy more than half the brief")
 
 
+def validate_charts(data: dict, charts: dict) -> None:
+    event_map = charts.get("events") or {}
+    series = charts.get("series") or {}
+    if set(event_map) != {event["id"] for event in data["events"]}:
+        raise ValueError("GPT chart events must exactly match the brief")
+    for event in data["events"]:
+        mapping = event_map[event["id"]]
+        if mapping.get("stock") != event["primary_ticker"] or mapping.get("sector") != event["sector_etf"]:
+            raise ValueError(f"stale GPT chart mapping for {event['id']}")
+        for symbol in (event["primary_ticker"], event["sector_etf"]):
+            record = series.get(symbol) or {}
+            dates = record.get("dates") or []
+            if len(dates) < 20 or len(dates) != len(record.get("close") or []) or len(dates) != len(record.get("z50") or []):
+                raise ValueError(f"missing or misaligned GPT chart series for {symbol}")
+
+
 def render_panel(data: dict) -> str:
     data_version = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
+    chart_version = hashlib.sha256(CHART_DATA.read_bytes()).hexdigest()[:12]
     return f'''            <section class="trading-panel brief-panel" id="gpt-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="gpt-brief-tab" hidden>
-                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={data_version}">
+                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v={data_version}" data-chart-url="/trading/gpt-brief-charts.json?v={chart_version}">
                     <p class="trading-note">Loading the latest future catalyst scan…</p>
                 </div>
             </section>'''
@@ -105,7 +125,9 @@ def render_panel(data: dict) -> str:
 
 def main() -> None:
     data = json.loads(DATA.read_text())
+    charts = json.loads(CHART_DATA.read_text())
     validate(data)
+    validate_charts(data, charts)
     page = PAGE.read_text()
 
     if 'id="gpt-brief-tab"' not in page:

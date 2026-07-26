@@ -362,6 +362,9 @@
         .hypothesis-price strong { color: var(--bl-ink); font: 600 14px var(--bl-mono); }
         .hypothesis-detail { min-width: 0; padding: 18px 20px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
         .hypothesis-detail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .hypothesis-chart-link { display: inline-flex; align-items: center; min-height: 34px; margin-left: auto; padding: 5px 10px; border: 1px solid var(--bl-chipbd); border-radius: 6px; background: var(--bl-chipbg); color: var(--bl-accent); font: 600 11.5px var(--bl-sans); text-decoration: none; white-space: nowrap; }
+        .hypothesis-chart-link:hover { border-color: var(--bl-accent); text-decoration: none; }
+        .hypothesis-detail-head .hypothesis-status { flex-basis: 100%; }
         .hypothesis-detail h3 { margin: 0; font: 700 15px var(--bl-mono); }
         .hypothesis-bottom-line { max-width: 980px; margin: 8px 0 16px; color: var(--bl-ink); font-size: 15px; font-weight: 600; text-wrap: pretty; }
         .hypothesis-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
@@ -904,6 +907,7 @@
                     <article class="hypothesis-detail" id="hypothesis-abt-setup" aria-labelledby="hypothesis-abt-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-abt-title">ABT setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=ABT#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Unfolded · active thesis</span>
                         </div>
                         <p class="hypothesis-bottom-line">Abbott is a defensive healthcare compounder trading near 18.2× the midpoint of raised 2026 adjusted EPS guidance. Libre is the base engine; Exact Sciences execution is the swing factor that determines whether the growth upgrade earns a better multiple.</p>
@@ -948,6 +952,7 @@
                     <article class="hypothesis-detail" id="hypothesis-hood-setup" aria-labelledby="hypothesis-hood-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-hood-title">HOOD setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=HOOD#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Slightly underpriced · through Q2 and H2 2026</span>
                         </div>
                         <p class="hypothesis-bottom-line">Robinhood is growing both transaction activity and customer assets faster than the current valuation fully credits. The combination is the point: volumes create earnings upside now, while recurring deposits make the platform’s growth less dependent on one hot trading quarter. Next hard test: Q2 earnings on July 29 after the close.</p>
@@ -992,6 +997,7 @@
                     <article class="hypothesis-detail" id="hypothesis-hims-setup" aria-labelledby="hypothesis-hims-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-hims-title">HIMS setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=HIMS#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Unfolded · thesis only</span>
                         </div>
                         <p class="hypothesis-bottom-line"><strong>No position.</strong> The peptide optionality remains real, but constructive PCAC votes are non-binding. Keep this as a research thesis until there is a formal FDA timetable, a next PCAC meeting date, and HIMS below $25.</p>
@@ -1036,6 +1042,7 @@
                     <article class="hypothesis-detail" id="hypothesis-byddy-setup" aria-labelledby="hypothesis-byddy-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-byddy-title">BYDDY setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=BYDDY#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Speculative · event-driven long · 6–18 months</span>
                         </div>
                         <p class="hypothesis-bottom-line">BYDDY is primarily a China EV recovery plus geopolitical-risk-compression thesis. Robotics is real optionality now—executives have confirmed humanoid development—but BYD has not disclosed a Tesla-like roadmap, production schedule, or major capital program. Conviction stays medium until sales, margins, or robotics evidence improves.</p>
@@ -1080,6 +1087,7 @@
                     <article class="hypothesis-detail" id="hypothesis-ntdoy-setup" aria-labelledby="hypothesis-ntdoy-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-ntdoy-title">NTDOY setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=NTDOY#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Cautiously constructive · accumulate on weakness · 12–24 months</span>
                         </div>
                         <p class="hypothesis-bottom-line">Nintendo is a quality compounder facing a real but cyclical hardware-margin squeeze. Switch 2 demand was not mediocre—it reached 19.86 million units by March—but Nintendo now has to prove that elite IP, software attach, and pricing can offset a lower year-two hardware forecast and rising memory costs.</p>
@@ -1124,6 +1132,7 @@
                     <article class="hypothesis-detail" id="hypothesis-rblx-setup" aria-labelledby="hypothesis-rblx-title">
                         <div class="hypothesis-detail-head">
                             <h3 id="hypothesis-rblx-title">RBLX setup</h3>
+                            <a class="hypothesis-chart-link" href="/trading/momentum/?chart=RBLX#scan">Open Momentum chart →</a>
                             <span class="hypothesis-status">Speculative long · constructive on weakness · 18–36 months</span>
                         </div>
                         <p class="hypothesis-bottom-line">Roblox is a high-upside cultural-platform bet, not a proven high-margin compounder yet. The asymmetric case works if a massive youth audience ages into higher-spending adults while creators, advertising, and AI-assisted discovery deepen the economy faster than safety, infrastructure, and dilution consume the upside.</p>
@@ -1249,11 +1258,11 @@
 <p class="scan-qualified-links"><b>Short setups</b> · <a href="?chart=WBD#scan" translate="no">WBD</a> · <a href="?chart=DIS#scan" translate="no">DIS</a> · <a href="?chart=ASTS#scan" translate="no">ASTS</a> · <a href="?chart=MCD#scan" translate="no">MCD</a> · <a href="?chart=LOW#scan" translate="no">LOW</a> · <a href="?chart=CMCSA#scan" translate="no">CMCSA</a> · <a href="?chart=GOOGL#scan" translate="no">GOOGL</a> · <a href="?chart=DKNG#scan" translate="no">DKNG</a> · <a href="?chart=TSLA#scan" translate="no">TSLA</a> · <a href="?chart=GOOG#scan" translate="no">GOOG</a></p>
                 </div>
                 <details class="scan-universe-disclosure" id="scan-universe" open>
-                    <summary>Browse full universe · 170 symbols</summary>
+                    <summary>Browse full universe · 171 symbols</summary>
                     <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
-                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=d84e8a9e75a0"><p class="bl-empty">Loading universe…</p></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=18d2e0d917ab"><p class="bl-empty">Loading universe…</p></div>
                 </details>
-                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=f7e81fda68d6"}</script>
+                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=9991057cbf63"}</script>
                 <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Watchful halves longs; validated Elevated gates them to WATCH; shorts stay. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
             </section>
             <!-- AUTO:SCAN:END -->
@@ -1614,7 +1623,7 @@
 
             <!-- AUTO:GPT_BRIEF:START -->
             <section class="trading-panel brief-panel" id="gpt-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="gpt-brief-tab" hidden>
-                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v=5e0a43fcf3ac">
+                <div id="gpt-brief-shell" data-url="/trading/gpt-brief.json?v=dda68114c542" data-chart-url="/trading/gpt-brief-charts.json?v=bc00149773c3">
                     <p class="trading-note">Loading the latest future catalyst scan…</p>
                 </div>
             </section>
@@ -1918,7 +1927,7 @@
     </footer>
     <script src="/js/trading-broker-light.js?v=68c18f340228"></script>
     <script src="/js/trading-risk.js?v=e357c62e6412"></script>
-    <script src="/js/trading-gpt-brief.js?v=75441ebdaf57"></script>
+    <script src="/js/trading-gpt-brief.js?v=d59cb21d019b"></script>
     <script src="/js/trading-grok-brief.js?v=22912f5aeb74"></script>
 </body>
 </html>

@@ -46,9 +46,12 @@ class RoutedTradingSyncTests(unittest.TestCase):
     def test_gpt_brief_route_loads_the_current_payload(self) -> None:
         page = (ROOT / "trading" / "gpt-brief" / "index.html").read_text()
         payload = ROOT / "trading" / "gpt-brief.json"
+        chart_payload = ROOT / "trading" / "gpt-brief-charts.json"
         payload_hash = hashlib.sha256(payload.read_bytes()).hexdigest()[:12]
+        chart_hash = hashlib.sha256(chart_payload.read_bytes()).hexdigest()[:12]
         script_hash = hashlib.sha256((ROOT / "js" / "trading-gpt-brief.js").read_bytes()).hexdigest()[:12]
         self.assertIn(f'/trading/gpt-brief.json?v={payload_hash}', page)
+        self.assertIn(f'/trading/gpt-brief-charts.json?v={chart_hash}', page)
         self.assertIn(f'/js/trading-gpt-brief.js?v={script_hash}', page)
         self.assertIn('id="gpt-brief-shell"', page)
         self.assertIn('Big stock-moving events, explained in plain English.', page)
