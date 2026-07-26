@@ -413,6 +413,25 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('direction / type / P&amp;L', self.js)
         self.assertEqual(self.html.count('class="activity-row"'), 40)
 
+    def test_desk_pages_share_one_nav_and_stamp(self):
+        """Guard against multi-agent drift: every routed desk page must carry the
+        same nav link set (hrefs and labels) and the same stamp format."""
+        import glob
+        pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
+                 if "classic" not in p and "charts" not in p] + [str(ROOT / "trading" / "index.html")]
+        nav_sets, stamps = set(), set()
+        for p in pages:
+            s = pathlib.Path(p).read_text()
+            nav = s[s.find("subnav"):s.find("</nav>")]
+            nav_sets.add(tuple(re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', nav)))
+            m = re.search(r'class="stamp">([^<]+)<', s)
+            stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
+        self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
+        self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
+        hrefs = [h for h, _ in next(iter(nav_sets))]
+        self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
+
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
