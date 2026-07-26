@@ -27,6 +27,15 @@
 .fr-off .fr-call,.fr-sumverdict.fr-off{color:var(--bl-loss)}
 .fr-neutral .fr-call,.fr-sumverdict.fr-neutral{color:var(--bl-warn)}
 .fr-sumverdict.fr-on{background:#e4f2ea}.fr-sumverdict.fr-off{background:#fbe9ec}.fr-sumverdict.fr-neutral{background:#f3eee4}
+.fr-rating{margin-left:auto;display:flex;align-items:baseline;gap:6px;flex-wrap:wrap}
+.fr-rating-num{font:700 30px var(--bl-mono)}
+.fr-rating-scale{font:600 13px var(--bl-mono);color:var(--bl-faint)}
+.fr-rating-bar{flex-basis:100%;display:block;height:7px;border-radius:4px;max-width:170px;
+  background:linear-gradient(90deg,#f3d5d9,#f6ead0 50%,#dcefe2);position:relative;overflow:hidden}
+.fr-rating-fill{position:absolute;top:0;bottom:0;right:0;left:auto;background:var(--bl-page);opacity:.72;width:45%;
+  border-left:2px solid var(--bl-ink)}
+.fr-rating-cap{flex-basis:100%;font-size:10.5px;text-transform:uppercase;letter-spacing:.07em;color:var(--bl-faint)}
+.fr-sumrating{margin-left:auto;font:700 13px var(--bl-mono);color:var(--bl-ink2)}
 .fr-body>p{font-size:13.5px;line-height:1.65;margin:0 0 12px;max-width:86ch}
 </style>
 </head>
@@ -48,7 +57,7 @@
 <p class="take">A daily call — <b>risk-on</b>, <b>risk-off</b>, or <b>neutral</b> — made by Claude Fable from a fixed,
 published rubric. Eleven signals, each scored −1/0/+1 against pre-set thresholds; the sum makes the call, not the mood.
 One entry per market day, kept forever, so the record can be graded.</p>
-<p class="meta">Composite ≥ +0.25 → risk-on · ≤ −0.25 → risk-off · otherwise neutral · rubric v1, frozen 2026-07-25 · not investment advice</p></div>
+<p class="meta">Composite ≥ +0.25 → risk-on · ≤ −0.25 → risk-off · otherwise neutral · 0–10 rating = (composite + 1) × 5, so 0 is maximum risk-off, 5 dead neutral, 10 maximum risk-on · rubric v1, frozen 2026-07-25 · not investment advice</p></div>
 
 <details class="trading-method" id="fr-method"><summary>The rubric (v1)</summary>
 <p><b>Trend</b> — SPY vs its 50-day average (±0.25% dead band). <b>Vol level</b> — VIX &lt;16 / 16–20 / &gt;20.
@@ -62,10 +71,15 @@ SKEW is deliberately excluded (weak predictive value). Data: Alpaca SIP, Cboe se
 Hyperliquid perps, Yahoo FX. Rubric changes get logged here, never applied retroactively.</p></details>
 
 <!-- AUTO:FABLE_RISK:START -->
-<details class="fr-entry" open><summary><time datetime="2026-07-25">2026-07-25</time><span class="fr-sumverdict fr-neutral">NEUTRAL</span><span class="fr-sumfor">assessment for Mon Jul 27 open</span></summary><div class="fr-body">
+<details class="fr-entry" open><summary><time datetime="2026-07-25">2026-07-25</time><span class="fr-sumverdict fr-neutral">NEUTRAL</span><span class="fr-sumfor">assessment for Mon Jul 27 open</span><span class="fr-sumrating">5.5/10</span></summary><div class="fr-body">
 <div class="fr-verdict fr-neutral">
   <div class="fr-call">NEUTRAL</div>
   <div class="fr-sub">calm gauges, defensive internals · signal sum +1 of 11 · composite +0.09</div>
+  <div class="fr-rating" title="0 = maximum risk-off · 10 = maximum risk-on">
+    <span class="fr-rating-num">5.5</span><span class="fr-rating-scale">/ 10</span>
+    <span class="fr-rating-bar"><span class="fr-rating-fill" style="width:45%"></span></span>
+    <span class="fr-rating-cap">risk appetite</span>
+  </div>
 </div>
 <p>The ledger splits cleanly down the middle, and the split itself is the story. Every <i>stress gauge</i> is quiet: bond volatility is outright calm (MOVE 70.9), the VIX curve is in healthy contango, high-yield spreads sit at a tight 2.77% and barely moved all week, and 10 of 13 US market groups still trade above their year-to-date cost basis. Nothing in vol or credit is confirming danger.</p><p>But every <i>appetite gauge</i> inside equities points the other way. SPY closed Friday below its 50-day average. Small caps have been shunned for a month — IWM has lagged SPY by 3.2 points over 20 sessions. And the leadership tape is the tell: the three strongest sectors are Energy, Real Estate, and Utilities, with zero growth or cyclical sectors in the top three. Energy leading on a supply shock while utilities and REITs lead everything else is what defense looks like, not what greed looks like.</p><p>The headline backdrop leans the same defensive way without yet showing up in the gauges: Brent settled above <a href="https://www.cnbc.com/2026/07/23/stock-market-today-live-updates.html" rel="noopener">$100 after tanker attacks off Saudi Arabia</a>, the <a href="https://www.cnbc.com/2026/07/22/stock-market-today-live-updates.html" rel="noopener">10-year yield topped 4.7%, its highest since January 2025</a>, and fresh global tariffs landed into the weekend. That is a market being asked to absorb an oil shock and a rates shock at once — so far it is absorbing them, which is exactly what the calm credit and vol readings say.</p><p>Verdict: <b>neutral</b>, and honestly neutral rather than lazily neutral — four signals say on, three say off, four abstain. The character of the negatives matters though: all three are equity-internal rotation signals, which historically turn before credit and vol do. I would treat this as a market to hold existing risk with defined exits, not one to add new risk into strength.</p>
 <div class="card"><h2>Signal ledger<span class="card-r">rubric v1 · each −1 / 0 / +1</span></h2>
