@@ -32,6 +32,7 @@ def main() -> None:
     parsed_url = urlsplit(args.url)
     origin = f"{parsed_url.scheme}://{parsed_url.netloc}"
     gpt_route = f"{origin}/trading/gpt-brief/"
+    gemini_route = f"{origin}/trading/gemini-risk/"
 
     with sync_playwright() as playwright:
         browser = playwright.chromium.launch(headless=True, executable_path=executable)
@@ -274,8 +275,23 @@ def main() -> None:
             check(not mobile_errors, f"mobile JavaScript errors on {route or 'Portfolio'}: {mobile_errors}")
             mobile.close()
 
+        for viewport in ({"width": 1280, "height": 900}, {"width": 390, "height": 844}):
+            gemini = browser.new_page(viewport=viewport)
+            gemini_errors: list[str] = []
+            gemini.on("pageerror", lambda error: gemini_errors.append(str(error)))
+            gemini.goto(gemini_route, wait_until="networkidle")
+            check(gemini.locator("h1").inner_text() == "Gemini Risk", "Gemini Risk route heading is wrong")
+            check(gemini.locator(".gemini-risk-card").count() == 5, "Gemini Risk analysis card count is wrong")
+            check(gemini.locator(".gemini-risk-report").get_attribute("data-rating") == "4", "Gemini Risk rating is wrong")
+            check(gemini.locator(".subnav [aria-current='page']").inner_text() == "Gemini Risk", "Gemini Risk current nav is wrong")
+            check(gemini.locator(".chip-gemini").inner_text() == "Gemini 4", "Gemini Risk status chip is wrong")
+            widths = gemini.evaluate("({body: document.body.scrollWidth, html: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth})")
+            check(widths["body"] <= widths["viewport"] and widths["html"] <= widths["viewport"], f"Gemini Risk overflow at {viewport['width']}px: {widths}")
+            check(not gemini_errors, f"Gemini Risk JavaScript errors at {viewport['width']}px: {gemini_errors}")
+            gemini.close()
+
         browser.close()
-    print("Trading browser smoke: PASS (9 tabs, interactions, deep links, mobile overflow, touch targets)")
+    print("Trading browser smoke: PASS (10 tabs, routed Gemini Risk, interactions, deep links, mobile overflow, touch targets)")
 
 
 if __name__ == "__main__":
