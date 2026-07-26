@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.css?v=1"
+CSS_HREF = "/trading/hypothesis-summary.css?v=2"
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
 END = "<!-- AUTO:HYPOTHESIS_SUMMARY:END -->"
 
