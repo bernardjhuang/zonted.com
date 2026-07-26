@@ -72,6 +72,14 @@ class ScannerRiskPolicyTest(unittest.TestCase):
         self.assertEqual(counts["stale_risk_shadow"], 2)
         self.assertEqual([scan.signal(row)[0] for row in rows], ["ENTER+", "ENTER", "SHORT+", "WATCH"])
 
+    def test_disabled_risk_keeps_raw_signals_without_a_metric_artifact(self):
+        risk = scan.disabled_risk_context("2026-07-24")
+        rows, counts = scan.apply_risk_policy(self.rows, risk)
+        self.assertEqual(risk["label"], "Disabled")
+        self.assertIsNone(risk["score"])
+        self.assertEqual(counts["none"], 4)
+        self.assertEqual([scan.signal(row)[0] for row in rows], ["ENTER+", "ENTER", "SHORT+", "WATCH"])
+
     def test_loader_requires_same_session_unless_backfill_is_explicit(self):
         payload = {
             "schema_version": 2,

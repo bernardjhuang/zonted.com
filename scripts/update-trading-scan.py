@@ -100,6 +100,24 @@ def load_risk_context(path, last_bar, *, allow_stale=False):
     }
 
 
+def disabled_risk_context(last_bar):
+    """Explicitly disable mechanical risk gating when the public risk page is journal-only."""
+    return {
+        "source": None,
+        "source_digest": None,
+        "as_of": last_bar,
+        "label": "Disabled",
+        "score": None,
+        "fresh": True,
+        "policy": {
+            "watchful_action": "none",
+            "elevated_action": "none",
+            "elevated_hard_gate_enabled": False,
+            "stage1_bands_separate_from_unconditional_base_rate": False,
+        },
+    }
+
+
 def apply_risk_policy(source_rows, risk):
     """Preserve raw signals, then add deterministic public verdicts and audit decisions."""
     rows = []
@@ -223,6 +241,7 @@ def parse_args():
     parser.add_argument("quotes", nargs="?", help="optional current quote JSON")
     parser.add_argument("--risk", default=DEFAULT_RISK_ASSET, help="Risk v2 policy JSON")
     parser.add_argument("--allow-stale-risk", action="store_true", help="Backfill only: shadow-log a mismatched risk date and never hard-gate")
+    parser.add_argument("--no-risk", action="store_true", help="Disable mechanical risk gating and publish raw momentum signals")
     return parser.parse_args()
 
 
@@ -240,10 +259,13 @@ def main():
     row_symbols = [str(r.get("symbol") or "") for r in rows]
     if len(row_symbols) != len(set(row_symbols)) or any(not re.fullmatch(r"[A-Z][A-Z0-9.-]{0,14}", symbol) for symbol in row_symbols):
         sys.exit("Scan symbols must be unique, uppercase, and contain only letters, digits, dots, or hyphens")
-    try:
-        risk = load_risk_context(args.risk, p["last_bar"], allow_stale=args.allow_stale_risk)
-    except (OSError, ValueError, json.JSONDecodeError) as error:
-        sys.exit(str(error))
+    if args.no_risk:
+        risk = disabled_risk_context(p["last_bar"])
+    else:
+        try:
+            risk = load_risk_context(args.risk, p["last_bar"], allow_stale=args.allow_stale_risk)
+        except (OSError, ValueError, json.JSONDecodeError) as error:
+            sys.exit(str(error))
     rows, risk_decision_counts = apply_risk_policy(rows, risk)
     p = dict(p)
     p["rows"] = rows
@@ -408,7 +430,9 @@ def main():
         "rows": universe_rows,
     }, separators=(",", ":"), allow_nan=False)
     universe_hash = hashlib.sha256(universe_json.encode()).hexdigest()[:12]
-    if not risk["fresh"]:
+    if risk["label"] == "Disabled":
+        overlay_copy = "Subjective risk journal only · no automated risk gate; momentum signals are published unchanged."
+    elif not risk["fresh"]:
         overlay_copy = f"Risk input dated {risk['as_of']} does not match this scan; no hard gate was allowed."
     elif risk["label"] == "Watchful":
         overlay_copy = f"Risk {risk['label']} {risk['score']:.2f} · qualified longs stay public · half-size"
