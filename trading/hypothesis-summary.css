@@ -1,0 +1,55 @@
+/* Hypotheses summary — page-specific table and two-year sparklines. */
+.hyp-summary{margin:18px 0 26px;border:1px solid var(--bl-border);border-radius:10px;background:var(--bl-card);overflow:hidden}
+.hyp-summary-head{display:flex;align-items:flex-end;justify-content:space-between;gap:18px;padding:15px 18px;background:var(--bl-rowhead);border-bottom:1px solid var(--bl-border)}
+.hyp-summary-head h2{margin:0;font-size:14px;letter-spacing:-.01em}
+.hyp-summary-head p{margin:3px 0 0;color:var(--bl-muted);font-size:12px}
+.hyp-summary-asof{color:var(--bl-faint);font:600 10.5px var(--bl-mono);white-space:nowrap}
+.hyp-summary-wrap{overflow-x:auto}
+.hyp-summary-table{min-width:940px;margin:0}
+.hyp-summary-table th{background:var(--bl-card)}
+.hyp-summary-table td{vertical-align:middle;padding-top:10px;padding-bottom:10px}
+.hyp-summary-table tbody tr:hover td{background:var(--bl-hover)}
+.hyp-summary-symbol a{display:block;color:var(--bl-ink);font:700 14px var(--bl-mono);text-decoration:none}
+.hyp-summary-symbol a:hover{color:var(--bl-accent)}
+.hyp-summary-symbol span{display:block;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono);text-transform:uppercase}
+.hyp-summary-chart{width:260px;min-width:260px;margin:0}
+.hyp-summary-chart svg{display:block;width:100%;height:70px}
+.hyp-summary-chart .grid{stroke:var(--bl-divider);stroke-width:1;vector-effect:non-scaling-stroke}
+.hyp-summary-chart .line{fill:none;stroke:var(--bl-accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
+.hyp-summary-chart.is-down .line{stroke:var(--bl-loss)}
+.hyp-summary-chart .dot{fill:var(--bl-card);stroke:var(--bl-accent);stroke-width:2;vector-effect:non-scaling-stroke}
+.hyp-summary-chart.is-down .dot{stroke:var(--bl-loss)}
+.hyp-summary-chart figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono)}
+.hyp-summary-chart figcaption b{color:var(--bl-ink);font-weight:600}
+.hyp-summary-metrics{min-width:180px;white-space:normal}
+.hyp-summary-metrics span{display:flex;justify-content:space-between;gap:12px;color:var(--bl-ink2);font:600 11px var(--bl-mono)}
+.hyp-summary-metrics span+span{margin-top:4px}
+.hyp-summary-metrics b{color:var(--bl-faint);font:500 10.5px var(--bl-sans)}
+.hyp-summary-level{font:700 12px var(--bl-mono);text-align:right}
+.hyp-summary-level--bear{color:var(--bl-loss)}
+.hyp-summary-level--base{color:var(--bl-accent)}
+.hyp-summary-level--bull{color:var(--bl-gain)}
+.hyp-summary-note{padding:10px 18px 12px;border-top:1px solid var(--bl-divider);color:var(--bl-faint);font-size:11px;line-height:1.5}
+@media(max-width:720px){
+  .hyp-summary{margin-top:14px}
+  .hyp-summary-head{align-items:flex-start;padding:13px 14px}
+  .hyp-summary-asof{white-space:normal;text-align:right}
+  .hyp-summary-wrap{overflow:visible}
+  .hyp-summary-table{min-width:0}
+  .hyp-summary-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+  .hyp-summary-table,.hyp-summary-table tbody,.hyp-summary-table tr,.hyp-summary-table td{display:block;width:100%}
+  .hyp-summary-table tr{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));padding:14px;border-bottom:1px solid var(--bl-divider)}
+  .hyp-summary-table td{padding:5px 0;border:0;white-space:normal}
+  .hyp-summary-table td::before{content:attr(data-label);display:block;margin-bottom:3px;color:var(--bl-faint);font:600 9px var(--bl-sans);text-transform:uppercase;letter-spacing:.06em}
+  .hyp-summary-symbol,.hyp-summary-chart-cell,.hyp-summary-metrics{grid-column:1/-1}
+  .hyp-summary-symbol{padding-top:0!important}
+  .hyp-summary-symbol::before,.hyp-summary-chart-cell::before,.hyp-summary-metrics::before{display:none!important}
+  .hyp-summary-chart{width:100%;min-width:0;margin:7px 0 5px}
+  .hyp-summary-chart svg{height:auto;max-height:92px}
+  .hyp-summary-metrics{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;margin-bottom:7px}
+  .hyp-summary-metrics span{display:block;padding:7px 8px;border:1px solid var(--bl-divider);border-radius:5px;background:var(--bl-hover)}
+  .hyp-summary-metrics span+span{margin:0}
+  .hyp-summary-metrics b{display:block;margin-bottom:2px}
+  .hyp-summary-level{text-align:left!important}
+  .hyp-summary-note{padding:10px 14px}
+}

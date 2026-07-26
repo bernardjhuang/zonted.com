@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "as_of": "2026-07-26",
+  "rows": {
+    "ABT": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$179.5B"},
+        {"label": "2026 adj. P/E", "value": "18.7×"},
+        {"label": "Price / book", "value": "3.4×"}
+      ],
+      "entry_levels": {"bear": 61.0, "base": 96.0, "bull": 144.0},
+      "method": "SEC-first 10-year FCFF DCF",
+      "confidence": "medium"
+    },
+    "HOOD": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$85.5B"},
+        {"label": "TTM P/E", "value": "46.1×"},
+        {"label": "Price / sales", "value": "18.5×"}
+      ],
+      "entry_levels": {"bear": 21.11, "base": 26.38, "bull": 31.66},
+      "method": "Reported earnings + residual-income model",
+      "confidence": "low"
+    },
+    "HIMS": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$6.5B"},
+        {"label": "Price / sales", "value": "2.7×"},
+        {"label": "GAAP earnings", "value": "Loss"}
+      ],
+      "entry_levels": {"bear": 4.55, "base": 6.88, "bull": 9.52},
+      "method": "10-year normalized cash-flow model",
+      "confidence": "medium"
+    },
+    "BYDDY": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$101.4B"},
+        {"label": "TTM P/E", "value": "25.3×"},
+        {"label": "Net margin", "value": "3.5%"}
+      ],
+      "entry_levels": {"bear": 4.77, "base": 6.35, "bull": 7.94},
+      "method": "Normalized reported-earnings fallback",
+      "confidence": "low"
+    },
+    "NTDOY": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$49.0B"},
+        {"label": "TTM P/E", "value": "19.0×"},
+        {"label": "Balance sheet", "value": "Net cash"}
+      ],
+      "entry_levels": {"bear": 7.89, "base": 10.87, "bull": 14.39},
+      "method": "DCF + reported-earnings cross-check",
+      "confidence": "low"
+    },
+    "RBLX": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$34.0B"},
+        {"label": "Price / sales", "value": "6.4×"},
+        {"label": "GAAP earnings", "value": "Loss"}
+      ],
+      "entry_levels": {"bear": 21.27, "base": 33.0, "bull": 47.26},
+      "method": "10-year normalized cash-flow model",
+      "confidence": "medium"
+    },
+    "CEG": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$98.0B"},
+        {"label": "TTM P/E", "value": "23.8×"},
+        {"label": "Price / book", "value": "3.0×"}
+      ],
+      "entry_levels": {"bear": 80.27, "base": 110.82, "bull": 143.79},
+      "method": "10-year normalized cash-flow model",
+      "confidence": "medium"
+    },
+    "RDDT": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$32.5B"},
+        {"label": "TTM P/E", "value": "48.3×"},
+        {"label": "Price / sales", "value": "13.1×"}
+      ],
+      "entry_levels": {"bear": 95.04, "base": 178.9, "bull": 338.53},
+      "method": "Dedicated SEC-first FCFE DCF",
+      "confidence": "low"
+    },
+    "TMO": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$227.0B"},
+        {"label": "TTM P/E", "value": "29.9×"},
+        {"label": "Price / book", "value": "3.9×"}
+      ],
+      "entry_levels": {"bear": 193.07, "base": 275.34, "bull": 377.87},
+      "method": "DCF + reported-earnings cross-check",
+      "confidence": "medium"
+    }
+  }
+}
