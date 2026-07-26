@@ -49,7 +49,7 @@ class TradingThemesContractTest(unittest.TestCase):
         reviews = self.theme["model_reviews"]
         self.assertEqual(
             [row["model"] for row in reviews],
-            ["Grok (version not supplied)", "Claude Fable", "Gemini 3.1 Pro", "GPT-5.6"],
+            ["Grok 4.5", "Claude Fable", "Gemini 3.1 Pro", "GPT-5.6"],
         )
         grok = reviews[0]
         self.assertEqual(grok["role"], "User-supplied original map")
