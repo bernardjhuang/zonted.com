@@ -93,6 +93,10 @@ def main() -> None:
         desktop.goto(f"{origin}/trading/hypotheses/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
         check(hypothesis_links.count() == 9, "not every public hypothesis links to its Momentum chart")
+        for case in ("bear", "base", "bull"):
+            level_lines = desktop.locator(f'.hyp-summary-chart [data-entry-level="{case}"]')
+            check(level_lines.count() == 9, f"not every summary chart has a {case} entry line")
+            check(level_lines.first.evaluate("line => getComputedStyle(line).stroke") != "none", f"{case} entry line is not styled")
         expected_hypothesis_hrefs = [f"/trading/watchlist/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "TMO")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis Momentum chart links are incomplete or misordered")
         desktop.goto(f"{origin}/trading/watchlist/?chart=RBLX#scan", wait_until="networkidle")

@@ -15,6 +15,10 @@
 .hyp-summary-chart{width:260px;min-width:260px;margin:0}
 .hyp-summary-chart svg{display:block;width:100%;height:70px}
 .hyp-summary-chart .grid{stroke:var(--bl-divider);stroke-width:1;vector-effect:non-scaling-stroke}
+.hyp-summary-chart .entry-line{fill:none;stroke-width:1.35;opacity:.9;vector-effect:non-scaling-stroke}
+.hyp-summary-chart .entry-line--bear{stroke:var(--bl-loss);stroke-dasharray:5 3}
+.hyp-summary-chart .entry-line--base{stroke:var(--bl-accent);stroke-width:1.7}
+.hyp-summary-chart .entry-line--bull{stroke:var(--bl-gain);stroke-dasharray:1.5 3}
 .hyp-summary-chart .line{fill:none;stroke:var(--bl-accent);stroke-width:2;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .hyp-summary-chart.is-down .line{stroke:var(--bl-loss)}
 .hyp-summary-chart .dot{fill:var(--bl-card);stroke:var(--bl-accent);stroke-width:2;vector-effect:non-scaling-stroke}
