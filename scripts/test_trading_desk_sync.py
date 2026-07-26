@@ -174,7 +174,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
-            self.assertIn('/trading/desk.css?v=18', page, path.as_posix())
+            self.assertIn('/trading/desk.css?v=19', page, path.as_posix())
             self.assertIn('/trading/desk.js?v=18', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
