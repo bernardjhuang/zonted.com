@@ -113,6 +113,28 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotIn(junk, page)
             self.assertNotIn(junk, script)
 
+    def test_gemini_risk_route_matches_structured_model_output(self) -> None:
+        page = (ROOT / "trading" / "gemini-risk" / "index.html").read_text()
+        payload = json.loads((ROOT / "trading" / "gemini-risk.json").read_text())
+        script = (ROOT / "trading" / "desk.js").read_text()
+        entry = payload["entries"][0]
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(payload["model"], "Gemini 3.1 Pro")
+        self.assertEqual(entry["stance"], "Neutral to Risk-Off")
+        self.assertEqual(entry["rating"], 4)
+        self.assertEqual(entry["market_data_through"], "2026-07-24")
+        self.assertEqual(len(entry["sections"]), 5)
+        self.assertIn("<title>Gemini Risk", page)
+        self.assertIn("<h1>Gemini Risk</h1>", page)
+        self.assertIn('aria-current="page">Gemini Risk</a>', page)
+        self.assertIn('data-model="Gemini 3.1 Pro"', page)
+        self.assertIn('data-rating="4"', page)
+        self.assertEqual(page.count('class="gemini-risk-card"'), 5)
+        self.assertEqual(page.count("The stock market has been mixed"), 1)
+        self.assertIn("Attribution and citation note", page)
+        self.assertIn("/trading/gemini-risk.json", script)
+        self.assertIn("setChip('gemini', 'Gemini'", script)
+
     def test_position_heat_bars_are_replaced_by_price_charts(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
@@ -166,7 +188,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
     def test_trading_nav_has_home_logo_and_vwap_uses_three_columns(self) -> None:
         styles = (ROOT / "trading" / "desk.css").read_text()
-        pages = [ROOT / "trading" / "index.html", *[route.path for route in sync.ROUTES.values()], ROOT / "trading" / "gpt-risk" / "index.html", ROOT / "trading" / "hypotheses" / "index.html", ROOT / "trading" / "grok-brief" / "index.html"]
+        candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
+        pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
+        self.assertEqual(len(pages), 13)
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
@@ -174,8 +198,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
+            self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
+            self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
             self.assertIn('/trading/desk.css?v=19', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=18', page, path.as_posix())
+            self.assertIn('/trading/desk.js?v=19', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 

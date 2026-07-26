@@ -11,10 +11,10 @@
 
   const riskJournalData = fetch('/trading/risk-journal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-  /* ── status chips: three independent risk-appetite reads, all 0–10.
+  /* ── status chips: four independent risk-appetite reads, all 0–10.
      Each updates on its own; a failed fetch leaves that chip's static
      fallback text in place. Stance color uses the Fable rubric bands
-     (≥6.25 on, ≤3.75 off) so all three are judged on the same scale. ── */
+     (≥6.25 on, ≤3.75 off) so all four are judged on the same scale. ── */
   const setChip = (key, name, value, stanceText) => {
     const chip = $('.chip-' + key);
     if (!chip || !Number.isFinite(value)) return;
@@ -30,6 +30,10 @@
   fetch('/trading/fable-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
     const latest = d && d.entries && d.entries[0];
     if (latest) setChip('fable', 'Fable', Number(latest.rating), latest.verdict);
+  });
+  fetch('/trading/gemini-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
+    const latest = d && d.entries && d.entries[0];
+    if (latest) setChip('gemini', 'Gemini', Number(latest.rating), latest.stance);
   });
   fetch('/trading/grok-risk/', { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').catch(() => '').then(html => {
     const m = /Risk[\s-]*(On|Off|Neutral)\s*\((\d+(?:\.\d+)?)\s*\/\s*10\)/i.exec(html)
