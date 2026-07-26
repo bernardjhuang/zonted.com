@@ -1,11 +1,11 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-07-26T16:14:53Z",
+  "updated_at": "2026-07-26T19:57:20Z",
   "as_of": "2026-07-24",
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-    "consensus": "Median of the three models that returned explicit scores: GPT-5.6, Claude Fable, and Gemini 3.1 Pro. Grok supplied the original opportunity map but no numeric score, so none was invented.",
+    "consensus": "Energy uses the median of GPT-5.6, Claude Fable, and Gemini 3.1 Pro. New themes may begin with a single explicitly identified reviewer until independent model reviews are commissioned; missing model scores are never invented.",
     "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
   },
   "themes": [
@@ -165,16 +165,66 @@
         "date": "2026-07-24",
         "note": "Trailing P/E and distance from 52-week high are context, not valuation conclusions.",
         "rows": [
-          {"symbol": "GEV", "price": "$1,015", "pe": "30.2×", "off_high": "−15%"},
-          {"symbol": "ETN", "price": "$404", "pe": "38.7×", "off_high": "−7%"},
-          {"symbol": "VRT", "price": "$290", "pe": "73.8×", "off_high": "−24%"},
-          {"symbol": "PWR", "price": "$626", "pe": "86.6×", "off_high": "−21%"},
-          {"symbol": "CEG", "price": "$274", "pe": "21.9×", "off_high": "−34%"},
-          {"symbol": "VST", "price": "$163", "pe": "25.5×", "off_high": "−26%"},
-          {"symbol": "D", "price": "$71", "pe": "21.2×", "off_high": "−3%"},
-          {"symbol": "ETR", "price": "$116", "pe": "29.3×", "off_high": "−2%"},
-          {"symbol": "OKLO", "price": "$40", "pe": "Loss-making", "off_high": "−79%"},
-          {"symbol": "BE", "price": "$185", "pe": "Loss-making", "off_high": "−47%"}
+          {
+            "symbol": "GEV",
+            "price": "$1,015",
+            "pe": "30.2×",
+            "off_high": "−15%"
+          },
+          {
+            "symbol": "ETN",
+            "price": "$404",
+            "pe": "38.7×",
+            "off_high": "−7%"
+          },
+          {
+            "symbol": "VRT",
+            "price": "$290",
+            "pe": "73.8×",
+            "off_high": "−24%"
+          },
+          {
+            "symbol": "PWR",
+            "price": "$626",
+            "pe": "86.6×",
+            "off_high": "−21%"
+          },
+          {
+            "symbol": "CEG",
+            "price": "$274",
+            "pe": "21.9×",
+            "off_high": "−34%"
+          },
+          {
+            "symbol": "VST",
+            "price": "$163",
+            "pe": "25.5×",
+            "off_high": "−26%"
+          },
+          {
+            "symbol": "D",
+            "price": "$71",
+            "pe": "21.2×",
+            "off_high": "−3%"
+          },
+          {
+            "symbol": "ETR",
+            "price": "$116",
+            "pe": "29.3×",
+            "off_high": "−2%"
+          },
+          {
+            "symbol": "OKLO",
+            "price": "$40",
+            "pe": "Loss-making",
+            "off_high": "−79%"
+          },
+          {
+            "symbol": "BE",
+            "price": "$185",
+            "pe": "Loss-making",
+            "off_high": "−47%"
+          }
         ]
       },
       "falsifiers": [
@@ -196,14 +246,344 @@
         "Real deployment milestones for nuclear restarts and SMRs—not LOIs."
       ],
       "sources": [
-        {"label": "PJM 2028/29 auction results", "url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf"},
-        {"label": "PJM auction cap and 6.8 GW shortfall", "url": "https://www.utilitydive.com/news/pjm-capacity-auction-price-cap-reserve-shortfall/825282/"},
-        {"label": "ERCOT large-load update", "url": "https://www.ercot.com/files/docs/2026/05/24/8-Interconnection-and-Grid-Analysis-Update.pdf"},
-        {"label": "GE Vernova 116 GW turbine backlog", "url": "https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/"},
-        {"label": "Hyperscaler 2026 capex concentration", "url": "https://www.cnbc.com/2026/02/06/google-microsoft-meta-amazon-ai-cash.html"},
-        {"label": "Data-center delay forecast", "url": "https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/"},
-        {"label": "Q1 2026 local-opposition tracker", "url": "https://www.datacenterwatch.org/q1-2026"},
-        {"label": "State data-center legislation", "url": "https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape"}
+        {
+          "label": "PJM 2028/29 auction results",
+          "url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf"
+        },
+        {
+          "label": "PJM auction cap and 6.8 GW shortfall",
+          "url": "https://www.utilitydive.com/news/pjm-capacity-auction-price-cap-reserve-shortfall/825282/"
+        },
+        {
+          "label": "ERCOT large-load update",
+          "url": "https://www.ercot.com/files/docs/2026/05/24/8-Interconnection-and-Grid-Analysis-Update.pdf"
+        },
+        {
+          "label": "GE Vernova 116 GW turbine backlog",
+          "url": "https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/"
+        },
+        {
+          "label": "Hyperscaler 2026 capex concentration",
+          "url": "https://www.cnbc.com/2026/02/06/google-microsoft-meta-amazon-ai-cash.html"
+        },
+        {
+          "label": "Data-center delay forecast",
+          "url": "https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/"
+        },
+        {
+          "label": "Q1 2026 local-opposition tracker",
+          "url": "https://www.datacenterwatch.org/q1-2026"
+        },
+        {
+          "label": "State data-center legislation",
+          "url": "https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape"
+        }
+      ]
+    },
+    {
+      "id": "frontier-intelligence-value-capture",
+      "category": "Frontier intelligence",
+      "title": "Frontier intelligence → physical validation bottleneck",
+      "horizon": "2026–2035",
+      "status": "Initial synthesis",
+      "owner_belief": "Another jump in model intelligence matters most where outcomes are still limited by scientific search, experiment design, simulation, verification, and control of physical systems. As hypotheses become cheap, scarce laboratory capacity, trusted measurement, proprietary data, and regulated validation loops should capture disproportionate value.",
+      "conviction": "High conviction that frontier capability will accelerate discovery. Medium conviction on public-equity capture; the cleanest beneficiaries are often diversified tools, software, and services companies rather than pure-play discovery stories.",
+      "final_verdict": "The biggest breakthroughs may occur in biology, materials, robotics, physics, and space, but the strongest public-market economics may sit one layer down in laboratory automation, instruments, simulation, metrology, test, and provenance. The 88/100 knowledge and 65/100 price scores are medians across the layer map—not cross-model consensus. Independent model reviews are still pending.",
+      "consensus_scores": {
+        "knowledge_saturation": 88,
+        "price_saturation": 65
+      },
+      "model_reviews": [
+        {
+          "model": "GPT-5.6",
+          "role": "Initial synthesis · cross-model review pending",
+          "knowledge_saturation": 88,
+          "price_saturation": 65,
+          "verdict": "Frontier discovery is widely anticipated, but value capture is mapped badly. The residual edge is the physical validation stack: instruments, automation, samples, simulation, metrology, test, and regulated workflow software."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Lab automation + measurement",
+          "symbols": "A · TMO · DHR · AVTR · AZTA · MTD",
+          "knowledge_saturation": 70,
+          "price_saturation": 70,
+          "read": "The best picks-and-shovels layer. AI can propose experiments faster than labs can run, reproduce, and audit them. Agilent CrossLab, Thermo Fisher Unity, Avantor services, Azenta sample management, and precision instruments sit near that bottleneck."
+        },
+        {
+          "layer": "Materials + autonomous chemistry",
+          "symbols": "A · BRKR · MTD · TMO · SDGR",
+          "knowledge_saturation": 65,
+          "price_saturation": 45,
+          "read": "Potentially the least saturated major theme. Closed-loop labs can search catalysts, batteries, semiconductors, and specialty materials, but manufacturing scale-up remains a separate failure point."
+        },
+        {
+          "layer": "Genetics + protein engineering",
+          "symbols": "TMO · DHR · ILMN · RXRX · SDGR · CRSP · BEAM",
+          "knowledge_saturation": 88,
+          "price_saturation": 48,
+          "read": "Scientific upside is enormous and the original bubble has fractured. Proprietary wet-lab feedback and human datasets matter more than generic AI-drug branding; clinical attrition still decides the economics."
+        },
+        {
+          "layer": "Semiconductor design / EDA",
+          "symbols": "CDNS · SNPS · KEYS · KLAC · AMAT",
+          "knowledge_saturation": 95,
+          "price_saturation": 90,
+          "read": "A nearly ideal AI workflow with excellent incumbent capture—and almost no narrative obscurity. Verification, test, advanced packaging, and yield control may offer better residual edge than design copilots."
+        },
+        {
+          "layer": "Robotics + embodied autonomy",
+          "symbols": "TER · ROK · ISRG · SYM",
+          "knowledge_saturation": 90,
+          "price_saturation": 78,
+          "read": "Better world models can expand adaptable physical labor, but reliability, safety, integration, service networks, and payback periods remain brutal. Vertical robots with proprietary workflows are stronger than generic humanoid stories."
+        },
+        {
+          "layer": "Cybersecurity + defense autonomy",
+          "symbols": "PANW · CRWD · FTNT · NET · PLTR",
+          "knowledge_saturation": 95,
+          "price_saturation": 90,
+          "read": "Frontier models improve both attackers and defenders. Telemetry, identity, trust, and installed platforms support capture, but the obvious public basket already prices a durable arms race."
+        },
+        {
+          "layer": "Fundamental physics + mathematics",
+          "symbols": "No clean proxy · KEYS · BRKR",
+          "knowledge_saturation": 60,
+          "price_saturation": 20,
+          "read": "The largest discovery upside and weakest direct public capture. Instruments and simulation may benefit, but a theorem, plasma insight, or new material does not automatically map to shareholder value."
+        },
+        {
+          "layer": "Finance + insurance",
+          "symbols": "MCO · SPGI · PGR · CB · AON · AJG",
+          "knowledge_saturation": 92,
+          "price_saturation": 55,
+          "read": "Likely a margin, speed, and risk-selection theme more than a scientific breakthrough. Incumbents with proprietary histories, distribution, and regulatory permission should capture more than generic AI vendors."
+        },
+        {
+          "layer": "Space autonomy + geospatial intelligence",
+          "symbols": "RKLB · RDW · PL · BKSY · IRDM · LUNR",
+          "knowledge_saturation": 88,
+          "price_saturation": 70,
+          "read": "Autonomy is valuable when latency and operator bandwidth bind, but launch, hardware, procurement, and financing still dominate. Mission software can improve without making every space equity economical."
+        },
+        {
+          "layer": "Weather + climate systems",
+          "symbols": "SPGI · MCO · PGR · DE · TRMB",
+          "knowledge_saturation": 75,
+          "price_saturation": 35,
+          "read": "Forecasting gains may diffuse as a public good. The better question is which insurer, farm platform, energy trader, or logistics network owns assets that become more valuable when forecasts improve."
+        },
+        {
+          "layer": "Energy / fusion / grid optimization",
+          "symbols": "CEG · BWXT · GEV · OKLO · SMR",
+          "knowledge_saturation": 75,
+          "price_saturation": 65,
+          "read": "AI can improve plasma control, materials, reactor design, and grid dispatch, but cannot delete licensing, construction, and physical validation. Operating assets deserve different underwriting from pre-revenue developers."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where the thesis breaks",
+          "bullets": [
+            "It can confuse benchmark progress with scientific discovery. FrontierScience still shows a large research gap, but benchmark gains do not prove externally verified novelty.",
+            "Intelligence may cease to be the binding constraint once experiments hit biology, materials, manufacturing, safety, or regulation.",
+            "Model capabilities can commoditize faster than public companies build defensible data and validation loops.",
+            "The biggest breakthroughs may accrue to private labs, governments, universities, or broad incumbents with theme exposure too small to move the stock.",
+            "More hypotheses can create more false positives, replication burden, and instrument demand without improving final clinical or industrial success."
+          ]
+        },
+        {
+          "title": "Where the stock map breaks",
+          "bullets": [
+            "Laboratory tools remain cyclical and exposed to biotech funding, China, academic budgets, and post-pandemic inventory digestion.",
+            "EDA, robotics, and cyber names can be excellent companies and terrible entries when multiples already assume the breakthrough.",
+            "Pure-play AI-biotech, space, SMR, and humanoid equities often need financing long before the science pays off.",
+            "Diversified instruments and service companies may capture the bottleneck but dilute the theme with slower businesses.",
+            "Trailing P/E is only a screen. Backlog quality, recurring consumables, service attach, leverage, dilution, and free-cash-flow conversion decide whether the theme reaches shareholders."
+          ]
+        }
+      ],
+      "what_survived": [
+        "Frontier science is not solved: GPT-5.2 scored 77% on original science-olympiad problems but only 25% on open-ended PhD-level research tasks in FrontierScience.",
+        "Automated laboratories are moving from concept toward infrastructure: DeepMind announced a UK materials lab designed to synthesize and characterize hundreds of materials per day.",
+        "Current self-driving labs remain small and bespoke, making orchestration, standards, and trusted instrumentation the near-term bottleneck.",
+        "Physical autonomy is already deployed at scale—542,000 industrial robots were installed in 2024—even though general humanoid economics remain unproven.",
+        "NASA executed AI-planned Perseverance drives in December 2025, proving that autonomy can move from research into mission operations.",
+        "Regulated validation remains unavoidable: FDA guidance ties AI evidence in drug development to a specific context of use and credibility assessment."
+      ],
+      "residual_edge": [
+        "Instrument and service revenue tied to experiment throughput rather than a single scientific winner.",
+        "Sample custody, cold-chain storage, provenance, and regulated laboratory workflows that become harder—not easier—as experiments scale.",
+        "Verification, test, metrology, and simulation spending that grows faster than the number of proposed designs.",
+        "Proprietary wet-lab or human datasets with repeat feedback loops, not scraped literature plus a foundation model.",
+        "Vertical robotics where uptime, service, and workflow data create switching costs.",
+        "Financial and insurance incumbents whose private data and regulatory permission convert better models into lower losses or better capital allocation.",
+        "Assets with revenue now and frontier optionality later; avoid needing the breakthrough to finance the company."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "A · AVTR · AZTA · TMO · MTD · BRKR · VEEV",
+          "why": "These sit near physical validation, sample management, lab service, precision measurement, and regulated workflow. Underwrite recurring revenue, service attach, leverage, and end-market recovery."
+        },
+        {
+          "bucket": "Good businesses, crowded prices",
+          "symbols": "CDNS · SNPS · TER · ISRG · PANW · CRWD · KLAC",
+          "why": "The capability-to-revenue path is credible. The valuation cushion often is not; wait for price, estimates, or both to reset."
+        },
+        {
+          "bucket": "Speculation, not core exposure",
+          "symbols": "RXRX · SDGR · BEAM · RKLB · LUNR · OKLO · SMR",
+          "why": "Require clinical proof, mission economics, funded projects, and dilution math. A frontier narrative cannot pay for trials, launches, reactors, or factories."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Robinhood fundamentals",
+        "date": "2026-07-24",
+        "note": "Trailing P/E and distance from 52-week high are screening context, not full valuation work.",
+        "rows": [
+          {
+            "symbol": "A",
+            "price": "$139.89",
+            "pe": "27.3×",
+            "off_high": "−13%"
+          },
+          {
+            "symbol": "AVTR",
+            "price": "$11.43",
+            "pe": "Loss-making",
+            "off_high": "−28%"
+          },
+          {
+            "symbol": "AZTA",
+            "price": "$28.29",
+            "pe": "Loss-making",
+            "off_high": "−32%"
+          },
+          {
+            "symbol": "TMO",
+            "price": "$573.64",
+            "pe": "29.9×",
+            "off_high": "−11%"
+          },
+          {
+            "symbol": "VEEV",
+            "price": "$182.00",
+            "pe": "35.1×",
+            "off_high": "−41%"
+          },
+          {
+            "symbol": "CDNS",
+            "price": "$335.24",
+            "pe": "85.1×",
+            "off_high": "−20%"
+          },
+          {
+            "symbol": "SNPS",
+            "price": "$378.26",
+            "pe": "96.5×",
+            "off_high": "−42%"
+          },
+          {
+            "symbol": "TER",
+            "price": "$365.48",
+            "pe": "59.7×",
+            "off_high": "−25%"
+          },
+          {
+            "symbol": "PANW",
+            "price": "$328.09",
+            "pe": "291.2×",
+            "off_high": "−11%"
+          },
+          {
+            "symbol": "RKLB",
+            "price": "$69.31",
+            "pe": "Loss-making",
+            "off_high": "−54%"
+          },
+          {
+            "symbol": "PGR",
+            "price": "$210.76",
+            "pe": "10.3×",
+            "off_high": "−17%"
+          },
+          {
+            "symbol": "MTD",
+            "price": "$1,327.72",
+            "pe": "31.3×",
+            "off_high": "−13%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "Wet-lab hit rates, cycle times, or cost per validated candidate fail to improve despite better models.",
+        "Closed-loop autonomous laboratories do not scale beyond bespoke demonstrations.",
+        "Clinical attrition remains unchanged after controlling for target class and trial design.",
+        "Robot intervention rates, maintenance, and safety prevent attractive labor economics.",
+        "AI-designed chips or materials fail external verification or cannot be manufactured economically.",
+        "Model commoditization pushes value to cloud vendors while tools, data, and workflow owners lose pricing power.",
+        "Validation spending does not grow with hypothesis volume, disproving the bottleneck thesis."
+      ],
+      "watch_next": [
+        "Wet-lab hit rate, experiment throughput, and cost per validated candidate.",
+        "Autonomous labs operating outside one-off pilots, with reproducible cross-lab results.",
+        "Clinical candidates whose design or patient selection was materially AI-generated.",
+        "Robot uptime, intervention rate, payback period, and task-transfer performance.",
+        "AI-designed blocks that tape out and pass independent verification.",
+        "External validation on unsaturated research benchmarks—not self-graded model demos.",
+        "Revenue and margins from AI-native products rather than management mentions.",
+        "Whether laboratory service, test, and validation spending grows faster than model-software spending."
+      ],
+      "sources": [
+        {
+          "label": "FrontierScience expert-level benchmark",
+          "url": "https://arxiv.org/abs/2601.21165"
+        },
+        {
+          "label": "OpenAI: AI as a Scientific Collaborator",
+          "url": "https://cdn.openai.com/pdf/f4b4a5da-b2de-418d-9fcd-6b293e9dc157/oai_ai-as-a-scientific-collaborator_jan-2026.pdf"
+        },
+        {
+          "label": "Stanford AI Index: Science and Medicine",
+          "url": "https://hai.stanford.edu/assets/files/hai_ai-index-report-2025_chapter5_final.pdf"
+        },
+        {
+          "label": "DeepMind automated UK materials lab",
+          "url": "https://deepmind.google/blog/strengthening-our-partnership-with-the-uk-government-to-support-prosperity-and-security-in-the-ai-era/"
+        },
+        {
+          "label": "Nature: multi-agent autonomous materials labs",
+          "url": "https://www.nature.com/articles/s43246-026-01219-5"
+        },
+        {
+          "label": "US Department of Energy Genesis Mission",
+          "url": "https://www.energy.gov/genesis-mission-demonstration"
+        },
+        {
+          "label": "FDA AI evidence framework for drugs and biologics",
+          "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological"
+        },
+        {
+          "label": "NASA first AI-planned Perseverance drive",
+          "url": "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-first-ai-planned-drive-on-mars/"
+        },
+        {
+          "label": "IFR World Robotics 2025",
+          "url": "https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years"
+        },
+        {
+          "label": "Synopsys AI-powered EDA",
+          "url": "https://www.synopsys.com/ai/ai-powered-eda.html"
+        },
+        {
+          "label": "BIS 2026 Annual Economic Report on frontier-AI cyber risk",
+          "url": "https://www.bis.org/publ/arpdf/ar2026e1.htm"
+        },
+        {
+          "label": "NAIC: Artificial Intelligence in insurance",
+          "url": "https://content.naic.org/insurance-topics/artificial-intelligence"
+        }
       ]
     }
   ]

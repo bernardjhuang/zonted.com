@@ -56,13 +56,24 @@
     <tbody>${snapshot.rows.map(row => `<tr><td class="mono"><strong>${esc(row.symbol)}</strong></td><td class="num mono">${esc(row.price)}</td><td class="num mono">${esc(row.pe)}</td><td class="num mono">${esc(row.off_high)}</td></tr>`).join('')}</tbody>
   </table><p class="theme-table-note">${esc(snapshot.source)} · ${esc(snapshot.date)} · ${esc(snapshot.note)}</p></div>`;
 
-  const renderTheme = (theme, method) => `<article class="theme-record" id="${esc(theme.id)}">
+  const renderAdversarial = review => {
+    const columns = Array.isArray(review) ? review : [
+      { title: 'Where Grok breaks', bullets: review.grok },
+      { title: 'Where Fable breaks', bullets: review.fable },
+    ];
+    return `<div class="theme-dual-review">${columns.map(column => `
+      <article><h3>${esc(column.title)}</h3>${bullets(column.bullets)}</article>`).join('')}</div>`;
+  };
+
+  const renderTheme = (theme, method) => {
+    const sectionId = suffix => `${theme.id}-${suffix}`;
+    return `<article class="theme-record" id="${esc(theme.id)}">
     <header class="theme-hero">
       <div class="theme-kicker"><span>${esc(theme.category)}</span><span>${esc(theme.horizon)}</span><span>${esc(theme.status)}</span></div>
       <h2>${esc(theme.title)}</h2>
       <p class="theme-belief">${esc(theme.owner_belief)}</p>
       <p class="theme-conviction">${esc(theme.conviction)}</p>
-      <div class="theme-consensus" aria-label="Consensus saturation scores">
+      <div class="theme-consensus" aria-label="Theme saturation scores">
         ${score('Knowledge saturation', theme.consensus_scores.knowledge_saturation, 'knowledge')}
         ${score('Price saturation', theme.consensus_scores.price_saturation, 'price')}
       </div>
@@ -77,41 +88,38 @@
       <p><strong>Important:</strong> ${esc(method.warning)}</p>
     </details>
 
-    <section class="theme-section" aria-labelledby="model-reviews-heading">
-      <div class="theme-section-head"><span>01</span><div><h2 id="model-reviews-heading">Model reviews</h2><p>The disagreement is the useful part.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('model-reviews-heading'))}">
+      <div class="theme-section-head"><span>01</span><div><h2 id="${esc(sectionId('model-reviews-heading'))}">Model reviews</h2><p>Missing reviewers stay missing; scores are never padded.</p></div></div>
       ${renderModels(theme.model_reviews)}
     </section>
 
-    <section class="theme-section" aria-labelledby="layer-scorecard-heading">
-      <div class="theme-section-head"><span>02</span><div><h2 id="layer-scorecard-heading">Saturation by layer</h2><p>One theme, radically different prices and economics.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('layer-scorecard-heading'))}">
+      <div class="theme-section-head"><span>02</span><div><h2 id="${esc(sectionId('layer-scorecard-heading'))}">Saturation by layer</h2><p>One theme, radically different prices and economics.</p></div></div>
       ${renderLayers(theme.layer_scorecard)}
     </section>
 
-    <section class="theme-section" aria-labelledby="adversarial-heading">
-      <div class="theme-section-head"><span>03</span><div><h2 id="adversarial-heading">Adversarial review</h2><p>Both source theses get punched in the face.</p></div></div>
-      <div class="theme-dual-review">
-        <article><h3>Where Grok breaks</h3>${bullets(theme.adversarial_review.grok)}</article>
-        <article><h3>Where Fable breaks</h3>${bullets(theme.adversarial_review.fable)}</article>
-      </div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('adversarial-heading'))}">
+      <div class="theme-section-head"><span>03</span><div><h2 id="${esc(sectionId('adversarial-heading'))}">Adversarial review</h2><p>The thesis and the stock map both get punched in the face.</p></div></div>
+      ${renderAdversarial(theme.adversarial_review)}
     </section>
 
-    <section class="theme-section" aria-labelledby="survived-heading">
-      <div class="theme-section-head"><span>04</span><div><h2 id="survived-heading">What survives the attack</h2><p>The parts strong enough to keep.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('survived-heading'))}">
+      <div class="theme-section-head"><span>04</span><div><h2 id="${esc(sectionId('survived-heading'))}">What survives the attack</h2><p>The parts strong enough to keep.</p></div></div>
       <div class="theme-copy-card">${bullets(theme.what_survived)}</div>
     </section>
 
-    <section class="theme-section" aria-labelledby="edge-heading">
-      <div class="theme-section-head"><span>05</span><div><h2 id="edge-heading">Where edge may remain</h2><p>Contracts and constraints, not the headline.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('edge-heading'))}">
+      <div class="theme-section-head"><span>05</span><div><h2 id="${esc(sectionId('edge-heading'))}">Where edge may remain</h2><p>Contracts and constraints, not the headline.</p></div></div>
       <div class="theme-copy-card theme-edge">${bullets(theme.residual_edge)}</div>
     </section>
 
-    <section class="theme-section" aria-labelledby="priority-heading">
-      <div class="theme-section-head"><span>06</span><div><h2 id="priority-heading">Research priority</h2><p>This is a diligence queue, not a buy list.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('priority-heading'))}">
+      <div class="theme-section-head"><span>06</span><div><h2 id="${esc(sectionId('priority-heading'))}">Research priority</h2><p>This is a diligence queue, not a buy list.</p></div></div>
       ${renderBuckets(theme.research_priority)}
     </section>
 
-    <section class="theme-section" aria-labelledby="valuation-heading">
-      <div class="theme-section-head"><span>07</span><div><h2 id="valuation-heading">Valuation snapshot</h2><p>Friday close context for the market’s current grading.</p></div></div>
+    <section class="theme-section" aria-labelledby="${esc(sectionId('valuation-heading'))}">
+      <div class="theme-section-head"><span>07</span><div><h2 id="${esc(sectionId('valuation-heading'))}">Valuation snapshot</h2><p>Friday close context for the market’s current grading.</p></div></div>
       ${renderValuation(theme.valuation_snapshot)}
     </section>
 
@@ -126,6 +134,7 @@
       <p>Thematic research, not investment advice. Scores are judgments, not forecasts.</p>
     </footer>
   </article>`;
+  };
 
   fetch(shell.dataset.url, { cache: 'no-store' })
     .then(response => {

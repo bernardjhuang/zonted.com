@@ -20,7 +20,9 @@ class TradingThemesContractTest(unittest.TestCase):
         cls.page = PAGE.read_text()
         cls.payload = json.loads(DATA.read_text())
         cls.script = SCRIPT.read_text()
-        cls.theme = cls.payload["themes"][0]
+        cls.energy = next(theme for theme in cls.payload["themes"] if theme["id"] == "ai-power-scarcity")
+        cls.frontier = next(theme for theme in cls.payload["themes"] if theme["id"] == "frontier-intelligence-value-capture")
+        cls.theme = cls.energy
 
     def test_route_loads_exact_versioned_assets(self) -> None:
         data_hash = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
@@ -34,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 1)
+        self.assertEqual(len(self.payload["themes"]), 2)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -61,7 +63,7 @@ class TradingThemesContractTest(unittest.TestCase):
             values = [row[field] for row in scored]
             self.assertTrue(all(isinstance(value, int) and 0 <= value <= 100 for value in values))
             self.assertEqual(self.theme["consensus_scores"][field], int(statistics.median(values)))
-        self.assertIn("none was invented", self.payload["method"]["consensus"])
+        self.assertIn("never invented", self.payload["method"]["consensus"])
 
     def test_layer_scores_and_research_buckets_are_complete(self) -> None:
         layers = self.theme["layer_scorecard"]
@@ -85,8 +87,28 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertTrue(any("pjm.com" in row["url"] for row in self.theme["sources"]))
         self.assertTrue(any("ercot.com" in row["url"] for row in self.theme["sources"]))
 
+    def test_frontier_intelligence_theme_is_complete_and_honest(self) -> None:
+        theme = self.frontier
+        self.assertEqual(theme["category"], "Frontier intelligence")
+        self.assertEqual(theme["consensus_scores"], {"knowledge_saturation": 88, "price_saturation": 65})
+        self.assertEqual(len(theme["layer_scorecard"]), 11)
+        self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6"])
+        self.assertIn("cross-model review pending", theme["model_reviews"][0]["role"])
+        self.assertNotIn("Claude", " ".join(row["model"] for row in theme["model_reviews"]))
+        self.assertNotIn("Gemini", " ".join(row["model"] for row in theme["model_reviews"]))
+        self.assertIsInstance(theme["adversarial_review"], list)
+        self.assertGreaterEqual(len(theme["what_survived"]), 6)
+        self.assertGreaterEqual(len(theme["residual_edge"]), 7)
+        self.assertGreaterEqual(len(theme["falsifiers"]), 7)
+        self.assertGreaterEqual(len(theme["sources"]), 12)
+        self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+        self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 10)
+        self.assertIn("missing model scores are never invented", self.payload["method"]["consensus"])
+
     def test_renderer_escapes_copy_and_exposes_all_sections(self) -> None:
         self.assertIn("const esc =", self.script)
+        self.assertIn("const sectionId =", self.script)
+        self.assertIn("const renderAdversarial =", self.script)
         self.assertIn("replaceAll('&', '&amp;')", self.script)
         for text in (
             "Model reviews",
