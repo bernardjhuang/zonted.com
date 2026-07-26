@@ -1,0 +1,110 @@
+{
+ "schema_version": 1,
+ "entries": [
+  {
+   "date": "2026-07-25",
+   "assess_for": "Mon Jul 27 open",
+   "verdict": "NEUTRAL",
+   "subtitle": "calm gauges, defensive internals",
+   "score": 1,
+   "n_signals": 11,
+   "composite": "+0.09",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "738.93 vs 744.11 \u00b7 \u22120.70%",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "70.9",
+     "score": 1
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLE \u00b7 XLRE \u00b7 XLU \u2014 zero cyclicals",
+     "score": -1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22123.2 pts",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "2 of 7 \u00b7 BTC +0.5% this weekend",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "USDJPY +0.79% (yen weaker)",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The ledger splits cleanly down the middle, and the split itself is the story. Every <i>stress gauge</i> is quiet: bond volatility is outright calm (MOVE 70.9), the VIX curve is in healthy contango, high-yield spreads sit at a tight 2.77% and barely moved all week, and 10 of 13 US market groups still trade above their year-to-date cost basis. Nothing in vol or credit is confirming danger.</p>",
+    "<p>But every <i>appetite gauge</i> inside equities points the other way. SPY closed Friday below its 50-day average. Small caps have been shunned for a month \u2014 IWM has lagged SPY by 3.2 points over 20 sessions. And the leadership tape is the tell: the three strongest sectors are Energy, Real Estate, and Utilities, with zero growth or cyclical sectors in the top three. Energy leading on a supply shock while utilities and REITs lead everything else is what defense looks like, not what greed looks like.</p>",
+    "<p>The headline backdrop leans the same defensive way without yet showing up in the gauges: Brent settled above <a href=\"https://www.cnbc.com/2026/07/23/stock-market-today-live-updates.html\" rel=\"noopener\">$100 after tanker attacks off Saudi Arabia</a>, the <a href=\"https://www.cnbc.com/2026/07/22/stock-market-today-live-updates.html\" rel=\"noopener\">10-year yield topped 4.7%, its highest since January 2025</a>, and fresh global tariffs landed into the weekend. That is a market being asked to absorb an oil shock and a rates shock at once \u2014 so far it is absorbing them, which is exactly what the calm credit and vol readings say.</p>",
+    "<p>Verdict: <b>neutral</b>, and honestly neutral rather than lazily neutral \u2014 four signals say on, three say off, four abstain. The character of the negatives matters though: all three are equity-internal rotation signals, which historically turn before credit and vol do. I would treat this as a market to hold existing risk with defined exits, not one to add new risk into strength.</p>"
+   ],
+   "flips": {
+    "to_off": "SPY failing to reclaim 744 while HY OAS widens 10bp+ and VIX takes out 20 \u2014 that converts quiet-defensive into confirmed stress. A VIX curve flip toward flat would accelerate it.",
+    "to_on": "SPY back above its 50-day with at least two of XLK/XLY/XLC/XLI/XLF re-entering the top-3 sector ranks, and IWM's 20-day gap to SPY closing inside a point."
+   },
+   "sources": [
+    {
+     "t": "CNBC Jul 24 \u2014 oil above $100, tanker attacks",
+     "u": "https://www.cnbc.com/2026/07/23/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "CNBC Jul 23 \u2014 10-year tops 4.7%",
+     "u": "https://www.cnbc.com/2026/07/22/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Zonted risk feed (Cboe/FRED)",
+     "u": "/trading/risk-ytd.json"
+    },
+    {
+     "t": "Scan universe (Alpaca SIP)",
+     "u": "/trading/scan-universe.json"
+    }
+   ]
+  }
+ ]
+}
