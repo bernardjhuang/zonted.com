@@ -71,7 +71,7 @@ a{color:inherit}
 .position-risk-chart svg{display:block;width:100%;height:auto;overflow:visible;touch-action:pan-y;cursor:crosshair;border-radius:5px}
 .position-risk-chart svg:focus-visible{outline:2px solid var(--bl-accent);outline-offset:3px}
 .prc-grid{stroke:var(--bl-divider);stroke-width:1}.prc-price{fill:none;stroke:var(--bl-accent);stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}
-.prc-invalidation{stroke:var(--bl-loss);stroke-width:1.5;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}.prc-entry-level{stroke:var(--bl-muted);stroke-width:1.5;stroke-dasharray:7 4;vector-effect:non-scaling-stroke}.prc-entry{stroke:var(--bl-faint);stroke-width:1.2;stroke-dasharray:2 5;vector-effect:non-scaling-stroke}
+.prc-invalidation{stroke:var(--bl-loss);stroke-width:1.5;stroke-dasharray:6 4;vector-effect:non-scaling-stroke}.prc-entry-level{stroke:var(--bl-muted);stroke-width:1.5;stroke-dasharray:7 4;vector-effect:non-scaling-stroke}
 .prc-now{fill:var(--bl-card);stroke:var(--bl-accent);stroke-width:3;vector-effect:non-scaling-stroke}.prc-label,.prc-axis{fill:var(--bl-faint);font:600 10px var(--bl-mono)}.prc-label-kill{fill:var(--bl-loss)}.prc-label-entry-level{fill:var(--bl-muted)}.prc-label-now{fill:var(--bl-accent);text-anchor:end}.prc-axis-end{text-anchor:end}
 .prc-hover-line{stroke:var(--bl-ink);stroke-width:1;opacity:.35;vector-effect:non-scaling-stroke}.prc-hover-dot{fill:var(--bl-card);stroke:var(--bl-ink);stroke-width:3;vector-effect:non-scaling-stroke}.prc-hover-line[hidden],.prc-hover-dot[hidden]{display:none}
 .prc-tooltip{position:absolute;z-index:4;min-width:195px;padding:9px 11px;border:1px solid var(--bl-border);border-radius:7px;background:var(--bl-ink);color:#fafaf8;box-shadow:0 8px 22px rgba(0,0,0,.22);font:500 10.5px/1.45 var(--bl-mono);pointer-events:none;text-transform:none;letter-spacing:0}
@@ -99,6 +99,20 @@ a{color:inherit}
 .mkt:last-child{border-bottom:0}
 .mkt .v{font-family:var(--bl-mono);font-size:13px;text-align:right}
 .mkt .lbl{color:var(--bl-muted)}
+.market-loading{padding:18px 16px;color:var(--bl-muted);font-size:12px}
+.market-ytd-head{display:flex;justify-content:space-between;gap:10px;padding:12px 14px 2px;font:700 12px var(--bl-mono)}
+.market-ytd-head strong{display:flex;flex-direction:column;gap:2px}.market-ytd-head em{font-style:normal;font-size:11px;font-weight:600;color:var(--bl-muted)}
+.market-ytd-wrap{position:relative;padding:0 10px 4px}.market-ytd-chart{display:block;width:100%;height:auto;touch-action:pan-y;cursor:crosshair;border-radius:5px}
+.market-ytd-chart:focus-visible{outline:2px solid var(--bl-accent);outline-offset:1px}.market-chart-grid{stroke:var(--bl-divider);stroke-width:1;vector-effect:non-scaling-stroke}
+.market-spy-line,.market-vix-line{fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;vector-effect:non-scaling-stroke}.market-spy-line{stroke:var(--bl-accent)}.market-vix-line{stroke:var(--bl-loss)}
+.market-spy-dot,.market-vix-dot,.market-hover-dot{fill:var(--bl-card);stroke-width:2.5;vector-effect:non-scaling-stroke}.market-spy-dot,.market-hover-spy{stroke:var(--bl-accent)}.market-vix-dot,.market-hover-vix{stroke:var(--bl-loss)}
+.market-hover-line{stroke:var(--bl-ink);stroke-width:1;opacity:.28;vector-effect:non-scaling-stroke}.market-hover-line[hidden],.market-hover-dot[hidden]{display:none}
+.market-chart-label,.market-chart-axis{fill:var(--bl-faint);font:600 9px var(--bl-mono)}.market-chart-axis-end{text-anchor:end}
+.market-ytd-tooltip{position:absolute;z-index:5;min-width:178px;padding:8px 10px;border-radius:7px;background:var(--bl-ink);color:#fafaf8;box-shadow:0 8px 20px rgba(0,0,0,.22);font:500 10px/1.45 var(--bl-mono);pointer-events:none}.market-ytd-tooltip[hidden]{display:none}.market-ytd-tooltip b,.market-ytd-tooltip span{display:flex;justify-content:space-between;gap:12px}.market-ytd-tooltip b{margin-bottom:4px;padding-bottom:4px;border-bottom:1px solid rgba(255,255,255,.18)}.market-ytd-tooltip em{font-style:normal}
+.market-leadership{border-top:1px solid var(--bl-divider)}.market-rank-group{padding:11px 14px;border-bottom:1px solid var(--bl-divider)}.market-rank-group h4{margin:0 0 8px;font:700 10px var(--bl-sans);text-transform:uppercase;letter-spacing:.08em}
+.market-rank-row{display:grid;grid-template-columns:56px minmax(0,1fr);align-items:center;gap:7px;margin-top:5px}.market-rank-row>span{color:var(--bl-faint);font-size:10px}.market-rank-row>div{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+.market-rank-chip{display:flex;justify-content:space-between;gap:4px;padding:5px 6px;border:1px solid var(--bl-divider);border-radius:5px;color:var(--bl-ink2);font:600 10px var(--bl-mono);text-decoration:none}.market-rank-chip em{font-style:normal;font-weight:500}.market-rank-chip.leader em{color:var(--bl-gain)}.market-rank-chip.laggard em{color:var(--bl-loss)}.market-rank-chip:hover{border-color:var(--bl-chipbd);background:var(--bl-chipbg)}
+.market-source{margin:0;padding:9px 14px 11px;color:var(--bl-faint);font:500 9.5px/1.4 var(--bl-mono)}
 
 /* ── research link cards (desk) ─────────────────────── */
 .res-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-bottom:44px}

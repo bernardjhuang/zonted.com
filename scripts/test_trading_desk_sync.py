@@ -118,14 +118,33 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count('class="position-risk-chart"'), 2)
         self.assertIn("prc-invalidation", script)
         self.assertIn("prc-entry-level", script)
-        self.assertIn("prc-entry", script)
+        self.assertNotIn('class="prc-entry"', script)
+        self.assertNotIn("vertical entry reference", script)
         self.assertIn("prc-tooltip", script)
         self.assertIn("room to invalidation", script)
         self.assertIn("ArrowLeft", script)
         self.assertIn("pointermove", script)
         self.assertIn(".position-risk-chart", styles)
         self.assertIn(".prc-entry-level", styles)
+        self.assertNotIn(".prc-entry{", styles)
         self.assertIn(".prc-tooltip", styles)
+
+    def test_market_rail_uses_ytd_chart_and_live_leadership_groups(self) -> None:
+        page = (ROOT / "trading" / "index.html").read_text()
+        script = (ROOT / "trading" / "desk.js").read_text()
+        styles = (ROOT / "trading" / "desk.css").read_text()
+        payload = json.loads((ROOT / "trading" / "market-ytd.json").read_text())
+        self.assertIn('id="market-overview-live"', page)
+        self.assertNotIn("Risk regime", page)
+        self.assertNotIn("MOVE · HY OAS", page)
+        for asset in ("market-ytd.json", "vwap-charts.json", "crypto-charts.json"):
+            self.assertIn(asset, script)
+        for marker in ("market-ytd-chart", "market-leadership", "Sectors", "Crypto", "Countries"):
+            self.assertIn(marker, script + styles)
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(payload["period"], "YTD")
+        self.assertGreaterEqual(len(payload["points"]), 50)
+        self.assertEqual(payload["points"][-1]["date"], payload["as_of"])
 
     def test_momentum_deep_link_filters_opens_and_scrolls_to_requested_ticker(self) -> None:
         script = (ROOT / "js" / "trading-broker-light.js").read_text()
@@ -152,8 +171,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/vwap/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/risk/"[^>]*>GPT Risk</a>')
-            self.assertIn('/trading/desk.css?v=16', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=16', page, path.as_posix())
+            self.assertIn('/trading/desk.css?v=17', page, path.as_posix())
+            self.assertIn('/trading/desk.js?v=17', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 
