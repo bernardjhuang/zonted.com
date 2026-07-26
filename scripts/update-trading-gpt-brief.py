@@ -53,6 +53,7 @@ def validate(data: dict) -> None:
         event_required = {
             "id", "primary_ticker", "market_cap_usd", "reference_price", "binary_grade", "sector",
             "date", "date_status", "horizon", "tier", "category", "tickers", "title",
+            "plain_summary", "plain_good", "plain_bad", "plain_watch",
             "confidence", "trigger", "implication", "white_swan", "base_case", "black_swan",
             "why_mispriced", "magnitude", "action", "invalidation", "watch", "sources",
         }
@@ -67,6 +68,10 @@ def validate(data: dict) -> None:
         primary_tickers.add(event["primary_ticker"])
         if event["primary_ticker"] not in event["tickers"]:
             raise ValueError(f"primary ticker missing from tickers: {event['id']}")
+        for field in ("plain_summary", "plain_good", "plain_bad", "plain_watch"):
+            text = str(event[field]).strip()
+            if not text or len(text) > 180:
+                raise ValueError(f"{field} must be 1–180 characters for {event['id']}")
         sector = str(event["sector"]).strip()
         if not sector:
             raise ValueError(f"event has no sector: {event['id']}")

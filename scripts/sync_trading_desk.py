@@ -30,6 +30,7 @@ class Route:
     description: str
     regions: tuple[str, ...]
     scripts: tuple[pathlib.Path, ...] = ()
+    meta: str = "Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets"
 
 
 ROUTES = {
@@ -42,9 +43,10 @@ ROUTES = {
     "gpt-brief": Route(
         ROOT / "trading" / "gpt-brief" / "index.html",
         "GPT brief",
-        "The sector-diverse six-week catalyst radar, loaded from the latest scheduled GPT brief payload.",
+        "Big stock-moving events, explained in plain English.",
         ("GPT_BRIEF",),
         (GPT_SCRIPT,),
+        meta="Updated automatically on weekdays at 6:30 AM CT.",
     ),
     "grok-brief": Route(
         ROOT / "trading" / "grok-brief" / "index.html",
@@ -116,7 +118,7 @@ def render_route(target: str, classic: str, route: Route) -> str:
         for script in route.scripts
     )
     body = f'''<!-- AUTO:ROUTED_TRADING:START -->
-<div class="phead"><h1 id="{heading_id}">{route.title}</h1><p class="take">{route.description}</p><p class="meta">Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets</p></div>
+<div class="phead"><h1 id="{heading_id}">{route.title}</h1><p class="take">{route.description}</p><p class="meta">{route.meta}</p></div>
 {panels}
 <!-- AUTO:ROUTED_TRADING:END -->'''
     return page_prefix(target, classic) + body + "\n</div>\n" + (script_tags + "\n" if script_tags else "") + "</body>\n</html>\n"

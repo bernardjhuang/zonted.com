@@ -51,6 +51,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(f'/trading/gpt-brief.json?v={payload_hash}', page)
         self.assertIn(f'/js/trading-gpt-brief.js?v={script_hash}', page)
         self.assertIn('id="gpt-brief-shell"', page)
+        self.assertIn('Big stock-moving events, explained in plain English.', page)
+        self.assertIn('Updated automatically on weekdays at 6:30 AM CT.', page)
+        self.assertNotIn('source of truth: /trading/classic/', page)
         panel = re.search(r'<section[^>]+id="gpt-brief-panel"[^>]*>', page)
         if panel is None:
             self.fail("missing gpt-brief-panel")

@@ -399,6 +399,50 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
    inside closed <details> that combination can zero heights; undo it */
 .brief-risk-card,.hypothesis-block,.whale-card{content-visibility:visible;contain-intrinsic-size:unset}
 
+/* ── GPT catalyst brief: scan first, research second ─────────────── */
+.gpt-quick-read{max-width:920px;margin:0 20px 6px;padding:12px 14px;border-left:3px solid var(--bl-accent);background:var(--bl-rowhead);color:var(--bl-ink2);font-size:13.5px;line-height:1.5}
+.gpt-brief-list{max-width:980px;padding:0 20px}
+.gpt-catalyst-card{padding:0;overflow:hidden}
+.gpt-catalyst-card>summary{list-style:none}
+.gpt-catalyst-card>summary::-webkit-details-marker{display:none}
+.gpt-card-summary{display:grid;grid-template-columns:28px minmax(0,1fr) auto;gap:12px;align-items:start;padding:15px 16px;cursor:pointer}
+.gpt-card-summary:hover{background:var(--bl-hover)}
+.gpt-card-summary:focus-visible{outline:2px solid var(--bl-accent);outline-offset:-2px}
+.gpt-event-number{display:grid;place-items:center;width:26px;height:26px;border-radius:50%;background:var(--bl-chipbg);color:var(--bl-accent);font:700 12px var(--bl-mono)}
+.gpt-summary-copy{display:grid;gap:5px;min-width:0}
+.gpt-summary-topline{display:flex;align-items:baseline;gap:9px;flex-wrap:wrap;color:var(--bl-ink)}
+.gpt-summary-topline strong{font-size:13px}
+.gpt-summary-copy small{color:var(--bl-faint);font-size:11.5px}
+.gpt-plain-summary{max-width:760px;color:var(--bl-ink);font-size:14.5px;line-height:1.45;text-wrap:pretty}
+.gpt-risk-badge{padding:4px 8px;border:1px solid var(--bl-input);border-radius:999px;color:var(--bl-muted);font:700 10px var(--bl-sans);letter-spacing:.03em;text-transform:uppercase;white-space:nowrap}
+.gpt-risk-badge[data-grade="extreme"]{border-color:var(--bl-loss);color:var(--bl-loss)}
+.gpt-risk-badge[data-grade="high"]{border-color:var(--bl-warn);color:var(--bl-warn)}
+.gpt-catalyst-card[open]>.gpt-card-summary{border-bottom:1px solid var(--bl-divider);background:var(--bl-hover)}
+.gpt-card-body{padding:14px 16px 16px}
+.gpt-plain-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.gpt-plain-outcome{min-width:0;padding:11px 12px;border:1px solid var(--bl-divider);border-left-width:3px;border-radius:7px;background:var(--bl-card)}
+.gpt-plain-outcome h4{margin:0 0 5px;font:700 10.5px var(--bl-sans);letter-spacing:.06em;text-transform:uppercase}
+.gpt-plain-outcome p{margin:0;color:var(--bl-ink2);font-size:13px;line-height:1.5}
+.gpt-plain-good{border-left-color:var(--bl-gain)}.gpt-plain-good h4{color:var(--bl-gain)}
+.gpt-plain-bad{border-left-color:var(--bl-loss)}.gpt-plain-bad h4{color:var(--bl-loss)}
+.gpt-plain-watch{border-left-color:var(--bl-vwap)}.gpt-plain-watch h4{color:var(--bl-vwap)}
+.gpt-full-research{margin-top:12px;border-top:1px solid var(--bl-divider);padding-top:10px}
+.gpt-full-research>summary{display:inline-flex;align-items:center;min-height:38px;color:var(--bl-accent);cursor:pointer;font-size:12.5px;font-weight:600;list-style:none}
+.gpt-full-research>summary::-webkit-details-marker{display:none}
+.gpt-full-research>summary::before{content:'›';margin-right:7px;font-size:17px;transition:transform .15s}
+.gpt-full-research[open]>summary::before{transform:rotate(90deg)}
+.gpt-research-body{max-width:860px;padding:4px 0 2px;color:var(--bl-ink2);font-size:13px;line-height:1.55}
+@media(max-width:720px){
+  #gpt-brief-shell .position-head{align-items:flex-start;flex-direction:column;gap:3px}
+  .gpt-quick-read{margin-left:16px;margin-right:16px}
+  .gpt-brief-list{padding:0 12px}
+  .gpt-card-summary{grid-template-columns:24px minmax(0,1fr);gap:10px;padding:13px 12px}
+  .gpt-event-number{width:24px;height:24px}
+  .gpt-risk-badge{grid-column:2;justify-self:start}
+  .gpt-plain-grid{grid-template-columns:1fr}
+  .gpt-card-body{padding:12px}
+}
+
 /* ── horizon theses ───────────────────────────────────────────────── */
 .grok-brief-thesis-card{margin-top:16px}
 .grok-brief-secondary{color:var(--bl-muted);font-size:12.5px}
