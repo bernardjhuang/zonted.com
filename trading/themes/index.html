@@ -3,12 +3,13 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Grok brief — Trading Desk — Zonted</title>
+<title>Themes — Trading Desk — Zonted</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/trading/desk.css?v=18">
 <script defer src="/trading/desk.js?v=18"></script>
+<script defer src="/js/trading-themes.js?v=52c64bad9e72"></script>
 </head>
 <body class="bl">
 <div class="status"><div class="wrap">
@@ -22,17 +23,11 @@
     <span class="metric"><span class="k">Open</span>2</span>
   </div>
 </div></div>
-<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/hypotheses/">Hypotheses</a><a href="/trading/themes/">Themes</a><a href="/trading/brief/">Brief</a><a href="/trading/gpt-brief/">GPT brief</a><a href="/trading/grok-brief/" aria-current="page">Grok brief</a><a href="/trading/watchlist/">Watchlist</a><a href="/trading/momentum/">Momentum</a><a href="/trading/grok-risk/">Grok Risk</a><a href="/trading/gpt-risk/">GPT Risk</a><a href="/trading/fable-risk/">Fable Risk</a><a href="/trading/performance/">Performance</a></div></nav>
-<div class="wrap">
-<!-- AUTO:ROUTED_TRADING:START -->
-<div class="phead"><h1 id="desk-route-heading">Grok brief</h1><p class="take">Grok deep research on dated catalysts still early enough to own — FDA, DEA, CFTC, SEC, DOD, WHO, and the Federal Register.</p><p class="meta">Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets</p></div>
-<section class="trading-panel brief-panel" id="grok-brief-panel" role="tabpanel" tabindex="0" aria-labelledby="desk-route-heading">
-                <div id="grok-brief-shell" data-url="/trading/grok-brief.json?v=9a5299e32924">
-                    <p class="trading-note">Loading the latest Grok catalyst brief…</p>
-                </div>
-            </section>
-<!-- AUTO:ROUTED_TRADING:END -->
+<nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/hypotheses/">Hypotheses</a><a href="/trading/themes/" aria-current="page">Themes</a><a href="/trading/brief/">Brief</a><a href="/trading/gpt-brief/">GPT brief</a><a href="/trading/grok-brief/">Grok brief</a><a href="/trading/watchlist/">Watchlist</a><a href="/trading/momentum/">Momentum</a><a href="/trading/grok-risk/">Grok Risk</a><a href="/trading/gpt-risk/">GPT Risk</a><a href="/trading/fable-risk/">Fable Risk</a><a href="/trading/performance/">Performance</a></div></nav>
+<div class="wrap themes-shell">
+<div class="phead"><h1>Themes</h1><p class="take">Core beliefs, attacked by multiple models and scored for how widely known—and how fully priced—they already are.</p><p class="meta">Human thesis → adversarial reviews → final synthesis · current scores use Friday’s close</p></div>
+<main id="themes-live" data-url="/trading/themes.json?v=fdd1b20aae46" aria-live="polite"><p class="theme-loading">Loading theme ledger…</p></main>
+<noscript><p class="theme-error">JavaScript is required for the scored theme ledger. The canonical research remains available in <a href="/trading/themes.json">themes.json</a>.</p></noscript>
 </div>
-<script defer src="/js/trading-grok-brief.js?v=22912f5aeb74"></script>
 </body>
 </html>

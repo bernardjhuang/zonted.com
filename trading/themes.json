@@ -1,0 +1,210 @@
+{
+  "schema_version": 1,
+  "updated_at": "2026-07-26T16:14:53Z",
+  "as_of": "2026-07-24",
+  "method": {
+    "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
+    "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
+    "consensus": "Median of the three models that returned explicit scores: GPT-5.6, Claude Fable, and Gemini 3.1 Pro. Grok supplied the original opportunity map but no numeric score, so none was invented.",
+    "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
+  },
+  "themes": [
+    {
+      "id": "ai-power-scarcity",
+      "category": "Energy",
+      "title": "AI data centers → electricity scarcity",
+      "horizon": "2026–2031",
+      "status": "Active research",
+      "owner_belief": "AI and hyperscale data-center construction will create a durable U.S. electricity-load shock. The scarce assets are not generic ‘energy exposure’; they are firm megawatts, energized interconnections, turbines, transformers, skilled electrical labor, cooling, and fuel delivery in the regions where projects can actually connect.",
+      "conviction": "High conviction in physical load growth. Medium conviction that the obvious public-equity basket still offers alpha.",
+      "final_verdict": "The demand thesis survives. The easy trade does not. Knowledge saturation is 92/100 and price saturation is 69/100 overall, with huge dispersion by layer. The residual edge is contract-level underwriting—signed minimum-take load, cancellation terms, rate treatment, existing capacity, and time-to-power—not knowing that AI uses electricity.",
+      "consensus_scores": {
+        "knowledge_saturation": 92,
+        "price_saturation": 69
+      },
+      "model_reviews": [
+        {
+          "model": "Grok 4.3",
+          "role": "Original map",
+          "knowledge_saturation": null,
+          "price_saturation": null,
+          "verdict": "Correctly mapped the physical bottlenecks and regional shift, but turned nearly every layer into a winner list. It did not explicitly score saturation, so this page does not fake one."
+        },
+        {
+          "model": "Claude Fable",
+          "role": "Adversarial reviewer",
+          "knowledge_saturation": 88,
+          "price_saturation": 62,
+          "verdict": "Consensus theme, bifurcated pricing. The remaining opportunity is distinguishing intact contracted economics from broken narrative after large drawdowns."
+        },
+        {
+          "model": "Gemini 3.1 Pro",
+          "role": "Independent reviewer",
+          "knowledge_saturation": 95,
+          "price_saturation": 85,
+          "verdict": "The equity narrative has peaked and fractured. Most obvious equipment and construction expressions leave almost no margin for error."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Final synthesis",
+          "knowledge_saturation": 92,
+          "price_saturation": 69,
+          "verdict": "Physical scarcity is real, but investability depends on who captures the rent. Merchant power, gas delivery, bridge power, and electrical labor deserve contract-by-contract work; regulated utilities and headline equipment trades look crowded."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Equipment + grid",
+          "symbols": "GEV · ETN · HUBB · PWR",
+          "knowledge_saturation": 92,
+          "price_saturation": 82,
+          "read": "Backlogs are real and widely understood. PWR at 86.6× trailing and ETN near its high leave little room for a capex wobble; GEV’s 30.2× is less absurd but still assumes backlog quality."
+        },
+        {
+          "layer": "Cooling + electrical",
+          "symbols": "VRT · FIX · NVT · IESC · EME",
+          "knowledge_saturation": 90,
+          "price_saturation": 76,
+          "read": "The bottleneck is real, but cooling can commoditize and labor-heavy contractors can suffer margin leakage. EME looks less narrative-priced than VRT, FIX, or NVT."
+        },
+        {
+          "layer": "Regulated utilities",
+          "symbols": "D · ETR · AEP · NEE",
+          "knowledge_saturation": 88,
+          "price_saturation": 87,
+          "read": "The ‘safe AI-power’ trade is crowded. D and ETR were within 3% of 52-week highs while politicians and commissions are actively deciding who pays for grid expansion."
+        },
+        {
+          "layer": "Merchant power",
+          "symbols": "CEG · VST · TLN · NRG",
+          "knowledge_saturation": 90,
+          "price_saturation": 58,
+          "read": "Everyone knows the story, but 20–34% drawdowns reopened the valuation debate. The question is whether contracted floors survive political caps and hyperscaler bargaining power."
+        },
+        {
+          "layer": "Nuclear fuel + SMRs",
+          "symbols": "CCJ · LEU · BWXT · OKLO · SMR",
+          "knowledge_saturation": 94,
+          "price_saturation": 45,
+          "read": "The bubble already broke; that does not make pre-revenue reactors cheap. Separate operating fuel-cycle cash flows from first-of-a-kind deployment risk."
+        },
+        {
+          "layer": "Natural gas + midstream",
+          "symbols": "EQT · WMB · KMI · ET",
+          "knowledge_saturation": 75,
+          "price_saturation": 55,
+          "read": "Less saturated than the headline basket, not undiscovered. Cheap trailing multiples can reflect commodity, basis, permitting, and capex risk—not free AI optionality."
+        },
+        {
+          "layer": "Bridge power + engines",
+          "symbols": "CAT · CMI · BE",
+          "knowledge_saturation": 68,
+          "price_saturation": 55,
+          "read": "Reciprocating engines solve time-to-power while grids lag. Duration and replacement risk matter. BE’s $53.2B market cap despite losses is narrative pricing, not a bargain."
+        },
+        {
+          "layer": "Powered land",
+          "symbols": "IREN · APLD · CIFR · WULF",
+          "knowledge_saturation": 78,
+          "price_saturation": 70,
+          "read": "Energized interconnections are scarce, but miner-to-AI conversions carry financing, governance, customer-concentration, and execution risk. Signed leases matter; slide-deck megawatts do not."
+        }
+      ],
+      "adversarial_review": {
+        "grok": [
+          "It conflates physical load growth with shareholder returns. Utilities, merchants, equipment vendors, contractors, fuel suppliers, and pre-revenue developers have different rent capture and failure modes.",
+          "It treats queue gigawatts, announced campuses, signed electricity-service agreements, and energized load as if they were comparable. They are not.",
+          "It underweights politics and cost allocation. Scarcity can be real while commissions, legislatures, or dominant hyperscalers prevent that scarcity rent from reaching equity holders.",
+          "It dilutes the theme with low-exposure water and industrial names, then calls diversification a solution. Owning every proxy is how you pay consensus prices for weak exposure.",
+          "It buries natural gas, pipelines, reciprocating engines, electrical labor, and energized land even though those may solve the near-term time-to-power problem faster than new nuclear."
+        ],
+        "fable": [
+          "Its core criticism is stronger, but ‘gas is the cheapest way to own it’ confuses a low multiple with a durable edge. Commodity cyclicality, LNG competition, basis risk, permitting, and new-pipeline capex can eat the apparent discount.",
+          "Trailing P/E is a rough sorting tool, not valuation work. It is noisy for cyclicals, acquisition-heavy generators, and fast-growing contractors; forward free cash flow and contract economics matter more.",
+          "Several precise demand-quality claims were too confidently stated. Official ERCOT material supports a gigantic, low-quality queue, but this review could not independently verify the specific ‘198 GW in Q1’ figure, so it is excluded from the final thesis.",
+          "The 30–50% project statistic is primarily a delay forecast, not proof that half the load disappears. Likewise, $130B ‘blocked or delayed’ is a political-friction signal, not equivalent to $130B permanently canceled.",
+          "A legislated capacity floor and cap do not make merchant power automatically asymmetric. The floor may still be inadequate against fuel, debt, maintenance, acquisition, and new-build economics.",
+          "The 1999–2002 analogy is useful, not destiny. Deposits, cancellation rights, resource adequacy rules, contract tenor, and today’s concentrated buyers must be compared before declaring the same cobweb bust."
+        ]
+      },
+      "what_survived": [
+        "Firm power scarcity is the right organizing idea. PJM’s 2028/29 capacity auction cleared at its $325/MW-day cap and still missed the reliability requirement by about 6.8 GW.",
+        "The bottleneck is physical. GE Vernova reported a 116 GW gas-turbine backlog and is taking 2031 reservations.",
+        "Demand concentration is a real single-factor risk. Four hyperscalers are expected to spend roughly $700B in 2026, but company-level figures vary with fiscal calendars and what each source counts as capex.",
+        "Queue data is marketing until it becomes a signed, funded, minimum-take obligation. ERCOT was tracking roughly 438 GW of large-load requests in May 2026—far beyond plausible near-term system absorption.",
+        "Local politics and rate treatment can redirect the economic benefit. More than 300 data-center bills appeared across 30 states early in 2026, including proposals for special rate classes and moratoria."
+      ],
+      "residual_edge": [
+        "Signed take-or-pay ESAs and PPAs versus non-binding queue positions.",
+        "Existing energized capacity versus projects that need turbines, transmission, permits, water, or multiyear interconnection work.",
+        "Backlog cancellation terms and deposits, not headline backlog dollars or gigawatts.",
+        "Who funds dedicated generation and grid upgrades: hyperscaler, utility rate base, or residential customers.",
+        "Gas and midstream assets with a second demand leg from LNG—not AI-only economics—and a credible path through permitting and last-mile constraints.",
+        "Bridge-power and electrical-labor businesses where backlog converts quickly to cash without heroic terminal-growth assumptions.",
+        "Merchant assets whose contracted downside and regulatory floor can be modeled explicitly after the drawdown."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "CEG · VST · EQT · WMB · EME · IESC · CAT · CMI",
+          "why": "These sit closer to current cash flow or time-to-power. Underwrite contracts, leverage, fuel exposure, capex, and regulatory treatment before touching them."
+        },
+        {
+          "bucket": "Good businesses, crowded prices",
+          "symbols": "GEV · ETN · VRT · PWR · D · ETR · FIX · NVT",
+          "why": "The story is credible; the valuation cushion often is not. Wait for estimates, price, or both to reset."
+        },
+        {
+          "bucket": "Speculation, not core exposure",
+          "symbols": "OKLO · SMR · BE · IREN · APLD · CIFR · WULF",
+          "why": "Popped bubbles can keep falling. Require funded projects, signed counterparties, unit economics, and dilution math—not LOIs and megawatt decks."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Robinhood fundamentals",
+        "date": "2026-07-24",
+        "note": "Trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+        "rows": [
+          {"symbol": "GEV", "price": "$1,015", "pe": "30.2×", "off_high": "−15%"},
+          {"symbol": "ETN", "price": "$404", "pe": "38.7×", "off_high": "−7%"},
+          {"symbol": "VRT", "price": "$290", "pe": "73.8×", "off_high": "−24%"},
+          {"symbol": "PWR", "price": "$626", "pe": "86.6×", "off_high": "−21%"},
+          {"symbol": "CEG", "price": "$274", "pe": "21.9×", "off_high": "−34%"},
+          {"symbol": "VST", "price": "$163", "pe": "25.5×", "off_high": "−26%"},
+          {"symbol": "D", "price": "$71", "pe": "21.2×", "off_high": "−3%"},
+          {"symbol": "ETR", "price": "$116", "pe": "29.3×", "off_high": "−2%"},
+          {"symbol": "OKLO", "price": "$40", "pe": "Loss-making", "off_high": "−79%"},
+          {"symbol": "BE", "price": "$185", "pe": "Loss-making", "off_high": "−47%"}
+        ]
+      },
+      "falsifiers": [
+        "Hyperscaler capex guidance rolls over for two consecutive quarters while announced load remains unfunded.",
+        "Signed minimum-take electricity agreements fail to grow even as queue gigawatts rise.",
+        "Turbine or transformer cancellations accelerate and vendors lose deposits or pricing power.",
+        "State commissions force shareholders—not hyperscalers—to absorb stranded grid and generation costs.",
+        "Compute-per-watt gains overwhelm Jevons demand and materially flatten realized energized megawatts.",
+        "New generation arrives faster than contracted load in 2029–31, compressing energy and capacity margins.",
+        "Gas supply, pipeline, water, labor, or permitting constraints make the supposed beneficiaries spend more than the scarcity rent they capture."
+      ],
+      "watch_next": [
+        "Quarterly hyperscaler capex guidance and AI revenue—not announced campus headlines.",
+        "Energized MW, signed ESAs, deposits, and minimum-take terms versus queue MW.",
+        "PJM/ERCOT capacity and energy prices, plus extensions or revisions to political caps and floors.",
+        "Utility tariff rulings that specify who pays for transmission, generation, and stranded assets.",
+        "GEV and peer slot pricing, deposits, cancellation terms, and 2029–31 delivery conversion.",
+        "Natural-gas basis, pipeline approvals, LNG demand, and the delivered fuel cost at target data-center regions.",
+        "Real deployment milestones for nuclear restarts and SMRs—not LOIs."
+      ],
+      "sources": [
+        {"label": "PJM 2028/29 auction results", "url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf"},
+        {"label": "PJM auction cap and 6.8 GW shortfall", "url": "https://www.utilitydive.com/news/pjm-capacity-auction-price-cap-reserve-shortfall/825282/"},
+        {"label": "ERCOT large-load update", "url": "https://www.ercot.com/files/docs/2026/05/24/8-Interconnection-and-Grid-Analysis-Update.pdf"},
+        {"label": "GE Vernova 116 GW turbine backlog", "url": "https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/"},
+        {"label": "Hyperscaler 2026 capex concentration", "url": "https://www.cnbc.com/2026/02/06/google-microsoft-meta-amazon-ai-cash.html"},
+        {"label": "Data-center delay forecast", "url": "https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/"},
+        {"label": "Q1 2026 local-opposition tracker", "url": "https://www.datacenterwatch.org/q1-2026"},
+        {"label": "State data-center legislation", "url": "https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape"}
+      ]
+    }
+  ]
+}
