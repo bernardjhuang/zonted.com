@@ -139,9 +139,12 @@ class RoutedTradingSyncTests(unittest.TestCase):
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
         self.assertNotIn('class="track-bar"', page)
-        self.assertEqual(page.count('class="position-risk-chart"'), 3)
-        self.assertEqual(page.count('data-position-symbol='), 3)
-        self.assertIn('data-position-symbol="FIGR"', page)
+        self.assertEqual(page.count('class="position-risk-chart"'), 6)
+        self.assertEqual(page.count('data-position-symbol='), 6)
+        self.assertEqual(
+            set(re.findall(r'data-position-symbol="([A-Z]+)"', page)),
+            {"ABT", "CEG", "FIGR", "HOOD", "HPQ", "RDDT"},
+        )
         self.assertIn("prc-invalidation", script)
         self.assertIn("prc-entry-level", script)
         self.assertNotIn('class="prc-entry"', script)

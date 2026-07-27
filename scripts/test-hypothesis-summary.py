@@ -112,7 +112,7 @@ class HypothesisSummaryTests(unittest.TestCase):
         scan_charts = json.loads(summary.SCAN_CHARTS.read_text())["charts"]
         sector_charts = json.loads(summary.VWAP_CHARTS.read_text())["charts"]
         missing = {symbol for symbol in symbols if symbol not in scan_charts}
-        self.assertLessEqual(missing, {"FIGR"})
+        self.assertFalse(missing)
         for symbol in set(symbols) - missing:
             self.assertIn(scan_charts[symbol]["sector_etf"], sector_charts, symbol)
 
