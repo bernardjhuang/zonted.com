@@ -13,8 +13,6 @@
 .hyp-summary-symbol a:hover{color:var(--bl-accent)}
 .hyp-summary-symbol span{display:block;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono);text-transform:uppercase}
 .hyp-summary-chart{width:260px;min-width:260px;margin:0}
-.hyp-summary-chart-meta{display:flex;align-items:baseline;justify-content:flex-end;gap:5px;margin-bottom:1px;color:var(--bl-faint);font:500 9px var(--bl-mono);text-transform:uppercase}
-.hyp-summary-chart-meta b{color:var(--bl-ink);font-size:10.5px}
 .hyp-summary-chart svg{display:block;width:100%;height:70px}
 .hyp-summary-chart .grid{stroke:var(--bl-divider);stroke-width:1;vector-effect:non-scaling-stroke}
 .hyp-summary-chart .entry-line{fill:none;stroke-width:1.35;opacity:.9;vector-effect:non-scaling-stroke}
@@ -27,6 +25,7 @@
 .hyp-summary-chart.is-down .dot{stroke:var(--bl-loss)}
 .hyp-summary-chart figcaption{display:flex;justify-content:space-between;gap:10px;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono)}
 .hyp-summary-chart figcaption b{color:var(--bl-ink);font-weight:600}
+.hyp-summary-beta{min-width:72px;color:var(--bl-ink);font:700 12px var(--bl-mono);text-align:right}
 .hyp-summary-metrics{min-width:180px;white-space:normal}
 .hyp-summary-metrics span{display:flex;justify-content:space-between;gap:12px;color:var(--bl-ink2);font:600 11px var(--bl-mono)}
 .hyp-summary-metrics span+span{margin-top:4px}
@@ -56,6 +55,6 @@
   .hyp-summary-metrics span{display:block;padding:7px 8px;border:1px solid var(--bl-divider);border-radius:5px;background:var(--bl-hover)}
   .hyp-summary-metrics span+span{margin:0}
   .hyp-summary-metrics b{display:block;margin-bottom:2px}
-  .hyp-summary-level{text-align:left!important}
+  .hyp-summary-beta,.hyp-summary-level{text-align:left!important}
   .hyp-summary-note{padding:10px 14px}
 }
