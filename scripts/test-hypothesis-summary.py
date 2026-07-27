@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import hashlib
 import importlib.util
 import json
 import pathlib
@@ -88,9 +89,13 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Low confidence means", self.page)
         self.assertIn("Confidence measures model reliability—not expected upside", self.page)
 
-    def test_summary_stylesheet_version_is_unique(self) -> None:
-        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v=5"), 1)
-        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v="), 1)
+    def test_summary_stylesheet_asset_is_unique(self) -> None:
+        self.assertEqual(self.page.count(summary.CSS_HREF), 1)
+        self.assertEqual(self.page.count("/trading/hypothesis-summary"), 1)
+        asset = ROOT / summary.CSS_HREF.removeprefix("/")
+        payload = asset.read_bytes()
+        digest = hashlib.sha1(f"blob {len(payload)}\0".encode() + payload).hexdigest()[:8]
+        self.assertIn(f".{digest}.css", summary.CSS_HREF)
 
     def test_checked_in_page_matches_renderer(self) -> None:
         rendered = summary.render_page(self.page, self.config, self.charts)

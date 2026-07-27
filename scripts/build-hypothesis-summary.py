@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.css?v=5"
+CSS_HREF = "/trading/hypothesis-summary.24cf469f.css"
 MIN_CHART_POINTS = 26
 MIN_BETA_OBSERVATIONS = 26
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
@@ -309,7 +309,7 @@ def render_page(page: str, config: dict, charts: dict) -> str:
         if count != 1:
             raise ValueError("Could not find hypothesis page heading")
     page, css_count = re.subn(
-        r'<link rel="stylesheet" href="/trading/hypothesis-summary\.css\?v=\d+">',
+        r'<link rel="stylesheet" href="/trading/hypothesis-summary(?:\.[a-f0-9]{8})?\.css(?:\?v=\d+)?">',
         f'<link rel="stylesheet" href="{CSS_HREF}">',
         page,
         count=1,
