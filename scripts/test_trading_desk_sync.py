@@ -6,12 +6,34 @@ import html
 import json
 import pathlib
 import re
+import subprocess
+import sys
 import unittest
 
 import sync_trading_desk as sync
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CLASSIC = (ROOT / "trading" / "classic" / "index.html").read_text()
+DESK_HOME = ROOT / "trading" / "index.html"
+
+
+def _desk_rows(page: str, kind: str) -> list[str]:
+    pattern = rf'<tr\b(?=[^>]*data-desk-kind="{kind}")[^>]*>.*?</tr>'
+    return re.findall(pattern, page, re.S)
+
+
+def _row_symbol(row: str) -> str:
+    match = re.search(r'data-desk-symbol="([A-Z]+)"', row)
+    if match is None:
+        raise AssertionError(f"desk row has no data-desk-symbol: {row[:160]}")
+    return match.group(1)
+
+
+def _row_attr(row: str, name: str) -> str:
+    match = re.search(rf'{re.escape(name)}="([^"]+)"', row)
+    if match is None:
+        raise AssertionError(f"desk row has no {name}: {row[:160]}")
+    return match.group(1)
 
 
 class RoutedTradingSyncTests(unittest.TestCase):
@@ -159,29 +181,114 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("Integrity note", page)
         self.assertIn("/trading/meta-risk.json", page)
 
-    def test_position_heat_bars_are_replaced_by_price_charts(self) -> None:
+    def test_trading_desk_v3_generator_is_network_free_and_idempotent(self) -> None:
+        script = ROOT / "scripts" / "build-trading-desk.py"
+        self.assertTrue(script.exists(), "desk must be generated from source, not hand-edited HTML")
+        result = subprocess.run(
+            [sys.executable, str(script), "--check"],
+            cwd=ROOT,
+            text=True,
+            capture_output=True,
+            timeout=30,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stdout + result.stderr)
+        self.assertIn("network-free", result.stdout)
+
+    def test_trading_desk_v3_uses_two_aligned_blotter_tables(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
-        self.assertNotIn('class="track-bar"', page)
-        self.assertEqual(page.count('class="position-risk-chart"'), 6)
-        self.assertEqual(page.count('data-position-symbol='), 6)
+        self.assertTrue(page.startswith("<!DOCTYPE html>"))
+        self.assertIn("<!-- AUTO:DESK_POSITIONS:START -->", page)
+        self.assertIn("<!-- AUTO:DESK_POSITIONS:END -->", page)
+        self.assertIn("<!-- AUTO:DESK_HYPOTHESES:START -->", page)
+        self.assertIn("<!-- AUTO:DESK_HYPOTHESES:END -->", page)
+        self.assertNotIn('class="pos"', page)
+        self.assertNotIn('class="portfolio-card', page)
+
+        colgroups = re.findall(r'<table\b[^>]*class="[^"]*desk-blotter-table[^"]*"[^>]*>\s*(<colgroup>.*?</colgroup>)', page, re.S)
+        self.assertEqual(len(colgroups), 2)
+        self.assertEqual(colgroups[0], colgroups[1], "positions and hypotheses tables must share one literal colgroup")
         self.assertEqual(
-            set(re.findall(r'data-position-symbol="([A-Z]+)"', page)),
-            {"ABT", "CEG", "FIGR", "HOOD", "HPQ", "RDDT"},
+            re.findall(r'<col style="width:([^\"]+)">', colgroups[0]),
+            ["17%", "8%", "7%", "8%", "11%", "6.5%", "7%", "18%", "11%", "6.5%"],
         )
-        self.assertIn("prc-invalidation", script)
-        self.assertIn("prc-entry-level", script)
-        self.assertNotIn('class="prc-entry"', script)
-        self.assertNotIn("vertical entry reference", script)
-        self.assertIn("prc-tooltip", script)
-        self.assertIn("room to invalidation", script)
-        self.assertIn("ArrowLeft", script)
+        self.assertIn(".desk-blotter-table{table-layout:fixed", styles.replace(" ", ""))
+
+        position_rows = _desk_rows(page, "position")
+        thesis_rows = _desk_rows(page, "hypothesis")
+        self.assertEqual([_row_symbol(row) for row in position_rows], ["HOOD", "RDDT", "CEG", "FIGR", "HPQ", "ABT"])
+        self.assertEqual([_row_symbol(row) for row in thesis_rows], ["RBLX", "NTDOY", "HIMS", "BYDDY", "TMO"])
+        self.assertFalse({ _row_symbol(row) for row in position_rows } & { _row_symbol(row) for row in thesis_rows })
+        for rows in (position_rows, thesis_rows):
+            catalysts = [_row_attr(row, "data-catalyst-date") for row in rows]
+            self.assertEqual(catalysts, sorted(catalysts), catalysts)
+            for row in rows:
+                self.assertRegex(row, r'data-edge="(up|down|flat|soon|no-feed)"')
+                self.assertIn('class="desk-edge-word"', row)
+
+        for symbol in ("BYDDY", "NTDOY"):
+            row = next(row for row in thesis_rows if _row_symbol(row) == symbol)
+            self.assertIn('data-feed-state="no-feed"', row)
+            for label in ("Last", "Day", "Beta", "Spread Z", "YTD"):
+                self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
+
+        toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
+        self.assertEqual(len(toggles), 11)
+        for detail_id in toggles:
+            match = re.search(rf'<tr[^>]+id="{detail_id}"[^>]+hidden[^>]*>(.*?)</tr>', page, re.S)
+            self.assertIsNotNone(match, detail_id)
+            detail = match.group(1) if match else ""
+            self.assertIn('data-desk-two-year-chart', detail)
+            self.assertIn('data-desk-valuation', detail)
+            self.assertIn('data-desk-entry-tiles', detail)
+            self.assertIn('data-hypothesis-chart-open=', detail)
+            self.assertIn('data-thesis-open=', detail)
+
+        self.assertIn("initDeskBlotter", script)
+        self.assertIn("toggleDeskRow", script)
+        self.assertIn("ArrowDown", script)
         self.assertIn("pointermove", script)
-        self.assertIn(".position-risk-chart", styles)
-        self.assertIn(".prc-entry-level", styles)
-        self.assertNotIn(".prc-entry{", styles)
-        self.assertIn(".prc-tooltip", styles)
+        self.assertIn("--desk-chart-bear", styles)
+        self.assertIn("--desk-chart-base", styles)
+        self.assertIn("--desk-chart-bull", styles)
+
+    def test_trading_desk_v3_reuses_chart_modal_and_fetches_full_thesis(self) -> None:
+        page = DESK_HOME.read_text()
+        script = (ROOT / "trading" / "desk.js").read_text()
+        styles = (ROOT / "trading" / "desk.css").read_text()
+        chart_script_hash = hashlib.sha256((ROOT / "js" / "hypothesis-chart-modal.1b5e1178.js").read_bytes()).hexdigest()[:12]
+        self.assertEqual(page.count('id="hypothesis-chart-dialog"'), 1)
+        self.assertEqual(page.count('id="scan-chart-config"'), 1)
+        self.assertIn(f'/js/hypothesis-chart-modal.1b5e1178.js?v={chart_script_hash}', page)
+        self.assertEqual(page.count('data-hypothesis-chart-open='), 11)
+        for launcher in re.findall(r'<button[^>]+data-hypothesis-chart-open="[A-Z]+"[^>]*>', page):
+            self.assertIn('aria-haspopup="dialog"', launcher)
+            self.assertIn('aria-controls="hypothesis-chart-dialog"', launcher)
+        config_match = re.search(r'<script type="application/json" id="scan-chart-config">(.*?)</script>', page)
+        self.assertIsNotNone(config_match)
+        config = json.loads(config_match.group(1) if config_match else "{}")
+        self.assertEqual(config["url"], f'/trading/scan-charts.json?v={sync.digest(sync.SCAN_CHARTS)}')
+        self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
+
+        self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
+        self.assertIn('data-thesis-source="/trading/hypotheses/"', page)
+        self.assertIn('data-thesis-summary', page)
+        self.assertIn('data-thesis-body', page)
+        self.assertIn("fetch(thesisSource", script)
+        self.assertIn("article.hypothesis-detail", script)
+        self.assertIn("details", script)
+        self.assertIn("setAttribute('open'", script)
+        self.assertIn("data-thesis-open", script)
+        self.assertIn("cancel", script)
+        self.assertIn("focus", script)
+        self.assertIn(".desk-thesis-dialog", styles)
+        self.assertIn(".hyp-chart-dialog", styles)
+        self.assertRegex(styles, r'\.desk-thesis-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
+        self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
+        self.assertNotIn('height="auto"', page + script)
+        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr) 316px', styles.replace(" ", ""))
 
     def test_market_rail_uses_ytd_chart_and_live_leadership_groups(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
@@ -287,6 +394,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
     def test_trading_nav_has_home_logo_and_vwap_uses_three_columns(self) -> None:
         styles = (ROOT / "trading" / "desk.css").read_text()
+        css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
+        js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
         self.assertEqual(len(pages), 12)
@@ -294,6 +403,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
             self.assertIn('aria-label="Zonted homepage"', page, path.as_posix())
+            self.assertNotRegex(page, r'href="/trading/hypotheses/"[^>]*>Hypotheses</a>')
             self.assertRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
@@ -301,8 +411,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
             self.assertRegex(page, r'href="/trading/meta-risk/"[^>]*>Meta Risk</a>')
             self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
-            self.assertIn('/trading/desk.css?v=19', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=20', page, path.as_posix())
+            self.assertIn(f'/trading/desk.css?v={css_hash}', page, path.as_posix())
+            self.assertIn(f'/trading/desk.js?v={js_hash}', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 
