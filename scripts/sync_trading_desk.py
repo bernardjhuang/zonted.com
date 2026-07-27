@@ -22,6 +22,9 @@ CLASSIC = ROOT / "trading" / "classic" / "index.html"
 DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
+VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
+CHART_MODAL_SCRIPT = ROOT / "js" / "hypothesis-chart-modal.1b5e1178.js"
+CHART_MODAL_STYLE = ROOT / "trading" / "hypothesis-summary.6e6f3b19.css"
 
 
 @dataclass(frozen=True)
@@ -31,6 +34,7 @@ class Route:
     description: str
     regions: tuple[str, ...]
     scripts: tuple[pathlib.Path, ...] = ()
+    styles: tuple[pathlib.Path, ...] = ()
     meta: str = "Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets"
     view: str = "source"
 
@@ -51,7 +55,8 @@ ROUTES = {
         "VWAP Setups",
         "Breaks above or below both earnings VWAP and YTD VWAP stay active for three trading sessions.",
         ("SCAN",),
-        (BROKER_SCRIPT,),
+        (CHART_MODAL_SCRIPT, BROKER_SCRIPT),
+        (CHART_MODAL_STYLE,),
         view="dual-vwap",
     ),
     "vwap": Route(
@@ -119,7 +124,9 @@ def dual_vwap_setups(charts: dict, window: int = 3) -> dict[str, list[dict]]:
                 continue
             result[side].append({
                 "symbol": symbol,
+                "company_name": record.get("company_name") or symbol,
                 "sector": record.get("sector") or "",
+                "sector_etf": record.get("sector_etf") or "",
                 "trigger_date": dates[trigger],
                 "day": age + 1,
                 "current_side": current_side,
@@ -141,24 +148,61 @@ def _short_date(iso: str) -> str:
     return f"{months[int(iso[5:7]) - 1]} {int(iso[8:10])}"
 
 
+def sector_z_scores() -> dict[str, float]:
+    payload = json.loads(VWAP_CHARTS.read_text())
+    scores: dict[str, float] = {}
+    for symbol, markup in (payload.get("charts") or {}).items():
+        match = re.search(r"data-d='([^']+)'", markup)
+        if match is None:
+            continue
+        data = json.loads(html.unescape(match.group(1)))
+        values = data.get("z50") or []
+        if values and values[-1] is not None:
+            scores[symbol] = float(values[-1])
+    return scores
+
+
 def _dual_vwap_links(rows: list[dict], label: str) -> str:
     if not rows:
         return f'<p class="scan-qualified-links"><b>{label}</b> · None active</p>'
     side_label = {"long": "above both", "short": "below both", None: "between VWAPs"}
     links = []
     for row in rows:
-        symbol = html.escape(row["symbol"])
+        symbol = html.escape(row["symbol"], quote=True)
+        company_name = html.escape(row["company_name"])
+        sector_etf = html.escape(row["sector_etf"], quote=True)
+        sector_z = row["sector_z"]
+        direction = "up" if sector_z > 0 else "down" if sector_z < 0 else "flat"
         status = side_label[row["current_side"]]
         links.append(
-            f'<a href="?chart={symbol}#scan" translate="no"><b>{symbol}</b>'
-            f'<span>{_short_date(row["trigger_date"])} · day {row["day"]}/3</span><small>{status} now</small></a>'
+            f'<button type="button" class="dual-vwap-chart-launch" data-hypothesis-chart-open="{symbol}" data-sector-direction="{direction}" '
+            f'aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog" '
+            f'aria-label="Open {symbol} {company_name} setup and sector charts" translate="no"><b>{symbol}</b>'
+            f'<span>{_short_date(row["trigger_date"])} · day {row["day"]}/3</span><em>{company_name}</em>'
+            f'<small>{sector_etf} {sector_z:+.2f} · {status} now</small></button>'
         )
     return f'<div class="dual-vwap-list" aria-label="{label}">' + "".join(links) + "</div>"
+
+
+def _chart_modal() -> str:
+    return '''<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title">
+<div class="hyp-chart-dialog-frame" data-hypothesis-chart-detail>
+<header class="hyp-chart-dialog-head"><div><span>VWAP setup data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header>
+<div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div>
+<p class="hyp-chart-dialog-note">Same completed-session Spread Z, VWAP, and sector Z-score data used by the <a href="/trading/watchlist/">Watchlist</a>.</p>
+</div>
+</dialog>'''
 
 
 def render_dual_vwap_panel(panel: str) -> str:
     payload = json.loads(SCAN_CHARTS.read_text())
     setups = dual_vwap_setups(payload.get("charts") or {})
+    scores = sector_z_scores()
+    for rows in setups.values():
+        for row in rows:
+            if row["sector_etf"] not in scores:
+                raise ValueError(f'missing sector Z-score for {row["symbol"]}: {row["sector_etf"]}')
+            row["sector_z"] = scores[row["sector_etf"]]
     last_bar = html.escape(payload.get("last_bar") or "latest completed session")
     long_rows, short_rows = setups["long"], setups["short"]
     panel = _replace_once(
@@ -205,7 +249,14 @@ def render_dual_vwap_panel(panel: str) -> str:
         panel,
         "method",
     )
-    return panel
+    config_match = re.search(r'<script type="application/json" id="scan-chart-config">(.*?)</script>', panel)
+    if config_match is None:
+        raise ValueError("dual-VWAP route is missing scan chart config")
+    chart_config = json.loads(config_match.group(1))
+    chart_config["vwap_url"] = f"/trading/vwap-charts.json?v={digest(VWAP_CHARTS)}"
+    encoded_config = json.dumps(chart_config, separators=(",", ":"))
+    panel = panel[:config_match.start(1)] + encoded_config + panel[config_match.end(1):]
+    return panel + "\n" + _chart_modal()
 
 
 def page_prefix(target: str, classic: str) -> str:
@@ -234,11 +285,17 @@ def render_route(target: str, classic: str, route: Route) -> str:
         f'<script defer src="/{script.relative_to(ROOT).as_posix()}?v={digest(script)}"></script>'
         for script in route.scripts
     )
+    prefix = page_prefix(target, classic)
+    for style in route.styles:
+        href = f'/{style.relative_to(ROOT).as_posix()}'
+        tag = f'<link rel="stylesheet" href="{href}">'
+        if tag not in prefix:
+            prefix = prefix.replace("</head>", tag + "\n</head>", 1)
     body = f'''<!-- AUTO:ROUTED_TRADING:START -->
 <div class="phead"><h1 id="{heading_id}">{route.title}</h1><p class="take">{route.description}</p><p class="meta">{route.meta}</p></div>
 {panels}
 <!-- AUTO:ROUTED_TRADING:END -->'''
-    return page_prefix(target, classic) + body + "\n</div>\n" + (script_tags + "\n" if script_tags else "") + "</body>\n</html>\n"
+    return prefix + body + "\n</div>\n" + (script_tags + "\n" if script_tags else "") + "</body>\n</html>\n"
 
 
 def atomic_write(path: pathlib.Path, content: str) -> None:
