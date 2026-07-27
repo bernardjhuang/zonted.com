@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import hashlib
+import html
 import json
 import pathlib
 import re
@@ -218,6 +219,33 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(setups["long"][0]["trigger_date"], "2026-07-21")
         self.assertEqual(setups["short"][0]["symbol"], "FLIP")
         self.assertEqual(setups["short"][0]["trigger_date"], "2026-07-22")
+
+    def test_dual_vwap_ticker_cards_launch_reused_chart_modal(self) -> None:
+        page = (ROOT / "trading" / "vwap-setups" / "index.html").read_text()
+        payload = json.loads((ROOT / "trading" / "scan-charts.json").read_text())
+        self.assertFalse([symbol for symbol, record in payload["charts"].items() if not record.get("company_name")])
+        setups = sync.dual_vwap_setups(payload["charts"])
+        active_symbols = [row["symbol"] for rows in setups.values() for row in rows]
+        self.assertTrue(active_symbols)
+        self.assertEqual(page.count('class="dual-vwap-chart-launch"'), len(active_symbols))
+        for symbol in active_symbols:
+            record = payload["charts"][symbol]
+            company_name = record.get("company_name")
+            self.assertTrue(company_name, symbol)
+            self.assertIn(f'data-hypothesis-chart-open="{symbol}"', page)
+            self.assertIn(f'<em>{html.escape(company_name)}</em>', page)
+            sector_z = sync.sector_z_scores()[record["sector_etf"]]
+            direction = "up" if sector_z > 0 else "down" if sector_z < 0 else "flat"
+            self.assertIn(f'data-hypothesis-chart-open="{symbol}" data-sector-direction="{direction}"', page)
+            self.assertIn(f'{record["sector_etf"]} {sector_z:+.2f}', page)
+        self.assertEqual(page.count('id="hypothesis-chart-dialog"'), 1)
+        self.assertEqual(page.count('id="scan-chart-config"'), 1)
+        self.assertIn('/trading/hypothesis-summary.6e6f3b19.css', page)
+        self.assertIn('/js/hypothesis-chart-modal.1b5e1178.js?v=', page)
+        match = re.search(r'<script type="application/json" id="scan-chart-config">(.*?)</script>', page)
+        self.assertIsNotNone(match)
+        chart_config = json.loads(match.group(1) if match else "{}")
+        self.assertEqual(chart_config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
     def test_public_route_names_match_their_new_jobs(self) -> None:
         watchlist = (ROOT / "trading" / "watchlist" / "index.html").read_text()
