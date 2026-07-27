@@ -25,6 +25,7 @@ class RiskJournalContractTest(unittest.TestCase):
         dates = [row["date"] for row in entries]
         self.assertEqual(dates, sorted(dates, reverse=True))
         self.assertEqual(len(dates), len(set(dates)))
+        self.assertIn("2026-07-27", dates)
 
     def test_each_entry_is_an_honest_journal_read(self) -> None:
         required_lists = (
