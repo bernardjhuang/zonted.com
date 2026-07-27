@@ -32,7 +32,7 @@ START_POS = "<!-- AUTO:DESK_POSITIONS:START -->"
 END_POS = "<!-- AUTO:DESK_POSITIONS:END -->"
 START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
 END_HYP = "<!-- AUTO:DESK_HYPOTHESES:END -->"
-COLGROUP = '<colgroup><col style="width:17%"><col style="width:8%"><col style="width:7%"><col style="width:8%"><col style="width:11%"><col style="width:6.5%"><col style="width:7%"><col style="width:18%"><col style="width:11%"><col style="width:6.5%"></colgroup>'
+COLGROUP = '<colgroup><col style="width:20%"><col style="width:8%"><col style="width:7%"><col style="width:12%"><col style="width:7%"><col style="width:7%"><col style="width:20%"><col style="width:12%"><col style="width:7%"></colgroup>'
 OTC = {"BYDDY", "NTDOY"}
 
 
@@ -62,14 +62,14 @@ def article_metadata(source: str) -> dict[str, dict[str, str]]:
     for raw_symbol, attrs in pattern.findall(source):
         symbol = raw_symbol.upper()
         values = {}
-        for key in ("catalyst", "trigger", "stance"):
+        for key in ("catalyst", "catalyst-name", "trigger", "stance"):
             match = re.search(rf'data-desk-{key}="([^"]+)"', attrs)
             if not match:
                 raise ValueError(f"{symbol} is missing data-desk-{key}")
             values[key] = html.unescape(match.group(1))
         out[symbol] = values
-    if len(out) != 11:
-        raise ValueError(f"Expected 11 hypothesis articles, got {len(out)}")
+    if len(out) != 12:
+        raise ValueError(f"Expected 12 hypothesis articles, got {len(out)}")
     return out
 
 
@@ -96,7 +96,9 @@ def row_market(symbol: str, hyp_chart: dict, scan_chart: dict | None, quote: dic
     closes = [float(v) for v in hyp_chart["close"]]
     if scan_chart:
         series = scan_chart["series"]
-        daily = [float(v) for v in series["c"]]
+        dates = list(series["dates"])
+        closes = [float(v) for v in series["c"]]
+        daily = closes
         last = daily[-1]
         day = (daily[-1] / daily[-2] - 1) * 100
         spread = float(scan_chart["stats"]["spread_z"])
@@ -167,33 +169,46 @@ def ytd_chart(symbol: str, market: dict, entry: float | None = None, kill: float
 
 def vol(values: list[float]) -> float:
     returns = [b / a - 1 for a, b in zip(values, values[1:]) if a > 0]
-    return statistics.stdev(returns) * math.sqrt(52) * 100 if len(returns) > 2 else 0.0
+    return statistics.stdev(returns) * math.sqrt(252) * 100 if len(returns) > 2 else 0.0
 
 
-def detail_chart(symbol: str, market: dict, levels: dict) -> str:
+def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None = None) -> str:
     if not market.get("feed"):
-        return f'<div class="desk-no-feed desk-no-feed--chart" data-desk-two-year-chart="{symbol}">— <span>No feed · two-year chart unavailable</span></div>'
-    values = market["closes"]
+        return f'<div class="desk-no-feed desk-no-feed--chart" data-desk-one-year-chart="{symbol}">— <span>No feed · one-year chart unavailable</span></div>'
+    pairs = [(dt.date.fromisoformat(date), float(close)) for date, close in zip(market["dates"], market["closes"])]
+    cutoff = pairs[-1][0] - dt.timedelta(days=365)
+    pairs = [(date, close) for date, close in pairs if date >= cutoff]
+    dates = [date.isoformat() for date, _close in pairs]
+    values = [close for _date, close in pairs]
     scenarios = {k: float(levels[k]) for k in ("bear", "base", "bull")}
     domain = values + list(scenarios.values())
     low, high = min(domain), max(domain)
     margin = max((high - low) * .04, 1)
     low, high = max(0, low - margin), high + margin
-    width, height, pad = 420.0, 150.0, 8.0
+    width, height, pad = 520.0, 210.0, 10.0
     span = high - low or 1
     y = lambda value: pad + (high - value) * (height - 2 * pad) / span
     rules = "".join(
-        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="8" y1="{y(price):.1f}" x2="412" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
+        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="10" y1="{y(price):.1f}" x2="510" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
         for case, price in scenarios.items()
     )
     band_y = min(y(scenarios["bear"]), y(scenarios["bull"]))
     band_h = abs(y(scenarios["bear"]) - y(scenarios["bull"]))
     points = polyline(values, width, height, pad, low, high)
+    entry = float(position["entry"]) if position else None
+    kill = float(position["kill"]) if position and position.get("kill") else None
+    attrs = (
+        f'data-desk-one-year-chart="{symbol}" data-desk-chart-dates="{",".join(dates)}" '
+        f'data-desk-chart-closes="{",".join(f"{value:.4f}" for value in values)}" '
+        f'data-desk-chart-entry="{entry if entry is not None else ""}" data-desk-chart-kill="{kill if kill is not None else ""}"'
+    )
     return (
-        f'<figure class="desk-detail-chart" data-desk-two-year-chart="{symbol}"><svg viewBox="0 0 420 150" role="img" aria-label="{symbol} up to two-year price with intrinsic levels">'
-        f'<rect class="desk-detail-band" x="8" y="{band_y:.1f}" width="404" height="{band_h:.1f}"/>{rules}'
-        f'<polyline class="desk-detail-price" points="{points}"/></svg>'
-        f'<figcaption>Up to 2 years · Beta {market["beta"]:.2f} · Annualized vol {vol(values):.0f}%</figcaption></figure>'
+        f'<figure class="desk-detail-chart" {attrs}><svg viewBox="0 0 520 210" role="img" tabindex="0" aria-label="{symbol} one-year price history with intrinsic levels. Hover or use arrow keys for daily metrics.">'
+        f'<rect class="desk-detail-band" x="10" y="{band_y:.1f}" width="500" height="{band_h:.1f}"/>{rules}'
+        f'<polyline class="desk-detail-price" points="{points}"/><line class="desk-chart-hover-line" x1="0" x2="0" y1="10" y2="200" hidden/>'
+        f'<circle class="desk-chart-hover-dot" cx="0" cy="0" r="4" hidden/></svg>'
+        f'<div class="desk-chart-tooltip" data-desk-chart-tooltip role="status" aria-live="polite" hidden></div>'
+        f'<figcaption>1 year · Beta {market["beta"]:.2f} · Annualized vol {vol(values):.0f}% · Hover for metrics</figcaption></figure>'
     )
 
 
@@ -216,7 +231,7 @@ def valuation_detail(symbol: str, market: dict, valuation: dict, position: dict 
     distance_line = f'Trading {distance:+.0f}% versus the base case' if distance is not None else "Market price feed unavailable"
     canonical = f"/trading/hypotheses/#hypothesis-{symbol.lower()}-setup"
     return f'''<div class="desk-fold-grid">
-<div>{detail_chart(symbol, market, levels)}</div>
+<div>{detail_chart(symbol, market, levels, position)}</div>
 <div class="desk-valuation" data-desk-valuation><h4>Valuation</h4>{metrics}<div><span>Last</span><b>{money(last)}</b></div><div><span>Sector</span><b>{html.escape(sector)}</b></div></div>
 <div class="desk-entry" data-desk-entry-tiles><h4>Intrinsic entry levels</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button><button type="button" data-thesis-open="{symbol}" aria-haspopup="dialog" aria-controls="desk-thesis-dialog">Full thesis</button><a href="{canonical}">Canonical thesis</a></div></div>
 </div>'''
@@ -235,7 +250,6 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         meta = metadata[symbol]
         catalyst = dt.date.fromisoformat(meta["catalyst"])
         days = max(0, (catalyst - as_of).days)
-        pnl = (market["last"] / float(position["entry"]) - 1) * 100
         kill = position.get("kill")
         if kill:
             room = (market["last"] / float(kill) - 1) * 100
@@ -245,11 +259,13 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         edge = "up" if market["day"] > .05 else "down" if market["day"] < -.05 else "flat"
         edge_word = {"up":"Up", "down":"Down", "flat":"Flat"}[edge]
         detail_id = f"desk-detail-{symbol.lower()}"
+        flair = position.get("flair")
+        flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
         main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
-<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><small>{html.escape(position['instrument'])}</small></button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('P&L', pct(pnl), 'desk-num')}{feed_cell('Room to kill', room_html)}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('YTD · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst">{catalyst.strftime("%b %-d")}</span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small></button></td>
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Room to kill', room_html)}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('YTD · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
-        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="10">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
+        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)
     return "\n".join(rows)
 
@@ -271,18 +287,18 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
             last, day, beta, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
-{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}<td colspan="2" data-label="What would move it"><span class="desk-trigger">{html.escape(meta['trigger'])}</span></td>{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('YTD', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}">{catalyst.strftime("%b %-d")}</span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}<td data-label="What would move it"><span class="desk-trigger">{html.escape(meta['trigger'])}</span></td>{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('YTD', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
-        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="10">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
+        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
         rows.append(main + detail)
     return "\n".join(rows)
 
 
 def table(title: str, subtitle: str, body: str, hypotheses: bool = False) -> str:
     if hypotheses:
-        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th colspan="2">What would move it</th><th>Beta</th><th>Spread Z</th><th>YTD</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>What would move it</th><th>Beta</th><th>Spread Z</th><th>YTD</th><th>Next catalyst</th><th>In</th>'
     else:
-        heads = '<th>Position</th><th>Last</th><th>Day</th><th>P&amp;L</th><th>Room to kill</th><th>Beta</th><th>Spread Z</th><th>YTD · levels</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Room to kill</th><th>Beta</th><th>Spread Z</th><th>YTD · levels</th><th>Next catalyst</th><th>In</th>'
     return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
@@ -359,11 +375,11 @@ def main() -> int:
         if rendered != PAGE.read_text():
             print("[trading-desk] stale: run python3 scripts/build-trading-desk.py")
             return 1
-        print("[trading-desk] current and network-free: 6 positions + 5 tracked hypotheses")
+        print("[trading-desk] current and network-free: 6 positions + 6 tracked hypotheses")
         return 0
     PAGE.write_text(rendered)
     sync_shell_assets()
-    print(f"[trading-desk] built {args.mode}: 6 positions + 5 tracked hypotheses")
+    print(f"[trading-desk] built {args.mode}: 6 positions + 6 tracked hypotheses")
     return 0
 
 
