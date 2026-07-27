@@ -35,6 +35,7 @@ class HypothesisSummaryTests(unittest.TestCase):
         for symbol in symbols:
             self.assertIn(f'data-hypothesis-summary-row="{symbol}"', self.page)
             self.assertIn(f'href="#hypothesis-{symbol.lower()}-setup"', self.page)
+            self.assertIn(f'data-hypothesis-chart-open="{symbol}"', self.page)
 
     def test_every_row_has_two_year_chart_metrics_and_three_case_levels(self) -> None:
         symbols = list(self.config["rows"])
@@ -92,10 +93,28 @@ class HypothesisSummaryTests(unittest.TestCase):
     def test_summary_stylesheet_asset_is_unique(self) -> None:
         self.assertEqual(self.page.count(summary.CSS_HREF), 1)
         self.assertEqual(self.page.count("/trading/hypothesis-summary"), 1)
-        asset = ROOT / summary.CSS_HREF.removeprefix("/")
-        payload = asset.read_bytes()
-        digest = hashlib.sha1(f"blob {len(payload)}\0".encode() + payload).hexdigest()[:8]
-        self.assertIn(f".{digest}.css", summary.CSS_HREF)
+        for href, suffix in ((summary.CSS_HREF, ".css"), (summary.MODAL_SCRIPT_HREF, ".js")):
+            asset = ROOT / href.removeprefix("/")
+            payload = asset.read_bytes()
+            digest = hashlib.sha1(f"blob {len(payload)}\0".encode() + payload).hexdigest()[:8]
+            self.assertIn(f".{digest}{suffix}", href)
+
+    def test_chart_modal_uses_watchlist_assets_and_sector_pairs(self) -> None:
+        symbols = summary.extract_hypothesis_symbols(self.page)
+        self.assertEqual(self.page.count('class="hyp-summary-chart-launch"'), len(symbols))
+        self.assertEqual(self.page.count('id="hypothesis-chart-dialog"'), 1)
+        self.assertEqual(self.page.count(summary.MODAL_SCRIPT_HREF), 1)
+        match = re.search(r'<script type="application/json" id="scan-chart-config">(.*?)</script>', self.page)
+        self.assertIsNotNone(match)
+        chart_config = json.loads(match.group(1) if match else "{}")
+        self.assertEqual(chart_config["url"], summary.versioned_asset(summary.SCAN_CHARTS))
+        self.assertEqual(chart_config["vwap_url"], summary.versioned_asset(summary.VWAP_CHARTS))
+        scan_charts = json.loads(summary.SCAN_CHARTS.read_text())["charts"]
+        sector_charts = json.loads(summary.VWAP_CHARTS.read_text())["charts"]
+        missing = {symbol for symbol in symbols if symbol not in scan_charts}
+        self.assertLessEqual(missing, {"FIGR"})
+        for symbol in set(symbols) - missing:
+            self.assertIn(scan_charts[symbol]["sector_etf"], sector_charts, symbol)
 
     def test_checked_in_page_matches_renderer(self) -> None:
         rendered = summary.render_page(self.page, self.config, self.charts)
