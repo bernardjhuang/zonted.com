@@ -613,7 +613,10 @@ def main():
     page_changed = new != open(PAGE).read()
     if page_changed:
         open(PAGE, "w").write(new)
-    routed_changed = bool(sync_sections(["brief"]))
+    try:
+        routed_changed = bool(sync_sections(["brief"]))
+    except (KeyError, ValueError):
+        routed_changed = False
     if not page_changed and not routed_changed:
         print(f"[brief] already current: {entry_count} briefs, latest {latest_date}")
         return
