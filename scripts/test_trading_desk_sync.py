@@ -182,11 +182,46 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("scrollIntoView({ block: 'start', behavior: 'smooth' })", script)
         self.assertIn("toggle.focus({ preventScroll: true })", script)
 
+    def test_dual_vwap_setup_window_persists_for_three_trading_sessions(self) -> None:
+        def chart(closes: list[float], earnings: list[float], ytd: list[float]) -> dict:
+            dates = [f"2026-07-{day:02d}" for day in range(13, 13 + len(closes))]
+            return {"series": {"dates": dates, "c": closes, "ev": earnings, "yv": ytd}}
+
+        charts = {
+            "LONG": chart([9, 11, 9, 9], [10, 10, 10, 10], [8, 8, 8, 8]),
+            "SHORT": chart([9, 7, 9], [10, 10, 10], [8, 8, 8]),
+            "EXPIRED": chart([9, 11, 9, 9, 9], [10, 10, 10, 10, 10], [8, 8, 8, 8, 8]),
+        }
+        setups = sync.dual_vwap_setups(charts)
+        self.assertEqual([row["symbol"] for row in setups["long"]], ["LONG"])
+        self.assertEqual(setups["long"][0]["day"], 3)
+        self.assertIsNone(setups["long"][0]["current_side"])
+        self.assertEqual([row["symbol"] for row in setups["short"]], ["SHORT"])
+        self.assertEqual(setups["short"][0]["day"], 2)
+        self.assertNotIn("EXPIRED", {row["symbol"] for side in setups.values() for row in side})
+
+    def test_fast_reversal_can_be_active_on_both_sides(self) -> None:
+        charts = {"FLIP": {"series": {
+            "dates": ["2026-07-20", "2026-07-21", "2026-07-22"],
+            "c": [9, 11, 9], "ev": [10, 10, 10], "yv": [10, 10, 10],
+        }}}
+        setups = sync.dual_vwap_setups(charts)
+        self.assertEqual(setups["long"][0]["symbol"], "FLIP")
+        self.assertEqual(setups["long"][0]["trigger_date"], "2026-07-21")
+        self.assertEqual(setups["short"][0]["symbol"], "FLIP")
+        self.assertEqual(setups["short"][0]["trigger_date"], "2026-07-22")
+
     def test_public_route_names_match_their_new_jobs(self) -> None:
         watchlist = (ROOT / "trading" / "watchlist" / "index.html").read_text()
+        setups = (ROOT / "trading" / "vwap-setups" / "index.html").read_text()
         momentum = (ROOT / "trading" / "momentum" / "index.html").read_text()
         self.assertIn("<title>Watchlist", watchlist)
         self.assertIn('id="desk-route-heading">Watchlist</h1>', watchlist)
+        self.assertIn("<title>VWAP Setups", setups)
+        self.assertIn('id="desk-route-heading">VWAP Setups</h1>', setups)
+        self.assertIn("Breaks above or below both earnings VWAP and YTD VWAP stay active for three trading sessions.", setups)
+        updater = (ROOT / "scripts" / "update-trading-scan.py").read_text()
+        self.assertIn('sync_sections(["momentum", "setups"])', updater)
         self.assertIn("<title>Momentum", momentum)
         self.assertIn('id="desk-route-heading">Momentum</h1>', momentum)
 
@@ -194,12 +229,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
-        self.assertEqual(len(pages), 10)
+        self.assertEqual(len(pages), 11)
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
             self.assertIn('aria-label="Zonted homepage"', page, path.as_posix())
             self.assertRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
+            self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
             self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
