@@ -43,7 +43,7 @@ def exercise(page, url: str, screenshot: Path) -> None:
 
     chart_opener = page.locator(".desk-detail-row:not([hidden]) [data-hypothesis-chart-open]")
     chart_opener.click()
-    page.locator("#hypothesis-chart-dialog[open] .scan-comparison-grid").wait_for()
+    page.locator("#hypothesis-chart-dialog[open] svg").nth(1).wait_for()
     check(page.locator("#hypothesis-chart-dialog[open] svg").count() >= 2, "setup dialog did not render both charts")
     page.keyboard.press("Escape")
     check(chart_opener.evaluate("el => document.activeElement === el"), "chart opener did not regain focus")
