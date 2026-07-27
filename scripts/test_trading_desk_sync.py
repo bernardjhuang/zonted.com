@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import os
 import pathlib
 import re
 import subprocess
@@ -184,8 +185,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
     def test_trading_desk_v3_generator_is_network_free_and_idempotent(self) -> None:
         script = ROOT / "scripts" / "build-trading-desk.py"
         self.assertTrue(script.exists(), "desk must be generated from source, not hand-edited HTML")
+        check_args = [sys.executable, str(script)]
+        morning_quotes = os.environ.get("ZONTED_DESK_MORNING_QUOTES")
+        if morning_quotes:
+            check_args.extend(["--mode", "morning", "--quotes", morning_quotes])
+        check_args.append("--check")
         result = subprocess.run(
-            [sys.executable, str(script), "--check"],
+            check_args,
             cwd=ROOT,
             text=True,
             capture_output=True,
