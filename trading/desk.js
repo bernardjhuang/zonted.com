@@ -315,3 +315,105 @@
     }).catch(() => {});
   }
 })();
+
+/* Trading desk v3 blotter interactions. Generated rows remain useful without JS. */
+(function () {
+  'use strict';
+  let thesisDocument = null;
+  let thesisOpener = null;
+
+  function toggleDeskRow(button, force) {
+    var id = button.getAttribute('aria-controls');
+    var detail = id ? document.getElementById(id) : null;
+    if (!detail) return;
+    var open = typeof force === 'boolean' ? force : button.getAttribute('aria-expanded') !== 'true';
+    button.setAttribute('aria-expanded', String(open));
+    detail.hidden = !open;
+    button.closest('tr').classList.toggle('is-open', open);
+  }
+
+  function initDeskBlotter() {
+    var toggles = Array.prototype.slice.call(document.querySelectorAll('.desk-row-toggle'));
+    toggles.forEach(function (button, index) {
+      button.addEventListener('click', function () { toggleDeskRow(button); });
+      button.addEventListener('keydown', function (event) {
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          var direction = event.key === 'ArrowDown' ? 1 : -1;
+          var next = toggles[(index + direction + toggles.length) % toggles.length];
+          next.focus();
+        }
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          toggleDeskRow(button);
+        }
+      });
+    });
+    document.querySelectorAll('.desk-ytd').forEach(function (figure) {
+      figure.addEventListener('pointermove', function (event) {
+        figure.style.setProperty('--desk-pointer-x', event.offsetX + 'px');
+      });
+    });
+  }
+
+  function closeThesisDialog(dialog) {
+    dialog.close();
+    if (thesisOpener) thesisOpener.focus();
+  }
+
+  async function openThesis(button) {
+    var dialog = document.getElementById('desk-thesis-dialog');
+    if (!dialog) return;
+    thesisOpener = button;
+    var symbol = button.getAttribute('data-thesis-open');
+    var thesisSource = dialog.getAttribute('data-thesis-source');
+    var body = dialog.querySelector('[data-thesis-body]');
+    var summary = dialog.querySelector('[data-thesis-summary]');
+    dialog.querySelector('#desk-thesis-title').textContent = symbol + ' full thesis';
+    body.innerHTML = '<p>Loading thesis…</p>';
+    dialog.showModal();
+    try {
+      if (!thesisDocument) {
+        var response = await fetch(thesisSource, {credentials: 'same-origin'});
+        if (!response.ok) throw new Error('Thesis source returned ' + response.status);
+        thesisDocument = new DOMParser().parseFromString(await response.text(), 'text/html');
+      }
+      var article = thesisDocument.querySelector('article.hypothesis-detail#hypothesis-' + symbol.toLowerCase() + '-setup');
+      if (!article) throw new Error('No canonical thesis found for ' + symbol);
+      var clone = article.cloneNode(true);
+      clone.querySelectorAll('details').forEach(function (details) { details.setAttribute('open', ''); });
+      body.replaceChildren(clone);
+      var row = button.closest('.desk-detail-row').previousElementSibling;
+      var catalyst = row.querySelector('.desk-catalyst');
+      summary.innerHTML = '<div class="desk-thesis-summary"><b>' + symbol + '</b><span>Next catalyst ' + (catalyst ? catalyst.textContent : '—') + '</span></div>';
+    } catch (error) {
+      body.innerHTML = '<p class="bl-empty">Could not load the full thesis. <a href="/trading/hypotheses/#hypothesis-' + symbol.toLowerCase() + '-setup">Open the canonical page</a>.</p>';
+      console.error(error);
+    }
+  }
+
+  function initThesisDialog() {
+    var dialog = document.getElementById('desk-thesis-dialog');
+    if (!dialog) return;
+    document.addEventListener('click', function (event) {
+      var opener = event.target.closest('[data-thesis-open]');
+      if (opener) openThesis(opener);
+      if (event.target.closest('[data-thesis-close]')) closeThesisDialog(dialog);
+    });
+    dialog.addEventListener('click', function (event) {
+      if (event.target === dialog) closeThesisDialog(dialog);
+    });
+    dialog.addEventListener('cancel', function (event) {
+      event.preventDefault();
+      closeThesisDialog(dialog);
+    });
+  }
+
+  function initDeskV3() {
+    initDeskBlotter();
+    initThesisDialog();
+  }
+
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initDeskV3);
+  else initDeskV3();
+})();

@@ -288,7 +288,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertRegex(styles, r'\.desk-thesis-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertNotIn('height="auto"', page + script)
-        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr) 316px', styles.replace(" ", ""))
+        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)316px', styles.replace(" ", ""))
 
     def test_market_rail_uses_ytd_chart_and_live_leadership_groups(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
