@@ -200,6 +200,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(setups["short"][0]["day"], 2)
         self.assertNotIn("EXPIRED", {row["symbol"] for side in setups.values() for row in side})
 
+    def test_first_available_bar_is_not_a_crossover(self) -> None:
+        charts = {
+            "FIRST_LONG": {"series": {"dates": ["2026-07-20"], "c": [11], "ev": [10], "yv": [10]}},
+            "FIRST_SHORT": {"series": {"dates": ["2026-07-20"], "c": [9], "ev": [10], "yv": [10]}},
+        }
+        setups = sync.dual_vwap_setups(charts)
+        self.assertEqual(setups, {"long": [], "short": []})
+
     def test_fast_reversal_can_be_active_on_both_sides(self) -> None:
         charts = {"FLIP": {"series": {
             "dates": ["2026-07-20", "2026-07-21", "2026-07-22"],
