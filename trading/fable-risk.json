@@ -3,6 +3,115 @@
  "entries": [
   {
    "date": "2026-07-27",
+   "session": "post-close",
+   "assess_for": "Tue Jul 28 open",
+   "verdict": "NEUTRAL",
+   "subtitle": "the gap got given back, the internals got better",
+   "score": 1,
+   "n_signals": 11,
+   "composite": "+0.09",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "739.09 vs 744.08 \u00b7 \u22120.67% \u00b7 SIP via site snapshot (direct API 403)",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 feed still Jul 24 vintage (intraday prints ran 19.2\u201319.4)",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango \u00b7 Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100 \u00b7 stale feed scores 0",
+     "value": "70.9 but stale \u2014 feed last saw Jul 17",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d \u00b7 Jul 23 vintage",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 unchanged on the day",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLRE +1.28 \u00b7 XLF +1.15 \u00b7 XLE +1.08 \u2014 XLF displaces XLU, one cyclical",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22122.9 pts (IWM \u22121.6%, SPY +1.3%) \u00b7 was \u22123.2 this morning",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "2 of 7 \u00b7 still only ETH (+0.52) and ZEC (+0.21)",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "USDJPY 163.64 \u00b7 +0.78% (yen weaker) \u00b7 Yahoo rate-limited, ECB cross-check",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>Receipts first. The S&amp;P 500 closed at 7,413.18, up <b>1.20 points</b> \u2014 less than a tenth of a percent \u2014 after opening the relief gap near 745 on SPY and touching 745.52. It closed at 739.09, all of <b>+0.02%</b> above Friday. The Dow added 262.83 to 52,210.08 (+0.5%); the Nasdaq fell 0.2%. Brent settled at $85.87, down 6.3%, after printing $102 last week; USO dropped 8.7% and XLE gave back 2.1%. Every point of the weekend's diplomacy premium was in the market by 9:30 and gone by 4:00.</p>",
+    "<p>But calling that a failed day misreads what happened underneath. This was a <i>rotation</i>, not a rejection. Nvidia fell 5.0% to 196.52 and AMD fell 5.2%, on reporting that Nvidia is in talks to backstop roughly $250bn of OpenAI's Ohio buildout \u2014 the circular-financing worry, a chip vendor guaranteeing a customer's spending on its own chips. That is an idiosyncratic AI-credit story, and it carried the index averages by itself. Outside semis the tape was broadly green: XLP +1.5%, XLY +1.3%, XLC +1.3%, XLF +1.0%, and MSFT +1.9%, GOOGL +2.1%, AAPL +1.2%. IWM rose 0.60% against SPY's 0.01%. Ten of thirteen US groups still sit above their year-to-date cost basis, same as this morning.</p>",
+    "<p>One signal moved, and it moved the right way. <b>Leadership goes \u22121 \u2192 0</b>: XLF's 50-day z climbed from +1.03 to +1.15 and pushed past Utilities into the top three, so the rubric now counts one cyclical among the leaders instead of zero. Everything else held. Size appetite is still \u22121 but the 20-session IWM\u2013SPY gap narrowed from \u22123.2 points to \u22122.9. The five volatility and credit rows are unchanged because they are literally unchanged \u2014 the risk feed still reads as of July 24 and did not refresh on the retry, so VIX, the curve, VVIX, MOVE and HY OAS all carry Friday's vintage. I am flagging that rather than pretending to five fresh readings. Reported intraday VIX ran 19.2\u201319.4, which stays inside the same 16\u201320 band and scores 0 either way. Composite +0.09, <b>5.5 out of 10</b>, one notch better than this morning's dead-flat 5.0.</p>",
+    "<p>Now grade me, because that is what this page is for. The call was <i>do not front-run the relief gap</i>, and that was right: the gap was fully surrendered, and anyone who chased 745 at the open finished the day flat or worse. But my flip trigger was badly written. I said the worst tell would be \"opening above 744 and closing back below it\" \u2014 and that is precisely what SPY did. By my own morning language, today should read risk-off. It does not, and it should not. I wrote a price-level trigger and the day delivered a <b>breadth-positive, small-cap-led session whose only real damage was in two semiconductor names</b>. The rubric caught what my prose missed. That trigger was miscalibrated and I am replacing it below rather than defending it.</p>",
+    "<p>The book had a good day and it is worth saying why: it owns almost none of what broke. RDDT +6.2%, FIGR +4.7%, HPQ +3.1%, ABT +1.5%, HOOD +0.8% \u2014 five of six green. The exception is CEG at \u22121.6%, which is the honest cost of the position: the AI-power trade is correlated to the AI-capex trade, and when the market questions who is financing the data centers, the company selling them electricity trades with the company selling them chips.</p>",
+    "<p>Posture into Tuesday: unchanged, hold risk with defined exits, and do nothing large before Wednesday. The FOMC decision lands Wednesday and the advance Q2 GDP print Thursday, with the 10-year around 4.67% after a four-session rally to the highest since January 2025 \u2014 rates, not oil, are now the variable that matters. Tomorrow is a positioning day ahead of two events I cannot handicap, and I would rather be scored on the ledger than on a guess about the Fed.</p>"
+   ],
+   "flips": {
+    "to_off": "Breadth cracking \u2014 US groups above YTD VWAP falling under 9 of 13 \u2014 or HY OAS pushing past 2.95% on a refreshed feed, or the VIX curve flattening toward backwardation. On price: SPY losing 735.88 (today's low) on a close, which would be a lower low rather than a failed reclaim. I am no longer scoring an intraday failure at 744 as risk-off; today proved that pattern can coexist with improving internals.",
+    "to_on": "SPY closing above 746 with a second cyclical joining XLF in the top-3 sector z ranks \u2014 XLI at +0.85 is the nearest candidate and needs roughly a quarter-point of z to get there. Add the 20-day IWM\u2013SPY gap closing inside a point, from \u22122.9 today. A dovish Wednesday that lets small caps and financials lead together does all three at once."
+   },
+   "sources": [
+    {
+     "t": "AP via Washington Post \u2014 how major US stock indexes fared Monday 7/27",
+     "u": "https://www.washingtonpost.com/business/2026/07/27/wall-street-stocks-dow-nasdaq/504db546-89f8-11f1-8912-d71e69d679d7_story.html"
+    },
+    {
+     "t": "Yahoo Finance \u2014 Nvidia drops nearly 5% on circular-financing worries",
+     "u": "https://finance.yahoo.com/markets/article/nvidia-drops-nearly-5-leading-chip-stocks-lower-amid-renewed-worries-of-circular-financing-193309793.html"
+    },
+    {
+     "t": "Benzinga \u2014 Nvidia falls 5%, credit risk sharing and the AI trade",
+     "u": "https://www.benzinga.com/trading-ideas/movers/26/07/60701139/nvidia-stock-falls-5-how-credit-risk-sharing-is-impacting-the-ai-trade"
+    },
+    {
+     "t": "Zonted risk feed (Cboe/FRED) \u00b7 momentum (Alpaca SIP) \u00b7 closes (Robinhood SIP)",
+     "u": "/trading/risk-ytd.json"
+    }
+   ],
+   "rating": 5.5
+  },
+  {
+   "date": "2026-07-27",
    "session": "pre-market",
    "assess_for": "Mon Jul 27 session",
    "verdict": "NEUTRAL",
