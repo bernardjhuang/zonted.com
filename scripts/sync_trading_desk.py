@@ -110,7 +110,7 @@ def dual_vwap_setups(charts: dict, window: int = 3) -> dict[str, list[dict]]:
         latest = len(dates) - 1
         current_side = sides[latest]
         for side in result:
-            triggers = [i for i, value in enumerate(sides) if value == side and (i == 0 or sides[i - 1] != side)]
+            triggers = [i for i, value in enumerate(sides) if i > 0 and value == side and sides[i - 1] != side]
             if not triggers:
                 continue
             trigger = triggers[-1]
