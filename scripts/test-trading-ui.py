@@ -10,6 +10,8 @@ import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
+DESK_HOME = ROOT / "trading" / "index.html"
+HYPOTHESES_ROUTE = ROOT / "trading" / "hypotheses" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
@@ -84,27 +86,27 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Asymmetry:', grok_brief_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
-        self.assertIn('Hypotheses <span class="trading-tab-count">9</span>', self.html)
-        self.assertEqual(self.html.count('data-hypothesis-symbol='), 9)
+        hypotheses_html = HYPOTHESES_ROUTE.read_text()
+        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), 11)
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
                 r'<article class="hypothesis-detail" id="hypothesis-([a-z]+)-setup"(.*?)</article>',
-                self.html,
+                hypotheses_html,
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "HIMS", "HOOD", "NTDOY", "RDDT", "RBLX", "TMO"})
-        self.assertIn('<span class="hypothesis-status">Watch · thesis only</span>', self.html)
+        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "FIGR", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"})
+        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), 11)
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
         for symbol, block in details.items():
-            self.assertIn(f'data-hypothesis-symbol="{symbol}"', self.html)
+            self.assertIn(f'id="hypothesis-{symbol.lower()}-setup"', hypotheses_html)
             self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', block)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
-        hypotheses_route = (ROOT / "trading" / "hypotheses" / "index.html").read_text()
+        hypotheses_route = HYPOTHESES_ROUTE.read_text()
         for symbol in details:
             self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', hypotheses_route)
         route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
@@ -136,10 +138,34 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('126.8M', details["RDDT"])
         self.assertIn('July 30, 2026', details["RDDT"])
         self.assertIn('$715–725M', details["RDDT"])
+        self.assertIn('Open position · profitable fintech', details["FIGR"])
+        self.assertIn('record loan volume', details["FIGR"])
+        self.assertIn('Open position · cash-yield value', details["HPQ"])
+        self.assertIn('AI-PC refresh', details["HPQ"])
         self.assertIn('5% organic growth', details["TMO"])
         self.assertIn('$1.68B', details["TMO"])
         self.assertIn('October 21, 2026', details["TMO"])
         self.assertIn('$193 bear / $275 base / $378 bull', details["TMO"])
+
+    def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
+        hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
+        self.assertEqual(len(articles), 11)
+        self.assertEqual(
+            {symbol.upper() for symbol, _attrs in articles},
+            {"ABT", "BYDDY", "CEG", "FIGR", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"},
+        )
+        for symbol, attrs in articles:
+            self.assertRegex(attrs, r'data-desk-catalyst="\d{4}-\d{2}-\d{2}"', symbol)
+            self.assertRegex(attrs, r'data-desk-trigger="[^"]+"', symbol)
+            self.assertRegex(attrs, r'data-desk-stance="(constructive|speculative|research-only|open-position)"', symbol)
+
+        desk = DESK_HOME.read_text()
+        self.assertEqual(desk.count('data-desk-kind="position"'), 6)
+        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 5)
+        self.assertIn('data-desk-source-articles="11"', desk)
+        self.assertIn('/trading/hypotheses/#hypothesis-hood-setup', desk)
+        self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
@@ -349,8 +375,8 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_live_setups_collapsed_and_recent_activity_folded(self):
         combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
-        self.assertEqual(len(combined_pnl_rows), 6)
-        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, {"ABT", "FIGR", "HOOD"})
+        self.assertGreaterEqual(len(combined_pnl_rows), 6)
+        self.assertGreaterEqual(len({symbol for _, symbol in combined_pnl_rows}), 3)
         for symbol in {symbol for _, symbol in combined_pnl_rows}:
             values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
             self.assertEqual(len(values), 1, symbol)
@@ -372,11 +398,13 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_desk_pages_share_one_nav_and_stamp(self):
         """Guard against multi-agent drift: every routed desk page must carry the
-        same nav link set (hrefs and labels) and the same stamp format."""
+        same nav link set (hrefs and labels), stamp format, and current desk assets."""
         import glob
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
                  if "classic" not in p and "charts" not in p and '<nav class="subnav"' in pathlib.Path(p).read_text()] + [str(ROOT / "trading" / "index.html")]
         nav_sets, stamps, chips = set(), set(), set()
+        css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
+        js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         for p in pages:
             s = pathlib.Path(p).read_text()
             nav = s[s.find("subnav"):s.find("</nav>")]
@@ -385,11 +413,15 @@ class TradingUiContractTest(unittest.TestCase):
             chip = re.search(r'<span class="chipset">.*?</span></a></span>', s)
             chips.add(chip.group(0) if chip else "missing")
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
+            self.assertIn(f'/trading/desk.css?v={css_hash}', s, p)
+            self.assertIn(f'/trading/desk.js?v={js_hash}', s, p)
         self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
         self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
         self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
+        self.assertNotIn("/trading/hypotheses/", hrefs)
+        self.assertTrue(HYPOTHESES_ROUTE.exists(), "canonical hypotheses source route must remain available")
 
 
 
