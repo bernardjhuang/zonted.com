@@ -9,9 +9,13 @@
 .hyp-summary-table th{background:var(--bl-card)}
 .hyp-summary-table td{vertical-align:middle;padding-top:10px;padding-bottom:10px}
 .hyp-summary-table tbody tr:hover td{background:var(--bl-hover)}
+.hyp-summary-symbol-head{display:flex;align-items:center;gap:7px}
 .hyp-summary-symbol a{display:block;color:var(--bl-ink);font:700 14px var(--bl-mono);text-decoration:none}
 .hyp-summary-symbol a:hover{color:var(--bl-accent)}
-.hyp-summary-symbol span{display:block;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono);text-transform:uppercase}
+.hyp-summary-confidence{display:block;margin-top:3px;color:var(--bl-faint);font:500 9.5px var(--bl-mono);text-transform:uppercase}
+.hyp-summary-chart-launch{display:inline-grid;place-items:center;width:28px;height:28px;padding:0;border:1px solid transparent;border-radius:6px;background:transparent;color:var(--bl-muted);font-size:15px;line-height:1;cursor:pointer}
+.hyp-summary-chart-launch:hover{border-color:var(--bl-chipbd);background:var(--bl-hover)}
+.hyp-summary-chart-launch:focus-visible{outline:2px solid var(--bl-accent);outline-offset:2px}
 .hyp-summary-chart{width:260px;min-width:260px;margin:0}
 .hyp-summary-chart svg{display:block;width:100%;height:70px}
 .hyp-summary-chart .grid{stroke:var(--bl-divider);stroke-width:1;vector-effect:non-scaling-stroke}
@@ -35,6 +39,29 @@
 .hyp-summary-level--base{color:var(--bl-accent)}
 .hyp-summary-level--bull{color:var(--bl-gain)}
 .hyp-summary-note{padding:10px 18px 12px;border-top:1px solid var(--bl-divider);color:var(--bl-faint);font-size:11px;line-height:1.5}
+.hyp-chart-dialog{width:min(1440px,calc(100vw - 32px));max-width:none;max-height:calc(100dvh - 32px);margin:auto;padding:0;border:1px solid var(--bl-border);border-radius:12px;background:var(--bl-card);color:var(--bl-ink);box-shadow:0 28px 80px rgba(20,22,26,.28);overflow:auto}
+.hyp-chart-dialog::backdrop{background:rgba(18,20,24,.58);backdrop-filter:blur(3px)}
+body:has(.hyp-chart-dialog[open]){overflow:hidden}
+.hyp-chart-dialog-frame{min-width:0}
+.hyp-chart-dialog-head{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:14px 18px;border-bottom:1px solid var(--bl-border);background:color-mix(in srgb,var(--bl-card) 94%,transparent)}
+.hyp-chart-dialog-head>div>span{display:block;margin-bottom:2px;color:var(--bl-faint);font:600 9.5px var(--bl-sans);letter-spacing:.07em;text-transform:uppercase}
+.hyp-chart-dialog-head h2{margin:0;font:700 15px var(--bl-mono)}
+.hyp-chart-dialog-close{display:grid;place-items:center;width:36px;height:36px;padding:0;border:1px solid var(--bl-border);border-radius:8px;background:var(--bl-card);color:var(--bl-muted);font:400 24px/1 var(--bl-sans);cursor:pointer}
+.hyp-chart-dialog-close:hover{color:var(--bl-ink);background:var(--bl-hover)}
+.hyp-chart-dialog-close:focus-visible{outline:2px solid var(--bl-accent);outline-offset:2px}
+.hyp-chart-dialog-body{padding:16px 16px 4px}
+.hyp-chart-dialog .scan-setup-chart{min-width:0;padding:0;border:0}
+.hyp-chart-dialog .scan-comparison-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:0}
+.hyp-chart-dialog .scan-comparison-grid>.scan-stock-chart,.hyp-chart-dialog .scan-comparison-grid>.scan-sector-chart{min-width:0}
+.hyp-chart-dialog .setup-card,.hyp-chart-dialog .vwap-chart{margin:0}
+.hyp-chart-dialog .setup-card header{align-items:center}
+.hyp-chart-dialog .setup-stats{margin-left:0;flex:1 0 100%}
+.hyp-chart-dialog .setup-read{min-height:3em}
+.hyp-chart-dialog-note{margin:0;padding:8px 18px 14px;color:var(--bl-faint);font-size:11px}
+.hyp-chart-dialog-note a,.hyp-chart-unavailable a{color:var(--bl-accent)}
+.hyp-chart-loading{margin:0;padding:40px 18px;color:var(--bl-muted);text-align:center}
+.hyp-chart-unavailable{display:grid;gap:6px;align-content:center;min-height:220px;margin:0;padding:24px;border:1px dashed var(--bl-border);border-radius:8px;color:var(--bl-muted);text-align:center}
+.hyp-chart-unavailable strong{color:var(--bl-ink)}
 @media(max-width:720px){
   .hyp-summary{margin-top:14px}
   .hyp-summary-head{align-items:flex-start;padding:13px 14px}
@@ -57,4 +84,14 @@
   .hyp-summary-metrics b{display:block;margin-bottom:2px}
   .hyp-summary-beta,.hyp-summary-level{text-align:left!important}
   .hyp-summary-note{padding:10px 14px}
+}
+@media(max-width:900px){
+  .hyp-chart-dialog{width:calc(100vw - 16px);max-height:calc(100dvh - 16px)}
+  .hyp-chart-dialog-head{padding:12px 14px}
+  .hyp-chart-dialog-head h2{font-size:13px}
+  .hyp-chart-dialog-body{padding:10px 8px 2px}
+  .hyp-chart-dialog .scan-comparison-grid{grid-template-columns:1fr;gap:10px}
+  .hyp-chart-dialog .setup-card,.hyp-chart-dialog .vwap-chart{padding:10px 10px 6px}
+  .hyp-chart-dialog .setup-read{min-height:0}
+  .hyp-chart-dialog-note{padding:8px 12px 12px}
 }

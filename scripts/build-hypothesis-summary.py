@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import hashlib
 import html
 import json
 import math
@@ -22,7 +23,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.24cf469f.css"
+SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
+VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
+CSS_HREF = "/trading/hypothesis-summary.6e6f3b19.css"
+MODAL_SCRIPT_HREF = "/js/hypothesis-chart-modal.1b5e1178.js"
 MIN_CHART_POINTS = 26
 MIN_BETA_OBSERVATIONS = 26
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
@@ -41,6 +45,11 @@ def extract_hypothesis_symbols(page: str) -> list[str]:
 
 def load_json(path: pathlib.Path) -> dict:
     return json.loads(path.read_text()) if path.exists() else {}
+
+
+def versioned_asset(path: pathlib.Path) -> str:
+    digest = hashlib.sha256(path.read_bytes()).hexdigest()[:12]
+    return f"/{path.relative_to(ROOT).as_posix()}?v={digest}"
 
 
 def validate_config(symbols: list[str], config: dict) -> None:
@@ -274,7 +283,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
         beta = float(chart["beta_2y_weekly_vs_spy"])
         beta_observations = int(chart["beta_observations"])
         rows.append(f'''<tr data-hypothesis-summary-row="{symbol}">
-<td class="hyp-summary-symbol" data-label="Ticker"><a href="#hypothesis-{symbol.lower()}-setup">{symbol}</a><span title="{html.escape(record["method"], quote=True)}">{html.escape(record["confidence"])} confidence</span></td>
+<td class="hyp-summary-symbol" data-label="Ticker"><div class="hyp-summary-symbol-head"><a href="#hypothesis-{symbol.lower()}-setup">{symbol}</a><button type="button" class="hyp-summary-chart-launch" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog" aria-label="Open {symbol} Spread Z and sector Z-score charts" title="Open {symbol} Spread Z and sector Z-score charts"><span aria-hidden="true">📊</span></button></div><span class="hyp-summary-confidence" title="{html.escape(record["method"], quote=True)}">{html.escape(record["confidence"])} confidence</span></td>
 <td class="hyp-summary-chart-cell" data-label="Up to 2-year stock chart">{sparkline(symbol, chart, levels)}</td>
 <td class="hyp-summary-beta" data-label="Beta vs SPY" title="Beta using {beta_observations} aligned weekly adjusted-close returns versus SPY">{beta:.2f}</td>
 <td class="hyp-summary-metrics" data-label="Valuation">{metrics}</td>
@@ -284,6 +293,10 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 </tr>''')
     as_of = short_date(charts["as_of"])
     valuation_as_of = short_date(config["as_of"])
+    chart_config = json.dumps({
+        "url": versioned_asset(SCAN_CHARTS),
+        "vwap_url": versioned_asset(VWAP_CHARTS),
+    }, separators=(",", ":"))
     return f'''{START}
 <section class="hyp-summary" aria-labelledby="hyp-summary-heading">
 <div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Up to two years of price context, current valuation snapshot, and bear / base / bull intrinsic entry levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
@@ -294,6 +307,15 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 </tbody></table></div>
 <p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Beta uses up to two years of weekly adjusted-close returns versus SPY; newer listings use their available trading history. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
 </section>
+<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title">
+<div class="hyp-chart-dialog-frame" id="hypothesis-chart-dialog-detail" data-hypothesis-chart-detail>
+<header class="hyp-chart-dialog-head"><div><span>Watchlist scanner data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header>
+<div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div>
+<p class="hyp-chart-dialog-note">Same completed-session Spread Z, VWAP, and sector Z-score data used by the <a href="/trading/watchlist/">Watchlist</a>.</p>
+</div>
+</dialog>
+<script type="application/json" id="scan-chart-config">{chart_config}</script>
+<script defer src="{MODAL_SCRIPT_HREF}"></script>
 {END}'''
 
 
