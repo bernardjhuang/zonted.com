@@ -53,6 +53,11 @@ class HypothesisSummaryTests(unittest.TestCase):
             self.assertLess(chart["dates"][0], chart["dates"][-1], symbol)
             self.assertTrue(-5 < float(chart["beta_2y_weekly_vs_spy"]) < 10, symbol)
             self.assertGreaterEqual(int(chart["beta_observations"]), summary.MIN_BETA_OBSERVATIONS, symbol)
+            self.assertIn(
+                f'data-label="Beta vs SPY" title="Beta using {chart["beta_observations"]} aligned weekly adjusted-close returns versus SPY">{float(chart["beta_2y_weekly_vs_spy"]):.2f}</td>',
+                self.page,
+                symbol,
+            )
             for case, value in row["entry_levels"].items():
                 self.assertIn(
                     f'data-entry-level="{case}" data-entry-price="{float(value):.2f}"',
@@ -84,7 +89,7 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Confidence measures model reliability—not expected upside", self.page)
 
     def test_summary_stylesheet_version_is_unique(self) -> None:
-        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v=4"), 1)
+        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v=5"), 1)
         self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v="), 1)
 
     def test_checked_in_page_matches_renderer(self) -> None:
@@ -102,7 +107,9 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Base", body)
         self.assertIn("Bull", body)
         self.assertIn("Valuation", body)
-        self.assertEqual(body.count("Beta vs SPY"), len(self.config["rows"]))
+        self.assertEqual(body.count('class="hyp-summary-beta"'), len(self.config["rows"]))
+        self.assertNotIn("hyp-summary-chart-meta", body)
+        self.assertIn('<th class="num">Beta vs SPY</th><th>Valuation</th>', body)
         self.assertIn("Beta uses up to two years of weekly adjusted-close returns versus SPY", body)
 
 

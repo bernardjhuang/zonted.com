@@ -22,7 +22,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.css?v=4"
+CSS_HREF = "/trading/hypothesis-summary.css?v=5"
 MIN_CHART_POINTS = 26
 MIN_BETA_OBSERVATIONS = 26
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
@@ -256,7 +256,6 @@ def sparkline(symbol: str, chart: dict, levels: dict) -> str:
         for case, price in entry_levels.items()
     )
     return f'''<figure class="hyp-summary-chart {direction}">
-<div class="hyp-summary-chart-meta" title="Beta using {beta_observations} aligned weekly adjusted-close returns versus SPY"><span>Beta vs SPY</span><b>{beta:.2f}</b></div>
 <svg viewBox="0 0 280 76" preserveAspectRatio="none" role="img" aria-label="{aria}">{grids}{entry_lines}<polyline class="line" points="{points}"/><circle class="dot" cx="{x(len(values) - 1):.1f}" cy="{y(values[-1]):.1f}" r="3"/></svg>
 <figcaption><span>{html.escape(short_date(dates[0]))}</span><b>${values[-1]:,.2f} <span class="{change_class}">{change:+.1f}%</span></b><span>{html.escape(short_date(dates[-1]))}</span></figcaption>
 </figure>'''
@@ -271,9 +270,13 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
             for metric in record["valuation_metrics"]
         )
         levels = record["entry_levels"]
+        chart = charts["charts"][symbol]
+        beta = float(chart["beta_2y_weekly_vs_spy"])
+        beta_observations = int(chart["beta_observations"])
         rows.append(f'''<tr data-hypothesis-summary-row="{symbol}">
 <td class="hyp-summary-symbol" data-label="Ticker"><a href="#hypothesis-{symbol.lower()}-setup">{symbol}</a><span title="{html.escape(record["method"], quote=True)}">{html.escape(record["confidence"])} confidence</span></td>
-<td class="hyp-summary-chart-cell" data-label="Up to 2-year stock chart">{sparkline(symbol, charts["charts"][symbol], levels)}</td>
+<td class="hyp-summary-chart-cell" data-label="Up to 2-year stock chart">{sparkline(symbol, chart, levels)}</td>
+<td class="hyp-summary-beta" data-label="Beta vs SPY" title="Beta using {beta_observations} aligned weekly adjusted-close returns versus SPY">{beta:.2f}</td>
 <td class="hyp-summary-metrics" data-label="Valuation">{metrics}</td>
 <td class="hyp-summary-level hyp-summary-level--bear" data-label="Bear">{money(levels["bear"])}</td>
 <td class="hyp-summary-level hyp-summary-level--base" data-label="Base">{money(levels["base"])}</td>
@@ -285,7 +288,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 <section class="hyp-summary" aria-labelledby="hyp-summary-heading">
 <div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Up to two years of price context, current valuation snapshot, and bear / base / bull intrinsic entry levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
 <div class="hyp-summary-wrap"><table class="hyp-summary-table">
-<thead><tr><th>Ticker</th><th>Up to 2-year stock chart</th><th>Valuation</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Bull</th></tr></thead>
+<thead><tr><th>Ticker</th><th>Up to 2-year stock chart</th><th class="num">Beta vs SPY</th><th>Valuation</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Bull</th></tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
