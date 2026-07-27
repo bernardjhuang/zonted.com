@@ -135,6 +135,30 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("/trading/gemini-risk.json", script)
         self.assertIn("setChip('gemini', 'Gemini'", script)
 
+    def test_meta_risk_route_preserves_the_search_grounded_model_output(self) -> None:
+        page = (ROOT / "trading" / "meta-risk" / "index.html").read_text()
+        payload = json.loads((ROOT / "trading" / "meta-risk.json").read_text())
+        entry = payload["entries"][0]
+        self.assertEqual(payload["schema_version"], 1)
+        self.assertEqual(payload["model"], "Meta AI muse-spark-1.1")
+        self.assertEqual(
+            payload["prompt"],
+            "Use all data sources that make sense to you. How would you rate the current stock market: risk on, risk off, or neutral? Why?",
+        )
+        self.assertEqual(entry["as_of"], "2026-07-27")
+        self.assertEqual(entry["stance"], "Neutral, leaning Risk-Off")
+        self.assertGreaterEqual(len(entry["search_queries"]), 10)
+        self.assertGreaterEqual(len(entry["sources"]), 3)
+        self.assertIn("<title>Meta Risk", page)
+        self.assertIn("<h1>Meta Risk</h1>", page)
+        self.assertIn('aria-current="page">Meta Risk</a>', page)
+        self.assertIn('data-model="Meta AI muse-spark-1.1"', page)
+        self.assertIn("Exact model response", page)
+        self.assertIn('class="meta-risk-response"', page)
+        self.assertNotIn("### Why", page)
+        self.assertIn("Integrity note", page)
+        self.assertIn("/trading/meta-risk.json", page)
+
     def test_position_heat_bars_are_replaced_by_price_charts(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
@@ -265,7 +289,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
-        self.assertEqual(len(pages), 11)
+        self.assertEqual(len(pages), 12)
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
@@ -275,6 +299,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
             self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
+            self.assertRegex(page, r'href="/trading/meta-risk/"[^>]*>Meta Risk</a>')
             self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
             self.assertIn('/trading/desk.css?v=19', page, path.as_posix())
             self.assertIn('/trading/desk.js?v=20', page, path.as_posix())
