@@ -18,13 +18,28 @@ def exercise(page, url: str, screenshot: Path) -> None:
     page.goto(url, wait_until="networkidle")
     check(page.locator(".desk-blotter-table").count() == 2, "expected two blotter tables")
     check(page.locator('[data-desk-kind="position"]').count() == 6, "expected six positions")
-    check(page.locator('[data-desk-kind="hypothesis"]').count() == 5, "expected five hypotheses")
+    check(page.locator('[data-desk-kind="hypothesis"]').count() == 6, "expected six hypotheses")
+    check(page.locator("th", has_text="P&L").count() == 0, "P&L column should be removed")
+    check(page.locator(".desk-position-flair--momentum").count() == 2, "expected two momentum flairs")
+    check(page.locator(".desk-position-flair--thesis").count() == 3, "expected three thesis flairs")
+    check(page.locator(".desk-catalyst b").first.inner_text().strip() != "", "catalyst name is missing")
     check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "page has horizontal overflow")
 
     opener = page.locator('[data-desk-kind="position"] .desk-row-toggle').first
     opener.click()
     check(opener.get_attribute("aria-expanded") == "true", "fold-out did not expand")
     check(page.locator(".desk-detail-row:not([hidden])").count() == 1, "fold-out detail not visible")
+    history_chart = page.locator(".desk-detail-row:not([hidden]) .desk-detail-chart")
+    check(history_chart.locator("figcaption").inner_text().startswith("1 year"), "detail chart is not one-year")
+    svg_box = history_chart.locator("svg").bounding_box()
+    if svg_box is None:
+        raise AssertionError("detail chart has no rendered bounds")
+    check(svg_box["height"] >= 200, "detail chart is too small")
+    history_chart.locator("svg").hover(position={"x": max(12, svg_box["width"] * .65), "y": svg_box["height"] * .5})
+    tooltip = history_chart.locator("[data-desk-chart-tooltip]:not([hidden])")
+    tooltip.wait_for()
+    tooltip_text = tooltip.inner_text()
+    check("Day" in tooltip_text and "1Y path" in tooltip_text, "hover metrics are incomplete")
 
     chart_opener = page.locator(".desk-detail-row:not([hidden]) [data-hypothesis-chart-open]")
     chart_opener.click()
@@ -58,7 +73,7 @@ def main() -> None:
         browser.close()
     print(f"[smoke] desktop 1440x1000: {args.desktop_shot}")
     print(f"[smoke] mobile 390x844: {args.mobile_shot}")
-    print("[smoke] two tables, fold-out, two-chart modal, thesis fetch, focus return, overflow, JS: OK")
+    print("[smoke] two tables, flairs, named catalysts, one-year hover metrics, modals, focus, overflow, JS: OK")
 
 
 if __name__ == "__main__":

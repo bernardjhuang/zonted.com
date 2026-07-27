@@ -218,14 +218,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(colgroups[0], colgroups[1], "positions and hypotheses tables must share one literal colgroup")
         self.assertEqual(
             re.findall(r'<col style="width:([^\"]+)">', colgroups[0]),
-            ["17%", "8%", "7%", "8%", "11%", "6.5%", "7%", "18%", "11%", "6.5%"],
+            ["20%", "8%", "7%", "12%", "7%", "7%", "20%", "12%", "7%"],
         )
         self.assertIn(".desk-blotter-table{table-layout:fixed", styles.replace(" ", ""))
 
         position_rows = _desk_rows(page, "position")
         thesis_rows = _desk_rows(page, "hypothesis")
-        self.assertEqual([_row_symbol(row) for row in position_rows], ["HOOD", "RDDT", "CEG", "FIGR", "HPQ", "ABT"])
-        self.assertEqual([_row_symbol(row) for row in thesis_rows], ["RBLX", "NTDOY", "HIMS", "BYDDY", "TMO"])
+        self.assertEqual([_row_symbol(row) for row in position_rows], ["HOOD", "CEG", "FIGR", "FRMI", "HPQ", "ABT"])
+        self.assertEqual([_row_symbol(row) for row in thesis_rows], ["RBLX", "RDDT", "NTDOY", "HIMS", "BYDDY", "TMO"])
         self.assertFalse({ _row_symbol(row) for row in position_rows } & { _row_symbol(row) for row in thesis_rows })
         for rows in (position_rows, thesis_rows):
             catalysts = [_row_attr(row, "data-catalyst-date") for row in rows]
@@ -241,12 +241,12 @@ class RoutedTradingSyncTests(unittest.TestCase):
                 self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
-        self.assertEqual(len(toggles), 11)
+        self.assertEqual(len(toggles), 12)
         for detail_id in toggles:
             match = re.search(rf'<tr[^>]+id="{detail_id}"[^>]+hidden[^>]*>(.*?)</tr>', page, re.S)
             self.assertIsNotNone(match, detail_id)
             detail = match.group(1) if match else ""
-            self.assertIn('data-desk-two-year-chart', detail)
+            self.assertIn('data-desk-one-year-chart', detail)
             self.assertIn('data-desk-valuation', detail)
             self.assertIn('data-desk-entry-tiles', detail)
             self.assertIn('data-hypothesis-chart-open=', detail)
@@ -256,6 +256,19 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("toggleDeskRow", script)
         self.assertIn("ArrowDown", script)
         self.assertIn("pointermove", script)
+        self.assertIn("initDeskHistoryCharts", script)
+        self.assertIn("data-desk-chart-tooltip", page)
+        self.assertNotIn("Up to 2 years", page)
+        self.assertNotIn('<th>P&amp;L</th>', page)
+        self.assertIn('<b>Q2 earnings</b><small>Jul 29</small>', page)
+        for symbol in ("HPQ", "ABT"):
+            row = next(row for row in position_rows if _row_symbol(row) == symbol)
+            self.assertIn('desk-position-flair--momentum', row)
+            self.assertIn('>Momentum<', row)
+        for symbol in ("FIGR", "HOOD", "CEG"):
+            row = next(row for row in position_rows if _row_symbol(row) == symbol)
+            self.assertIn('desk-position-flair--thesis', row)
+            self.assertIn('>Thesis<', row)
         self.assertIn("--desk-chart-bear", styles)
         self.assertIn("--desk-chart-base", styles)
         self.assertIn("--desk-chart-bull", styles)
@@ -268,7 +281,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count('id="hypothesis-chart-dialog"'), 1)
         self.assertEqual(page.count('id="scan-chart-config"'), 1)
         self.assertIn(f'/js/hypothesis-chart-modal.1b5e1178.js?v={chart_script_hash}', page)
-        self.assertEqual(page.count('data-hypothesis-chart-open='), 11)
+        self.assertEqual(page.count('data-hypothesis-chart-open='), 12)
         for launcher in re.findall(r'<button[^>]+data-hypothesis-chart-open="[A-Z]+"[^>]*>', page):
             self.assertIn('aria-haspopup="dialog"', launcher)
             self.assertIn('aria-controls="hypothesis-chart-dialog"', launcher)

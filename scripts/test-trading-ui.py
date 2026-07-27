@@ -88,7 +88,7 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_hypotheses_are_explicit_and_scannable(self):
         hypotheses_html = HYPOTHESES_ROUTE.read_text()
-        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), 11)
+        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), 12)
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
@@ -97,8 +97,8 @@ class TradingUiContractTest(unittest.TestCase):
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "FIGR", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"})
-        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), 11)
+        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"})
+        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), 12)
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
@@ -151,10 +151,10 @@ class TradingUiContractTest(unittest.TestCase):
     def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
         hypotheses_route = HYPOTHESES_ROUTE.read_text()
         articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
-        self.assertEqual(len(articles), 11)
+        self.assertEqual(len(articles), 12)
         self.assertEqual(
             {symbol.upper() for symbol, _attrs in articles},
-            {"ABT", "BYDDY", "CEG", "FIGR", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"},
+            {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"},
         )
         for symbol, attrs in articles:
             self.assertRegex(attrs, r'data-desk-catalyst="\d{4}-\d{2}-\d{2}"', symbol)
@@ -163,8 +163,8 @@ class TradingUiContractTest(unittest.TestCase):
 
         desk = DESK_HOME.read_text()
         self.assertEqual(desk.count('data-desk-kind="position"'), 6)
-        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 5)
-        self.assertIn('data-desk-source-articles="11"', desk)
+        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 6)
+        self.assertIn('data-desk-source-articles="12"', desk)
         self.assertIn('/trading/hypotheses/#hypothesis-hood-setup', desk)
         self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
 

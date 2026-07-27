@@ -356,6 +356,90 @@
     });
   }
 
+  function initDeskHistoryCharts() {
+    document.querySelectorAll('[data-desk-one-year-chart]').forEach(function (figure) {
+      var svg = figure.querySelector('svg');
+      var tooltip = figure.querySelector('[data-desk-chart-tooltip]');
+      var hoverLine = figure.querySelector('.desk-chart-hover-line');
+      var hoverDot = figure.querySelector('.desk-chart-hover-dot');
+      if (!svg || !tooltip || !hoverLine || !hoverDot) return;
+      var dates = (figure.getAttribute('data-desk-chart-dates') || '').split(',').filter(Boolean);
+      var closes = (figure.getAttribute('data-desk-chart-closes') || '').split(',').map(Number);
+      if (dates.length < 2 || dates.length !== closes.length || !closes.every(Number.isFinite)) return;
+      var entry = Number(figure.getAttribute('data-desk-chart-entry'));
+      var kill = Number(figure.getAttribute('data-desk-chart-kill'));
+      var hasEntry = Number.isFinite(entry) && entry > 0;
+      var hasKill = Number.isFinite(kill) && kill > 0;
+      var width = 520, height = 210, pad = 10;
+      var rawLow = Math.min.apply(null, closes);
+      var rawHigh = Math.max.apply(null, closes);
+      var scenarioPrices = Array.prototype.map.call(figure.querySelectorAll('.desk-detail-rule title'), function (title) {
+        var match = title.textContent.match(/\$([\d,.]+)/);
+        return match ? Number(match[1].replace(/,/g, '')) : NaN;
+      }).filter(Number.isFinite);
+      if (scenarioPrices.length) {
+        rawLow = Math.min.apply(null, [rawLow].concat(scenarioPrices));
+        rawHigh = Math.max.apply(null, [rawHigh].concat(scenarioPrices));
+      }
+      var margin = Math.max((rawHigh - rawLow) * .04, 1);
+      var low = Math.max(0, rawLow - margin), high = rawHigh + margin;
+      var x = function (index) { return pad + index * (width - 2 * pad) / Math.max(closes.length - 1, 1); };
+      var y = function (value) { return pad + (high - value) * (height - 2 * pad) / (high - low || 1); };
+      var activeIndex = closes.length - 1;
+      var signed = function (value) { return (value >= 0 ? '+' : '−') + Math.abs(value).toFixed(1) + '%'; };
+      function hideMetrics() {
+        tooltip.hidden = true;
+        hoverLine.setAttribute('hidden', '');
+        hoverDot.setAttribute('hidden', '');
+      }
+      function showMetrics(index) {
+        activeIndex = Math.max(0, Math.min(closes.length - 1, index));
+        var close = closes[activeIndex];
+        var day = activeIndex ? (close / closes[activeIndex - 1] - 1) * 100 : null;
+        var year = (close / closes[0] - 1) * 100;
+        var extras = '';
+        if (hasEntry) extras += '<span>vs entry <b>' + signed((close / entry - 1) * 100) + '</b></span>';
+        if (hasKill) extras += '<span>room to kill <b>' + signed((close / kill - 1) * 100) + '</b></span>';
+        tooltip.innerHTML = '<strong>' + dates[activeIndex] + ' · $' + close.toFixed(2) + '</strong>' +
+          '<span>Day <b>' + (day === null ? '—' : signed(day)) + '</b></span>' +
+          '<span>1Y path <b>' + signed(year) + '</b></span>' + extras;
+        var hoverX = x(activeIndex), hoverY = y(close);
+        hoverLine.setAttribute('x1', hoverX.toFixed(1));
+        hoverLine.setAttribute('x2', hoverX.toFixed(1));
+        hoverDot.setAttribute('cx', hoverX.toFixed(1));
+        hoverDot.setAttribute('cy', hoverY.toFixed(1));
+        hoverLine.removeAttribute('hidden');
+        hoverDot.removeAttribute('hidden');
+        tooltip.hidden = false;
+        var svgRect = svg.getBoundingClientRect(), figureRect = figure.getBoundingClientRect();
+        var pointLeft = svgRect.left - figureRect.left + hoverX / width * svgRect.width;
+        var pointTop = svgRect.top - figureRect.top + hoverY / height * svgRect.height;
+        tooltip.style.left = Math.min(Math.max(8, pointLeft + 12), figure.clientWidth - tooltip.offsetWidth - 8) + 'px';
+        tooltip.style.top = Math.max(8, pointTop - tooltip.offsetHeight - 10) + 'px';
+      }
+      function pointerIndex(event) {
+        var rect = svg.getBoundingClientRect();
+        var viewX = (event.clientX - rect.left) / rect.width * width;
+        return Math.round((viewX - pad) / (width - 2 * pad) * (closes.length - 1));
+      }
+      svg.addEventListener('pointermove', function (event) { showMetrics(pointerIndex(event)); });
+      svg.addEventListener('pointerdown', function (event) { showMetrics(pointerIndex(event)); });
+      svg.addEventListener('pointerleave', function () { if (document.activeElement !== svg) hideMetrics(); });
+      svg.addEventListener('focus', function () { showMetrics(activeIndex); });
+      svg.addEventListener('blur', hideMetrics);
+      svg.addEventListener('keydown', function (event) {
+        var next = null;
+        if (event.key === 'ArrowLeft') next = activeIndex - 1;
+        if (event.key === 'ArrowRight') next = activeIndex + 1;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = closes.length - 1;
+        if (next === null) return;
+        event.preventDefault();
+        showMetrics(next);
+      });
+    });
+  }
+
   function closeThesisDialog(dialog) {
     dialog.close();
     if (thesisOpener) thesisOpener.focus();
@@ -411,6 +495,7 @@
 
   function initDeskV3() {
     initDeskBlotter();
+    initDeskHistoryCharts();
     initThesisDialog();
   }
 
