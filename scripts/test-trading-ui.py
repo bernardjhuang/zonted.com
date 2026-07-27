@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import pathlib
 import re
 import unittest
@@ -416,7 +417,12 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn(f'/trading/desk.css?v={css_hash}', s, p)
             self.assertIn(f'/trading/desk.js?v={js_hash}', s, p)
         self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
-        self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
+        if os.environ.get("ZONTED_DESK_MORNING_QUOTES"):
+            live_stamps = {stamp for stamp in stamps if stamp.startswith("Live · ")}
+            self.assertEqual(len(live_stamps), 1, f"morning stamp drift: {stamps}")
+            self.assertEqual(stamps - live_stamps, {"Snapshot · <date>"})
+        else:
+            self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
         self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
