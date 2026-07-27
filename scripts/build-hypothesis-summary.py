@@ -22,7 +22,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "hypotheses" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
-CSS_HREF = "/trading/hypothesis-summary.css?v=3"
+CSS_HREF = "/trading/hypothesis-summary.css?v=4"
+MIN_CHART_POINTS = 26
+MIN_BETA_OBSERVATIONS = 26
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
 END = "<!-- AUTO:HYPOTHESIS_SUMMARY:END -->"
 
@@ -61,6 +63,25 @@ def validate_config(symbols: list[str], config: dict) -> None:
             raise ValueError(f"{symbol} needs positive finite bear/base/bull entry levels")
         if not row.get("method") or row.get("confidence") not in {"low", "medium", "high"}:
             raise ValueError(f"{symbol} needs a method and low/medium/high confidence")
+
+
+def validate_charts(symbols: list[str], charts: dict) -> None:
+    records = charts.get("charts") or {}
+    if list(records) != symbols:
+        raise ValueError("Chart symbols must exactly match hypothesis order")
+    if charts.get("beta_method") != "up to 2 years of weekly adjusted-close returns versus SPY":
+        raise ValueError("Chart payload needs the documented SPY beta method")
+    for symbol, chart in records.items():
+        dates = chart.get("dates") or []
+        closes = chart.get("close") or []
+        beta = chart.get("beta_2y_weekly_vs_spy")
+        observations = chart.get("beta_observations")
+        if len(dates) < MIN_CHART_POINTS or len(dates) != len(closes):
+            raise ValueError(f"{symbol} needs at least {MIN_CHART_POINTS} aligned chart dates and closes")
+        if isinstance(beta, bool) or not isinstance(beta, (int, float)) or not math.isfinite(beta):
+            raise ValueError(f"{symbol} needs a finite beta against SPY")
+        if not isinstance(observations, int) or observations < MIN_BETA_OBSERVATIONS:
+            raise ValueError(f"{symbol} beta needs at least {MIN_BETA_OBSERVATIONS} weekly return observations")
 
 
 def fetch_chart(symbol: str) -> dict:
@@ -110,25 +131,77 @@ def fetch_chart(symbol: str) -> dict:
     }
 
 
+def beta_against_benchmark(chart: dict, benchmark: dict) -> tuple[float, int]:
+    def weekly_closes(payload: dict) -> dict[tuple[int, int], float]:
+        closes: dict[tuple[int, int], float] = {}
+        for date, close in zip(payload.get("dates") or [], payload.get("close") or []):
+            parsed = dt.date.fromisoformat(date)
+            iso = parsed.isocalendar()
+            closes[(iso.year, iso.week)] = float(close)
+        return closes
+
+    asset = weekly_closes(chart)
+    market = weekly_closes(benchmark)
+    weeks = sorted(set(asset) & set(market))
+    asset_returns = [asset[current] / asset[previous] - 1.0 for previous, current in zip(weeks, weeks[1:])]
+    market_returns = [market[current] / market[previous] - 1.0 for previous, current in zip(weeks, weeks[1:])]
+    if len(asset_returns) < MIN_BETA_OBSERVATIONS:
+        raise ValueError(
+            f"Beta needs at least {MIN_BETA_OBSERVATIONS} aligned weekly returns; got {len(asset_returns)}"
+        )
+    asset_mean = sum(asset_returns) / len(asset_returns)
+    market_mean = sum(market_returns) / len(market_returns)
+    market_variance = sum((value - market_mean) ** 2 for value in market_returns)
+    if market_variance <= 0:
+        raise ValueError("Benchmark returns have no variance")
+    covariance = sum(
+        (asset_value - asset_mean) * (market_value - market_mean)
+        for asset_value, market_value in zip(asset_returns, market_returns)
+    )
+    beta = covariance / market_variance
+    if not math.isfinite(beta):
+        raise ValueError("Beta is not finite")
+    return round(beta, 2), len(asset_returns)
+
+
 def refresh_charts(symbols: list[str], existing: dict) -> dict:
     previous = existing.get("charts") or {}
     charts: dict[str, dict] = {}
     warnings: list[str] = []
+    try:
+        benchmark = fetch_chart("SPY")
+    except Exception as error:
+        benchmark = None
+        warnings.append(f"SPY beta benchmark: {type(error).__name__}: {error}")
     for symbol in symbols:
         try:
             charts[symbol] = fetch_chart(symbol)
         except Exception as error:
             cached = previous.get(symbol)
-            if not cached or len(cached.get("dates") or []) < 80:
+            if not cached or len(cached.get("dates") or []) < MIN_CHART_POINTS:
                 raise RuntimeError(f"Could not refresh {symbol} and no valid cached chart exists: {error}") from error
             charts[symbol] = cached
             warnings.append(f"{symbol}: {type(error).__name__}: {error}")
+        if benchmark is not None:
+            try:
+                beta, observations = beta_against_benchmark(charts[symbol], benchmark)
+                charts[symbol]["beta_2y_weekly_vs_spy"] = beta
+                charts[symbol]["beta_observations"] = observations
+                continue
+            except Exception as error:
+                warnings.append(f"{symbol} beta: {type(error).__name__}: {error}")
+        cached = previous.get(symbol) or {}
+        if not math.isfinite(float(cached.get("beta_2y_weekly_vs_spy", math.nan))):
+            raise RuntimeError(f"Could not calculate {symbol} beta and no cached beta exists")
+        charts[symbol]["beta_2y_weekly_vs_spy"] = cached["beta_2y_weekly_vs_spy"]
+        charts[symbol]["beta_observations"] = cached["beta_observations"]
     if warnings:
         print("[hypothesis-summary] chart refresh warnings: " + " | ".join(warnings), file=sys.stderr)
     return {
         "schema_version": 1,
         "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "as_of": max(chart["dates"][-1] for chart in charts.values()),
+        "beta_method": "up to 2 years of weekly adjusted-close returns versus SPY",
         "charts": charts,
     }
 
@@ -162,9 +235,12 @@ def sparkline(symbol: str, chart: dict, levels: dict) -> str:
     change = (values[-1] / values[0] - 1.0) * 100.0
     direction = "is-down" if change < 0 else "is-up"
     change_class = "down" if change < 0 else "up"
+    beta = float(chart["beta_2y_weekly_vs_spy"])
+    beta_observations = int(chart["beta_observations"])
     aria = html.escape(
         f"{symbol} adjusted close from {short_date(dates[0])} to {short_date(dates[-1])}; "
         f"{values[0]:.2f} to {values[-1]:.2f}, {change:+.1f} percent; "
+        f"beta {beta:.2f} versus SPY from {beta_observations} aligned weekly returns; "
         f"bear entry {money(entry_levels['bear'])}, base entry {money(entry_levels['base'])}, "
         f"bull entry {money(entry_levels['bull'])}",
         quote=True,
@@ -180,6 +256,7 @@ def sparkline(symbol: str, chart: dict, levels: dict) -> str:
         for case, price in entry_levels.items()
     )
     return f'''<figure class="hyp-summary-chart {direction}">
+<div class="hyp-summary-chart-meta" title="Beta using {beta_observations} aligned weekly adjusted-close returns versus SPY"><span>Beta vs SPY</span><b>{beta:.2f}</b></div>
 <svg viewBox="0 0 280 76" preserveAspectRatio="none" role="img" aria-label="{aria}">{grids}{entry_lines}<polyline class="line" points="{points}"/><circle class="dot" cx="{x(len(values) - 1):.1f}" cy="{y(values[-1]):.1f}" r="3"/></svg>
 <figcaption><span>{html.escape(short_date(dates[0]))}</span><b>${values[-1]:,.2f} <span class="{change_class}">{change:+.1f}%</span></b><span>{html.escape(short_date(dates[-1]))}</span></figcaption>
 </figure>'''
@@ -196,7 +273,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
         levels = record["entry_levels"]
         rows.append(f'''<tr data-hypothesis-summary-row="{symbol}">
 <td class="hyp-summary-symbol" data-label="Ticker"><a href="#hypothesis-{symbol.lower()}-setup">{symbol}</a><span title="{html.escape(record["method"], quote=True)}">{html.escape(record["confidence"])} confidence</span></td>
-<td class="hyp-summary-chart-cell" data-label="2-year stock chart">{sparkline(symbol, charts["charts"][symbol], levels)}</td>
+<td class="hyp-summary-chart-cell" data-label="Up to 2-year stock chart">{sparkline(symbol, charts["charts"][symbol], levels)}</td>
 <td class="hyp-summary-metrics" data-label="Valuation">{metrics}</td>
 <td class="hyp-summary-level hyp-summary-level--bear" data-label="Bear">{money(levels["bear"])}</td>
 <td class="hyp-summary-level hyp-summary-level--base" data-label="Base">{money(levels["base"])}</td>
@@ -206,13 +283,13 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
     valuation_as_of = short_date(config["as_of"])
     return f'''{START}
 <section class="hyp-summary" aria-labelledby="hyp-summary-heading">
-<div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Two-year price context, current valuation snapshot, and bear / base / bull intrinsic entry levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
+<div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Up to two years of price context, current valuation snapshot, and bear / base / bull intrinsic entry levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
 <div class="hyp-summary-wrap"><table class="hyp-summary-table">
-<thead><tr><th>Ticker</th><th>2-year stock chart</th><th>Valuation</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Bull</th></tr></thead>
+<thead><tr><th>Ticker</th><th>Up to 2-year stock chart</th><th>Valuation</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Bull</th></tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
-<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
+<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Beta uses up to two years of weekly adjusted-close returns versus SPY; newer listings use their available trading history. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
 </section>
 {END}'''
 
@@ -220,8 +297,7 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 def render_page(page: str, config: dict, charts: dict) -> str:
     symbols = extract_hypothesis_symbols(page)
     validate_config(symbols, config)
-    if set((charts.get("charts") or {})) != set(symbols):
-        raise ValueError("Chart symbols must exactly match hypothesis symbols")
+    validate_charts(symbols, charts)
     summary = render_summary(symbols, config, charts)
     if START in page and END in page:
         page = re.sub(re.escape(START) + r".*?" + re.escape(END), summary, page, count=1, flags=re.S)

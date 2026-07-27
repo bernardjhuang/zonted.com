@@ -48,9 +48,11 @@ class HypothesisSummaryTests(unittest.TestCase):
             self.assertEqual(set(row["entry_levels"]), {"bear", "base", "bull"}, symbol)
             self.assertTrue(all(float(value) > 0 for value in row["entry_levels"].values()), symbol)
             chart = self.charts["charts"][symbol]
-            self.assertGreaterEqual(len(chart["dates"]), 80, symbol)
+            self.assertGreaterEqual(len(chart["dates"]), summary.MIN_CHART_POINTS, symbol)
             self.assertEqual(len(chart["dates"]), len(chart["close"]), symbol)
             self.assertLess(chart["dates"][0], chart["dates"][-1], symbol)
+            self.assertTrue(-5 < float(chart["beta_2y_weekly_vs_spy"]) < 10, symbol)
+            self.assertGreaterEqual(int(chart["beta_observations"]), summary.MIN_BETA_OBSERVATIONS, symbol)
             for case, value in row["entry_levels"].items():
                 self.assertIn(
                     f'data-entry-level="{case}" data-entry-price="{float(value):.2f}"',
@@ -58,13 +60,31 @@ class HypothesisSummaryTests(unittest.TestCase):
                     symbol,
                 )
 
+    def test_beta_calculation_matches_linear_weekly_returns(self) -> None:
+        dates = [
+            (summary.dt.date(2025, 1, 3) + summary.dt.timedelta(days=7 * index)).isoformat()
+            for index in range(60)
+        ]
+        benchmark_close = [100.0]
+        asset_close = [100.0]
+        for index in range(1, len(dates)):
+            market_return = 0.01 if index % 2 else -0.005
+            benchmark_close.append(benchmark_close[-1] * (1 + market_return))
+            asset_close.append(asset_close[-1] * (1 + 2 * market_return))
+        beta, observations = summary.beta_against_benchmark(
+            {"dates": dates, "close": asset_close},
+            {"dates": dates, "close": benchmark_close},
+        )
+        self.assertEqual(beta, 2.0)
+        self.assertEqual(observations, 59)
+
     def test_confidence_labels_are_explained(self) -> None:
         self.assertIn("Medium confidence means", self.page)
         self.assertIn("Low confidence means", self.page)
         self.assertIn("Confidence measures model reliability—not expected upside", self.page)
 
     def test_summary_stylesheet_version_is_unique(self) -> None:
-        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v=3"), 1)
+        self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v=4"), 1)
         self.assertEqual(self.page.count("/trading/hypothesis-summary.css?v="), 1)
 
     def test_checked_in_page_matches_renderer(self) -> None:
@@ -82,6 +102,8 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Base", body)
         self.assertIn("Bull", body)
         self.assertIn("Valuation", body)
+        self.assertEqual(body.count("Beta vs SPY"), len(self.config["rows"]))
+        self.assertIn("Beta uses up to two years of weekly adjusted-close returns versus SPY", body)
 
 
 if __name__ == "__main__":
