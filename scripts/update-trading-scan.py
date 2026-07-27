@@ -521,7 +521,7 @@ def main():
         open(CHART_ASSET, "w").write(asset_json)
     if universe_changed:
         open(UNIVERSE_ASSET, "w").write(universe_json)
-    routed_changed = bool(sync_sections(["momentum"]))
+    routed_changed = bool(sync_sections(["momentum", "setups"]))
     if not page_changed and not asset_changed and not universe_changed and not routed_changed:
         print(f"[scan] already current: {os.path.basename(path)}, {len(longs)} long / {len(shorts)} short setups, {len(all_rows)} rows")
         return
