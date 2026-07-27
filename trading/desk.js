@@ -48,12 +48,14 @@
     const dates = source.dataset.dates.split(',');
     const closes = source.dataset.closes.split(',').map(Number);
     const entry = Number(source.dataset.entry);
-    const kill = Number(chart.dataset.kill);
+    const kill = chart.dataset.kill === undefined ? null : Number(chart.dataset.kill);
+    const hasKill = Number.isFinite(kill);
     source.remove();
-    if (dates.length < 2 || dates.length !== closes.length || !closes.every(Number.isFinite) || !Number.isFinite(entry) || !Number.isFinite(kill)) return;
+    if (dates.length < 2 || dates.length !== closes.length || !closes.every(Number.isFinite) || !Number.isFinite(entry)) return;
 
     const W = 760, H = 190, left = 46, right = 22, top = 18, bottom = 30;
-    const rawLow = Math.min(...closes, entry, kill), rawHigh = Math.max(...closes, entry, kill);
+    const levels = hasKill ? [entry, kill] : [entry];
+    const rawLow = Math.min(...closes, ...levels), rawHigh = Math.max(...closes, ...levels);
     const padding = Math.max((rawHigh - rawLow) * .08, rawHigh * .01);
     const lo = rawLow - padding, hi = rawHigh + padding;
     const x = i => left + i / (closes.length - 1) * (W - left - right);
@@ -62,15 +64,20 @@
     const last = closes[closes.length - 1];
     const symbol = $('.pos-sym', chart.closest('.pos'))?.textContent.trim() || 'Position';
     const tooltipId = 'prc-tooltip-' + symbol.toLowerCase().replace(/[^a-z0-9]+/g, '-');
+    const invalidationAria = hasKill ? ', horizontal invalidation at $' + num(kill) : '';
+    const entryLabelY = y(entry) - 8;
+    const killLabelY = hasKill ? Math.min(H - bottom - 4, y(kill) + 13) : null;
+    const invalidationLines = hasKill ?
+      '<line class="prc-invalidation" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(kill).toFixed(2) + '" y2="' + y(kill).toFixed(2) + '"></line>' +
+      '<text class="prc-label prc-label-kill" x="' + (left + 5) + '" y="' + killLabelY.toFixed(2) + '">Invalidation $' + num(kill) + '</text>' : '';
     chart.insertAdjacentHTML('beforeend',
       '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" tabindex="0" aria-describedby="' + tooltipId + '" aria-label="' +
-      esc(symbol + ' 60-session price history. Horizontal invalidation at $' + num(kill) + ', horizontal entry price at $' + num(entry) + ', latest $' + num(last) + '. Hover or use arrow keys for daily metrics.') + '">' +
+      esc(symbol + ' 60-session price history' + invalidationAria + ', horizontal entry price at $' + num(entry) + ', latest $' + num(last) + '. Hover or use arrow keys for daily metrics.') + '">' +
       '<line class="prc-grid" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(hi).toFixed(2) + '" y2="' + y(hi).toFixed(2) + '"></line>' +
       '<line class="prc-grid" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(lo).toFixed(2) + '" y2="' + y(lo).toFixed(2) + '"></line>' +
-      '<line class="prc-invalidation" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(kill).toFixed(2) + '" y2="' + y(kill).toFixed(2) + '"></line>' +
-      '<text class="prc-label prc-label-kill" x="' + (left + 5) + '" y="' + (y(kill) - 6).toFixed(2) + '">Invalidation $' + num(kill) + '</text>' +
+      invalidationLines +
       '<line class="prc-entry-level" x1="' + left + '" x2="' + (W - right) + '" y1="' + y(entry).toFixed(2) + '" y2="' + y(entry).toFixed(2) + '"></line>' +
-      '<text class="prc-label prc-label-entry-level" x="' + (left + 5) + '" y="' + (y(entry) - 6).toFixed(2) + '">Entry $' + num(entry) + '</text>' +
+      '<text class="prc-label prc-label-entry-level" x="' + (left + 5) + '" y="' + entryLabelY.toFixed(2) + '">Entry $' + num(entry) + '</text>' +
       '<polyline class="prc-price" points="' + points + '"></polyline>' +
       '<circle class="prc-now" cx="' + x(closes.length - 1).toFixed(2) + '" cy="' + y(last).toFixed(2) + '" r="4"></circle>' +
       '<text class="prc-label prc-label-now" x="' + (W - right - 5) + '" y="' + (y(last) - 7).toFixed(2) + '">Now $' + num(last) + '</text>' +
@@ -93,13 +100,16 @@
       const close = closes[activeIndex];
       const dayPct = activeIndex ? (close / closes[activeIndex - 1] - 1) * 100 : null;
       const vsEntry = close - entry, vsEntryPct = vsEntry / entry * 100;
-      const room = close - kill, roomPct = room / kill * 100;
       const metric = (value, suffix = '') => '<em class="' + (value >= 0 ? 'up' : 'down') + '">' + signed(value, 1, suffix) + '</em>';
       const money = value => '<em class="' + (value >= 0 ? 'up' : 'down') + '">' + (value >= 0 ? '+' : '−') + '$' + Math.abs(value).toFixed(2) + '</em>';
+      const invalidationMetric = hasKill ? (() => {
+        const room = close - kill, roomPct = room / kill * 100;
+        return '<span>room to invalidation ' + money(room) + ' · ' + metric(roomPct, '%') + '</span>';
+      })() : '<span>invalidation <em>not recorded</em></span>';
       tooltip.innerHTML = '<b><span>' + esc(prettyDate(dates[activeIndex])) + '</span><strong>$' + num(close) + '</strong></b>' +
         '<span>Day ' + (dayPct == null ? '<em>—</em>' : metric(dayPct, '%')) + '</span>' +
         '<span>vs entry ' + money(vsEntry) + ' · ' + metric(vsEntryPct, '%') + '</span>' +
-        '<span>room to invalidation ' + money(room) + ' · ' + metric(roomPct, '%') + '</span>';
+        invalidationMetric;
       const hoverX = x(activeIndex), hoverY = y(close);
       hoverLine.setAttribute('x1', hoverX.toFixed(2));
       hoverLine.setAttribute('x2', hoverX.toFixed(2));

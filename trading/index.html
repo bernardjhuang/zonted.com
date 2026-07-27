@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/trading/desk.css?v=19">
-<script defer src="/trading/desk.js?v=19"></script>
+<script defer src="/trading/desk.js?v=20"></script>
 <style>
 /* Mentality card — pre-trade reminders */
 .mentality .creed{padding:13px 16px;border-bottom:1px solid var(--bl-divider)}
@@ -23,12 +23,12 @@
 <div class="status"><div class="wrap">
   <a class="trade-z-logo" href="/" aria-label="Zonted homepage"><span aria-hidden="true">Z</span></a>
   <a class="brand" href="/trading/">Trading</a>
-  <span class="stamp">Snapshot · July 24, 2026</span>
+  <span class="stamp">Snapshot · July 27, 2026 · 10:12 AM ET</span>
   <div class="status-metrics">
     <span class="chipset"><a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 6/10"><span class="dot"></span>GPT 6</a><a class="chip chip-grok chip-on" href="/trading/grok-risk/" title="Grok risk appetite — Risk On · 7/10"><span class="dot"></span>Grok 7</a><a class="chip chip-gemini chip-neutral" href="/trading/gemini-risk/" title="Gemini risk appetite — Neutral to Risk-Off · 4/10"><span class="dot"></span>Gemini 4</a><a class="chip chip-fable chip-neutral" href="/trading/fable-risk/" title="Fable risk appetite — NEUTRAL · 5.5/10"><span class="dot"></span>Fable 5.5</a></span>
-    <span class="metric"><span class="k">SPY</span>738.85 <span class="up">+0.1%</span></span>
-    <span class="metric"><span class="k">VIX</span>18.58</span>
-    <span class="metric"><span class="k">Open</span>2</span>
+    <span class="metric"><span class="k">SPY</span>741.02 <span class="up">+0.3%</span></span>
+    <span class="metric"><span class="k">VIX</span>18.89</span>
+    <span class="metric"><span class="k">Open</span>3</span>
   </div>
 </div></div>
 <nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/" aria-current="page">Desk</a><a href="/trading/hypotheses/">Hypotheses</a><a href="/trading/themes/">Themes</a><a href="/trading/watchlist/">Watchlist</a><a href="/trading/momentum/">Momentum</a><a href="/trading/grok-risk/">Grok Risk</a><a href="/trading/gpt-risk/">GPT Risk</a><a href="/trading/gemini-risk/">Gemini Risk</a><a href="/trading/fable-risk/">Fable Risk</a><a href="/trading/performance/">Performance</a></div></nav>
@@ -36,47 +36,67 @@
 <h1 style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap">Trading Desk</h1>
 <div class="desk">
   <section class="desk-main">
-    <div class="col-h"><h2>Positions</h2><span class="sub">2 open · price + risk levels</span></div>
+    <!-- AUTO:DESK_POSITIONS:START -->
+    <div class="col-h"><h2>Positions</h2><span class="sub">3 open · live price + risk levels</span></div>
 
-    <article class="pos">
+    <article class="pos" data-position-symbol="HOOD">
       <div class="pos-top">
         <div><div class="pos-sym">HOOD</div>
-          <div class="pos-instr">301 shares @ $95.46 · 15× Jan 2027 $125 call @ $12.61</div></div>
-        <span class="spark-wrap spark-data" hidden data-dates="2026-05-20,2026-05-21,2026-05-22,2026-05-26,2026-05-27,2026-05-28,2026-05-29,2026-06-01,2026-06-02,2026-06-03,2026-06-04,2026-06-05,2026-06-08,2026-06-09,2026-06-10,2026-06-11,2026-06-12,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-29,2026-06-30,2026-07-01,2026-07-02,2026-07-06,2026-07-07,2026-07-08,2026-07-09,2026-07-10,2026-07-13,2026-07-14,2026-07-15,2026-07-16,2026-07-17,2026-07-20,2026-07-21,2026-07-22,2026-07-23,2026-07-24" data-closes="75.76,75.92,73.64,74.09,76.23,84.84,94.30,90.73,88.16,82.85,88.33,82.47,85.04,83.77,86.36,92.23,93.19,98.12,96.71,105.20,108.15,105.71,103.25,97.19,93.47,98.69,101.83,100.28,108.65,112.73,117.55,112.90,113.53,115.11,111.97,109.86,113.45,115.54,106.02,99.96,99.28,106.36,104.48,101.58,94.91" data-entry="95.46"><svg class="spark" viewBox="0 0 170 46" width="170" height="46" aria-label="60-day price sparkline"><polygon points="3,32 3.0,30.6 6.7,30.5 10.5,32.0 14.2,31.7 17.9,30.3 21.6,24.6 25.4,18.4 29.1,20.7 32.8,22.4 36.5,25.9 40.3,22.3 44.0,26.2 47.7,24.5 51.5,25.3 55.2,23.6 58.9,19.7 62.6,19.1 66.4,15.8 70.1,16.8 73.8,11.2 77.5,9.2 81.3,10.8 85.0,12.4 88.7,16.4 92.5,18.9 96.2,15.5 99.9,13.4 103.6,14.4 107.4,8.9 111.1,6.2 114.8,3.0 118.5,6.1 122.3,5.7 126.0,4.6 129.7,6.7 133.5,8.1 137.2,5.7 140.9,4.3 144.6,10.6 148.4,14.6 152.1,15.1 155.8,10.4 159.5,11.6 163.3,13.5 167.0,18.0 167,32" fill="rgba(8,122,66,.09)"/><polyline points="3.0,30.6 6.7,30.5 10.5,32.0 14.2,31.7 17.9,30.3 21.6,24.6 25.4,18.4 29.1,20.7 32.8,22.4 36.5,25.9 40.3,22.3 44.0,26.2 47.7,24.5 51.5,25.3 55.2,23.6 58.9,19.7 62.6,19.1 66.4,15.8 70.1,16.8 73.8,11.2 77.5,9.2 81.3,10.8 85.0,12.4 88.7,16.4 92.5,18.9 96.2,15.5 99.9,13.4 103.6,14.4 107.4,8.9 111.1,6.2 114.8,3.0 118.5,6.1 122.3,5.7 126.0,4.6 129.7,6.7 133.5,8.1 137.2,5.7 140.9,4.3 144.6,10.6 148.4,14.6 152.1,15.1 155.8,10.4 159.5,11.6 163.3,13.5 167.0,18.0" fill="none" stroke="#087a42" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><line x1="29.1" y1="29" x2="29.1" y2="35" stroke="#c8c5bd" stroke-width="1"/><text x="29.1" y="44" font-size="8" fill="#666a70" text-anchor="middle" font-family="IBM Plex Mono,monospace">Jun</text><line x1="107.4" y1="29" x2="107.4" y2="35" stroke="#c8c5bd" stroke-width="1"/><text x="107.4" y="44" font-size="8" fill="#666a70" text-anchor="middle" font-family="IBM Plex Mono,monospace">Jul</text></svg><span class="spark-tip" hidden></span></span>
-        <div class="pos-price">94.91<div class="pos-day down">−6.6%</div></div>
-      </div>
-      <div class="pos-grid">
-        <div class="cell"><span class="k">Shares P&amp;L</span><span class="v down">−0.6%</span></div>
-        <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+3.2%</span></div>
-        <div class="cell"><span class="k">Spread Z</span><span class="v">−0.06</span></div>
-        <div class="cell"><span class="k">Sector</span><span class="v">XLF +1.03</span></div>
-      </div>
-      <figure class="position-risk-chart" data-kill="92" aria-label="HOOD price history with entry and invalidation levels">
-        <figcaption><span>Price · 60 sessions</span><span>3.1% room to invalidation</span></figcaption>
-      </figure>
-      <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis. <b>Invalidated on a price breakdown below $92.</b></p>
-      <div class="pos-actions"><a class="btn" href="/trading/watchlist/?chart=HOOD#scan">Setup chart</a><a class="btn ghost" href="/trading/hypotheses/">Full thesis</a></div>
-    </article>
-
-    <article class="pos">
-      <div class="pos-top">
-        <div><div class="pos-sym">ABT</div>
-          <div class="pos-instr">1 share @ $101.61 · 70× Jan 2027 $120 call @ $2.69</div></div>
-        <span class="spark-wrap spark-data" hidden data-dates="2026-05-20,2026-05-21,2026-05-22,2026-05-26,2026-05-27,2026-05-28,2026-05-29,2026-06-01,2026-06-02,2026-06-03,2026-06-04,2026-06-05,2026-06-08,2026-06-09,2026-06-10,2026-06-11,2026-06-12,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-29,2026-06-30,2026-07-01,2026-07-02,2026-07-06,2026-07-07,2026-07-08,2026-07-09,2026-07-10,2026-07-13,2026-07-14,2026-07-15,2026-07-16,2026-07-17,2026-07-20,2026-07-21,2026-07-22,2026-07-23,2026-07-24" data-closes="87.75,87.15,86.79,86.06,85.07,85.69,84.99,87.16,86.35,86.37,90.14,90.43,89.86,90.60,88.54,89.02,87.56,88.04,89.98,87.87,87.78,87.21,89.89,89.85,92.58,93.45,92.05,90.10,91.53,94.72,94.95,95.16,94.51,93.73,93.26,91.46,88.33,89.27,98.83,100.68,101.66,99.67,100.57,100.75,103.06" data-entry="101.61"><svg class="spark" viewBox="0 0 170 46" width="170" height="46" aria-label="60-day price sparkline"><polygon points="3,32 3.0,27.6 6.7,28.5 10.5,29.1 14.2,30.3 17.9,31.9 21.6,30.9 25.4,32.0 29.1,28.5 32.8,29.8 36.5,29.8 40.3,23.7 44.0,23.3 47.7,24.2 51.5,23.0 55.2,26.3 58.9,25.5 62.6,27.9 66.4,27.1 70.1,24.0 73.8,27.4 77.5,27.5 81.3,28.4 85.0,24.1 88.7,24.2 92.5,19.8 96.2,18.4 99.9,20.7 103.6,23.8 107.4,21.5 111.1,16.4 114.8,16.0 118.5,15.7 122.3,16.7 126.0,18.0 129.7,18.7 133.5,21.6 137.2,26.6 140.9,25.1 144.6,9.8 148.4,6.8 152.1,5.2 155.8,8.4 159.5,7.0 163.3,6.7 167.0,3.0 167,32" fill="rgba(8,122,66,.09)"/><polyline points="3.0,27.6 6.7,28.5 10.5,29.1 14.2,30.3 17.9,31.9 21.6,30.9 25.4,32.0 29.1,28.5 32.8,29.8 36.5,29.8 40.3,23.7 44.0,23.3 47.7,24.2 51.5,23.0 55.2,26.3 58.9,25.5 62.6,27.9 66.4,27.1 70.1,24.0 73.8,27.4 77.5,27.5 81.3,28.4 85.0,24.1 88.7,24.2 92.5,19.8 96.2,18.4 99.9,20.7 103.6,23.8 107.4,21.5 111.1,16.4 114.8,16.0 118.5,15.7 122.3,16.7 126.0,18.0 129.7,18.7 133.5,21.6 137.2,26.6 140.9,25.1 144.6,9.8 148.4,6.8 152.1,5.2 155.8,8.4 159.5,7.0 163.3,6.7 167.0,3.0" fill="none" stroke="#087a42" stroke-width="1.6" stroke-linejoin="round" stroke-linecap="round"/><line x1="29.1" y1="29" x2="29.1" y2="35" stroke="#c8c5bd" stroke-width="1"/><text x="29.1" y="44" font-size="8" fill="#666a70" text-anchor="middle" font-family="IBM Plex Mono,monospace">Jun</text><line x1="107.4" y1="29" x2="107.4" y2="35" stroke="#c8c5bd" stroke-width="1"/><text x="107.4" y="44" font-size="8" fill="#666a70" text-anchor="middle" font-family="IBM Plex Mono,monospace">Jul</text></svg><span class="spark-tip" hidden></span></span>
-        <div class="pos-price">103.06<div class="pos-day up">+2.3%</div></div>
+          <div class="pos-instr">1 share @ $95.12 · 15× Jan 2027 $125 call @ $12.61</div></div>
+        <span class="spark-wrap spark-data" hidden data-dates="2026-04-30,2026-05-01,2026-05-04,2026-05-05,2026-05-06,2026-05-07,2026-05-08,2026-05-11,2026-05-12,2026-05-13,2026-05-14,2026-05-15,2026-05-18,2026-05-19,2026-05-20,2026-05-21,2026-05-22,2026-05-26,2026-05-27,2026-05-28,2026-05-29,2026-06-01,2026-06-02,2026-06-03,2026-06-04,2026-06-05,2026-06-08,2026-06-09,2026-06-10,2026-06-11,2026-06-12,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-29,2026-06-30,2026-07-01,2026-07-02,2026-07-06,2026-07-07,2026-07-08,2026-07-09,2026-07-10,2026-07-13,2026-07-14,2026-07-15,2026-07-16,2026-07-17,2026-07-20,2026-07-21,2026-07-22,2026-07-23,2026-07-24,2026-07-27" data-closes="72.89,73.66,76.55,77.03,79.05,76.28,77.03,80.78,78.27,76.75,80.70,77.14,77.15,74.16,75.76,75.92,73.64,74.09,76.23,84.84,94.30,90.73,88.16,82.85,88.33,82.47,85.04,83.77,86.36,92.23,93.19,98.12,96.71,105.20,108.15,105.71,103.25,97.19,93.47,98.69,101.83,100.28,108.65,112.73,117.55,112.90,113.53,115.11,111.97,109.86,113.45,115.54,106.02,99.96,99.28,106.36,104.48,101.58,94.91,96.46" data-entry="95.12"></span>
+        <div class="pos-price">96.46<div class="pos-day up">+1.6%</div></div>
       </div>
       <div class="pos-grid">
         <div class="cell"><span class="k">Shares P&amp;L</span><span class="v up">+1.4%</span></div>
+        <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+3.2%</span></div>
+        <div class="cell"><span class="k">Spread Z</span><span class="v down">−0.06</span></div>
+        <div class="cell"><span class="k">Sector</span><span class="v up">XLF +1.03</span></div>
+      </div>
+      <figure class="position-risk-chart" data-kill="92" aria-label="HOOD price history with entry and invalidation levels">
+        <figcaption><span>Price · 60 sessions</span><span>4.8% room to invalidation</span></figcaption>
+      </figure>
+      <p class="pos-thesis">Financial-sector leadership plus Robinhood growth and a rising blockchain-fee thesis. <b>Invalidated on a price breakdown below $92.</b></p>
+      <div class="pos-actions"><a class="btn" href="/trading/watchlist/?chart=HOOD#scan">Setup chart</a><a class="btn ghost" href="/trading/hypotheses/#hypothesis-hood-setup">Full thesis</a></div>
+    </article>
+    <article class="pos" data-position-symbol="ABT">
+      <div class="pos-top">
+        <div><div class="pos-sym">ABT</div>
+          <div class="pos-instr">1 share @ $101.61 · 70× Jan 2027 $120 call @ $2.69</div></div>
+        <span class="spark-wrap spark-data" hidden data-dates="2026-04-30,2026-05-01,2026-05-04,2026-05-05,2026-05-06,2026-05-07,2026-05-08,2026-05-11,2026-05-12,2026-05-13,2026-05-14,2026-05-15,2026-05-18,2026-05-19,2026-05-20,2026-05-21,2026-05-22,2026-05-26,2026-05-27,2026-05-28,2026-05-29,2026-06-01,2026-06-02,2026-06-03,2026-06-04,2026-06-05,2026-06-08,2026-06-09,2026-06-10,2026-06-11,2026-06-12,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-29,2026-06-30,2026-07-01,2026-07-02,2026-07-06,2026-07-07,2026-07-08,2026-07-09,2026-07-10,2026-07-13,2026-07-14,2026-07-15,2026-07-16,2026-07-17,2026-07-20,2026-07-21,2026-07-22,2026-07-23,2026-07-24,2026-07-27" data-closes="90.79,89.46,87.54,87.17,86.30,87.01,84.32,82.56,84.35,83.83,84.90,84.47,87.91,88.82,88.38,87.77,87.41,86.67,85.68,86.30,85.60,87.78,86.97,86.99,90.78,91.07,90.50,91.25,89.17,89.65,88.18,88.67,90.62,88.50,88.41,87.83,90.53,90.49,93.24,94.12,92.71,90.74,92.18,95.40,95.63,95.84,95.18,94.40,93.93,92.11,88.96,89.27,98.83,100.68,101.66,99.67,100.57,100.75,103.06,104.33" data-entry="101.61"></span>
+        <div class="pos-price">104.33<div class="pos-day up">+1.2%</div></div>
+      </div>
+      <div class="pos-grid">
+        <div class="cell"><span class="k">Shares P&amp;L</span><span class="v up">+2.7%</span></div>
         <div class="cell"><span class="k">vs earn VWAP</span><span class="v up">+2.7%</span></div>
         <div class="cell"><span class="k">Spread Z</span><span class="v up">+1.19</span></div>
-        <div class="cell"><span class="k">Sector</span><span class="v">XLV +0.98</span></div>
+        <div class="cell"><span class="k">Sector</span><span class="v up">XLV +0.98</span></div>
       </div>
       <figure class="position-risk-chart" data-kill="99" aria-label="ABT price history with entry and invalidation levels">
-        <figcaption><span>Price · 60 sessions</span><span>3.9% room to invalidation</span></figcaption>
+        <figcaption><span>Price · 60 sessions</span><span>5.4% room to invalidation</span></figcaption>
       </figure>
       <p class="pos-thesis">Healthcare strength plus a reclaim of the earnings and YTD VWAPs after a strong report.</p>
-      <div class="pos-actions"><a class="btn" href="/trading/watchlist/?chart=ABT#scan">Setup chart</a><a class="btn ghost" href="/trading/hypotheses/">Full thesis</a></div>
+      <div class="pos-actions"><a class="btn" href="/trading/watchlist/?chart=ABT#scan">Setup chart</a><a class="btn ghost" href="/trading/hypotheses/#hypothesis-abt-setup">Full thesis</a></div>
     </article>
+    <article class="pos" data-position-symbol="FIGR">
+      <div class="pos-top">
+        <div><div class="pos-sym">FIGR</div>
+          <div class="pos-instr">200 shares @ $29.14 · 3× Jan 2027 $40 call @ $3.70</div></div>
+        <span class="spark-wrap spark-data" hidden data-dates="2026-04-30,2026-05-01,2026-05-04,2026-05-05,2026-05-06,2026-05-07,2026-05-08,2026-05-11,2026-05-12,2026-05-13,2026-05-14,2026-05-15,2026-05-18,2026-05-19,2026-05-20,2026-05-21,2026-05-22,2026-05-26,2026-05-27,2026-05-28,2026-05-29,2026-06-01,2026-06-02,2026-06-03,2026-06-04,2026-06-05,2026-06-08,2026-06-09,2026-06-10,2026-06-11,2026-06-12,2026-06-15,2026-06-16,2026-06-17,2026-06-18,2026-06-22,2026-06-23,2026-06-24,2026-06-25,2026-06-26,2026-06-29,2026-06-30,2026-07-01,2026-07-02,2026-07-06,2026-07-07,2026-07-08,2026-07-09,2026-07-10,2026-07-13,2026-07-14,2026-07-15,2026-07-16,2026-07-17,2026-07-20,2026-07-21,2026-07-22,2026-07-23,2026-07-24,2026-07-27" data-closes="35.10,36.45,36.04,37.30,38.00,37.51,37.63,38.97,39.50,40.51,43.22,43.28,38.58,36.23,36.40,34.38,33.95,35.22,34.09,34.73,35.35,33.41,32.09,30.98,31.32,28.49,27.86,28.28,28.07,28.15,27.93,28.99,29.65,27.40,28.55,29.09,27.98,27.40,26.91,26.86,27.07,30.71,32.67,33.91,34.41,31.05,30.65,32.79,31.80,29.74,29.96,30.93,30.87,28.97,30.42,31.49,30.04,29.24,27.59,28.91" data-entry="29.14"></span>
+        <div class="pos-price">28.91<div class="pos-day up">+4.8%</div></div>
+      </div>
+      <div class="pos-grid">
+        <div class="cell"><span class="k">Shares P&amp;L</span><span class="v down">−0.8%</span></div>
+        <div class="cell"><span class="k">vs earn VWAP</span><span class="v">n/a</span></div>
+        <div class="cell"><span class="k">Spread Z</span><span class="v">n/a</span></div>
+        <div class="cell"><span class="k">Sector</span><span class="v">n/a</span></div>
+      </div>
+      <figure class="position-risk-chart" aria-label="FIGR price history with entry levels">
+        <figcaption><span>Price · 60 sessions</span><span>No hard invalidation recorded</span></figcaption>
+      </figure>
+      <p class="pos-thesis">Profitable fintech below the $31 base case; August 13 earnings must prove record loan volume converts into durable earnings. <b>No hard invalidation recorded.</b></p>
+      <div class="pos-actions"><a class="btn ghost" href="/trading/hypotheses/#hypothesis-figr-setup">Full thesis</a></div>
+    </article>
+    <!-- AUTO:DESK_POSITIONS:END -->
   </section>
 
   <aside class="desk-rail">
