@@ -2,6 +2,114 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-07-27",
+   "session": "pre-market",
+   "assess_for": "Mon Jul 27 session",
+   "verdict": "NEUTRAL",
+   "subtitle": "dead-even ledger into a relief gap",
+   "score": 0,
+   "n_signals": 11,
+   "composite": "0.00",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "738.93 vs 744.11 \u00b7 \u22120.70%",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100 \u00b7 stale feed scores 0",
+     "value": "70.9 but stale \u2014 feed last saw Jul 17",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLE +1.34 \u00b7 XLRE +1.21 \u00b7 XLU +1.15 \u2014 zero cyclicals",
+     "score": -1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22123.2 pts (IWM \u22122.6%, SPY +0.6%)",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "2 of 7 \u00b7 only ETH (+0.52) and ZEC (+0.21) lead",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "USDJPY 163.75 \u00b7 +0.76% (yen weaker, near 40-yr low)",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The ledger lands exactly on zero \u2014 four signals on, three off, four abstaining \u2014 and I want to be upfront about what it is measuring. Every input here is Friday's close. Over the weekend the US and Iran both paused strikes, Brent gapped down as much as 7.4% to below $90 before settling near $92, and futures caught a relief bid. <b>None of that is in the table.</b> The rubric reads the tape it has, and the tape it has is a market that closed Friday still carrying war premium.</p>",
+    "<p>The split is the same one I flagged Saturday, and it has not healed. <i>Stress gauges are quiet:</i> the VIX curve is in +0.75 contango, high-yield spreads sit at 2.77% and widened all of 6bp over five sessions, and 10 of 13 US market groups still trade above their year-to-date cost basis. <i>Appetite gauges inside equities are not:</i> SPY closed 0.70% below its 50-day, small caps have lagged by 3.2 points over 20 sessions, and the three strongest sectors are Energy, Real Estate and Utilities \u2014 zero growth or cyclical names in the top three. That is a tape paying for oil exposure and duration substitutes, not for risk.</p>",
+    "<p>One honest bookkeeping change from Saturday: rates vol scores 0 today instead of +1. The MOVE reading itself is unchanged and calm at 70.9, but the feed's last observation is July 17 and it now flags stale, and the frozen rubric says a stale source scores zero. That single reclassification is the entire difference between Saturday's +0.09 composite and today's 0.00 \u2014 the market did not deteriorate, my confidence in one input did. Crypto tells the same lukewarm story it did Friday: only ETH and Zcash are beating bitcoin on 50-day spread z, two of seven. And the yen is still the funding currency nobody wants, at 163.75 and pinned near a 40-year low \u2014 no safe-haven bid there at all.</p>",
+    "<p>Context for the week: Treasury yields spiked hard during the escalation \u2014 the 10-year printed 4.71% and the 2-year 4.31%, its highest since December 2024 \u2014 before backing off toward 4.35% as the shooting stopped. Wednesday brings the FOMC decision and Thursday the advance read on Q2 GDP, so the two things that could actually re-rate this ledger both land mid-week, after today's open.</p>",
+    "<p>Verdict: <b>neutral</b>, 5.0 out of 10, dead center. I am deliberately not front-running the relief gap. A weekend headline that reverses a $10 move in crude is exactly the kind of input that can reverse again, and the internals that are hurting \u2014 leadership, size, trend \u2014 are the slow-moving ones a single gap-up does not repair. Hold existing risk with defined exits; let today's close, not last night's futures, tell me whether the rotation is turning.</p>"
+   ],
+   "flips": {
+    "to_off": "SPY failing to reclaim 744 on the relief gap \u2014 opening above it and closing back below is the worst tell \u2014 combined with HY OAS pushing past 2.95% or the VIX curve flattening toward backwardation. A Hormuz relapse that puts Brent back over $100 does it in one session.",
+    "to_on": "SPY closing above 746 (the 50-day plus the 0.25% band) with at least two of XLK/XLY/XLC/XLI/XLF back in the top-3 sector z ranks, and IWM's 20-day gap to SPY closing inside a point. Cyclicals have to lead the rally, not just participate in it."
+   },
+   "sources": [
+    {
+     "t": "Bloomberg Jul 26 \u2014 oil tumbles as US and Iran pause strikes",
+     "u": "https://www.bloomberg.com/news/articles/2026-07-26/oil-tumbles-as-us-and-iran-pause-military-strikes-markets-wrap"
+    },
+    {
+     "t": "CNBC \u2014 week ahead, Jul 27\u201331 (FOMC Wed, Q2 GDP Thu)",
+     "u": "https://www.cnbc.com/2026/07/24/stock-market-next-week-outlook-for-july-27-31-2026.html"
+    },
+    {
+     "t": "CNBC Jul 23 \u2014 10-year tops 4.7% on oil spike",
+     "u": "https://www.cnbc.com/2026/07/22/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Zonted risk feed (Cboe/FRED) \u00b7 momentum (Alpaca SIP)",
+     "u": "/trading/risk-ytd.json"
+    }
+   ],
+   "rating": 5.0
+  },
+  {
    "date": "2026-07-25",
    "assess_for": "Mon Jul 27 open",
    "verdict": "NEUTRAL",
