@@ -66,13 +66,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         ):
             self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
-    def test_public_brief_routes_are_retired(self) -> None:
+    def test_public_brief_route_is_restored_and_old_model_routes_stay_retired(self) -> None:
         self.assertNotIn("brief", sync.ROUTES)
         self.assertNotIn("grok-brief", sync.ROUTES)
-        self.assertFalse((ROOT / "trading" / "brief" / "index.html").exists())
+        self.assertTrue((ROOT / "trading" / "brief" / "index.html").exists())
         self.assertFalse((ROOT / "trading" / "grok-brief" / "index.html").exists())
         redirects = (ROOT / "_redirects").read_text()
-        for retired_url in ("/trading/brief", "/trading/grok-brief", "/trading/horizon"):
+        for retired_url in ("/trading/grok-brief", "/trading/horizon"):
             self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
     def test_performance_route_matches_classic_results_and_history(self) -> None:
@@ -139,7 +139,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
         self.assertNotIn('class="track-bar"', page)
-        self.assertEqual(page.count('class="position-risk-chart"'), 2)
+        self.assertEqual(page.count('class="position-risk-chart"'), 3)
+        self.assertEqual(page.count('data-position-symbol='), 3)
+        self.assertIn('data-position-symbol="FIGR"', page)
         self.assertIn("prc-invalidation", script)
         self.assertIn("prc-entry-level", script)
         self.assertNotIn('class="prc-entry"', script)
@@ -200,7 +202,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
             self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
             self.assertIn('/trading/desk.css?v=19', page, path.as_posix())
-            self.assertIn('/trading/desk.js?v=19', page, path.as_posix())
+            self.assertIn('/trading/desk.js?v=20', page, path.as_posix())
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 

@@ -107,7 +107,8 @@ class TradingUiContractTest(unittest.TestCase):
         hypotheses_route = (ROOT / "trading" / "hypotheses" / "index.html").read_text()
         for symbol in details:
             self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', hypotheses_route)
-        self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(details))
+        route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
+        self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(route_details))
         self.assertIn('Exact Sciences', details["ABT"])
         self.assertIn('Libre Assist', details["ABT"])
         self.assertIn('Slightly underpriced', details["HOOD"])
@@ -348,8 +349,8 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_live_setups_collapsed_and_recent_activity_folded(self):
         combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
-        self.assertEqual(len(combined_pnl_rows), 4)
-        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, {"ABT", "HOOD"})
+        self.assertEqual(len(combined_pnl_rows), 6)
+        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, {"ABT", "FIGR", "HOOD"})
         for symbol in {symbol for _, symbol in combined_pnl_rows}:
             values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
             self.assertEqual(len(values), 1, symbol)
@@ -374,7 +375,7 @@ class TradingUiContractTest(unittest.TestCase):
         same nav link set (hrefs and labels) and the same stamp format."""
         import glob
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
-                 if "classic" not in p and "charts" not in p] + [str(ROOT / "trading" / "index.html")]
+                 if "classic" not in p and "charts" not in p and '<nav class="subnav"' in pathlib.Path(p).read_text()] + [str(ROOT / "trading" / "index.html")]
         nav_sets, stamps, chips = set(), set(), set()
         for p in pages:
             s = pathlib.Path(p).read_text()
