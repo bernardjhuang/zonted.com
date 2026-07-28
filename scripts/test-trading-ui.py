@@ -196,9 +196,15 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertAlmostEqual(win_rate, wins / decided * 100, places=1)
         self.assertIn('class="performance-actions"', block)
         self.assertIn('Last 14 days', block)
-        actions = re.findall(r'class="performance-action" data-performance-side="(buy|sell)" data-performance-type="(stock|option)"[^>]*><span>(Buy|Sell) · (Stock|Option)</span><strong[^>]*>([+−][\d.]+%|—)</strong>', block)
-        self.assertTrue(actions)
-        for forbidden in ('$', 'balance', 'buying power', 'ticker'):
+        action_items = re.findall(r'<li class="performance-action(?: performance-action--(?:win|loss))?" data-performance-side="(buy|sell)" data-performance-type="(stock|option)" data-performance-symbol="([A-Z][A-Z0-9.\-]{0,9})" data-performance-date="(\d{4}-\d{2}-\d{2})">(.*?)</li>', block, re.S)
+        self.assertTrue(action_items)
+        for side, asset_type, symbol, action_date, item in action_items:
+            self.assertIn(f'<b>{symbol}</b> · {side.title()} · {asset_type.title()}', item)
+            self.assertIn(f'<time datetime="{action_date}">', item)
+            self.assertRegex(item, r'<strong class="(?:positive|negative)">[+−][\d.]+%</strong>')
+        self.assertRegex(block, r'class="performance-action performance-action--win" data-performance-side="sell"[\s\S]*?<strong class="positive">')
+        self.assertRegex(block, r'class="performance-action performance-action--loss" data-performance-side="sell"[\s\S]*?<strong class="negative">')
+        for forbidden in ('$', 'balance', 'buying power', 'account number', 'order id'):
             self.assertNotIn(forbidden, block.casefold())
 
     def test_results_history_is_unique_ordered_and_matches_chart(self):
@@ -293,7 +299,7 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_chart_payloads_are_external_and_small_shell(self):
         # Thesis copy stays server-rendered for no-JS access; charts remain external.
-        self.assertLess(PAGE.stat().st_size, 325_000)
+        self.assertLess(PAGE.stat().st_size, 340_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):
@@ -408,6 +414,7 @@ class TradingUiContractTest(unittest.TestCase):
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
                  if "classic" not in p and "charts" not in p and '<nav class="subnav"' in pathlib.Path(p).read_text()] + [str(ROOT / "trading" / "index.html")]
         nav_sets, stamps, chips = set(), set(), set()
+        styles = (ROOT / "trading" / "desk.css").read_text()
         css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         for p in pages:
@@ -431,6 +438,12 @@ class TradingUiContractTest(unittest.TestCase):
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
         self.assertNotIn("/trading/hypotheses/", hrefs)
+        for risk_route in ("grok-risk", "gpt-risk", "gemini-risk", "meta-risk", "fable-risk"):
+            self.assertNotIn(f"/trading/{risk_route}/", hrefs)
+        for model in ("gpt", "grok", "gemini", "meta", "fable"):
+            self.assertIn(f".chip-{model}::before", styles)
+            self.assertIn(f"/trading/model-icons/{model}.svg", styles)
+            self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
         self.assertTrue(HYPOTHESES_ROUTE.exists(), "canonical hypotheses source route must remain available")
 
 

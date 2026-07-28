@@ -21,7 +21,8 @@ def exercise(page, url: str, screenshot: Path) -> None:
     check(page.locator('[data-desk-kind="hypothesis"]').count() == 6, "expected six hypotheses")
     check(page.locator("th", has_text="P&L").count() == 0, "P&L column should be removed")
     check(page.locator(".desk-position-flair--momentum").count() == 2, "expected two momentum flairs")
-    check(page.locator(".desk-position-flair--thesis").count() == 3, "expected three thesis flairs")
+    check(page.locator(".desk-position-flair--thesis").count() == 4, "expected four thesis flairs")
+    check(page.locator('[data-desk-symbol="FRMI"] .desk-position-flair--thesis').count() == 1, "FRMI thesis flair is missing")
     check(page.locator(".desk-catalyst b").first.inner_text().strip() != "", "catalyst name is missing")
     check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "page has horizontal overflow")
 
@@ -29,7 +30,11 @@ def exercise(page, url: str, screenshot: Path) -> None:
     spark_svg = spark.locator("svg")
     spark_box = spark_svg.bounding_box()
     if spark_box is None:
-        raise AssertionError("YTD sparkline has no rendered bounds")
+        raise AssertionError("one-year spark chart has no rendered bounds")
+    check(spark_box["width"] >= 230 and spark_box["height"] >= 84, "one-year spark chart was not doubled in size")
+    spark_axes = spark.locator(".desk-ytd-axis-label")
+    check(spark_axes.count() == 6, "spark chart needs three price ticks and three date ticks")
+    check((spark_axes.first.text_content() or "").startswith("$"), "spark chart Y axis is missing price labels")
     if (page.viewport_size or {}).get("width", 0) <= 500:
         spark_svg.focus()
         spark_svg.press("ArrowLeft")
@@ -38,7 +43,7 @@ def exercise(page, url: str, screenshot: Path) -> None:
     spark_tooltip = spark.locator("[data-desk-ytd-tooltip]:not([hidden])")
     spark_tooltip.wait_for()
     spark_text = spark_tooltip.inner_text()
-    check("Day" in spark_text and "YTD" in spark_text and "vs entry" in spark_text, "sparkline hover metrics are incomplete")
+    check("Day" in spark_text and "Trailing 1Y" in spark_text and "vs entry" in spark_text, "spark chart hover metrics are incomplete")
 
     opener = page.locator('[data-desk-kind="position"] .desk-row-toggle').first
     opener.click()
