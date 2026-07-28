@@ -178,7 +178,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('class="results-chart"', block)
         self.assertIn('Daily EOD snapshots', block)
         self.assertIn('Quantity-free YTD outcome statistics', block)
-        self.assertIn('Positive outcomes', block)
+        self.assertIn('Last 7 days', block)
         self.assertIn('Last 30 days', block)
         self.assertRegex(block, r'Current (wins|losses|none) streak')
         self.assertIn('Quantities and dollar amounts are ignored', block)
@@ -204,6 +204,7 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertRegex(item, r'<strong class="(?:positive|negative)">[+−][\d.]+%</strong>')
         self.assertRegex(block, r'class="performance-action performance-action--win" data-performance-side="sell"[\s\S]*?<strong class="positive">')
         self.assertRegex(block, r'class="performance-action performance-action--loss" data-performance-side="sell"[\s\S]*?<strong class="negative">')
+        self.assertIn(".performance-action-list{display:grid;grid-template-columns:1fr", (ROOT / "trading" / "desk.css").read_text())
         for forbidden in ('$', 'balance', 'buying power', 'account number', 'order id'):
             self.assertNotIn(forbidden, block.casefold())
 
@@ -422,8 +423,15 @@ class TradingUiContractTest(unittest.TestCase):
             nav = s[s.find("subnav"):s.find("</nav>")]
             nav_sets.add(tuple(re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', nav)))
             m = re.search(r'class="stamp">([^<]+)<', s)
-            chip = re.search(r'<span class="chipset">.*?</span></a></span>', s)
-            chips.add(chip.group(0) if chip else "missing")
+            chip = re.search(r'<span class="chipset">.*?</span>', s)
+            chip_markup = chip.group(0) if chip else "missing"
+            chips.add(chip_markup)
+            self.assertNotEqual(chip_markup, "missing", p)
+            self.assertNotIn('<span class="dot">', chip_markup, p)
+            for state, score in re.findall(r'class="chip chip-[^ ]+ chip-(on|off|neutral)"[^>]*>[^<]*?([\d.]+)</a>', chip_markup):
+                value = float(score)
+                expected = "on" if value > 5 else "off" if value < 5 else "neutral"
+                self.assertEqual(state, expected, f"risk pill color mismatch at {value}: {p}")
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
             self.assertIn(f'/trading/desk.css?v={css_hash}', s, p)
             self.assertIn(f'/trading/desk.js?v={js_hash}', s, p)
@@ -434,7 +442,7 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertEqual(stamps, live_stamps, f"all nav dates must refresh in morning mode: {stamps}")
         else:
             self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
-        self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")
+        self.assertNotIn("missing", chips)
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
         self.assertNotIn("/trading/hypotheses/", hrefs)
@@ -444,6 +452,8 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn(f".chip-{model}::before", styles)
             self.assertIn(f"/trading/model-icons/{model}.svg", styles)
             self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
+        self.assertNotIn(".chip .dot", styles)
+        self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
         self.assertTrue(HYPOTHESES_ROUTE.exists(), "canonical hypotheses source route must remain available")
 
 
