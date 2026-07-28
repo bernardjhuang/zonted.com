@@ -41,6 +41,14 @@
 
   const gapTone = gap => (gap >= 25 ? 'open' : gap >= 12 ? 'mid' : 'tight');
 
+  const sortThemesByGapDescending = themes => [...themes].sort((a, b) => {
+    const aGap = gapOf(a.consensus_scores.knowledge_saturation, a.consensus_scores.price_saturation);
+    const bGap = gapOf(b.consensus_scores.knowledge_saturation, b.consensus_scores.price_saturation);
+    if (aGap === null) return bGap === null ? 0 : 1;
+    if (bGap === null) return -1;
+    return bGap - aGap;
+  });
+
   const gapNote = (known, priced) => {
     const gap = gapOf(known, priced);
     if (gap === null) return '';
@@ -257,8 +265,9 @@
       return response.json();
     })
     .then(payload => {
-      shell.innerHTML = renderNav(payload.themes)
-        + payload.themes.map(theme => renderTheme(theme, payload.method)).join('');
+      const themes = sortThemesByGapDescending(payload.themes);
+      shell.innerHTML = renderNav(themes)
+        + themes.map(theme => renderTheme(theme, payload.method)).join('');
       shell.dataset.ready = 'true';
       syncStickyOffset();
       if (window.ResizeObserver && statusBar) new ResizeObserver(syncStickyOffset).observe(statusBar);
