@@ -96,9 +96,13 @@ def row_market(symbol: str, hyp_chart: dict, scan_chart: dict | None, quote: dic
     closes = [float(v) for v in hyp_chart["close"]]
     if scan_chart:
         series = scan_chart["series"]
-        dates = list(series["dates"])
-        closes = [float(v) for v in series["c"]]
-        daily = closes
+        daily_dates = list(series["dates"])
+        daily = [float(v) for v in series["c"]]
+        if daily_dates[-1] == dates[-1]:
+            closes[-1] = daily[-1]
+        elif daily_dates[-1] > dates[-1]:
+            dates.append(daily_dates[-1])
+            closes.append(daily[-1])
         last = daily[-1]
         day = (daily[-1] / daily[-2] - 1) * 100
         spread = float(scan_chart["stats"]["spread_z"])
@@ -368,10 +372,22 @@ def sync_shell_assets(stamp: str | None = None) -> None:
             source = re.sub(rf'<a href="/trading/{risk_route}/"(?: aria-current="page")?>{label}</a>', '', source)
         source = source.replace('/trading/watchlist/?chart=', '/trading/vwap-setups/?chart=')
         source = source.replace('Market · YTD', 'Market · trailing 1Y')
-        meta_chip = '<a class="chip chip-meta chip-neutral" href="/trading/meta-risk/" title="Meta risk appetite — Neutral, leaning Risk-Off · 4/10"><span class="dot"></span>Meta 4</a>'
+        meta_chip = '<a class="chip chip-meta chip-off" href="/trading/meta-risk/" title="Meta risk appetite — Neutral, leaning Risk-Off · 4/10">Meta 4</a>'
         source = re.sub(r'<a class="chip chip-meta [^"]+" href="/trading/meta-risk/".*?</a>', meta_chip, source)
         if 'class="chip chip-meta ' not in source:
             source = source.replace('<a class="chip chip-fable ', meta_chip + '<a class="chip chip-fable ', 1)
+        source = re.sub(r'<span class="dot"></span>(?=[A-Za-z]+ [\d.]+</a>)', '', source)
+        def normalize_model_chip(match: re.Match[str]) -> str:
+            opening, label, score_text = match.groups()
+            value = float(score_text)
+            state = "on" if value > 5 else "off" if value < 5 else "neutral"
+            opening = re.sub(r'chip-(?:on|off|neutral)', f'chip-{state}', opening)
+            return f"{opening}{label}{score_text}</a>"
+        source = re.sub(
+            r'(<a class="chip chip-(?:gpt|grok|gemini|meta|fable) chip-(?:on|off|neutral)"[^>]*>)([^<]*?)([\d.]+)</a>',
+            normalize_model_chip,
+            source,
+        )
         if stamp:
             source = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
             source = re.sub(r'(<span class="trading-stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)

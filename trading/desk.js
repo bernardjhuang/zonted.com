@@ -11,16 +11,16 @@
 
   const riskJournalData = fetch('/trading/risk-journal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-  /* ── status chips: four independent risk-appetite reads, all 0–10.
+  /* ── status chips: five independent risk-appetite reads, all 0–10.
      Each updates on its own; a failed fetch leaves that chip's static
-     fallback text in place. Stance color uses the Fable rubric bands
-     (≥6.25 on, ≤3.75 off) so all four are judged on the same scale. ── */
+     fallback text in place. Scores above 5 are green, below 5 are red,
+     and exactly 5 keeps the neutral treatment. ── */
   const setChip = (key, name, value, stanceText) => {
     const chip = $('.chip-' + key);
     if (!chip || !Number.isFinite(value)) return;
     chip.classList.remove('chip-on', 'chip-off', 'chip-neutral');
-    chip.classList.add(value >= 6.25 ? 'chip-on' : value <= 3.75 ? 'chip-off' : 'chip-neutral');
-    chip.innerHTML = '<span class="dot"></span>' + name + ' ' + esc(Math.round(value * 10) / 10);
+    chip.classList.add(value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral');
+    chip.textContent = name + ' ' + Math.round(value * 10) / 10;
     if (stanceText) chip.title = name + ' risk appetite — ' + stanceText + ' · ' + Math.round(value * 10) / 10 + '/10';
   };
   riskJournalData.then(d => {

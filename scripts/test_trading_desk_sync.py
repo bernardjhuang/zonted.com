@@ -4,6 +4,7 @@ from __future__ import annotations
 import hashlib
 import html
 import json
+import datetime as dt
 import os
 import pathlib
 import re
@@ -271,6 +272,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count('class="desk-ytd-axis-label"'), 60)
         self.assertEqual(page.count('class="desk-ytd-grid"'), 30)
         self.assertEqual(page.count("trailing one-year return"), 10)
+        chart_ranges = re.findall(r'data-desk-one-year-chart="([A-Z]+)" data-desk-chart-dates="([^"]+)"', page)
+        self.assertEqual(len(chart_ranges), 10)
+        source_charts = json.loads((ROOT / "trading/hypothesis-charts.json").read_text())["charts"]
+        for symbol, encoded_dates in chart_ranges:
+            dates = [dt.date.fromisoformat(value) for value in encoded_dates.split(",")]
+            source_start = dt.date.fromisoformat(source_charts[symbol]["dates"][0])
+            expected_start = max(source_start, dates[-1] - dt.timedelta(days=365))
+            self.assertGreaterEqual(dates[0], expected_start, symbol)
+            self.assertLessEqual((dates[0] - expected_start).days, 7, f"{symbol} chart omits available trailing-one-year history")
         self.assertIn("Trailing 1Y", script)
         self.assertIn("grid-template-columns:236px", styles.replace(" ", ""))
         self.assertEqual(page.count('class="desk-detail-axis-label"'), 70)
@@ -284,6 +294,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
             self.assertIn('desk-position-flair--momentum', row)
             self.assertIn('>Momentum<', row)
+        hpq_row = next(row for row in position_rows if _row_symbol(row) == "HPQ")
+        self.assertIn('data-desk-ytd-kill="25.0"', hpq_row)
+        self.assertIn('<title>Kill $25.00</title>', hpq_row)
         for symbol in ("FIGR", "HOOD", "CEG", "FRMI"):
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
             self.assertIn('desk-position-flair--thesis', row)
