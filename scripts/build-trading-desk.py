@@ -26,6 +26,7 @@ VALUATIONS = ROOT / "trading/hypothesis-valuations.json"
 CHARTS = ROOT / "trading/hypothesis-charts.json"
 SCAN = ROOT / "trading/scan-charts.json"
 VWAP = ROOT / "trading/vwap-charts.json"
+MARKET = ROOT / "trading/market-ytd.json"
 DESK_CSS = ROOT / "trading/desk.css"
 DESK_JS = ROOT / "trading/desk.js"
 CHART_MODAL_JS = ROOT / "js/hypothesis-chart-modal.b42a9700.js"
@@ -74,9 +75,32 @@ def article_metadata(source: str) -> dict[str, dict[str, str]]:
     return out
 
 
-def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.datetime | None]:
+def validate_status_market(status: dict) -> dict[str, float]:
+    values = {key: status.get(key) for key in ("spy", "spy_day_pct", "vix")}
+    if any(isinstance(value, bool) or not isinstance(value, (int, float)) or not math.isfinite(value) for value in values.values()):
+        raise ValueError("Status market needs finite SPY, SPY day change, and VIX values")
+    normalized = {key: float(status[key]) for key in values}
+    if normalized["spy"] <= 0 or normalized["vix"] <= 0 or not -100 < normalized["spy_day_pct"] < 100:
+        raise ValueError(f"Implausible status market: {normalized}")
+    return normalized
+
+
+def close_status_market() -> dict[str, float]:
+    payload = load(MARKET)
+    points = payload.get("points") or []
+    if payload.get("schema_version") != 2 or len(points) < 2 or payload.get("as_of") != points[-1].get("date"):
+        raise ValueError("Status bar needs a current trailing-one-year market payload")
+    latest, previous = points[-1], points[-2]
+    return validate_status_market({
+        "spy": latest.get("spy"),
+        "spy_day_pct": (float(latest["spy"]) / float(previous["spy"]) - 1) * 100,
+        "vix": latest.get("vix"),
+    })
+
+
+def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.datetime | None, dict[str, float] | None]:
     if path is None:
-        return {}, None
+        return {}, None, None
     payload = load(path)
     if payload.get("schema_version") != 1:
         raise ValueError("Morning quote payload must use schema_version 1")
@@ -89,7 +113,26 @@ def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.date
             raise ValueError(f"Invalid morning price for {symbol}")
         if not isinstance(day, (int, float)) or not -100 < day < 1000:
             raise ValueError(f"Invalid morning day change for {symbol}")
-    return quotes, stamp
+    status = payload.get("status_market")
+    return quotes, stamp, validate_status_market(status) if isinstance(status, dict) else None
+
+
+def render_status_metrics(page: str, positions: int, status: dict[str, float]) -> str:
+    spy = float(status["spy"])
+    spy_day = float(status["spy_day_pct"])
+    vix = float(status["vix"])
+    day_class = "up" if spy_day >= 0 else "down"
+    day_text = f"{spy_day:+.1f}%".replace("-", "−")
+    metrics = (
+        f'\n    <span class="metric" data-status-spy="{spy:.2f}" data-status-spy-day="{spy_day:.4f}"><span class="k">SPY</span>{spy:.2f} <span class="{day_class}">{day_text}</span></span>'
+        f'\n    <span class="metric" data-status-vix="{vix:.2f}"><span class="k">VIX</span>{vix:.2f}</span>'
+        f'\n    <span class="metric" data-status-open="{positions}"><span class="k">Open</span>{positions}</span>\n  '
+    )
+    pattern = r'(<div class="status-metrics">\s*<span class="chipset">.*?</span>).*?(</div>)'
+    rendered, count = re.subn(pattern, lambda match: match.group(1) + metrics + match.group(2), page, count=1, flags=re.S)
+    if count != 1:
+        raise ValueError("Status metrics region not found")
+    return rendered
 
 
 def row_market(
@@ -435,7 +478,7 @@ def modals() -> str:
 <dialog class="desk-thesis-dialog" id="desk-thesis-dialog" data-thesis-source="/trading/hypotheses/" aria-labelledby="desk-thesis-title"><div class="desk-thesis-frame"><header><h2 id="desk-thesis-title">Full thesis</h2><button type="button" data-thesis-close aria-label="Close thesis dialog">×</button></header><div data-thesis-summary></div><div data-thesis-body><p>Loading thesis…</p></div></div></dialog>'''
 
 
-def sync_shell_assets(stamp: str | None = None) -> None:
+def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = None) -> None:
     css_ref = f'/trading/desk.css?v={digest(DESK_CSS)}'
     js_ref = f'/trading/desk.js?v={digest(DESK_JS)}'
     modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
@@ -468,6 +511,10 @@ def sync_shell_assets(stamp: str | None = None) -> None:
         if stamp:
             source = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
             source = re.sub(r'(<span class="trading-stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
+        if status_metrics and '<div class="status-metrics">' in source:
+            source, count = re.subn(r'<div class="status-metrics">.*?</div>', status_metrics, source, count=1, flags=re.S)
+            if count != 1:
+                raise ValueError(f"Status metrics region could not be replaced in {path.relative_to(ROOT)}")
         path.write_text(source)
 
 
@@ -491,7 +538,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     if set(metadata) != set(valuation) or set(metadata) != set(charts):
         raise ValueError("Desk articles, valuations, and chart symbols must match exactly")
     scan = load(SCAN)["charts"]
-    quotes, quote_stamp = quotes_from(quote_path)
+    quotes, quote_stamp, live_status = quotes_from(quote_path)
     symbols = sorted(metadata)
     quote_date = quote_stamp.date() if quote_stamp else None
     markets = {
@@ -521,6 +568,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     page = re.sub(r'\s*<script defer src="/js/hypothesis-chart-modal\.[a-f0-9]{8}\.js(?:\?v=[a-f0-9]+)?"></script>', '', page)
     modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
     page = page.replace('</body>', f'{modals()}\n<script defer src="{modal_ref}"></script>\n</body>', 1)
+    page = render_status_metrics(page, len(positions), live_status or close_status_market())
     if mode == "morning" and quote_stamp:
         stamp = quote_stamp.astimezone().strftime("Live · %B %-d, %Y · %-I:%M %p CT")
     else:
@@ -548,7 +596,8 @@ def main() -> int:
         return 0
     PAGE.write_text(rendered)
     stamp_match = re.search(r'<span class="stamp">(.*?)</span>', rendered)
-    sync_shell_assets(stamp_match.group(1) if stamp_match else None)
+    status_match = re.search(r'<div class="status-metrics">.*?</div>', rendered, flags=re.S)
+    sync_shell_assets(stamp_match.group(1) if stamp_match else None, status_match.group(0) if status_match else None)
     positions = len(load(POSITIONS)["positions"])
     total = len(article_metadata(HYPOTHESES.read_text()))
     print(f"[trading-desk] built {args.mode}: {positions} positions + {total - positions} tracked hypotheses")

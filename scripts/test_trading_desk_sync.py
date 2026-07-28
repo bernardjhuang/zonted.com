@@ -426,6 +426,36 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("SPY · TRAILING 1Y %", script)
         self.assertEqual(payload["points"][-1]["date"], payload["as_of"])
 
+    def test_status_bar_matches_market_snapshot_and_open_positions_across_routes(self) -> None:
+        page = (ROOT / "trading" / "index.html").read_text()
+        positions = json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
+        stamp = re.search(r'<span class="stamp">([^<]+)</span>', page)
+        self.assertIsNotNone(stamp)
+        if stamp and stamp.group(1).startswith("Live ·"):
+            status = json.loads((ROOT / "trading" / "desk-morning-quotes.json").read_text())["status_market"]
+        else:
+            points = json.loads((ROOT / "trading" / "market-ytd.json").read_text())["points"]
+            latest, previous = points[-1], points[-2]
+            status = {
+                "spy": latest["spy"],
+                "spy_day_pct": (latest["spy"] / previous["spy"] - 1) * 100,
+                "vix": latest["vix"],
+            }
+        expected = (
+            f'data-status-spy="{float(status["spy"]):.2f}" data-status-spy-day="{float(status["spy_day_pct"]):.4f}"',
+            f'data-status-vix="{float(status["vix"]):.2f}"',
+            f'data-status-open="{len(positions)}"',
+        )
+        status_pages = [
+            path for path in (ROOT / "trading").glob("**/index.html")
+            if '<div class="status-metrics">' in path.read_text()
+        ]
+        self.assertEqual(len(status_pages), 11)
+        for path in status_pages:
+            source = path.read_text()
+            for marker in expected:
+                self.assertIn(marker, source, path)
+
     def test_momentum_deep_link_filters_opens_and_scrolls_to_requested_ticker(self) -> None:
         script = (ROOT / "js" / "trading-broker-light.js").read_text()
         self.assertIn("universeInput.value = requested", script)
