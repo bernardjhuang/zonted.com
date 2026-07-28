@@ -259,8 +259,8 @@ class TradingThemesContractTest(unittest.TestCase):
             "emerging-ai-compute-water-geography": (58, 28, 58, 28),
             "emerging-autonomous-science-verification-wall": (52, 22, 58, 22),
             "emerging-orbital-compute-relief-valve": (45, 8, 60, 20),
-            "emerging-precision-fermentation-molecules": (65, 35, 70, 52),
-            "emerging-radiative-cooling-everything-grid": (60, 25, 60, 34),
+            "emerging-precision-fermentation-molecules": (65, 35, 75, 55),
+            "emerging-radiative-cooling-everything-grid": (60, 25, 60, 30),
         }
         found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
         self.assertEqual(set(found), set(expected))
