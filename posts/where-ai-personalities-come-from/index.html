@@ -8,7 +8,7 @@
     <meta name="description" content="An AI's personality is a file you can read. Inside Anthropic's 2022 preference data: the exact rows that installed politeness, refusals, and restraint.">
     <link rel="canonical" href="https://zonted.com/posts/where-ai-personalities-come-from/">
     <meta property="og:title" content="The Files Where AI Personalities Come From">
-    <meta property="og:description" content="An AI's values aren't emergent — they're a curated dataset you can open and read. I read them, and measured how the recommendation rules changed between 2022 and 2024.">
+    <meta property="og:description" content="An AI's values aren't emergent — they're a curated dataset you can open and read. The exact rows that installed refusals, politeness, and restraint, verbatim.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://zonted.com/posts/where-ai-personalities-come-from/img/og.png">
     <meta property="og:url" content="https://zonted.com/posts/where-ai-personalities-come-from/">
@@ -21,7 +21,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"The Files Where AI Personalities Come From","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-26","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/where-ai-personalities-come-from/","description":"Anthropic's and Nvidia's actual preference-training data is sitting on Hugging Face, readable like a spreadsheet. I read it — and measured how the rules for AI recommendations changed between 2022 and 2024.","image":"https://zonted.com/posts/where-ai-personalities-come-from/img/og.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"The Files Where AI Personalities Come From","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-26","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/where-ai-personalities-come-from/","description":"Anthropic's actual preference-training data is sitting on Hugging Face, readable like a spreadsheet. These are the exact rows that installed refusals, politeness, and restraint.","image":"https://zonted.com/posts/where-ai-personalities-come-from/img/og.png"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The Files Where AI Personalities Come From"}]}
@@ -231,7 +231,7 @@
                 <ul>
                     <li>Refusals, politeness, and tone are <strong>installed by specific, readable training examples</strong> — I'll show you the exact rows</li>
                     <li>In the 2022 data, preferred answers often <strong>refused to name products</strong> &mdash; a thread that led somewhere unexpected when I measured it properly in <a href="/posts/inside-ai-training-data/">the follow-up</a></li>
-                    <li>Preference training also explains why AI recommendations are winner-take-all: base models spread belief across brands; post-training crowns one king</li>
+                    <li>The data has a visible skill ceiling &mdash; 2022 alignment is crude by today's standards, which means <strong>you can carbon-date an AI behavior</strong> by finding the layer that taught it</li>
                 </ul>
                 <p class="tldr-tail">An AI's values aren't emergent. They're a curated dataset with version numbers — and the version history changes who gets recommended.</p>
             </div>
