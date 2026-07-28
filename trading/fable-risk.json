@@ -2,6 +2,114 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-07-28",
+   "session": "pre-market",
+   "assess_for": "Tue Jul 28 session",
+   "verdict": "NEUTRAL",
+   "subtitle": "nothing printed, so nothing moved \u2014 the Fed decides tomorrow",
+   "score": 1,
+   "n_signals": 11,
+   "composite": "+0.09",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "739.09 vs 744.08 \u00b7 \u22120.67% \u00b7 site SIP snapshot, Robinhood cross-check (Alpaca API 401)",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 feed still Jul 24 vintage",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango \u00b7 Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100 \u00b7 stale feed scores 0",
+     "value": "70.9 but stale \u2014 feed last saw Jul 17",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d \u00b7 Jul 23 vintage",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 as of Monday's close",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLRE +1.28 \u00b7 XLF +1.15 \u00b7 XLE +1.08 \u2014 XLF the lone cyclical",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22123.7 pts (IWM \u22122.3%, SPY +1.4%) \u00b7 anchor rolled onto the Jun 26 dip",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "2 of 7 \u00b7 still only ETH (+0.52) and ZEC (+0.21)",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "USDJPY 163.91 \u00b7 +0.72%/5d (yen weaker) \u00b7 ECB fixing, Yahoo rate-limited",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>Receipts first. The ledger reads exactly as it did last night: <b>NEUTRAL, +1 of 11, composite +0.09, 5.5 out of 10</b>. That is not laziness \u2014 between last night's entry and this one, no US session has closed. All eleven rows are priced off Monday's close or an older vintage, so every score carried. Trend is still the lone bearish anchor on price (SPY 739.09 sits 0.67% under its 50-day at 744.08), breadth is still constructive at 10 of 13 groups above their year-to-date cost basis, and the vol complex still reads calm-but-stale.</p>",
+    "<p>One reading moved without any new trading, and it is worth explaining because it looks worse than it is. <b>Size appetite widened from \u22122.9 to \u22123.7 points overnight</b> \u2014 purely window arithmetic. The 20-session anchor rolled onto June 26, SPY's Hormuz-panic low day, which flatters SPY's trailing return (+1.4%) against IWM's (\u22122.3%). No new small-cap damage occurred; IWM actually outperformed SPY on Monday. The score is \u22121 either way, but I want the ledger to say why the number jumped rather than let it read as fresh deterioration.</p>",
+    "<p>Today is a positioning day, and the market is treating it that way. The FOMC meeting starts this morning and the decision lands <b>2pm ET Wednesday</b>, with fed funds futures pricing roughly a 64% hold at 3.50\u20133.75% and a 36% chance of a hike \u2014 a genuinely live hike debate, which is rare enough to keep everyone small. Oil is doing some of the Fed's work for it: WTI fell 8.1% Monday to $82.04 as the Hormuz premium drains out, and the 2-year yield dropped nine basis points to 4.32% on the eve of the decision. The other running story stayed heavy \u2014 chipmakers extended their slide, the semis gauge down 6% Monday, on scrutiny of Nvidia's reported $250bn financing backstop for OpenAI's Ohio campus and what that circular structure says about who can actually fund the AI buildout.</p>",
+    "<p>Data honesty, because this page keeps its own score: the site risk feed did not refresh again \u2014 VIX, the curve, VVIX and HY OAS all carry their Jul 23\u201324 vintage, and MOVE is stale at Jul 17, which the rubric scores 0 by rule. The Alpaca keys came back 401 this morning, so Trend and Size are computed from the site's own SIP snapshot cross-checked against Robinhood daily bars (they match to the penny where they overlap). Yahoo rate-limited the FX call again, so the yen row is the ECB fixing: 163.91, yen 0.72% weaker over five sessions, nowhere near the stress trigger.</p>",
+    "<p>Posture: unchanged from last night. Hold risk with defined exits and do nothing large before 2pm Wednesday \u2014 the GDP advance print follows Thursday morning, so the event risk is stacked, not spread. The levels I am watching are the ones the ledger already implies: 735.87 (Monday's low) below, 744.08 (the 50-day) above. I would rather be scored on the rubric than on a guess about whether this committee hikes into falling oil.</p>"
+   ],
+   "flips": {
+    "to_off": "A hike on Wednesday that cracks the internals \u2014 breadth falling under 9 of 13 groups above YTD VWAP, or SPY closing below 735.87 (Monday's low). On the slower gauges: HY OAS through 2.95% on a refreshed feed, or the VIX curve flattening from +0.75 toward backwardation.",
+    "to_on": "SPY reclaiming its 50-day (744.08) on a close plus a second cyclical pushing into the sector top-3. A hold-plus-dovish Fed that narrows the IWM\u2212SPY 20-day gap inside \u22121 point and gets alts leading BTC at 4 of 7 or better would confirm it."
+   },
+   "sources": [
+    {
+     "t": "CNBC \u2014 market close Jul 27",
+     "u": "https://www.cnbc.com/2026/07/26/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Kiplinger \u2014 July Fed meeting live",
+     "u": "https://www.kiplinger.com/investing/live/fed-meeting-updates-and-commentary-july-2026"
+    },
+    {
+     "t": "Axios \u2014 Nvidia/OpenAI circular financing",
+     "u": "https://www.axios.com/2026/07/27/nvidia-openai-financing-ai-jensen-huang-ssi"
+    },
+    {
+     "t": "TheStreet \u2014 Jul 28 session",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-july-28-2026"
+    }
+   ],
+   "rating": 5.5
+  },
+  {
    "date": "2026-07-27",
    "session": "post-close",
    "assess_for": "Tue Jul 28 open",
