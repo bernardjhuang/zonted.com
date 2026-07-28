@@ -230,6 +230,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         positions_artifact = json.loads((ROOT / "trading" / "desk-positions.json").read_text())
         self.assertEqual(positions_artifact["schema_version"], 2)
         positions_payload = positions_artifact["positions"]
+        cash_percent = float(positions_artifact["cash_percent"])
+        self.assertIn(f'{cash_percent:.1f}% cash · {len(positions_payload)} open · sorted by portfolio allocation', page)
         expected_positions = {row["symbol"] for row in positions_payload}
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
         total_symbols = expected_positions | expected_hypotheses

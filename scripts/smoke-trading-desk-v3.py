@@ -21,6 +21,7 @@ def exercise(page, url: str, screenshot: Path) -> None:
     hypothesis_count = page.locator('[data-desk-kind="hypothesis"]').count()
     source_count = int(page.locator('.desk-main').get_attribute('data-desk-source-articles') or 0)
     check(position_count > 0 and position_count + hypothesis_count == source_count, "live positions and tracked hypotheses do not partition the source universe")
+    check("% cash" in page.locator('.desk-table-head').first.inner_text(), "Positions header is missing cash percentage")
     allocations = page.locator('[data-desk-kind="position"]').evaluate_all("rows => rows.map(row => Number(row.dataset.allocationPercent))")
     check(allocations == sorted(allocations, reverse=True), "positions are not sorted by allocation descending")
     check(page.locator('.desk-position-allocation').count() == position_count, "position allocations are missing")

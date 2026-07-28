@@ -420,6 +420,9 @@ def render(mode: str, quote_path: Path | None) -> str:
     metadata = article_metadata(hypothesis_source)
     positions_payload = load(POSITIONS)
     positions = positions_payload["positions"]
+    cash_percent = positions_payload.get("cash_percent")
+    if isinstance(cash_percent, bool) or not isinstance(cash_percent, (int, float)) or not 0 <= cash_percent <= 100:
+        raise ValueError("Desk positions need cash_percent between 0 and 100")
     valuation = load(VALUATIONS)["rows"]
     charts_payload = load(CHARTS)
     charts = charts_payload["charts"]
@@ -443,7 +446,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
 {START_POS}
-{table('Positions', f'{len(positions)} open · sorted by portfolio allocation', pos_body)}
+{table('Positions', f'{cash_percent:.1f}% cash · {len(positions)} open · sorted by portfolio allocation', pos_body)}
 {END_POS}
 {START_HYP}
 {table('Tracked hypotheses', f'{len(tracked)} thesis-only names · sorted by catalyst', hyp_body, True)}
