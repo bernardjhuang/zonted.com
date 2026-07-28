@@ -23,7 +23,7 @@ DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
 VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
-CHART_MODAL_SCRIPT = ROOT / "js" / "hypothesis-chart-modal.1b5e1178.js"
+CHART_MODAL_SCRIPT = ROOT / "js" / "hypothesis-chart-modal.b42a9700.js"
 CHART_MODAL_STYLE = ROOT / "trading" / "hypothesis-summary.6e6f3b19.css"
 
 
@@ -40,16 +40,6 @@ class Route:
 
 
 ROUTES = {
-    # Section keys are stable API for the generator scripts; the target paths
-    # moved when URLs were renamed to match page names (momentum -> watchlist,
-    # vwap -> momentum). Old URLs 301 via _redirects.
-    "momentum": Route(
-        ROOT / "trading" / "watchlist" / "index.html",
-        "Watchlist",
-        "The generated stock watchlist and setup-chart universe from the latest completed market session.",
-        ("SCAN",),
-        (BROKER_SCRIPT,),
-    ),
     "setups": Route(
         ROOT / "trading" / "vwap-setups" / "index.html",
         "VWAP Setups",
@@ -184,12 +174,59 @@ def _dual_vwap_links(rows: list[dict], label: str) -> str:
     return f'<div class="dual-vwap-list" aria-label="{label}">' + "".join(links) + "</div>"
 
 
+def _momentum_setups(charts: dict, scores: dict[str, float]) -> dict[str, list[dict]]:
+    result: dict[str, list[dict]] = {"long": [], "short": []}
+    long_labels = {"ENTER+", "ENTER"}
+    short_labels = {"SHORT+", "SHORT", "BREAKING"}
+    for symbol, record in charts.items():
+        label = record.get("label")
+        side = "long" if label in long_labels else "short" if label in short_labels else None
+        if side is None:
+            continue
+        sector_etf = str(record.get("sector_etf") or "")
+        if sector_etf not in scores:
+            raise ValueError(f"missing sector Z-score for momentum setup {symbol}: {sector_etf}")
+        result[side].append({
+            "symbol": symbol,
+            "company_name": record.get("company_name") or symbol,
+            "sector": record.get("sector") or "",
+            "sector_etf": sector_etf,
+            "sector_z": scores[sector_etf],
+            "label": label,
+            "spread_z": (record.get("stats") or {}).get("spread_z"),
+        })
+    return result
+
+
+def _momentum_links(rows: list[dict], label: str) -> str:
+    if not rows:
+        return f'<p class="scan-qualified-links"><b>{label}</b> · None active</p>'
+    links = []
+    for row in rows:
+        symbol = html.escape(row["symbol"], quote=True)
+        company_name = html.escape(row["company_name"])
+        sector = html.escape(row["sector"])
+        sector_etf = html.escape(row["sector_etf"], quote=True)
+        sector_z = row["sector_z"]
+        direction = "up" if sector_z > 0 else "down" if sector_z < 0 else "flat"
+        spread = row["spread_z"]
+        spread_copy = f" · Spread Z {spread:+.2f}" if isinstance(spread, (int, float)) else ""
+        links.append(
+            f'<button type="button" class="sector-setup-chart-launch" data-hypothesis-chart-open="{symbol}" data-sector-direction="{direction}" '
+            f'aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog" '
+            f'aria-label="Open {symbol} {company_name} setup and sector charts" translate="no"><b>{symbol}</b>'
+            f'<span>{html.escape(row["label"])}</span><em>{company_name}</em>'
+            f'<small>{sector} · {sector_etf} {sector_z:+.2f}{spread_copy}</small></button>'
+        )
+    return f'<div class="sector-setup-list" aria-label="{label}">' + "".join(links) + "</div>"
+
+
 def _chart_modal() -> str:
     return '''<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title">
 <div class="hyp-chart-dialog-frame" data-hypothesis-chart-detail>
 <header class="hyp-chart-dialog-head"><div><span>VWAP setup data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header>
 <div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div>
-<p class="hyp-chart-dialog-note">Same completed-session Spread Z, VWAP, and sector Z-score data used by the <a href="/trading/watchlist/">Watchlist</a>.</p>
+<p class="hyp-chart-dialog-note">Completed-session Spread Z, VWAP, and sector Z-score data from this VWAP Setups page.</p>
 </div>
 </dialog>'''
 
@@ -205,6 +242,12 @@ def render_dual_vwap_panel(panel: str) -> str:
             row["sector_z"] = scores[row["sector_etf"]]
     last_bar = html.escape(payload.get("last_bar") or "latest completed session")
     long_rows, short_rows = setups["long"], setups["short"]
+    momentum = _momentum_setups(payload.get("charts") or {}, scores)
+    sector_match = re.search(r'<div class="sector-summary">.*?</div>', panel, re.S)
+    if sector_match is None:
+        raise ValueError("dual-VWAP source panel is missing sector summary")
+    sector_summary = sector_match.group(0)
+    panel = panel[:sector_match.start()] + panel[sector_match.end():]
     panel = _replace_once(
         r'<div class="position-head">.*?</div>',
         f'<div class="position-head"><h2 id="scan-heading">Dual-VWAP breaks</h2><span>Signals through {last_bar} close</span></div>',
@@ -243,12 +286,42 @@ def render_dual_vwap_panel(panel: str) -> str:
         panel,
         "setup lists",
     )
+    dual_method = '<details class="trading-method" id="scan-method"><summary>How this works</summary><p>A long trigger fires when the daily close moves from anywhere else to above both the earnings-anchored VWAP and YTD VWAP. A short trigger is the mirror below both. The trigger day is day 1; the ticker remains active through day 3 even if it moves back between or through the VWAPs. A fast reversal can briefly appear on both lists. Missing earnings VWAP means no signal. This is a mechanical screen, not a recommendation.</p></details>'
     panel = _replace_once(
         r'<details class="trading-method" id="scan-method">.*?</details>',
-        '<details class="trading-method" id="scan-method"><summary>How this works</summary><p>A long trigger fires when the daily close moves from anywhere else to above both the earnings-anchored VWAP and YTD VWAP. A short trigger is the mirror below both. The trigger day is day 1; the ticker remains active through day 3 even if it moves back between or through the VWAPs. A fast reversal can briefly appear on both lists. Missing earnings VWAP means no signal. This is a mechanical screen, not a recommendation.</p></details>',
+        dual_method,
         panel,
         "method",
     )
+    momentum_longs, momentum_shorts = momentum["long"], momentum["short"]
+    sector_names = sorted({row["sector"] for row in momentum_longs + momentum_shorts})
+    sector_clause = f" across {', '.join(html.escape(name) for name in sector_names)}" if sector_names else ""
+    momentum_section = f'''<section class="sector-qualified-setups" aria-labelledby="sector-qualified-heading">
+                <div class="position-head"><h2 id="sector-qualified-heading">Sector-qualified momentum</h2><span>Signals through {last_bar} close</span></div>
+                <p class="trading-takeaway">{len(momentum_longs)} qualified long and {len(momentum_shorts)} qualified short setups{sector_clause}.</p>
+                <p class="scan-risk-overlay">Cards follow the sector ETF: green is positive 50-day Z, red is negative 50-day Z.</p>
+                {sector_summary}
+                <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
+                <div class="position-group">
+                    <h3>Long setups · {len(momentum_longs)}</h3>
+{_momentum_links(momentum_longs, "Sector-qualified long setups")}
+                </div>
+                <div class="position-group">
+                    <h3>Short setups · {len(momentum_shorts)}</h3>
+{_momentum_links(momentum_shorts, "Sector-qualified short setups")}
+                </div>
+                <details class="trading-method" id="sector-setup-method"><summary>How sector-qualified setups work</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Earnings within about 9 days are flagged in the full universe. This is a mechanical screen, not a recommendation.</p></details>
+            </section>'''
+    method_match = re.search(r'<details class="trading-method" id="scan-method">.*?</details>', panel, re.S)
+    if method_match is None:
+        raise ValueError("dual-VWAP route is missing rendered method")
+    method_html = method_match.group(0)
+    panel = panel[:method_match.start()] + panel[method_match.end():]
+    universe_marker = '<details class="scan-universe-disclosure" id="scan-universe" open>'
+    universe_index = panel.find(universe_marker)
+    if universe_index < 0:
+        raise ValueError("dual-VWAP route is missing universe table")
+    panel = panel[:universe_index] + method_html + "\n" + momentum_section + "\n                " + panel[universe_index:]
     config_match = re.search(r'<script type="application/json" id="scan-chart-config">(.*?)</script>', panel)
     if config_match is None:
         raise ValueError("dual-VWAP route is missing scan chart config")
@@ -295,7 +368,8 @@ def render_route(target: str, classic: str, route: Route) -> str:
 <div class="phead"><h1 id="{heading_id}">{route.title}</h1><p class="take">{route.description}</p><p class="meta">{route.meta}</p></div>
 {panels}
 <!-- AUTO:ROUTED_TRADING:END -->'''
-    return prefix + body + "\n</div>\n" + (script_tags + "\n" if script_tags else "") + "</body>\n</html>\n"
+    rendered = prefix + body + "\n</div>\n" + (script_tags + "\n" if script_tags else "") + "</body>\n</html>\n"
+    return re.sub(r'(?m)^[ \t]+$', '', rendered)
 
 
 def atomic_write(path: pathlib.Path, content: str) -> None:

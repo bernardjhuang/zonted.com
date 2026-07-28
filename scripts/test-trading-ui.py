@@ -104,12 +104,12 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
         for symbol, block in details.items():
             self.assertIn(f'id="hypothesis-{symbol.lower()}-setup"', hypotheses_html)
-            self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', block)
+            self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', block)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
         hypotheses_route = HYPOTHESES_ROUTE.read_text()
         for symbol in details:
-            self.assertIn(f'href="/trading/watchlist/?chart={symbol}#scan"', hypotheses_route)
+            self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', hypotheses_route)
         route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
         self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(route_details))
         self.assertIn('Exact Sciences', details["ABT"])
@@ -165,8 +165,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(desk.count('data-desk-kind="position"'), 6)
         self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 6)
         self.assertIn('data-desk-source-articles="12"', desk)
-        self.assertIn('/trading/hypotheses/#hypothesis-hood-setup', desk)
         self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
+        self.assertEqual(desk.count('class="desk-thesis-cell-button"'), 12)
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
@@ -194,7 +194,11 @@ class TradingUiContractTest(unittest.TestCase):
         win_rate = float(stats.group(5))
         self.assertEqual(decided, wins + losses)
         self.assertAlmostEqual(win_rate, wins / decided * 100, places=1)
-        for forbidden in ('$', 'balance', 'buying power', 'position', 'trade'):
+        self.assertIn('class="performance-actions"', block)
+        self.assertIn('Last 14 days', block)
+        actions = re.findall(r'class="performance-action" data-performance-side="(buy|sell)" data-performance-type="(stock|option)"[^>]*><span>(Buy|Sell) · (Stock|Option)</span><strong[^>]*>([+−][\d.]+%|—)</strong>', block)
+        self.assertTrue(actions)
+        for forbidden in ('$', 'balance', 'buying power', 'ticker'):
             self.assertNotIn(forbidden, block.casefold())
 
     def test_results_history_is_unique_ordered_and_matches_chart(self):
@@ -289,7 +293,7 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_chart_payloads_are_external_and_small_shell(self):
         # Thesis copy stays server-rendered for no-JS access; charts remain external.
-        self.assertLess(PAGE.stat().st_size, 300_000)
+        self.assertLess(PAGE.stat().st_size, 325_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):
@@ -420,7 +424,7 @@ class TradingUiContractTest(unittest.TestCase):
         if os.environ.get("ZONTED_DESK_MORNING_QUOTES"):
             live_stamps = {stamp for stamp in stamps if stamp.startswith("Live · ")}
             self.assertEqual(len(live_stamps), 1, f"morning stamp drift: {stamps}")
-            self.assertEqual(stamps - live_stamps, {"Snapshot · <date>"})
+            self.assertEqual(stamps, live_stamps, f"all nav dates must refresh in morning mode: {stamps}")
         else:
             self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
         self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")

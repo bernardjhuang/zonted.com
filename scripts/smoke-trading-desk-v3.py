@@ -25,17 +25,39 @@ def exercise(page, url: str, screenshot: Path) -> None:
     check(page.locator(".desk-catalyst b").first.inner_text().strip() != "", "catalyst name is missing")
     check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), "page has horizontal overflow")
 
+    spark = page.locator('[data-desk-kind="position"] .desk-ytd').first
+    spark_svg = spark.locator("svg")
+    spark_box = spark_svg.bounding_box()
+    if spark_box is None:
+        raise AssertionError("YTD sparkline has no rendered bounds")
+    if (page.viewport_size or {}).get("width", 0) <= 500:
+        spark_svg.focus()
+        spark_svg.press("ArrowLeft")
+    else:
+        spark_svg.hover(position={"x": spark_box["width"] * .58, "y": spark_box["height"] * .5})
+    spark_tooltip = spark.locator("[data-desk-ytd-tooltip]:not([hidden])")
+    spark_tooltip.wait_for()
+    spark_text = spark_tooltip.inner_text()
+    check("Day" in spark_text and "YTD" in spark_text and "vs entry" in spark_text, "sparkline hover metrics are incomplete")
+
     opener = page.locator('[data-desk-kind="position"] .desk-row-toggle').first
     opener.click()
     check(opener.get_attribute("aria-expanded") == "true", "fold-out did not expand")
     check(page.locator(".desk-detail-row:not([hidden])").count() == 1, "fold-out detail not visible")
     history_chart = page.locator(".desk-detail-row:not([hidden]) .desk-detail-chart")
     check(history_chart.locator("figcaption").inner_text().startswith("1 year"), "detail chart is not one-year")
+    axis_labels = history_chart.locator(".desk-detail-axis-label")
+    check(axis_labels.count() == 7, "detail chart needs four price ticks and three date ticks")
+    check((axis_labels.first.text_content() or "").startswith("$"), "detail Y axis is missing price labels")
     svg_box = history_chart.locator("svg").bounding_box()
     if svg_box is None:
         raise AssertionError("detail chart has no rendered bounds")
     check(svg_box["height"] >= 200, "detail chart is too small")
-    history_chart.locator("svg").hover(position={"x": max(12, svg_box["width"] * .65), "y": svg_box["height"] * .5})
+    if (page.viewport_size or {}).get("width", 0) <= 500:
+        history_chart.locator("svg").focus()
+        history_chart.locator("svg").press("ArrowLeft")
+    else:
+        history_chart.locator("svg").hover(position={"x": max(12, svg_box["width"] * .65), "y": svg_box["height"] * .5})
     tooltip = history_chart.locator("[data-desk-chart-tooltip]:not([hidden])")
     tooltip.wait_for()
     tooltip_text = tooltip.inner_text()
@@ -48,7 +70,7 @@ def exercise(page, url: str, screenshot: Path) -> None:
     page.keyboard.press("Escape")
     check(chart_opener.evaluate("el => document.activeElement === el"), "chart opener did not regain focus")
 
-    thesis_opener = page.locator(".desk-detail-row:not([hidden]) [data-thesis-open]")
+    thesis_opener = page.locator(".desk-main-row [data-thesis-open]").first
     thesis_opener.click()
     page.locator("#desk-thesis-dialog[open] article.hypothesis-detail").wait_for()
     check(page.locator("#desk-thesis-dialog[open] article.hypothesis-detail details[open]").count() >= 1, "full thesis work is not expanded")

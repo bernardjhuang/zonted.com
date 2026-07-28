@@ -47,7 +47,7 @@ def main() -> None:
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
         card_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-built [data-position-row]')].map(row => [row.dataset.positionSymbol, row.querySelector('.portfolio-card-head .mono').textContent.trim()]))""")
-        check(source_pnl == card_pnl and set(card_pnl) == {"ABT", "HOOD"}, "portfolio cards do not show combined equity + option P&L")
+        check(source_pnl == card_pnl and len(card_pnl) == 6, "portfolio cards do not show combined equity + option P&L")
         position_toggles = desktop.locator("#bl-built [data-position-chart-toggle]")
         check(position_toggles.count() >= 1, "expected at least one live position setup")
         check(position_toggles.evaluate_all("nodes => nodes.every(node => node.getAttribute('aria-expanded') === 'false')"), "live position setups are not collapsed by default")
@@ -91,14 +91,14 @@ def main() -> None:
         check("below $25" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS price trigger is missing")
         desktop.goto(f"{origin}/trading/hypotheses/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
-        check(hypothesis_links.count() == 9, "not every public hypothesis links to its Momentum chart")
+        check(hypothesis_links.count() == 12, "not every public hypothesis links to its VWAP setup chart")
         for case in ("bear", "base", "bull"):
             level_lines = desktop.locator(f'.hyp-summary-chart [data-entry-level="{case}"]')
-            check(level_lines.count() == 9, f"not every summary chart has a {case} entry line")
+            check(level_lines.count() == 12, f"not every summary chart has a {case} entry line")
             check(level_lines.first.evaluate("line => getComputedStyle(line).stroke") != "none", f"{case} entry line is not styled")
-        expected_hypothesis_hrefs = [f"/trading/watchlist/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "TMO")]
-        check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis Momentum chart links are incomplete or misordered")
-        desktop.goto(f"{origin}/trading/watchlist/?chart=RBLX#scan", wait_until="networkidle")
+        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "HPQ", "TMO")]
+        check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis VWAP setup links are incomplete or misordered")
+        desktop.goto(f"{origin}/trading/vwap-setups/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
         check(desktop.locator("[data-scan-detail][data-scan-symbol='RBLX']").is_visible(), "RBLX hypothesis deep link did not unfold its chart")
 
@@ -211,7 +211,7 @@ def main() -> None:
         decided = int(results_stats.get_attribute("data-results-decided") or 0)
         win_rate = float(results_stats.get_attribute("data-results-win-rate") or 0)
         check(decided == wins + losses and round(wins / decided * 100, 1) == win_rate, "win-rate arithmetic is inconsistent")
-        check("Quantities and dollar amounts are ignored" in desktop.locator("#results-panel .results-method").inner_text(), "quantity-free method disclosure is missing")
+        check(desktop.locator("#results-panel .results-method", has_text="Quantities and dollar amounts are ignored").count() == 1, "quantity-free method disclosure is missing")
 
         desktop.goto(args.url + "#log", wait_until="networkidle")
         check(desktop.locator("#positions-tab").get_attribute("aria-selected") == "true", "legacy #log did not land on Portfolio")

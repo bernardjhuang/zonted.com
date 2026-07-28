@@ -27,7 +27,7 @@ SCAN = ROOT / "trading/scan-charts.json"
 VWAP = ROOT / "trading/vwap-charts.json"
 DESK_CSS = ROOT / "trading/desk.css"
 DESK_JS = ROOT / "trading/desk.js"
-CHART_MODAL_JS = ROOT / "js/hypothesis-chart-modal.1b5e1178.js"
+CHART_MODAL_JS = ROOT / "js/hypothesis-chart-modal.b42a9700.js"
 START_POS = "<!-- AUTO:DESK_POSITIONS:START -->"
 END_POS = "<!-- AUTO:DESK_POSITIONS:END -->"
 START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
@@ -130,6 +130,14 @@ def polyline(values: list[float], width: float, height: float, pad: float, low: 
     return " ".join(points)
 
 
+def plot_polyline(values: list[float], x0: float, x1: float, y0: float, y1: float, low: float, high: float) -> str:
+    span = high - low or 1.0
+    return " ".join(
+        f"{x0 + index * (x1 - x0) / max(len(values) - 1, 1):.1f},{y0 + (high - value) * (y1 - y0) / span:.1f}"
+        for index, value in enumerate(values)
+    )
+
+
 def ytd_chart(symbol: str, market: dict, entry: float | None = None, kill: float | None = None) -> str:
     if not market.get("feed"):
         return '<div class="desk-no-feed">— <span>No feed</span></div>'
@@ -159,10 +167,16 @@ def ytd_chart(symbol: str, market: dict, entry: float | None = None, kill: float
     change = values[-1]
     direction = "up" if change >= 0 else "down"
     points = polyline(values, width, height, pad, low, high)
+    attrs = (
+        f'data-desk-ytd-chart="{symbol}" data-desk-ytd-entry="{entry if entry is not None else ""}" '
+        f'data-desk-ytd-kill="{kill if kill is not None else ""}"'
+    )
     return (
-        f'<figure class="desk-ytd desk-ytd--{direction}" data-desk-ytd-chart="{symbol}">'
-        f'<svg viewBox="0 0 118 44" role="img" aria-label="{symbol} year-to-date {change:+.1f} percent">'
-        f'{"".join(rules)}<polyline class="desk-ytd-line" points="{points}"/></svg>'
+        f'<figure class="desk-ytd desk-ytd--{direction}" {attrs}>'
+        f'<svg viewBox="0 0 118 44" role="img" tabindex="0" aria-label="{symbol} year-to-date {change:+.1f} percent. Hover or use arrow keys for metrics.">'
+        f'{"".join(rules)}<polyline class="desk-ytd-line" points="{points}"/>'
+        f'<line class="desk-ytd-hover-line" x1="0" x2="0" y1="2" y2="42" hidden/><circle class="desk-ytd-hover-dot" cx="0" cy="0" r="2.6" hidden/></svg>'
+        f'<div class="desk-ytd-tooltip" data-desk-ytd-tooltip role="status" aria-live="polite" hidden></div>'
         f'<figcaption>{change:+.1f}% YTD</figcaption></figure>'
     )
 
@@ -185,16 +199,33 @@ def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None 
     low, high = min(domain), max(domain)
     margin = max((high - low) * .04, 1)
     low, high = max(0, low - margin), high + margin
-    width, height, pad = 520.0, 210.0, 10.0
+    width, height = 520.0, 210.0
+    left, right, top, bottom = 44.0, 510.0, 10.0, 182.0
     span = high - low or 1
-    y = lambda value: pad + (high - value) * (height - 2 * pad) / span
+    y = lambda value: top + (high - value) * (bottom - top) / span
     rules = "".join(
-        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="10" y1="{y(price):.1f}" x2="510" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
+        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="{left:.0f}" y1="{y(price):.1f}" x2="{right:.0f}" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
         for case, price in scenarios.items()
     )
     band_y = min(y(scenarios["bear"]), y(scenarios["bull"]))
     band_h = abs(y(scenarios["bear"]) - y(scenarios["bull"]))
-    points = polyline(values, width, height, pad, low, high)
+    points = plot_polyline(values, left, right, top, bottom, low, high)
+    y_ticks = []
+    for index in range(4):
+        price = high - index * span / 3
+        tick_y = y(price)
+        digits = 2 if price < 10 else 1 if price < 100 else 0
+        y_ticks.append(
+            f'<line class="desk-detail-grid" x1="{left:.0f}" y1="{tick_y:.1f}" x2="{right:.0f}" y2="{tick_y:.1f}"/>'
+            f'<text class="desk-detail-axis-label" x="38" y="{tick_y + 3:.1f}" text-anchor="end">${price:.{digits}f}</text>'
+        )
+    x_ticks = []
+    for index in sorted({0, len(dates) // 2, len(dates) - 1}):
+        tick_x = left + index * (right - left) / max(len(dates) - 1, 1)
+        parsed = dt.date.fromisoformat(dates[index])
+        label = parsed.strftime("%b %-d") + (f" ’{parsed.strftime('%y')}" if index in (0, len(dates) - 1) else "")
+        anchor = "start" if index == 0 else "end" if index == len(dates) - 1 else "middle"
+        x_ticks.append(f'<text class="desk-detail-axis-label" x="{tick_x:.1f}" y="202" text-anchor="{anchor}">{label}</text>')
     entry = float(position["entry"]) if position else None
     kill = float(position["kill"]) if position and position.get("kill") else None
     attrs = (
@@ -203,9 +234,9 @@ def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None 
         f'data-desk-chart-entry="{entry if entry is not None else ""}" data-desk-chart-kill="{kill if kill is not None else ""}"'
     )
     return (
-        f'<figure class="desk-detail-chart" {attrs}><svg viewBox="0 0 520 210" role="img" tabindex="0" aria-label="{symbol} one-year price history with intrinsic levels. Hover or use arrow keys for daily metrics.">'
-        f'<rect class="desk-detail-band" x="10" y="{band_y:.1f}" width="500" height="{band_h:.1f}"/>{rules}'
-        f'<polyline class="desk-detail-price" points="{points}"/><line class="desk-chart-hover-line" x1="0" x2="0" y1="10" y2="200" hidden/>'
+        f'<figure class="desk-detail-chart" {attrs}><svg viewBox="0 0 520 210" role="img" tabindex="0" aria-label="{symbol} one-year price history with price and date axes. Hover or use arrow keys for daily metrics.">'
+        f'<rect class="desk-detail-band" x="{left:.0f}" y="{band_y:.1f}" width="{right-left:.0f}" height="{band_h:.1f}"/>{"".join(y_ticks)}{rules}'
+        f'<polyline class="desk-detail-price" points="{points}"/>{"".join(x_ticks)}<line class="desk-chart-hover-line" x1="0" x2="0" y1="{top:.0f}" y2="{bottom:.0f}" hidden/>'
         f'<circle class="desk-chart-hover-dot" cx="0" cy="0" r="4" hidden/></svg>'
         f'<div class="desk-chart-tooltip" data-desk-chart-tooltip role="status" aria-live="polite" hidden></div>'
         f'<figcaption>1 year · Beta {market["beta"]:.2f} · Annualized vol {vol(values):.0f}% · Hover for metrics</figcaption></figure>'
@@ -229,17 +260,20 @@ def valuation_detail(symbol: str, market: dict, valuation: dict, position: dict 
     sector = position["sector"] if position else "See full thesis"
     tiles = "".join(f'<div class="desk-entry-tile desk-entry-tile--{case}"><span>{case.title()}</span><b>{money(float(levels[case]))}</b></div>' for case in ("bear", "base", "bull"))
     distance_line = f'Trading {distance:+.0f}% versus the base case' if distance is not None else "Market price feed unavailable"
-    canonical = f"/trading/hypotheses/#hypothesis-{symbol.lower()}-setup"
     return f'''<div class="desk-fold-grid">
 <div>{detail_chart(symbol, market, levels, position)}</div>
 <div class="desk-valuation" data-desk-valuation><h4>Valuation</h4>{metrics}<div><span>Last</span><b>{money(last)}</b></div><div><span>Sector</span><b>{html.escape(sector)}</b></div></div>
-<div class="desk-entry" data-desk-entry-tiles><h4>Intrinsic entry levels</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button><button type="button" data-thesis-open="{symbol}" aria-haspopup="dialog" aria-controls="desk-thesis-dialog">Full thesis</button><a href="{canonical}">Canonical thesis</a></div></div>
+<div class="desk-entry" data-desk-entry-tiles><h4>Intrinsic entry levels</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button></div></div>
 </div>'''
 
 
 def no_feed_market_cells() -> tuple[str, str, str, str, str]:
     cell = '<div class="desk-no-feed">— <span>No feed</span></div>'
     return cell, cell, cell, cell, cell
+
+
+def thesis_button(symbol: str) -> str:
+    return f'<button class="desk-thesis-cell-button" type="button" data-thesis-open="{symbol}" aria-haspopup="dialog" aria-controls="desk-thesis-dialog">Full thesis</button>'
 
 
 def position_rows(positions: list[dict], metadata: dict, markets: dict, valuations: dict, as_of: dt.date) -> str:
@@ -251,11 +285,6 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         catalyst = dt.date.fromisoformat(meta["catalyst"])
         days = max(0, (catalyst - as_of).days)
         kill = position.get("kill")
-        if kill:
-            room = (market["last"] / float(kill) - 1) * 100
-            room_html = f'<div class="desk-room {"desk-room--tight" if room < 5 else ""}"><b>{room:.1f}%</b><span style="--room:{min(max(room,0),25)/25*100:.0f}%"></span></div>'
-        else:
-            room_html = '<div class="desk-room"><b>—</b><small>No hard kill</small></div>'
         edge = "up" if market["day"] > .05 else "down" if market["day"] < -.05 else "flat"
         edge_word = {"up":"Up", "down":"Down", "flat":"Flat"}[edge]
         detail_id = f"desk-detail-{symbol.lower()}"
@@ -263,7 +292,7 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
         main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small></button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Room to kill', room_html)}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('YTD · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('YTD · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)
@@ -287,7 +316,7 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
             last, day, beta, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
-{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}<td data-label="What would move it"><span class="desk-trigger">{html.escape(meta['trigger'])}</span></td>{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('YTD', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('YTD', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
         rows.append(main + detail)
@@ -296,28 +325,37 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
 
 def table(title: str, subtitle: str, body: str, hypotheses: bool = False) -> str:
     if hypotheses:
-        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>What would move it</th><th>Beta</th><th>Spread Z</th><th>YTD</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>YTD</th><th>Next catalyst</th><th>In</th>'
     else:
-        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Room to kill</th><th>Beta</th><th>Spread Z</th><th>YTD · levels</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>YTD · levels</th><th>Next catalyst</th><th>In</th>'
     return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
 def modals() -> str:
     config = json.dumps({"url": f"/trading/scan-charts.json?v={digest(SCAN)}", "vwap_url": f"/trading/vwap-charts.json?v={digest(VWAP)}"}, separators=(",", ":"))
-    return f'''<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title"><div class="hyp-chart-dialog-frame" data-hypothesis-chart-detail><header class="hyp-chart-dialog-head"><div><span>Watchlist scanner data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header><div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div></div></dialog>
+    return f'''<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title"><div class="hyp-chart-dialog-frame" data-hypothesis-chart-detail><header class="hyp-chart-dialog-head"><div><span>VWAP setup data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header><div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div></div></dialog>
 <script type="application/json" id="scan-chart-config">{config}</script>
 <dialog class="desk-thesis-dialog" id="desk-thesis-dialog" data-thesis-source="/trading/hypotheses/" aria-labelledby="desk-thesis-title"><div class="desk-thesis-frame"><header><h2 id="desk-thesis-title">Full thesis</h2><button type="button" data-thesis-close aria-label="Close thesis dialog">×</button></header><div data-thesis-summary></div><div data-thesis-body><p>Loading thesis…</p></div></div></dialog>'''
 
 
-def sync_shell_assets() -> None:
+def sync_shell_assets(stamp: str | None = None) -> None:
     css_ref = f'/trading/desk.css?v={digest(DESK_CSS)}'
     js_ref = f'/trading/desk.js?v={digest(DESK_JS)}'
-    modal_ref = f'/js/hypothesis-chart-modal.1b5e1178.js?v={digest(CHART_MODAL_JS)}'
+    modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
     for path in sorted((ROOT / "trading").glob("**/index.html")):
         source = path.read_text()
         source = re.sub(r'/trading/desk\.css\?v=[a-f0-9]+', css_ref, source)
         source = re.sub(r'/trading/desk\.js\?v=[a-f0-9]+', js_ref, source)
         source = re.sub(r'<a href="/trading/hypotheses/"(?: aria-current="page")?>Hypotheses</a>', '', source)
+        source = re.sub(r'<a href="/trading/watchlist/"(?: aria-current="page")?>Watchlist</a>', '', source)
+        source = source.replace('/trading/watchlist/?chart=', '/trading/vwap-setups/?chart=')
+        meta_chip = '<a class="chip chip-meta chip-neutral" href="/trading/meta-risk/" title="Meta risk appetite — Neutral, leaning Risk-Off · 4/10"><span class="dot"></span>Meta 4</a>'
+        source = re.sub(r'<a class="chip chip-meta [^"]+" href="/trading/meta-risk/".*?</a>', meta_chip, source)
+        if 'class="chip chip-meta ' not in source:
+            source = source.replace('<a class="chip chip-fable ', meta_chip + '<a class="chip chip-fable ', 1)
+        if stamp:
+            source = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
+            source = re.sub(r'(<span class="trading-stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
         path.write_text(source)
 
 
@@ -351,11 +389,11 @@ def render(mode: str, quote_path: Path | None) -> str:
     if count != 1:
         raise ValueError("Desk main section not found")
     page = re.sub(r'\s*<dialog class="hyp-chart-dialog".*?</dialog>\s*<script type="application/json" id="scan-chart-config">.*?</script>\s*<dialog class="desk-thesis-dialog".*?</dialog>', '', page, flags=re.S)
-    page = re.sub(r'\s*<script defer src="/js/hypothesis-chart-modal\.1b5e1178\.js(?:\?v=[a-f0-9]+)?"></script>', '', page)
-    modal_ref = f'/js/hypothesis-chart-modal.1b5e1178.js?v={digest(CHART_MODAL_JS)}'
+    page = re.sub(r'\s*<script defer src="/js/hypothesis-chart-modal\.[a-f0-9]{8}\.js(?:\?v=[a-f0-9]+)?"></script>', '', page)
+    modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
     page = page.replace('</body>', f'{modals()}\n<script defer src="{modal_ref}"></script>\n</body>', 1)
     if mode == "morning" and quote_stamp:
-        stamp = quote_stamp.astimezone().strftime("Live · %-I:%M %p CT")
+        stamp = quote_stamp.astimezone().strftime("Live · %B %-d, %Y · %-I:%M %p CT")
     else:
         stamp = f"Snapshot · {as_of.strftime('%B %-d, %Y')}"
     page = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', page, count=1)
@@ -378,7 +416,8 @@ def main() -> int:
         print("[trading-desk] current and network-free: 6 positions + 6 tracked hypotheses")
         return 0
     PAGE.write_text(rendered)
-    sync_shell_assets()
+    stamp_match = re.search(r'<span class="stamp">(.*?)</span>', rendered)
+    sync_shell_assets(stamp_match.group(1) if stamp_match else None)
     print(f"[trading-desk] built {args.mode}: 6 positions + 6 tracked hypotheses")
     return 0
 

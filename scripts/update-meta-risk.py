@@ -27,6 +27,9 @@ def validate(payload: dict) -> dict:
         raise ValueError("meta-risk requires a completed HTTP 200 provider receipt")
     if entry.get("rating") is not None:
         raise ValueError("meta-risk rating must stay null unless Meta supplies one")
+    derived_rating = entry.get("derived_rating")
+    if not isinstance(derived_rating, (int, float)) or not 0 <= float(derived_rating) <= 10:
+        raise ValueError("meta-risk derived_rating must be between 0 and 10")
     if not entry.get("search_queries") or not entry.get("verbatim_response"):
         raise ValueError("meta-risk requires search queries and the verbatim response")
     return entry
@@ -72,7 +75,7 @@ def render(payload: dict, entry: dict) -> str:
     return f'''<article class="meta-risk-report" data-model="{esc(payload["model"])}">
   <header class="meta-risk-verdict">
     <div><span class="meta-risk-kicker">Current market stance</span><h2>{esc(entry["stance"])}</h2><p>{esc(entry["summary"])}</p></div>
-    <div class="meta-risk-score"><strong>—</strong><span>/ 10</span><small>Meta gave no numeric score</small></div>
+    <div class="meta-risk-score"><strong>{float(entry['derived_rating']):g}</strong><span>/ 10</span><small>Zonted stance mapping · Meta supplied no number</small></div>
   </header>
   <p class="meta-risk-dates">Assessment {esc(entry["as_of"])} · search-grounded API response · model {esc(payload["model"])}</p>
   <section class="meta-risk-prompt"><span>Exact prompt</span><p>{esc(payload["prompt"])}</p></section>
