@@ -225,7 +225,7 @@ def vol(values: list[float]) -> float:
     return statistics.stdev(returns) * math.sqrt(252) * 100 if len(returns) > 2 else 0.0
 
 
-def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None = None) -> str:
+def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None = None, level_labels: dict | None = None) -> str:
     if not market.get("feed"):
         return f'<div class="desk-no-feed desk-no-feed--chart" data-desk-one-year-chart="{symbol}">— <span>No feed · one-year chart unavailable</span></div>'
     pairs = [(dt.date.fromisoformat(date), float(close)) for date, close in zip(market["dates"], market["closes"])]
@@ -234,6 +234,7 @@ def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None 
     dates = [date.isoformat() for date, _close in pairs]
     values = [close for _date, close in pairs]
     scenarios = {k: float(levels[k]) for k in ("bear", "base", "bull")}
+    labels = level_labels or {case: case.title() for case in scenarios}
     domain = values + list(scenarios.values())
     low, high = min(domain), max(domain)
     margin = max((high - low) * .04, 1)
@@ -243,7 +244,7 @@ def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None 
     span = high - low or 1
     y = lambda value: top + (high - value) * (bottom - top) / span
     rules = "".join(
-        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="{left:.0f}" y1="{y(price):.1f}" x2="{right:.0f}" y2="{y(price):.1f}"><title>{case.title()} {money(price)}</title></line>'
+        f'<line class="desk-detail-rule desk-detail-rule--{case}" x1="{left:.0f}" y1="{y(price):.1f}" x2="{right:.0f}" y2="{y(price):.1f}"><title>{html.escape(labels[case])} {money(price)}</title></line>'
         for case, price in scenarios.items()
     )
     band_y = min(y(scenarios["bear"]), y(scenarios["bull"]))
@@ -291,18 +292,38 @@ def beta_label(beta: float) -> str:
     return f'{beta:.2f}{f"<small>{note}</small>" if note else ""}'
 
 
+def entry_level_display(valuation: dict) -> tuple[str, dict[str, str], str]:
+    default_labels = {case: case.title() for case in ("bear", "base", "bull")}
+    display = valuation.get("entry_level_display")
+    if display is None:
+        return "Intrinsic entry levels", default_labels, "base case"
+    if not isinstance(display, dict):
+        raise ValueError("entry_level_display must be an object")
+    heading = display.get("heading")
+    labels = display.get("labels")
+    comparison = display.get("base_comparison")
+    if not isinstance(heading, str) or not heading.strip():
+        raise ValueError("entry_level_display needs a heading")
+    if not isinstance(labels, dict) or set(labels) != set(default_labels) or not all(isinstance(value, str) and value.strip() for value in labels.values()):
+        raise ValueError("entry_level_display labels must name bear/base/bull")
+    if not isinstance(comparison, str) or not comparison.strip():
+        raise ValueError("entry_level_display needs base_comparison")
+    return heading, labels, comparison
+
+
 def valuation_detail(symbol: str, market: dict, valuation: dict, position: dict | None) -> str:
     levels = valuation["entry_levels"]
+    heading, level_labels, comparison = entry_level_display(valuation)
     metrics = "".join(f'<div><span>{html.escape(item["label"])}</span><b>{html.escape(item["value"])}</b></div>' for item in valuation["valuation_metrics"])
     last = market.get("last")
     distance = ((last / float(levels["base"]) - 1) * 100) if isinstance(last, (int, float)) else None
     sector = position["sector"] if position else "See full thesis"
-    tiles = "".join(f'<div class="desk-entry-tile desk-entry-tile--{case}"><span>{case.title()}</span><b>{money(float(levels[case]))}</b></div>' for case in ("bear", "base", "bull"))
-    distance_line = f'Trading {distance:+.0f}% versus the base case' if distance is not None else "Market price feed unavailable"
+    tiles = "".join(f'<div class="desk-entry-tile desk-entry-tile--{case}"><span>{html.escape(level_labels[case])}</span><b>{money(float(levels[case]))}</b></div>' for case in ("bear", "base", "bull"))
+    distance_line = f'Trading {distance:+.0f}% versus {comparison}' if distance is not None else "Market price feed unavailable"
     return f'''<div class="desk-fold-grid">
-<div>{detail_chart(symbol, market, levels, position)}</div>
+<div>{detail_chart(symbol, market, levels, position, level_labels)}</div>
 <div class="desk-valuation" data-desk-valuation><h4>Valuation</h4>{metrics}<div><span>Last</span><b>{money(last)}</b></div><div><span>Sector</span><b>{html.escape(sector)}</b></div></div>
-<div class="desk-entry" data-desk-entry-tiles><h4>Intrinsic entry levels</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button></div></div>
+<div class="desk-entry" data-desk-entry-tiles><h4>{html.escape(heading)}</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button></div></div>
 </div>'''
 
 
