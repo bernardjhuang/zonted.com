@@ -137,6 +137,9 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertIn("const esc =", self.script)
         self.assertIn("const sectionId =", self.script)
         self.assertIn("const renderAdversarial =", self.script)
+        self.assertIn("const sortThemesByGapDescending =", self.script)
+        self.assertIn("const themes = sortThemesByGapDescending(payload.themes);", self.script)
+        self.assertIn("return bGap - aGap;", self.script)
         self.assertIn("replaceAll('&', '&amp;')", self.script)
         for text in (
             "Model reviews",
