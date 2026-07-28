@@ -47,7 +47,7 @@ def main() -> None:
         check(desktop.locator("#bl-tools, #bl-q, #bl-export").count() == 0, "retired portfolio search/export tools remain")
         source_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-raw .ticker[data-symbol-pnl]')].map(row => [row.querySelector('.ticker-symbol').textContent.trim(), row.dataset.symbolPnl]))""")
         card_pnl = desktop.evaluate("""() => Object.fromEntries([...document.querySelectorAll('#bl-built [data-position-row]')].map(row => [row.dataset.positionSymbol, row.querySelector('.portfolio-card-head .mono').textContent.trim()]))""")
-        check(source_pnl == card_pnl and len(card_pnl) == 6, "portfolio cards do not show combined equity + option P&L")
+        check(source_pnl == card_pnl and len(card_pnl) == len(source_pnl) and len(card_pnl) > 0, "portfolio cards do not match current combined equity + option P&L")
         position_toggles = desktop.locator("#bl-built [data-position-chart-toggle]")
         check(position_toggles.count() >= 1, "expected at least one live position setup")
         check(position_toggles.evaluate_all("nodes => nodes.every(node => node.getAttribute('aria-expanded') === 'false')"), "live position setups are not collapsed by default")

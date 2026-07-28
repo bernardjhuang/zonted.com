@@ -227,8 +227,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
         position_rows = _desk_rows(page, "position")
         thesis_rows = _desk_rows(page, "hypothesis")
-        self.assertEqual([_row_symbol(row) for row in position_rows], ["HOOD", "CEG", "FIGR", "FRMI", "HPQ", "ABT"])
-        self.assertEqual([_row_symbol(row) for row in thesis_rows], ["RBLX", "RDDT", "NTDOY", "HIMS", "BYDDY", "TMO"])
+        positions_payload = json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
+        expected_positions = {row["symbol"] for row in positions_payload}
+        expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
+        self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
+        self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({ _row_symbol(row) for row in position_rows } & { _row_symbol(row) for row in thesis_rows })
         for rows in (position_rows, thesis_rows):
             catalysts = [_row_attr(row, "data-catalyst-date") for row in rows]
@@ -290,17 +293,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn("Up to 2 years", page)
         self.assertNotIn('<th>P&amp;L</th>', page)
         self.assertIn('<b>Q2 earnings</b><small>Jul 29</small>', page)
-        for symbol in ("HPQ", "ABT"):
+        for position in positions_payload:
+            symbol = position["symbol"]
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
-            self.assertIn('desk-position-flair--momentum', row)
-            self.assertIn('>Momentum<', row)
-        hpq_row = next(row for row in position_rows if _row_symbol(row) == "HPQ")
-        self.assertIn('data-desk-ytd-kill="25.0"', hpq_row)
-        self.assertIn('<title>Kill $25.00</title>', hpq_row)
-        for symbol in ("FIGR", "HOOD", "CEG", "FRMI"):
-            row = next(row for row in position_rows if _row_symbol(row) == symbol)
-            self.assertIn('desk-position-flair--thesis', row)
-            self.assertIn('>Thesis<', row)
+            flair = position["flair"]
+            self.assertIn(f'desk-position-flair--{flair}', row)
+            self.assertIn(f'>{flair.title()}<', row)
+            if position.get("kill") is not None:
+                self.assertIn(f'data-desk-ytd-kill="{position["kill"]}"', row)
+                self.assertIn(f'<title>Kill ${float(position["kill"]):.2f}</title>', row)
         self.assertIn("--desk-chart-bear", styles)
         self.assertIn("--desk-chart-base", styles)
         self.assertIn("--desk-chart-bull", styles)

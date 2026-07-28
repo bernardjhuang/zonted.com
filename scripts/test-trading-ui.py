@@ -162,11 +162,14 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertRegex(attrs, r'data-desk-stance="(constructive|speculative|research-only|open-position)"', symbol)
 
         desk = DESK_HOME.read_text()
-        self.assertEqual(desk.count('data-desk-kind="position"'), 6)
-        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 6)
+        position_count = len(json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"])
+        self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
+        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 12 - position_count)
         self.assertIn('data-desk-source-articles="12"', desk)
         self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
         self.assertEqual(desk.count('class="desk-thesis-cell-button"'), 12)
+        self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
+        self.assertNotIn("Six are live positions.", hypotheses_route)
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)

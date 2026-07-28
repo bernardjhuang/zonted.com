@@ -2,7 +2,8 @@
 """Build the merged Zonted trading desk from checked-in source data.
 
 The default/close mode consumes completed-session artifacts only. Morning mode accepts
-an explicit validated quote file and changes intraday fields without touching analytics.
+an explicit validated quote file, overlays the current session on Desk charts, and leaves
+completed-session statistical artifacts untouched.
 No network calls are made in any mode.
 """
 from __future__ import annotations
@@ -77,6 +78,8 @@ def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.date
     if path is None:
         return {}, None
     payload = load(path)
+    if payload.get("schema_version") != 1:
+        raise ValueError("Morning quote payload must use schema_version 1")
     quotes = payload.get("quotes") or {}
     stamp = dt.datetime.fromisoformat(str(payload["generated_at"]).replace("Z", "+00:00"))
     for symbol, quote in quotes.items():
@@ -89,10 +92,16 @@ def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.date
     return quotes, stamp
 
 
-def row_market(symbol: str, hyp_chart: dict, scan_chart: dict | None, quote: dict | None) -> dict:
+def row_market(
+    symbol: str,
+    hyp_chart: dict,
+    scan_chart: dict | None,
+    quote: dict | None,
+    quote_date: dt.date | None = None,
+) -> dict:
     if symbol in OTC:
         return {"feed": False}
-    dates = hyp_chart["dates"]
+    dates = list(hyp_chart["dates"])
     closes = [float(v) for v in hyp_chart["close"]]
     if scan_chart:
         series = scan_chart["series"]
@@ -113,6 +122,16 @@ def row_market(symbol: str, hyp_chart: dict, scan_chart: dict | None, quote: dic
     if quote:
         last = float(quote["price"])
         day = float(quote["day_pct"])
+        if quote_date is None:
+            raise ValueError(f"Morning quote for {symbol} has no session date")
+        date_text = quote_date.isoformat()
+        if date_text == dates[-1]:
+            closes[-1] = last
+        elif date_text > dates[-1]:
+            dates.append(date_text)
+            closes.append(last)
+        else:
+            raise ValueError(f"Morning quote for {symbol} predates chart history")
     return {
         "feed": True,
         "last": last,
@@ -406,10 +425,17 @@ def render(mode: str, quote_path: Path | None) -> str:
     scan = load(SCAN)["charts"]
     quotes, quote_stamp = quotes_from(quote_path)
     symbols = sorted(metadata)
-    markets = {symbol: row_market(symbol, charts[symbol], scan.get(symbol), quotes.get(symbol)) for symbol in symbols}
+    quote_date = quote_stamp.date() if quote_stamp else None
+    markets = {
+        symbol: row_market(symbol, charts[symbol], scan.get(symbol), quotes.get(symbol), quote_date)
+        for symbol in symbols
+    }
     as_of = quote_stamp.date() if quote_stamp else dt.date.fromisoformat(charts_payload["as_of"])
     position_symbols = {p["symbol"] for p in positions}
     tracked = [s for s in symbols if s not in position_symbols]
+    for symbol in tracked:
+        if metadata[symbol]["stance"] == "open-position":
+            metadata[symbol]["stance"] = "constructive"
     pos_body = position_rows(positions, metadata, markets, valuation, as_of)
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
@@ -448,12 +474,14 @@ def main() -> int:
         if rendered != PAGE.read_text():
             print("[trading-desk] stale: run python3 scripts/build-trading-desk.py")
             return 1
-        print("[trading-desk] current and network-free: 6 positions + 6 tracked hypotheses")
+        positions = len(load(POSITIONS)["positions"])
+        print(f"[trading-desk] current and network-free: {positions} positions + {12 - positions} tracked hypotheses")
         return 0
     PAGE.write_text(rendered)
     stamp_match = re.search(r'<span class="stamp">(.*?)</span>', rendered)
     sync_shell_assets(stamp_match.group(1) if stamp_match else None)
-    print(f"[trading-desk] built {args.mode}: 6 positions + 6 tracked hypotheses")
+    positions = len(load(POSITIONS)["positions"])
+    print(f"[trading-desk] built {args.mode}: {positions} positions + {12 - positions} tracked hypotheses")
     return 0
 
 
