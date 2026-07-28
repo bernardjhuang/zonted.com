@@ -162,6 +162,27 @@ class TradingThemesContractTest(unittest.TestCase):
             self.assertIn(text, self.script)
         self.assertRegex(self.script, r"fetch\(shell\.dataset\.url")
 
+    def test_renderer_ships_ledger_dumbbell_and_record_overlay(self) -> None:
+        """v2 index: filters + dumbbell gap chart + sortable ledger + record overlay."""
+        for token in (
+            "const renderDumbbell =",
+            "const renderLedger =",
+            "const renderControls =",
+            "const stageOf =",
+            "const openRecord =",
+            "const syncFromHash =",
+            "data-theme-id",
+            "rec-overlay",
+            "themes-ledger",
+        ):
+            self.assertIn(token, self.script)
+        for token in (
+            ".mi-claude", ".mi-gpt", ".mi-grok", ".mi-gemini", ".mi-meta",
+            "model-icons/fable.svg",
+            ".rec-panel", ".fpill", ".themes-ledger", ".db-tip",
+        ):
+            self.assertIn(token, self.page)
+
     def test_hunt_themes_follow_ledger_rules(self) -> None:
         counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
         grok_review_ids = {

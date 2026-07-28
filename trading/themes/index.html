@@ -9,7 +9,7 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/trading/desk.css?v=8fb948041eb9">
 <script defer src="/trading/desk.js?v=95918574e88b"></script>
-<script defer src="/js/trading-themes.js?v=a1143bd06f06"></script>
+<script defer src="/js/trading-themes.js?v=7a88509aaeb0"></script>
 <style>
 .model-provenance{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .prov-chip{display:inline-flex;align-items:center;gap:4px;min-width:0;padding:2px 6px 2px 3px;border:1px solid var(--bl-border);border-radius:999px;background:#fff;color:var(--bl-muted);font:600 9.5px var(--bl-mono);line-height:1.2}
@@ -21,10 +21,87 @@
 .prov-claude i{background:#bd6843}
 .prov-gemini i{background:#536fd1}
 .prov-meta i{background:#4267df}
-.theme-pill .model-provenance{margin:2px 0 1px}
 .theme-hero .model-provenance{margin:-8px 0 18px}
 .theme-hero .prov-chip{border-color:#ffffff35;background:#ffffff10;color:#d9dbe0}
 .theme-hero .prov-source{color:#fff}
+
+/* ── ledger index: controls ── */
+.ledger-controls{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin:2px 0 16px}
+.fpills{display:flex;gap:7px;flex-wrap:wrap}
+.fpill{display:inline-flex;align-items:center;gap:6px;padding:5px 11px;border:1px solid var(--bl-border);border-radius:999px;background:var(--bl-card);color:var(--bl-muted);font:600 12px var(--bl-sans);cursor:pointer}
+.fpill i{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.fpill b{font:600 10.5px var(--bl-mono);color:var(--bl-faint)}
+.fpill:hover{border-color:var(--bl-chipbd)}
+.fpill.on{border-color:var(--bl-accent);background:var(--bl-chipbg);color:var(--bl-ink)}
+.gapctl{display:inline-flex;align-items:center;gap:8px;font:600 12px var(--bl-sans);color:var(--bl-muted)}
+.gapctl input{accent-color:var(--bl-accent);width:120px}
+.gapctl b{font:600 12px var(--bl-mono);color:var(--bl-ink2);min-width:2ch}
+.lcount{margin-left:auto;font:500 12px var(--bl-mono);color:var(--bl-faint)}
+
+/* ── dumbbell gap chart ── */
+.gap-map{border:1px solid var(--bl-border);border-radius:12px;background:var(--bl-card);padding:18px 18px 10px;margin-bottom:22px}
+.gap-map-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
+.gap-map-head h2{font-size:16px;letter-spacing:-.01em}
+.gap-map-head p{font-size:12.5px;color:var(--bl-muted);max-width:78ch}
+.db-scroll{overflow-x:auto}
+.db-scroll svg{display:block;width:100%;min-width:900px}
+.db-row{cursor:pointer}
+.db-row:hover .db-label{fill:var(--bl-accent);font-weight:600}
+.db-tip{position:fixed;z-index:70;max-width:300px;padding:8px 11px;border:1px solid var(--bl-border);border-radius:8px;background:var(--bl-card);color:var(--bl-ink2);font:500 12px/1.45 var(--bl-sans);box-shadow:0 8px 24px #10111926;pointer-events:none}
+
+/* ── sortable ledger ── */
+.ledger-wrap{overflow-x:auto;border:1px solid var(--bl-border);border-radius:12px;background:var(--bl-card)}
+.themes-ledger{width:100%;min-width:920px;border-collapse:collapse;font-size:13px}
+.themes-ledger th{position:sticky;top:0;background:var(--bl-rowhead);border-bottom:1px solid var(--bl-border);text-align:left;white-space:nowrap}
+.themes-ledger th button{all:unset;display:block;width:100%;padding:9px 12px;font:600 11px var(--bl-mono);letter-spacing:.04em;text-transform:uppercase;color:var(--bl-muted);cursor:pointer}
+.themes-ledger th button:hover{color:var(--bl-ink)}
+.themes-ledger th .arrow{margin-left:4px;color:var(--bl-accent)}
+.themes-ledger th.r button,.themes-ledger td.r{text-align:right}
+.themes-ledger td{padding:8px 12px;border-bottom:1px solid var(--bl-divider);vertical-align:middle}
+.themes-ledger tbody tr:last-child td{border-bottom:0}
+.lrow{cursor:pointer}
+.lrow:hover td{background:var(--bl-hover)}
+.lt-btn{all:unset;display:block;max-width:380px;font:600 13px/1.35 var(--bl-sans);color:var(--bl-ink);cursor:pointer}
+.lrow:hover .lt-btn{color:var(--bl-accent)}
+.lcat{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--bl-muted);white-space:nowrap}
+.lcat i{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+.lstage{display:inline-block;padding:2px 8px;border:1px solid var(--bl-divider);border-radius:999px;font:600 10.5px var(--bl-mono);color:var(--bl-muted);white-space:nowrap}
+.lknown{font:600 12.5px var(--bl-mono);color:var(--bl-accent)}
+.lpriced{font:600 12.5px var(--bl-mono);color:var(--bl-warn)}
+.lgap{font:700 12.5px var(--bl-mono)} /* text+bg come from desk.css .tone-* */
+.lhor{font:500 11.5px var(--bl-mono);color:var(--bl-faint);white-space:nowrap}
+.ledger-foot{margin:10px 2px 0;font-size:12px;color:var(--bl-faint)}
+.ledger-method{margin-top:16px}
+
+/* ── model icons (same SVGs the risk chips mask) ── */
+.micons{display:inline-flex;align-items:center;gap:5px}
+.mi{display:inline-block;width:15px;height:15px;flex:0 0 15px;background:#70757d;border-radius:50%}
+.mi-claude{border-radius:0;background:#bd6843;-webkit-mask:url('/trading/model-icons/fable.svg') center/contain no-repeat;mask:url('/trading/model-icons/fable.svg') center/contain no-repeat}
+.mi-gpt{border-radius:0;background:#16866f;-webkit-mask:url('/trading/model-icons/gpt.svg') center/contain no-repeat;mask:url('/trading/model-icons/gpt.svg') center/contain no-repeat}
+.mi-grok{border-radius:0;background:#111;-webkit-mask:url('/trading/model-icons/grok.svg') center/contain no-repeat;mask:url('/trading/model-icons/grok.svg') center/contain no-repeat}
+.mi-gemini{border-radius:0;background:#536fd1;-webkit-mask:url('/trading/model-icons/gemini.svg') center/contain no-repeat;mask:url('/trading/model-icons/gemini.svg') center/contain no-repeat}
+.mi-meta{border-radius:0;background:#4267df;-webkit-mask:url('/trading/model-icons/meta.svg') center/contain no-repeat;mask:url('/trading/model-icons/meta.svg') center/contain no-repeat}
+.mi-review{background:#9a9da4}
+.mi-sep{width:1px;height:12px;background:var(--bl-border)}
+
+/* ── record overlay ── */
+.rec-overlay{position:fixed;inset:0;z-index:60}
+.rec-backdrop{position:absolute;inset:0;background:#10111988}
+.rec-panel{position:relative;margin:4vh auto;width:min(1080px,94vw);max-height:92vh;overflow-y:auto;background:var(--bl-page);color:var(--bl-ink);border:1px solid var(--bl-border);border-radius:14px;padding:18px 22px 30px;box-shadow:0 24px 64px #10111955}
+.rec-bar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.rec-permalink{font:600 11.5px var(--bl-mono);color:var(--bl-muted);text-decoration:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rec-permalink:hover{color:var(--bl-accent)}
+.rec-close{all:unset;padding:6px 12px;border:1px solid var(--bl-border);border-radius:999px;background:var(--bl-card);font:600 11.5px var(--bl-mono);color:var(--bl-muted);cursor:pointer}
+.rec-close:hover{border-color:var(--bl-accent);color:var(--bl-ink)}
+.rec-close:focus-visible{outline:2px solid var(--bl-accent);outline-offset:2px}
+.rec-body .theme-record{margin-bottom:0}
+body.rec-open{overflow:hidden}
+
+@media (max-width:720px){
+  .lcount{margin-left:0}
+  .lt-btn{max-width:240px}
+  .rec-panel{margin:0;width:100vw;max-height:100vh;border-radius:0;padding:14px 14px 26px}
+}
 </style>
 </head>
 <body class="bl">

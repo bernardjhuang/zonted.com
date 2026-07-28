@@ -41,6 +41,8 @@
 
   const gapTone = gap => (gap >= 25 ? 'open' : gap >= 12 ? 'mid' : 'tight');
 
+  const fmtGap = gap => `${gap > 0 ? '+' : ''}${gap}`;
+
   const modelIdentity = model => {
     const name = String(model ?? '').toLowerCase();
     if (name.includes('grok')) return { key: 'grok', mark: '𝕏' };
@@ -80,7 +82,7 @@
       : gap >= 0 ? 'Priced close to the story'
       : 'Priced ahead of what is understood';
     return `<p class="sat-gap tone-${gapTone(gap)}">
-      <strong>${gap > 0 ? '+' : ''}${gap}</strong>
+      <strong>${fmtGap(gap)}</strong>
       <span>${esc(phrase)}</span>
     </p>`;
   };
@@ -89,7 +91,7 @@
     const gap = gapOf(known, priced);
     if (gap === null) return '';
     return `<span class="layer-gap tone-${gapTone(gap)}" title="Knowledge saturation minus price saturation">
-      ${gap > 0 ? '+' : ''}${gap}<i>gap</i></span>`;
+      ${fmtGap(gap)}<i>gap</i></span>`;
   };
 
   const bullets = items => `<ul class="theme-list">${items.map(item => `<li>${esc(item)}</li>`).join('')}</ul>`;
@@ -246,42 +248,280 @@
   </article>`;
   };
 
-  const renderNav = themes => `<nav class="theme-switch" aria-label="Jump to theme">
-    ${themes.map((theme, index) => {
-      const gap = gapOf(theme.consensus_scores.knowledge_saturation, theme.consensus_scores.price_saturation);
-      return `<a class="theme-pill${index === 0 ? ' is-current' : ''}" href="#${esc(theme.id)}" data-theme="${esc(theme.id)}">
-        <span class="pill-cat">${esc(theme.category)}</span>
-        <span class="pill-title">${esc(theme.title)}</span>
-        ${renderProvenance(theme)}
-        <span class="pill-scores">
-          <b>${esc(theme.consensus_scores.knowledge_saturation)}</b> known
-          <b>${esc(theme.consensus_scores.price_saturation)}</b> priced
-          ${gap === null ? '' : `<em class="tone-${gapTone(gap)}">${gap > 0 ? '+' : ''}${gap} gap</em>`}
-        </span>
-      </a>`;
-    }).join('')}
-  </nav>`;
+  // ── Ledger index (v2) ──────────────────────────────────────────────
+  // The page is an index now: category filters + a dumbbell gap chart +
+  // a sortable ledger. Full records render on demand inside an overlay,
+  // addressed by the same #theme-id anchors the old long-scroll page
+  // used, so shared deep links keep working.
 
-  // Keep the sticky theme switcher docked under the variable-height status bar.
-  const statusBar = document.querySelector('.status');
-  const syncStickyOffset = () => {
-    if (!statusBar) return;
-    document.documentElement.style.setProperty('--desk-top', `${statusBar.offsetHeight}px`);
+  const CATEGORY_COLOR = {
+    Geographies: '#2f5fb3',
+    Sectors: '#0e7a63',
+    Emerging: '#8a4bab',
+    Energy: '#b3622f',
+    'Frontier intelligence': '#5c5f66',
+  };
+  const catColor = category => CATEGORY_COLOR[category] || '#70757d';
+
+  // Maturity chip = the status text before the "· N reviewers" suffix,
+  // verbatim from themes.json. Reviewer count already shows as icons.
+  const stageOf = status => String(status ?? '').split('·')[0].trim();
+
+  const modelIcon = (kind, model) => {
+    const identity = modelIdentity(model);
+    const label = kind === 'source' ? 'Source' : 'Review';
+    return `<i class="mi mi-${identity.key} mi-${kind}" title="${label}: ${esc(model)}"></i>`;
   };
 
-  const trackCurrentTheme = () => {
-    const pills = [...shell.querySelectorAll('.theme-pill')];
-    const records = [...shell.querySelectorAll('.theme-record')];
-    if (!pills.length || !records.length || !('IntersectionObserver' in window)) return;
+  const modelIcons = theme => {
+    const reviewers = theme.reviewed_by || [];
+    return `<span class="micons" aria-label="Source ${esc(theme.source_model)}${
+      reviewers.length ? ', reviewed by ' + esc(reviewers.join(', ')) : ''}">${
+      modelIcon('source', theme.source_model)}${
+      reviewers.length ? '<i class="mi-sep" aria-hidden="true"></i>' + reviewers.map(model => modelIcon('review', model)).join('') : ''
+    }</span>`;
+  };
 
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        pills.forEach(pill => pill.classList.toggle('is-current', pill.dataset.theme === entry.target.id));
-      });
-    }, { rootMargin: '-45% 0px -50% 0px' });
+  const rowOf = theme => ({
+    theme,
+    title: theme.title,
+    category: theme.category,
+    stage: stageOf(theme.status),
+    known: num(theme.consensus_scores.knowledge_saturation),
+    priced: num(theme.consensus_scores.price_saturation),
+    gap: gapOf(theme.consensus_scores.knowledge_saturation, theme.consensus_scores.price_saturation),
+    models: 1 + (theme.reviewed_by || []).length,
+    horizon: theme.horizon,
+  });
 
-    records.forEach(record => observer.observe(record));
+  const state = { cats: new Set(), minGap: 0, sortKey: 'gap', sortDir: -1 };
+  let rows = [];
+  let byId = new Map();
+  let methodRef = null;
+
+  const visibleRows = () => rows.filter(row =>
+    (!state.cats.size || state.cats.has(row.category)) && (row.gap ?? 0) >= state.minGap);
+
+  const NUMERIC_KEYS = new Set(['known', 'priced', 'gap', 'models']);
+  const sortedRows = list => [...list].sort((a, b) => {
+    if (NUMERIC_KEYS.has(state.sortKey)) {
+      return ((a[state.sortKey] ?? -1) - (b[state.sortKey] ?? -1)) * state.sortDir;
+    }
+    return String(a[state.sortKey]).localeCompare(String(b[state.sortKey])) * state.sortDir;
+  });
+
+  const renderControls = () => {
+    const categories = [...new Set(rows.map(row => row.category))];
+    return `<div class="ledger-controls">
+      <div class="fpills" role="group" aria-label="Filter by category">
+        ${categories.map(category => `<button type="button" class="fpill${state.cats.has(category) ? ' on' : ''}" data-cat="${esc(category)}">
+          <i style="background:${catColor(category)}" aria-hidden="true"></i>${esc(category)}<b>${rows.filter(row => row.category === category).length}</b>
+        </button>`).join('')}
+      </div>
+      <label class="gapctl">Min gap <input type="range" min="0" max="50" step="5" value="${state.minGap}" data-gap-range>
+        <b data-gap-value>${state.minGap}</b></label>
+      <span class="lcount" data-count aria-live="polite"></span>
+    </div>`;
+  };
+
+  const renderDumbbell = list => {
+    const RH = 26, L = 360, R = 60, W = 1200, T = 30;
+    const H = T + list.length * RH + 34;
+    const x = value => L + value / 100 * (W - L - R);
+    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Themes ranked by gap between known and priced">`;
+    for (let g = 0; g <= 100; g += 25) {
+      svg += `<line x1="${x(g)}" y1="${T - 8}" x2="${x(g)}" y2="${H - 26}" stroke="var(--bl-divider)"/>`
+        + `<text x="${x(g)}" y="${H - 10}" font-size="10" text-anchor="middle" fill="var(--bl-faint)" font-family="var(--bl-mono)">${g}</text>`;
+    }
+    svg += `<text x="${x(0)}" y="${T - 14}" font-size="10.5" fill="var(--bl-warn)" font-weight="600" font-family="var(--bl-mono)">● PRICED</text>`
+      + `<text x="${x(0) + 74}" y="${T - 14}" font-size="10.5" fill="var(--bl-accent)" font-weight="600" font-family="var(--bl-mono)">● KNOWN</text>`;
+    list.forEach((row, index) => {
+      const y = T + index * RH + RH / 2;
+      const labelX = Math.max(x(row.known), x(row.priced)) + 12;
+      const title = row.title.length > 46 ? `${row.title.slice(0, 45)}…` : row.title;
+      svg += `<g class="db-row" data-theme-id="${esc(row.theme.id)}"
+        data-tip="${esc(`${row.title} — ${row.category} · known ${row.known} / priced ${row.priced} · gap ${fmtGap(row.gap)} · ${row.models} model${row.models === 1 ? '' : 's'}`)}">
+        <rect x="0" y="${y - RH / 2}" width="${W}" height="${RH}" fill="transparent"/>
+        <text class="db-label" x="${L - 14}" y="${y + 4}" font-size="12" text-anchor="end" fill="var(--bl-ink2)">${esc(title)}</text>
+        <line x1="${x(row.priced)}" y1="${y}" x2="${x(row.known)}" y2="${y}" stroke="${catColor(row.category)}" stroke-width="3" opacity=".55" stroke-linecap="round"/>
+        <circle cx="${x(row.priced)}" cy="${y}" r="5" fill="var(--bl-warn)" stroke="var(--bl-card)" stroke-width="1.6"/>
+        <circle cx="${x(row.known)}" cy="${y}" r="5" fill="var(--bl-accent)" stroke="var(--bl-card)" stroke-width="1.6"/>
+        <text x="${labelX}" y="${y + 4}" font-size="10.5" fill="${row.gap >= 0 ? 'var(--bl-gain)' : 'var(--bl-loss)'}" font-weight="600" font-family="var(--bl-mono)">${fmtGap(row.gap)}</text>
+      </g>`;
+    });
+    svg += '</svg>';
+    return svg;
+  };
+
+  const LEDGER_COLUMNS = [
+    ['title', 'Theme'], ['category', 'Category'], ['models', 'Models'], ['stage', 'Maturity'],
+    ['known', 'Known'], ['priced', 'Priced'], ['gap', 'Gap'], ['horizon', 'Horizon'],
+  ];
+
+  const renderLedger = list => `<table class="themes-ledger" aria-label="Theme ledger">
+    <thead><tr>${LEDGER_COLUMNS.map(([key, label]) => `
+      <th${NUMERIC_KEYS.has(key) && key !== 'models' ? ' class="r"' : ''} data-sort="${key}"
+        aria-sort="${state.sortKey === key ? (state.sortDir === 1 ? 'ascending' : 'descending') : 'none'}">
+        <button type="button">${label}<span class="arrow">${state.sortKey === key ? (state.sortDir === 1 ? '▴' : '▾') : ''}</span></button>
+      </th>`).join('')}</tr></thead>
+    <tbody>${list.map(row => `<tr class="lrow" data-theme-id="${esc(row.theme.id)}">
+      <td class="lt"><button type="button" class="lt-btn">${esc(row.title)}</button></td>
+      <td><span class="lcat"><i style="background:${catColor(row.category)}" aria-hidden="true"></i>${esc(row.category)}</span></td>
+      <td>${modelIcons(row.theme)}</td>
+      <td><span class="lstage">${esc(row.stage)}</span></td>
+      <td class="r lknown">${row.known}</td>
+      <td class="r lpriced">${row.priced}</td>
+      <td class="r lgap tone-${gapTone(row.gap)}">${fmtGap(row.gap)}</td>
+      <td class="lhor">${esc(row.horizon)}</td>
+    </tr>`).join('')}</tbody>
+  </table>`;
+
+  const renderMethodFold = method => `<details class="theme-method ledger-method">
+    <summary>How to read these scores</summary>
+    <div class="method-body">
+      <p><strong>Known</strong> ${esc(method.knowledge_saturation)}</p>
+      <p><strong>Priced</strong> ${esc(method.price_saturation)}</p>
+      <p><strong>Gap</strong> Known minus priced. A wide gap flags a story the market understands but has not paid for; a narrow or negative gap flags one already discounted.</p>
+      <p><strong>Consensus</strong> ${esc(method.consensus)}</p>
+      <p class="method-warn"><strong>Important</strong> ${esc(method.warning)}</p>
+    </div>
+  </details>`;
+
+  const updateViews = () => {
+    const chartList = [...visibleRows()].sort((a, b) => (b.gap ?? -1) - (a.gap ?? -1));
+    const list = sortedRows(visibleRows());
+    shell.querySelector('[data-chart]').innerHTML = renderDumbbell(chartList);
+    shell.querySelector('[data-ledger]').innerHTML = renderLedger(list);
+    shell.querySelector('[data-count]').textContent = `${list.length} of ${rows.length} themes`;
+  };
+
+  // ── Record overlay ─────────────────────────────────────────────────
+  let overlay = null;
+  let openedByPush = false;
+  let lastFocus = null;
+
+  const buildOverlay = () => {
+    overlay = document.createElement('div');
+    overlay.className = 'rec-overlay';
+    overlay.hidden = true;
+    overlay.innerHTML = `<div class="rec-backdrop" data-rec-close></div>
+      <div class="rec-panel" role="dialog" aria-modal="true" aria-label="Theme record">
+        <div class="rec-bar">
+          <a class="rec-permalink" href="#"></a>
+          <button type="button" class="rec-close" data-rec-close>Close ✕</button>
+        </div>
+        <div class="rec-body"></div>
+      </div>`;
+    document.body.appendChild(overlay);
+    overlay.addEventListener('click', event => {
+      if (event.target.closest('[data-rec-close]')) closeRecord();
+    });
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && !overlay.hidden) closeRecord();
+    });
+    window.addEventListener('popstate', () => syncFromHash(false));
+  };
+
+  const openRecord = (theme, { push = true, section = null } = {}) => {
+    lastFocus = document.activeElement;
+    overlay.querySelector('.rec-body').innerHTML = renderTheme(theme, methodRef);
+    const permalink = overlay.querySelector('.rec-permalink');
+    permalink.href = `#${theme.id}`;
+    permalink.textContent = `/trading/themes/#${theme.id}`;
+    overlay.hidden = false;
+    document.body.classList.add('rec-open');
+    if (push) {
+      history.pushState({ theme: theme.id }, '', `#${section || theme.id}`);
+      openedByPush = true;
+    }
+    const panel = overlay.querySelector('.rec-panel');
+    panel.scrollTop = 0;
+    if (section) {
+      const target = overlay.querySelector(`#${CSS.escape(section)}`);
+      if (target) {
+        const fold = target.closest('details');
+        if (fold) fold.open = true;
+        target.scrollIntoView();
+      }
+    }
+    overlay.querySelector('.rec-close').focus();
+  };
+
+  const closeRecord = () => {
+    if (openedByPush) {
+      openedByPush = false;
+      history.back(); // popstate → syncFromHash hides the overlay
+      return;
+    }
+    hideOverlay();
+    if (location.hash) history.replaceState(null, '', location.pathname + location.search);
+  };
+
+  const hideOverlay = () => {
+    overlay.hidden = true;
+    document.body.classList.remove('rec-open');
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus();
+  };
+
+  // Deep links: #theme-id opens the record, #theme-id-section opens it
+  // scrolled to that section — the anchors the long-scroll page used.
+  const syncFromHash = (push = false) => {
+    const hash = decodeURIComponent(location.hash.slice(1));
+    if (!hash) { if (!overlay.hidden) hideOverlay(); return; }
+    if (byId.has(hash)) { openRecord(byId.get(hash), { push }); return; }
+    const parent = [...byId.keys()].find(id => hash.startsWith(`${id}-`));
+    if (parent) { openRecord(byId.get(parent), { push, section: hash }); return; }
+    if (!overlay.hidden) hideOverlay();
+  };
+
+  const wireShell = () => {
+    shell.addEventListener('click', event => {
+      const pill = event.target.closest('.fpill');
+      if (pill) {
+        const category = pill.dataset.cat;
+        state.cats.has(category) ? state.cats.delete(category) : state.cats.add(category);
+        pill.classList.toggle('on');
+        updateViews();
+        return;
+      }
+      const header = event.target.closest('th[data-sort]');
+      if (header) {
+        const key = header.dataset.sort;
+        if (state.sortKey === key) {
+          state.sortDir *= -1;
+        } else {
+          state.sortKey = key;
+          state.sortDir = NUMERIC_KEYS.has(key) ? -1 : 1;
+        }
+        updateViews();
+        return;
+      }
+      const opener = event.target.closest('[data-theme-id]');
+      if (opener && byId.has(opener.dataset.themeId)) {
+        openRecord(byId.get(opener.dataset.themeId));
+      }
+    });
+
+    shell.addEventListener('input', event => {
+      if (!event.target.matches('[data-gap-range]')) return;
+      state.minGap = Number(event.target.value);
+      shell.querySelector('[data-gap-value]').textContent = state.minGap;
+      updateViews();
+    });
+
+    const tip = document.createElement('div');
+    tip.className = 'db-tip';
+    tip.hidden = true;
+    document.body.appendChild(tip);
+    shell.addEventListener('mousemove', event => {
+      const row = event.target.closest('.db-row');
+      if (!row) { tip.hidden = true; return; }
+      tip.textContent = row.dataset.tip;
+      tip.hidden = false;
+      tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - 320)}px`;
+      tip.style.top = `${event.clientY + 14}px`;
+    });
+    shell.addEventListener('mouseleave', () => { tip.hidden = true; });
   };
 
   fetch(shell.dataset.url, { cache: 'no-store' })
@@ -290,14 +530,24 @@
       return response.json();
     })
     .then(payload => {
+      methodRef = payload.method;
       const themes = sortThemesByGapDescending(payload.themes);
-      shell.innerHTML = renderNav(themes)
-        + themes.map(theme => renderTheme(theme, payload.method)).join('');
+      rows = themes.map(rowOf);
+      byId = new Map(themes.map(theme => [theme.id, theme]));
+      shell.innerHTML = renderControls()
+        + `<section class="gap-map">
+            <div class="gap-map-head"><h2>The gap</h2>
+              <p>Each line runs from priced (amber) to known (blue) — the longer the line, the bigger the story the market has not paid for. Ranked by gap; click any row for the full record.</p></div>
+            <div class="db-scroll" data-chart></div>
+          </section>`
+        + `<div class="ledger-wrap" data-ledger></div>
+           <p class="ledger-foot">Colored icon sourced the theme · gray icons reviewed it · hover an icon for the model · click any row for the full record.</p>`
+        + renderMethodFold(payload.method);
+      buildOverlay();
+      updateViews();
+      wireShell();
       shell.dataset.ready = 'true';
-      syncStickyOffset();
-      if (window.ResizeObserver && statusBar) new ResizeObserver(syncStickyOffset).observe(statusBar);
-      window.addEventListener('resize', syncStickyOffset);
-      trackCurrentTheme();
+      syncFromHash(false);
     })
     .catch(error => {
       shell.innerHTML = '<p class="theme-error">Themes could not be loaded. The previous research remains in the JSON source.</p>';
