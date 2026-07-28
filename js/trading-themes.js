@@ -41,6 +41,28 @@
 
   const gapTone = gap => (gap >= 25 ? 'open' : gap >= 12 ? 'mid' : 'tight');
 
+  const modelIdentity = model => {
+    const name = String(model ?? '').toLowerCase();
+    if (name.includes('grok')) return { key: 'grok', mark: '𝕏' };
+    if (name.includes('gpt')) return { key: 'gpt', mark: '◎' };
+    if (name.includes('claude') || name.includes('fable')) return { key: 'claude', mark: '✦' };
+    if (name.includes('gemini')) return { key: 'gemini', mark: '◆' };
+    return { key: 'other', mark: '●' };
+  };
+
+  const modelChip = (kind, model) => {
+    const identity = modelIdentity(model);
+    const label = kind === 'source' ? 'Source' : 'Review';
+    return `<span class="prov-chip prov-${kind} prov-${identity.key}" title="${label}: ${esc(model)}">
+      <i aria-hidden="true">${identity.mark}</i><span>${label} · ${esc(model)}</span>
+    </span>`;
+  };
+
+  const renderProvenance = theme => `<div class="model-provenance" aria-label="Model provenance">
+    ${modelChip('source', theme.source_model)}
+    ${(theme.reviewed_by || []).map(model => modelChip('review', model)).join('')}
+  </div>`;
+
   const sortThemesByGapDescending = themes => [...themes].sort((a, b) => {
     const aGap = gapOf(a.consensus_scores.knowledge_saturation, a.consensus_scores.price_saturation);
     const bGap = gapOf(b.consensus_scores.knowledge_saturation, b.consensus_scores.price_saturation);
@@ -155,6 +177,7 @@
       <div class="theme-kicker">
         <span>${esc(theme.category)}</span><span>${esc(theme.horizon)}</span><span>${esc(theme.status)}</span>
       </div>
+      ${renderProvenance(theme)}
       <h2>${esc(theme.title)}</h2>
       <p class="theme-belief">${esc(theme.owner_belief)}</p>
       <div class="hero-scores">
@@ -228,6 +251,7 @@
       return `<a class="theme-pill${index === 0 ? ' is-current' : ''}" href="#${esc(theme.id)}" data-theme="${esc(theme.id)}">
         <span class="pill-cat">${esc(theme.category)}</span>
         <span class="pill-title">${esc(theme.title)}</span>
+        ${renderProvenance(theme)}
         <span class="pill-scores">
           <b>${esc(theme.consensus_scores.knowledge_saturation)}</b> known
           <b>${esc(theme.consensus_scores.price_saturation)}</b> priced

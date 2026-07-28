@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 26)
+        self.assertEqual(len(self.payload["themes"]), 31)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -100,7 +100,7 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertGreaterEqual(len(theme["sources"]), 12)
         self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
         self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 10)
-        self.assertIn("missing model scores are never invented", self.payload["method"]["consensus"])
+        self.assertIn("missing model scores are never invented", self.payload["method"]["consensus"].lower())
 
     def test_every_theme_consensus_is_the_median_of_scored_reviews(self) -> None:
         for theme in self.payload["themes"]:
@@ -137,6 +137,11 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertIn("const esc =", self.script)
         self.assertIn("const sectionId =", self.script)
         self.assertIn("const renderAdversarial =", self.script)
+        self.assertIn("const renderProvenance =", self.script)
+        self.assertIn('aria-label="Model provenance"', self.script)
+        self.assertIn("theme.source_model", self.script)
+        self.assertIn("theme.reviewed_by", self.script)
+        self.assertIn(".prov-grok i", self.page)
         self.assertIn("const sortThemesByGapDescending =", self.script)
         self.assertIn("const themes = sortThemesByGapDescending(payload.themes);", self.script)
         self.assertIn("return bGap - aGap;", self.script)
@@ -172,6 +177,11 @@ class TradingThemesContractTest(unittest.TestCase):
             "sector-upper-cband-capex-echo",
             "emerging-pfas-testing-wave",
             "emerging-live-experience-k",
+            "emerging-ai-compute-water-geography",
+            "emerging-autonomous-science-verification-wall",
+            "emerging-orbital-compute-relief-valve",
+            "emerging-precision-fermentation-molecules",
+            "emerging-radiative-cooling-everything-grid",
         }
         hunt = [
             t for t in self.payload["themes"]
@@ -216,6 +226,53 @@ class TradingThemesContractTest(unittest.TestCase):
         }
         self.assertEqual(supplied_grok_ids, grok_review_ids)
         self.assertIn("Grok 4.5 added to five named reviews supplied by Bernard", self.payload["method"]["consensus"])
+
+    def test_frontier_signal_themes_are_complete_and_independently_scored(self) -> None:
+        expected = {
+            "emerging-ai-compute-water-geography": (58, 28, 63, 36),
+            "emerging-autonomous-science-verification-wall": (52, 22, 58, 28),
+            "emerging-orbital-compute-relief-valve": (45, 8, 52, 14),
+            "emerging-precision-fermentation-molecules": (65, 35, 70, 45),
+            "emerging-radiative-cooling-everything-grid": (60, 25, 66, 36),
+        }
+        found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
+        self.assertEqual(set(found), set(expected))
+        for theme_id, (grok_known, grok_priced, consensus_known, consensus_priced) in expected.items():
+            theme = found[theme_id]
+            self.assertEqual(theme["category"], "Emerging")
+            self.assertEqual(theme["status"], "Frontier signal · 2 reviewers")
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["Grok 4.5", "GPT-5.6"])
+            self.assertEqual(theme["source_model"], "Grok 4.5")
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"])
+            self.assertEqual(
+                (theme["model_reviews"][0]["knowledge_saturation"], theme["model_reviews"][0]["price_saturation"]),
+                (grok_known, grok_priced),
+            )
+            self.assertEqual(
+                (theme["consensus_scores"]["knowledge_saturation"], theme["consensus_scores"]["price_saturation"]),
+                (consensus_known, consensus_priced),
+            )
+            for field in (
+                "owner_belief", "conviction", "final_verdict", "layer_scorecard", "adversarial_review",
+                "what_survived", "residual_edge", "research_priority", "falsifiers", "watch_next", "sources",
+            ):
+                self.assertTrue(theme[field], f"{theme_id}.{field}")
+            self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
+            self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 5)
+            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+            self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
+
+    def test_every_theme_exposes_source_reviewers_and_has_gpt(self) -> None:
+        for theme in self.payload["themes"]:
+            models = [row["model"] for row in theme["model_reviews"]]
+            self.assertIn(theme["source_model"], models, theme["id"])
+            self.assertEqual(theme["reviewed_by"], [model for model in models if model != theme["source_model"]], theme["id"])
+            self.assertTrue(any(model.startswith("GPT") for model in models), theme["id"])
+
+        live = next(theme for theme in self.payload["themes"] if theme["id"] == "emerging-live-experience-k")
+        self.assertEqual([row["model"] for row in live["model_reviews"]], ["Claude Fable 5", "GPT-5.6"])
+        self.assertEqual(live["consensus_scores"], {"knowledge_saturation": 68, "price_saturation": 51})
+        self.assertEqual(live["status"], "Theme hunt · 2 reviewers")
 
     def test_gpt_origin_second_order_themes_are_complete(self) -> None:
         expected = {

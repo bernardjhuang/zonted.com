@@ -9,7 +9,22 @@
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/trading/desk.css?v=b6fb98a12db2">
 <script defer src="/trading/desk.js?v=95918574e88b"></script>
-<script defer src="/js/trading-themes.js?v=8ced249600d4"></script>
+<script defer src="/js/trading-themes.js?v=158feab4f6f2"></script>
+<style>
+.model-provenance{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
+.prov-chip{display:inline-flex;align-items:center;gap:4px;min-width:0;padding:2px 6px 2px 3px;border:1px solid var(--bl-border);border-radius:999px;background:#fff;color:var(--bl-muted);font:600 9.5px var(--bl-mono);line-height:1.2}
+.prov-chip i{display:grid;place-items:center;width:16px;height:16px;border-radius:50%;font-style:normal;font-size:9px;color:#fff;background:#70757d}
+.prov-source{border-style:solid;color:var(--bl-ink)}
+.prov-review{border-style:dashed}
+.prov-grok i{background:#111}
+.prov-gpt i{background:#16866f}
+.prov-claude i{background:#bd6843}
+.prov-gemini i{background:#536fd1}
+.theme-pill .model-provenance{margin:2px 0 1px}
+.theme-hero .model-provenance{margin:-8px 0 18px}
+.theme-hero .prov-chip{border-color:#ffffff35;background:#ffffff10;color:#d9dbe0}
+.theme-hero .prov-source{color:#fff}
+</style>
 </head>
 <body class="bl">
 <div class="status"><div class="wrap">
@@ -26,7 +41,7 @@
 <nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/themes/" aria-current="page">Themes</a><a href="/trading/vwap-setups/">VWAP Setups</a><a href="/trading/momentum/">Momentum</a><a href="/trading/performance/">Performance</a></div></nav>
 <div class="wrap themes-shell">
 <div class="phead"><h1>Themes</h1><p class="take">Core beliefs scored for how widely known—and how fully priced—they already are. Independent model reviews are added when commissioned; missing scores stay missing.</p><p class="meta">Human thesis → evidence → adversarial review → saturation score · market snapshots use Friday’s close</p></div>
-<main id="themes-live" data-url="/trading/themes.json?v=be354aabaf51" aria-live="polite"><p class="theme-loading">Loading theme ledger…</p></main>
+<main id="themes-live" data-url="/trading/themes.json?v=c1e9f5976bd6" aria-live="polite"><p class="theme-loading">Loading theme ledger…</p></main>
 <noscript><p class="theme-error">JavaScript is required for the scored theme ledger. The canonical research remains available in <a href="/trading/themes.json">themes.json</a>.</p></noscript>
 </div>
 </body>
