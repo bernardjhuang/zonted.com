@@ -8,6 +8,15 @@
     <lastBuildDate>Tue, 28 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>I Watched a Neural Network Learn That Paris Is the Capital of France</title>
+      <link>https://zonted.com/posts/watching-ai-learn-paris/</link>
+      <description>Pythia publishes a checkpoint every 1,000 training steps and its training data is public and countable. So I replayed training like a time-lapse and watched a fact form — and watched a brand with 64 mentions never form at all.</description>
+      <content:encoded><![CDATA[This month I trained a model on my own Google history and read the files that teach models how to behave . Both left the same question hanging: knowledge ends up in a model — but how does it get there? Not metaphorically. Literally: at what point in training does a network start believing that Paris is the capital of France? Using a model that publishes checkpoints throughout training — and whose training data is public and countable — you can replay knowledge forming, step by step. At 2B tokens the model writes English but believes nothing — every candidate answer sits at 0% • Paris climbs 0% → 3% → 8% → 15% across 300B tokens. London has 2× the mentions and stays at 0.05% the whole way • There's an ignition threshold: a brand with 64 mentions never forms a belief at all , across the entire run • Fame never converts to belief; placement does — and the model knows the difference from the very first checkpoint]]></content:encoded>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/watching-ai-learn-paris/</guid>
+    </item>
+    <item>
       <title>I Read Anthropic&#x27;s and Nvidia&#x27;s Public Training Data. Here&#x27;s What&#x27;s Actually In There.</title>
       <link>https://zonted.com/posts/inside-ai-training-data/</link>
       <description>Anthropic&#x27;s and Nvidia&#x27;s preference-training data is public. I read it: where refusals come from, what the rubric rewards, and what&#x27;s barely in there at all.</description>
@@ -15,15 +24,6 @@
       <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/inside-ai-training-data/</guid>
-    </item>
-    <item>
-      <title>AI Learned to Recommend Products by Accident</title>
-      <link>https://zonted.com/posts/how-ai-learned-to-recommend/</link>
-      <description>Anthropic&#x27;s and Nvidia&#x27;s actual preference-training data is public on Hugging Face. Reading both shows the grading rubric changed between 2022 and 2024 — and that product recommendation was barely trained at all.</description>
-      <content:encoded><![CDATA[Last week I trained a language model on fifteen years of my own Google history to watch how it forms beliefs about brands. That covered pretraining — the stage where a model reads everything and learns to autocomplete. But it skipped the stage that decides how a model actually behaves : whether it refuses you, how much it grovels, and whether it names your product when someone asks for a recommendation. Two public files — Anthropic's 2022 preference data and Nvidia's 2024 data — show how the definition of a "good answer" was rewritten in two years, and why AI recommends brands today when it wouldn't in 2022. 2022 rubric: binary, "which of these two is better," with roughly half the dataset devoted to refusing harm • 2024 rubric: five graded axes — helpfulness, correctness, coherence, complexity, verbosity • In 2022, the answer that named specific products was the rejected one. By 2024, naming several with tradeoffs is what scores highest. • But across three preference datasets I scanned, genuine product-recommendation prompts were ~0.2% of the data . Nobody trained this behavior on purpose.]]></content:encoded>
-      <pubDate>Mon, 27 Jul 2026 00:00:00 +0000</pubDate>
-      <author>bernard@zonted.com (Bernard Huang)</author>
-      <guid isPermaLink="true">https://zonted.com/posts/how-ai-learned-to-recommend/</guid>
     </item>
     <item>
       <title>The Files Where AI Personalities Come From</title>

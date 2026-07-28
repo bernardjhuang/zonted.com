@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <title>I Watched a Neural Network Learn That Paris Is the Capital of France</title>
+    <meta name="description" content="Pythia publishes a checkpoint every 1,000 training steps and its training data is public and countable. So I replayed training like a time-lapse and watched a fact form — and watched a brand with 64 mentions never form at all.">
+    <link rel="canonical" href="https://zonted.com/posts/watching-ai-learn-paris/">
+    <meta property="og:title" content="I Watched a Neural Network Learn That Paris Is the Capital of France">
+    <meta property="og:description" content="A time-lapse of knowledge forming inside a model: Paris climbs from 0% to 15% across 300B training tokens. London has twice the mentions — it never had a chance.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://zonted.com/posts/watching-ai-learn-paris/img/og.png">
+    <meta property="og:url" content="https://zonted.com/posts/watching-ai-learn-paris/">
+    <meta property="article:published_time" content="2026-07-28">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Watched a Neural Network Learn That Paris Is the Capital of France","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-28","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/watching-ai-learn-paris/","description":"Replaying a model's training checkpoints like a time-lapse: Paris climbs from 0% to 15% across 300B tokens while London, with twice the mentions, stays flat — and a brand with 64 mentions never ignites.","image":"https://zonted.com/posts/watching-ai-learn-paris/img/og.png"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Watching a Neural Network Learn"}]}
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <style>
+      .lm-fig { margin:1.5rem 0 0.5rem; }
+      .lm-fig svg { width:100%; height:auto; display:block; }
+      .lm-fig svg text { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; fill:#6e6e6e; }
+      .lm-fig svg .nm { fill:#1a1a1a; font-family:'Inter',system-ui,sans-serif; font-size:12px; font-weight:600; }
+      .lm-cap { font-size:0.85rem; color:#6e6e6e; margin-bottom:2rem; line-height:1.6; }
+      .tally { width:100%; border-collapse:collapse; font-family:'Inter',system-ui,sans-serif; font-size:0.88rem; margin:1.25rem 0 0.5rem; }
+      .tally th { text-align:left; font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); padding:6px 8px; }
+      .tally th.num, .tally td.num { text-align:right; }
+      .tally td { padding:8px; border-bottom:1px solid var(--border-light); color:var(--text-muted); }
+      .tally td:first-child { color:var(--text); font-weight:500; }
+      .tally td.num { font-family:'IBM Plex Mono',monospace; font-variant-numeric:tabular-nums; }
+      .tally tr.dead td { color:#a33; }
+      .tally tr.dead td:first-child { color:#a33; }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Projects</a>
+                <a href="/trading/">Trading</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#time-lapse">A time-lapse of training</a></li>
+            <li><a href="#paris">Watching Paris form</a></li>
+            <li><a href="#ignition">The ignition threshold</a></li>
+            <li><a href="#means">What forming a belief takes</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#time-lapse">A time-lapse of training</a></li>
+        <li><a href="#paris">Watching Paris form</a></li>
+        <li><a href="#ignition">The ignition threshold</a></li>
+        <li><a href="#means">What forming a belief takes</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Watched a Neural Network Learn That Paris Is the Capital of France</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">July 28, 2026 &middot; 7 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+            <p class="dropcap">This month I <a href="/posts/i-trained-a-gpt-on-my-life/">trained a model on my own Google history</a> and <a href="/posts/inside-ai-training-data/">read the files that teach models how to behave</a>. Both left the same question hanging: knowledge ends up <em>in</em> a model &mdash; but how does it get there? Not metaphorically. Literally: at what point in training does a network start believing that Paris is the capital of France?</p>
+
+            <p>It turns out you can just watch. Here's the time-lapse.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Using a model that publishes checkpoints throughout training &mdash; and whose training data is public and countable &mdash; you can replay knowledge forming, step by step.</p>
+                <ul>
+                    <li>At 2B tokens the model writes English but believes <strong>nothing</strong> &mdash; every candidate answer sits at 0%</li>
+                    <li>Paris climbs 0% &rarr; 3% &rarr; 8% &rarr; <strong>15%</strong> across 300B tokens. <strong>London has 2&times; the mentions and stays at 0.05% the whole way</strong></li>
+                    <li>There's an ignition threshold: a brand with <strong>64 mentions never forms a belief at all</strong>, across the entire run</li>
+                    <li>Fame never converts to belief; placement does &mdash; and the model knows the difference from the very first checkpoint</li>
+                </ul>
+            </div>
+
+            <h2 id="time-lapse">A time-lapse of training</h2>
+            <p>Most models give you one artifact: the finished thing. <a href="https://huggingface.co/EleutherAI/pythia-410m" rel="noopener">Pythia</a>, a model family EleutherAI built specifically for this kind of science, gives you three gifts at once:</p>
+            <ul>
+                <li><strong>154 checkpoints</strong> &mdash; a saved copy of the model every 1,000 training steps, from initialization to the end</li>
+                <li><strong>Open weights</strong> &mdash; so you can read exact probabilities instead of sampling and guessing</li>
+                <li><strong>A public training corpus</strong> (The Pile) that's <a href="https://infini-gram.io/" rel="noopener">indexed and countable</a> &mdash; you can look up how many times any phrase appears in what the model ate</li>
+            </ul>
+            <p>Put those together and you can do something that's impossible with GPT or Gemini: pick a fact, count its evidence in the training data, then load the model at different ages and measure exactly how much it believes the fact at each point. Training, replayed like a time-lapse.</p>
+            <p>My probe is the same one from the earlier posts: feed the model a prompt like <em>"The capital of France is"</em> and read the exact probability it assigns to each candidate continuation. No sampling, no noise &mdash; one forward pass returns the model's true credence.</p>
+
+            <h2 id="paris">Watching Paris form</h2>
+
+            <div class="lm-fig">
+            <svg viewBox="0 0 640 330" role="img" aria-label="Line chart of belief forming across training checkpoints: Paris rises from 0 percent at 2 billion tokens to 15.1 percent at 300 billion. Lyon rises slightly to 1.8 percent. London stays flat at 0.05 percent despite having twice the mentions of Paris.">
+              <text x="0" y="12" style="fill:#6e6e6e">P("The capital of France is ___") across training</text>
+              <line x1="50" y1="270" x2="620" y2="270" stroke="#e8e8e4"/>
+              <line x1="50" y1="198" x2="620" y2="198" stroke="#e8e8e4"/>
+              <line x1="50" y1="126" x2="620" y2="126" stroke="#e8e8e4"/>
+              <line x1="50" y1="54" x2="620" y2="54" stroke="#e8e8e4"/>
+              <text x="42" y="274" text-anchor="end">0%</text>
+              <text x="42" y="202" text-anchor="end">5%</text>
+              <text x="42" y="130" text-anchor="end">10%</text>
+              <text x="42" y="58" text-anchor="end">15%</text>
+              <polyline points="60,270 240,226 420,160 600,53" fill="none" stroke="#369" stroke-width="2.5" stroke-linejoin="round"/>
+              <circle cx="60" cy="270" r="4.5" fill="#369" stroke="#fcfcfa" stroke-width="2"/>
+              <circle cx="240" cy="226" r="4.5" fill="#369" stroke="#fcfcfa" stroke-width="2"/>
+              <circle cx="420" cy="160" r="4.5" fill="#369" stroke="#fcfcfa" stroke-width="2"/>
+              <circle cx="600" cy="53" r="5.5" fill="#369" stroke="#fcfcfa" stroke-width="2"/>
+              <polyline points="60,270 240,268 420,266 600,245" fill="none" stroke="#2a7a2a" stroke-width="2" stroke-dasharray="6 4" stroke-linejoin="round"/>
+              <polyline points="60,270 240,270 420,269 600,269" fill="none" stroke="#a33" stroke-width="2" stroke-dasharray="2 4" stroke-linejoin="round"/>
+              <text x="588" y="40" text-anchor="end" class="nm" style="fill:#369">Paris &middot; 15.1%</text>
+              <text x="588" y="238" text-anchor="end" class="nm" style="fill:#2a7a2a">Lyon &middot; 1.8%</text>
+              <text x="588" y="262" text-anchor="end" class="nm" style="fill:#a33">London &middot; 0.05%</text>
+              <text x="60" y="292" text-anchor="middle">~2B tokens</text>
+              <text x="240" y="292" text-anchor="middle">~17B</text>
+              <text x="420" y="292" text-anchor="middle">~75B</text>
+              <text x="600" y="292" text-anchor="end">~300B (final)</text>
+              <text x="335" y="318" text-anchor="middle">training tokens seen (checkpoints step1000 / 8000 / 36000 / final)</text>
+            </svg>
+            </div>
+            <p class="lm-cap">Pythia-410M, exact probabilities at four checkpoints. London appears <strong>15.6 million times</strong> in the training data &mdash; twice Paris's 7.8 million &mdash; and never moves.</p>
+
+            <p>Three things in this chart rearranged how I think about models.</p>
+            <p><strong>At 2 billion tokens, the model believes nothing.</strong> It already writes plausible English at that checkpoint &mdash; sentences parse, grammar mostly works. But ask it the capital of France and every candidate sits at zero. Fluency arrives before facts. The model learns to <em>talk</em> long before it has anything to say, which is a decent description of some humans too.</p>
+            <p><strong>Paris compounds.</strong> 3% at 17B tokens, 8% at 75B, 15% at 300B. Knowledge doesn't switch on; it accretes, like sediment, every time the association appears in another context.</p>
+            <p><strong>And London never grows.</strong> This is the part I keep coming back to. London is <em>more famous than Paris</em> in this corpus &mdash; twice the mentions. If models learned by exposure, London should drift upward, then get corrected. It doesn't. It's pinned at 0.05% from the first checkpoint to the last, because what the network learns was never "London is important." It's "London follows <em>the capital of France is</em>" &mdash; and it doesn't. The model never makes the fame mistake, at any age. <strong>Conditional association isn't a refinement that comes late in training. It's the substrate.</strong></p>
+
+            <h2 id="ignition">The ignition threshold</h2>
+            <p>Facts about France are well-supplied in any corpus. What about entities with thin evidence &mdash; say, brands? Same time-lapse, this time for <em>"The best SEO content optimization tool is"</em>, with each tool's total mention count in the training data alongside:</p>
+
+            <table class="tally">
+                <thead><tr><th>Tool</th><th class="num">Mentions in corpus</th><th class="num">@2B</th><th class="num">@17B</th><th class="num">@75B</th><th class="num">@300B</th></tr></thead>
+                <tbody>
+                    <tr><td>Yoast</td><td class="num">16,611</td><td class="num">0.00%</td><td class="num">0.59%</td><td class="num">1.85%</td><td class="num">2.47%</td></tr>
+                    <tr><td>Ahrefs</td><td class="num">9,784</td><td class="num">0.00%</td><td class="num">0.07%</td><td class="num">0.33%</td><td class="num">1.05%</td></tr>
+                    <tr class="dead"><td>Clearscope</td><td class="num">64</td><td class="num">0.00%</td><td class="num">0.00%</td><td class="num">0.00%</td><td class="num">0.01%</td></tr>
+                </tbody>
+            </table>
+            <p class="lm-cap">Belief forming (and not forming) for SEO tools across the same four checkpoints. Disclosure: I co-founded Clearscope, which is exactly why I picked it &mdash; I wanted to see my own brand's evidence trail. The Pile was assembled around 2020, before most of Clearscope's web footprint existed.</p>
+
+            <p>Yoast and Ahrefs climb steadily, in proportion to their thousands of mentions. Clearscope &mdash; 64 mentions &mdash; <strong>never ignites</strong>. Not slowly, not weakly: at no point across 300 billion tokens of training does the model form any belief about it whatsoever.</p>
+            <p>That's the ignition threshold, and it's the most practical thing this experiment shows. Below some level of evidence, additional training does nothing &mdash; there's no flashcard to practice. The difference between 64 mentions and 10,000 isn't a weaker belief versus a stronger one. It's nonexistence versus existence.</p>
+
+            <h2 id="means">What forming a belief actually takes</h2>
+            <p>Put the two experiments together and you get a compact description of how knowledge enters a neural network:</p>
+            <ul>
+                <li><strong>Placement decides the direction.</strong> The model only ever learns what follows what. London's fame is invisible to it; Paris's position after "the capital of France is" is everything. This held at every single checkpoint &mdash; it's not something the model figures out eventually.</li>
+                <li><strong>Volume decides the speed.</strong> More well-placed evidence, faster accretion. Paris compounds for 300 billion tokens and is still climbing at the end.</li>
+                <li><strong>A threshold decides existence.</strong> Under it, you are not a weak belief. You are nothing.</li>
+            </ul>
+            <p>For the AI-visibility thread that runs through this whole series, this is the pretraining layer measured directly, and it's blunt: if your brand's evidence is thin in the corpora these models eat, no amount of anything else makes the model believe in you &mdash; the belief simply never forms. And if you're well-mentioned but never in the answer slot, you're London: maximally famous, never the answer.</p>
+            <p>But honestly, the reason this experiment stuck with me isn't the marketing implication. It's that "what does an AI know and when did it learn it" sounds like an interpretability research question, and it turned out to be a weekend with a laptop, a public model, and a corpus you can grep. The time-lapse was sitting there, free, waiting for someone to press play.</p>
+
+            <p style="color:var(--text-muted);font-size:0.95rem;margin-top:2rem;">Method: <a href="https://huggingface.co/EleutherAI/pythia-410m" rel="noopener">EleutherAI/pythia-410m</a> at revisions step1000, step8000, step36000, and main (~2B / ~17B / ~75B / ~300B tokens at ~2M tokens per step). Beliefs are exact average log-probabilities per token of each continuation, converted to per-token probabilities &mdash; comparable across candidates on the same prompt. Mention counts are exact phrase counts over the Pile training split via the <a href="https://infini-gram.io/" rel="noopener">infini-gram</a> API; single-word counts can be inflated by unrelated senses (a caveat that cuts against brands with dictionary-word names). One model size, one prompt per fact &mdash; the shapes replicated across the prompts I tried, but treat exact percentages as illustrative, not universal.</p>
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/inside-ai-training-data/">I Read Anthropic&#x27;s and Nvidia&#x27;s Public Training Data. Here&#x27;s What&#x27;s Actually In There.</a><p class="zn-recommended-dek">Anthropic&#x27;s and Nvidia&#x27;s preference-training data is public. I read it: where refusals come from, what the rubric rewards, and what&#x27;s barely…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/where-ai-personalities-come-from/">The Files Where AI Personalities Come From</a><p class="zn-recommended-dek">An AI&#x27;s personality is a file you can read. Inside Anthropic&#x27;s 2022 preference data: the exact rows that installed politeness, refusals, and…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/google-trends-stock-attention/">Does Google Trends Predict Stock Prices? A Five-Year Backtest</a><p class="zn-recommended-dek">I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/games/">Games</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    if (!sections.length || !tocLinks.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) { const al = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`); if (al) label.textContent = al.textContent; }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
