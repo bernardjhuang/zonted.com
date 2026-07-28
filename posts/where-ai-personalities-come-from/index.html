@@ -100,6 +100,11 @@
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
         <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
     </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
     <div class="article-container">
