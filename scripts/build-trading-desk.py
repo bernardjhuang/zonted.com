@@ -69,8 +69,8 @@ def article_metadata(source: str) -> dict[str, dict[str, str]]:
                 raise ValueError(f"{symbol} is missing data-desk-{key}")
             values[key] = html.unescape(match.group(1))
         out[symbol] = values
-    if len(out) != 12:
-        raise ValueError(f"Expected 12 hypothesis articles, got {len(out)}")
+    if not out:
+        raise ValueError("Expected at least one hypothesis article")
     return out
 
 
@@ -317,7 +317,7 @@ def thesis_button(symbol: str) -> str:
 
 def position_rows(positions: list[dict], metadata: dict, markets: dict, valuations: dict, as_of: dt.date) -> str:
     rows = []
-    for position in sorted(positions, key=lambda p: metadata[p["symbol"]]["catalyst"]):
+    for position in sorted(positions, key=lambda p: (-float(p["allocation_percent"]), p["symbol"])):
         symbol = position["symbol"]
         market = markets[symbol]
         meta = metadata[symbol]
@@ -329,8 +329,9 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         detail_id = f"desk-detail-{symbol.lower()}"
         flair = position.get("flair")
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
-        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
-<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small></button></td>
+        allocation = float(position["allocation_percent"])
+        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-allocation-percent="{allocation:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
+<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-allocation">{allocation:.1f}% allocation</span></button></td>
 {feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
@@ -422,6 +423,8 @@ def render(mode: str, quote_path: Path | None) -> str:
     valuation = load(VALUATIONS)["rows"]
     charts_payload = load(CHARTS)
     charts = charts_payload["charts"]
+    if set(metadata) != set(valuation) or set(metadata) != set(charts):
+        raise ValueError("Desk articles, valuations, and chart symbols must match exactly")
     scan = load(SCAN)["charts"]
     quotes, quote_stamp = quotes_from(quote_path)
     symbols = sorted(metadata)
@@ -440,7 +443,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
 {START_POS}
-{table('Positions', f'{len(positions)} open · live price + authored risk levels', pos_body)}
+{table('Positions', f'{len(positions)} open · sorted by portfolio allocation', pos_body)}
 {END_POS}
 {START_HYP}
 {table('Tracked hypotheses', f'{len(tracked)} thesis-only names · sorted by catalyst', hyp_body, True)}
@@ -475,13 +478,15 @@ def main() -> int:
             print("[trading-desk] stale: run python3 scripts/build-trading-desk.py")
             return 1
         positions = len(load(POSITIONS)["positions"])
-        print(f"[trading-desk] current and network-free: {positions} positions + {12 - positions} tracked hypotheses")
+        total = len(article_metadata(HYPOTHESES.read_text()))
+        print(f"[trading-desk] current and network-free: {positions} positions + {total - positions} tracked hypotheses")
         return 0
     PAGE.write_text(rendered)
     stamp_match = re.search(r'<span class="stamp">(.*?)</span>', rendered)
     sync_shell_assets(stamp_match.group(1) if stamp_match else None)
     positions = len(load(POSITIONS)["positions"])
-    print(f"[trading-desk] built {args.mode}: {positions} positions + {12 - positions} tracked hypotheses")
+    total = len(article_metadata(HYPOTHESES.read_text()))
+    print(f"[trading-desk] built {args.mode}: {positions} positions + {total - positions} tracked hypotheses")
     return 0
 
 

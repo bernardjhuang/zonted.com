@@ -227,15 +227,21 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
         position_rows = _desk_rows(page, "position")
         thesis_rows = _desk_rows(page, "hypothesis")
-        positions_payload = json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
+        positions_artifact = json.loads((ROOT / "trading" / "desk-positions.json").read_text())
+        self.assertEqual(positions_artifact["schema_version"], 2)
+        positions_payload = positions_artifact["positions"]
         expected_positions = {row["symbol"] for row in positions_payload}
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
+        total_symbols = expected_positions | expected_hypotheses
+        feed_count = len(total_symbols - {"BYDDY", "NTDOY"})
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
-        self.assertFalse({ _row_symbol(row) for row in position_rows } & { _row_symbol(row) for row in thesis_rows })
+        self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})
+        allocations = [float(_row_attr(row, "data-allocation-percent")) for row in position_rows]
+        self.assertEqual(allocations, sorted(allocations, reverse=True))
+        catalysts = [_row_attr(row, "data-catalyst-date") for row in thesis_rows]
+        self.assertEqual(catalysts, sorted(catalysts), catalysts)
         for rows in (position_rows, thesis_rows):
-            catalysts = [_row_attr(row, "data-catalyst-date") for row in rows]
-            self.assertEqual(catalysts, sorted(catalysts), catalysts)
             for row in rows:
                 self.assertRegex(row, r'data-edge="(up|down|flat|soon|no-feed)"')
                 self.assertIn('class="desk-edge-word"', row)
@@ -247,7 +253,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
                 self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
-        self.assertEqual(len(toggles), 12)
+        self.assertEqual(len(toggles), len(total_symbols))
         for detail_id in toggles:
             match = re.search(rf'<tr[^>]+id="{detail_id}"[^>]+hidden[^>]*>(.*?)</tr>', page, re.S)
             self.assertIsNotNone(match, detail_id)
@@ -258,7 +264,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertIn('data-hypothesis-chart-open=', detail)
             self.assertNotIn('data-thesis-open=', detail)
 
-        self.assertEqual(page.count('class="desk-thesis-cell-button"'), 12)
+        self.assertEqual(page.count('class="desk-thesis-cell-button"'), len(total_symbols))
         self.assertNotIn("Room to kill", page)
         self.assertNotIn("What would move it", page)
         self.assertNotIn("Canonical thesis", page)
@@ -270,13 +276,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("initDeskHistoryCharts", script)
         self.assertIn("initDeskYtdCharts", script)
         self.assertIn("data-desk-chart-tooltip", page)
-        self.assertEqual(page.count("data-desk-ytd-tooltip"), 10)
-        self.assertEqual(page.count('viewBox="0 0 236 88"'), 10)
-        self.assertEqual(page.count('class="desk-ytd-axis-label"'), 60)
-        self.assertEqual(page.count('class="desk-ytd-grid"'), 30)
-        self.assertEqual(page.count("trailing one-year return"), 10)
+        self.assertEqual(page.count("data-desk-ytd-tooltip"), feed_count)
+        self.assertEqual(page.count('viewBox="0 0 236 88"'), feed_count)
+        self.assertEqual(page.count('class="desk-ytd-axis-label"'), feed_count * 6)
+        self.assertEqual(page.count('class="desk-ytd-grid"'), feed_count * 3)
+        self.assertEqual(page.count("trailing one-year return"), feed_count)
         chart_ranges = re.findall(r'data-desk-one-year-chart="([A-Z]+)" data-desk-chart-dates="([^"]+)"', page)
-        self.assertEqual(len(chart_ranges), 10)
+        self.assertEqual(len(chart_ranges), feed_count)
         source_charts = json.loads((ROOT / "trading/hypothesis-charts.json").read_text())["charts"]
         for symbol, encoded_dates in chart_ranges:
             dates = [dt.date.fromisoformat(value) for value in encoded_dates.split(",")]
@@ -286,8 +292,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertLessEqual((dates[0] - expected_start).days, 7, f"{symbol} chart omits available trailing-one-year history")
         self.assertIn("Trailing 1Y", script)
         self.assertIn("grid-template-columns:236px", styles.replace(" ", ""))
-        self.assertEqual(page.count('class="desk-detail-axis-label"'), 70)
-        self.assertEqual(page.count('class="desk-detail-grid"'), 40)
+        self.assertEqual(page.count('class="desk-detail-axis-label"'), feed_count * 7)
+        self.assertEqual(page.count('class="desk-detail-grid"'), feed_count * 4)
         self.assertIn("price and date axes", page)
         self.assertIn(".desk-ytd-tooltip{position:fixed", styles.replace(" ", ""))
         self.assertNotIn("Up to 2 years", page)
@@ -299,6 +305,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             flair = position["flair"]
             self.assertIn(f'desk-position-flair--{flair}', row)
             self.assertIn(f'>{flair.title()}<', row)
+            self.assertIn(f'data-allocation-percent="{position["allocation_percent"]:.1f}"', row)
+            self.assertIn(f'>{position["allocation_percent"]:.1f}% allocation<', row)
             if position.get("kill") is not None:
                 self.assertIn(f'data-desk-ytd-kill="{position["kill"]}"', row)
                 self.assertIn(f'<title>Kill ${float(position["kill"]):.2f}</title>', row)
@@ -311,10 +319,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
         chart_script_hash = hashlib.sha256((ROOT / "js" / "hypothesis-chart-modal.b42a9700.js").read_bytes()).hexdigest()[:12]
+        total_symbols = len(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"])
         self.assertEqual(page.count('id="hypothesis-chart-dialog"'), 1)
         self.assertEqual(page.count('id="scan-chart-config"'), 1)
         self.assertIn(f'/js/hypothesis-chart-modal.b42a9700.js?v={chart_script_hash}', page)
-        self.assertEqual(page.count('data-hypothesis-chart-open='), 12)
+        self.assertEqual(page.count('data-hypothesis-chart-open='), total_symbols)
         for launcher in re.findall(r'<button[^>]+data-hypothesis-chart-open="[A-Z]+"[^>]*>', page):
             self.assertIn('aria-haspopup="dialog"', launcher)
             self.assertIn('aria-controls="hypothesis-chart-dialog"', launcher)

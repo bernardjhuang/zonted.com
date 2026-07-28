@@ -54,6 +54,9 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
         side = str(live.get("equity_side") or "long")
         if side not in {"long", "short"}:
             raise ValueError(f"{symbol} has unsupported equity_side: {side}")
+        allocation = live.get("allocation_percent")
+        if isinstance(allocation, bool) or not isinstance(allocation, (int, float)) or not 0 <= allocation <= 100:
+            raise ValueError(f"{symbol} needs allocation_percent between 0 and 100")
         parts = [f"{'Short equity' if side == 'short' else 'Equity'} @ ${money(entry)}"]
         options = live.get("options") or []
         if not isinstance(options, list):
@@ -64,13 +67,15 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
             "symbol": symbol,
             "instrument": " · ".join(parts),
             "entry": round(float(entry), 2),
+            "allocation_percent": round(float(allocation), 1),
             "kill": profile.get("kill"),
             "flair": profile["flair"],
             "sector": profile["sector"],
             "sector_etf": profile["sector_etf"],
             "thesis": profile["thesis"],
         })
-    return {"schema_version": 1, "positions": positions}
+    positions.sort(key=lambda row: (-row["allocation_percent"], row["symbol"]))
+    return {"schema_version": 2, "positions": positions}
 
 
 def serialize(payload: dict[str, Any]) -> str:
