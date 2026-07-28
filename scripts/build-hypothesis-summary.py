@@ -350,6 +350,7 @@ def render_page(page: str, config: dict, charts: dict) -> str:
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="verify checked-in artifacts without network access")
+    parser.add_argument("--cached", action="store_true", help="render from the checked-in chart payload without network access")
     args = parser.parse_args()
 
     page = PAGE.read_text()
@@ -357,7 +358,7 @@ def main() -> int:
     symbols = extract_hypothesis_symbols(page)
     validate_config(symbols, config)
     charts = load_json(CHARTS)
-    if not args.check:
+    if not args.check and not args.cached:
         charts = refresh_charts(symbols, charts)
         CHARTS.write_text(json.dumps(charts, separators=(",", ":")) + "\n")
     rendered = render_page(page, config, charts)
