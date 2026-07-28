@@ -152,7 +152,7 @@
     svg.addEventListener('blur', hideMetrics);
   });
 
-  /* ── market rail: SPY/VIX YTD + cross-asset leadership ─────────── */
+  /* ── market rail: SPY/VIX trailing 1Y + cross-asset leadership ─── */
   const marketRoot = $('#market-overview-live');
   if (marketRoot) {
     const feed = path => fetch(path, { cache: 'no-cache' }).then(r => {
@@ -197,7 +197,7 @@
       feed('/trading/crypto-charts.json'),
     ]).then(([market, vwap, crypto]) => {
       const points = Array.isArray(market.points) ? market.points : [];
-      if (points.length < 2) throw new Error('market YTD history is empty');
+      if (points.length < 2) throw new Error('market one-year history is empty');
       const W = 360, H = 210, x0 = 18, x1 = 342;
       const spyTop = 32, spyBottom = 91, vixTop = 124, vixBottom = 183;
       const x = i => x0 + i / (points.length - 1) * (x1 - x0);
@@ -207,7 +207,7 @@
         const padding = Math.max((high - low) * .08, .5);
         return [low - padding, high + padding];
       };
-      const spyValues = points.map(row => Number(row.spy_ytd_percent));
+      const spyValues = points.map(row => Number(row.spy_1y_percent));
       const vixValues = points.map(row => Number(row.vix));
       const [spyLow, spyHigh] = domain(spyValues, true), [vixLow, vixHigh] = domain(vixValues, false);
       const spyY = value => spyTop + (spyHigh - value) / (spyHigh - spyLow || 1) * (spyBottom - spyTop);
@@ -215,15 +215,15 @@
       const line = (values, y) => values.map((value, i) => x(i).toFixed(2) + ',' + y(value).toFixed(2)).join(' ');
       const latest = points[points.length - 1];
       const tooltipId = 'market-ytd-tooltip';
-      marketRoot.innerHTML = '<div class="market-ytd-head"><strong>SPY <em class="' + (latest.spy_ytd_percent >= 0 ? 'up' : 'down') + '">$' + num(latest.spy) + ' · ' + signed(latest.spy_ytd_percent, 1, '%') + '</em></strong>' +
+      marketRoot.innerHTML = '<div class="market-ytd-head"><strong>SPY <em class="' + (latest.spy_1y_percent >= 0 ? 'up' : 'down') + '">$' + num(latest.spy) + ' · ' + signed(latest.spy_1y_percent, 1, '%') + '</em></strong>' +
         '<strong>VIX <em>' + num(latest.vix) + '</em></strong></div>' +
-        '<div class="market-ytd-wrap"><svg class="market-ytd-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" tabindex="0" aria-describedby="' + tooltipId + '" aria-label="SPY year-to-date return and VIX level through ' + esc(market.as_of) + '. Hover or use arrow keys for daily values.">' +
+        '<div class="market-ytd-wrap"><svg class="market-ytd-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" tabindex="0" aria-describedby="' + tooltipId + '" aria-label="SPY trailing one-year return and VIX level through ' + esc(market.as_of) + '. Hover or use arrow keys for daily values.">' +
         '<line class="market-chart-grid" x1="' + x0 + '" x2="' + x1 + '" y1="' + spyY(0).toFixed(2) + '" y2="' + spyY(0).toFixed(2) + '"></line>' +
         '<line class="market-chart-grid" x1="' + x0 + '" x2="' + x1 + '" y1="' + vixBottom + '" y2="' + vixBottom + '"></line>' +
-        '<text class="market-chart-label" x="' + x0 + '" y="20">SPY · YTD %</text><text class="market-chart-label" x="' + x0 + '" y="112">VIX · LEVEL</text>' +
+        '<text class="market-chart-label" x="' + x0 + '" y="20">SPY · TRAILING 1Y %</text><text class="market-chart-label" x="' + x0 + '" y="112">VIX · LEVEL</text>' +
         '<polyline class="market-spy-line" points="' + line(spyValues, spyY) + '"></polyline>' +
         '<polyline class="market-vix-line" points="' + line(vixValues, vixY) + '"></polyline>' +
-        '<circle class="market-spy-dot" cx="' + x(points.length - 1).toFixed(2) + '" cy="' + spyY(latest.spy_ytd_percent).toFixed(2) + '" r="3.5"></circle>' +
+        '<circle class="market-spy-dot" cx="' + x(points.length - 1).toFixed(2) + '" cy="' + spyY(latest.spy_1y_percent).toFixed(2) + '" r="3.5"></circle>' +
         '<circle class="market-vix-dot" cx="' + x(points.length - 1).toFixed(2) + '" cy="' + vixY(latest.vix).toFixed(2) + '" r="3.5"></circle>' +
         '<line class="market-hover-line" x1="0" x2="0" y1="' + spyTop + '" y2="' + vixBottom + '" hidden></line>' +
         '<circle class="market-hover-dot market-hover-spy" cx="0" cy="0" r="3.5" hidden></circle><circle class="market-hover-dot market-hover-vix" cx="0" cy="0" r="3.5" hidden></circle>' +
@@ -245,9 +245,9 @@
       const show = index => {
         activeIndex = Math.max(0, Math.min(points.length - 1, index));
         const point = points[activeIndex], hoverX = x(activeIndex);
-        tooltip.innerHTML = '<b>' + esc(prettyDate(point.date)) + '</b><span>SPY <em>$' + num(point.spy) + ' · ' + signed(point.spy_ytd_percent, 1, '%') + '</em></span><span>VIX <em>' + num(point.vix) + '</em></span>';
+        tooltip.innerHTML = '<b>' + esc(prettyDate(point.date)) + '</b><span>SPY <em>$' + num(point.spy) + ' · ' + signed(point.spy_1y_percent, 1, '%') + '</em></span><span>VIX <em>' + num(point.vix) + '</em></span>';
         hoverLine.setAttribute('x1', hoverX.toFixed(2)); hoverLine.setAttribute('x2', hoverX.toFixed(2));
-        spyDot.setAttribute('cx', hoverX.toFixed(2)); spyDot.setAttribute('cy', spyY(point.spy_ytd_percent).toFixed(2));
+        spyDot.setAttribute('cx', hoverX.toFixed(2)); spyDot.setAttribute('cy', spyY(point.spy_1y_percent).toFixed(2));
         vixDot.setAttribute('cx', hoverX.toFixed(2)); vixDot.setAttribute('cy', vixY(point.vix).toFixed(2));
         [hoverLine, spyDot, vixDot].forEach(node => node.removeAttribute('hidden'));
         tooltip.hidden = false;
@@ -368,26 +368,22 @@
       var allDates = (history.getAttribute('data-desk-chart-dates') || '').split(',').filter(Boolean);
       var allCloses = (history.getAttribute('data-desk-chart-closes') || '').split(',').map(Number);
       if (allDates.length < 2 || allDates.length !== allCloses.length || !allCloses.every(Number.isFinite)) return;
-      var yearStart = allDates[allDates.length - 1].slice(0, 4) + '-01-01';
-      var first = allDates.findIndex(function (date) { return date >= yearStart; });
-      if (first < 0) first = Math.max(0, allDates.length - 30);
-      var dates = allDates.slice(first), closes = allCloses.slice(first);
+      var dates = allDates, closes = allCloses;
       var base = closes[0];
-      var values = closes.map(function (close) { return (close / base - 1) * 100; });
       var entry = Number(figure.getAttribute('data-desk-ytd-entry'));
       var kill = Number(figure.getAttribute('data-desk-ytd-kill'));
       var hasEntry = Number.isFinite(entry) && entry > 0;
       var hasKill = Number.isFinite(kill) && kill > 0;
-      var domain = values.concat([0]);
-      if (hasEntry) domain.push((entry / base - 1) * 100);
-      if (hasKill) domain.push((kill / base - 1) * 100);
+      var domain = closes.slice();
+      if (hasEntry) domain.push(entry);
+      if (hasKill) domain.push(kill);
       var rawLow = Math.min.apply(null, domain), rawHigh = Math.max.apply(null, domain);
-      var margin = Math.max((rawHigh - rawLow) * .08, 1);
-      var low = rawLow - margin, high = rawHigh + margin;
-      var width = 118, height = 44, pad = 2;
-      var x = function (index) { return pad + index * (width - 2 * pad) / Math.max(values.length - 1, 1); };
-      var y = function (value) { return pad + (high - value) * (height - 2 * pad) / (high - low || 1); };
-      var activeIndex = values.length - 1;
+      var margin = Math.max((rawHigh - rawLow) * .06, .5);
+      var low = Math.max(0, rawLow - margin), high = rawHigh + margin;
+      var width = 236, height = 88, leftBound = 36, rightBound = 232, topBound = 6, bottomBound = 68;
+      var x = function (index) { return leftBound + index * (rightBound - leftBound) / Math.max(closes.length - 1, 1); };
+      var y = function (value) { return topBound + (high - value) * (bottomBound - topBound) / (high - low || 1); };
+      var activeIndex = closes.length - 1;
       var signed = function (value) { return (value >= 0 ? '+' : '−') + Math.abs(value).toFixed(1) + '%'; };
       function hideMetrics() {
         tooltip.hidden = true;
@@ -398,7 +394,7 @@
       function showMetrics(index) {
         if (activeHide && activeHide !== hideMetrics) activeHide();
         activeHide = hideMetrics;
-        activeIndex = Math.max(0, Math.min(values.length - 1, index));
+        activeIndex = Math.max(0, Math.min(closes.length - 1, index));
         var close = closes[activeIndex];
         var day = activeIndex ? (close / closes[activeIndex - 1] - 1) * 100 : null;
         var extras = '';
@@ -406,8 +402,8 @@
         if (hasKill) extras += '<span>room to kill <b>' + signed((close / kill - 1) * 100) + '</b></span>';
         tooltip.innerHTML = '<strong>' + dates[activeIndex] + ' · $' + close.toFixed(2) + '</strong>' +
           '<span>Day <b>' + (day === null ? '—' : signed(day)) + '</b></span>' +
-          '<span>YTD <b>' + signed(values[activeIndex]) + '</b></span>' + extras;
-        var hoverX = x(activeIndex), hoverY = y(values[activeIndex]);
+          '<span>Trailing 1Y <b>' + signed((close / base - 1) * 100) + '</b></span>' + extras;
+        var hoverX = x(activeIndex), hoverY = y(close);
         hoverLine.setAttribute('x1', hoverX.toFixed(1));
         hoverLine.setAttribute('x2', hoverX.toFixed(1));
         hoverDot.setAttribute('cx', hoverX.toFixed(1));
@@ -425,7 +421,7 @@
       function pointerIndex(event) {
         var rect = svg.getBoundingClientRect();
         var viewX = (event.clientX - rect.left) / rect.width * width;
-        return Math.round((viewX - pad) / (width - 2 * pad) * (values.length - 1));
+        return Math.round((viewX - leftBound) / (rightBound - leftBound) * (closes.length - 1));
       }
       svg.addEventListener('pointermove', function (event) { showMetrics(pointerIndex(event)); });
       svg.addEventListener('pointerdown', function (event) { showMetrics(pointerIndex(event)); });
@@ -437,7 +433,7 @@
         if (event.key === 'ArrowLeft') next = activeIndex - 1;
         if (event.key === 'ArrowRight') next = activeIndex + 1;
         if (event.key === 'Home') next = 0;
-        if (event.key === 'End') next = values.length - 1;
+        if (event.key === 'End') next = closes.length - 1;
         if (next === null) return;
         event.preventDefault();
         showMetrics(next);

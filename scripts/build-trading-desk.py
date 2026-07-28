@@ -32,7 +32,7 @@ START_POS = "<!-- AUTO:DESK_POSITIONS:START -->"
 END_POS = "<!-- AUTO:DESK_POSITIONS:END -->"
 START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
 END_HYP = "<!-- AUTO:DESK_HYPOTHESES:END -->"
-COLGROUP = '<colgroup><col style="width:20%"><col style="width:8%"><col style="width:7%"><col style="width:12%"><col style="width:7%"><col style="width:7%"><col style="width:20%"><col style="width:12%"><col style="width:7%"></colgroup>'
+COLGROUP = '<colgroup><col style="width:18%"><col style="width:7%"><col style="width:6%"><col style="width:10%"><col style="width:6%"><col style="width:6%"><col style="width:28%"><col style="width:13%"><col style="width:6%"></colgroup>'
 OTC = {"BYDDY", "NTDOY"}
 
 
@@ -141,43 +141,59 @@ def plot_polyline(values: list[float], x0: float, x1: float, y0: float, y1: floa
 def ytd_chart(symbol: str, market: dict, entry: float | None = None, kill: float | None = None) -> str:
     if not market.get("feed"):
         return '<div class="desk-no-feed">— <span>No feed</span></div>'
-    pairs = [(d, c) for d, c in zip(market["dates"], market["closes"]) if d >= "2026-01-01"]
-    if not pairs:
-        pairs = list(zip(market["dates"], market["closes"]))[-30:]
-    dates = [d for d, _ in pairs]
+    pairs = [(dt.date.fromisoformat(d), float(c)) for d, c in zip(market["dates"], market["closes"])]
+    cutoff = pairs[-1][0] - dt.timedelta(days=365)
+    pairs = [(date, close) for date, close in pairs if date >= cutoff]
+    dates = [date.isoformat() for date, _ in pairs]
     closes = [float(c) for _, c in pairs]
     base = closes[0]
-    values = [(value / base - 1) * 100 for value in closes]
-    levels: list[tuple[str, float, str]] = [("zero", 0.0, "YTD 0%")]
+    levels: list[tuple[str, float, str]] = [("start", base, f"1Y start {money(base)}")]
     if entry is not None:
-        levels.append(("entry", (entry / base - 1) * 100, f"Entry {money(entry)}"))
+        levels.append(("entry", entry, f"Entry {money(entry)}"))
     if kill is not None:
-        levels.append(("kill", (kill / base - 1) * 100, f"Kill {money(kill)}"))
-    domain = values + [level for _kind, level, _label in levels]
+        levels.append(("kill", kill, f"Kill {money(kill)}"))
+    domain = closes + [level for _kind, level, _label in levels]
     low, high = min(domain), max(domain)
-    margin = max((high - low) * .08, 1.0)
-    low -= margin
+    margin = max((high - low) * .06, .5)
+    low = max(0, low - margin)
     high += margin
-    width, height, pad = 118.0, 44.0, 2.0
+    width, height = 236.0, 88.0
+    left, right, top, bottom = 36.0, 232.0, 6.0, 68.0
     span = high - low or 1
+    y = lambda value: top + (high - value) * (bottom - top) / span
     rules = []
     for kind, value, label in levels:
-        y = pad + (high - value) * (height - 2 * pad) / span
-        rules.append(f'<line class="desk-ytd-rule desk-ytd-rule--{kind}" x1="2" y1="{y:.1f}" x2="116" y2="{y:.1f}"><title>{html.escape(label)}</title></line>')
-    change = values[-1]
+        rule_y = y(value)
+        rules.append(f'<line class="desk-ytd-rule desk-ytd-rule--{kind}" x1="{left:.0f}" y1="{rule_y:.1f}" x2="{right:.0f}" y2="{rule_y:.1f}"><title>{html.escape(label)}</title></line>')
+    axes = []
+    for index in range(3):
+        price = high - index * span / 2
+        tick_y = y(price)
+        digits = 2 if price < 10 else 1 if price < 100 else 0
+        axes.append(
+            f'<line class="desk-ytd-grid" x1="{left:.0f}" y1="{tick_y:.1f}" x2="{right:.0f}" y2="{tick_y:.1f}"/>'
+            f'<text class="desk-ytd-axis-label" x="32" y="{tick_y + 3:.1f}" text-anchor="end">${price:.{digits}f}</text>'
+        )
+    for index in sorted({0, len(dates) // 2, len(dates) - 1}):
+        tick_x = left + index * (right - left) / max(len(dates) - 1, 1)
+        parsed = dt.date.fromisoformat(dates[index])
+        label = parsed.strftime("%b %-d") + (f" ’{parsed.strftime('%y')}" if index in (0, len(dates) - 1) else "")
+        anchor = "start" if index == 0 else "end" if index == len(dates) - 1 else "middle"
+        axes.append(f'<text class="desk-ytd-axis-label" x="{tick_x:.1f}" y="84" text-anchor="{anchor}">{label}</text>')
+    change = (closes[-1] / base - 1) * 100
     direction = "up" if change >= 0 else "down"
-    points = polyline(values, width, height, pad, low, high)
+    points = plot_polyline(closes, left, right, top, bottom, low, high)
     attrs = (
         f'data-desk-ytd-chart="{symbol}" data-desk-ytd-entry="{entry if entry is not None else ""}" '
         f'data-desk-ytd-kill="{kill if kill is not None else ""}"'
     )
     return (
         f'<figure class="desk-ytd desk-ytd--{direction}" {attrs}>'
-        f'<svg viewBox="0 0 118 44" role="img" tabindex="0" aria-label="{symbol} year-to-date {change:+.1f} percent. Hover or use arrow keys for metrics.">'
-        f'{"".join(rules)}<polyline class="desk-ytd-line" points="{points}"/>'
-        f'<line class="desk-ytd-hover-line" x1="0" x2="0" y1="2" y2="42" hidden/><circle class="desk-ytd-hover-dot" cx="0" cy="0" r="2.6" hidden/></svg>'
+        f'<svg viewBox="0 0 236 88" role="img" tabindex="0" aria-label="{symbol} trailing one-year return {change:+.1f} percent, with price and date axes. Hover or use arrow keys for metrics.">'
+        f'{"".join(axes)}{"".join(rules)}<polyline class="desk-ytd-line" points="{points}"/>'
+        f'<line class="desk-ytd-hover-line" x1="0" x2="0" y1="{top:.0f}" y2="{bottom:.0f}" hidden/><circle class="desk-ytd-hover-dot" cx="0" cy="0" r="3" hidden/></svg>'
         f'<div class="desk-ytd-tooltip" data-desk-ytd-tooltip role="status" aria-live="polite" hidden></div>'
-        f'<figcaption>{change:+.1f}% YTD</figcaption></figure>'
+        f'<figcaption>{change:+.1f}% · trailing 1Y</figcaption></figure>'
     )
 
 
@@ -292,7 +308,7 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
         main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small></button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('YTD · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)
@@ -316,7 +332,7 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
             last, day, beta, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
-{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('YTD', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
         rows.append(main + detail)
@@ -325,9 +341,9 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
 
 def table(title: str, subtitle: str, body: str, hypotheses: bool = False) -> str:
     if hypotheses:
-        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>YTD</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
     else:
-        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>YTD · levels</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
     return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
@@ -348,7 +364,10 @@ def sync_shell_assets(stamp: str | None = None) -> None:
         source = re.sub(r'/trading/desk\.js\?v=[a-f0-9]+', js_ref, source)
         source = re.sub(r'<a href="/trading/hypotheses/"(?: aria-current="page")?>Hypotheses</a>', '', source)
         source = re.sub(r'<a href="/trading/watchlist/"(?: aria-current="page")?>Watchlist</a>', '', source)
+        for risk_route, label in (("grok-risk", "Grok Risk"), ("gpt-risk", "GPT Risk"), ("gemini-risk", "Gemini Risk"), ("meta-risk", "Meta Risk"), ("fable-risk", "Fable Risk")):
+            source = re.sub(rf'<a href="/trading/{risk_route}/"(?: aria-current="page")?>{label}</a>', '', source)
         source = source.replace('/trading/watchlist/?chart=', '/trading/vwap-setups/?chart=')
+        source = source.replace('Market · YTD', 'Market · trailing 1Y')
         meta_chip = '<a class="chip chip-meta chip-neutral" href="/trading/meta-risk/" title="Meta risk appetite — Neutral, leaning Risk-Off · 4/10"><span class="dot"></span>Meta 4</a>'
         source = re.sub(r'<a class="chip chip-meta [^"]+" href="/trading/meta-risk/".*?</a>', meta_chip, source)
         if 'class="chip chip-meta ' not in source:

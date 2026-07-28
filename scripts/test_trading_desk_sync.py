@@ -149,7 +149,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(len(entry["sections"]), 5)
         self.assertIn("<title>Gemini Risk", page)
         self.assertIn("<h1>Gemini Risk</h1>", page)
-        self.assertIn('aria-current="page">Gemini Risk</a>', page)
+        self.assertRegex(page, r'class="chip chip-gemini [^"]+" href="/trading/gemini-risk/"')
         self.assertIn('data-model="Gemini 3.1 Pro"', page)
         self.assertIn('data-rating="4"', page)
         self.assertEqual(page.count('class="gemini-risk-card"'), 5)
@@ -176,7 +176,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertGreaterEqual(len(entry["sources"]), 3)
         self.assertIn("<title>Meta Risk", page)
         self.assertIn("<h1>Meta Risk</h1>", page)
-        self.assertIn('aria-current="page">Meta Risk</a>', page)
+        self.assertRegex(page, r'class="chip chip-meta [^"]+" href="/trading/meta-risk/"')
         self.assertIn('data-model="Meta AI muse-spark-1.1"', page)
         self.assertIn("Exact model response", page)
         self.assertIn('class="meta-risk-response"', page)
@@ -220,7 +220,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(colgroups[0], colgroups[1], "positions and hypotheses tables must share one literal colgroup")
         self.assertEqual(
             re.findall(r'<col style="width:([^\"]+)">', colgroups[0]),
-            ["20%", "8%", "7%", "12%", "7%", "7%", "20%", "12%", "7%"],
+            ["18%", "7%", "6%", "10%", "6%", "6%", "28%", "13%", "6%"],
         )
         self.assertIn(".desk-blotter-table{table-layout:fixed", styles.replace(" ", ""))
 
@@ -239,7 +239,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         for symbol in ("BYDDY", "NTDOY"):
             row = next(row for row in thesis_rows if _row_symbol(row) == symbol)
             self.assertIn('data-feed-state="no-feed"', row)
-            for label in ("Last", "Day", "Beta", "Spread Z", "YTD"):
+            for label in ("Last", "Day", "Beta", "Spread Z", "1Y"):
                 self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
@@ -267,6 +267,12 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("initDeskYtdCharts", script)
         self.assertIn("data-desk-chart-tooltip", page)
         self.assertEqual(page.count("data-desk-ytd-tooltip"), 10)
+        self.assertEqual(page.count('viewBox="0 0 236 88"'), 10)
+        self.assertEqual(page.count('class="desk-ytd-axis-label"'), 60)
+        self.assertEqual(page.count('class="desk-ytd-grid"'), 30)
+        self.assertEqual(page.count("trailing one-year return"), 10)
+        self.assertIn("Trailing 1Y", script)
+        self.assertIn("grid-template-columns:236px", styles.replace(" ", ""))
         self.assertEqual(page.count('class="desk-detail-axis-label"'), 70)
         self.assertEqual(page.count('class="desk-detail-grid"'), 40)
         self.assertIn("price and date axes", page)
@@ -278,7 +284,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
             self.assertIn('desk-position-flair--momentum', row)
             self.assertIn('>Momentum<', row)
-        for symbol in ("FIGR", "HOOD", "CEG"):
+        for symbol in ("FIGR", "HOOD", "CEG", "FRMI"):
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
             self.assertIn('desk-position-flair--thesis', row)
             self.assertIn('>Thesis<', row)
@@ -320,9 +326,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertRegex(styles, r'\.desk-thesis-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertNotIn('height="auto"', page + script)
-        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)316px', styles.replace(" ", ""))
+        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)280px', styles.replace(" ", ""))
 
-    def test_market_rail_uses_ytd_chart_and_live_leadership_groups(self) -> None:
+    def test_market_rail_uses_trailing_one_year_chart_and_live_leadership_groups(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
@@ -334,9 +340,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertIn(asset, script)
         for marker in ("market-ytd-chart", "market-leadership", "Sectors", "Crypto", "Countries"):
             self.assertIn(marker, script + styles)
-        self.assertEqual(payload["schema_version"], 1)
-        self.assertEqual(payload["period"], "YTD")
-        self.assertGreaterEqual(len(payload["points"]), 50)
+        self.assertEqual(payload["schema_version"], 2)
+        self.assertEqual(payload["period"], "1Y")
+        self.assertGreaterEqual(len(payload["points"]), 240)
+        self.assertLessEqual(len(payload["points"]), 260)
+        self.assertTrue(all("spy_1y_percent" in point for point in payload["points"]))
+        self.assertIn("Market · trailing 1Y", page)
+        self.assertIn("SPY · TRAILING 1Y %", script)
         self.assertEqual(payload["points"][-1]["date"], payload["as_of"])
 
     def test_momentum_deep_link_filters_opens_and_scrolls_to_requested_ticker(self) -> None:
@@ -446,9 +456,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
-            self.assertRegex(page, r'href="/trading/gpt-risk/"[^>]*>GPT Risk</a>')
-            self.assertRegex(page, r'href="/trading/gemini-risk/"[^>]*>Gemini Risk</a>')
-            self.assertRegex(page, r'href="/trading/meta-risk/"[^>]*>Meta Risk</a>')
+            self.assertRegex(page, r'class="chip chip-gpt [^"]+" href="/trading/gpt-risk/"')
+            self.assertRegex(page, r'class="chip chip-gemini [^"]+" href="/trading/gemini-risk/"')
+            self.assertRegex(page, r'class="chip chip-meta [^"]+" href="/trading/meta-risk/"')
             self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
             self.assertEqual(page.count('class="chip chip-meta '), 1, path.as_posix())
             self.assertIn(f'<span class="stamp">{desk_stamp}</span>', page, path.as_posix())
