@@ -287,9 +287,27 @@ def feed_cell(label: str, value: str, cls: str = "") -> str:
     return f'<td class="{cls}" data-label="{label}">{value}</td>'
 
 
-def beta_label(beta: float) -> str:
-    note = "high" if beta >= 2 else "low" if beta <= .75 else ""
-    return f'{beta:.2f}{f"<small>{note}</small>" if note else ""}'
+def iv_label(position: dict | None, *, stock_only: bool = False) -> str:
+    if not position or position.get("implied_volatility_percent") is None:
+        note = "Stock only" if stock_only else "No held option"
+        return f'—<small>{note}</small>'
+    return f'{float(position["implied_volatility_percent"]):.1f}%<small>Held option</small>'
+
+
+def position_risk_lines(position: dict) -> str:
+    capital = float(position["capital_percent"])
+    premium = float(position["premium_at_risk_percent"])
+    theta = float(position["theta_percent_per_day"])
+    parts = [f"capital {capital:.1f}%"]
+    if premium > 0:
+        parts.extend((f"premium {premium:.1f}%", f"θ/day {theta:+.2f}%"))
+    else:
+        parts.append("stock only")
+    flag = ""
+    if position.get("unstable_delta"):
+        flag = f'<span class="desk-position-risk-flag">⚠ {int(position["min_dte"])}-DTE delta</span>'
+    metrics = "".join(f"<span>{html.escape(part)}</span>" for part in parts)
+    return f'<span class="desk-position-risk-meta">{metrics}</span>{flag}'
 
 
 def entry_level_display(valuation: dict) -> tuple[str, dict[str, str], str]:
@@ -327,9 +345,9 @@ def valuation_detail(symbol: str, market: dict, valuation: dict, position: dict 
 </div>'''
 
 
-def no_feed_market_cells() -> tuple[str, str, str, str, str]:
+def no_feed_market_cells() -> tuple[str, str, str, str]:
     cell = '<div class="desk-no-feed">— <span>No feed</span></div>'
-    return cell, cell, cell, cell, cell
+    return cell, cell, cell, cell
 
 
 def thesis_button(symbol: str) -> str:
@@ -338,7 +356,7 @@ def thesis_button(symbol: str) -> str:
 
 def position_rows(positions: list[dict], metadata: dict, markets: dict, valuations: dict, as_of: dt.date) -> str:
     rows = []
-    for position in sorted(positions, key=lambda p: (-float(p["allocation_percent"]), p["symbol"])):
+    for position in sorted(positions, key=lambda p: (-float(p["exposure_percent"]), p["symbol"])):
         symbol = position["symbol"]
         market = markets[symbol]
         meta = metadata[symbol]
@@ -350,10 +368,10 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         detail_id = f"desk-detail-{symbol.lower()}"
         flair = position.get("flair")
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
-        allocation = float(position["allocation_percent"])
-        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-allocation-percent="{allocation:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
-<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-allocation">{allocation:.1f}% allocation</span></button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta_label(market['beta']), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+        exposure = float(position["exposure_percent"])
+        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
+<td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-exposure">{exposure:.1f}% Δ$ exposure</span>{position_risk_lines(position)}</button></td>
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('IV', iv_label(position, stock_only=True), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)
@@ -372,27 +390,43 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
         edge_word = "No feed" if edge == "no-feed" else "Soon" if edge == "soon" else "Up" if edge == "up" else "Down"
         detail_id = f"desk-detail-{symbol.lower()}"
         if market.get("feed"):
-            last, day, beta, spread, ytd = money(market["last"]), pct(market["day"]), beta_label(market["beta"]), f'{market["spread"]:+.2f}', ytd_chart(symbol, market)
+            last, day, spread, ytd = money(market["last"]), pct(market["day"]), f'{market["spread"]:+.2f}', ytd_chart(symbol, market)
         else:
-            last, day, beta, spread, ytd = no_feed_market_cells()
+            last, day, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
-{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', beta, 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('IV', iv_label(None), 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
         rows.append(main + detail)
     return "\n".join(rows)
 
 
-def table(title: str, subtitle: str, body: str, hypotheses: bool = False, title_note: str | None = None) -> str:
+def risk_strip(summary: dict, sleeves: dict) -> str:
+    sleeve_html = "".join(
+        f'<span><b>{html.escape(name.title())}</b> · Δ$ {float(values["exposure_percent"]):.1f}% · capital {float(values["capital_percent"]):.1f}% · premium {float(values["premium_at_risk_percent"]):.1f}%</span>'
+        for name, values in sorted(sleeves.items())
+    )
+    return (
+        '<div class="desk-risk-strip" aria-label="Portfolio risk summary">'
+        f'<span>Gross Δ$ <b>{float(summary["gross_delta_leverage"]):.1f}×</b></span>'
+        f'<span>Net Δ$ <b>{float(summary["net_delta_exposure_percent"]):.1f}%</b></span>'
+        f'<span>Premium risk <b>{float(summary["premium_at_risk_percent"]):.1f}%</b></span>'
+        f'<span>Θ/day <b>{float(summary["theta_percent_per_day"]):+.2f}%</b></span>'
+        f'<span>Cash liquidity <b>{float(summary["cash_percent"]):.1f}%</b></span>'
+        f'<small>{html.escape(str(summary["quantity_basis"]))}</small>'
+        '</div>'
+        f'<div class="desk-sleeve-strip" aria-label="Sleeve risk summary">{sleeve_html}</div>'
+    )
+
+
+def table(title: str, subtitle: str, body: str, hypotheses: bool = False, risk_summary: dict | None = None, sleeves: dict | None = None) -> str:
     if hypotheses:
-        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>IV</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
     else:
-        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
-    heading = title
-    if title_note:
-        heading += f' <span class="desk-cash-weight">{title_note}</span>'
-    return f'<div class="desk-table-head"><h2>{heading}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
+        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>IV</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
+    extra = risk_strip(risk_summary, sleeves or {}) if risk_summary else ""
+    return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div>{extra}<div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
 def modals() -> str:
@@ -443,10 +477,15 @@ def render(mode: str, quote_path: Path | None) -> str:
     hypothesis_source = HYPOTHESES.read_text()
     metadata = article_metadata(hypothesis_source)
     positions_payload = load(POSITIONS)
+    if positions_payload.get("schema_version") != 3:
+        raise ValueError("Desk positions must use schema_version 3")
     positions = positions_payload["positions"]
-    cash_percent = positions_payload.get("cash_percent")
-    if isinstance(cash_percent, bool) or not isinstance(cash_percent, (int, float)) or not 0 <= cash_percent <= 100:
-        raise ValueError("Desk positions need cash_percent between 0 and 100")
+    risk_summary = positions_payload.get("risk_summary")
+    if not isinstance(risk_summary, dict):
+        raise ValueError("Desk positions need risk_summary")
+    sleeves = positions_payload.get("sleeves")
+    if not isinstance(sleeves, dict) or not sleeves:
+        raise ValueError("Desk positions need sleeve rollups")
     valuation = load(VALUATIONS)["rows"]
     charts_payload = load(CHARTS)
     charts = charts_payload["charts"]
@@ -470,7 +509,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
 {START_POS}
-{table('Positions', f'{len(positions)} open · sorted by portfolio allocation', pos_body, title_note=f'{cash_percent:.1f}% cash')}
+{table('Positions', f'{len(positions)} open · sorted by Δ$ exposure', pos_body, risk_summary=risk_summary, sleeves=sleeves)}
 {END_POS}
 {START_HYP}
 {table('Tracked hypotheses', f'{len(tracked)} thesis-only names · sorted by catalyst', hyp_body, True)}

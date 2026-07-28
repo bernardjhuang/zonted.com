@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-07-27",
+  "as_of": "2026-07-28",
   "rows": {
     "ABT": {
       "valuation_metrics": [
@@ -40,6 +40,21 @@
         "base_comparison": "cost basis"
       },
       "method": "52-week low / live cost basis / call strike trading references; not intrinsic value",
+      "confidence": "low"
+    },
+    "JBS": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$15.3B"},
+        {"label": "TTM P/E", "value": "7.2×"},
+        {"label": "52-week range", "value": "$11.49–$18.65"}
+      ],
+      "entry_levels": {"bear": 11.49, "base": 13.82, "bull": 18.65},
+      "entry_level_display": {
+        "heading": "Trading reference levels",
+        "labels": {"bear": "52W low", "base": "Cost basis", "bull": "52W high"},
+        "base_comparison": "cost basis"
+      },
+      "method": "52-week low / live cost basis / 52-week high trading references; not intrinsic value",
       "confidence": "low"
     },
     "HOOD": {
