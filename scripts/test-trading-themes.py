@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 20)
+        self.assertEqual(len(self.payload["themes"]), 21)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -154,7 +154,7 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertRegex(self.script, r"fetch\(shell\.dataset\.url")
 
     def test_hunt_themes_follow_ledger_rules(self) -> None:
-        counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
+        counts = {"Geographies": 7, "Sectors": 5, "Emerging": 7}
         hunt = [t for t in self.payload["themes"] if t["category"] in counts]
         for category, expected in counts.items():
             self.assertEqual(sum(1 for t in hunt if t["category"] == category), expected, category)
