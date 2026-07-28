@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 31)
+        self.assertEqual(len(self.payload["themes"]), 36)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -142,6 +142,7 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertIn("theme.source_model", self.script)
         self.assertIn("theme.reviewed_by", self.script)
         self.assertIn(".prov-grok i", self.page)
+        self.assertIn(".prov-meta i", self.page)
         self.assertIn("const sortThemesByGapDescending =", self.script)
         self.assertIn("const themes = sortThemesByGapDescending(payload.themes);", self.script)
         self.assertIn("return bGap - aGap;", self.script)
@@ -182,6 +183,11 @@ class TradingThemesContractTest(unittest.TestCase):
             "emerging-orbital-compute-relief-valve",
             "emerging-precision-fermentation-molecules",
             "emerging-radiative-cooling-everything-grid",
+            "meta-power-wall-rate-shock",
+            "meta-humanoid-labor-wage-shock",
+            "meta-partial-reprogramming-humans",
+            "meta-silicon-sovereignty-stack-split",
+            "meta-y2q-post-quantum-rebuild",
         }
         hunt = [
             t for t in self.payload["themes"]
@@ -273,6 +279,43 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual([row["model"] for row in live["model_reviews"]], ["Claude Fable 5", "GPT-5.6"])
         self.assertEqual(live["consensus_scores"], {"knowledge_saturation": 68, "price_saturation": 51})
         self.assertEqual(live["status"], "Theme hunt · 2 reviewers")
+
+    def test_meta_frontier_themes_are_complete_and_independently_scored(self) -> None:
+        expected = {
+            "meta-power-wall-rate-shock": ("Energy", 68, 32, 78, 48),
+            "meta-humanoid-labor-wage-shock": ("Emerging", 38, 14, 50, 27),
+            "meta-partial-reprogramming-humans": ("Emerging", 24, 8, 33, 13),
+            "meta-silicon-sovereignty-stack-split": ("Sectors", 54, 26, 66, 40),
+            "meta-y2q-post-quantum-rebuild": ("Emerging", 18, 5, 31, 12),
+        }
+        found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
+        self.assertEqual(set(found), set(expected))
+        for theme_id, (category, meta_known, meta_priced, consensus_known, consensus_priced) in expected.items():
+            theme = found[theme_id]
+            self.assertEqual(theme["category"], category)
+            self.assertEqual(theme["status"], "Meta frontier · 2 reviewers")
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["Meta AI", "GPT-5.6"])
+            self.assertEqual(theme["source_model"], "Meta AI")
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"])
+            self.assertEqual(
+                (theme["model_reviews"][0]["knowledge_saturation"], theme["model_reviews"][0]["price_saturation"]),
+                (meta_known, meta_priced),
+            )
+            self.assertEqual(
+                (theme["consensus_scores"]["knowledge_saturation"], theme["consensus_scores"]["price_saturation"]),
+                (consensus_known, consensus_priced),
+            )
+            for field in (
+                "owner_belief", "conviction", "final_verdict", "layer_scorecard", "adversarial_review",
+                "what_survived", "residual_edge", "research_priority", "falsifiers", "watch_next", "sources",
+            ):
+                self.assertTrue(theme[field], f"{theme_id}.{field}")
+            self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
+            self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 6)
+            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+            self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
+
+        self.assertIn("Meta frontier set", self.payload["method"]["consensus"])
 
     def test_gpt_origin_second_order_themes_are_complete(self) -> None:
         expected = {
