@@ -70,6 +70,20 @@ def validate_config(symbols: list[str], config: dict) -> None:
             for value in levels.values()
         ):
             raise ValueError(f"{symbol} needs positive finite bear/base/bull entry levels")
+        display = row.get("entry_level_display")
+        if display is not None:
+            labels = display.get("labels") if isinstance(display, dict) else None
+            if (
+                not isinstance(display, dict)
+                or not isinstance(display.get("heading"), str)
+                or not display["heading"].strip()
+                or not isinstance(labels, dict)
+                or set(labels) != {"bear", "base", "bull"}
+                or not all(isinstance(value, str) and value.strip() for value in labels.values())
+                or not isinstance(display.get("base_comparison"), str)
+                or not display["base_comparison"].strip()
+            ):
+                raise ValueError(f"{symbol} has invalid entry_level_display")
         if not row.get("method") or row.get("confidence") not in {"low", "medium", "high"}:
             raise ValueError(f"{symbol} needs a method and low/medium/high confidence")
 
@@ -299,13 +313,13 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
     }, separators=(",", ":"))
     return f'''{START}
 <section class="hyp-summary" aria-labelledby="hyp-summary-heading">
-<div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Up to two years of price context, current valuation snapshot, and bear / base / bull intrinsic entry levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
+<div class="hyp-summary-head"><div><h2 id="hyp-summary-heading">Hypothesis valuation scoreboard</h2><p>Up to two years of price context, current valuation snapshot, and authored entry or reference levels.</p></div><span class="hyp-summary-asof">Prices through {as_of}</span></div>
 <div class="hyp-summary-wrap"><table class="hyp-summary-table">
 <thead><tr><th>Ticker</th><th>Up to 2-year stock chart</th><th class="num">Beta vs SPY</th><th>Valuation</th><th class="num">Bear</th><th class="num">Base</th><th class="num">Bull</th></tr></thead>
 <tbody>
 {chr(10).join(rows)}
 </tbody></table></div>
-<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Beta uses up to two years of weekly adjusted-close returns versus SPY; newer listings use their available trading history. Scenario levels are model outputs, not automatic orders. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
+<p class="hyp-summary-note">Valuation snapshot: {valuation_as_of}. Beta uses up to two years of weekly adjusted-close returns versus SPY; newer listings use their available trading history. Scenario levels are model outputs, not automatic orders. Trading-reference rows are explicitly not intrinsic values. Financial and foreign issuers use the more appropriate intrinsic-value method where a corporate DCF would be misleading. <strong>Medium confidence means</strong> filing-backed inputs and enough history to normalize cash flow; <strong>Low confidence means</strong> a special-case, limited-history, or fallback model with a wider error bar. Confidence measures model reliability—not expected upside.</p>
 </section>
 <dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title">
 <div class="hyp-chart-dialog-frame" id="hypothesis-chart-dialog-detail" data-hypothesis-chart-detail>

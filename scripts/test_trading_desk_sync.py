@@ -322,6 +322,26 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("--desk-chart-base", styles)
         self.assertIn("--desk-chart-bull", styles)
 
+    def test_trading_reference_levels_are_not_presented_as_intrinsic_scenarios(self) -> None:
+        page = DESK_HOME.read_text()
+        expected = {
+            "lth": ("52W low", "Cost basis", "52W high", "cost basis"),
+            "pg": ("52W low", "Cost basis", "Call strike", "cost basis"),
+        }
+        for symbol, display in expected.items():
+            labels, comparison = display[:3], display[3]
+            match = re.search(rf'<tr class="desk-detail-row" id="desk-detail-{symbol}".*?</tr>', page, re.S)
+            self.assertIsNotNone(match, symbol)
+            detail = match.group(0) if match else ""
+            self.assertIn("Trading reference levels", detail)
+            self.assertNotIn("Intrinsic entry levels", detail)
+            for label in labels:
+                self.assertIn(f'<span>{label}</span>', detail)
+            self.assertIn(f"versus {comparison}", detail)
+        intrinsic = re.search(r'<tr class="desk-detail-row" id="desk-detail-abt".*?</tr>', page, re.S)
+        self.assertIsNotNone(intrinsic)
+        self.assertIn("Intrinsic entry levels", intrinsic.group(0) if intrinsic else "")
+
     def test_trading_desk_v3_reuses_chart_modal_and_fetches_full_thesis(self) -> None:
         page = DESK_HOME.read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
