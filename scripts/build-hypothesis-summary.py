@@ -26,7 +26,7 @@ CHARTS = ROOT / "trading" / "hypothesis-charts.json"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
 VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
 CSS_HREF = "/trading/hypothesis-summary.6e6f3b19.css"
-MODAL_SCRIPT_HREF = "/js/hypothesis-chart-modal.1b5e1178.js"
+MODAL_SCRIPT_HREF = "/js/hypothesis-chart-modal.b42a9700.js"
 MIN_CHART_POINTS = 26
 MIN_BETA_OBSERVATIONS = 26
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
@@ -309,9 +309,9 @@ def render_summary(symbols: list[str], config: dict, charts: dict) -> str:
 </section>
 <dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title">
 <div class="hyp-chart-dialog-frame" id="hypothesis-chart-dialog-detail" data-hypothesis-chart-detail>
-<header class="hyp-chart-dialog-head"><div><span>Watchlist scanner data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header>
+<header class="hyp-chart-dialog-head"><div><span>VWAP setup data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header>
 <div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div>
-<p class="hyp-chart-dialog-note">Same completed-session Spread Z, VWAP, and sector Z-score data used by the <a href="/trading/watchlist/">Watchlist</a>.</p>
+<p class="hyp-chart-dialog-note">Completed-session Spread Z, VWAP, and sector Z-score data from the <a href="/trading/vwap-setups/">VWAP Setups</a> page.</p>
 </div>
 </dialog>
 <script type="application/json" id="scan-chart-config">{chart_config}</script>

@@ -315,7 +315,7 @@
 
     const record = stockCharts[symbol];
     if (!record?.series?.dates?.length) {
-      shell.innerHTML = `<div class="hyp-chart-unavailable"><strong>${esc(symbol)} is not in the current scanner universe.</strong><span>No completed-session Spread Z or sector chart is available from the Watchlist feed yet.</span><a href="/trading/watchlist/?chart=${encodeURIComponent(symbol)}#scan">Open Watchlist</a></div>`;
+      shell.innerHTML = `<div class="hyp-chart-unavailable"><strong>${esc(symbol)} is not in the current scanner universe.</strong><span>No completed-session Spread Z or sector chart is available from the VWAP Setups feed yet.</span><a href="/trading/vwap-setups/?chart=${encodeURIComponent(symbol)}#scan">Open VWAP Setups</a></div>`;
       shell.removeAttribute('aria-busy');
       shell.dataset.rendered = 'true';
       return;

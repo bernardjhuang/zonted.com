@@ -35,6 +35,10 @@
     const latest = d && d.entries && d.entries[0];
     if (latest) setChip('gemini', 'Gemini', Number(latest.rating), latest.stance);
   });
+  fetch('/trading/meta-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
+    const latest = d && d.entries && d.entries[0];
+    if (latest) setChip('meta', 'Meta', Number(latest.derived_rating), latest.stance);
+  });
   fetch('/trading/grok-risk/', { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').catch(() => '').then(html => {
     const m = /Risk[\s-]*(On|Off|Neutral)\s*\((\d+(?:\.\d+)?)\s*\/\s*10\)/i.exec(html)
       || /(?:^|[^\d.])(\d+(?:\.\d+)?)\s*\/\s*10\b/.exec(html);
@@ -349,11 +353,97 @@
         }
       });
     });
-    document.querySelectorAll('.desk-ytd').forEach(function (figure) {
-      figure.addEventListener('pointermove', function (event) {
-        figure.style.setProperty('--desk-pointer-x', event.offsetX + 'px');
+  }
+
+  function initDeskYtdCharts() {
+    var activeHide = null;
+    document.querySelectorAll('[data-desk-ytd-chart]').forEach(function (figure) {
+      var symbol = figure.getAttribute('data-desk-ytd-chart');
+      var history = document.querySelector('[data-desk-one-year-chart="' + symbol + '"]');
+      var svg = figure.querySelector('svg');
+      var tooltip = figure.querySelector('[data-desk-ytd-tooltip]');
+      var hoverLine = figure.querySelector('.desk-ytd-hover-line');
+      var hoverDot = figure.querySelector('.desk-ytd-hover-dot');
+      if (!history || !svg || !tooltip || !hoverLine || !hoverDot) return;
+      var allDates = (history.getAttribute('data-desk-chart-dates') || '').split(',').filter(Boolean);
+      var allCloses = (history.getAttribute('data-desk-chart-closes') || '').split(',').map(Number);
+      if (allDates.length < 2 || allDates.length !== allCloses.length || !allCloses.every(Number.isFinite)) return;
+      var yearStart = allDates[allDates.length - 1].slice(0, 4) + '-01-01';
+      var first = allDates.findIndex(function (date) { return date >= yearStart; });
+      if (first < 0) first = Math.max(0, allDates.length - 30);
+      var dates = allDates.slice(first), closes = allCloses.slice(first);
+      var base = closes[0];
+      var values = closes.map(function (close) { return (close / base - 1) * 100; });
+      var entry = Number(figure.getAttribute('data-desk-ytd-entry'));
+      var kill = Number(figure.getAttribute('data-desk-ytd-kill'));
+      var hasEntry = Number.isFinite(entry) && entry > 0;
+      var hasKill = Number.isFinite(kill) && kill > 0;
+      var domain = values.concat([0]);
+      if (hasEntry) domain.push((entry / base - 1) * 100);
+      if (hasKill) domain.push((kill / base - 1) * 100);
+      var rawLow = Math.min.apply(null, domain), rawHigh = Math.max.apply(null, domain);
+      var margin = Math.max((rawHigh - rawLow) * .08, 1);
+      var low = rawLow - margin, high = rawHigh + margin;
+      var width = 118, height = 44, pad = 2;
+      var x = function (index) { return pad + index * (width - 2 * pad) / Math.max(values.length - 1, 1); };
+      var y = function (value) { return pad + (high - value) * (height - 2 * pad) / (high - low || 1); };
+      var activeIndex = values.length - 1;
+      var signed = function (value) { return (value >= 0 ? '+' : '−') + Math.abs(value).toFixed(1) + '%'; };
+      function hideMetrics() {
+        tooltip.hidden = true;
+        hoverLine.setAttribute('hidden', '');
+        hoverDot.setAttribute('hidden', '');
+        if (activeHide === hideMetrics) activeHide = null;
+      }
+      function showMetrics(index) {
+        if (activeHide && activeHide !== hideMetrics) activeHide();
+        activeHide = hideMetrics;
+        activeIndex = Math.max(0, Math.min(values.length - 1, index));
+        var close = closes[activeIndex];
+        var day = activeIndex ? (close / closes[activeIndex - 1] - 1) * 100 : null;
+        var extras = '';
+        if (hasEntry) extras += '<span>vs entry <b>' + signed((close / entry - 1) * 100) + '</b></span>';
+        if (hasKill) extras += '<span>room to kill <b>' + signed((close / kill - 1) * 100) + '</b></span>';
+        tooltip.innerHTML = '<strong>' + dates[activeIndex] + ' · $' + close.toFixed(2) + '</strong>' +
+          '<span>Day <b>' + (day === null ? '—' : signed(day)) + '</b></span>' +
+          '<span>YTD <b>' + signed(values[activeIndex]) + '</b></span>' + extras;
+        var hoverX = x(activeIndex), hoverY = y(values[activeIndex]);
+        hoverLine.setAttribute('x1', hoverX.toFixed(1));
+        hoverLine.setAttribute('x2', hoverX.toFixed(1));
+        hoverDot.setAttribute('cx', hoverX.toFixed(1));
+        hoverDot.setAttribute('cy', hoverY.toFixed(1));
+        hoverLine.removeAttribute('hidden');
+        hoverDot.removeAttribute('hidden');
+        tooltip.hidden = false;
+        var rect = svg.getBoundingClientRect();
+        var pointLeft = rect.left + hoverX / width * rect.width;
+        var left = Math.min(Math.max(8, pointLeft - tooltip.offsetWidth / 2), window.innerWidth - tooltip.offsetWidth - 8);
+        var above = rect.top - tooltip.offsetHeight - 8;
+        tooltip.style.left = left + 'px';
+        tooltip.style.top = (above >= 8 ? above : rect.bottom + 8) + 'px';
+      }
+      function pointerIndex(event) {
+        var rect = svg.getBoundingClientRect();
+        var viewX = (event.clientX - rect.left) / rect.width * width;
+        return Math.round((viewX - pad) / (width - 2 * pad) * (values.length - 1));
+      }
+      svg.addEventListener('pointermove', function (event) { showMetrics(pointerIndex(event)); });
+      svg.addEventListener('pointerdown', function (event) { showMetrics(pointerIndex(event)); });
+      svg.addEventListener('pointerleave', function () { if (document.activeElement !== svg) hideMetrics(); });
+      svg.addEventListener('focus', function () { showMetrics(activeIndex); });
+      svg.addEventListener('blur', hideMetrics);
+      svg.addEventListener('keydown', function (event) {
+        var next = null;
+        if (event.key === 'ArrowLeft') next = activeIndex - 1;
+        if (event.key === 'ArrowRight') next = activeIndex + 1;
+        if (event.key === 'Home') next = 0;
+        if (event.key === 'End') next = values.length - 1;
+        if (next === null) return;
+        event.preventDefault();
+        showMetrics(next);
       });
     });
+    window.addEventListener('scroll', function () { if (activeHide) activeHide(); }, {passive: true});
   }
 
   function initDeskHistoryCharts() {
@@ -370,7 +460,7 @@
       var kill = Number(figure.getAttribute('data-desk-chart-kill'));
       var hasEntry = Number.isFinite(entry) && entry > 0;
       var hasKill = Number.isFinite(kill) && kill > 0;
-      var width = 520, height = 210, pad = 10;
+      var width = 520, height = 210, left = 44, right = 510, top = 10, bottom = 182;
       var rawLow = Math.min.apply(null, closes);
       var rawHigh = Math.max.apply(null, closes);
       var scenarioPrices = Array.prototype.map.call(figure.querySelectorAll('.desk-detail-rule title'), function (title) {
@@ -383,8 +473,8 @@
       }
       var margin = Math.max((rawHigh - rawLow) * .04, 1);
       var low = Math.max(0, rawLow - margin), high = rawHigh + margin;
-      var x = function (index) { return pad + index * (width - 2 * pad) / Math.max(closes.length - 1, 1); };
-      var y = function (value) { return pad + (high - value) * (height - 2 * pad) / (high - low || 1); };
+      var x = function (index) { return left + index * (right - left) / Math.max(closes.length - 1, 1); };
+      var y = function (value) { return top + (high - value) * (bottom - top) / (high - low || 1); };
       var activeIndex = closes.length - 1;
       var signed = function (value) { return (value >= 0 ? '+' : '−') + Math.abs(value).toFixed(1) + '%'; };
       function hideMetrics() {
@@ -420,7 +510,7 @@
       function pointerIndex(event) {
         var rect = svg.getBoundingClientRect();
         var viewX = (event.clientX - rect.left) / rect.width * width;
-        return Math.round((viewX - pad) / (width - 2 * pad) * (closes.length - 1));
+        return Math.round((viewX - left) / (right - left) * (closes.length - 1));
       }
       svg.addEventListener('pointermove', function (event) { showMetrics(pointerIndex(event)); });
       svg.addEventListener('pointerdown', function (event) { showMetrics(pointerIndex(event)); });
@@ -467,8 +557,12 @@
       var clone = article.cloneNode(true);
       clone.querySelectorAll('details').forEach(function (details) { details.setAttribute('open', ''); });
       body.replaceChildren(clone);
-      var row = button.closest('.desk-detail-row').previousElementSibling;
-      var catalyst = row.querySelector('.desk-catalyst');
+      var row = button.closest('.desk-main-row');
+      if (!row) {
+        var detailRow = button.closest('.desk-detail-row');
+        row = detailRow ? detailRow.previousElementSibling : null;
+      }
+      var catalyst = row ? row.querySelector('.desk-catalyst') : null;
       summary.innerHTML = '<div class="desk-thesis-summary"><b>' + symbol + '</b><span>Next catalyst ' + (catalyst ? catalyst.textContent : '—') + '</span></div>';
     } catch (error) {
       body.innerHTML = '<p class="bl-empty">Could not load the full thesis. <a href="/trading/hypotheses/#hypothesis-' + symbol.toLowerCase() + '-setup">Open the canonical page</a>.</p>';
@@ -495,6 +589,7 @@
 
   function initDeskV3() {
     initDeskBlotter();
+    initDeskYtdCharts();
     initDeskHistoryCharts();
     initThesisDialog();
   }
