@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 25)
+        self.assertEqual(len(self.payload["themes"]), 26)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -161,6 +161,7 @@ class TradingThemesContractTest(unittest.TestCase):
             "sector-medicaid-churn-economy",
             "sector-upper-cband-capex-echo",
             "emerging-pfas-testing-wave",
+            "emerging-live-experience-k",
         }
         hunt = [
             t for t in self.payload["themes"]
