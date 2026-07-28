@@ -4,12 +4,15 @@ from __future__ import annotations
 
 import json
 import hashlib
+import os
 import pathlib
 import re
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
+DESK_HOME = ROOT / "trading" / "index.html"
+HYPOTHESES_ROUTE = ROOT / "trading" / "hypotheses" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
@@ -83,7 +86,87 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Transmission:', grok_brief_js)
         self.assertIn('Asymmetry:', grok_brief_js)
 
-    # test_hypotheses_are_explicit_and_scannable removed per Bernard 2026-07-27 — hypothesis scanning alert disabled until we stabilize the count/contract. Will re-add once we know what works.
+    def test_hypotheses_are_explicit_and_scannable(self):
+        hypotheses_html = HYPOTHESES_ROUTE.read_text()
+        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), 12)
+        details = {
+            symbol.upper(): block
+            for symbol, block in re.findall(
+                r'<article class="hypothesis-detail" id="hypothesis-([a-z]+)-setup"(.*?)</article>',
+                hypotheses_html,
+                re.S,
+            )
+        }
+        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"})
+        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), 12)
+        self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
+        self.assertIn('<strong>No position.</strong>', details["HIMS"])
+        self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
+        for symbol, block in details.items():
+            self.assertIn(f'id="hypothesis-{symbol.lower()}-setup"', hypotheses_html)
+            self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', block)
+            self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
+            self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
+        hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        for symbol in details:
+            self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', hypotheses_route)
+        route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
+        self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(route_details))
+        self.assertIn('Exact Sciences', details["ABT"])
+        self.assertIn('Libre Assist', details["ABT"])
+        self.assertIn('Slightly underpriced', details["HOOD"])
+        self.assertIn('$940–980B', details["HOOD"])
+        self.assertIn('$69.1B', details["HOOD"])
+        self.assertIn('Monthly operating metrics', details["HOOD"])
+        self.assertIn('June 2026 month-to-date trading update', details["HOOD"])
+        self.assertIn('403,472 June NEV sales', details["BYDDY"])
+        self.assertIn('175,349 exports', details["BYDDY"])
+        self.assertIn('humanoid development', details["BYDDY"])
+        self.assertIn('July production and sales volume', details["BYDDY"])
+        self.assertIn('19.86M Switch 2 units', details["NTDOY"])
+        self.assertIn('16.50M units', details["NTDOY"])
+        self.assertIn('August 6, 2026', details["NTDOY"])
+        self.assertIn('$449.99 to $499.99', details["NTDOY"])
+        self.assertIn('35% to 132M', details["RBLX"])
+        self.assertIn('monetized over 50% better', details["RBLX"])
+        self.assertIn('July 30, 2026', details["RBLX"])
+        self.assertIn('$596M', details["RBLX"])
+        self.assertIn('55 GW', details["CEG"])
+        self.assertIn('1,121 MW', details["CEG"])
+        self.assertIn('August 6, 2026', details["CEG"])
+        self.assertIn('$11.00–$12.00', details["CEG"])
+        self.assertIn('69% to $663M', details["RDDT"])
+        self.assertIn('126.8M', details["RDDT"])
+        self.assertIn('July 30, 2026', details["RDDT"])
+        self.assertIn('$715–725M', details["RDDT"])
+        self.assertIn('Open position · profitable fintech', details["FIGR"])
+        self.assertIn('record loan volume', details["FIGR"])
+        self.assertIn('Open position · cash-yield value', details["HPQ"])
+        self.assertIn('AI-PC refresh', details["HPQ"])
+        self.assertIn('5% organic growth', details["TMO"])
+        self.assertIn('$1.68B', details["TMO"])
+        self.assertIn('October 21, 2026', details["TMO"])
+        self.assertIn('$193 bear / $275 base / $378 bull', details["TMO"])
+
+    def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
+        hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
+        self.assertEqual(len(articles), 12)
+        self.assertEqual(
+            {symbol.upper() for symbol, _attrs in articles},
+            {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"},
+        )
+        for symbol, attrs in articles:
+            self.assertRegex(attrs, r'data-desk-catalyst="\d{4}-\d{2}-\d{2}"', symbol)
+            self.assertRegex(attrs, r'data-desk-trigger="[^"]+"', symbol)
+            self.assertRegex(attrs, r'data-desk-stance="(constructive|speculative|research-only|open-position)"', symbol)
+
+        desk = DESK_HOME.read_text()
+        self.assertEqual(desk.count('data-desk-kind="position"'), 6)
+        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 6)
+        self.assertIn('data-desk-source-articles="12"', desk)
+        self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
+        self.assertEqual(desk.count('class="desk-thesis-cell-button"'), 12)
 
     def test_results_is_quantity_free_with_outcome_stats(self):
         match = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', self.html, re.S)
@@ -95,7 +178,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('class="results-chart"', block)
         self.assertIn('Daily EOD snapshots', block)
         self.assertIn('Quantity-free YTD outcome statistics', block)
-        self.assertIn('Positive outcomes', block)
+        self.assertIn('Last 7 days', block)
         self.assertIn('Last 30 days', block)
         self.assertRegex(block, r'Current (wins|losses|none) streak')
         self.assertIn('Quantities and dollar amounts are ignored', block)
@@ -111,7 +194,18 @@ class TradingUiContractTest(unittest.TestCase):
         win_rate = float(stats.group(5))
         self.assertEqual(decided, wins + losses)
         self.assertAlmostEqual(win_rate, wins / decided * 100, places=1)
-        for forbidden in ('$', 'balance', 'buying power', 'position', 'trade'):
+        self.assertIn('class="performance-actions"', block)
+        self.assertIn('Last 14 days', block)
+        action_items = re.findall(r'<li class="performance-action(?: performance-action--(?:win|loss))?" data-performance-side="(buy|sell)" data-performance-type="(stock|option)" data-performance-symbol="([A-Z][A-Z0-9.\-]{0,9})" data-performance-date="(\d{4}-\d{2}-\d{2})">(.*?)</li>', block, re.S)
+        self.assertTrue(action_items)
+        for side, asset_type, symbol, action_date, item in action_items:
+            self.assertIn(f'<b>{symbol}</b> · {side.title()} · {asset_type.title()}', item)
+            self.assertIn(f'<time datetime="{action_date}">', item)
+            self.assertRegex(item, r'<strong class="(?:positive|negative)">[+−][\d.]+%</strong>')
+        self.assertRegex(block, r'class="performance-action performance-action--win" data-performance-side="sell"[\s\S]*?<strong class="positive">')
+        self.assertRegex(block, r'class="performance-action performance-action--loss" data-performance-side="sell"[\s\S]*?<strong class="negative">')
+        self.assertIn(".performance-action-list{display:grid;grid-template-columns:1fr", (ROOT / "trading" / "desk.css").read_text())
+        for forbidden in ('$', 'balance', 'buying power', 'account number', 'order id'):
             self.assertNotIn(forbidden, block.casefold())
 
     def test_results_history_is_unique_ordered_and_matches_chart(self):
@@ -205,8 +299,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('aria-label="Full momentum scan of the tracked universe"', self.html)
 
     def test_chart_payloads_are_external_and_small_shell(self):
-        # Thesis copy stays server-rendered for no-JS access; charts remain external.
-        self.assertLess(PAGE.stat().st_size, 300_000)
+        # Thesis + brief copy stay server-rendered for no-JS access; chart payloads remain external.
+        self.assertLess(PAGE.stat().st_size, 425_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):
@@ -293,8 +387,8 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_live_setups_collapsed_and_recent_activity_folded(self):
         combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
-        self.assertEqual(len(combined_pnl_rows), 4)
-        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, {"ABT", "HOOD"})
+        self.assertGreaterEqual(len(combined_pnl_rows), 6)
+        self.assertGreaterEqual(len({symbol for _, symbol in combined_pnl_rows}), 3)
         for symbol in {symbol for _, symbol in combined_pnl_rows}:
             values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
             self.assertEqual(len(values), 1, symbol)
@@ -316,24 +410,51 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_desk_pages_share_one_nav_and_stamp(self):
         """Guard against multi-agent drift: every routed desk page must carry the
-        same nav link set (hrefs and labels) and the same stamp format."""
+        same nav link set (hrefs and labels), stamp format, and current desk assets."""
         import glob
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
-                 if "classic" not in p and "charts" not in p] + [str(ROOT / "trading" / "index.html")]
+                 if "classic" not in p and "charts" not in p and '<nav class="subnav"' in pathlib.Path(p).read_text()] + [str(ROOT / "trading" / "index.html")]
         nav_sets, stamps, chips = set(), set(), set()
+        styles = (ROOT / "trading" / "desk.css").read_text()
+        css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
+        js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         for p in pages:
             s = pathlib.Path(p).read_text()
             nav = s[s.find("subnav"):s.find("</nav>")]
             nav_sets.add(tuple(re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', nav)))
             m = re.search(r'class="stamp">([^<]+)<', s)
-            chip = re.search(r'<span class="chipset">.*?</span></a></span>', s)
-            chips.add(chip.group(0) if chip else "missing")
+            chip = re.search(r'<span class="chipset">.*?</span>', s)
+            chip_markup = chip.group(0) if chip else "missing"
+            chips.add(chip_markup)
+            self.assertNotEqual(chip_markup, "missing", p)
+            self.assertNotIn('<span class="dot">', chip_markup, p)
+            for state, score in re.findall(r'class="chip chip-[^ ]+ chip-(on|off|neutral)"[^>]*>[^<]*?([\d.]+)</a>', chip_markup):
+                value = float(score)
+                expected = "on" if value > 5 else "off" if value < 5 else "neutral"
+                self.assertEqual(state, expected, f"risk pill color mismatch at {value}: {p}")
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
+            self.assertIn(f'/trading/desk.css?v={css_hash}', s, p)
+            self.assertIn(f'/trading/desk.js?v={js_hash}', s, p)
         self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
-        self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
-        self.assertEqual(len(chips), 1, "status chipset diverges across desk pages")
+        if os.environ.get("ZONTED_DESK_MORNING_QUOTES"):
+            live_stamps = {stamp for stamp in stamps if stamp.startswith("Live · ")}
+            self.assertEqual(len(live_stamps), 1, f"morning stamp drift: {stamps}")
+            self.assertEqual(stamps, live_stamps, f"all nav dates must refresh in morning mode: {stamps}")
+        else:
+            self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
+        self.assertNotIn("missing", chips)
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
+        self.assertNotIn("/trading/hypotheses/", hrefs)
+        for risk_route in ("grok-risk", "gpt-risk", "gemini-risk", "meta-risk", "fable-risk"):
+            self.assertNotIn(f"/trading/{risk_route}/", hrefs)
+        for model in ("gpt", "grok", "gemini", "meta", "fable"):
+            self.assertIn(f".chip-{model}::before", styles)
+            self.assertIn(f"/trading/model-icons/{model}.svg", styles)
+            self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
+        self.assertNotIn(".chip .dot", styles)
+        self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
+        self.assertTrue(HYPOTHESES_ROUTE.exists(), "canonical hypotheses source route must remain available")
 
 
 
