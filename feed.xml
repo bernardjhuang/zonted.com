@@ -5,8 +5,35 @@
     <link>https://zonted.com/</link>
     <description>I test AI tools so you don't have to. Honest reviews, real data, and opinions from someone who actually builds with this stuff.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 25 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Tue, 28 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>I Read Anthropic&#x27;s and Nvidia&#x27;s Public Training Data. Here&#x27;s What&#x27;s Actually In There.</title>
+      <link>https://zonted.com/posts/inside-ai-training-data/</link>
+      <description>The preference data that taught AI models how to behave is sitting on Hugging Face. I opened Anthropic&#x27;s 2022 file and Nvidia&#x27;s 2024 file and read them — here&#x27;s what&#x27;s inside, and what it explains about the answers you get.</description>
+      <content:encoded><![CDATA[Last week I trained a language model on fifteen years of my own Google history , mostly to watch how it formed opinions about brands. That covered pretraining — the stage where a model reads everything and learns to predict what comes next. But it left the stranger question alone: who decided how the thing should behave ? The preference data that shaped how AI models behave is public. Reading it replaces a lot of speculation with specifics. The grading rubric changed between 2022 and 2024 — one binary judgment became five graded axes • A refusal is a row where the competent answer was marked rejected • The 2024 rubric measurably rewards list-shaped answers — 59% of 3,451 decisive pairs • Product recommendations are ~0.2% of the data. Which explains what I found asking AI for the best product 120 times: 7.6 brands per answer , top slot locked in 90% of runs]]></content:encoded>
+      <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/inside-ai-training-data/</guid>
+    </item>
+    <item>
+      <title>AI Learned to Recommend Products by Accident</title>
+      <link>https://zonted.com/posts/how-ai-learned-to-recommend/</link>
+      <description>Anthropic&#x27;s and Nvidia&#x27;s actual preference-training data is public on Hugging Face. Reading both shows the grading rubric changed between 2022 and 2024 — and that product recommendation was barely trained at all.</description>
+      <content:encoded><![CDATA[Last week I trained a language model on fifteen years of my own Google history to watch how it forms beliefs about brands. That covered pretraining — the stage where a model reads everything and learns to autocomplete. But it skipped the stage that decides how a model actually behaves : whether it refuses you, how much it grovels, and whether it names your product when someone asks for a recommendation. Two public files — Anthropic's 2022 preference data and Nvidia's 2024 data — show how the definition of a "good answer" was rewritten in two years, and why AI recommends brands today when it wouldn't in 2022. 2022 rubric: binary, "which of these two is better," with roughly half the dataset devoted to refusing harm • 2024 rubric: five graded axes — helpfulness, correctness, coherence, complexity, verbosity • In 2022, the answer that named specific products was the rejected one. By 2024, naming several with tradeoffs is what scores highest. • But across three preference datasets I scanned, genuine product-recommendation prompts were ~0.2% of the data . Nobody trained this behavior on purpose.]]></content:encoded>
+      <pubDate>Mon, 27 Jul 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/how-ai-learned-to-recommend/</guid>
+    </item>
+    <item>
+      <title>The Files Where AI Personalities Come From</title>
+      <link>https://zonted.com/posts/where-ai-personalities-come-from/</link>
+      <description>Anthropic&#x27;s and Nvidia&#x27;s actual preference-training data is sitting on Hugging Face, readable like a spreadsheet. I read it — and measured how the rules for AI recommendations changed between 2022 and 2024.</description>
+      <content:encoded><![CDATA[Every chatbot you've ever talked to has a personality — helpful but careful, warm but not fawning, opinionated about some things and diplomatically vague about others. Ask where that personality comes from and you'll get hand-waving about "emergent behavior" and "alignment." Here's the thing nobody tells you: the personality is a file, and you can read it. Anthropic's actual 2022 preference-training data (169K examples) and Nvidia's 2024 equivalent are public on Hugging Face. I read them — and measured how the rules changed. Refusals, politeness, and tone are installed by specific, readable training examples — I'll show you the exact rows • In 2022 data, preferred answers often refused to name products ; by 2024, naming specific products is what wins — measured: {{PCT2022}}% → {{PCT2024}}% • Preference training also explains why AI recommendations are winner-take-all: base models spread belief across brands; post-training crowns one king]]></content:encoded>
+      <pubDate>Sun, 26 Jul 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/where-ai-personalities-come-from/</guid>
+    </item>
     <item>
       <title>Does Google Trends Predict Stock Prices? A Five-Year Backtest</title>
       <link>https://zonted.com/posts/google-trends-stock-attention/</link>

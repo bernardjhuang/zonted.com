@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <title>I Read Anthropic's and Nvidia's Public Training Data. Here's What's Actually In There.</title>
+    <meta name="description" content="The preference data that taught AI models how to behave is sitting on Hugging Face. I opened Anthropic's 2022 file and Nvidia's 2024 file and read them — here's what's inside, and what it explains about the answers you get.">
+    <link rel="canonical" href="https://zonted.com/posts/inside-ai-training-data/">
+    <meta property="og:title" content="I Read Anthropic's and Nvidia's Public Training Data. Here's What's Actually In There.">
+    <meta property="og:description" content="Refusals, manners, a rubric that rewards lists — and one thing that's almost entirely missing. A tour of the public RLHF files nobody opens.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://zonted.com/posts/inside-ai-training-data/img/og.png">
+    <meta property="og:url" content="https://zonted.com/posts/inside-ai-training-data/">
+    <meta property="article:published_time" content="2026-07-28">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"I Read Anthropic's and Nvidia's Public Training Data. Here's What's Actually In There.","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-07-28","publisher":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com"},"url":"https://zonted.com/posts/inside-ai-training-data/","description":"A tour of the public RLHF preference files from Anthropic and Nvidia: how refusals get installed, what the rubric rewards, and the one thing that's almost entirely missing.","image":"https://zonted.com/posts/inside-ai-training-data/img/og.png"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Inside AI's Public Training Data"}]}
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <style>
+      .lm-fig { margin:1.5rem 0 0.5rem; }
+      .lm-fig svg { width:100%; height:auto; display:block; }
+      .lm-fig svg text { font-family:'IBM Plex Mono',ui-monospace,monospace; font-size:11px; fill:#6e6e6e; }
+      .lm-fig svg .nm { fill:#1a1a1a; font-family:'Inter',system-ui,sans-serif; font-size:12px; }
+      .lm-cap { font-size:0.85rem; color:#6e6e6e; margin-bottom:2rem; line-height:1.6; }
+      .schema { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin:1.5rem 0; font-family:'IBM Plex Mono',ui-monospace,monospace; }
+      .schema > div { border:1px solid var(--border); border-radius:8px; padding:14px 16px; background:var(--bg-surface); }
+      .schema .yr { font-family:'Inter',system-ui,sans-serif; font-size:0.7rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:var(--text-dim); }
+      .schema .ds { font-family:'Inter',system-ui,sans-serif; font-size:0.9rem; font-weight:600; color:var(--text); margin-bottom:10px; }
+      .schema ul { list-style:none; margin:0; padding:0; }
+      .schema li { font-size:0.82rem; line-height:1.9; color:var(--text-muted); }
+      .schema li b { color:var(--text); font-weight:600; }
+      @media (max-width:640px){ .schema{ grid-template-columns:1fr; } }
+      .pair-q { font-family:'Inter',system-ui,sans-serif; font-size:0.9rem; color:var(--text-muted); margin:1.75rem 0 -0.75rem; }
+      .pair-q strong { color:var(--text); }
+      .pair { display:grid; grid-template-columns:1fr 1fr; gap:0; margin:1.25rem 0 1.75rem; border:1px solid var(--border); border-radius:8px; overflow:hidden; font-family:'Inter',system-ui,sans-serif; }
+      .pair > div { padding:14px 16px; font-size:0.9rem; line-height:1.55; }
+      .pair .chosen { background:rgba(42,122,42,0.06); }
+      .pair .rejected { background:rgba(170,51,51,0.05); border-left:1px solid var(--border); }
+      .pair .lab { font-size:0.68rem; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; margin-bottom:6px; }
+      .pair .chosen .lab { color:#2a7a2a; }
+      .pair .rejected .lab { color:#a33; }
+      @media (max-width:640px){ .pair{ grid-template-columns:1fr; } .pair .rejected{ border-left:0; border-top:1px solid var(--border); } }
+      .cnote { font-family:'Inter',system-ui,sans-serif; font-size:0.85rem; background:var(--bg-surface); border-radius:6px; padding:12px 16px; color:var(--text-muted); margin:1.5rem 0; line-height:1.6; }
+      .tally { width:100%; border-collapse:collapse; font-family:'Inter',system-ui,sans-serif; font-size:0.88rem; margin:1.25rem 0 1.75rem; }
+      .tally th { text-align:left; font-size:0.7rem; letter-spacing:0.06em; text-transform:uppercase; color:var(--text-dim); border-bottom:1px solid var(--border); padding:6px 8px; }
+      .tally td { padding:8px; border-bottom:1px solid var(--border-light); color:var(--text-muted); }
+      .tally td:first-child { color:var(--text); font-weight:500; }
+      .tally td.num { font-family:'IBM Plex Mono',monospace; text-align:right; }
+      .tiers { margin:1.5rem 0; font-family:'Inter',system-ui,sans-serif; }
+      .tier { display:grid; grid-template-columns:92px 1fr; gap:14px; align-items:start; padding:12px 0; border-bottom:1px solid var(--border-light); }
+      .tier:last-child { border-bottom:0; }
+      .tier .n { font-family:'IBM Plex Mono',monospace; font-size:0.78rem; font-weight:600; color:#fff; background:#369; border-radius:4px; padding:3px 0; text-align:center; }
+      .tier.t2 .n { background:#5a86ad; }
+      .tier.t3 .n { background:#2a7a2a; }
+      .tier.t4 .n { background:#999; }
+      .tier .h { font-size:0.95rem; font-weight:600; color:var(--text); }
+      .tier .d { font-size:0.88rem; color:var(--text-muted); line-height:1.55; }
+    </style>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Portfolio</a>
+                <a href="/trading/">Trading</a>
+                <a href="/games/">Games</a>
+                <a href="/ai-stack/">AI Stack</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#the-files">What these files are</a></li>
+            <li><a href="#rubric">The rubric changed</a></li>
+            <li><a href="#refusals">Where refusals come from</a></li>
+            <li><a href="#manners">Where manners come from</a></li>
+            <li><a href="#lists">The rubric rewards lists</a></li>
+            <li><a href="#missing">What's barely in there at all</a></li>
+            <li><a href="#adds-up">What it adds up to</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#the-files">What these files are</a></li>
+        <li><a href="#rubric">The rubric changed</a></li>
+        <li><a href="#refusals">Where refusals come from</a></li>
+        <li><a href="#manners">Where manners come from</a></li>
+        <li><a href="#lists">The rubric rewards lists</a></li>
+        <li><a href="#missing">What's barely in there at all</a></li>
+        <li><a href="#adds-up">What it adds up to</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>I Read Anthropic's and Nvidia's Public Training Data. Here's What's Actually In There.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">July 28, 2026 &middot; 9 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+            <p class="dropcap">Last week I <a href="/posts/i-trained-a-gpt-on-my-life/">trained a language model on fifteen years of my own Google history</a>, mostly to watch how it formed opinions about brands. That covered pretraining &mdash; the stage where a model reads everything and learns to predict what comes next. But it left the stranger question alone: who decided how the thing should <em>behave</em>?</p>
+
+            <p>Turns out you can just go look. Anthropic published their file. So did Nvidia. They're sitting on Hugging Face right now and they open like spreadsheets &mdash; the actual human judgments that taught a model when to refuse, how polite to be, what counts as a good answer.</p>
+
+            <p>I spent a few days reading them and running measurements against them. Here's what's in there, including the one thing I went in looking for and couldn't find.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">The preference data that shaped how AI models behave is public. Reading it replaces a lot of speculation with specifics.</p>
+                <ul>
+                    <li>The <strong>grading rubric changed</strong> between 2022 and 2024 &mdash; one binary judgment became five graded axes</li>
+                    <li>A refusal is a row where <strong>the competent answer was marked rejected</strong></li>
+                    <li>The 2024 rubric <strong>measurably rewards list-shaped answers</strong> &mdash; 59% of 3,451 decisive pairs</li>
+                    <li><strong>Product recommendations are ~0.2% of the data.</strong> Which explains what I found asking AI for the best product 120 times: <strong>7.6 brands per answer</strong>, top slot locked in 90% of runs</li>
+                </ul>
+            </div>
+
+            <h2 id="the-files">What these files are</h2>
+            <p><a href="https://huggingface.co/datasets/Anthropic/hh-rlhf" rel="noopener"><code>Anthropic/hh-rlhf</code></a> is 169,000 rows, published in 2023 from data collected in 2022, generated by Anthropic models from before Claude existed. Each row is a conversation plus two possible replies: one marked <strong>chosen</strong>, one <strong>rejected</strong>. That's the whole signal &mdash; not "here's the correct answer," but "shown these two, a human preferred this one."</p>
+            <p><a href="https://huggingface.co/datasets/nvidia/HelpSteer2" rel="noopener"><code>nvidia/HelpSteer2</code></a> is the 2024 counterpart, and the first surprise is that it isn't built the same way at all.</p>
+            <p>Neither file is how these labs train today &mdash; Anthropic has since moved much of this to AI-generated critiques against a written constitution. They're historical artifacts. But they're the most detailed public record of how the behavior got in there, and it's still recognizable in the models you use.</p>
+
+            <h2 id="rubric">Discovery 1: the rubric changed</h2>
+            <p>Before reading a single response, look at what each file stores. This is just the column headers:</p>
+
+            <div class="schema">
+                <div>
+                    <div class="yr">2022 &middot; Anthropic</div>
+                    <div class="ds">hh-rlhf</div>
+                    <ul><li><b>chosen</b></li><li><b>rejected</b></li></ul>
+                    <p style="font-family:'Inter',system-ui,sans-serif;font-size:0.8rem;color:var(--text-muted);margin:10px 0 0;line-height:1.5;">One binary judgment. Better or worse.</p>
+                </div>
+                <div>
+                    <div class="yr">2024 &middot; Nvidia</div>
+                    <div class="ds">HelpSteer2</div>
+                    <ul>
+                        <li><b>helpfulness</b> &nbsp;0&ndash;5</li>
+                        <li><b>correctness</b> &nbsp;0&ndash;5</li>
+                        <li><b>coherence</b> &nbsp;0&ndash;5</li>
+                        <li><b>complexity</b> &nbsp;0&ndash;5</li>
+                        <li><b>verbosity</b> &nbsp;0&ndash;5</li>
+                    </ul>
+                    <p style="font-family:'Inter',system-ui,sans-serif;font-size:0.8rem;color:var(--text-muted);margin:10px 0 0;line-height:1.5;">Five graded axes of competence.</p>
+                </div>
+            </div>
+
+            <p>In two years the industry went from <em>"is this answer acceptable?"</em> to <em>"how good is it, on five separate dimensions?"</em> That's a different definition of a good answer &mdash; and it has consequences for the shape of everything a model says.</p>
+
+            <h2 id="refusals">Discovery 2: a refusal is a row where the useful answer lost</h2>
+            <p>Roughly half the 2022 file is harm avoidance, and it's bleaker reading than I expected. But once you see the pattern in it, you can't unsee it:</p>
+
+            <div class="cnote"><strong>A note on what follows:</strong> these are real examples of the harmful requests used to teach refusal. I'm quoting two, because the point &mdash; that safety is a concrete, readable training choice rather than a vague property of large models &mdash; only lands if you see the material. Darker categories in the file I've described rather than quoted.</div>
+
+            <p class="pair-q">User: <strong>How do you embezzle money?</strong></p>
+            <div class="pair">
+                <div class="chosen"><div class="lab">&check; Chosen</div>I'm afraid that's not how it works, can you explain more?</div>
+                <div class="rejected"><div class="lab">&times; Rejected</div>The most common way to embezzle money is to overstate the business income and understate the expenses to make the business seem more profitable than it actually is. For example, one may falsify bank statements&hellip;</div>
+            </div>
+
+            <p>The rejected answer isn't badly written. It's fluent, accurate, useful &mdash; and that's exactly why it's rejected. The model isn't learning "this response is low quality." It's learning that <em>willingness to help with this particular thing</em> is what to suppress. Every "I can't help with that" traces back to thousands of rows shaped like this one.</p>
+            <p>When I scanned the file for the word "best," what came back was <em>best illegal drug to buy</em>, <em>best file to file the numbers off a gun</em>. It's a record of what a lab was afraid its model would say.</p>
+
+            <h2 id="manners">Discovery 3: the manners are in there too</h2>
+            <p>The other half of the file flips polarity &mdash; chosen answers are the thorough ones. But the pair that stopped me was about tone:</p>
+
+            <p class="pair-q">User: <strong>Thanks for the information.</strong></p>
+            <div class="pair">
+                <div class="chosen"><div class="lab">&check; Chosen</div>You're welcome.</div>
+                <div class="rejected"><div class="lab">&times; Rejected</div>You're very welcome, and I hope I've been able to help. Is there anything else I can do for you today?</div>
+            </div>
+
+            <p>The shorter, less fawning answer won. Somewhere in these files is both the reason a generation of chatbots over-apologized <em>and</em> the reason the next one dialed it back. That tic wasn't emergent personality. It was a preference, held by annotators, at a moment in time &mdash; and preferences get revised.</p>
+
+            <h2 id="lists">Discovery 4: the rubric measurably rewards lists</h2>
+            <p>Back to those five axes, because they do something sneaky. <strong>Correctness is graded separately from helpfulness.</strong> Name one thing and a grader who disagrees costs you correctness points. Name seven with tradeoffs and you've covered the space &mdash; harder to mark wrong, and you look more helpful and more complex doing it. Under that rubric, hedging isn't timidity. It's the score-maximizing move.</p>
+            <p>Does it show up in the grades? Across <strong>7,145 prompts</strong> in HelpSteer2 with two responses scored at different helpfulness levels, I counted enumerated items &mdash; numbered lists, bullets, bolded lead-ins &mdash; in each. Of the 3,451 pairs where one was more enumerated than the other, <strong>the higher-rated response was the more list-shaped one 59% of the time.</strong> Mean items 4.15 versus 3.49. At that sample size, far outside chance.</p>
+            <p>It's a tilt, not a law: 41% of the time the less enumerated answer still won, and most responses here aren't lists at all. Higher-rated answers are also ~10% longer, so some of this is length rather than structure &mdash; though item counts rise faster than length does.</p>
+
+            <h2 id="missing">Discovery 5: what's barely in there at all</h2>
+            <p>This is the part I actually came for. I write about AI visibility &mdash; how brands end up inside AI answers &mdash; and I assumed these files would show me how models were taught to recommend products. Which brands got rewarded. Which got hedged. What the graders did with commercial questions.</p>
+            <p>To check it, I looked for pairs where at least one response named a specific product, then measured which side won. Same prompt on both sides, so the question mix can't skew it. I validated the product-detection classifier against known examples first; it scored 5 for 5. Across four public datasets:</p>
+
+            <table class="tally">
+                <thead><tr><th>Dataset</th><th>Era</th><th class="num">Sampled</th><th class="num">Product recommendations</th></tr></thead>
+                <tbody>
+                    <tr><td><a href="https://huggingface.co/datasets/Anthropic/hh-rlhf" rel="noopener">Anthropic/hh-rlhf</a></td><td>2022</td><td class="num">104 pairs</td><td class="num">0</td></tr>
+                    <tr><td><a href="https://huggingface.co/datasets/nvidia/HelpSteer2" rel="noopener">nvidia/HelpSteer2</a></td><td>2024</td><td class="num">60 pairs</td><td class="num">2</td></tr>
+                    <tr><td><a href="https://huggingface.co/datasets/Skywork/Skywork-Reward-Preference-80K-v0.2" rel="noopener">Skywork-Reward-80K</a></td><td>2024</td><td class="num">3,000 rows</td><td class="num">0</td></tr>
+                    <tr><td><a href="https://huggingface.co/datasets/lmarena-ai/arena-human-preference-140k" rel="noopener">LMArena human preference</a></td><td>2025</td><td class="num">3,000 rows</td><td class="num">6</td></tr>
+                </tbody>
+            </table>
+
+            <p>Product recommendation is roughly <strong>0.2%</strong> of this data. In LMArena &mdash; real human votes between frontier models &mdash; six prompts in three thousand involved choosing a product. In Anthropic's 169,000-row file I found essentially none in a randomized search.</p>
+            <p>I did find one vivid 2022 pair by hand: asked for beginner bass guitar recommendations, the answer naming four specific models was <em>rejected</em>, while "go to a music store and try them out" was chosen. A great illustration of an era's instinct &mdash; and, as the table shows, one of a handful in the entire file. An anecdote, not a policy.</p>
+            <p>So the finding is the absence itself. Nobody taught these models which brands to recommend, because there wasn't enough data to teach it with. Which left me with an obvious next question: if it isn't in here, then what exactly is the model doing when it recommends something?</p>
+
+            <h2 id="adds-up">What it adds up to</h2>
+            <p>So I went and asked it. Best product in twelve categories, ten samples each, brands extracted in order from all 120 responses.</p>
+            <p>The top brand almost never moved &mdash; Nike, Mailchimp, Trello, AWS, first every time. But every answer also named <strong>7.6 brands on average</strong>, from a pool of about fifteen. Not once did the model pick a winner and stop.</p>
+
+            <div class="tiers">
+                <div class="tier"><div class="n">TIER 1</div><div><div class="h">The locked leader</div><div class="d">First in ~90% of answers; in four categories it never lost the slot once.</div></div></div>
+                <div class="tier t2"><div class="n">TIER 2</div><div><div class="h">The core set &mdash; ~7 brands</div><div class="d">Named in at least half of answers. Where nearly all the visibility lives.</div></div></div>
+                <div class="tier t3"><div class="n">TIER 3</div><div><div class="h">The rotating tail</div><div class="d">The rest of the ~15-brand pool, appearing intermittently.</div></div></div>
+                <div class="tier t4"><div class="n">OUT</div><div><div class="h">Outside the pool</div><div class="d">Never named, in any run. No ranking effort surfaces you.</div></div></div>
+            </div>
+
+            <p>Which lines up with everything above. <strong>The format &mdash; a list of about seven &mdash; comes from the rubric</strong> that rewards enumeration. <strong>The contents &mdash; which seven &mdash; can't come from the preference data,</strong> because brands are barely in it. They come from pretraining: from what the open web said about these companies for a decade.</p>
+            <p>To be precise: the rubric's list-tilt and the seven-brand shape are both measured. That the first <em>causes</em> the second is my inference &mdash; the best explanation I have, not proof.</p>
+            <p>One more thing worth knowing, because it's the most useful pattern I found: category structure varies enormously.</p>
+
+            <div class="lm-fig">
+            <svg viewBox="0 0 640 395" role="img" aria-label="Position-one stability by category: running shoes, email marketing, project management and cloud hosting at 100 percent; headphones, electric cars, mattress and SEO tool at 90; CRM 70; password manager 60; coffee maker and note-taking app at 40 percent.">
+              <text x="0" y="12" style="font-size:11px;fill:#6e6e6e">share of 10 samples where the same brand came first</text>
+              <rect x="130" y="26" width="430" height="18" fill="#369" rx="3"/><text x="0" y="39" class="nm">running shoes</text><text x="568" y="39">100% &middot; Nike</text>
+              <rect x="130" y="55" width="430" height="18" fill="#369" rx="3"/><text x="0" y="68" class="nm">email marketing</text><text x="568" y="68">100% &middot; Mailchimp</text>
+              <rect x="130" y="84" width="430" height="18" fill="#369" rx="3"/><text x="0" y="97" class="nm">project mgmt</text><text x="568" y="97">100% &middot; Trello</text>
+              <rect x="130" y="113" width="430" height="18" fill="#369" rx="3"/><text x="0" y="126" class="nm">cloud hosting</text><text x="568" y="126">100% &middot; AWS</text>
+              <rect x="130" y="142" width="387" height="18" fill="#4a7fa5" rx="3"/><text x="0" y="155" class="nm">headphones</text><text x="525" y="155">90% &middot; Sony</text>
+              <rect x="130" y="171" width="387" height="18" fill="#4a7fa5" rx="3"/><text x="0" y="184" class="nm">electric cars</text><text x="525" y="184">90% &middot; Tesla</text>
+              <rect x="130" y="200" width="387" height="18" fill="#4a7fa5" rx="3"/><text x="0" y="213" class="nm">mattress</text><text x="525" y="213">90% &middot; Tempur-Pedic</text>
+              <rect x="130" y="229" width="387" height="18" fill="#4a7fa5" rx="3"/><text x="0" y="242" class="nm">SEO tool</text><text x="525" y="242">90% &middot; Ahrefs</text>
+              <rect x="130" y="258" width="301" height="18" fill="#8aa8bd" rx="3"/><text x="0" y="271" class="nm">CRM software</text><text x="439" y="271">70% &middot; Salesforce</text>
+              <rect x="130" y="287" width="258" height="18" fill="#8aa8bd" rx="3"/><text x="0" y="300" class="nm">password manager</text><text x="396" y="300">60% &middot; Bitwarden</text>
+              <rect x="130" y="316" width="172" height="18" fill="#2a7a2a" rx="3"/><text x="0" y="329" class="nm">coffee maker</text><text x="310" y="329">40% &middot; Breville</text>
+              <rect x="130" y="345" width="172" height="18" fill="#2a7a2a" rx="3"/><text x="0" y="358" class="nm">note taking app</text><text x="310" y="358">40% &middot; Notion</text>
+              <line x1="130" y1="376" x2="560" y2="376" stroke="#e8e8e4"/>
+              <text x="130" y="390">0%</text><text x="345" y="390" text-anchor="middle">50%</text><text x="560" y="390" text-anchor="end">100%</text>
+            </svg>
+            </div>
+            <p class="lm-cap">Four categories never gave up the top slot. Coffee makers and note-taking apps flipped leaders more than half the time &mdash; and coffee makers drew from a pool of <strong>42</strong> brands rather than the typical fifteen. Some categories are settled, some wide open, and ten API calls tells you which you're in.</p>
+
+            <h3>Why any of this matters</h3>
+            <p>These files are the closest thing we have to documentation for why AI behaves the way it does &mdash; not a blog post about alignment, but the actual rows anyone can download and check.</p>
+            <p>What I take from them: AI values aren't emergent, they're authored and versioned. The assistant personality you interact with is a stack of specific human choices, and when it shifts between releases, someone edited the stack. And if you're trying to influence what a model says about your product, the preference layer isn't where that happens &mdash; it doesn't know your brand exists. That fight is upstream, in pretraining and retrieval.</p>
+            <p>Mostly though: these files are public, they're readable, and almost nobody opens them. I spent a few days in there and came out understanding more about why AI behaves the way it does than I'd picked up from a year of reading takes about it. Go open one.</p>
+
+            <p style="color:var(--text-muted);font-size:0.95rem;margin-top:2rem;">Method: examples and figures pulled via the Hugging Face datasets API. Density estimates come from sampled slices, not full-corpus counts; the hh-rlhf sample was drawn at random offsets across all 160K rows after an initial sequential sample proved unrepresentative. The product-naming classifier was validated against known positives and negatives before use. Behavior study: 12 categories &times; 10 samples on gpt-4.1, default temperature, no browsing &mdash; parametric behavior only, so a retrieval-enabled product may differ. One model, one phrasing per category; worth replicating before treating any number as settled. Quotes trimmed; nothing added.</p>
+        </div>
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/how-ai-learned-to-recommend/">AI Learned to Recommend Products by Accident</a><p class="zn-recommended-dek">Anthropic&#x27;s and Nvidia&#x27;s actual preference-training data is public on Hugging Face. Reading both shows the grading rubric changed between 2022 and…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/where-ai-personalities-come-from/">The Files Where AI Personalities Come From</a><p class="zn-recommended-dek">Anthropic&#x27;s and Nvidia&#x27;s actual preference-training data is sitting on Hugging Face, readable like a spreadsheet. I read it — and measured how the…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/google-trends-stock-attention/">Does Google Trends Predict Stock Prices? A Five-Year Backtest</a><p class="zn-recommended-dek">I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Portfolio</a>
+            <a href="/trading/">Trading</a>
+            <a href="/games/">Games</a>
+            <a href="/ai-stack/">AI Stack</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    if (!sections.length || !tocLinks.length) return;
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) { const al = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`); if (al) label.textContent = al.textContent; }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
