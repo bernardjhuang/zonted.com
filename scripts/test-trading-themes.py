@@ -256,21 +256,22 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_frontier_signal_themes_are_complete_and_independently_scored(self) -> None:
         expected = {
-            "emerging-ai-compute-water-geography": (58, 28, 63, 36),
-            "emerging-autonomous-science-verification-wall": (52, 22, 58, 28),
-            "emerging-orbital-compute-relief-valve": (45, 8, 52, 14),
-            "emerging-precision-fermentation-molecules": (65, 35, 70, 45),
-            "emerging-radiative-cooling-everything-grid": (60, 25, 66, 36),
+            "emerging-ai-compute-water-geography": (58, 28, 58, 28),
+            "emerging-autonomous-science-verification-wall": (52, 22, 58, 22),
+            "emerging-orbital-compute-relief-valve": (45, 8, 60, 20),
+            "emerging-precision-fermentation-molecules": (65, 35, 70, 52),
+            "emerging-radiative-cooling-everything-grid": (60, 25, 60, 34),
         }
         found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
         self.assertEqual(set(found), set(expected))
         for theme_id, (grok_known, grok_priced, consensus_known, consensus_priced) in expected.items():
             theme = found[theme_id]
             self.assertEqual(theme["category"], "Emerging")
-            self.assertEqual(theme["status"], "Frontier signal · 2 reviewers")
-            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["Grok 4.5", "GPT-5.6"])
+            self.assertEqual(theme["status"], "Frontier signal · 3 reviewers")
+            self.assertEqual([row["model"] for row in theme["model_reviews"]],
+                             ["Grok 4.5", "GPT-5.6", "Claude Fable 5"])
             self.assertEqual(theme["source_model"], "Grok 4.5")
-            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"])
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6", "Claude Fable 5"])
             self.assertEqual(
                 (theme["model_reviews"][0]["knowledge_saturation"], theme["model_reviews"][0]["price_saturation"]),
                 (grok_known, grok_priced),
@@ -303,21 +304,22 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_meta_frontier_themes_are_complete_and_independently_scored(self) -> None:
         expected = {
-            "meta-power-wall-rate-shock": ("Energy", 68, 32, 78, 48),
-            "meta-humanoid-labor-wage-shock": ("Emerging", 38, 14, 50, 27),
-            "meta-partial-reprogramming-humans": ("Emerging", 24, 8, 33, 13),
-            "meta-silicon-sovereignty-stack-split": ("Sectors", 54, 26, 66, 40),
-            "meta-y2q-post-quantum-rebuild": ("Emerging", 18, 5, 31, 12),
+            "meta-power-wall-rate-shock": ("Energy", 68, 32, 80, 56),
+            "meta-humanoid-labor-wage-shock": ("Emerging", 38, 14, 58, 30),
+            "meta-partial-reprogramming-humans": ("Emerging", 24, 8, 36, 14),
+            "meta-silicon-sovereignty-stack-split": ("Sectors", 54, 26, 78, 55),
+            "meta-y2q-post-quantum-rebuild": ("Emerging", 18, 5, 45, 20),
         }
         found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
         self.assertEqual(set(found), set(expected))
         for theme_id, (category, meta_known, meta_priced, consensus_known, consensus_priced) in expected.items():
             theme = found[theme_id]
             self.assertEqual(theme["category"], category)
-            self.assertEqual(theme["status"], "Meta frontier · 2 reviewers")
-            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["Meta AI", "GPT-5.6"])
+            self.assertEqual(theme["status"], "Meta frontier · 3 reviewers")
+            self.assertEqual([row["model"] for row in theme["model_reviews"]],
+                             ["Meta AI", "GPT-5.6", "Claude Fable 5"])
             self.assertEqual(theme["source_model"], "Meta AI")
-            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"])
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6", "Claude Fable 5"])
             self.assertEqual(
                 (theme["model_reviews"][0]["knowledge_saturation"], theme["model_reviews"][0]["price_saturation"]),
                 (meta_known, meta_priced),
@@ -352,11 +354,10 @@ class TradingThemesContractTest(unittest.TestCase):
         for theme_id, category in expected.items():
             theme = found[theme_id]
             self.assertEqual(theme["category"], category)
-            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6"])
-            self.assertIn("single reviewer", theme["status"])
-            review = theme["model_reviews"][0]
-            self.assertEqual(theme["consensus_scores"]["knowledge_saturation"], review["knowledge_saturation"])
-            self.assertEqual(theme["consensus_scores"]["price_saturation"], review["price_saturation"])
+            self.assertEqual([row["model"] for row in theme["model_reviews"]],
+                             ["GPT-5.6", "Claude Fable 5"])
+            self.assertEqual(theme["reviewed_by"], ["Claude Fable 5"])
+            self.assertIn("2 reviewers", theme["status"])
             for field in (
                 "layer_scorecard", "adversarial_review", "what_survived", "residual_edge",
                 "research_priority", "falsifiers", "watch_next", "sources",
