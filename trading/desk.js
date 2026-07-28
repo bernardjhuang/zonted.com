@@ -40,6 +40,12 @@
     if (latest) setChip('meta', 'Meta', Number(latest.derived_rating), latest.stance);
   });
   fetch('/trading/grok-risk/', { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').catch(() => '').then(html => {
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+    const latest = doc.querySelector('.risk-assessment[data-rating]');
+    if (latest) {
+      setChip('grok', 'Grok', Number(latest.dataset.rating), latest.dataset.stance || '');
+      return;
+    }
     const m = /Risk[\s-]*(On|Off|Neutral)\s*\((\d+(?:\.\d+)?)\s*\/\s*10\)/i.exec(html)
       || /(?:^|[^\d.])(\d+(?:\.\d+)?)\s*\/\s*10\b/.exec(html);
     if (m) setChip('grok', 'Grok', Number(m[2] !== undefined ? m[2] : m[1]), m[2] !== undefined ? 'Risk ' + m[1] : '');
