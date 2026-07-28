@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 2)
+        self.assertEqual(len(self.payload["themes"]), 9)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -152,6 +152,32 @@ class TradingThemesContractTest(unittest.TestCase):
         ):
             self.assertIn(text, self.script)
         self.assertRegex(self.script, r"fetch\(shell\.dataset\.url")
+
+    def test_geo_themes_follow_ledger_rules(self) -> None:
+        geo = [t for t in self.payload["themes"] if t["category"] == "Geographies"]
+        self.assertEqual(len(geo), 7)
+        self.assertEqual(len({t["id"] for t in geo}), 7)
+        for theme in geo:
+            for field in ("owner_belief", "conviction", "final_verdict"):
+                self.assertTrue(theme[field], theme["id"])
+            scores = theme["consensus_scores"]
+            for value in scores.values():
+                self.assertTrue(isinstance(value, int) and 0 <= value <= 100, theme["id"])
+            # single-reviewer themes: consensus must equal the identified review, never invented
+            reviews = theme["model_reviews"]
+            self.assertEqual(len(reviews), 1, theme["id"])
+            self.assertEqual(reviews[0]["knowledge_saturation"], scores["knowledge_saturation"], theme["id"])
+            self.assertEqual(reviews[0]["price_saturation"], scores["price_saturation"], theme["id"])
+            self.assertIn("single reviewer", theme["status"], theme["id"])
+            # renderer accesses every section unconditionally
+            for field in ("layer_scorecard", "adversarial_review", "what_survived",
+                          "residual_edge", "research_priority", "falsifiers",
+                          "watch_next", "sources"):
+                self.assertTrue(theme[field], f'{theme["id"]}.{field}')
+            self.assertTrue(theme["valuation_snapshot"]["rows"], theme["id"])
+            for row in theme["layer_scorecard"]:
+                self.assertTrue(0 <= row["knowledge_saturation"] <= 100, theme["id"])
+                self.assertTrue(0 <= row["price_saturation"] <= 100, theme["id"])
 
 
 if __name__ == "__main__":
