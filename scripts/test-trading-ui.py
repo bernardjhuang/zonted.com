@@ -88,7 +88,8 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_hypotheses_are_explicit_and_scannable(self):
         hypotheses_html = HYPOTHESES_ROUTE.read_text()
-        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), 12)
+        expected_symbols = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"])
+        self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), len(expected_symbols))
         details = {
             symbol.upper(): block
             for symbol, block in re.findall(
@@ -97,8 +98,8 @@ class TradingUiContractTest(unittest.TestCase):
                 re.S,
             )
         }
-        self.assertEqual(set(details), {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"})
-        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), 12)
+        self.assertEqual(set(details), expected_symbols)
+        self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), len(expected_symbols))
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
         self.assertIn('<h4>Watch plan</h4>', details["HIMS"])
@@ -114,6 +115,9 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(route_details))
         self.assertIn('Exact Sciences', details["ABT"])
         self.assertIn('Libre Assist', details["ABT"])
+        self.assertIn('Fiscal Q4', details["PG"])
+        self.assertIn('not a claim that the shares are cheap', details["PG"])
+        self.assertIn('Current market value is published only as a percentage', details["PG"])
         self.assertIn('Slightly underpriced', details["HOOD"])
         self.assertIn('$940–980B', details["HOOD"])
         self.assertIn('$69.1B', details["HOOD"])
@@ -150,12 +154,10 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
         hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        expected_symbols = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"])
         articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
-        self.assertEqual(len(articles), 12)
-        self.assertEqual(
-            {symbol.upper() for symbol, _attrs in articles},
-            {"ABT", "BYDDY", "CEG", "FIGR", "FRMI", "HIMS", "HOOD", "HPQ", "NTDOY", "RDDT", "RBLX", "TMO"},
-        )
+        self.assertEqual(len(articles), len(expected_symbols))
+        self.assertEqual({symbol.upper() for symbol, _attrs in articles}, expected_symbols)
         for symbol, attrs in articles:
             self.assertRegex(attrs, r'data-desk-catalyst="\d{4}-\d{2}-\d{2}"', symbol)
             self.assertRegex(attrs, r'data-desk-trigger="[^"]+"', symbol)
@@ -164,10 +166,10 @@ class TradingUiContractTest(unittest.TestCase):
         desk = DESK_HOME.read_text()
         position_count = len(json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"])
         self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
-        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), 12 - position_count)
-        self.assertIn('data-desk-source-articles="12"', desk)
+        self.assertEqual(desk.count('data-desk-kind="hypothesis"'), len(expected_symbols) - position_count)
+        self.assertIn(f'data-desk-source-articles="{len(expected_symbols)}"', desk)
         self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
-        self.assertEqual(desk.count('class="desk-thesis-cell-button"'), 12)
+        self.assertEqual(desk.count('class="desk-thesis-cell-button"'), len(expected_symbols))
         self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
         self.assertNotIn("Six are live positions.", hypotheses_route)
 

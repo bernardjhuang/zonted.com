@@ -30,6 +30,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
                 "AAA": {
                     "equity_entry": 10.125,
                     "equity_side": "long",
+                    "allocation_percent": 7.8,
                     "options": [{"option_type": "call", "strike": 15, "expiration": "2027-01-15", "entry": 2.285}],
                 }
             },
@@ -37,11 +38,21 @@ class DeskPositionBuilderTests(unittest.TestCase):
         result = builder.render(holdings, self.profiles())
         self.assertEqual([row["symbol"] for row in result["positions"]], ["AAA"])
         self.assertEqual(result["positions"][0]["entry"], 10.12)
+        self.assertEqual(result["positions"][0]["allocation_percent"], 7.8)
         self.assertEqual(result["positions"][0]["instrument"], "Equity @ $10.12 · Jan 2027 $15 call @ $2.29")
         public = builder.serialize(result).casefold()
         self.assertNotIn("quantity", public)
         self.assertNotIn("account", public)
         self.assertNotIn("1234", public)
+
+    def test_positions_sort_by_allocation_descending(self):
+        holdings = {"desk_instruments": {
+            "AAA": {"equity_entry": 10.0, "equity_side": "long", "allocation_percent": 7.8, "options": []},
+            "BBB": {"equity_entry": 20.0, "equity_side": "long", "allocation_percent": 23.4, "options": []},
+        }}
+        result = builder.render(holdings, self.profiles())
+        self.assertEqual(result["schema_version"], 2)
+        self.assertEqual([row["symbol"] for row in result["positions"]], ["BBB", "AAA"])
 
     def test_unknown_held_symbol_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "need authored Desk profiles"):

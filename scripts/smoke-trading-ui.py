@@ -91,12 +91,13 @@ def main() -> None:
         check("below $25" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS price trigger is missing")
         desktop.goto(f"{origin}/trading/hypotheses/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
-        check(hypothesis_links.count() == 12, "not every public hypothesis links to its VWAP setup chart")
+        hypothesis_count = desktop.locator("article.hypothesis-detail").count()
+        check(hypothesis_links.count() == hypothesis_count, "not every public hypothesis links to its VWAP setup chart")
         for case in ("bear", "base", "bull"):
             level_lines = desktop.locator(f'.hyp-summary-chart [data-entry-level="{case}"]')
-            check(level_lines.count() == 12, f"not every summary chart has a {case} entry line")
+            check(level_lines.count() == hypothesis_count, f"not every summary chart has a {case} entry line")
             check(level_lines.first.evaluate("line => getComputedStyle(line).stroke") != "none", f"{case} entry line is not styled")
-        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "HPQ", "TMO")]
+        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "PG", "HOOD", "HIMS", "BYDDY", "NTDOY", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "HPQ", "TMO")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis VWAP setup links are incomplete or misordered")
         desktop.goto(f"{origin}/trading/vwap-setups/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
@@ -248,7 +249,7 @@ def main() -> None:
             check(gemini.locator("h1").inner_text() == "Gemini Risk", "Gemini Risk route heading is wrong")
             check(gemini.locator(".gemini-risk-card").count() == 5, "Gemini Risk analysis card count is wrong")
             check(gemini.locator(".gemini-risk-report").get_attribute("data-rating") == "4", "Gemini Risk rating is wrong")
-            check(gemini.locator(".subnav [aria-current='page']").inner_text() == "Gemini Risk", "Gemini Risk current nav is wrong")
+            check(gemini.locator(".subnav [aria-current='page']").count() == 0, "risk routes should be reached from model chips, not the section nav")
             check(gemini.locator(".chip-gemini").inner_text() == "Gemini 4", "Gemini Risk status chip is wrong")
             widths = gemini.evaluate("({body: document.body.scrollWidth, html: document.documentElement.scrollWidth, viewport: document.documentElement.clientWidth})")
             check(widths["body"] <= widths["viewport"] and widths["html"] <= widths["viewport"], f"Gemini Risk overflow at {viewport['width']}px: {widths}")
