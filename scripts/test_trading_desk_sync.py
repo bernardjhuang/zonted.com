@@ -249,13 +249,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(f'<span>{len(positions_payload)} open · sorted by Δ$ exposure</span>', page)
         self.assertIn("--bl-exposure:var(--bl-accent)", styles.replace(" ", ""))
         self.assertIn(".desk-position-exposure{grid-column:2;color:var(--bl-exposure)", styles.replace(" ", ""))
-        self.assertIn("<th>IV</th>", page)
-        self.assertNotIn("<th>Beta</th>", page)
+        self.assertEqual(page.count("<th>Beta</th>"), 2)
+        self.assertNotIn("<th>IV</th>", page)
+        self.assertNotIn('data-label="IV"', page)
         self.assertNotIn("allocation_percent", json.dumps(positions_artifact))
         self.assertNotIn("% allocation", page)
         expected_positions = {row["symbol"] for row in positions_payload}
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
         total_symbols = expected_positions | expected_hypotheses
+        source_charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
         feed_count = len(total_symbols - {"BYDDY", "NTDOY"})
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
@@ -269,13 +271,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
             for row in rows:
                 self.assertRegex(row, r'data-edge="(up|down|flat|soon|no-feed)"')
                 self.assertIn('class="desk-edge-word"', row)
+                symbol = _row_symbol(row)
+                self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
 
         for symbol in ("BYDDY", "NTDOY"):
             row = next(row for row in thesis_rows if _row_symbol(row) == symbol)
             self.assertIn('data-feed-state="no-feed"', row)
             for label in ("Last", "Day", "Spread Z", "1Y"):
                 self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
-            self.assertRegex(row, r'data-label="IV"[\s\S]*?—[\s\S]*?No held option')
+            self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
         self.assertEqual(len(toggles), len(total_symbols))
@@ -308,7 +312,6 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count("trailing one-year return"), feed_count)
         chart_ranges = re.findall(r'data-desk-one-year-chart="([A-Z]+)" data-desk-chart-dates="([^"]+)"', page)
         self.assertEqual(len(chart_ranges), feed_count)
-        source_charts = json.loads((ROOT / "trading/hypothesis-charts.json").read_text())["charts"]
         for symbol, encoded_dates in chart_ranges:
             dates = [dt.date.fromisoformat(value) for value in encoded_dates.split(",")]
             source_start = dt.date.fromisoformat(source_charts[symbol]["dates"][0])
@@ -336,9 +339,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if position["premium_at_risk_percent"] > 0:
                 self.assertIn(f'>premium {position["premium_at_risk_percent"]:.1f}%<', row)
                 self.assertIn(f'>θ/day {position["theta_percent_per_day"]:+.2f}%<', row)
-                self.assertIn(f'data-label="IV">{position["implied_volatility_percent"]:.1f}%<small>Held option</small>', row)
-            else:
-                self.assertIn('data-label="IV">—<small>Stock only</small>', row)
+            self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
             if position["unstable_delta"]:
                 self.assertIn(f'⚠ {position["min_dte"]}-DTE delta', row)
             if position.get("kill") is not None:
