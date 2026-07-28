@@ -40,6 +40,9 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
     instruments = holdings.get("desk_instruments")
     if not isinstance(instruments, dict) or not instruments:
         raise ValueError("live holdings snapshot contains no desk_instruments")
+    cash_percent = holdings.get("cash_percent")
+    if isinstance(cash_percent, bool) or not isinstance(cash_percent, (int, float)) or not 0 <= cash_percent <= 100:
+        raise ValueError("live holdings snapshot needs cash_percent between 0 and 100")
     profiles = profiles_payload["profiles"]
     missing = sorted(set(instruments) - set(profiles))
     if missing:
@@ -75,7 +78,7 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
             "thesis": profile["thesis"],
         })
     positions.sort(key=lambda row: (-row["allocation_percent"], row["symbol"]))
-    return {"schema_version": 2, "positions": positions}
+    return {"schema_version": 2, "cash_percent": round(float(cash_percent), 1), "positions": positions}
 
 
 def serialize(payload: dict[str, Any]) -> str:
