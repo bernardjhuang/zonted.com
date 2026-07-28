@@ -363,12 +363,15 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
     return "\n".join(rows)
 
 
-def table(title: str, subtitle: str, body: str, hypotheses: bool = False) -> str:
+def table(title: str, subtitle: str, body: str, hypotheses: bool = False, title_note: str | None = None) -> str:
     if hypotheses:
         heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
     else:
         heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
-    return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
+    heading = title
+    if title_note:
+        heading += f' <span class="desk-cash-weight">{title_note}</span>'
+    return f'<div class="desk-table-head"><h2>{heading}</h2><span>{subtitle}</span></div><div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
 
 def modals() -> str:
@@ -446,7 +449,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
 {START_POS}
-{table('Positions', f'{cash_percent:.1f}% cash · {len(positions)} open · sorted by portfolio allocation', pos_body)}
+{table('Positions', f'{len(positions)} open · sorted by portfolio allocation', pos_body, title_note=f'{cash_percent:.1f}% cash')}
 {END_POS}
 {START_HYP}
 {table('Tracked hypotheses', f'{len(tracked)} thesis-only names · sorted by catalyst', hyp_body, True)}
