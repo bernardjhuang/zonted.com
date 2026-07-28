@@ -266,12 +266,11 @@ def detail_chart(symbol: str, market: dict, levels: dict, position: dict | None 
         label = parsed.strftime("%b %-d") + (f" ’{parsed.strftime('%y')}" if index in (0, len(dates) - 1) else "")
         anchor = "start" if index == 0 else "end" if index == len(dates) - 1 else "middle"
         x_ticks.append(f'<text class="desk-detail-axis-label" x="{tick_x:.1f}" y="202" text-anchor="{anchor}">{label}</text>')
-    entry = float(position["entry"]) if position else None
     kill = float(position["kill"]) if position and position.get("kill") else None
     attrs = (
         f'data-desk-one-year-chart="{symbol}" data-desk-chart-dates="{",".join(dates)}" '
         f'data-desk-chart-closes="{",".join(f"{value:.4f}" for value in values)}" '
-        f'data-desk-chart-entry="{entry if entry is not None else ""}" data-desk-chart-kill="{kill if kill is not None else ""}"'
+        f'data-desk-chart-kill="{kill if kill is not None else ""}"'
     )
     return (
         f'<figure class="desk-detail-chart" {attrs}><svg viewBox="0 0 520 210" role="img" tabindex="0" aria-label="{symbol} one-year price history with price and date axes. Hover or use arrow keys for daily metrics.">'
@@ -371,7 +370,7 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         exposure = float(position["exposure_percent"])
         main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-exposure">{exposure:.1f}% Δ$ exposure</span>{position_risk_lines(position)}</button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('IV', iv_label(position, stock_only=True), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, float(position['entry']), float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('IV', iv_label(position, stock_only=True), 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, None, float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)

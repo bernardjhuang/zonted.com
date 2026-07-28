@@ -20,19 +20,12 @@ def level(value: Any) -> str:
     return f"{number:.2f}".rstrip("0").rstrip(".")
 
 
-def money(value: Any) -> str:
-    return f"{float(value):.2f}"
-
-
 def option_label(row: dict[str, Any]) -> str:
     expiration = dt.date.fromisoformat(str(row["expiration"]))
     option_type = str(row["option_type"]).lower()
     if option_type not in {"call", "put"}:
         raise ValueError(f"unsupported option type: {option_type}")
-    return (
-        f"{expiration.strftime('%b %Y')} ${level(row['strike'])} {option_type} "
-        f"@ ${money(row['entry'])}"
-    )
+    return f"{expiration.strftime('%b %Y')} ${level(row['strike'])} {option_type}"
 
 
 def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[str, Any]:
@@ -67,9 +60,6 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
     positions: list[dict[str, Any]] = []
     for symbol in sorted(instruments):
         live = instruments[symbol]
-        entry = live.get("equity_entry")
-        if not isinstance(entry, (int, float)) or entry <= 0:
-            raise ValueError(f"{symbol} needs a positive equity_entry for its Desk price chart")
         side = str(live.get("equity_side") or "long")
         if side not in {"long", "short"}:
             raise ValueError(f"{symbol} has unsupported equity_side: {side}")
@@ -102,7 +92,7 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
         if not isinstance(unstable, bool):
             raise ValueError(f"{symbol} needs boolean unstable_delta")
 
-        parts = [f"{'Short equity' if side == 'short' else 'Equity'} @ ${money(entry)}"]
+        parts = ["Short equity" if side == "short" else "Equity"]
         options = live.get("options") or []
         if not isinstance(options, list):
             raise ValueError(f"{symbol} options must be an array")
@@ -111,7 +101,6 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
         positions.append({
             "symbol": symbol,
             "instrument": " · ".join(parts),
-            "entry": round(float(entry), 2),
             **risk_values,
             "implied_volatility_percent": round(float(iv), 1) if iv is not None else None,
             "delta_used": round(float(delta_used), 4) if delta_used is not None else None,

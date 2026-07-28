@@ -80,13 +80,13 @@ class DeskPositionBuilderTests(unittest.TestCase):
             "premium_at_risk_percent": 19.2,
         })
         self.assertEqual([row["symbol"] for row in result["positions"]], ["AAA"])
-        self.assertEqual(result["positions"][0]["entry"], 10.12)
         self.assertEqual(result["positions"][0]["exposure_percent"], 171.4)
         self.assertEqual(result["positions"][0]["capital_percent"], 19.4)
         self.assertEqual(result["positions"][0]["implied_volatility_percent"], 27.0)
-        self.assertEqual(result["positions"][0]["instrument"], "Equity @ $10.12 · Jan 2027 $15 call @ $2.29")
+        self.assertEqual(result["positions"][0]["instrument"], "Equity · Jan 2027 $15 call")
+        self.assertNotIn("entry", result["positions"][0])
         public = builder.serialize(result).casefold()
-        for forbidden in ("quantity\"", "account", "1234", "total_value", "allocation_percent"):
+        for forbidden in ("quantity\"", "account", "1234", "total_value", "allocation_percent", "equity_entry", "@ $10.12", "@ $2.29"):
             self.assertNotIn(forbidden, public)
 
     def test_positions_sort_by_delta_exposure_descending_without_capping_at_100(self):
@@ -106,9 +106,11 @@ class DeskPositionBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
 
-    def test_option_only_position_fails_instead_of_plotting_option_cost_on_stock_chart(self):
-        with self.assertRaisesRegex(ValueError, "positive equity_entry"):
-            builder.render({"risk_summary": summary(), "desk_instruments": {"AAA": {"equity_entry": None, **risk(7.8), "options": [{"option_type": "call", "strike": 15, "expiration": "2027-01-15", "entry": 2.0}]}}}, self.profiles())
+    def test_private_entry_values_are_not_required_or_published(self):
+        result = builder.render({"risk_summary": summary(), "desk_instruments": {"AAA": {"equity_entry": None, "equity_side": "long", **risk(7.8), "options": [{"option_type": "call", "strike": 15, "expiration": "2027-01-15", "entry": 2.0}]}}}, self.profiles())
+        public = builder.serialize(result)
+        self.assertNotIn('"entry"', public)
+        self.assertNotIn("@ $2.00", public)
 
 
 if __name__ == "__main__":

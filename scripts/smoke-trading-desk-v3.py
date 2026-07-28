@@ -54,7 +54,8 @@ def exercise(page, url: str, screenshot: Path) -> None:
     spark_tooltip = spark.locator("[data-desk-ytd-tooltip]:not([hidden])")
     spark_tooltip.wait_for()
     spark_text = spark_tooltip.inner_text()
-    check("Day" in spark_text and "Trailing 1Y" in spark_text and "vs entry" in spark_text, "spark chart hover metrics are incomplete")
+    check("Day" in spark_text and "Trailing 1Y" in spark_text, "spark chart hover metrics are incomplete")
+    check("vs entry" not in spark_text, "private execution-entry metric leaked into the public chart")
 
     opener = page.locator('[data-desk-kind="position"] .desk-row-toggle').first
     opener.click()
