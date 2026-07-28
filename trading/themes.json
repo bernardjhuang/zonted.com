@@ -1,629 +1,1508 @@
 {
-  "schema_version": 1,
-  "updated_at": "2026-07-26T22:40:00Z",
-  "as_of": "2026-07-24",
-  "method": {
-    "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
-    "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-    "consensus": "Energy uses the median of GPT-5.6, Claude Fable, and Gemini 3.1 Pro. New themes may begin with a single explicitly identified reviewer until independent model reviews are commissioned; missing model scores are never invented.",
-    "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
-  },
-  "themes": [
+ "schema_version": 1,
+ "updated_at": "2026-07-27",
+ "as_of": "2026-07-24",
+ "method": {
+  "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
+  "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
+  "consensus": "Energy uses the median of GPT-5.6, Claude Fable, and Gemini 3.1 Pro. New themes may begin with a single explicitly identified reviewer until independent model reviews are commissioned; missing model scores are never invented.",
+  "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
+ },
+ "themes": [
+  {
+   "id": "ai-power-scarcity",
+   "category": "Energy",
+   "title": "AI data centers \u2192 electricity scarcity",
+   "horizon": "2026\u20132031",
+   "status": "Active research",
+   "owner_belief": "AI and hyperscale data-center construction will create a durable U.S. electricity-load shock. The scarce assets are not generic \u2018energy exposure\u2019; they are firm megawatts, energized interconnections, turbines, transformers, skilled electrical labor, cooling, and fuel delivery in the regions where projects can actually connect.",
+   "conviction": "High conviction in physical load growth. Medium conviction that the obvious public-equity basket still offers alpha.",
+   "final_verdict": "The demand thesis survives. The easy trade does not. Knowledge saturation is 92/100 and price saturation is 69/100 overall, with huge dispersion by layer. The residual edge is contract-level underwriting\u2014signed minimum-take load, cancellation terms, rate treatment, existing capacity, and time-to-power\u2014not knowing that AI uses electricity.",
+   "consensus_scores": {
+    "knowledge_saturation": 92,
+    "price_saturation": 69
+   },
+   "model_reviews": [
     {
-      "id": "ai-power-scarcity",
-      "category": "Energy",
-      "title": "AI data centers → electricity scarcity",
-      "horizon": "2026–2031",
-      "status": "Active research",
-      "owner_belief": "AI and hyperscale data-center construction will create a durable U.S. electricity-load shock. The scarce assets are not generic ‘energy exposure’; they are firm megawatts, energized interconnections, turbines, transformers, skilled electrical labor, cooling, and fuel delivery in the regions where projects can actually connect.",
-      "conviction": "High conviction in physical load growth. Medium conviction that the obvious public-equity basket still offers alpha.",
-      "final_verdict": "The demand thesis survives. The easy trade does not. Knowledge saturation is 92/100 and price saturation is 69/100 overall, with huge dispersion by layer. The residual edge is contract-level underwriting—signed minimum-take load, cancellation terms, rate treatment, existing capacity, and time-to-power—not knowing that AI uses electricity.",
-      "consensus_scores": {
-        "knowledge_saturation": 92,
-        "price_saturation": 69
-      },
-      "model_reviews": [
-        {
-          "model": "Grok 4.5",
-          "role": "User-supplied original map",
-          "knowledge_saturation": null,
-          "price_saturation": null,
-          "verdict": "Bernard supplied this Grok 4.5 output directly. It correctly mapped the physical bottlenecks and regional shift, but turned nearly every layer into a winner list. It did not explicitly score saturation, so this page does not fake one."
-        },
-        {
-          "model": "Claude Fable",
-          "role": "Adversarial reviewer",
-          "knowledge_saturation": 88,
-          "price_saturation": 62,
-          "verdict": "Consensus theme, bifurcated pricing. The remaining opportunity is distinguishing intact contracted economics from broken narrative after large drawdowns."
-        },
-        {
-          "model": "Gemini 3.1 Pro",
-          "role": "Independent reviewer",
-          "knowledge_saturation": 95,
-          "price_saturation": 85,
-          "verdict": "The equity narrative has peaked and fractured. Most obvious equipment and construction expressions leave almost no margin for error."
-        },
-        {
-          "model": "GPT-5.6",
-          "role": "Final synthesis",
-          "knowledge_saturation": 92,
-          "price_saturation": 69,
-          "verdict": "Physical scarcity is real, but investability depends on who captures the rent. Merchant power, gas delivery, bridge power, and electrical labor deserve contract-by-contract work; regulated utilities and headline equipment trades look crowded."
-        }
-      ],
-      "layer_scorecard": [
-        {
-          "layer": "Equipment + grid",
-          "symbols": "GEV · ETN · HUBB · PWR",
-          "knowledge_saturation": 92,
-          "price_saturation": 82,
-          "read": "Backlogs are real and widely understood. PWR at 86.6× trailing and ETN near its high leave little room for a capex wobble; GEV’s 30.2× is less absurd but still assumes backlog quality."
-        },
-        {
-          "layer": "Cooling + electrical",
-          "symbols": "VRT · FIX · NVT · IESC · EME",
-          "knowledge_saturation": 90,
-          "price_saturation": 76,
-          "read": "The bottleneck is real, but cooling can commoditize and labor-heavy contractors can suffer margin leakage. EME looks less narrative-priced than VRT, FIX, or NVT."
-        },
-        {
-          "layer": "Regulated utilities",
-          "symbols": "D · ETR · AEP · NEE",
-          "knowledge_saturation": 88,
-          "price_saturation": 87,
-          "read": "The ‘safe AI-power’ trade is crowded. D and ETR were within 3% of 52-week highs while politicians and commissions are actively deciding who pays for grid expansion."
-        },
-        {
-          "layer": "Merchant power",
-          "symbols": "CEG · VST · TLN · NRG",
-          "knowledge_saturation": 90,
-          "price_saturation": 58,
-          "read": "Everyone knows the story, but 20–34% drawdowns reopened the valuation debate. The question is whether contracted floors survive political caps and hyperscaler bargaining power."
-        },
-        {
-          "layer": "Nuclear fuel + SMRs",
-          "symbols": "CCJ · LEU · BWXT · OKLO · SMR",
-          "knowledge_saturation": 94,
-          "price_saturation": 45,
-          "read": "The bubble already broke; that does not make pre-revenue reactors cheap. Separate operating fuel-cycle cash flows from first-of-a-kind deployment risk."
-        },
-        {
-          "layer": "Natural gas + midstream",
-          "symbols": "EQT · WMB · KMI · ET",
-          "knowledge_saturation": 75,
-          "price_saturation": 55,
-          "read": "Less saturated than the headline basket, not undiscovered. Cheap trailing multiples can reflect commodity, basis, permitting, and capex risk—not free AI optionality."
-        },
-        {
-          "layer": "Bridge power + engines",
-          "symbols": "CAT · CMI · BE",
-          "knowledge_saturation": 68,
-          "price_saturation": 55,
-          "read": "Reciprocating engines solve time-to-power while grids lag. Duration and replacement risk matter. BE’s $53.2B market cap despite losses is narrative pricing, not a bargain."
-        },
-        {
-          "layer": "Powered land",
-          "symbols": "IREN · APLD · CIFR · WULF",
-          "knowledge_saturation": 78,
-          "price_saturation": 70,
-          "read": "Energized interconnections are scarce, but miner-to-AI conversions carry financing, governance, customer-concentration, and execution risk. Signed leases matter; slide-deck megawatts do not."
-        }
-      ],
-      "adversarial_review": {
-        "grok": [
-          "It conflates physical load growth with shareholder returns. Utilities, merchants, equipment vendors, contractors, fuel suppliers, and pre-revenue developers have different rent capture and failure modes.",
-          "It treats queue gigawatts, announced campuses, signed electricity-service agreements, and energized load as if they were comparable. They are not.",
-          "It underweights politics and cost allocation. Scarcity can be real while commissions, legislatures, or dominant hyperscalers prevent that scarcity rent from reaching equity holders.",
-          "It dilutes the theme with low-exposure water and industrial names, then calls diversification a solution. Owning every proxy is how you pay consensus prices for weak exposure.",
-          "It buries natural gas, pipelines, reciprocating engines, electrical labor, and energized land even though those may solve the near-term time-to-power problem faster than new nuclear."
-        ],
-        "fable": [
-          "Its core criticism is stronger, but ‘gas is the cheapest way to own it’ confuses a low multiple with a durable edge. Commodity cyclicality, LNG competition, basis risk, permitting, and new-pipeline capex can eat the apparent discount.",
-          "Trailing P/E is a rough sorting tool, not valuation work. It is noisy for cyclicals, acquisition-heavy generators, and fast-growing contractors; forward free cash flow and contract economics matter more.",
-          "Several precise demand-quality claims were too confidently stated. Official ERCOT material supports a gigantic, low-quality queue, but this review could not independently verify the specific ‘198 GW in Q1’ figure, so it is excluded from the final thesis.",
-          "The 30–50% project statistic is primarily a delay forecast, not proof that half the load disappears. Likewise, $130B ‘blocked or delayed’ is a political-friction signal, not equivalent to $130B permanently canceled.",
-          "A legislated capacity floor and cap do not make merchant power automatically asymmetric. The floor may still be inadequate against fuel, debt, maintenance, acquisition, and new-build economics.",
-          "The 1999–2002 analogy is useful, not destiny. Deposits, cancellation rights, resource adequacy rules, contract tenor, and today’s concentrated buyers must be compared before declaring the same cobweb bust.",
-          "The whole review is an equity-multiple exercise with no credit lens. High-yield spreads near 2.8% sat around the 5th percentile of the past decade while this buildout grew steadily more debt-financed. If the theme is wrong, credit reprices first, and almost none of that risk is currently priced.",
-          "By the time this map existed, the ‘find the obscure name’ move was largely spent. Argan and Sterling had each risen roughly 4× from their 2025 lows, Vicor about 9×, Navitas about 6×, and Hut 8 about 7.5×. Discovery was saturated, not just narrative."
-        ]
-      },
-      "what_survived": [
-        "Firm power scarcity is the right organizing idea. PJM’s 2028/29 capacity auction cleared at its $325/MW-day cap and still missed the reliability requirement by about 6.8 GW.",
-        "The bottleneck is physical. GE Vernova reported a 116 GW gas-turbine backlog and is taking 2031 reservations.",
-        "Demand concentration is a real single-factor risk. Four hyperscalers are expected to spend roughly $700B in 2026, but company-level figures vary with fiscal calendars and what each source counts as capex.",
-        "Queue data is marketing until it becomes a signed, funded, minimum-take obligation. ERCOT was tracking roughly 438 GW of large-load requests in May 2026—far beyond plausible near-term system absorption.",
-        "Local politics and rate treatment can redirect the economic benefit. More than 300 data-center bills appeared across 30 states early in 2026, including proposals for special rate classes and moratoria."
-      ],
-      "residual_edge": [
-        "Signed take-or-pay ESAs and PPAs versus non-binding queue positions.",
-        "Existing energized capacity versus projects that need turbines, transmission, permits, water, or multiyear interconnection work.",
-        "Backlog cancellation terms and deposits, not headline backlog dollars or gigawatts.",
-        "Who funds dedicated generation and grid upgrades: hyperscaler, utility rate base, or residential customers.",
-        "Gas and midstream assets with a second demand leg from LNG—not AI-only economics—and a credible path through permitting and last-mile constraints.",
-        "Bridge-power and electrical-labor businesses where backlog converts quickly to cash without heroic terminal-growth assumptions.",
-        "Merchant assets whose contracted downside and regulatory floor can be modeled explicitly after the drawdown."
-      ],
-      "research_priority": [
-        {
-          "bucket": "Investigate first",
-          "symbols": "CEG · VST · EQT · WMB · EME · IESC · CAT · CMI",
-          "why": "These sit closer to current cash flow or time-to-power. Underwrite contracts, leverage, fuel exposure, capex, and regulatory treatment before touching them."
-        },
-        {
-          "bucket": "Good businesses, crowded prices",
-          "symbols": "GEV · ETN · VRT · PWR · D · ETR · FIX · NVT",
-          "why": "The story is credible; the valuation cushion often is not. Wait for estimates, price, or both to reset."
-        },
-        {
-          "bucket": "Speculation, not core exposure",
-          "symbols": "OKLO · SMR · BE · IREN · APLD · CIFR · WULF",
-          "why": "Popped bubbles can keep falling. Require funded projects, signed counterparties, unit economics, and dilution math—not LOIs and megawatt decks."
-        }
-      ],
-      "valuation_snapshot": {
-        "source": "Robinhood fundamentals",
-        "date": "2026-07-24",
-        "note": "Trailing P/E and distance from 52-week high are context, not valuation conclusions.",
-        "rows": [
-          {
-            "symbol": "GEV",
-            "price": "$1,015",
-            "pe": "30.2×",
-            "off_high": "−15%"
-          },
-          {
-            "symbol": "ETN",
-            "price": "$404",
-            "pe": "38.7×",
-            "off_high": "−7%"
-          },
-          {
-            "symbol": "VRT",
-            "price": "$290",
-            "pe": "73.8×",
-            "off_high": "−24%"
-          },
-          {
-            "symbol": "PWR",
-            "price": "$626",
-            "pe": "86.6×",
-            "off_high": "−21%"
-          },
-          {
-            "symbol": "CEG",
-            "price": "$274",
-            "pe": "21.9×",
-            "off_high": "−34%"
-          },
-          {
-            "symbol": "VST",
-            "price": "$163",
-            "pe": "25.5×",
-            "off_high": "−26%"
-          },
-          {
-            "symbol": "D",
-            "price": "$71",
-            "pe": "21.2×",
-            "off_high": "−3%"
-          },
-          {
-            "symbol": "ETR",
-            "price": "$116",
-            "pe": "29.3×",
-            "off_high": "−2%"
-          },
-          {
-            "symbol": "OKLO",
-            "price": "$40",
-            "pe": "Loss-making",
-            "off_high": "−79%"
-          },
-          {
-            "symbol": "BE",
-            "price": "$185",
-            "pe": "Loss-making",
-            "off_high": "−47%"
-          }
-        ]
-      },
-      "falsifiers": [
-        "Hyperscaler capex guidance rolls over for two consecutive quarters while announced load remains unfunded.",
-        "Signed minimum-take electricity agreements fail to grow even as queue gigawatts rise.",
-        "Turbine or transformer cancellations accelerate and vendors lose deposits or pricing power.",
-        "State commissions force shareholders—not hyperscalers—to absorb stranded grid and generation costs.",
-        "Compute-per-watt gains overwhelm Jevons demand and materially flatten realized energized megawatts.",
-        "New generation arrives faster than contracted load in 2029–31, compressing energy and capacity margins.",
-        "Gas supply, pipeline, water, labor, or permitting constraints make the supposed beneficiaries spend more than the scarcity rent they capture."
-      ],
-      "watch_next": [
-        "Quarterly hyperscaler capex guidance and AI revenue—not announced campus headlines.",
-        "Energized MW, signed ESAs, deposits, and minimum-take terms versus queue MW.",
-        "PJM/ERCOT capacity and energy prices, plus extensions or revisions to political caps and floors.",
-        "Utility tariff rulings that specify who pays for transmission, generation, and stranded assets.",
-        "GEV and peer slot pricing, deposits, cancellation terms, and 2029–31 delivery conversion.",
-        "Natural-gas basis, pipeline approvals, LNG demand, and the delivered fuel cost at target data-center regions.",
-        "Real deployment milestones for nuclear restarts and SMRs—not LOIs."
-      ],
-      "sources": [
-        {
-          "label": "PJM 2028/29 auction results",
-          "url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf"
-        },
-        {
-          "label": "PJM auction cap and 6.8 GW shortfall",
-          "url": "https://www.utilitydive.com/news/pjm-capacity-auction-price-cap-reserve-shortfall/825282/"
-        },
-        {
-          "label": "ERCOT large-load update",
-          "url": "https://www.ercot.com/files/docs/2026/05/24/8-Interconnection-and-Grid-Analysis-Update.pdf"
-        },
-        {
-          "label": "GE Vernova 116 GW turbine backlog",
-          "url": "https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/"
-        },
-        {
-          "label": "Hyperscaler 2026 capex concentration",
-          "url": "https://www.cnbc.com/2026/02/06/google-microsoft-meta-amazon-ai-cash.html"
-        },
-        {
-          "label": "Data-center delay forecast",
-          "url": "https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/"
-        },
-        {
-          "label": "Q1 2026 local-opposition tracker",
-          "url": "https://www.datacenterwatch.org/q1-2026"
-        },
-        {
-          "label": "State data-center legislation",
-          "url": "https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape"
-        }
-      ]
+     "model": "Grok 4.5",
+     "role": "User-supplied original map",
+     "knowledge_saturation": null,
+     "price_saturation": null,
+     "verdict": "Bernard supplied this Grok 4.5 output directly. It correctly mapped the physical bottlenecks and regional shift, but turned nearly every layer into a winner list. It did not explicitly score saturation, so this page does not fake one."
     },
     {
-      "id": "frontier-intelligence-value-capture",
-      "category": "Frontier intelligence",
-      "title": "Frontier intelligence → physical validation bottleneck",
-      "horizon": "2026–2035",
-      "status": "Initial synthesis",
-      "owner_belief": "Another jump in model intelligence matters most where outcomes are still limited by scientific search, experiment design, simulation, verification, and control of physical systems. As hypotheses become cheap, scarce laboratory capacity, trusted measurement, proprietary data, and regulated validation loops should capture disproportionate value.",
-      "conviction": "High conviction that frontier capability will accelerate discovery. Medium conviction on public-equity capture; the cleanest beneficiaries are often diversified tools, software, and services companies rather than pure-play discovery stories.",
-      "final_verdict": "The bottleneck framing survives; the stock map does not. The strongest public-market economics still sit one layer down in laboratory automation, instruments, simulation, metrology, test, and provenance—but the accessible expressions of that layer re-rated hard between April and July 2026, before this theme was written. Consensus is now the median of two independent reviews at 85/100 knowledge and 69/100 price. The unresolved question is not whether physical validation becomes scarce; it is whether any public vendor is large enough to capture it.",
-      "consensus_scores": {
-        "knowledge_saturation": 85,
-        "price_saturation": 69
-      },
-      "model_reviews": [
-        {
-          "model": "GPT-5.6",
-          "role": "Initial synthesis",
-          "knowledge_saturation": 88,
-          "price_saturation": 65,
-          "verdict": "Frontier discovery is widely anticipated, but value capture is mapped badly. The residual edge is the physical validation stack: instruments, automation, samples, simulation, metrology, test, and regulated workflow software."
-        },
-        {
-          "model": "Claude Fable",
-          "role": "Adversarial reviewer",
-          "knowledge_saturation": 82,
-          "price_saturation": 74,
-          "verdict": "The bottleneck framing is right and the stock map is a lap behind the tape. Life-science tools bottomed in April–May 2026 and re-rated hard before this theme was written, while the layer that would actually prove the thesis—autonomous labs—is too small to move any incumbent's revenue."
-        }
-      ],
-      "layer_scorecard": [
-        {
-          "layer": "Lab automation + measurement",
-          "symbols": "A · TMO · DHR · AVTR · AZTA · MTD",
-          "knowledge_saturation": 70,
-          "price_saturation": 70,
-          "read": "The best picks-and-shovels layer. AI can propose experiments faster than labs can run, reproduce, and audit them. Agilent CrossLab, Thermo Fisher Unity, Avantor services, Azenta sample management, and precision instruments sit near that bottleneck."
-        },
-        {
-          "layer": "Materials + autonomous chemistry",
-          "symbols": "A · BRKR · MTD · TMO · SDGR",
-          "knowledge_saturation": 65,
-          "price_saturation": 45,
-          "read": "Potentially the least saturated major theme. Closed-loop labs can search catalysts, batteries, semiconductors, and specialty materials, but manufacturing scale-up remains a separate failure point."
-        },
-        {
-          "layer": "Genetics + protein engineering",
-          "symbols": "TMO · DHR · ILMN · RXRX · SDGR · CRSP · BEAM",
-          "knowledge_saturation": 88,
-          "price_saturation": 48,
-          "read": "Scientific upside is enormous and the original bubble has fractured. Proprietary wet-lab feedback and human datasets matter more than generic AI-drug branding; clinical attrition still decides the economics."
-        },
-        {
-          "layer": "Semiconductor design / EDA",
-          "symbols": "CDNS · SNPS · KEYS · KLAC · AMAT",
-          "knowledge_saturation": 95,
-          "price_saturation": 90,
-          "read": "A nearly ideal AI workflow with excellent incumbent capture—and almost no narrative obscurity. Verification, test, advanced packaging, and yield control may offer better residual edge than design copilots."
-        },
-        {
-          "layer": "Robotics + embodied autonomy",
-          "symbols": "TER · ROK · ISRG · SYM",
-          "knowledge_saturation": 90,
-          "price_saturation": 78,
-          "read": "Better world models can expand adaptable physical labor, but reliability, safety, integration, service networks, and payback periods remain brutal. Vertical robots with proprietary workflows are stronger than generic humanoid stories."
-        },
-        {
-          "layer": "Cybersecurity + defense autonomy",
-          "symbols": "PANW · CRWD · FTNT · NET · PLTR",
-          "knowledge_saturation": 95,
-          "price_saturation": 90,
-          "read": "Frontier models improve both attackers and defenders. Telemetry, identity, trust, and installed platforms support capture, but the obvious public basket already prices a durable arms race."
-        },
-        {
-          "layer": "Fundamental physics + mathematics",
-          "symbols": "No clean proxy · KEYS · BRKR",
-          "knowledge_saturation": 60,
-          "price_saturation": 20,
-          "read": "The largest discovery upside and weakest direct public capture. Instruments and simulation may benefit, but a theorem, plasma insight, or new material does not automatically map to shareholder value."
-        },
-        {
-          "layer": "Finance + insurance",
-          "symbols": "MCO · SPGI · PGR · CB · AON · AJG",
-          "knowledge_saturation": 92,
-          "price_saturation": 55,
-          "read": "Likely a margin, speed, and risk-selection theme more than a scientific breakthrough. Incumbents with proprietary histories, distribution, and regulatory permission should capture more than generic AI vendors."
-        },
-        {
-          "layer": "Space autonomy + geospatial intelligence",
-          "symbols": "RKLB · RDW · PL · BKSY · IRDM · LUNR",
-          "knowledge_saturation": 88,
-          "price_saturation": 70,
-          "read": "Autonomy is valuable when latency and operator bandwidth bind, but launch, hardware, procurement, and financing still dominate. Mission software can improve without making every space equity economical."
-        },
-        {
-          "layer": "Weather + climate systems",
-          "symbols": "SPGI · MCO · PGR · DE · TRMB",
-          "knowledge_saturation": 75,
-          "price_saturation": 35,
-          "read": "Forecasting gains may diffuse as a public good. The better question is which insurer, farm platform, energy trader, or logistics network owns assets that become more valuable when forecasts improve."
-        },
-        {
-          "layer": "Energy / fusion / grid optimization",
-          "symbols": "CEG · BWXT · GEV · OKLO · SMR",
-          "knowledge_saturation": 75,
-          "price_saturation": 65,
-          "read": "AI can improve plasma control, materials, reactor design, and grid dispatch, but cannot delete licensing, construction, and physical validation. Operating assets deserve different underwriting from pre-revenue developers."
-        }
-      ],
-      "adversarial_review": [
-        {
-          "title": "Where the thesis breaks",
-          "bullets": [
-            "It can confuse benchmark progress with scientific discovery. FrontierScience still shows a large research gap, but benchmark gains do not prove externally verified novelty.",
-            "Intelligence may cease to be the binding constraint once experiments hit biology, materials, manufacturing, safety, or regulation.",
-            "Model capabilities can commoditize faster than public companies build defensible data and validation loops.",
-            "The biggest breakthroughs may accrue to private labs, governments, universities, or broad incumbents with theme exposure too small to move the stock.",
-            "More hypotheses can create more false positives, replication burden, and instrument demand without improving final clinical or industrial success."
-          ]
-        },
-        {
-          "title": "Where the stock map breaks",
-          "bullets": [
-            "Laboratory tools remain cyclical and exposed to biotech funding, China, academic budgets, and post-pandemic inventory digestion.",
-            "EDA, robotics, and cyber names can be excellent companies and terrible entries when multiples already assume the breakthrough.",
-            "Pure-play AI-biotech, space, SMR, and humanoid equities often need financing long before the science pays off.",
-            "Diversified instruments and service companies may capture the bottleneck but dilute the theme with slower businesses.",
-            "Trailing P/E is only a screen. Backlog quality, recurring consumables, service attach, leverage, dilution, and free-cash-flow conversion decide whether the theme reaches shareholders."
-          ]
-        },
-        {
-          "title": "Where the map is a lap behind the tape",
-          "bullets": [
-            "The price table used Friday's opening prints, not the closing prices this page promises. Rocket Lab was overstated by 8.4% and Teradyne by 4.5%, while Veeva and Progressive were understated—and the ‘off 52-week high’ column inherited every error.",
-            "The lab-tools layer is scored as if the last quarter never happened. Illumina rose roughly 118% off its October low and set a 52-week high on 23 July 2026; ICON is up about 150% off its February low; Charles River, Medpace, Labcorp and Quest printed 52-week highs the same week. That layer re-rated before this theme was published.",
-            "Autonomous labs cannot move the incumbents. Cumulative funding across the flagship self-driving-lab startups is roughly $850M against Thermo Fisher's ~$43B of annual revenue. Even at total capture it is a rounding error, so ‘lab automation’ as expressed here is a pharma-capex cycle wearing an AI costume.",
-            "The theme has no short side. The same shift it depends on—new approach methodologies, digital twins, model-informed development—is structurally deflationary to the preclinical and CRO complex it never names. Charles River, ICON, Medpace and IQVIA carry roughly $78B of combined market value and were at or near 52-week highs.",
-            "The vacancy paradox is unaddressed. If frontier models were about to make experiments abundant, US lab vacancy would not be 23–27%, Boston would not be near 29%, and Alexandria would not trade near half of book after a 45% dividend cut. AI capital is currently competing with biotech funding rather than feeding it.",
-            "Public pure-plays are being removed, not created. Simulations Plus agreed to go private with Altaris at about $375M in June 2026—roughly 4.6× revenue for a business with declining software revenue—while Certara traded near 3.3× with software bookings up 20%. Private buyers are paying up as public access shrinks.",
-            "The single most durable catalyst is missing. ICH M15 was adopted at Step 5 on 29 January 2026, moving model-informed drug development from best practice to a harmonised FDA/EMA/PMDA expectation. A theme built on regulated validation should lead with it."
-          ]
-        }
-      ],
-      "what_survived": [
-        "Frontier science is not solved: GPT-5.2 scored 77% on original science-olympiad problems but only 25% on open-ended PhD-level research tasks in FrontierScience.",
-        "Automated laboratories are moving from concept toward infrastructure: DeepMind announced a UK materials lab designed to synthesize and characterize hundreds of materials per day.",
-        "Current self-driving labs remain small and bespoke, making orchestration, standards, and trusted instrumentation the near-term bottleneck.",
-        "Physical autonomy is already deployed at scale—542,000 industrial robots were installed in 2024—even though general humanoid economics remain unproven.",
-        "NASA executed AI-planned Perseverance drives in December 2025, proving that autonomy can move from research into mission operations.",
-        "Regulated validation remains unavoidable: FDA guidance ties AI evidence in drug development to a specific context of use and credibility assessment.",
-        "Regulated validation is becoming a harmonised global expectation: ICH M15 reached Step 5 on 29 January 2026, aligning FDA, EMA and PMDA on how model-derived evidence is assessed.",
-        "Regulators are themselves users of the validation stack—about 20 drug agencies license the same biosimulation software sponsors file with, which is a standards moat rather than a capability moat."
-      ],
-      "residual_edge": [
-        "Instrument and service revenue tied to experiment throughput rather than a single scientific winner.",
-        "Sample custody, cold-chain storage, provenance, and regulated laboratory workflows that become harder—not easier—as experiments scale.",
-        "Verification, test, metrology, and simulation spending that grows faster than the number of proposed designs.",
-        "Proprietary wet-lab or human datasets with repeat feedback loops, not scraped literature plus a foundation model.",
-        "Vertical robotics where uptime, service, and workflow data create switching costs.",
-        "Financial and insurance incumbents whose private data and regulatory permission convert better models into lower losses or better capital allocation.",
-        "Assets with revenue now and frontier optionality later; avoid needing the breakthrough to finance the company."
-      ],
-      "research_priority": [
-        {
-          "bucket": "Investigate first",
-          "symbols": "A · AVTR · AZTA · TMO · MTD · BRKR · VEEV",
-          "why": "These sit near physical validation, sample management, lab service, precision measurement, and regulated workflow. Underwrite recurring revenue, service attach, leverage, and end-market recovery."
-        },
-        {
-          "bucket": "Good businesses, crowded prices",
-          "symbols": "CDNS · SNPS · TER · ISRG · PANW · CRWD · KLAC",
-          "why": "The capability-to-revenue path is credible. The valuation cushion often is not; wait for price, estimates, or both to reset."
-        },
-        {
-          "bucket": "Speculation, not core exposure",
-          "symbols": "RXRX · SDGR · BEAM · RKLB · LUNR · OKLO · SMR",
-          "why": "Require clinical proof, mission economics, funded projects, and dilution math. A frontier narrative cannot pay for trials, launches, reactors, or factories."
-        }
-      ],
-      "valuation_snapshot": {
-        "source": "Robinhood fundamentals",
-        "date": "2026-07-24",
-        "note": "Regular-session closing prices for 24 July 2026. Trailing P/E and distance from the 52-week high are screening context, not full valuation work.",
-        "rows": [
-          {
-            "symbol": "A",
-            "price": "$138.57",
-            "pe": "27.3×",
-            "off_high": "−14%"
-          },
-          {
-            "symbol": "AVTR",
-            "price": "$11.45",
-            "pe": "Loss-making",
-            "off_high": "−28%"
-          },
-          {
-            "symbol": "AZTA",
-            "price": "$27.39",
-            "pe": "Loss-making",
-            "off_high": "−34%"
-          },
-          {
-            "symbol": "TMO",
-            "price": "$568.27",
-            "pe": "29.9×",
-            "off_high": "−12%"
-          },
-          {
-            "symbol": "VEEV",
-            "price": "$186.35",
-            "pe": "35.1×",
-            "off_high": "−40%"
-          },
-          {
-            "symbol": "CDNS",
-            "price": "$326.22",
-            "pe": "85.1×",
-            "off_high": "−22%"
-          },
-          {
-            "symbol": "SNPS",
-            "price": "$373.44",
-            "pe": "96.5×",
-            "off_high": "−43%"
-          },
-          {
-            "symbol": "TER",
-            "price": "$349.84",
-            "pe": "59.7×",
-            "off_high": "−28%"
-          },
-          {
-            "symbol": "PANW",
-            "price": "$323.76",
-            "pe": "291.2×",
-            "off_high": "−12%"
-          },
-          {
-            "symbol": "RKLB",
-            "price": "$63.92",
-            "pe": "Loss-making",
-            "off_high": "−58%"
-          },
-          {
-            "symbol": "PGR",
-            "price": "$213.87",
-            "pe": "10.3×",
-            "off_high": "−16%"
-          },
-          {
-            "symbol": "MTD",
-            "price": "$1,328.89",
-            "pe": "31.3×",
-            "off_high": "−13%"
-          }
-        ]
-      },
-      "falsifiers": [
-        "Wet-lab hit rates, cycle times, or cost per validated candidate fail to improve despite better models.",
-        "Closed-loop autonomous laboratories do not scale beyond bespoke demonstrations.",
-        "Clinical attrition remains unchanged after controlling for target class and trial design.",
-        "Robot intervention rates, maintenance, and safety prevent attractive labor economics.",
-        "AI-designed chips or materials fail external verification or cannot be manufactured economically.",
-        "Model commoditization pushes value to cloud vendors while tools, data, and workflow owners lose pricing power.",
-        "Validation spending does not grow with hypothesis volume, disproving the bottleneck thesis.",
-        "Laboratory vacancy stays above 20% and biotech funding keeps losing capital to AI infrastructure, proving the hypothesis glut never reaches physical-validation demand.",
-        "Validation vendors keep guiding low-single-digit growth while regulatory acceptance rises, showing the economics accrue to drug developers rather than to the tools layer."
-      ],
-      "watch_next": [
-        "Wet-lab hit rate, experiment throughput, and cost per validated candidate.",
-        "Autonomous labs operating outside one-off pilots, with reproducible cross-lab results.",
-        "Clinical candidates whose design or patient selection was materially AI-generated.",
-        "Robot uptime, intervention rate, payback period, and task-transfer performance.",
-        "AI-designed blocks that tape out and pass independent verification.",
-        "External validation on unsaturated research benchmarks—not self-graded model demos.",
-        "Revenue and margins from AI-native products rather than management mentions.",
-        "Whether laboratory service, test, and validation spending grows faster than model-software spending.",
-        "Whether ICH M15 converts into 2027 vendor bookings rather than only appearing in guidance language.",
-        "Whether any incumbent breaks out autonomous-lab or AI-native revenue as a separate, material line."
-      ],
-      "sources": [
-        {
-          "label": "FrontierScience expert-level benchmark",
-          "url": "https://arxiv.org/abs/2601.21165"
-        },
-        {
-          "label": "OpenAI: AI as a Scientific Collaborator",
-          "url": "https://cdn.openai.com/pdf/f4b4a5da-b2de-418d-9fcd-6b293e9dc157/oai_ai-as-a-scientific-collaborator_jan-2026.pdf"
-        },
-        {
-          "label": "Stanford AI Index: Science and Medicine",
-          "url": "https://hai.stanford.edu/assets/files/hai_ai-index-report-2025_chapter5_final.pdf"
-        },
-        {
-          "label": "DeepMind automated UK materials lab",
-          "url": "https://deepmind.google/blog/strengthening-our-partnership-with-the-uk-government-to-support-prosperity-and-security-in-the-ai-era/"
-        },
-        {
-          "label": "Nature: multi-agent autonomous materials labs",
-          "url": "https://www.nature.com/articles/s43246-026-01219-5"
-        },
-        {
-          "label": "US Department of Energy Genesis Mission",
-          "url": "https://www.energy.gov/genesis-mission-demonstration"
-        },
-        {
-          "label": "FDA AI evidence framework for drugs and biologics",
-          "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological"
-        },
-        {
-          "label": "NASA first AI-planned Perseverance drive",
-          "url": "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-first-ai-planned-drive-on-mars/"
-        },
-        {
-          "label": "IFR World Robotics 2025",
-          "url": "https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years"
-        },
-        {
-          "label": "Synopsys AI-powered EDA",
-          "url": "https://www.synopsys.com/ai/ai-powered-eda.html"
-        },
-        {
-          "label": "BIS 2026 Annual Economic Report on frontier-AI cyber risk",
-          "url": "https://www.bis.org/publ/arpdf/ar2026e1.htm"
-        },
-        {
-          "label": "NAIC: Artificial Intelligence in insurance",
-          "url": "https://content.naic.org/insurance-topics/artificial-intelligence"
-        },
-        {
-          "label": "ICH M15 adopted (Step 5) January 2026",
-          "url": "https://database.ich.org/sites/default/files/ICH_M15_Step4_Final_Guideline_2026_0129.pdf"
-        },
-        {
-          "label": "FDA year-one progress reducing animal testing",
-          "url": "https://www.fda.gov/news-events/press-announcements/fda-achieves-year-1-goals-reducing-animal-testing-drug-development"
-        },
-        {
-          "label": "Simulations Plus to go private with Altaris",
-          "url": "https://www.businesswire.com/news/home/20260616126655/en/Simulations-Plus-to-Be-Acquired-by-Altaris-For-Approximately-$375-Million"
-        }
-      ]
+     "model": "Claude Fable",
+     "role": "Adversarial reviewer",
+     "knowledge_saturation": 88,
+     "price_saturation": 62,
+     "verdict": "Consensus theme, bifurcated pricing. The remaining opportunity is distinguishing intact contracted economics from broken narrative after large drawdowns."
+    },
+    {
+     "model": "Gemini 3.1 Pro",
+     "role": "Independent reviewer",
+     "knowledge_saturation": 95,
+     "price_saturation": 85,
+     "verdict": "The equity narrative has peaked and fractured. Most obvious equipment and construction expressions leave almost no margin for error."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Final synthesis",
+     "knowledge_saturation": 92,
+     "price_saturation": 69,
+     "verdict": "Physical scarcity is real, but investability depends on who captures the rent. Merchant power, gas delivery, bridge power, and electrical labor deserve contract-by-contract work; regulated utilities and headline equipment trades look crowded."
     }
-  ]
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Equipment + grid",
+     "symbols": "GEV \u00b7 ETN \u00b7 HUBB \u00b7 PWR",
+     "knowledge_saturation": 92,
+     "price_saturation": 82,
+     "read": "Backlogs are real and widely understood. PWR at 86.6\u00d7 trailing and ETN near its high leave little room for a capex wobble; GEV\u2019s 30.2\u00d7 is less absurd but still assumes backlog quality."
+    },
+    {
+     "layer": "Cooling + electrical",
+     "symbols": "VRT \u00b7 FIX \u00b7 NVT \u00b7 IESC \u00b7 EME",
+     "knowledge_saturation": 90,
+     "price_saturation": 76,
+     "read": "The bottleneck is real, but cooling can commoditize and labor-heavy contractors can suffer margin leakage. EME looks less narrative-priced than VRT, FIX, or NVT."
+    },
+    {
+     "layer": "Regulated utilities",
+     "symbols": "D \u00b7 ETR \u00b7 AEP \u00b7 NEE",
+     "knowledge_saturation": 88,
+     "price_saturation": 87,
+     "read": "The \u2018safe AI-power\u2019 trade is crowded. D and ETR were within 3% of 52-week highs while politicians and commissions are actively deciding who pays for grid expansion."
+    },
+    {
+     "layer": "Merchant power",
+     "symbols": "CEG \u00b7 VST \u00b7 TLN \u00b7 NRG",
+     "knowledge_saturation": 90,
+     "price_saturation": 58,
+     "read": "Everyone knows the story, but 20\u201334% drawdowns reopened the valuation debate. The question is whether contracted floors survive political caps and hyperscaler bargaining power."
+    },
+    {
+     "layer": "Nuclear fuel + SMRs",
+     "symbols": "CCJ \u00b7 LEU \u00b7 BWXT \u00b7 OKLO \u00b7 SMR",
+     "knowledge_saturation": 94,
+     "price_saturation": 45,
+     "read": "The bubble already broke; that does not make pre-revenue reactors cheap. Separate operating fuel-cycle cash flows from first-of-a-kind deployment risk."
+    },
+    {
+     "layer": "Natural gas + midstream",
+     "symbols": "EQT \u00b7 WMB \u00b7 KMI \u00b7 ET",
+     "knowledge_saturation": 75,
+     "price_saturation": 55,
+     "read": "Less saturated than the headline basket, not undiscovered. Cheap trailing multiples can reflect commodity, basis, permitting, and capex risk\u2014not free AI optionality."
+    },
+    {
+     "layer": "Bridge power + engines",
+     "symbols": "CAT \u00b7 CMI \u00b7 BE",
+     "knowledge_saturation": 68,
+     "price_saturation": 55,
+     "read": "Reciprocating engines solve time-to-power while grids lag. Duration and replacement risk matter. BE\u2019s $53.2B market cap despite losses is narrative pricing, not a bargain."
+    },
+    {
+     "layer": "Powered land",
+     "symbols": "IREN \u00b7 APLD \u00b7 CIFR \u00b7 WULF",
+     "knowledge_saturation": 78,
+     "price_saturation": 70,
+     "read": "Energized interconnections are scarce, but miner-to-AI conversions carry financing, governance, customer-concentration, and execution risk. Signed leases matter; slide-deck megawatts do not."
+    }
+   ],
+   "adversarial_review": {
+    "grok": [
+     "It conflates physical load growth with shareholder returns. Utilities, merchants, equipment vendors, contractors, fuel suppliers, and pre-revenue developers have different rent capture and failure modes.",
+     "It treats queue gigawatts, announced campuses, signed electricity-service agreements, and energized load as if they were comparable. They are not.",
+     "It underweights politics and cost allocation. Scarcity can be real while commissions, legislatures, or dominant hyperscalers prevent that scarcity rent from reaching equity holders.",
+     "It dilutes the theme with low-exposure water and industrial names, then calls diversification a solution. Owning every proxy is how you pay consensus prices for weak exposure.",
+     "It buries natural gas, pipelines, reciprocating engines, electrical labor, and energized land even though those may solve the near-term time-to-power problem faster than new nuclear."
+    ],
+    "fable": [
+     "Its core criticism is stronger, but \u2018gas is the cheapest way to own it\u2019 confuses a low multiple with a durable edge. Commodity cyclicality, LNG competition, basis risk, permitting, and new-pipeline capex can eat the apparent discount.",
+     "Trailing P/E is a rough sorting tool, not valuation work. It is noisy for cyclicals, acquisition-heavy generators, and fast-growing contractors; forward free cash flow and contract economics matter more.",
+     "Several precise demand-quality claims were too confidently stated. Official ERCOT material supports a gigantic, low-quality queue, but this review could not independently verify the specific \u2018198 GW in Q1\u2019 figure, so it is excluded from the final thesis.",
+     "The 30\u201350% project statistic is primarily a delay forecast, not proof that half the load disappears. Likewise, $130B \u2018blocked or delayed\u2019 is a political-friction signal, not equivalent to $130B permanently canceled.",
+     "A legislated capacity floor and cap do not make merchant power automatically asymmetric. The floor may still be inadequate against fuel, debt, maintenance, acquisition, and new-build economics.",
+     "The 1999\u20132002 analogy is useful, not destiny. Deposits, cancellation rights, resource adequacy rules, contract tenor, and today\u2019s concentrated buyers must be compared before declaring the same cobweb bust.",
+     "The whole review is an equity-multiple exercise with no credit lens. High-yield spreads near 2.8% sat around the 5th percentile of the past decade while this buildout grew steadily more debt-financed. If the theme is wrong, credit reprices first, and almost none of that risk is currently priced.",
+     "By the time this map existed, the \u2018find the obscure name\u2019 move was largely spent. Argan and Sterling had each risen roughly 4\u00d7 from their 2025 lows, Vicor about 9\u00d7, Navitas about 6\u00d7, and Hut 8 about 7.5\u00d7. Discovery was saturated, not just narrative."
+    ]
+   },
+   "what_survived": [
+    "Firm power scarcity is the right organizing idea. PJM\u2019s 2028/29 capacity auction cleared at its $325/MW-day cap and still missed the reliability requirement by about 6.8 GW.",
+    "The bottleneck is physical. GE Vernova reported a 116 GW gas-turbine backlog and is taking 2031 reservations.",
+    "Demand concentration is a real single-factor risk. Four hyperscalers are expected to spend roughly $700B in 2026, but company-level figures vary with fiscal calendars and what each source counts as capex.",
+    "Queue data is marketing until it becomes a signed, funded, minimum-take obligation. ERCOT was tracking roughly 438 GW of large-load requests in May 2026\u2014far beyond plausible near-term system absorption.",
+    "Local politics and rate treatment can redirect the economic benefit. More than 300 data-center bills appeared across 30 states early in 2026, including proposals for special rate classes and moratoria."
+   ],
+   "residual_edge": [
+    "Signed take-or-pay ESAs and PPAs versus non-binding queue positions.",
+    "Existing energized capacity versus projects that need turbines, transmission, permits, water, or multiyear interconnection work.",
+    "Backlog cancellation terms and deposits, not headline backlog dollars or gigawatts.",
+    "Who funds dedicated generation and grid upgrades: hyperscaler, utility rate base, or residential customers.",
+    "Gas and midstream assets with a second demand leg from LNG\u2014not AI-only economics\u2014and a credible path through permitting and last-mile constraints.",
+    "Bridge-power and electrical-labor businesses where backlog converts quickly to cash without heroic terminal-growth assumptions.",
+    "Merchant assets whose contracted downside and regulatory floor can be modeled explicitly after the drawdown."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "CEG \u00b7 VST \u00b7 EQT \u00b7 WMB \u00b7 EME \u00b7 IESC \u00b7 CAT \u00b7 CMI",
+     "why": "These sit closer to current cash flow or time-to-power. Underwrite contracts, leverage, fuel exposure, capex, and regulatory treatment before touching them."
+    },
+    {
+     "bucket": "Good businesses, crowded prices",
+     "symbols": "GEV \u00b7 ETN \u00b7 VRT \u00b7 PWR \u00b7 D \u00b7 ETR \u00b7 FIX \u00b7 NVT",
+     "why": "The story is credible; the valuation cushion often is not. Wait for estimates, price, or both to reset."
+    },
+    {
+     "bucket": "Speculation, not core exposure",
+     "symbols": "OKLO \u00b7 SMR \u00b7 BE \u00b7 IREN \u00b7 APLD \u00b7 CIFR \u00b7 WULF",
+     "why": "Popped bubbles can keep falling. Require funded projects, signed counterparties, unit economics, and dilution math\u2014not LOIs and megawatt decks."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood fundamentals",
+    "date": "2026-07-24",
+    "note": "Trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "GEV",
+      "price": "$1,015",
+      "pe": "30.2\u00d7",
+      "off_high": "\u221215%"
+     },
+     {
+      "symbol": "ETN",
+      "price": "$404",
+      "pe": "38.7\u00d7",
+      "off_high": "\u22127%"
+     },
+     {
+      "symbol": "VRT",
+      "price": "$290",
+      "pe": "73.8\u00d7",
+      "off_high": "\u221224%"
+     },
+     {
+      "symbol": "PWR",
+      "price": "$626",
+      "pe": "86.6\u00d7",
+      "off_high": "\u221221%"
+     },
+     {
+      "symbol": "CEG",
+      "price": "$274",
+      "pe": "21.9\u00d7",
+      "off_high": "\u221234%"
+     },
+     {
+      "symbol": "VST",
+      "price": "$163",
+      "pe": "25.5\u00d7",
+      "off_high": "\u221226%"
+     },
+     {
+      "symbol": "D",
+      "price": "$71",
+      "pe": "21.2\u00d7",
+      "off_high": "\u22123%"
+     },
+     {
+      "symbol": "ETR",
+      "price": "$116",
+      "pe": "29.3\u00d7",
+      "off_high": "\u22122%"
+     },
+     {
+      "symbol": "OKLO",
+      "price": "$40",
+      "pe": "Loss-making",
+      "off_high": "\u221279%"
+     },
+     {
+      "symbol": "BE",
+      "price": "$185",
+      "pe": "Loss-making",
+      "off_high": "\u221247%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Hyperscaler capex guidance rolls over for two consecutive quarters while announced load remains unfunded.",
+    "Signed minimum-take electricity agreements fail to grow even as queue gigawatts rise.",
+    "Turbine or transformer cancellations accelerate and vendors lose deposits or pricing power.",
+    "State commissions force shareholders\u2014not hyperscalers\u2014to absorb stranded grid and generation costs.",
+    "Compute-per-watt gains overwhelm Jevons demand and materially flatten realized energized megawatts.",
+    "New generation arrives faster than contracted load in 2029\u201331, compressing energy and capacity margins.",
+    "Gas supply, pipeline, water, labor, or permitting constraints make the supposed beneficiaries spend more than the scarcity rent they capture."
+   ],
+   "watch_next": [
+    "Quarterly hyperscaler capex guidance and AI revenue\u2014not announced campus headlines.",
+    "Energized MW, signed ESAs, deposits, and minimum-take terms versus queue MW.",
+    "PJM/ERCOT capacity and energy prices, plus extensions or revisions to political caps and floors.",
+    "Utility tariff rulings that specify who pays for transmission, generation, and stranded assets.",
+    "GEV and peer slot pricing, deposits, cancellation terms, and 2029\u201331 delivery conversion.",
+    "Natural-gas basis, pipeline approvals, LNG demand, and the delivered fuel cost at target data-center regions.",
+    "Real deployment milestones for nuclear restarts and SMRs\u2014not LOIs."
+   ],
+   "sources": [
+    {
+     "label": "PJM 2028/29 auction results",
+     "url": "https://www.pjm.com/-/media/DotCom/markets-ops/rpm/rpm-auction-info/2028-2029/2028-2029-bra-results-report.pdf"
+    },
+    {
+     "label": "PJM auction cap and 6.8 GW shortfall",
+     "url": "https://www.utilitydive.com/news/pjm-capacity-auction-price-cap-reserve-shortfall/825282/"
+    },
+    {
+     "label": "ERCOT large-load update",
+     "url": "https://www.ercot.com/files/docs/2026/05/24/8-Interconnection-and-Grid-Analysis-Update.pdf"
+    },
+    {
+     "label": "GE Vernova 116 GW turbine backlog",
+     "url": "https://www.utilitydive.com/news/ge-vernova-gas-turbine-backlog-climbs-to-116-gw/826039/"
+    },
+    {
+     "label": "Hyperscaler 2026 capex concentration",
+     "url": "https://www.cnbc.com/2026/02/06/google-microsoft-meta-amazon-ai-cash.html"
+    },
+    {
+     "label": "Data-center delay forecast",
+     "url": "https://www.latitudemedia.com/news/up-to-half-of-the-worlds-data-centers-may-be-delayed-this-year/"
+    },
+    {
+     "label": "Q1 2026 local-opposition tracker",
+     "url": "https://www.datacenterwatch.org/q1-2026"
+    },
+    {
+     "label": "State data-center legislation",
+     "url": "https://www.afslaw.com/perspectives/alerts/state-regulation-data-centers-2026-shifting-landscape"
+    }
+   ]
+  },
+  {
+   "id": "frontier-intelligence-value-capture",
+   "category": "Frontier intelligence",
+   "title": "Frontier intelligence \u2192 physical validation bottleneck",
+   "horizon": "2026\u20132035",
+   "status": "Initial synthesis",
+   "owner_belief": "Another jump in model intelligence matters most where outcomes are still limited by scientific search, experiment design, simulation, verification, and control of physical systems. As hypotheses become cheap, scarce laboratory capacity, trusted measurement, proprietary data, and regulated validation loops should capture disproportionate value.",
+   "conviction": "High conviction that frontier capability will accelerate discovery. Medium conviction on public-equity capture; the cleanest beneficiaries are often diversified tools, software, and services companies rather than pure-play discovery stories.",
+   "final_verdict": "The bottleneck framing survives; the stock map does not. The strongest public-market economics still sit one layer down in laboratory automation, instruments, simulation, metrology, test, and provenance\u2014but the accessible expressions of that layer re-rated hard between April and July 2026, before this theme was written. Consensus is now the median of two independent reviews at 85/100 knowledge and 69/100 price. The unresolved question is not whether physical validation becomes scarce; it is whether any public vendor is large enough to capture it.",
+   "consensus_scores": {
+    "knowledge_saturation": 85,
+    "price_saturation": 69
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Initial synthesis",
+     "knowledge_saturation": 88,
+     "price_saturation": 65,
+     "verdict": "Frontier discovery is widely anticipated, but value capture is mapped badly. The residual edge is the physical validation stack: instruments, automation, samples, simulation, metrology, test, and regulated workflow software."
+    },
+    {
+     "model": "Claude Fable",
+     "role": "Adversarial reviewer",
+     "knowledge_saturation": 82,
+     "price_saturation": 74,
+     "verdict": "The bottleneck framing is right and the stock map is a lap behind the tape. Life-science tools bottomed in April\u2013May 2026 and re-rated hard before this theme was written, while the layer that would actually prove the thesis\u2014autonomous labs\u2014is too small to move any incumbent's revenue."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Lab automation + measurement",
+     "symbols": "A \u00b7 TMO \u00b7 DHR \u00b7 AVTR \u00b7 AZTA \u00b7 MTD",
+     "knowledge_saturation": 70,
+     "price_saturation": 70,
+     "read": "The best picks-and-shovels layer. AI can propose experiments faster than labs can run, reproduce, and audit them. Agilent CrossLab, Thermo Fisher Unity, Avantor services, Azenta sample management, and precision instruments sit near that bottleneck."
+    },
+    {
+     "layer": "Materials + autonomous chemistry",
+     "symbols": "A \u00b7 BRKR \u00b7 MTD \u00b7 TMO \u00b7 SDGR",
+     "knowledge_saturation": 65,
+     "price_saturation": 45,
+     "read": "Potentially the least saturated major theme. Closed-loop labs can search catalysts, batteries, semiconductors, and specialty materials, but manufacturing scale-up remains a separate failure point."
+    },
+    {
+     "layer": "Genetics + protein engineering",
+     "symbols": "TMO \u00b7 DHR \u00b7 ILMN \u00b7 RXRX \u00b7 SDGR \u00b7 CRSP \u00b7 BEAM",
+     "knowledge_saturation": 88,
+     "price_saturation": 48,
+     "read": "Scientific upside is enormous and the original bubble has fractured. Proprietary wet-lab feedback and human datasets matter more than generic AI-drug branding; clinical attrition still decides the economics."
+    },
+    {
+     "layer": "Semiconductor design / EDA",
+     "symbols": "CDNS \u00b7 SNPS \u00b7 KEYS \u00b7 KLAC \u00b7 AMAT",
+     "knowledge_saturation": 95,
+     "price_saturation": 90,
+     "read": "A nearly ideal AI workflow with excellent incumbent capture\u2014and almost no narrative obscurity. Verification, test, advanced packaging, and yield control may offer better residual edge than design copilots."
+    },
+    {
+     "layer": "Robotics + embodied autonomy",
+     "symbols": "TER \u00b7 ROK \u00b7 ISRG \u00b7 SYM",
+     "knowledge_saturation": 90,
+     "price_saturation": 78,
+     "read": "Better world models can expand adaptable physical labor, but reliability, safety, integration, service networks, and payback periods remain brutal. Vertical robots with proprietary workflows are stronger than generic humanoid stories."
+    },
+    {
+     "layer": "Cybersecurity + defense autonomy",
+     "symbols": "PANW \u00b7 CRWD \u00b7 FTNT \u00b7 NET \u00b7 PLTR",
+     "knowledge_saturation": 95,
+     "price_saturation": 90,
+     "read": "Frontier models improve both attackers and defenders. Telemetry, identity, trust, and installed platforms support capture, but the obvious public basket already prices a durable arms race."
+    },
+    {
+     "layer": "Fundamental physics + mathematics",
+     "symbols": "No clean proxy \u00b7 KEYS \u00b7 BRKR",
+     "knowledge_saturation": 60,
+     "price_saturation": 20,
+     "read": "The largest discovery upside and weakest direct public capture. Instruments and simulation may benefit, but a theorem, plasma insight, or new material does not automatically map to shareholder value."
+    },
+    {
+     "layer": "Finance + insurance",
+     "symbols": "MCO \u00b7 SPGI \u00b7 PGR \u00b7 CB \u00b7 AON \u00b7 AJG",
+     "knowledge_saturation": 92,
+     "price_saturation": 55,
+     "read": "Likely a margin, speed, and risk-selection theme more than a scientific breakthrough. Incumbents with proprietary histories, distribution, and regulatory permission should capture more than generic AI vendors."
+    },
+    {
+     "layer": "Space autonomy + geospatial intelligence",
+     "symbols": "RKLB \u00b7 RDW \u00b7 PL \u00b7 BKSY \u00b7 IRDM \u00b7 LUNR",
+     "knowledge_saturation": 88,
+     "price_saturation": 70,
+     "read": "Autonomy is valuable when latency and operator bandwidth bind, but launch, hardware, procurement, and financing still dominate. Mission software can improve without making every space equity economical."
+    },
+    {
+     "layer": "Weather + climate systems",
+     "symbols": "SPGI \u00b7 MCO \u00b7 PGR \u00b7 DE \u00b7 TRMB",
+     "knowledge_saturation": 75,
+     "price_saturation": 35,
+     "read": "Forecasting gains may diffuse as a public good. The better question is which insurer, farm platform, energy trader, or logistics network owns assets that become more valuable when forecasts improve."
+    },
+    {
+     "layer": "Energy / fusion / grid optimization",
+     "symbols": "CEG \u00b7 BWXT \u00b7 GEV \u00b7 OKLO \u00b7 SMR",
+     "knowledge_saturation": 75,
+     "price_saturation": 65,
+     "read": "AI can improve plasma control, materials, reactor design, and grid dispatch, but cannot delete licensing, construction, and physical validation. Operating assets deserve different underwriting from pre-revenue developers."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where the thesis breaks",
+     "bullets": [
+      "It can confuse benchmark progress with scientific discovery. FrontierScience still shows a large research gap, but benchmark gains do not prove externally verified novelty.",
+      "Intelligence may cease to be the binding constraint once experiments hit biology, materials, manufacturing, safety, or regulation.",
+      "Model capabilities can commoditize faster than public companies build defensible data and validation loops.",
+      "The biggest breakthroughs may accrue to private labs, governments, universities, or broad incumbents with theme exposure too small to move the stock.",
+      "More hypotheses can create more false positives, replication burden, and instrument demand without improving final clinical or industrial success."
+     ]
+    },
+    {
+     "title": "Where the stock map breaks",
+     "bullets": [
+      "Laboratory tools remain cyclical and exposed to biotech funding, China, academic budgets, and post-pandemic inventory digestion.",
+      "EDA, robotics, and cyber names can be excellent companies and terrible entries when multiples already assume the breakthrough.",
+      "Pure-play AI-biotech, space, SMR, and humanoid equities often need financing long before the science pays off.",
+      "Diversified instruments and service companies may capture the bottleneck but dilute the theme with slower businesses.",
+      "Trailing P/E is only a screen. Backlog quality, recurring consumables, service attach, leverage, dilution, and free-cash-flow conversion decide whether the theme reaches shareholders."
+     ]
+    },
+    {
+     "title": "Where the map is a lap behind the tape",
+     "bullets": [
+      "The price table used Friday's opening prints, not the closing prices this page promises. Rocket Lab was overstated by 8.4% and Teradyne by 4.5%, while Veeva and Progressive were understated\u2014and the \u2018off 52-week high\u2019 column inherited every error.",
+      "The lab-tools layer is scored as if the last quarter never happened. Illumina rose roughly 118% off its October low and set a 52-week high on 23 July 2026; ICON is up about 150% off its February low; Charles River, Medpace, Labcorp and Quest printed 52-week highs the same week. That layer re-rated before this theme was published.",
+      "Autonomous labs cannot move the incumbents. Cumulative funding across the flagship self-driving-lab startups is roughly $850M against Thermo Fisher's ~$43B of annual revenue. Even at total capture it is a rounding error, so \u2018lab automation\u2019 as expressed here is a pharma-capex cycle wearing an AI costume.",
+      "The theme has no short side. The same shift it depends on\u2014new approach methodologies, digital twins, model-informed development\u2014is structurally deflationary to the preclinical and CRO complex it never names. Charles River, ICON, Medpace and IQVIA carry roughly $78B of combined market value and were at or near 52-week highs.",
+      "The vacancy paradox is unaddressed. If frontier models were about to make experiments abundant, US lab vacancy would not be 23\u201327%, Boston would not be near 29%, and Alexandria would not trade near half of book after a 45% dividend cut. AI capital is currently competing with biotech funding rather than feeding it.",
+      "Public pure-plays are being removed, not created. Simulations Plus agreed to go private with Altaris at about $375M in June 2026\u2014roughly 4.6\u00d7 revenue for a business with declining software revenue\u2014while Certara traded near 3.3\u00d7 with software bookings up 20%. Private buyers are paying up as public access shrinks.",
+      "The single most durable catalyst is missing. ICH M15 was adopted at Step 5 on 29 January 2026, moving model-informed drug development from best practice to a harmonised FDA/EMA/PMDA expectation. A theme built on regulated validation should lead with it."
+     ]
+    }
+   ],
+   "what_survived": [
+    "Frontier science is not solved: GPT-5.2 scored 77% on original science-olympiad problems but only 25% on open-ended PhD-level research tasks in FrontierScience.",
+    "Automated laboratories are moving from concept toward infrastructure: DeepMind announced a UK materials lab designed to synthesize and characterize hundreds of materials per day.",
+    "Current self-driving labs remain small and bespoke, making orchestration, standards, and trusted instrumentation the near-term bottleneck.",
+    "Physical autonomy is already deployed at scale\u2014542,000 industrial robots were installed in 2024\u2014even though general humanoid economics remain unproven.",
+    "NASA executed AI-planned Perseverance drives in December 2025, proving that autonomy can move from research into mission operations.",
+    "Regulated validation remains unavoidable: FDA guidance ties AI evidence in drug development to a specific context of use and credibility assessment.",
+    "Regulated validation is becoming a harmonised global expectation: ICH M15 reached Step 5 on 29 January 2026, aligning FDA, EMA and PMDA on how model-derived evidence is assessed.",
+    "Regulators are themselves users of the validation stack\u2014about 20 drug agencies license the same biosimulation software sponsors file with, which is a standards moat rather than a capability moat."
+   ],
+   "residual_edge": [
+    "Instrument and service revenue tied to experiment throughput rather than a single scientific winner.",
+    "Sample custody, cold-chain storage, provenance, and regulated laboratory workflows that become harder\u2014not easier\u2014as experiments scale.",
+    "Verification, test, metrology, and simulation spending that grows faster than the number of proposed designs.",
+    "Proprietary wet-lab or human datasets with repeat feedback loops, not scraped literature plus a foundation model.",
+    "Vertical robotics where uptime, service, and workflow data create switching costs.",
+    "Financial and insurance incumbents whose private data and regulatory permission convert better models into lower losses or better capital allocation.",
+    "Assets with revenue now and frontier optionality later; avoid needing the breakthrough to finance the company."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "A \u00b7 AVTR \u00b7 AZTA \u00b7 TMO \u00b7 MTD \u00b7 BRKR \u00b7 VEEV",
+     "why": "These sit near physical validation, sample management, lab service, precision measurement, and regulated workflow. Underwrite recurring revenue, service attach, leverage, and end-market recovery."
+    },
+    {
+     "bucket": "Good businesses, crowded prices",
+     "symbols": "CDNS \u00b7 SNPS \u00b7 TER \u00b7 ISRG \u00b7 PANW \u00b7 CRWD \u00b7 KLAC",
+     "why": "The capability-to-revenue path is credible. The valuation cushion often is not; wait for price, estimates, or both to reset."
+    },
+    {
+     "bucket": "Speculation, not core exposure",
+     "symbols": "RXRX \u00b7 SDGR \u00b7 BEAM \u00b7 RKLB \u00b7 LUNR \u00b7 OKLO \u00b7 SMR",
+     "why": "Require clinical proof, mission economics, funded projects, and dilution math. A frontier narrative cannot pay for trials, launches, reactors, or factories."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood fundamentals",
+    "date": "2026-07-24",
+    "note": "Regular-session closing prices for 24 July 2026. Trailing P/E and distance from the 52-week high are screening context, not full valuation work.",
+    "rows": [
+     {
+      "symbol": "A",
+      "price": "$138.57",
+      "pe": "27.3\u00d7",
+      "off_high": "\u221214%"
+     },
+     {
+      "symbol": "AVTR",
+      "price": "$11.45",
+      "pe": "Loss-making",
+      "off_high": "\u221228%"
+     },
+     {
+      "symbol": "AZTA",
+      "price": "$27.39",
+      "pe": "Loss-making",
+      "off_high": "\u221234%"
+     },
+     {
+      "symbol": "TMO",
+      "price": "$568.27",
+      "pe": "29.9\u00d7",
+      "off_high": "\u221212%"
+     },
+     {
+      "symbol": "VEEV",
+      "price": "$186.35",
+      "pe": "35.1\u00d7",
+      "off_high": "\u221240%"
+     },
+     {
+      "symbol": "CDNS",
+      "price": "$326.22",
+      "pe": "85.1\u00d7",
+      "off_high": "\u221222%"
+     },
+     {
+      "symbol": "SNPS",
+      "price": "$373.44",
+      "pe": "96.5\u00d7",
+      "off_high": "\u221243%"
+     },
+     {
+      "symbol": "TER",
+      "price": "$349.84",
+      "pe": "59.7\u00d7",
+      "off_high": "\u221228%"
+     },
+     {
+      "symbol": "PANW",
+      "price": "$323.76",
+      "pe": "291.2\u00d7",
+      "off_high": "\u221212%"
+     },
+     {
+      "symbol": "RKLB",
+      "price": "$63.92",
+      "pe": "Loss-making",
+      "off_high": "\u221258%"
+     },
+     {
+      "symbol": "PGR",
+      "price": "$213.87",
+      "pe": "10.3\u00d7",
+      "off_high": "\u221216%"
+     },
+     {
+      "symbol": "MTD",
+      "price": "$1,328.89",
+      "pe": "31.3\u00d7",
+      "off_high": "\u221213%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Wet-lab hit rates, cycle times, or cost per validated candidate fail to improve despite better models.",
+    "Closed-loop autonomous laboratories do not scale beyond bespoke demonstrations.",
+    "Clinical attrition remains unchanged after controlling for target class and trial design.",
+    "Robot intervention rates, maintenance, and safety prevent attractive labor economics.",
+    "AI-designed chips or materials fail external verification or cannot be manufactured economically.",
+    "Model commoditization pushes value to cloud vendors while tools, data, and workflow owners lose pricing power.",
+    "Validation spending does not grow with hypothesis volume, disproving the bottleneck thesis.",
+    "Laboratory vacancy stays above 20% and biotech funding keeps losing capital to AI infrastructure, proving the hypothesis glut never reaches physical-validation demand.",
+    "Validation vendors keep guiding low-single-digit growth while regulatory acceptance rises, showing the economics accrue to drug developers rather than to the tools layer."
+   ],
+   "watch_next": [
+    "Wet-lab hit rate, experiment throughput, and cost per validated candidate.",
+    "Autonomous labs operating outside one-off pilots, with reproducible cross-lab results.",
+    "Clinical candidates whose design or patient selection was materially AI-generated.",
+    "Robot uptime, intervention rate, payback period, and task-transfer performance.",
+    "AI-designed blocks that tape out and pass independent verification.",
+    "External validation on unsaturated research benchmarks\u2014not self-graded model demos.",
+    "Revenue and margins from AI-native products rather than management mentions.",
+    "Whether laboratory service, test, and validation spending grows faster than model-software spending.",
+    "Whether ICH M15 converts into 2027 vendor bookings rather than only appearing in guidance language.",
+    "Whether any incumbent breaks out autonomous-lab or AI-native revenue as a separate, material line."
+   ],
+   "sources": [
+    {
+     "label": "FrontierScience expert-level benchmark",
+     "url": "https://arxiv.org/abs/2601.21165"
+    },
+    {
+     "label": "OpenAI: AI as a Scientific Collaborator",
+     "url": "https://cdn.openai.com/pdf/f4b4a5da-b2de-418d-9fcd-6b293e9dc157/oai_ai-as-a-scientific-collaborator_jan-2026.pdf"
+    },
+    {
+     "label": "Stanford AI Index: Science and Medicine",
+     "url": "https://hai.stanford.edu/assets/files/hai_ai-index-report-2025_chapter5_final.pdf"
+    },
+    {
+     "label": "DeepMind automated UK materials lab",
+     "url": "https://deepmind.google/blog/strengthening-our-partnership-with-the-uk-government-to-support-prosperity-and-security-in-the-ai-era/"
+    },
+    {
+     "label": "Nature: multi-agent autonomous materials labs",
+     "url": "https://www.nature.com/articles/s43246-026-01219-5"
+    },
+    {
+     "label": "US Department of Energy Genesis Mission",
+     "url": "https://www.energy.gov/genesis-mission-demonstration"
+    },
+    {
+     "label": "FDA AI evidence framework for drugs and biologics",
+     "url": "https://www.fda.gov/regulatory-information/search-fda-guidance-documents/considerations-use-artificial-intelligence-support-regulatory-decision-making-drug-and-biological"
+    },
+    {
+     "label": "NASA first AI-planned Perseverance drive",
+     "url": "https://www.jpl.nasa.gov/news/nasas-perseverance-rover-completes-first-ai-planned-drive-on-mars/"
+    },
+    {
+     "label": "IFR World Robotics 2025",
+     "url": "https://ifr.org/ifr-press-releases/news/global-robot-demand-in-factories-doubles-over-10-years"
+    },
+    {
+     "label": "Synopsys AI-powered EDA",
+     "url": "https://www.synopsys.com/ai/ai-powered-eda.html"
+    },
+    {
+     "label": "BIS 2026 Annual Economic Report on frontier-AI cyber risk",
+     "url": "https://www.bis.org/publ/arpdf/ar2026e1.htm"
+    },
+    {
+     "label": "NAIC: Artificial Intelligence in insurance",
+     "url": "https://content.naic.org/insurance-topics/artificial-intelligence"
+    },
+    {
+     "label": "ICH M15 adopted (Step 5) January 2026",
+     "url": "https://database.ich.org/sites/default/files/ICH_M15_Step4_Final_Guideline_2026_0129.pdf"
+    },
+    {
+     "label": "FDA year-one progress reducing animal testing",
+     "url": "https://www.fda.gov/news-events/press-announcements/fda-achieves-year-1-goals-reducing-animal-testing-drug-development"
+    },
+    {
+     "label": "Simulations Plus to go private with Altaris",
+     "url": "https://www.businesswire.com/news/home/20260616126655/en/Simulations-Plus-to-Be-Acquired-by-Altaris-For-Approximately-$375-Million"
+    }
+   ]
+  },
+  {
+   "id": "geo-yen-forcing-chain",
+   "category": "Geographies",
+   "title": "$100 oil \u00d7 \u00a5164 \u2192 the forced BOJ and the carry unwind",
+   "horizon": "H2 2026\u20132027",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "Japan is running an incoherent policy triangle: a dovish government stacking the BOJ board, a finance ministry that has spent ~$72.5B defending a currency its own policy weakens, and $100 oil flowing through a 40-year-low yen into import costs. Consensus expects one polite 25bp hike by December. The pipeline says imported inflation accelerates into autumn while leveraged yen shorts sit at nine-year highs. When the political cost of \u00a5170 gasoline exceeds the political cost of higher rates, the BOJ moves faster than consensus \u2014 into record short positioning. August 2024, but from a wider spread and a bigger stock of positions.",
+   "conviction": "High conviction the triangle is unstable and resolves within 12 months. Medium conviction on the violent path over the orderly one \u2014 intervention plus gradualism has held before. Low conviction on any specific date: carry trades outlast positioning extremes for quarters, and shorting the consensus early is how carry traders die.",
+   "final_verdict": "The widest known/priced gap of the July geographic hunt. Everyone knows the carry trade exists \u2014 August 2024 made it a household word \u2014 but the market prices the polite path: 86% of surveyed economists see just 1.25% by December, while June core CPI at 1.6% is still below target, giving the doves cover exactly as petroleum import values run +59% and the pass-through arrives in autumn prints. The asymmetry is the point: the consensus path pays carry holders roughly the 250\u2013275bp spread; the forced path repriced the world in three days in 2024. Own the paid leg where it is real (megabanks \u2014 at 52-week highs), price the tail where it is cheap (the yen itself, \u221211% from its high), and treat USDJPY 5-day appreciation over 1% as the tripwire it already is in this desk's risk rubric.",
+   "consensus_scores": {
+    "knowledge_saturation": 80,
+    "price_saturation": 30
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 80,
+     "price_saturation": 30,
+     "verdict": "Known 80: the carry trade is famous and the yen's 40-year low is front-page. Priced 30: positioning is at nine-year extremes on the SHORT side, the banks that win from forced hikes just became Japan's largest company, and nobody prices the autumn CPI pass-through against a government whose own MOF is fighting its own monetary stance."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Japanese megabanks \u2014 the paid leg",
+     "symbols": "MUFG \u00b7 SMFG \u00b7 MFG",
+     "knowledge_saturation": 75,
+     "price_saturation": 70,
+     "read": "NIM 0.80%\u21920.89% y/y, record \u00a52.4T profit (+30%), deposit rates to 0.4% in August \u2014 highest since 1992. The crowding flag: MUFG just became Japan's most valuable company, the first financial at the top in 40 years, and trades at its 52-week high. The trade works, and everyone has found it."
+    },
+    {
+     "layer": "The yen itself \u2014 the asymmetric leg",
+     "symbols": "FXY",
+     "knowledge_saturation": 85,
+     "price_saturation": 35,
+     "read": "Leveraged-fund shorts above 115k contracts \u2014 the most since 2017 and above the level that preceded August 2024. Long yen bleeds carry while you wait and has been wrong for years, which is exactly why the convex side is cheap: FXY sits 11% off its 52-week high while the banks sit at theirs. Tail-hedge leg, not income leg."
+    },
+    {
+     "layer": "Hedged vs unhedged Japan",
+     "symbols": "DXJ vs EWJ",
+     "knowledge_saturation": 55,
+     "price_saturation": 60,
+     "read": "EWJ's +13% YTD is substantially \u00a5164 translation cosmetics \u2014 the top of that trade, not the start (desk z50 \u22120.18). DXJ hedged sits 1.5% off its high, EWJ 5.9%. If the yen snaps stronger the spread inverts mechanically \u2014 a cleaner, cheaper yen expression than most realize."
+    },
+    {
+     "layer": "The desk's own book \u2014 carry-unwind beta",
+     "symbols": "HOOD \u00b7 FIGR \u00b7 high-beta growth",
+     "knowledge_saturation": 30,
+     "price_saturation": 20,
+     "read": "August 2024's washout hit exactly this profile: crowded, high-beta, carry-funded risk. A book holding 3.4-beta and 2.3-beta positions is short this theme whether it wants to be or not. The rubric's USDJPY signal is the tripwire; when it fires, honor the kills fast."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Core CPI at 1.6% is BELOW target and came off a four-year low. The forcing chain needs pass-through that has not printed yet \u2014 this is a forecast of inflation, not observed inflation, and forecasting Japanese inflation has embarrassed everyone for thirty years.",
+      "MOF holds $1.2\u20131.4T of reserves and the IMF free-float convention still allows two more intervention episodes before November. The line can be held longer than positioning stays stretched.",
+      "The measured carry stock (~$261B by one estimate) is far smaller than the trillions of folklore, and August 2024 proved unwinds can complete in days and reverse in weeks. The tail may be shorter and shallower than the analogy implies.",
+      "Takaichi's appointments run one way: every replacement is a dove. By 2027 the committee may simply not hike regardless of CPI \u2014 fiscal dominance is a stable regime right up until the bond market objects, and JGB 10-years at 26-year highs are a slow leak, not a snap.",
+      "A hawkish Warsh Fed widens the spread and makes carry MORE profitable near-term. The trade can get more crowded before it breaks \u2014 and 'more crowded' has been the winning call every year since 2022."
+     ]
+    }
+   ],
+   "what_survived": [
+    "The policy triangle is genuinely incoherent: dovish board-stacking, $72.5B of yen defense, and imported energy inflation cannot all persist.",
+    "Positioning extremes are objective \u2014 nine-year-high leveraged shorts are not a matter of interpretation.",
+    "The pass-through arithmetic is mechanical: +59% petroleum import values reach CPI with a lag whether or not the BOJ acknowledges it.",
+    "US pressure is now explicit \u2014 Treasury pushing for hikes ('shadow governor' per Nikkei) adds a second-government constraint no prior carry episode had.",
+    "The asymmetry survives every counterargument: the orderly path pays single digits annually; the violent path moved double digits in days in 2024."
+   ],
+   "residual_edge": [
+    "Sequencing, not direction: consensus splits Oct 40% / Dec 50% on the next hike \u2014 an unscheduled or 50bp move is where the convexity lives.",
+    "Tokyo CPI leads national CPI by three weeks \u2014 the pass-through shows there first.",
+    "Intervention-episode counting: after the next episode, the IMF-consistency constraint visibly binds and the market knows the wall is thinner.",
+    "The DXJ/EWJ spread as a liquid yen expression nobody frames as one.",
+    "FXY option skew: if the tail is still priced like a sleepy FX pair, the hedge is mispriced relative to CFTC positioning."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "MUFG \u00b7 SMFG \u00b7 FXY",
+     "why": "Banks are the paid leg \u2014 verify how much NIM expansion is already in estimates at a 52-week high. FXY options are the convex leg \u2014 check what the vol surface actually charges for the tail before assuming it is cheap."
+    },
+    {
+     "bucket": "Monitor",
+     "symbols": "DXJ \u00b7 EWJ \u00b7 JGB 10y",
+     "why": "The hedged/unhedged spread and the long end of the JGB curve are the two cheapest continuous reads on whether the regime is slipping."
+    },
+    {
+     "bucket": "Avoid",
+     "symbols": "Unhedged exporter longs at \u00a5164",
+     "why": "Translation-gain beneficiaries are the crowded side of the same trade; \u00a5164 earnings are peak cosmetics, not a base."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "P/E not tracked for ADRs/ETFs here \u2014 dashes stay dashes. The pattern is the point: the paid leg trades at its 52-week high, the hedge leg 11% below its own.",
+    "rows": [
+     {
+      "symbol": "MUFG",
+      "price": "$22.89",
+      "pe": "\u2014",
+      "off_high": "+0.0%"
+     },
+     {
+      "symbol": "SMFG",
+      "price": "$26.18",
+      "pe": "\u2014",
+      "off_high": "-1.2%"
+     },
+     {
+      "symbol": "MFG",
+      "price": "$10.63",
+      "pe": "\u2014",
+      "off_high": "-0.3%"
+     },
+     {
+      "symbol": "FXY",
+      "price": "$56.04",
+      "pe": "\u2014",
+      "off_high": "-10.8%"
+     },
+     {
+      "symbol": "DXJ",
+      "price": "$176.98",
+      "pe": "\u2014",
+      "off_high": "-1.5%"
+     },
+     {
+      "symbol": "EWJ",
+      "price": "$91.21",
+      "pe": "\u2014",
+      "off_high": "-5.9%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Brent sustained back under $85 \u2014 Hormuz normalization drains the pass-through and the consensus path wins quietly.",
+    "Autumn national CPI prints stay under 2% despite the import-cost surge \u2014 the chain's first link fails in public.",
+    "Takaichi's government absorbs \u00a5170 without political rupture \u2014 fiscal dominance proves stabler than assumed.",
+    "CFTC shorts bleed back toward neutral without a price event \u2014 the gradual-unwind path, which is unwinding's modal outcome.",
+    "The Fed cuts hard into US weakness \u2014 the spread compresses from the American side and carry dies with a whimper, not a bang.",
+    "Shunto 2027 wage rounds come in weak \u2014 the BOJ genuinely has no domestic case and the doves are simply right."
+   ],
+   "watch_next": [
+    "FOMC July 29 \u2014 a hawkish Warsh hold widens the spread and feeds the trade before it breaks it.",
+    "Tokyo CPI, monthly, ~3 weeks ahead of national \u2014 the first place +59% petroleum import costs must appear.",
+    "BOJ meetings September, October 29\u201330, December \u2014 consensus says Oct/Dec for +25bp; anything faster validates the forcing chain.",
+    "MOF intervention episodes \u2014 two remain before November under the IMF free-float convention; count them.",
+    "\u00a5165, then \u00a5170 \u2014 the market's line, then the political one.",
+    "CFTC leveraged-fund yen positioning, published Fridays \u2014 the bomb's size, updated weekly.",
+    "JGB 10-year at 26-year highs \u2014 the slow-leak version of the same repricing."
+   ],
+   "sources": [
+    {
+     "label": "BOJ holds at 1%, yen \u00a5163.8 (TechTimes, Jul 27)",
+     "url": "https://www.techtimes.com/articles/321731/20260727/bank-japan-holds-rates-1-upgrades-gdp-forecast-yen-nears-40-year-low.htm"
+    },
+    {
+     "label": "BOJ hikes to 1%, highest since 1995 (CNBC, Jun 16)",
+     "url": "https://www.cnbc.com/2026/06/16/boj-rate-hike-historic-inflation.html"
+    },
+    {
+     "label": "Japan June core CPI 1.6% as oil bites (CNBC)",
+     "url": "https://www.cnbc.com/2026/07/24/japan-cpi-june-inflation-oil-prices-yen.html"
+    },
+    {
+     "label": "BOJ's slow dovish revamp under Takaichi (Reuters/Yahoo)",
+     "url": "https://finance.yahoo.com/economy/policy/articles/analysis-bojs-slow-dovish-revamp-072028654.html"
+    },
+    {
+     "label": "'BOJ shadow governor' Bessent pushed for hikes (Nikkei Asia)",
+     "url": "https://asia.nikkei.com/economy/bank-of-japan/boj-shadow-governor-bessent-pushed-for-rate-hike"
+    },
+    {
+     "label": "Yen shorts at nine-year high as carry revives (Japan Times)",
+     "url": "https://www.japantimes.co.jp/business/2026/06/15/markets/yen-carry-trade-revive/"
+    },
+    {
+     "label": "Japan can intervene twice more before November under IMF rules (Japan Times)",
+     "url": "https://www.japantimes.co.jp/business/2026/05/05/markets/imf-yen-interventions/"
+    },
+    {
+     "label": "June FOMC minutes \u2014 dots flip hawkish (Federal Reserve)",
+     "url": "https://www.federalreserve.gov/monetarypolicy/fomcminutes20260617.htm"
+    },
+    {
+     "label": "Carry-trade fears overblown at $261B (Seeking Alpha)",
+     "url": "https://seekingalpha.com/article/4857082-yen-carry-trade-fears-blown-out-of-proportion"
+    },
+    {
+     "label": "The yen carry trade is unwinding (Apollo Academy)",
+     "url": "https://www.apolloacademy.com/the-yen-carry-trade-is-unwinding/"
+    },
+    {
+     "label": "Record megabank profits on rising rates (GuruFocus)",
+     "url": "https://www.gurufocus.com/news/8862617/japanese-banks-report-record-profits-amid-rising-interest-rates-mufg-mizuho-smfg"
+    },
+    {
+     "label": "MUFG becomes Japan's most valuable company (BigGo)",
+     "url": "https://finance.biggo.com/news/a7a49ae0-6d73-4fac-8f52-0221ba4ea077"
+    }
+   ]
+  },
+  {
+   "id": "geo-barrels-to-flops",
+   "category": "Geographies",
+   "title": "Gulf sovereign compute \u2192 the relief valve on US electricity scarcity",
+   "horizon": "2027\u20132031",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "At $0.05\u20130.06/kWh with sovereign wealth funding 5GW-scale campuses, marginal AI training migrates to where power is cheap and permitted. $100 oil widens the arbitrage \u2014 it funds the Gulf and raises US gas-fired cost simultaneously. The second-order effect this ledger must price: Gulf capacity is a relief valve that caps the duration of the US electricity-scarcity theme scored above at 92/69.",
+   "conviction": "High conviction the cost gap is real and the capacity is funded. Low conviction on timing \u2014 announcement-to-megawatt conversion is the whole question \u2014 and the entire arbitrage runs on Washington's chip-export permission.",
+   "final_verdict": "Known as spectacle, unpriced as consequence. The announcements are everywhere; the implication \u2014 that US power-scarcity trades quietly assume a terminal value the Gulf is busy arbitraging away \u2014 appears in no one's model. There is no liquid Gulf proxy, which is itself information: the tradeable expression is an adversarial haircut on US scarcity names, not a purchase.",
+   "consensus_scores": {
+    "knowledge_saturation": 50,
+    "price_saturation": 10
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 50,
+     "price_saturation": 10,
+     "verdict": "Known 50: the campus announcements are front-page. Priced 10: as a duration cap on CEG/VST-profile terminal values, essentially unconsidered."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Gulf buildout",
+     "symbols": "G42 \u00b7 HUMAIN (private)",
+     "knowledge_saturation": 60,
+     "price_saturation": 20,
+     "read": "UAE 5GW campus is the largest outside the US; Saudi targets 1.5GW by 2030. Funded, not speculative \u2014 but private, so the absence of a proxy forces the expression elsewhere."
+    },
+    {
+     "layer": "US scarcity duration",
+     "symbols": "CEG \u00b7 VST profile",
+     "knowledge_saturation": 30,
+     "price_saturation": 5,
+     "read": "Nobody holding US power-scarcity trades models offshore relief. The 2028/29 PJM auction cleared at the cap; the question is what clears in 2031 if 8GW of sovereign compute is live elsewhere."
+    },
+    {
+     "layer": "Vendors",
+     "symbols": "NVDA-adjacent",
+     "knowledge_saturation": 85,
+     "price_saturation": 80,
+     "read": "The Gulf buys the same silicon \u2014 fully priced, not the point of this theme."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Chip-export controls can kill Gulf compute overnight \u2014 the arbitrage exists at Washington's pleasure.",
+      "Data sovereignty and latency limit which workloads migrate; training moves easier than inference, and inference is where the growth is.",
+      "US transmission, not generation, may stay the binding constraint \u2014 the relief valve helps the wrong bottleneck.",
+      "2030-31 timelines exceed most theme patience; the cap on US terminal values may arrive after the trades have already paid."
+     ]
+    }
+   ],
+   "what_survived": [
+    "The 10x electricity cost gap is physical and durable.",
+    "Announced Gulf capacity is sovereign-funded \u2014 these projects do not die of financing."
+   ],
+   "residual_edge": [
+    "Watch US power names' implied terminal values quietly extend past 2030 \u2014 that is the mispricing this theme predicts.",
+    "Announcement-to-MW conversion rate is the metric; press releases are not megawatts."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Monitor",
+     "symbols": "G42/HUMAIN milestones \u00b7 US export-license news \u00b7 PJM 2029/30 auction",
+     "why": "Three feeds decide whether the relief valve opens on schedule: delivered megawatts, GPU allocations, and the next capacity-auction print."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "No liquid Gulf proxy exists; CEG shown as the US-scarcity cross-reference this theme adversarially prices.",
+    "rows": [
+     {
+      "symbol": "CEG",
+      "price": "$274.35",
+      "pe": "\u2014",
+      "off_high": "-31.8%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "US export regime blocks Gulf GPU allocations at scale.",
+    "Gulf projects convert under 30% of announced MW by 2028.",
+    "US interconnect reform unlocks domestic supply faster than expected."
+   ],
+   "watch_next": [
+    "Delivered (not announced) Gulf megawatts, quarterly.",
+    "US chip-export licensing decisions for UAE/Saudi.",
+    "PJM 2029/30 auction \u2014 the first print that could show the valve working."
+   ],
+   "sources": [
+    {
+     "label": "Middle East AI infrastructure boom (Introl)",
+     "url": "https://introl.com/blog/middle-east-uae-saudi-arabia-ai-data-center-boom-2025"
+    },
+    {
+     "label": "UAE data centers powering the AI revolution (DCK)",
+     "url": "https://www.datacenterknowledge.com/data-center-site-selection/uae-data-centers-powering-the-middle-east-s-ai-and-cloud-revolution"
+    },
+    {
+     "label": "Saudi data center strategy (trade.gov)",
+     "url": "https://www.trade.gov/market-intelligence/saudi-arabia-ict-new-data-center-strategy-accelerate-ai-and-cloud-expansion"
+    }
+   ]
+  },
+  {
+   "id": "geo-twin-deficit-sorting",
+   "category": "Geographies",
+   "title": "$100 oil \u2192 the twin-deficit sorting of EM",
+   "horizon": "2026\u20132027",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "Oil above $100 re-rates countries by balance sheet, not by story. The first-order trade (energy equities) is saturated \u2014 retail 'should you buy oil stocks' coverage is the tell. The second order moves slower: importers with subsidy budgets (India, Thailand, Vietnam) absorb fiscal and currency damage monthly, exporters with clean grids (Brazil) compound the windfall, and the freight echo \u2014 Bab el-Mandeb transits \u221234%, longer routes \u2014 re-tightens shipping the way 2021 did.",
+   "conviction": "High conviction in the arithmetic: import dependence is measurable and compounds. Medium conviction on expressions \u2014 EM currencies answer to the Fed as much as to oil.",
+   "final_verdict": "Known 70, priced 40. The oil price is front-page; the country-level sorting is not. EWZ at +0.22 desk z has barely begun moving for a net exporter with the strongest EM currency; INDA at \u221210% YTD has priced maybe half its squeeze; the Suez/freight echo is priced nowhere.",
+   "consensus_scores": {
+    "knowledge_saturation": 70,
+    "price_saturation": 40
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 70,
+     "price_saturation": 40,
+     "verdict": "Known 70: everyone sees $100 oil. Priced 40: the sort into country risk premia happens over quarters, and the winner leg (Brazil) has moved least."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Exporter leg",
+     "symbols": "EWZ",
+     "knowledge_saturation": 60,
+     "price_saturation": 35,
+     "read": "Net exporter, renewables-heavy grid, strongest EM currency, IMF constructive \u2014 and the new 12% crude-export tax trims the equity's share of the windfall. Desk z +0.22: barely moving."
+    },
+    {
+     "layer": "Importer stress",
+     "symbols": "INDA \u00b7 THD \u00b7 VNM",
+     "knowledge_saturation": 65,
+     "price_saturation": 45,
+     "read": "India imports >80% of crude with a subsidy budget; VNM already at \u22121.83 desk z; THD's +22.9% YTD says the market is paying for tourism and ignoring the fuel bill."
+    },
+    {
+     "layer": "Freight echo",
+     "symbols": "tankers \u00b7 containers",
+     "knowledge_saturation": 40,
+     "price_saturation": 30,
+     "read": "Bab el-Mandeb \u221234% in a day; reroutes absorb capacity. The 2021 goods-inflation rhyme, and no desk instrument covers it \u2014 a coverage gap worth noting."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Oil can mean-revert on Hormuz normalization and the entire sort unwinds before it prices.",
+      "Brazil's export tax and fiscal politics can eat the exporter premium faster than the windfall accrues.",
+      "EM currencies are Fed instruments first and oil instruments second \u2014 a hawkish Warsh drowns the signal."
+     ]
+    }
+   ],
+   "what_survived": [
+    "Import dependence is arithmetic, not narrative.",
+    "Current-account damage compounds monthly while headlines fade \u2014 slow themes stay investable longer."
+   ],
+   "residual_edge": [
+    "The sort is slow, so entries remain available after the headline week.",
+    "EWZ is the cheapest expression of the winner leg on this desk."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "EWZ",
+     "why": "Net exporter + strongest EM currency + desk momentum barely positive: the rare case where the fundamental winner has not yet been paid."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Country ETF closes; P/E not tracked for ETFs \u2014 dashes stay dashes.",
+    "rows": [
+     {
+      "symbol": "EWZ",
+      "price": "$35.73",
+      "pe": "\u2014",
+      "off_high": "-13.6%"
+     },
+     {
+      "symbol": "INDA",
+      "price": "$48.02",
+      "pe": "\u2014",
+      "off_high": "-13.1%"
+     },
+     {
+      "symbol": "THD",
+      "price": "$72.83",
+      "pe": "\u2014",
+      "off_high": "-1.0%"
+     },
+     {
+      "symbol": "VNM",
+      "price": "$16.46",
+      "pe": "\u2014",
+      "off_high": "-16.9%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Brent sustained under $85.",
+    "A US\u2013India deal flips the India leg from stress to rally (see the India theme).",
+    "Brazil fiscal slippage triggers a real selloff that overwhelms the oil windfall."
+   ],
+   "watch_next": [
+    "Hormuz and Bab el-Mandeb transit counts, weekly.",
+    "India monthly trade deficit and rupee.",
+    "Brazil trade balance and the export-tax take."
+   ],
+   "sources": [
+    {
+     "label": "Tanker attacks across three chokepoints (CNBC)",
+     "url": "https://www.cnbc.com/2026/07/24/oil-tanker-red-sea-hormuz-black-sea-iran-ukraine.html"
+    },
+    {
+     "label": "Goldman: $120 if Hormuz stays disrupted (NAI500)",
+     "url": "https://nai500.com/blog/2026/07/red-sea-tanker-attacks-send-brent-past-100-energy-stocks-have-room-to-run/"
+    },
+    {
+     "label": "India's oil import exposure (Weekly Voice)",
+     "url": "https://weeklyvoice.com/indias-economy-enters-summer-2026-with-strength-stress-and-a-major-oil-risk/"
+    },
+    {
+     "label": "IMF Article IV: Brazil resilient (IMF, Jul 23)",
+     "url": "https://www.imf.org/en/news/articles/2026/07/23/pr26257-brazil-imf-executive-board-concludes-2026-article-iv-consultation"
+    }
+   ]
+  },
+  {
+   "id": "geo-india-binary",
+   "category": "Geographies",
+   "title": "Tariffs \u00d7 oil \u00d7 rupee \u2192 India's maximum-pain squeeze resolves binary",
+   "horizon": "H2 2026",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "50% US tariffs over Russian crude, >80% oil import dependence at $100, and a pressured rupee form the maximum-pain configuration \u2014 and maximum pain is what produces resolution. Both sides need the deal: the US wants a China+1 anchor, India needs export access and oil diplomacy. INDA prices the squeeze, not the resolution. The other branch \u2014 doubling down on discounted Russian barrels into secondary-sanctions escalation \u2014 is live too, which makes this event-driven rather than slow-burn.",
+   "conviction": "Medium conviction that binary framing is right at all \u2014 muddle-through is the modal path of trade disputes. High conviction on the asymmetry if it is: the bad branch is half-priced, the good branch is not.",
+   "final_verdict": "Known 60, priced 30. The tariff fight is well covered; the deal path is not in the price. INDA at \u221210.4% YTD and \u22120.37 desk z is a market paying for the squeeze and assigning roughly nothing to softening US posture that is already on the record.",
+   "consensus_scores": {
+    "knowledge_saturation": 60,
+    "price_saturation": 30
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 60,
+     "price_saturation": 30,
+     "verdict": "Known 60: the fight is covered. Priced 30: the resolution branch is nearly free, and at $100 oil India's incentive to defect to Russian barrels RAISES the variance in both directions."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Deal resolution",
+     "symbols": "INDA",
+     "knowledge_saturation": 55,
+     "price_saturation": 25,
+     "read": "Softening US posture is on the record; a deal reprices INDA off a \u221210% base with positioning light."
+    },
+    {
+     "layer": "Escalation branch",
+     "symbols": "INDA (short side)",
+     "knowledge_saturation": 50,
+     "price_saturation": 40,
+     "read": "$100 oil improves discounted-Russian-crude economics, raising defection incentive \u2014 secondary sanctions would stack on 50% tariffs already in place."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Muddle-through for years is how most trade disputes actually resolve \u2014 the binary may be a narrative convenience.",
+      "Domestic demand carries India's market more than trade does; both branches may matter less than assumed.",
+      "A rupee crisis would force RBI tightening that damages the domestic story regardless of the trade outcome."
+     ]
+    }
+   ],
+   "what_survived": [
+    "The pain configuration is real and measured \u2014 tariff rate, import share, and rupee are all observable.",
+    "US posture softening is documented, not inferred."
+   ],
+   "residual_edge": [
+    "Asymmetric entry: the bad branch is partially priced, the good branch is not \u2014 cheap optionality profile."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "INDA",
+     "why": "If subjective deal probability exceeds what a \u221210% YTD, \u22120.37z market implies, the position is the cheap side of a binary."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Country ETF close; P/E not tracked for ETFs.",
+    "rows": [
+     {
+      "symbol": "INDA",
+      "price": "$48.02",
+      "pe": "\u2014",
+      "off_high": "-13.1%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Tariffs extended or raised with talks abandoned.",
+    "Oil above $120 overwhelms any deal benefit.",
+    "RBI forced into defensive hikes by the rupee."
+   ],
+   "watch_next": [
+    "US\u2013India negotiation headlines \u2014 the only catalyst that matters.",
+    "Monthly trade deficit and rupee level.",
+    "Russian crude import volumes \u2014 the defection meter."
+   ],
+   "sources": [
+    {
+     "label": "Tariffs, oil and the rupee (ORF)",
+     "url": "https://www.orfonline.org/expert-speak/tariffs-oil-and-the-rupee-india-s-external-reckoning"
+    },
+    {
+     "label": "India's summer 2026 oil risk (Weekly Voice)",
+     "url": "https://weeklyvoice.com/indias-economy-enters-summer-2026-with-strength-stress-and-a-major-oil-risk/"
+    },
+    {
+     "label": "Hormuz and India's import dependence (India Briefing)",
+     "url": "https://www.india-briefing.com/news/indias-oil-supply-hormuz-diversification-strategy-43381.html/"
+    }
+   ]
+  },
+  {
+   "id": "geo-germany-barbell",
+   "category": "Geographies",
+   "title": "Rearmament vs deindustrialization \u2192 the German barbell",
+   "horizon": "2026\u20132028",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "Defense spending rises from \u20ac82B to \u20ac109B by 2027 (\u2248\u20ac130B with Ukraine) under an amended debt brake \u2014 a genuine fiscal impulse arriving exactly as energy re-inflation cuts 2026 growth to 0.5%. The index nets to nothing: defense, construction and software absorb stimulus while energy-intensive export industry keeps shrinking and China retaliation aims at autos. EWG flat at +0.03 desk z all year is not the absence of a theme \u2014 it is two themes cancelling.",
+   "conviction": "High conviction in the composition shift: budget law and three consecutive export-contraction years are structure, not cycle. Low conviction that EWG itself is ever the instrument.",
+   "final_verdict": "Known 80, priced 50. Defense primes are fully found; the offset view \u2014 fiscal impulse quietly cancelling the energy drag, making Germany outperform a 0.5% consensus \u2014 is half-priced at best, and the dispersion trade underneath is barely constructed anywhere.",
+   "consensus_scores": {
+    "knowledge_saturation": 80,
+    "price_saturation": 50
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 80,
+     "price_saturation": 50,
+     "verdict": "Known 80: rearmament is consensus. Priced 50: the primes yes, the barbell no \u2014 the index's flatness is the evidence."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Defense primes",
+     "symbols": "RHM-profile (off-desk)",
+     "knowledge_saturation": 90,
+     "price_saturation": 85,
+     "read": "Fully found and fully paid \u2014 the 2024-25 trade, not the 2026 one."
+    },
+    {
+     "layer": "Mittelstand decay",
+     "symbols": "energy-intensive exporters",
+     "knowledge_saturation": 70,
+     "price_saturation": 55,
+     "read": "Three straight years of export contraction with China converted from customer to competitor; retaliation lists aim here first."
+    },
+    {
+     "layer": "The barbell spread",
+     "symbols": "EWG internals",
+     "knowledge_saturation": 45,
+     "price_saturation": 30,
+     "read": "Long fiscal absorbers vs short energy-intensive industry \u2014 the actual trade, and no desk instrument expresses it. A coverage gap."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Goldman already argues 2026 outperformance \u2014 the offset view is half-priced, not unpriced.",
+      "Energy can mean-revert with oil and un-cancel the drag in the bulls' favor, making plain long EWG the lazy right answer.",
+      "Defense fiscal multipliers are historically weak \u2014 the impulse may underdeliver GDP even where it delivers orders."
+     ]
+    }
+   ],
+   "what_survived": [
+    "The budget numbers are law, not forecast.",
+    "Composition rotation is visible in orders data before it reaches indices."
+   ],
+   "residual_edge": [
+    "Poland/Czech defense supply chains are purer expressions than German primes \u2014 off every desk index, which is the point."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Monitor",
+     "symbols": "EWG internals \u00b7 IP vs construction/defense orders",
+     "why": "Direction is dead; dispersion is alive. The monthly split between industrial production and defense/construction orders is the theme's pulse."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Country ETF close; P/E not tracked for ETFs.",
+    "rows": [
+     {
+      "symbol": "EWG",
+      "price": "$41.12",
+      "pe": "\u2014",
+      "off_high": "-5.9%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Energy costs mean-revert toward pre-crisis levels.",
+    "China d\u00e9tente lifts autos and un-splits the barbell.",
+    "Coalition politics slips the defense ramp."
+   ],
+   "watch_next": [
+    "Monthly industrial production vs defense/construction orders.",
+    "China retaliation list contents \u2014 autos or not.",
+    "German fiscal execution vs announcement."
+   ],
+   "sources": [
+    {
+     "label": "Energy prices derail the German rebound (CNBC)",
+     "url": "https://www.cnbc.com/2026/04/24/germany-iran-defense-war-energy-oil-price-shock-industry-fiscal-stimulus-middle-east-europe-inflation-growth.html"
+    },
+    {
+     "label": "EC forecast: Germany 2026 (European Commission)",
+     "url": "https://economy-finance.ec.europa.eu/economic-surveillance-eu-member-states/country-pages/germany/economic-forecast-germany_en"
+    },
+    {
+     "label": "Goldman: Germany forecast to outperform (GS)",
+     "url": "https://www.goldmansachs.com/insights/articles/germanys-economy-is-forecast-to-outperform-in-2026"
+    }
+   ]
+  },
+  {
+   "id": "geo-transplant-scramble",
+   "category": "Geographies",
+   "title": "EU\u2013China overcapacity war \u2192 the transplant scramble",
+   "horizon": "2026\u20132029",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "The EU's drafted 'overcapacity instrument' \u2014 its own Section 301 \u2014 meets a China running record $412B monthly exports off 30% of world manufacturing against 13% of world consumption. Tariff walls do not stop that surplus; they relocate and redirect it. Relocation enriches transplant hosts (Hungary, Turkey, Morocco, Mexico, Brazil). Redirection sends the blocked surplus into the Global South \u2014 where Thailand's Japanese-owned auto base, the Detroit of Southeast Asia, gets hollowed. Germany is hit twice: competitor and first retaliation target. Korea autos quietly gain EU share.",
+   "conviction": "Medium conviction \u2014 the instrument is a draft and trade drafts die in negotiation. High conviction that the surplus arithmetic must discharge somewhere regardless of which wall goes up.",
+   "final_verdict": "Known 40, priced 20 \u2014 the least-known theme of the hunt, and the one where the desk's own tape argues back: THD is the hottest country on the board (+0.48z, +22.9% YTD) while this thesis calls its auto base structurally short. Either tourism and rate cuts dominate for years and the thesis is early to the point of wrong, or the market is paying headline momentum and ignoring a hollowing it has not priced at all. Resolve that before any position: decompose THD.",
+   "consensus_scores": {
+    "knowledge_saturation": 40,
+    "price_saturation": 20
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 40,
+     "price_saturation": 20,
+     "verdict": "Known 40: policy circles only. Priced 20: bystander winners have no index, and the Thai casualty is priced negatively \u2014 the market is paying it UP."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Transplant hosts",
+     "symbols": "no clean ETF (EWW closest, off-desk)",
+     "knowledge_saturation": 30,
+     "price_saturation": 15,
+     "read": "Hungary, Turkey, Morocco win FDI either way \u2014 and no liquid index expresses it. The gap is the finding."
+    },
+    {
+     "layer": "THD hollowing",
+     "symbols": "THD",
+     "knowledge_saturation": 35,
+     "price_saturation": 20,
+     "read": "Desk momentum says +22.9% YTD; this thesis says the auto base underneath is being hollowed by redirected Chinese EVs. Highest research-value disagreement in the hunt."
+    },
+    {
+     "layer": "Germany double-hit",
+     "symbols": "EWG",
+     "knowledge_saturation": 60,
+     "price_saturation": 45,
+     "read": "Competitor and retaliation target simultaneously \u2014 overlaps the barbell theme's short leg."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "THD's momentum is genuine evidence against \u2014 tourism and rate cuts may simply dominate for years.",
+      "Transplants take 3-5 years to build; the horizon may exceed any theme's patience.",
+      "The EU instrument may die in negotiation exactly as the EV tariff fight softened into minimum-price compromises."
+     ]
+    }
+   ],
+   "what_survived": [
+    "30% of manufacturing vs 13% of consumption is arithmetic that must discharge somewhere.",
+    "BYD's own split \u2014 overseas +70.7%, domestic \u221239.6% \u2014 is the redirection already running."
+   ],
+   "residual_edge": [
+    "Bystander FDI is unmapped by any index \u2014 private-market and single-stock territory, which is where unpriced lives.",
+    "Thai auto production data is the cheapest continuous test of the short leg."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "THD decomposition",
+     "why": "Resolve tourism-vs-hollowing before any position \u2014 the sector weights decide whether the index can fall while the thesis is right."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Country ETF closes; P/E not tracked for ETFs.",
+    "rows": [
+     {
+      "symbol": "THD",
+      "price": "$72.83",
+      "pe": "\u2014",
+      "off_high": "-1.0%"
+     },
+     {
+      "symbol": "EWG",
+      "price": "$41.12",
+      "pe": "\u2014",
+      "off_high": "-5.9%"
+     },
+     {
+      "symbol": "EWY",
+      "price": "$162.96",
+      "pe": "\u2014",
+      "off_high": "-25.7%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "An EU\u2013China grand bargain shelves the instrument.",
+    "Thai auto output stabilizes through 2027.",
+    "Chinese consumption stimulus actually rebalances demand home."
+   ],
+   "watch_next": [
+    "Late-July Politburo \u2014 stimulus vs export-push signals.",
+    "EU overcapacity-instrument drafting progress.",
+    "Thai monthly auto production and Chinese EV import share."
+   ],
+   "sources": [
+    {
+     "label": "EU edges toward its own Section 301 (Atlantic Council)",
+     "url": "https://www.atlanticcouncil.org/blogs/econographics/as-chinas-surpluses-become-unbearable-the-eu-is-edging-toward-its-own-section-301/"
+    },
+    {
+     "label": "China threatens retaliation over the instrument (EUobserver)",
+     "url": "https://euobserver.com/218003/china-threatens-retaliation-over-new-eu-tool-to-curb-chinese-overcapacity/"
+    },
+    {
+     "label": "Record exports, GDP miss (TechTimes)",
+     "url": "https://www.techtimes.com/articles/320531/20260715/china-exports-surge-record-ai-chips-gdp-miss-tariff-cliff-signal-deeper-trouble.htm"
+    }
+   ]
+  },
+  {
+   "id": "geo-korea-memory-opec",
+   "category": "Geographies",
+   "title": "Memory shortage \u2192 Korea as the OPEC of DRAM",
+   "horizon": "2026\u20132028",
+   "status": "Theme hunt \u00b7 single reviewer",
+   "owner_belief": "The worst memory shortage in 15 years \u2014 spot DRAM +700% y/y, capacity captured by HBM, SK Hynix sold out through 2026, Micron exiting consumer \u2014 lands on a country index that is roughly 40% Samsung plus Hynix. EWY is a duopoly royalty stream wearing an ETF: exports, the won, and the fiscal balance all lever to DRAM pricing power. The short leg of the same theme is the memory payers \u2014 device assemblers and hardware-margin stories (this desk's NTDOY thesis is that leg).",
+   "conviction": "High conviction in the shortage through 2027 \u2014 it is vendor-stated, not inferred. Low conviction on entry: +57.7% YTD says the direction is found; every memory cycle has ended the same way, and 'structural this time' is what the top always says.",
+   "final_verdict": "Known 60, priced 60 \u2014 the narrowest gap of the hunt, deliberately scored flat: direction is paid, duration is the only live question. Desk z at \u22120.73 with +57.7% YTD reads as consolidation after capture. If the sold-out-through-2027 claims hold, the pause is the entry; if contract prices roll over, the cycle has already topped. This one is a timing problem, not a thesis problem.",
+   "consensus_scores": {
+    "knowledge_saturation": 60,
+    "price_saturation": 60
+   },
+   "model_reviews": [
+    {
+     "model": "Claude Fable 5",
+     "role": "Author \u00b7 geographic theme hunt",
+     "knowledge_saturation": 60,
+     "price_saturation": 60,
+     "verdict": "Known 60: tech circles fully briefed, generalists not. Priced 60: the move happened \u2014 what remains unpriced is 2027 duration and the China-echo ending."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Duopoly rent",
+     "symbols": "EWY",
+     "knowledge_saturation": 70,
+     "price_saturation": 65,
+     "read": "+57.7% YTD, z50 \u22120.73: captured, now resting. The country-level expression of DRAM pricing power."
+    },
+    {
+     "layer": "Memory payers (short leg)",
+     "symbols": "device assemblers \u00b7 NTDOY-profile",
+     "knowledge_saturation": 45,
+     "price_saturation": 40,
+     "read": "BOM inflation compresses hardware margins \u2014 the desk's Nintendo thesis is this leg already written."
+    },
+    {
+     "layer": "China echo",
+     "symbols": "CXMT (private)",
+     "knowledge_saturation": 35,
+     "price_saturation": 20,
+     "read": "HBM exclusion force-feeds domestic Chinese capacity \u2014 the seed of the 2028 oversupply that ends every memory cycle."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where Fable breaks its own thesis",
+     "bullets": [
+      "Every memory supercycle has ended in oversupply, and everyone who called it structural owned the top.",
+      "+57.7% YTD may BE the cycle \u2014 the entry question dominates the thesis question at these levels.",
+      "Windfall-tax and won-appreciation risk siphon country-level gains from the index."
+     ]
+    }
+   ],
+   "what_survived": [
+    "Sold-out-through-2026 is vendor-stated fact, not analyst hope.",
+    "Micron exiting consumer is discipline behavior no prior cycle showed."
+   ],
+   "residual_edge": [
+    "Duration is the mispriced variable: 10\u201320%/month hike guidance into 2027 either holds (entry) or breaks (top) \u2014 watchable monthly."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Monitor",
+     "symbols": "EWY \u00b7 monthly DRAM contract prints",
+     "why": "The z \u22120.73 consolidation resolves within a quarter; contract pricing tells you which way before the index does."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Country ETF close; P/E not tracked for ETFs.",
+    "rows": [
+     {
+      "symbol": "EWY",
+      "price": "$162.96",
+      "pe": "\u2014",
+      "off_high": "-25.7%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "DRAM contract prices roll over two consecutive months.",
+    "CXMT ships competitive HBM early.",
+    "Hyperscaler capex guidance rolls over \u2014 the demand side of the shortage folds."
+   ],
+   "watch_next": [
+    "Monthly DRAM/NAND contract prints.",
+    "Samsung and Hynix capex discipline vs expansion announcements.",
+    "Q3 hike guidance (10\u201320%/month) holding or breaking."
+   ],
+   "sources": [
+    {
+     "label": "Samsung warns of 2026-wide shortage (NetworkWorld)",
+     "url": "https://www.networkworld.com/article/4113772/samsung-warns-of-memory-shortages-driving-industry-wide-price-surge-in-2026.html"
+    },
+    {
+     "label": "Shortage may last past 2030 (Tech Insider)",
+     "url": "https://tech-insider.org/memory-chip-shortage-2026-ai-consumer-electronics/"
+    },
+    {
+     "label": "Hynix scraps contract price caps (BigGo)",
+     "url": "https://finance.biggo.com/news/db5b7cb8-ada3-4745-b602-612b0bc70c50"
+    }
+   ]
+  }
+ ]
 }
