@@ -550,8 +550,8 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 .themes-shell{padding-bottom:64px}
 .theme-loading,.theme-error{padding:30px 0;color:var(--bl-muted)}
 
-/* sticky theme switcher — wayfinding across a long ledger */
-.theme-switch{position:sticky;top:var(--desk-top,0px);z-index:15;display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;padding:12px 0 14px;margin-bottom:28px;background:var(--bl-page);border-bottom:1px solid var(--bl-border)}
+/* theme switcher grid — scrolls with the page; grew too tall to pin at 9 themes */
+.theme-switch{display:grid;grid-template-columns:repeat(auto-fit,minmax(290px,1fr));gap:10px;padding:12px 0 14px;margin-bottom:28px;border-bottom:1px solid var(--bl-border)}
 .theme-pill{display:grid;gap:4px;padding:11px 14px;border:1px solid var(--bl-border);border-radius:10px;background:var(--bl-card);text-decoration:none}
 .theme-pill:hover{border-color:var(--bl-chipbd)}
 .theme-pill.is-current{border-color:var(--bl-accent);background:var(--bl-chipbg)}
@@ -566,7 +566,7 @@ td .sub{display:block;font-family:var(--bl-sans);font-size:11.5px;color:var(--bl
 .tone-mid{color:var(--bl-warn);background:var(--bl-warnbg)}
 .tone-tight{color:#a63142;background:#fbecee}
 
-.theme-record{display:grid;gap:24px;margin-bottom:60px;scroll-margin-top:calc(var(--desk-top,0px) + 96px)}
+.theme-record{display:grid;gap:24px;margin-bottom:60px;scroll-margin-top:calc(var(--desk-top,0px) + 16px)}
 .theme-hero{background:var(--bl-ink);color:#fafaf8;border-radius:14px;padding:32px}
 .theme-kicker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px}
 .theme-kicker span{padding:4px 10px;border:1px solid #ffffff2b;border-radius:999px;color:#d2d4d8;font:600 10px var(--bl-mono);text-transform:uppercase;letter-spacing:.07em}
