@@ -5,7 +5,7 @@
  "method": {
   "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
   "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-  "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented.",
+  "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented.",
   "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
  },
  "themes": [
@@ -5251,6 +5251,907 @@
    "source_model": "Grok 4.5",
    "reviewed_by": [
     "GPT-5.6"
+   ]
+  },
+  {
+   "id": "meta-power-wall-rate-shock",
+   "category": "Energy",
+   "title": "The Power Wall \u2192 grid breaks before AI does",
+   "horizon": "Q4 2026\u20132029",
+   "status": "Meta frontier \u00b7 2 reviewers",
+   "owner_belief": "AI infrastructure has moved from a chip-allocation problem toward a power-delivery problem. PJM capacity scarcity, load-growth backstops, transmission lead times, and customer rate design can force both a consumer rate shock and a faster pivot to onsite generation. The second order is who pays for reliability and who can energize capacity before the grid catches up.",
+   "conviction": "High conviction that power delivery constrains campus timing. High conviction that PJM rate design becomes political. Medium conviction in onsite generation share. Low conviction that this is independent from the existing AI-power theme rather than a sharper catalyst layer inside it.",
+   "final_verdict": "Consensus is 78 known / 48 priced: a +30 gap after a hard overlap haircut. This is not a new macro thesis; it is the rate-shock and onsite-power branch of AI electricity scarcity. Grid equipment is already crowded, merchant power already carries scarcity expectations, and regulated utilities face customer-allocation politics. Residual edge sits in signed load contracts, minimum-take terms, tariff treatment, interconnection dates, fuel supply, and who funds redundant capacity.",
+   "consensus_scores": {
+    "knowledge_saturation": 78,
+    "price_saturation": 48
+   },
+   "model_reviews": [
+    {
+     "model": "Meta AI",
+     "role": "Originator \u00b7 frontier theme synthesis supplied by Bernard",
+     "knowledge_saturation": 68,
+     "price_saturation": 32,
+     "verdict": "Known 68: investors understand that AI needs power. Priced 32: the PJM capacity-rate shock, reliability backstops, and pivot toward onsite generation are less reflected than the GPU and grid-equipment headline."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 88,
+     "price_saturation": 64,
+     "verdict": "This is a useful rate-shock and onsite-power subtheme, but it overlaps heavily with the existing AI-power ledger at 92 known / 69 priced. PJM scarcity, turbine backlogs, merchant power, transformers, and Bloom are already prominent trades. The remaining edge is contract and tariff design\u2014not rediscovering that AI is power-constrained."
+    }
+   ],
+   "source_model": "Meta AI",
+   "reviewed_by": [
+    "GPT-5.6"
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "PJM merchant power",
+     "symbols": "CEG \u00b7 VST",
+     "knowledge_saturation": 92,
+     "price_saturation": 72,
+     "read": "Scarcity and capacity pricing are explicit parts of the thesis. The edge is contract duration and load realization, not the headline demand forecast."
+    },
+    {
+     "layer": "Grid + turbine equipment",
+     "symbols": "GEV \u00b7 HUBB",
+     "knowledge_saturation": 96,
+     "price_saturation": 88,
+     "read": "Backlogs and lead times are consensus and valuations leave little room for order normalization or execution misses."
+    },
+    {
+     "layer": "Onsite power",
+     "symbols": "BE",
+     "knowledge_saturation": 78,
+     "price_saturation": 55,
+     "read": "The grid-delay workaround is real, but fuel, emissions, customer concentration, financing, and service economics determine whether revenue becomes durable cash flow."
+    },
+    {
+     "layer": "Regulated utility allocation",
+     "symbols": "ETR \u00b7 D-profile utilities",
+     "knowledge_saturation": 82,
+     "price_saturation": 72,
+     "read": "Load growth can expand rate base while also triggering backlash over who pays. A utility without a protective large-load tariff can turn growth into political risk."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why the Power Wall can be yesterday\u2019s trade",
+     "bullets": [
+      "The existing AI-power theme already scores 92/69; creating another theme can double-count one crowded capital cycle.",
+      "Capacity auctions and equity value are not the same: rate design can transfer scarcity rents away from generators and vendors.",
+      "Demand forecasts can be cut by model efficiency, campus cancellations, behind-the-meter generation, or migration to other regions.",
+      "GEV and HUBB already price exceptional backlogs, while BE still must convert onsite-power enthusiasm into durable margins and cash."
+     ]
+    }
+   ],
+   "what_survived": [
+    "PJM capacity scarcity is measurable in auction prices and reserve shortfalls.",
+    "Large-load additions can arrive faster than transmission and generation projects.",
+    "Onsite power is moving from emergency bridge to planned campus architecture.",
+    "Tariff and reliability-backstop design determines who captures or absorbs the rate shock."
+   ],
+   "residual_edge": [
+    "Underwrite individual data-center load contracts, energization dates, deposits, and cancellation terms.",
+    "Track large-load tariffs and cost-allocation rulings by utility territory.",
+    "Separate equipment backlog from margin, service, and working-capital conversion.",
+    "Measure onsite-power economics after fuel, emissions, redundancy, and financing."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Contract diligence",
+     "symbols": "CEG \u00b7 VST \u00b7 ETR",
+     "why": "Map signed load, minimum-take protection, tariff treatment, and reliability obligations."
+    },
+    {
+     "bucket": "Execution watch",
+     "symbols": "BE",
+     "why": "Require financed deployments, fuel certainty, service margins, and cash conversion."
+    },
+    {
+     "bucket": "Crowded quality",
+     "symbols": "GEV \u00b7 HUBB",
+     "why": "Great backlogs are known; only incremental duration or margin evidence creates fresh edge."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Friday split-adjusted closes. Equipment and regulated-utility expressions remain much closer to highs than merchant and onsite-power names; the dispersion reflects different risk, not a free convergence trade. P/E omitted per ledger convention.",
+    "rows": [
+     {
+      "symbol": "GEV",
+      "price": "$1014.75",
+      "pe": "\u2014",
+      "off_high": "\u221215.2%"
+     },
+     {
+      "symbol": "HUBB",
+      "price": "$486.09",
+      "pe": "\u2014",
+      "off_high": "\u221213.8%"
+     },
+     {
+      "symbol": "BE",
+      "price": "$184.89",
+      "pe": "\u2014",
+      "off_high": "\u221247.4%"
+     },
+     {
+      "symbol": "CEG",
+      "price": "$274.35",
+      "pe": "\u2014",
+      "off_high": "\u221233.3%"
+     },
+     {
+      "symbol": "VST",
+      "price": "$163.38",
+      "pe": "\u2014",
+      "off_high": "\u221225.4%"
+     },
+     {
+      "symbol": "ETR",
+      "price": "$115.95",
+      "pe": "\u2014",
+      "off_high": "\u22122.1%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "PJM reserve margins recover without sustained capacity-price or tariff pressure.",
+    "Data-center projects cancel or defer enough load to move energization queues materially lower.",
+    "Onsite generation loses on fuel, emissions, permitting, or financing economics.",
+    "Equipment backlogs normalize before new generation and transmission projects reach construction."
+   ],
+   "watch_next": [
+    "PJM auction clearing price, reserve margin, backstop procurement, and load forecast revisions.",
+    "Large-load tariff orders and customer cost-allocation rulings.",
+    "GEV/HUBB backlog duration, cancellation, margin, and working-capital conversion.",
+    "BE financed onsite megawatts, customer concentration, fuel supply, and service economics."
+   ],
+   "sources": [
+    {
+     "label": "Gartner \u2014 data-center electricity consumption projected +26% in 2026",
+     "url": "https://www.gartner.com/en/newsroom/press-releases/2026-06-10-gartner-says-data-center-electricity-demand-to-grow-26-percent-in-2026"
+    },
+    {
+     "label": "PJM \u2014 capacity-auction preparation and $325/MW-day cap",
+     "url": "https://insidelines.pjm.com/the-capacity-auction-is-coming-heres-what-were-doing-now/"
+    },
+    {
+     "label": "Reuters \u2014 PJM reliability backstop for swelling large-load demand",
+     "url": "https://www.reuters.com/business/energy/largest-us-power-grid-moves-ahead-with-plan-meet-swelling-demand-2026-07-28/"
+    },
+    {
+     "label": "Reuters \u2014 PJM auction hits cap and falls short of reliability requirement",
+     "url": "https://www.reuters.com/legal/litigation/us-pjm-power-grid-auction-prices-expected-stabilize-near-record-highs-2026-07-14/"
+    },
+    {
+     "label": "Bloom Energy \u2014 2026 Data Center Power Report",
+     "url": "https://www.bloomenergy.com/wp-content/uploads/2026-power-report.pdf"
+    }
+   ]
+  },
+  {
+   "id": "meta-humanoid-labor-wage-shock",
+   "category": "Emerging",
+   "title": "$2/hour humanoid labor \u2192 physical AI wage shock",
+   "horizon": "2026\u20132032",
+   "status": "Meta frontier \u00b7 2 reviewers",
+   "owner_belief": "Humanoid economics are approaching a task-specific crossover in warehouses, factories, and ground operations where labor is scarce, repetitive, and physically constrained. China\u2019s deployment push and live airport trials move the debate from demos toward utilization, while automotive and automation supply chains provide components and manufacturing capacity.",
+   "conviction": "High conviction that deployments grow from a small base. Medium conviction that selected repetitive workflows achieve attractive economics this decade. Low conviction that $2/hour represents near-term all-in cost after supervision, integration, downtime, financing, and safety.",
+   "final_verdict": "Consensus is 50 known / 27 priced: a +23 gap. The wage-shock framing is earlier than most labor models, but the supplied $2/hour figure is a future running-cost estimate\u2014not today\u2019s fully loaded cost. Public exposure is indirect: NVDA and TSLA are narrative-saturated, TER/HON/ROK sell enabling systems, and SYM is warehouse automation rather than a humanoid pure play. Track paid productive hours, not robots shipped.",
+   "consensus_scores": {
+    "knowledge_saturation": 50,
+    "price_saturation": 27
+   },
+   "model_reviews": [
+    {
+     "model": "Meta AI",
+     "role": "Originator \u00b7 frontier theme synthesis supplied by Bernard",
+     "knowledge_saturation": 38,
+     "price_saturation": 14,
+     "verdict": "Known 38: frontier investors follow humanoids, while most labor-sensitive equity models still treat deployment as a 2030s issue. Priced 14: public pure plays are scarce and component or labor-displacement effects remain largely absent from forecasts."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 62,
+     "price_saturation": 40,
+     "verdict": "Humanoids are now a mainstream AI narrative, and Tesla, Nvidia, automation, actuator, and warehouse names already carry physical-AI optionality. The quoted $2/hour is a projected operating cost, not a verified all-in deployed cost. The edge depends on uptime, supervision, integration, safety, and task-specific productivity."
+    }
+   ],
+   "source_model": "Meta AI",
+   "reviewed_by": [
+    "GPT-5.6"
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Embodied AI compute",
+     "symbols": "NVDA \u00b7 TSLA",
+     "knowledge_saturation": 92,
+     "price_saturation": 78,
+     "read": "Physical AI optionality is explicit in both narratives. Humanoid deployment must become material beyond valuation storytelling."
+    },
+    {
+     "layer": "Test + motion + controls",
+     "symbols": "TER \u00b7 HON \u00b7 ROK",
+     "knowledge_saturation": 62,
+     "price_saturation": 48,
+     "read": "Sensors, controls, testing, and industrial integration can benefit without picking the winning robot form factor, but exposure is diluted."
+    },
+    {
+     "layer": "Warehouse automation",
+     "symbols": "SYM",
+     "knowledge_saturation": 72,
+     "price_saturation": 52,
+     "read": "The task economics are closer to production, yet fixed automation may remain cheaper and more reliable than general-purpose humanoids."
+    },
+    {
+     "layer": "Labor-arbitrage risk",
+     "symbols": "UPS \u00b7 FDX \u00b7 airport services",
+     "knowledge_saturation": 42,
+     "price_saturation": 25,
+     "read": "Replacement risk is workflow-specific and likely appears first as capex, throughput, and attrition changes\u2014not an overnight wage collapse."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why $2/hour is not the bill",
+     "bullets": [
+      "Roland Berger describes projected running cost; deployment also needs capex, maintenance, teleoperation, integration, insurance, and downtime.",
+      "Ten thousand units can validate manufacturing while remaining immaterial to the labor market.",
+      "Fixed automation often beats a humanoid where environments can be redesigned.",
+      "Safety, battery life, dexterity, task switching, and exception handling can keep effective productive cost far above the headline."
+     ]
+    }
+   ],
+   "what_survived": [
+    "Airport and industrial trials are moving humanoids into real workflows.",
+    "Labor scarcity creates a stronger initial wedge than generic wage replacement.",
+    "Component and integration demand can grow before humanoid OEM economics are proven.",
+    "China\u2019s deployment tempo provides a near-term benchmark rather than a 2035-only story."
+   ],
+   "residual_edge": [
+    "Measure paid autonomous task-hours, intervention rate, uptime, and throughput per deployed unit.",
+    "Compare humanoids against fixed automation and process redesign, not only human wages.",
+    "Map component content and gross profit per unit across the supply chain.",
+    "Track whether pilots convert into repeat fleet orders at the same site."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Deployment proof",
+     "symbols": "TER \u00b7 HON \u00b7 ROK",
+     "why": "Look for disclosed robot-component or integration revenue tied to repeat industrial orders."
+    },
+    {
+     "bucket": "Automation benchmark",
+     "symbols": "SYM",
+     "why": "Compare humanoid cost and flexibility against an already-scaled warehouse alternative."
+    },
+    {
+     "bucket": "Narrative-saturated",
+     "symbols": "NVDA \u00b7 TSLA",
+     "why": "Humanoid optionality is real but already prominent; require material unit and revenue evidence."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Friday split-adjusted closes. Automation incumbents remain close to highs while humanoid-adjacent narrative and warehouse names show wider dispersion. None is a clean $2/hour labor proxy. P/E omitted per ledger convention.",
+    "rows": [
+     {
+      "symbol": "TSLA",
+      "price": "$313.03",
+      "pe": "\u2014",
+      "off_high": "\u221237.2%"
+     },
+     {
+      "symbol": "NVDA",
+      "price": "$206.84",
+      "pe": "\u2014",
+      "off_high": "\u221212.5%"
+     },
+     {
+      "symbol": "TER",
+      "price": "$349.92",
+      "pe": "\u2014",
+      "off_high": "\u221228.3%"
+     },
+     {
+      "symbol": "SYM",
+      "price": "$40.15",
+      "pe": "\u2014",
+      "off_high": "\u221254.3%"
+     },
+     {
+      "symbol": "ROK",
+      "price": "$462.16",
+      "pe": "\u2014",
+      "off_high": "\u22127.1%"
+     },
+     {
+      "symbol": "HON",
+      "price": "$243.15",
+      "pe": "\u2014",
+      "off_high": "\u22126.0%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Real deployments fail to achieve high autonomous uptime and low intervention rates.",
+    "All-in productive cost remains above task-specific human or fixed-automation alternatives through 2029.",
+    "Pilots do not convert into repeat fleet orders.",
+    "Safety or labor regulation prevents unsupervised operation in target workflows."
+   ],
+   "watch_next": [
+    "China\u2019s 2026 deployment count separated into shipped, installed, and productive units.",
+    "Japan Airlines trial: tasks completed, intervention rate, safety incidents, and expansion.",
+    "Humanoid OEM fleet utilization and repeat-customer orders.",
+    "Component suppliers disclosing humanoid revenue rather than design wins."
+   ],
+   "sources": [
+    {
+     "label": "Roland Berger \u2014 humanoid convergence and projected $2/hour running cost",
+     "url": "https://www.rolandberger.com/en/Insights/Publications/Humanoid-robots-why-the-convergence-moment-is-now.html"
+    },
+    {
+     "label": "eWeek \u2014 China 2026 humanoid work-mode deployment plan",
+     "url": "https://www.eweek.com/news/humanoid-robots-work-mode-2026-apac-china/"
+    },
+    {
+     "label": "Japan Airlines \u2014 humanoid airport-work demonstration program",
+     "url": "https://press.jal.co.jp/en/release/202604/009502.html"
+    },
+    {
+     "label": "CNBC \u2014 Japan Airlines Haneda humanoid trial",
+     "url": "https://www.cnbc.com/2026/05/01/japan-airlines-humanoid-robots-haneda-labor-shortage.html"
+    }
+   ]
+  },
+  {
+   "id": "meta-partial-reprogramming-humans",
+   "category": "Emerging",
+   "title": "Partial reprogramming enters humans \u2192 longevity becomes a platform test",
+   "horizon": "2026\u20132032",
+   "status": "Meta frontier \u00b7 2 reviewers",
+   "owner_belief": "ER-100 moves partial epigenetic reprogramming from animal data into a controlled human trial for optic neuropathies. If localized, inducible OSK expression proves tolerable and produces credible functional signals, it can validate a new therapeutic modality rather than merely another longevity biomarker story.",
+   "conviction": "High conviction that the trial is a genuine platform milestone. Medium conviction that localized ocular delivery can establish safety. Low conviction on efficacy, generalization beyond the eye, and investability because the leading platforms are private.",
+   "final_verdict": "Consensus is 33 known / 13 priced: a +20 gap. The science milestone is real; the \u201cGLP-1 moment for aging\u201d analogy is premature. ER-100 Phase 1 tests safety and tolerability in the eye, not systemic rejuvenation. Public exposure is mostly tools\u2014TMO/DHR manufacturing, ILMN/TWST measurement, and CRSP/NTLA as gene-therapy comparables\u2014not ownership of partial reprogramming economics.",
+   "consensus_scores": {
+    "knowledge_saturation": 33,
+    "price_saturation": 13
+   },
+   "model_reviews": [
+    {
+     "model": "Meta AI",
+     "role": "Originator \u00b7 frontier theme synthesis supplied by Bernard",
+     "knowledge_saturation": 24,
+     "price_saturation": 8,
+     "verdict": "Known 24: longevity venture circles know partial reprogramming, but the first FDA-cleared human program remains obscure to generalist investors. Priced 8: no public company offers meaningful direct exposure and the therapeutic-platform implication is absent from most models."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 42,
+     "price_saturation": 18,
+     "verdict": "The first-in-human milestone is important, but Phase 1 is a safety and tolerability test in a localized ocular setting\u2014not validation of systemic age reversal. Private-platform optionality is unpriced because it is mostly untradeable; public tools and gene-editing names are adjacent, not direct beneficiaries."
+    }
+   ],
+   "source_model": "Meta AI",
+   "reviewed_by": [
+    "GPT-5.6"
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Partial-reprogramming platforms",
+     "symbols": "Private Life Biosciences \u00b7 Altos \u00b7 NewLimit \u00b7 Retro",
+     "knowledge_saturation": 35,
+     "price_saturation": 8,
+     "read": "The cleanest economic exposure is private. Milestone validation can reprice venture secondaries long before public markets gain a pure play."
+    },
+    {
+     "layer": "AAV manufacturing + analytical tools",
+     "symbols": "TMO \u00b7 DHR",
+     "knowledge_saturation": 75,
+     "price_saturation": 58,
+     "read": "Manufacturing and testing benefit from gene-therapy activity broadly, but one small ocular trial is immaterial to diversified platforms."
+    },
+    {
+     "layer": "Epigenetic measurement",
+     "symbols": "ILMN \u00b7 TWST",
+     "knowledge_saturation": 52,
+     "price_saturation": 35,
+     "read": "Methylation and biomarker measurement become important, but research clocks are not automatically validated clinical surrogate endpoints."
+    },
+    {
+     "layer": "Public gene-therapy comparables",
+     "symbols": "CRSP \u00b7 NTLA",
+     "knowledge_saturation": 70,
+     "price_saturation": 48,
+     "read": "Platform validation can help sentiment, but these companies do not own ER-100 or partial-reprogramming IP."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why one eye trial does not reverse aging",
+     "bullets": [
+      "Phase 1 primarily evaluates safety and tolerability; efficacy signals can be noisy and uncontrolled.",
+      "Localized ocular delivery does not establish systemic delivery, repeat dosing, durability, or organ-level safety.",
+      "Partial reprogramming carries tumorigenesis, identity-loss, dose-control, and off-target risks.",
+      "Public tooling revenue is too diluted for a small private trial to move earnings."
+     ]
+    }
+   ],
+   "what_survived": [
+    "FDA authorization and first-patient dosing move the field into human evidence.",
+    "Inducible, localized delivery is a rational way to test a high-risk modality.",
+    "Safety plus functional evidence could validate a therapeutic class rather than a single asset.",
+    "The lack of public pure plays explains genuinely low price saturation."
+   ],
+   "residual_edge": [
+    "Track dose cohorts, adverse events, expression control, visual function, and structural optic-nerve measures.",
+    "Separate biomarker age changes from clinically meaningful function.",
+    "Map private-platform financing and licensing after each safety milestone.",
+    "Treat public tools as broad picks-and-shovels only when order evidence appears."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Clinical proof",
+     "symbols": "Life Biosciences ER-100",
+     "why": "The trial record, dose progression, safety, and visual-function evidence dominate the thesis."
+    },
+    {
+     "bucket": "Tooling watch",
+     "symbols": "TMO \u00b7 DHR \u00b7 ILMN \u00b7 TWST",
+     "why": "Require disclosed reprogramming or epigenetic-measurement demand before assigning revenue."
+    },
+    {
+     "bucket": "Comparable, not exposure",
+     "symbols": "CRSP \u00b7 NTLA",
+     "why": "Gene-therapy valuation read-through is possible; direct economics are absent."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Friday split-adjusted closes. Measurement incumbents trade far closer to highs than public gene-editing comparables, but none owns the private partial-reprogramming asset. P/E omitted per ledger convention.",
+    "rows": [
+     {
+      "symbol": "TMO",
+      "price": "$568.26",
+      "pe": "\u2014",
+      "off_high": "\u221211.6%"
+     },
+     {
+      "symbol": "DHR",
+      "price": "$191.50",
+      "pe": "\u2014",
+      "off_high": "\u221220.8%"
+     },
+     {
+      "symbol": "ILMN",
+      "price": "$194.09",
+      "pe": "\u2014",
+      "off_high": "\u22122.5%"
+     },
+     {
+      "symbol": "TWST",
+      "price": "$90.27",
+      "pe": "\u2014",
+      "off_high": "\u221214.4%"
+     },
+     {
+      "symbol": "CRSP",
+      "price": "$46.54",
+      "pe": "\u2014",
+      "off_high": "\u221240.7%"
+     },
+     {
+      "symbol": "NTLA",
+      "price": "$10.73",
+      "pe": "\u2014",
+      "off_high": "\u221262.0%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "ER-100 produces dose-limiting toxicity, uncontrolled expression, tumor signal, or meaningful ocular inflammation.",
+    "The trial cannot progress through planned dose cohorts.",
+    "Safety is acceptable but functional and structural measures show no credible signal.",
+    "Localized success fails to generalize to other tissues or repeat dosing."
+   ],
+   "watch_next": [
+    "ClinicalTrials.gov NCT07290244 status, enrollment, cohorts, and protocol changes.",
+    "ER-100 adverse events, dose progression, and expression-control evidence.",
+    "Visual function and optic-nerve structural outcomes\u2014not epigenetic clocks alone.",
+    "Private-platform licensing, financing, and second-indication filings."
+   ],
+   "sources": [
+    {
+     "label": "Life Biosciences \u2014 FDA clearance of ER-100 IND",
+     "url": "https://www.lifebiosciences.com/life-biosciences-announces-fda-clearance-of-ind-application-for-er-100-in-optic-neuropathies/"
+    },
+    {
+     "label": "ClinicalTrials.gov \u2014 ER-100 Phase 1 study NCT07290244",
+     "url": "https://clinicaltrials.gov/study/NCT07290244"
+    },
+    {
+     "label": "Life Biosciences \u2014 first patient dosed in ER-100 Phase 1",
+     "url": "https://www.lifebiosciences.com/life-biosciences-announces-first-patient-dosed-in-phase-1-trial-of-er-100-for-optic-neuropathies/"
+    },
+    {
+     "label": "MIT Technology Review \u2014 first human test of partial rejuvenation",
+     "url": "https://www.technologyreview.com/2026/01/27/1131796/the-first-human-test-of-a-rejuvenation-method-will-begin-shortly/"
+    },
+    {
+     "label": "BioSpace \u2014 ER-100 IND announcement",
+     "url": "https://www.biospace.com/press-releases/life-biosciences-announces-fda-clearance-of-ind-application-for-er-100-in-optic-neuropathies"
+    }
+   ]
+  },
+  {
+   "id": "meta-silicon-sovereignty-stack-split",
+   "category": "Sectors",
+   "title": "Silicon sovereignty \u2192 the great AI stack split",
+   "horizon": "2026\u20132031",
+   "status": "Meta frontier \u00b7 2 reviewers",
+   "owner_belief": "Export controls and national-security policy are creating parallel AI stacks rather than clean decoupling. Nations will selectively localize memory, accelerators, cloud control, data residency, and critical tools while remaining interdependent. The economic result is duplicated capex, guaranteed domestic demand, and less fungible regional supply.",
+   "conviction": "High conviction in persistent stack fragmentation. High conviction that memory and semiconductor equipment remain policy instruments. Medium conviction in hybrid sovereign-cloud growth. Low conviction that listed Chinese champions are still cheap after dramatic IPO repricing.",
+   "final_verdict": "Consensus is 66 known / 40 priced: a +26 gap. Sovereign AI is real, but \u201cNvidia monoculture is unchallenged\u201d is already a straw man\u2014export controls and domestic substitution dominate semiconductor research. CXMT\u2019s reported debut surge also means sovereignty can be violently priced locally. The edge is scenario-specific: license policy, China revenue exposure, HBM qualification, duplicate regional capex, and which tools remain irreplaceable.",
+   "consensus_scores": {
+    "knowledge_saturation": 66,
+    "price_saturation": 40
+   },
+   "model_reviews": [
+    {
+     "model": "Meta AI",
+     "role": "Originator \u00b7 frontier theme synthesis supplied by Bernard",
+     "knowledge_saturation": 54,
+     "price_saturation": 26,
+     "verdict": "Known 54: export controls and sovereign AI are visible. Priced 26: investors still under-model parallel regional stacks, domestic memory champions, and hybrid sovereign-cloud demand that fragments otherwise global supply chains."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 78,
+     "price_saturation": 55,
+     "verdict": "The stack split is already a central semiconductor thesis, and CXMT\u2019s reported debut surge contradicts the claim that China memory champions remain broadly discounted. Sovereignty creates regional winners, but it also creates duplicate capex, subsidies, gluts, export-policy volatility, and lower returns on capital."
+    }
+   ],
+   "source_model": "Meta AI",
+   "reviewed_by": [
+    "GPT-5.6"
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Accelerator control point",
+     "symbols": "NVDA \u00b7 AMD",
+     "knowledge_saturation": 95,
+     "price_saturation": 82,
+     "read": "China licensing and sovereign demand are headline drivers. The uncertainty is policy and product mix, not awareness."
+    },
+    {
+     "layer": "Memory sovereignty",
+     "symbols": "MU \u00b7 China-listed CXMT",
+     "knowledge_saturation": 78,
+     "price_saturation": 58,
+     "read": "HBM and server memory are strategic. Domestic champions gain guaranteed demand but can also create subsidized overcapacity and price pressure."
+    },
+    {
+     "layer": "Lithography + equipment",
+     "symbols": "ASML \u00b7 AMAT \u00b7 LRCX",
+     "knowledge_saturation": 90,
+     "price_saturation": 72,
+     "read": "Export exposure is deeply modeled. Residual edge lies in exact license scope, service restrictions, and substitution timelines."
+    },
+    {
+     "layer": "Hybrid sovereign cloud",
+     "symbols": "ORCL \u00b7 regional operators",
+     "knowledge_saturation": 68,
+     "price_saturation": 48,
+     "read": "Most workloads do not require full sovereign isolation. Control planes, residency, keys, and government contracts matter more than building entirely separate clouds."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where sovereignty destroys value",
+     "bullets": [
+      "CXMT\u2019s debut repricing suggests the champion trade can become crowded immediately.",
+      "Parallel stacks duplicate capex and can produce subsidized memory, foundry, and cloud overcapacity.",
+      "Policy can reverse, tighten, or become transactional faster than product road maps adapt.",
+      "Domestic demand guarantees volume, not technology parity, yield, margins, or shareholder returns."
+     ]
+    }
+   ],
+   "what_survived": [
+    "Export controls are creating durable regional architecture and procurement differences.",
+    "HBM, memory bandwidth, tools, and cloud control are strategic layers\u2014not generic chip demand.",
+    "Hybrid sovereignty is more economically plausible than total stack duplication.",
+    "Policy fragmentation reduces global supply fungibility and can amplify cycles."
+   ],
+   "residual_edge": [
+    "Build revenue and service exposure by product, customer, country, and license category.",
+    "Track actual HBM qualification, yield, and volume\u2014not capacity announcements.",
+    "Measure sovereign-cloud contracts by control requirement and recurring economics.",
+    "Model both scarcity upside and subsidized overcapacity downside."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Policy sensitivity",
+     "symbols": "NVDA \u00b7 AMD \u00b7 ASML \u00b7 AMAT \u00b7 LRCX",
+     "why": "Map exact product and service exposure under each export-license scenario."
+    },
+    {
+     "bucket": "Memory proof",
+     "symbols": "MU \u00b7 CXMT",
+     "why": "Track HBM qualification, yield, pricing, and customer concentration."
+    },
+    {
+     "bucket": "Contract evidence",
+     "symbols": "ORCL \u00b7 regional sovereign clouds",
+     "why": "Require signed government or regulated-workload contracts with disclosed economics."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Friday split-adjusted closes. Accelerator and lithography leaders remain near highs while memory and U.S. equipment names show wider drawdowns. The split is already policy-sensitive. P/E omitted per ledger convention.",
+    "rows": [
+     {
+      "symbol": "NVDA",
+      "price": "$206.84",
+      "pe": "\u2014",
+      "off_high": "\u221212.5%"
+     },
+     {
+      "symbol": "AMD",
+      "price": "$521.95",
+      "pe": "\u2014",
+      "off_high": "\u221210.7%"
+     },
+     {
+      "symbol": "MU",
+      "price": "$920.95",
+      "pe": "\u2014",
+      "off_high": "\u221226.6%"
+     },
+     {
+      "symbol": "ASML",
+      "price": "$1755.15",
+      "pe": "\u2014",
+      "off_high": "\u221212.1%"
+     },
+     {
+      "symbol": "AMAT",
+      "price": "$536.25",
+      "pe": "\u2014",
+      "off_high": "\u221227.5%"
+     },
+     {
+      "symbol": "LRCX",
+      "price": "$305.21",
+      "pe": "\u2014",
+      "off_high": "\u221230.4%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Export controls ease enough that regional stack duplication stops accelerating.",
+    "Domestic Chinese HBM and equipment programs fail sustained qualification and yield milestones.",
+    "Sovereign-cloud spending remains pilot-scale or shifts back to ordinary public-cloud regions.",
+    "Subsidized capacity creates a glut that destroys the intended scarcity economics."
+   ],
+   "watch_next": [
+    "BIS license policy for H200, MI325X-class products, memory bandwidth, and interconnect.",
+    "CXMT HBM qualification, yield, volume, and customer contracts after IPO.",
+    "MU/ASML/AMAT/LRCX China revenue and service commentary.",
+    "Sovereign-cloud contract value, residency scope, key control, and utilization."
+   ],
+   "sources": [
+    {
+     "label": "Reuters \u2014 CXMT debut and China\u2019s state-funded tech path",
+     "url": "https://www.reuters.com/world/asia-pacific/china-memory-chipmaker-cxmt-set-shanghai-debut-after-asias-biggest-ipo-2026-07-26/"
+    },
+    {
+     "label": "Reuters \u2014 CXMT and YMTC ride AI memory demand",
+     "url": "https://www.reuters.com/world/china/chinas-memory-chip-makers-ride-ai-boom-new-power-us-scrutiny-2026-07-24/"
+    },
+    {
+     "label": "U.S. BIS \u2014 revised semiconductor license-review policy for China",
+     "url": "https://www.bis.gov/press-release/department-commerce-revises-license-review-policy-semiconductors-exported-china"
+    },
+    {
+     "label": "APAC Sovereign AI Infrastructure Research Report 2026",
+     "url": "https://www.globenewswire.com/news-release/2026/05/19/3297355/28124/en/Asia-Pacific-Sovereign-AI-Infrastructure-Research-Report-2026-The-Hybrid-Model-Reshaping-a-13-Billion-Market-with-NVIDIA-Dominating-Size-Strategy-and-Forecast-to-2030.html"
+    }
+   ]
+  },
+  {
+   "id": "meta-y2q-post-quantum-rebuild",
+   "category": "Emerging",
+   "title": "Y2Q \u2192 the forced post-quantum cryptography rebuild",
+   "horizon": "2026\u20132035",
+   "status": "Meta frontier \u00b7 2 reviewers",
+   "owner_belief": "NIST standards and national-security transition schedules turn post-quantum cryptography from research into a migration program. The scarce work is not selecting an algorithm; it is finding cryptography across software, hardware, firmware, PKI, TLS, VPNs, code signing, identity, and long-lived data\u2014then making those systems crypto-agile without breaking them.",
+   "conviction": "High conviction that inventory and migration work grows for government and regulated enterprises. High conviction that harvest-now-decrypt-later makes some data urgent before a cryptographically relevant quantum computer exists. Medium conviction in public-vendor revenue attribution. Low conviction in a clean pure-play basket.",
+   "final_verdict": "Consensus is 31 known / 12 priced: a +19 gap. The supplied 18/5 score understates awareness inside security and government, but the migration workload is still largely absent from public-company segment reporting. The near-term spend is crypto discovery, PKI, certificates, HSMs, identity, protocol testing, and hybrid deployment\u2014not buying \u201cquantum stocks.\u201d IBM and Cloudflare have visible PQC work; PANW, CRWD, OKTA, and HPE are adjacent, diversified beneficiaries.",
+   "consensus_scores": {
+    "knowledge_saturation": 31,
+    "price_saturation": 12
+   },
+   "model_reviews": [
+    {
+     "model": "Meta AI",
+     "role": "Originator \u00b7 frontier theme synthesis supplied by Bernard",
+     "knowledge_saturation": 18,
+     "price_saturation": 5,
+     "verdict": "Known 18: post-quantum migration remains specialist outside defense and large financial institutions. Priced 5: public cybersecurity revenue and enterprise models barely isolate crypto inventory, agility, and migration work despite formal standards and dated transition guidance."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 45,
+     "price_saturation": 20,
+     "verdict": "PQC is well known inside security architecture, government, hyperscalers, and major vendors, so 18 is too low. The revenue pool is still under-modeled because migration begins with inventory, protocol dependencies, PKI, code signing, and hardware replacement. Public vendors are diversified and deadlines can phase, making the equity expression indirect."
+    }
+   ],
+   "source_model": "Meta AI",
+   "reviewed_by": [
+    "GPT-5.6"
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Standards + implementation",
+     "symbols": "IBM \u00b7 NET",
+     "knowledge_saturation": 62,
+     "price_saturation": 28,
+     "read": "Both have visible technical work, but PQC is tiny inside current revenue. Adoption and migration tooling matter more than press releases."
+    },
+    {
+     "layer": "Crypto inventory + network control",
+     "symbols": "PANW \u00b7 CRWD",
+     "knowledge_saturation": 48,
+     "price_saturation": 25,
+     "read": "Asset and protocol visibility can support migration, but neither is a pure crypto-agility vendor and product attribution remains weak."
+    },
+    {
+     "layer": "Identity + PKI dependencies",
+     "symbols": "OKTA",
+     "knowledge_saturation": 42,
+     "price_saturation": 20,
+     "read": "Authentication, certificates, signing, and federation create migration dependencies. PQC upside is indirect until products and revenue are disclosed."
+    },
+    {
+     "layer": "Hardware + HSM refresh",
+     "symbols": "HPE \u00b7 IBM \u00b7 private Thales/Entrust peers",
+     "knowledge_saturation": 38,
+     "price_saturation": 18,
+     "read": "Long-lived hardware and key-management estates can force replacement, but schedules vary and standards support can arrive through firmware."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why Y2Q does not equal Y2K revenue",
+     "bullets": [
+      "Transition schedules can phase by system class, waivers, and procurement cycle rather than create one deadline cliff.",
+      "Large vendors can bundle PQC support into existing products with little incremental pricing power.",
+      "Inventory and interoperability failures may slow deployment without producing clean public revenue.",
+      "A cryptographically relevant quantum computer may remain distant, reducing urgency outside national security and long-lived data."
+     ]
+    }
+   ],
+   "what_survived": [
+    "NIST has finalized deployable FIPS 203, 204, and 205 standards.",
+    "NSA and federal guidance create dated procurement and migration pressure.",
+    "Harvest-now-decrypt-later makes long-lived sensitive data a present risk.",
+    "Crypto inventory and agility are prerequisites regardless of the eventual quantum timeline."
+   ],
+   "residual_edge": [
+    "Measure cryptographic asset inventory coverage and remediation time, not generic quantum-readiness claims.",
+    "Track contract requirements flowing from national-security buyers into suppliers.",
+    "Identify hardware and firmware that cannot support hybrid or post-quantum algorithms in place.",
+    "Demand vendor disclosure of PQC product attach, bookings, and migration services."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Implementation proof",
+     "symbols": "IBM \u00b7 NET",
+     "why": "Track standards deployment, hybrid traffic, enterprise products, and disclosed customer adoption."
+    },
+    {
+     "bucket": "Inventory + control",
+     "symbols": "PANW \u00b7 CRWD \u00b7 OKTA",
+     "why": "Require explicit crypto-discovery, PKI, identity, or migration revenue rather than adjacency."
+    },
+    {
+     "bucket": "Refresh cycle",
+     "symbols": "HPE \u00b7 hardware security estates",
+     "why": "Map systems that require replacement rather than a software or firmware update."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Alpaca SIP daily closes",
+    "date": "2026-07-24",
+    "note": "Friday split-adjusted closes. Cloud and security platforms trade much closer to highs than diversified hardware and IBM, but PQC is not material enough to explain the spread. P/E omitted per ledger convention.",
+    "rows": [
+     {
+      "symbol": "IBM",
+      "price": "$214.19",
+      "pe": "\u2014",
+      "off_high": "\u221235.6%"
+     },
+     {
+      "symbol": "NET",
+      "price": "$262.15",
+      "pe": "\u2014",
+      "off_high": "\u22129.9%"
+     },
+     {
+      "symbol": "PANW",
+      "price": "$323.79",
+      "pe": "\u2014",
+      "off_high": "\u221212.2%"
+     },
+     {
+      "symbol": "CRWD",
+      "price": "$183.28",
+      "pe": "\u2014",
+      "off_high": "\u221215.7%"
+     },
+     {
+      "symbol": "OKTA",
+      "price": "$138.50",
+      "pe": "\u2014",
+      "off_high": "\u221211.8%"
+     },
+     {
+      "symbol": "HPE",
+      "price": "$47.69",
+      "pe": "\u2014",
+      "off_high": "\u221225.6%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Federal and national-security transition schedules are materially delayed or waived across new procurements.",
+    "Enterprises discover that most systems can migrate through bundled software updates with little services or hardware spend.",
+    "PQC product support fails interoperability, performance, or certificate-size requirements at scale.",
+    "Public vendors still disclose no material PQC bookings or migration revenue through 2029."
+   ],
+   "watch_next": [
+    "NSA CNSA 2.0 and CSfC procurement guidance entering 2027.",
+    "NIST transition guidance and deprecation dates for vulnerable algorithms.",
+    "Federal contract clauses flowing into defense and critical-infrastructure suppliers.",
+    "Vendor PQC traffic, crypto-inventory coverage, bookings, and hardware-refresh disclosures."
+   ],
+   "sources": [
+    {
+     "label": "NIST \u2014 first three finalized post-quantum standards",
+     "url": "https://www.nist.gov/news-events/news/2024/08/nist-releases-first-3-finalized-post-quantum-encryption-standards"
+    },
+    {
+     "label": "NIST CSRC \u2014 Post-Quantum Cryptography project",
+     "url": "https://csrc.nist.gov/projects/post-quantum-cryptography"
+    },
+    {
+     "label": "NSA \u2014 Post-Quantum Cybersecurity Resources and CNSA 2.0",
+     "url": "https://www.nsa.gov/Cybersecurity/Post-Quantum-Cybersecurity-Resources/"
+    },
+    {
+     "label": "NSA \u2014 CSfC Post-Quantum Cryptography Guidance Addendum",
+     "url": "https://www.nsa.gov/Portals/75/documents/resources/everyone/csfc/capability-packages/CSfC%20Post%20Quantum%20Cryptography%20Guidance%20Addendum%201_0%20Draft%20_5.pdf?ver=wCGPoDQXcJKEWTgbH8xsRA%3D%3D"
+    },
+    {
+     "label": "NIST NCCoE \u2014 Migration to Post-Quantum Cryptography project description",
+     "url": "https://www.nccoe.nist.gov/sites/default/files/2022-07/pqc-migration-project-description-final.pdf"
+    },
+    {
+     "label": "WEF \u2014 quantum-safe migration and crypto modernization",
+     "url": "https://www.weforum.org/stories/2026/01/quantum-safe-migration-cryptography-cybersecurity/"
+    }
    ]
   }
  ]

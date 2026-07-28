@@ -47,6 +47,7 @@
     if (name.includes('gpt')) return { key: 'gpt', mark: '◎' };
     if (name.includes('claude') || name.includes('fable')) return { key: 'claude', mark: '✦' };
     if (name.includes('gemini')) return { key: 'gemini', mark: '◆' };
+    if (name.includes('meta')) return { key: 'meta', mark: '∞' };
     return { key: 'other', mark: '●' };
   };
 
