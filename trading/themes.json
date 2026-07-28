@@ -5,7 +5,7 @@
  "method": {
   "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
   "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-  "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6. New GPT-origin themes may begin with one explicitly identified reviewer until another independent review is commissioned; missing model scores are never invented.",
+  "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. New GPT-origin themes may begin with one explicitly identified reviewer until another independent review is commissioned; missing model scores are never invented.",
   "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
  },
  "themes": [
@@ -630,7 +630,7 @@
    "category": "Geographies",
    "title": "$100 oil \u00d7 \u00a5164 \u2192 the forced BOJ and the carry unwind",
    "horizon": "H2 2026\u20132027",
-   "status": "Active research \u00b7 2 reviewers",
+   "status": "Active research \u00b7 3 reviewers",
    "owner_belief": "Japan is running an incoherent policy triangle: a dovish government stacking the BOJ board, a finance ministry that has spent ~$72.5B defending a currency its own policy weakens, and last week's oil spike (Brent above $100 before easing to the high $80s on de-escalation) flowing through a 40-year-low yen into import costs. Consensus expects one polite 25bp hike by December. The pipeline says imported inflation accelerates into autumn while leveraged yen shorts sit at nine-year highs. When the political cost of \u00a5170 gasoline exceeds the political cost of higher rates, the BOJ moves faster than consensus \u2014 into record short positioning. August 2024, but from a wider spread and a bigger stock of positions.",
    "conviction": "High conviction the triangle is unstable and resolves within 12 months. Medium conviction on the violent path over the orderly one \u2014 intervention plus gradualism has held before. Low conviction on any specific date: carry trades outlast positioning extremes for quarters, and shorting the consensus early is how carry traders die.",
    "final_verdict": "The widest known/priced gap of the July geographic hunt. Everyone knows the carry trade exists \u2014 August 2024 made it a household word \u2014 but the market prices the polite path: 86% of surveyed economists see just 1.25% by December, while June core CPI at 1.6% is still below target, giving the doves cover exactly as petroleum import values run +59% and the pass-through arrives in autumn prints. Status note (Jul 28): Brent's break from $100 to the high $80s on Middle East de-escalation puts the oil falsifier within reach \u2014 the near-term fuse is wetter than at publication, while the positioning and policy-triangle legs are unchanged. The asymmetry is the point: the consensus path pays carry holders roughly the 250\u2013275bp spread; the forced path repriced the world in three days in 2024. Own the paid leg where it is real (megabanks \u2014 at 52-week highs), price the tail where it is cheap (the yen itself, \u221211% from its high), and treat USDJPY 5-day appreciation over 1% as the tripwire it already is in this desk's risk rubric.",
@@ -652,6 +652,13 @@
      "knowledge_saturation": 85,
      "price_saturation": 45,
      "verdict": "The carry trade and BOJ forcing mechanism are highly known after 2024; the page overstates how invisible the tail is. What is not fully priced is the discontinuity between a slow hiking path and a positioning-driven unwind, so the yen is cleaner convexity than already-crowded megabanks."
+    },
+    {
+     "model": "Grok 4.5",
+     "role": "Independent review supplied by Bernard",
+     "knowledge_saturation": 82,
+     "price_saturation": 37,
+     "verdict": "The carry-unwind setup is well known, but markets still price a polite BOJ path while crowded yen shorts leave a discontinuous tail. Oil re-acceleration, faster imported CPI, or intervention fatigue could force an earlier or larger move; July 31 is likely an Outlook Report hold, with October and December the live policy windows. FXY is the clean convex expression, megabanks benefit from orderly normalization, and high-beta U.S. growth carries unwind risk."
     }
    ],
    "layer_scorecard": [
@@ -848,7 +855,7 @@
    "category": "Geographies",
    "title": "Gulf sovereign compute \u2192 the relief valve on US electricity scarcity",
    "horizon": "2027\u20132031",
-   "status": "Theme hunt \u00b7 2 reviewers",
+   "status": "Theme hunt \u00b7 3 reviewers",
    "owner_belief": "At $0.05\u20130.06/kWh with sovereign wealth funding 5GW-scale campuses, marginal AI training migrates to where power is cheap and permitted. $100 oil widens the arbitrage \u2014 it funds the Gulf and raises US gas-fired cost simultaneously. The second-order effect this ledger must price: Gulf capacity is a relief valve that caps the duration of the US electricity-scarcity theme scored above at 92/69.",
    "conviction": "High conviction the cost gap is real and the capacity is funded. Low conviction on timing \u2014 announcement-to-megawatt conversion is the whole question \u2014 and the entire arbitrage runs on Washington's chip-export permission.",
    "final_verdict": "Known as spectacle, unpriced as consequence. The announcements are everywhere; the implication \u2014 that US power-scarcity trades quietly assume a terminal value the Gulf is busy arbitraging away \u2014 appears in no one's model. There is no liquid Gulf proxy, which is itself information: the tradeable expression is an adversarial haircut on US scarcity names, not a purchase.",
@@ -870,6 +877,13 @@
      "knowledge_saturation": 65,
      "price_saturation": 25,
      "verdict": "Gulf compute plans are no longer obscure, but investors still mostly treat them as extra chip demand rather than a cap on U.S. power scarcity rents. The discount is justified by execution and export-license risk: announced gigawatts are not energized capacity, and the public-equity expression is indirect."
+    },
+    {
+     "model": "Grok 4.5",
+     "role": "Independent review supplied by Bernard",
+     "knowledge_saturation": 57,
+     "price_saturation": 17,
+     "verdict": "Gulf multi-gigawatt campus announcements are visible, but their second-order role as a duration cap on U.S. electricity-scarcity rents is barely reflected. Cheap power and sovereign capital can move marginal training load, pressuring the terminal value embedded in CEG- and VST-like exposures. Announced capacity is not energized capacity: export controls, construction execution, and time-to-power remain the binding constraints, while clean public-equity exposure is thin."
     }
    ],
    "layer_scorecard": [
@@ -1870,7 +1884,7 @@
    "category": "Sectors",
    "title": "The click economy breaks \u2192 payment networks become the agent rails",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 2 reviewers",
+   "status": "Theme hunt \u00b7 3 reviewers",
    "owner_belief": "The click economy is measurably dying \u2014 Ahrefs finds AI Overviews cut top-result CTR 58% (nearly double a year earlier), a randomized experiment shows a causal \u221239.8%, and publishers forecast \u221243% search traffic in three years. What replaces it is being built by the payment networks: Visa's Intelligent Commerce has run hundreds of live agent-initiated transactions with 100+ partners and an OpenAI integration; Mastercard's Agent Pay went live in Hong Kong in March. The consensus says crypto disrupts cards; the 2026 evidence says the networks are becoming the authentication and authorization layer of agent commerce \u2014 a new toll on a new road.",
    "conviction": "High conviction the click funnel keeps decaying \u2014 the causal evidence exists. Medium conviction the networks capture the agent layer rather than platform-native payments; the OpenAI-Visa deal is strong but early evidence.",
    "final_verdict": "The destruction side is priced \u2014 publisher and adtech equities already trade like it. The construction side is not: V and MA are valued as mature payment processors, not as the identity-and-authorization toll of agentic commerce. The desk's own XLC at deeply negative z confirms the loser leg is in the price; nothing in V/MA multiples reflects the winner leg.",
@@ -1892,6 +1906,13 @@
      "knowledge_saturation": 75,
      "price_saturation": 55,
      "verdict": "Agentic commerce and collapsing search click-through are now heavily marketed, and Visa and Mastercard are obvious candidates to preserve trust and authorization. What remains unpriced is the fee architecture: agents may increase transaction count while compressing discovery and acceptance economics, and platforms can still route around network rents."
+    },
+    {
+     "model": "Grok 4.5",
+     "role": "Independent review supplied by Bernard",
+     "knowledge_saturation": 67,
+     "price_saturation": 42,
+     "verdict": "AI Overviews' damage to open-web click-through is known and partly priced; the construction leg is not. Visa Intelligent Commerce and Mastercard Agent Pay are already positioning the networks as trusted authorization rails for agent-initiated commerce, while equity models still largely value V and MA as mature processors. The key falsifier is platform bypass; holiday 2026 volumes, liability rules, and hybrid card-stablecoin routing are the next proof points."
     }
    ],
    "layer_scorecard": [
@@ -2168,7 +2189,7 @@
    "category": "Sectors",
    "title": "Munitions industrial base \u2192 the energetics chokepoint",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 2 reviewers",
+   "status": "Theme hunt \u00b7 3 reviewers",
    "owner_belief": "The government has formally confirmed the bottleneck: a June 11 Defense Production Act invocation for munitions supply chains, citing solid rocket motors, igniters and guidance. Capacity is ramping \u2014 toward ~6x for large motors, 3x tactical, $700M+ invested by the primes, Anduril entering as the third US SRM supplier targeting 6,000 motors a year \u2014 and GM is exploring missile-parts production with Lockheed: auto capacity converting to arsenal. The real chokepoint sits below the motors: energetics chemistry \u2014 propellants and precursors with near-single-source supply.",
    "conviction": "High conviction in the demand and the bottleneck \u2014 the DPA invocation is the state saying so. Medium conviction on public-equity capture: the energetics layer is part-private, part-buried inside chemical conglomerates.",
    "final_verdict": "Defense spending is consensus; the layer question is not. Primes at premium multiples carry backlog that new entrants (Anduril's SRM line) are starting to contest \u2014 backlog is less of a moat than priced. The unpriced winners are energetic-materials and specialty-chemical suppliers, plus the strange second order of idle auto capacity finding a defense bid exactly as Chinese EV pressure hollows it.",
@@ -2190,6 +2211,13 @@
      "knowledge_saturation": 80,
      "price_saturation": 55,
      "verdict": "The munitions bottleneck is known to defense investors, but public attention remains concentrated on primes rather than propellants, precursors and qualification capacity. The gap is real but hard to monetize because the cleanest suppliers are private or immaterial inside diversified chemicals companies."
+    },
+    {
+     "model": "Grok 4.5",
+     "role": "Independent review supplied by Bernard",
+     "knowledge_saturation": 75,
+     "price_saturation": 42,
+     "verdict": "The need to replenish munitions is consensus; the less-priced constraint is energetics capacity\u2014RDX, HMX, TNT/IMX precursors, propellants, qualification, and domestic production. Multi-year prime contracts do not remove chemical bottlenecks, foreign precursor dependence, environmental constraints, or the lag from funding to monthly output. The gap is real but difficult to monetize because the cleanest suppliers are private or specialized; another high-intensity theater or a failed capacity ramp would expose it."
     }
    ],
    "layer_scorecard": [
@@ -3256,7 +3284,7 @@
    "category": "Emerging",
    "title": "GLP-1's quietest second order \u2192 life vs annuity repricing",
    "horizon": "2026\u20132035",
-   "status": "Theme hunt \u00b7 2 reviewers",
+   "status": "Theme hunt \u00b7 3 reviewers",
    "owner_belief": "The reinsurers have done the math: RGA finds incretins could cut mortality up to 8.8%; Munich Re, across 41 million insured lives, finds lower all-cause mortality among GLP-1 users in diabetic and non-diabetic populations alike; Swiss Re projects up to \u22126.4% US all-cause mortality by 2045. The industry has stated the asymmetry plainly \u2014 lower death claims for life insurers, longer payouts for annuity and pension providers \u2014 and almost no equity analyst has translated it.",
    "conviction": "High conviction in the direction \u2014 the mortality studies are the industry's own. Low conviction on timing: actuarial tables move at glacial, regulated speed, which is exactly why the gap persists.",
    "final_verdict": "The widest known/priced gap on this ledger. The cleanest unbuilt trade in financials: long mortality-heavy life books against longevity-heavy annuity books \u2014 XLF internals no one splits this way. The pension-risk-transfer boom of the past five years was priced on pre-GLP-1 tables, making PRT-concentrated balance sheets the specific losers. And the strangest loop: insurers become GLP-1 payers \u2014 subsidizing a $50/month pill to avoid a death claim is arithmetic \u2014 adding a durable payer to pharma volume that pharma analysts don't model.",
@@ -3278,6 +3306,13 @@
      "knowledge_saturation": 35,
      "price_saturation": 15,
      "verdict": "The mortality evidence is public inside actuarial circles but barely present in equity models. The low price score is warranted only with a long horizon: insurers can reprice new business, treatment persistence is uncertain, and mortality improvement may arrive too slowly to create near-term earnings surprises."
+    },
+    {
+     "model": "Grok 4.5",
+     "role": "Independent review supplied by Bernard",
+     "knowledge_saturation": 27,
+     "price_saturation": 10,
+     "verdict": "Oral GLP-1 adoption and coverage expansion are increasingly discussed, but sustained mortality improvement is still largely absent from life-insurance and annuity assumptions. Better morbidity and longevity could benefit mortality-heavy life books while pressuring annuity and longevity-risk liabilities; MET, PRU, AFL and peers require business-mix underwriting rather than a basket trade. Persistency, cardiovascular outcomes, coverage policy, anti-selection, lapse behavior, and the long actuarial lag are decisive."
     }
    ],
    "layer_scorecard": [

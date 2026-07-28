@@ -158,6 +158,13 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_hunt_themes_follow_ledger_rules(self) -> None:
         counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
+        grok_review_ids = {
+            "geo-yen-forcing-chain",
+            "sector-click-to-agent-rails",
+            "geo-barrels-to-flops",
+            "emerging-glp1-actuarial",
+            "sector-munitions-energetics",
+        }
         new_ids = {
             "geo-eu-traceability-stack",
             "sector-treasury-collateral-tax",
@@ -180,10 +187,19 @@ class TradingThemesContractTest(unittest.TestCase):
             for value in scores.values():
                 self.assertTrue(isinstance(value, int) and 0 <= value <= 100, theme["id"])
             reviews = theme["model_reviews"]
-            self.assertEqual([row["model"] for row in reviews], ["Claude Fable 5", "GPT-5.6"], theme["id"])
+            expected_models = ["Claude Fable 5", "GPT-5.6"]
+            if theme["id"] in grok_review_ids:
+                expected_models.append("Grok 4.5")
+                self.assertEqual(reviews[-1]["role"], "Independent review supplied by Bernard")
+                self.assertEqual(
+                    (reviews[-1]["knowledge_saturation"], reviews[-1]["price_saturation"]),
+                    (scores["knowledge_saturation"], scores["price_saturation"]),
+                )
+            self.assertEqual([row["model"] for row in reviews], expected_models, theme["id"])
             for field in ("knowledge_saturation", "price_saturation"):
                 self.assertEqual(scores[field], int(statistics.median(row[field] for row in reviews)), theme["id"])
-            self.assertIn("2 reviewers", theme["status"], theme["id"])
+            expected_count = "3 reviewers" if theme["id"] in grok_review_ids else "2 reviewers"
+            self.assertIn(expected_count, theme["status"], theme["id"])
             # renderer accesses every section unconditionally
             for field in ("layer_scorecard", "adversarial_review", "what_survived",
                           "residual_edge", "research_priority", "falsifiers",
@@ -193,6 +209,13 @@ class TradingThemesContractTest(unittest.TestCase):
             for row in theme["layer_scorecard"]:
                 self.assertTrue(0 <= row["knowledge_saturation"] <= 100, theme["id"])
                 self.assertTrue(0 <= row["price_saturation"] <= 100, theme["id"])
+
+        supplied_grok_ids = {
+            theme["id"] for theme in self.payload["themes"]
+            if any(row["role"] == "Independent review supplied by Bernard" for row in theme["model_reviews"])
+        }
+        self.assertEqual(supplied_grok_ids, grok_review_ids)
+        self.assertIn("Grok 4.5 added to five named reviews supplied by Bernard", self.payload["method"]["consensus"])
 
     def test_gpt_origin_second_order_themes_are_complete(self) -> None:
         expected = {
