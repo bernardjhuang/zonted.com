@@ -228,16 +228,31 @@ class RoutedTradingSyncTests(unittest.TestCase):
         position_rows = _desk_rows(page, "position")
         thesis_rows = _desk_rows(page, "hypothesis")
         positions_artifact = json.loads((ROOT / "trading" / "desk-positions.json").read_text())
-        self.assertEqual(positions_artifact["schema_version"], 2)
+        self.assertEqual(positions_artifact["schema_version"], 3)
         positions_payload = positions_artifact["positions"]
-        cash_percent = float(positions_artifact["cash_percent"])
-        self.assertIn(
-            f'<h2>Positions <span class="desk-cash-weight">{cash_percent:.1f}% cash</span></h2>',
-            page,
-        )
-        self.assertIn(f'<span>{len(positions_payload)} open · sorted by portfolio allocation</span>', page)
-        self.assertIn("--bl-allocation:var(--bl-accent)", styles.replace(" ", ""))
-        self.assertIn(".desk-table-head.desk-cash-weight{color:var(--bl-accent)", styles.replace(" ", ""))
+        risk_summary = positions_artifact["risk_summary"]
+        self.assertIn('<div class="desk-risk-strip" aria-label="Portfolio risk summary">', page)
+        self.assertIn(f'Gross Δ$ <b>{risk_summary["gross_delta_leverage"]:.1f}×</b>', page)
+        self.assertIn(f'Net Δ$ <b>{risk_summary["net_delta_exposure_percent"]:.1f}%</b>', page)
+        self.assertIn(f'Premium risk <b>{risk_summary["premium_at_risk_percent"]:.1f}%</b>', page)
+        self.assertIn(f'Θ/day <b>{risk_summary["theta_percent_per_day"]:+.2f}%</b>', page)
+        self.assertIn(f'Cash liquidity <b>{risk_summary["cash_percent"]:.1f}%</b>', page)
+        self.assertIn(risk_summary["quantity_basis"], page)
+        sleeves = positions_artifact["sleeves"]
+        self.assertEqual(set(sleeves), {"thesis", "momentum"})
+        self.assertIn('<div class="desk-sleeve-strip" aria-label="Sleeve risk summary">', page)
+        for name, values in sleeves.items():
+            self.assertIn(
+                f'<b>{name.title()}</b> · Δ$ {values["exposure_percent"]:.1f}% · capital {values["capital_percent"]:.1f}% · premium {values["premium_at_risk_percent"]:.1f}%',
+                page,
+            )
+        self.assertIn(f'<span>{len(positions_payload)} open · sorted by Δ$ exposure</span>', page)
+        self.assertIn("--bl-exposure:var(--bl-accent)", styles.replace(" ", ""))
+        self.assertIn(".desk-position-exposure{grid-column:2;color:var(--bl-exposure)", styles.replace(" ", ""))
+        self.assertIn("<th>IV</th>", page)
+        self.assertNotIn("<th>Beta</th>", page)
+        self.assertNotIn("allocation_percent", json.dumps(positions_artifact))
+        self.assertNotIn("% allocation", page)
         expected_positions = {row["symbol"] for row in positions_payload}
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
         total_symbols = expected_positions | expected_hypotheses
@@ -245,8 +260,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})
-        allocations = [float(_row_attr(row, "data-allocation-percent")) for row in position_rows]
-        self.assertEqual(allocations, sorted(allocations, reverse=True))
+        exposures = [float(_row_attr(row, "data-exposure-percent")) for row in position_rows]
+        self.assertEqual(exposures, sorted(exposures, reverse=True))
+        self.assertGreater(max(exposures), 100)
         catalysts = [_row_attr(row, "data-catalyst-date") for row in thesis_rows]
         self.assertEqual(catalysts, sorted(catalysts), catalysts)
         for rows in (position_rows, thesis_rows):
@@ -257,8 +273,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         for symbol in ("BYDDY", "NTDOY"):
             row = next(row for row in thesis_rows if _row_symbol(row) == symbol)
             self.assertIn('data-feed-state="no-feed"', row)
-            for label in ("Last", "Day", "Beta", "Spread Z", "1Y"):
+            for label in ("Last", "Day", "Spread Z", "1Y"):
                 self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
+            self.assertRegex(row, r'data-label="IV"[\s\S]*?—[\s\S]*?No held option')
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
         self.assertEqual(len(toggles), len(total_symbols))
@@ -313,8 +330,17 @@ class RoutedTradingSyncTests(unittest.TestCase):
             flair = position["flair"]
             self.assertIn(f'desk-position-flair--{flair}', row)
             self.assertIn(f'>{flair.title()}<', row)
-            self.assertIn(f'data-allocation-percent="{position["allocation_percent"]:.1f}"', row)
-            self.assertIn(f'>{position["allocation_percent"]:.1f}% allocation<', row)
+            self.assertIn(f'data-exposure-percent="{position["exposure_percent"]:.1f}"', row)
+            self.assertIn(f'>{position["exposure_percent"]:.1f}% Δ$ exposure<', row)
+            self.assertIn(f'>capital {position["capital_percent"]:.1f}%<', row)
+            if position["premium_at_risk_percent"] > 0:
+                self.assertIn(f'>premium {position["premium_at_risk_percent"]:.1f}%<', row)
+                self.assertIn(f'>θ/day {position["theta_percent_per_day"]:+.2f}%<', row)
+                self.assertIn(f'data-label="IV">{position["implied_volatility_percent"]:.1f}%<small>Held option</small>', row)
+            else:
+                self.assertIn('data-label="IV">—<small>Stock only</small>', row)
+            if position["unstable_delta"]:
+                self.assertIn(f'⚠ {position["min_dte"]}-DTE delta', row)
             if position.get("kill") is not None:
                 self.assertIn(f'data-desk-ytd-kill="{position["kill"]}"', row)
                 self.assertIn(f'<title>Kill ${float(position["kill"]):.2f}</title>', row)
