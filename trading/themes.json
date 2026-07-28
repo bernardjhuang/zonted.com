@@ -5,7 +5,7 @@
  "method": {
   "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
   "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-  "consensus": "Energy uses the median of GPT-5.6, Claude Fable, and Gemini 3.1 Pro. New themes may begin with a single explicitly identified reviewer until independent model reviews are commissioned; missing model scores are never invented.",
+  "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6. New GPT-origin themes may begin with one explicitly identified reviewer until another independent review is commissioned; missing model scores are never invented.",
   "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
  },
  "themes": [
@@ -630,13 +630,13 @@
    "category": "Geographies",
    "title": "$100 oil \u00d7 \u00a5164 \u2192 the forced BOJ and the carry unwind",
    "horizon": "H2 2026\u20132027",
-   "status": "Active research \u00b7 single reviewer",
+   "status": "Active research \u00b7 2 reviewers",
    "owner_belief": "Japan is running an incoherent policy triangle: a dovish government stacking the BOJ board, a finance ministry that has spent ~$72.5B defending a currency its own policy weakens, and $100 oil flowing through a 40-year-low yen into import costs. Consensus expects one polite 25bp hike by December. The pipeline says imported inflation accelerates into autumn while leveraged yen shorts sit at nine-year highs. When the political cost of \u00a5170 gasoline exceeds the political cost of higher rates, the BOJ moves faster than consensus \u2014 into record short positioning. August 2024, but from a wider spread and a bigger stock of positions.",
    "conviction": "High conviction the triangle is unstable and resolves within 12 months. Medium conviction on the violent path over the orderly one \u2014 intervention plus gradualism has held before. Low conviction on any specific date: carry trades outlast positioning extremes for quarters, and shorting the consensus early is how carry traders die.",
    "final_verdict": "The widest known/priced gap of the July geographic hunt. Everyone knows the carry trade exists \u2014 August 2024 made it a household word \u2014 but the market prices the polite path: 86% of surveyed economists see just 1.25% by December, while June core CPI at 1.6% is still below target, giving the doves cover exactly as petroleum import values run +59% and the pass-through arrives in autumn prints. The asymmetry is the point: the consensus path pays carry holders roughly the 250\u2013275bp spread; the forced path repriced the world in three days in 2024. Own the paid leg where it is real (megabanks \u2014 at 52-week highs), price the tail where it is cheap (the yen itself, \u221211% from its high), and treat USDJPY 5-day appreciation over 1% as the tripwire it already is in this desk's risk rubric.",
    "consensus_scores": {
-    "knowledge_saturation": 80,
-    "price_saturation": 30
+    "knowledge_saturation": 82,
+    "price_saturation": 37
    },
    "model_reviews": [
     {
@@ -645,6 +645,13 @@
      "knowledge_saturation": 80,
      "price_saturation": 30,
      "verdict": "Known 80: the carry trade is famous and the yen's 40-year low is front-page. Priced 30: positioning is at nine-year extremes on the SHORT side, the banks that win from forced hikes just became Japan's largest company, and nobody prices the autumn CPI pass-through against a government whose own MOF is fighting its own monetary stance."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 85,
+     "price_saturation": 45,
+     "verdict": "The carry trade and BOJ forcing mechanism are highly known after 2024; the page overstates how invisible the tail is. What is not fully priced is the discontinuity between a slow hiking path and a positioning-driven unwind, so the yen is cleaner convexity than already-crowded megabanks."
     }
    ],
    "layer_scorecard": [
@@ -836,13 +843,13 @@
    "category": "Geographies",
    "title": "Gulf sovereign compute \u2192 the relief valve on US electricity scarcity",
    "horizon": "2027\u20132031",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "At $0.05\u20130.06/kWh with sovereign wealth funding 5GW-scale campuses, marginal AI training migrates to where power is cheap and permitted. $100 oil widens the arbitrage \u2014 it funds the Gulf and raises US gas-fired cost simultaneously. The second-order effect this ledger must price: Gulf capacity is a relief valve that caps the duration of the US electricity-scarcity theme scored above at 92/69.",
    "conviction": "High conviction the cost gap is real and the capacity is funded. Low conviction on timing \u2014 announcement-to-megawatt conversion is the whole question \u2014 and the entire arbitrage runs on Washington's chip-export permission.",
    "final_verdict": "Known as spectacle, unpriced as consequence. The announcements are everywhere; the implication \u2014 that US power-scarcity trades quietly assume a terminal value the Gulf is busy arbitraging away \u2014 appears in no one's model. There is no liquid Gulf proxy, which is itself information: the tradeable expression is an adversarial haircut on US scarcity names, not a purchase.",
    "consensus_scores": {
-    "knowledge_saturation": 50,
-    "price_saturation": 10
+    "knowledge_saturation": 57,
+    "price_saturation": 17
    },
    "model_reviews": [
     {
@@ -851,6 +858,13 @@
      "knowledge_saturation": 50,
      "price_saturation": 10,
      "verdict": "Known 50: the campus announcements are front-page. Priced 10: as a duration cap on CEG/VST-profile terminal values, essentially unconsidered."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 65,
+     "price_saturation": 25,
+     "verdict": "Gulf compute plans are no longer obscure, but investors still mostly treat them as extra chip demand rather than a cap on U.S. power scarcity rents. The discount is justified by execution and export-license risk: announced gigawatts are not energized capacity, and the public-equity expression is indirect."
     }
    ],
    "layer_scorecard": [
@@ -945,13 +959,13 @@
    "category": "Geographies",
    "title": "$100 oil \u2192 the twin-deficit sorting of EM",
    "horizon": "2026\u20132027",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Oil above $100 re-rates countries by balance sheet, not by story. The first-order trade (energy equities) is saturated \u2014 retail 'should you buy oil stocks' coverage is the tell. The second order moves slower: importers with subsidy budgets (India, Thailand, Vietnam) absorb fiscal and currency damage monthly, exporters with clean grids (Brazil) compound the windfall, and the freight echo \u2014 Bab el-Mandeb transits \u221234%, longer routes \u2014 re-tightens shipping the way 2021 did.",
    "conviction": "High conviction in the arithmetic: import dependence is measurable and compounds. Medium conviction on expressions \u2014 EM currencies answer to the Fed as much as to oil.",
    "final_verdict": "Known 70, priced 40. The oil price is front-page; the country-level sorting is not. EWZ at +0.22 desk z has barely begun moving for a net exporter with the strongest EM currency; INDA at \u221210% YTD has priced maybe half its squeeze; the Suez/freight echo is priced nowhere.",
    "consensus_scores": {
-    "knowledge_saturation": 70,
-    "price_saturation": 40
+    "knowledge_saturation": 75,
+    "price_saturation": 50
    },
    "model_reviews": [
     {
@@ -960,6 +974,13 @@
      "knowledge_saturation": 70,
      "price_saturation": 40,
      "verdict": "Known 70: everyone sees $100 oil. Priced 40: the sort into country risk premia happens over quarters, and the winner leg (Brazil) has moved least."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 80,
+     "price_saturation": 60,
+     "verdict": "Oil-importer versus exporter sorting is textbook macro and the vulnerable country ETFs have already moved, so this is less undiscovered than the original score implies. The slower fiscal-subsidy and freight channels can still compound, but Fed policy and local politics will swamp a simple oil beta in several legs."
     }
    ],
    "layer_scorecard": [
@@ -1075,13 +1096,13 @@
    "category": "Geographies",
    "title": "Tariffs \u00d7 oil \u00d7 rupee \u2192 India's maximum-pain squeeze resolves binary",
    "horizon": "H2 2026",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "50% US tariffs over Russian crude, >80% oil import dependence at $100, and a pressured rupee form the maximum-pain configuration \u2014 and maximum pain is what produces resolution. Both sides need the deal: the US wants a China+1 anchor, India needs export access and oil diplomacy. INDA prices the squeeze, not the resolution. The other branch \u2014 doubling down on discounted Russian barrels into secondary-sanctions escalation \u2014 is live too, which makes this event-driven rather than slow-burn.",
    "conviction": "Medium conviction that binary framing is right at all \u2014 muddle-through is the modal path of trade disputes. High conviction on the asymmetry if it is: the bad branch is half-priced, the good branch is not.",
    "final_verdict": "Known 60, priced 30. The tariff fight is well covered; the deal path is not in the price. INDA at \u221210.4% YTD and \u22120.37 desk z is a market paying for the squeeze and assigning roughly nothing to softening US posture that is already on the record.",
    "consensus_scores": {
-    "knowledge_saturation": 60,
-    "price_saturation": 30
+    "knowledge_saturation": 70,
+    "price_saturation": 47
    },
    "model_reviews": [
     {
@@ -1090,6 +1111,13 @@
      "knowledge_saturation": 60,
      "price_saturation": 30,
      "verdict": "Known 60: the fight is covered. Priced 30: the resolution branch is nearly free, and at $100 oil India's incentive to defect to Russian barrels RAISES the variance in both directions."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 80,
+     "price_saturation": 65,
+     "verdict": "India's tariff, crude-import and rupee squeeze is widely covered and INDA already carries a meaningful risk discount. The alleged binary resolution is the weak link: muddle-through is more likely than either a clean deal or sanctions break, so the remaining gap is event optionality, not a structural mispricing."
     }
    ],
    "layer_scorecard": [
@@ -1175,13 +1203,13 @@
    "category": "Geographies",
    "title": "Rearmament vs deindustrialization \u2192 the German barbell",
    "horizon": "2026\u20132028",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Defense spending rises from \u20ac82B to \u20ac109B by 2027 (\u2248\u20ac130B with Ukraine) under an amended debt brake \u2014 a genuine fiscal impulse arriving exactly as energy re-inflation cuts 2026 growth to 0.5%. The index nets to nothing: defense, construction and software absorb stimulus while energy-intensive export industry keeps shrinking and China retaliation aims at autos. EWG flat at +0.03 desk z all year is not the absence of a theme \u2014 it is two themes cancelling.",
    "conviction": "High conviction in the composition shift: budget law and three consecutive export-contraction years are structure, not cycle. Low conviction that EWG itself is ever the instrument.",
    "final_verdict": "Known 80, priced 50. Defense primes are fully found; the offset view \u2014 fiscal impulse quietly cancelling the energy drag, making Germany outperform a 0.5% consensus \u2014 is half-priced at best, and the dispersion trade underneath is barely constructed anywhere.",
    "consensus_scores": {
-    "knowledge_saturation": 80,
-    "price_saturation": 50
+    "knowledge_saturation": 82,
+    "price_saturation": 60
    },
    "model_reviews": [
     {
@@ -1190,6 +1218,13 @@
      "knowledge_saturation": 80,
      "price_saturation": 50,
      "verdict": "Known 80: rearmament is consensus. Priced 50: the primes yes, the barbell no \u2014 the index's flatness is the evidence."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 85,
+     "price_saturation": 70,
+     "verdict": "Rearmament, fiscal expansion and energy-intensive deindustrialization are all consensus narratives. The useful insight is compositional rather than directional: EWG can look inert while defense and construction winners offset autos and chemicals, but the obvious prime contractors are already expensive."
     }
    ],
    "layer_scorecard": [
@@ -1282,13 +1317,13 @@
    "category": "Geographies",
    "title": "EU\u2013China overcapacity war \u2192 the transplant scramble",
    "horizon": "2026\u20132029",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "The EU's drafted 'overcapacity instrument' \u2014 its own Section 301 \u2014 meets a China running record $412B monthly exports off 30% of world manufacturing against 13% of world consumption. Tariff walls do not stop that surplus; they relocate and redirect it. Relocation enriches transplant hosts (Hungary, Turkey, Morocco, Mexico, Brazil). Redirection sends the blocked surplus into the Global South \u2014 where Thailand's Japanese-owned auto base, the Detroit of Southeast Asia, gets hollowed. Germany is hit twice: competitor and first retaliation target. Korea autos quietly gain EU share.",
    "conviction": "Medium conviction \u2014 the instrument is a draft and trade drafts die in negotiation. High conviction that the surplus arithmetic must discharge somewhere regardless of which wall goes up.",
    "final_verdict": "Known 40, priced 20 \u2014 the least-known theme of the hunt, and the one where the desk's own tape argues back: THD is the hottest country on the board (+0.48z, +22.9% YTD) while this thesis calls its auto base structurally short. Either tourism and rate cuts dominate for years and the thesis is early to the point of wrong, or the market is paying headline momentum and ignoring a hollowing it has not priced at all. Resolve that before any position: decompose THD.",
    "consensus_scores": {
-    "knowledge_saturation": 40,
-    "price_saturation": 20
+    "knowledge_saturation": 52,
+    "price_saturation": 30
    },
    "model_reviews": [
     {
@@ -1297,6 +1332,13 @@
      "knowledge_saturation": 40,
      "price_saturation": 20,
      "verdict": "Known 40: policy circles only. Priced 20: bystander winners have no index, and the Thai casualty is priced negatively \u2014 the market is paying it UP."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 65,
+     "price_saturation": 40,
+     "verdict": "China-plus-one relocation is well known, while the second-order loser map across Thailand, Germany and other incumbent manufacturing hubs is less settled. Pricing is incomplete because the policy is not final and broad country ETFs are poor instruments; the cleanest beneficiaries are often private or diluted inside indexes."
     }
    ],
    "layer_scorecard": [
@@ -1402,13 +1444,13 @@
    "category": "Geographies",
    "title": "Memory shortage \u2192 Korea as the OPEC of DRAM",
    "horizon": "2026\u20132028",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "The worst memory shortage in 15 years \u2014 spot DRAM +700% y/y, capacity captured by HBM, SK Hynix sold out through 2026, Micron exiting consumer \u2014 lands on a country index that is roughly 40% Samsung plus Hynix. EWY is a duopoly royalty stream wearing an ETF: exports, the won, and the fiscal balance all lever to DRAM pricing power. The short leg of the same theme is the memory payers \u2014 device assemblers and hardware-margin stories (this desk's NTDOY thesis is that leg).",
    "conviction": "High conviction in the shortage through 2027 \u2014 it is vendor-stated, not inferred. Low conviction on entry: +57.7% YTD says the direction is found; every memory cycle has ended the same way, and 'structural this time' is what the top always says.",
    "final_verdict": "Known 60, priced 60 \u2014 the narrowest gap of the hunt, deliberately scored flat: direction is paid, duration is the only live question. Desk z at \u22120.73 with +57.7% YTD reads as consolidation after capture. If the sold-out-through-2027 claims hold, the pause is the entry; if contract prices roll over, the cycle has already topped. This one is a timing problem, not a thesis problem.",
    "consensus_scores": {
-    "knowledge_saturation": 60,
-    "price_saturation": 60
+    "knowledge_saturation": 75,
+    "price_saturation": 72
    },
    "model_reviews": [
     {
@@ -1417,6 +1459,13 @@
      "knowledge_saturation": 60,
      "price_saturation": 60,
      "verdict": "Known 60: tech circles fully briefed, generalists not. Priced 60: the move happened \u2014 what remains unpriced is 2027 duration and the China-echo ending."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 90,
+     "price_saturation": 85,
+     "verdict": "HBM scarcity, DRAM pricing power and Korea's semiconductor concentration are fully visible, and EWY's surge says the market has paid for much of it. Residual upside requires the shortage to last longer than a normal memory cycle; the asymmetry now leans toward capex, Chinese supply and inventory normalization ending the rent."
     }
    ],
    "layer_scorecard": [
@@ -1505,17 +1554,181 @@
    ]
   },
   {
+   "id": "geo-eu-traceability-stack",
+   "category": "Geographies",
+   "title": "EU compliance wall \u2192 traceability becomes trade infrastructure",
+   "horizon": "H2 2026\u20132028",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "Two hard dates turn product data into a border credential: the EU Packaging and Packaging Waste Regulation applies from August 12, 2026, and deforestation due-diligence obligations follow at year-end. The immediate spend is not recycled resin; it is proof\u2014supplier identity, geolocation, composition, chain of custody, conformity files and audit trails that travel with every SKU.",
+   "conviction": "High conviction that documentation and traceability spend arrives before physical packaging redesign. Medium conviction on public-equity capture because the best verification vendors are diversified or privately held and many material targets phase in after 2026.",
+   "final_verdict": "The regulations are known to compliance teams, not yet modeled as a durable software and verification revenue pool. The second order is a digital tollbooth on EU market access: SAP/DASTY-class systems of record, geospatial and logistics data, and testing firms gain recurring workflow while exporters and packaging users absorb a permanent SKU-level data tax. Packaging-material winners are less clean because substitution mandates phase in and customers can redesign around price.",
+   "consensus_scores": {
+    "knowledge_saturation": 65,
+    "price_saturation": 30
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Originator \u00b7 event-to-ticker synthesis",
+     "knowledge_saturation": 65,
+     "price_saturation": 30,
+     "verdict": "Known 65: the deadlines are public and large exporters are preparing. Priced 30: investors still file this under ESG overhead rather than trade infrastructure, and no obvious public pure-play has been crowned."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Enterprise systems of record",
+     "symbols": "SAP \u00b7 DASTY",
+     "knowledge_saturation": 70,
+     "price_saturation": 45,
+     "read": "Compliance has to live beside procurement, bills of material and supplier master data. SAP markets EUDR workflows directly; the upside is real but diluted inside enormous software franchises."
+    },
+    {
+     "layer": "Geospatial + custody data",
+     "symbols": "TRMB \u00b7 logistics software",
+     "knowledge_saturation": 50,
+     "price_saturation": 25,
+     "read": "Plot-level origin and chain-of-custody evidence turn location data into a customs input. Trimble is a broad proxy, not a clean EUDR bet."
+    },
+    {
+     "layer": "Testing + verification",
+     "symbols": "SGS \u00b7 Intertek profile",
+     "knowledge_saturation": 45,
+     "price_saturation": 25,
+     "read": "Third-party assurance becomes recurring market-access work. The cleanest firms are foreign-listed and diversified; revenue disclosure is the first proof point."
+    },
+    {
+     "layer": "Packaging redesign",
+     "symbols": "AMCR \u00b7 BALL \u00b7 CCK",
+     "knowledge_saturation": 75,
+     "price_saturation": 60,
+     "read": "Metal and recyclable formats can gain share, but many content and reuse obligations phase in later. CCK near its high already prices execution better than the software layer does."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Where the chain can break",
+     "bullets": [
+      "August 2026 starts the regulation, not every recycled-content or reuse target; pulling later physical demand into 2026 would be fake precision.",
+      "Large brands can build compliance modules internally or force suppliers to provide data for free, compressing vendor economics.",
+      "Another delay or simplified reporting regime would turn the hard-date thesis into a slower consulting cycle.",
+      "SAP, Trimble and packaging companies have many larger earnings drivers; correct theme, weak ticker can still lose money."
+     ]
+    }
+   ],
+   "what_survived": [
+    "EUR-Lex confirms PPWR applies from August 12, 2026.",
+    "EUDR requires due diligence and traceability rather than a simple country-of-origin declaration.",
+    "The immediate operational bottleneck is data completeness across suppliers and SKUs, before factories can redesign packaging."
+   ],
+   "residual_edge": [
+    "Find vendors disclosing paid compliance modules, customer counts or assurance backlog\u2014not generic ESG capability.",
+    "Separate one-time implementation revenue from recurring data, audit and certification fees.",
+    "Watch exporters with fragmented suppliers and low gross margins; the data tax hurts them more than vertically integrated peers."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "SAP \u00b7 TRMB \u00b7 Intertek/SGS",
+     "why": "Look for disclosed EUDR/PPWR bookings, recurring workflow revenue and partner ecosystems."
+    },
+    {
+     "bucket": "Physical follow-through",
+     "symbols": "AMCR \u00b7 BALL \u00b7 CCK",
+     "why": "Wait for customer conversion, volume mix and capex\u2014not just regulation headlines."
+    },
+    {
+     "bucket": "Avoid the easy story",
+     "symbols": "Generic recyclers",
+     "why": "Later mandates, feedstock economics and national implementation make a 2026 volume windfall far from automatic."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood historicals + fundamentals",
+    "date": "2026-07-24",
+    "note": "Friday regular-session closes; trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "SAP",
+      "price": "$160.00",
+      "pe": "21.7\u00d7",
+      "off_high": "\u221247%"
+     },
+     {
+      "symbol": "TRMB",
+      "price": "$52.91",
+      "pe": "28.2\u00d7",
+      "off_high": "\u221240%"
+     },
+     {
+      "symbol": "DASTY",
+      "price": "$22.55",
+      "pe": "19.3\u00d7",
+      "off_high": "\u221236%"
+     },
+     {
+      "symbol": "AMCR",
+      "price": "$44.54",
+      "pe": "30.9\u00d7",
+      "off_high": "\u221213%"
+     },
+     {
+      "symbol": "BALL",
+      "price": "$63.84",
+      "pe": "18.3\u00d7",
+      "off_high": "\u22127%"
+     },
+     {
+      "symbol": "CCK",
+      "price": "$117.88",
+      "pe": "18.6\u00d7",
+      "off_high": "\u22123%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "The Commission or member states delay core documentation duties again.",
+    "Large exporters report immaterial implementation cost and no recurring vendor spend.",
+    "ERP and assurance vendors fail to disclose EUDR/PPWR demand by mid-2027.",
+    "Customs enforcement accepts coarse supplier attestations instead of product-level evidence."
+   ],
+   "watch_next": [
+    "August 12, 2026 PPWR application and implementing guidance.",
+    "December 2026 EUDR go-live and any last-minute simplification.",
+    "SAP, Intertek and SGS commentary on paid compliance pipeline.",
+    "Packaging company mix and customer-conversion disclosures through 2027."
+   ],
+   "sources": [
+    {
+     "label": "EUR-Lex \u2014 Packaging and packaging waste regulation applies August 12, 2026",
+     "url": "https://eur-lex.europa.eu/EN/legal-content/summary/packaging-and-packaging-waste-from-2026.html"
+    },
+    {
+     "label": "European Commission \u2014 EUDR implementation",
+     "url": "https://environment.ec.europa.eu/topics/forests/deforestation/regulation-deforestation-free-products_en"
+    },
+    {
+     "label": "SAP \u2014 EUDR operational readiness",
+     "url": "https://www.sap.com/blogs/eudr-update-operational-readiness"
+    },
+    {
+     "label": "Intertek \u2014 EUDR compliance services",
+     "url": "https://www.intertek.com/assuris/food/regulatory/eu-deforestation-regulation-eudr/"
+    }
+   ]
+  },
+  {
    "id": "sector-xlre-stealth-ai",
    "category": "Sectors",
    "title": "REIT index \u2192 stealth AI-infrastructure sector",
    "horizon": "2026\u20132029",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "XLRE ranks near the top of the desk's sector board while the 10-year sits above 4.7% \u2014 a combination rate-sensitive REITs should not produce. The resolution is composition: datacenter REITs are carrying the index on AI leasing (Digital Realty's strongest quarter ever, 1.2GW pipeline 60% pre-leased; Equinix spending $4.1B across 46 projects) while the office half stages a genuine flight-to-quality recovery (most leases signed in a decade to open 2026). Passive real-estate allocations are now buying AI infrastructure wearing a REIT label.",
    "conviction": "High conviction in the composition shift \u2014 the leasing numbers are reported facts. Medium conviction on the arbitrage persisting: index committees eventually reclassify what everyone can see.",
    "final_verdict": "The index-level move is half-priced; the two second-order reads are not. One: sector-classification arbitrage \u2014 XLRE's defensive, income character is quietly gone, and allocators holding it for that character own something else now. Two: the internal dispersion \u2014 commodity office and levered traditional REITs stay broken at 4.7% while datacenter and prime-gateway names carry the average over them. Index-level signals, including this desk's own z-score, blend two unrelated businesses.",
    "consensus_scores": {
-    "knowledge_saturation": 55,
-    "price_saturation": 45
+    "knowledge_saturation": 65,
+    "price_saturation": 57
    },
    "model_reviews": [
     {
@@ -1524,6 +1737,13 @@
      "knowledge_saturation": 55,
      "price_saturation": 45,
      "verdict": "Known 55: DC REITs' run is covered. Priced 45: the +39-45% trailing returns priced the leases; the classification arbitrage and the orphaned-REIT dispersion are not in anyone's model."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 75,
+     "price_saturation": 70,
+     "verdict": "Data-center REIT exposure inside real estate indexes is not stealth to sector investors, and the leading operators already trade on AI leasing. Office quality dispersion is the less-priced leg, but XLRE is too blunt: rates, leverage and index weights can dominate the composition thesis."
     }
    ],
    "layer_scorecard": [
@@ -1645,13 +1865,13 @@
    "category": "Sectors",
    "title": "The click economy breaks \u2192 payment networks become the agent rails",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "The click economy is measurably dying \u2014 Ahrefs finds AI Overviews cut top-result CTR 58% (nearly double a year earlier), a randomized experiment shows a causal \u221239.8%, and publishers forecast \u221243% search traffic in three years. What replaces it is being built by the payment networks: Visa's Intelligent Commerce has run hundreds of live agent-initiated transactions with 100+ partners and an OpenAI integration; Mastercard's Agent Pay went live in Hong Kong in March. The consensus says crypto disrupts cards; the 2026 evidence says the networks are becoming the authentication and authorization layer of agent commerce \u2014 a new toll on a new road.",
    "conviction": "High conviction the click funnel keeps decaying \u2014 the causal evidence exists. Medium conviction the networks capture the agent layer rather than platform-native payments; the OpenAI-Visa deal is strong but early evidence.",
    "final_verdict": "The destruction side is priced \u2014 publisher and adtech equities already trade like it. The construction side is not: V and MA are valued as mature payment processors, not as the identity-and-authorization toll of agentic commerce. The desk's own XLC at deeply negative z confirms the loser leg is in the price; nothing in V/MA multiples reflects the winner leg.",
    "consensus_scores": {
-    "knowledge_saturation": 60,
-    "price_saturation": 30
+    "knowledge_saturation": 67,
+    "price_saturation": 42
    },
    "model_reviews": [
     {
@@ -1660,6 +1880,13 @@
      "knowledge_saturation": 60,
      "price_saturation": 30,
      "verdict": "Known 60: AI Overviews' damage is front-page. Priced 30: the networks-as-agent-rails read appears in no sell-side framework yet."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 75,
+     "price_saturation": 55,
+     "verdict": "Agentic commerce and collapsing search click-through are now heavily marketed, and Visa and Mastercard are obvious candidates to preserve trust and authorization. What remains unpriced is the fee architecture: agents may increase transaction count while compressing discovery and acceptance economics, and platforms can still route around network rents."
     }
    ],
    "layer_scorecard": [
@@ -1790,13 +2017,13 @@
    "category": "Sectors",
    "title": "The memory tax \u2192 consumer hardware deflation ends",
    "horizon": "2026\u20132028",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Gartner projects combined DRAM+SSD prices up 130% by end-2026, lifting PC prices 17% and phones 13% while shipments fall 10.4% and 8.4%. Memory goes from 16% to 23% of a PC's bill of materials; the sub-$500 PC segment 'disappears by 2028.' Lenovo, Dell, HP, Acer and ASUS have all confirmed 15\u201320% hikes and spec downgrades. Two decades of consumer-hardware deflation are ending because AI datacenters are eating the memory supply \u2014 and durable-goods CPI turning positive walks straight into a Fed where 17 of 18 officials already lean hawkish.",
    "conviction": "High conviction in the mechanism \u2014 vendors have announced the prices. Medium conviction on duration: every memory cycle has ended in oversupply, and 2028 Chinese capacity is the scheduled ending.",
    "final_verdict": "Priced in the memory makers; unpriced as a regime. The second orders the market has not worked through: durables CPI as a new inflation input (a macro loop into the yen and rates themes), OEM margin resets and brand-power sorting, lengthening refresh cycles favoring installed-base software and repair/refurb over units, and edge-AI slowing \u2014 which keeps inference in the cloud and feeds the datacenter themes this ledger already tracks. The shortage is self-reinforcing across the stack.",
    "consensus_scores": {
-    "knowledge_saturation": 65,
-    "price_saturation": 40
+    "knowledge_saturation": 75,
+    "price_saturation": 55
    },
    "model_reviews": [
     {
@@ -1805,6 +2032,13 @@
      "knowledge_saturation": 65,
      "price_saturation": 40,
      "verdict": "Known 65: tech press covers it daily. Priced 40: memory equities yes; the OEM-margin and CPI-durables consequences, no."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 85,
+     "price_saturation": 70,
+     "verdict": "The memory squeeze and device price hikes are increasingly visible in vendor guidance, so consumer-hardware inflation is no longer a hidden shock. The incomplete pricing sits in demand elasticity and mix: assemblers can defend gross margin by raising price, but may lose units and the low end first."
     }
    ],
    "layer_scorecard": [
@@ -1929,13 +2163,13 @@
    "category": "Sectors",
    "title": "Munitions industrial base \u2192 the energetics chokepoint",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "The government has formally confirmed the bottleneck: a June 11 Defense Production Act invocation for munitions supply chains, citing solid rocket motors, igniters and guidance. Capacity is ramping \u2014 toward ~6x for large motors, 3x tactical, $700M+ invested by the primes, Anduril entering as the third US SRM supplier targeting 6,000 motors a year \u2014 and GM is exploring missile-parts production with Lockheed: auto capacity converting to arsenal. The real chokepoint sits below the motors: energetics chemistry \u2014 propellants and precursors with near-single-source supply.",
    "conviction": "High conviction in the demand and the bottleneck \u2014 the DPA invocation is the state saying so. Medium conviction on public-equity capture: the energetics layer is part-private, part-buried inside chemical conglomerates.",
    "final_verdict": "Defense spending is consensus; the layer question is not. Primes at premium multiples carry backlog that new entrants (Anduril's SRM line) are starting to contest \u2014 backlog is less of a moat than priced. The unpriced winners are energetic-materials and specialty-chemical suppliers, plus the strange second order of idle auto capacity finding a defense bid exactly as Chinese EV pressure hollows it.",
    "consensus_scores": {
-    "knowledge_saturation": 70,
-    "price_saturation": 30
+    "knowledge_saturation": 75,
+    "price_saturation": 42
    },
    "model_reviews": [
     {
@@ -1944,6 +2178,13 @@
      "knowledge_saturation": 70,
      "price_saturation": 30,
      "verdict": "Known 70: rearmament is front-page. Priced 30: at the energetics layer specifically, almost nothing."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 80,
+     "price_saturation": 55,
+     "verdict": "The munitions bottleneck is known to defense investors, but public attention remains concentrated on primes rather than propellants, precursors and qualification capacity. The gap is real but hard to monetize because the cleanest suppliers are private or immaterial inside diversified chemicals companies."
     }
    ],
    "layer_scorecard": [
@@ -2072,13 +2313,13 @@
    "category": "Sectors",
    "title": "GLP-1 act two \u2192 the pill goes mass, staples walk into a margin trap",
    "horizon": "2026\u20132031",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Lilly's Foundayo (orforglipron) \u2014 approved April 1, launched April 6 \u2014 is the S-curve steepener: a daily pill, no cold chain, no food restrictions, $149/month self-pay and $50 Medicare from July 1. Demand-side damage is already measured: 20% of US households include a GLP-1 user, snack and confectionery categories are down 12.4%, estimated CPG impact runs $32B growing to $44B in 2026, and three dozen non-healthcare companies now discuss GLP-1 on earnings calls. General Mills is raising capex 23% to reformulate \u2014 spending more to defend flat volume.",
    "conviction": "High conviction in the adoption inflection \u2014 the price points are published. High conviction in the staples volume drag \u2014 it is measured. Medium conviction on timing of when the market forces XLP to choose between 'defensive' and 'ex-growth.'",
    "final_verdict": "The megatrend is the most known thing on this ledger; the act-two specifics are not priced. The oral inflection at $149 removes every scale constraint injections had; Medicare's $50 price opens the senior wave. Staples face a margin trap \u2014 reformulation capex arms race against structurally flat volumes \u2014 while XLP trades flat, the market not yet choosing. The adversarial note this desk must log: mass adoption slowing Type 2 progression is a slow question over Libre's TAM \u2014 an input for the ABT hypothesis's threat list.",
    "consensus_scores": {
-    "knowledge_saturation": 90,
-    "price_saturation": 45
+    "knowledge_saturation": 92,
+    "price_saturation": 60
    },
    "model_reviews": [
     {
@@ -2087,6 +2328,13 @@
      "knowledge_saturation": 90,
      "price_saturation": 45,
      "verdict": "Known 90: nothing is more covered. Priced 45: the oral acceleration, the Medicare wave, and the staples margin trap are all second-order and absent from XLP's flat tape."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 95,
+     "price_saturation": 75,
+     "verdict": "Oral GLP-1 adoption is among the most-followed healthcare stories, and Lilly's franchise already prices enormous volume. Staples and benefit-design consequences are less discounted, but category-volume claims should be separated from broad food inflation and consumer weakness before treating XLP as a clean short."
     }
    ],
    "layer_scorecard": [
@@ -2226,17 +2474,515 @@
    ]
   },
   {
+   "id": "sector-treasury-collateral-tax",
+   "category": "Sectors",
+   "title": "$28T Treasury market \u2192 the collateral-velocity tax",
+   "horizon": "Dec 2026\u2013Jun 2027",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "Mandatory central clearing starts for eligible cash Treasury trades on December 31, 2026 and repos on June 30, 2027. The first order is safer settlement. The second order is a new price on balance-sheet and collateral velocity: clients need clearing access, margin, custody, default-fund capacity and intraday liquidity for the deepest market in the world.",
+   "conviction": "High conviction on the dates and plumbing migration. Medium conviction on who captures the economics because competition among FICC, CME and ICE can give much of the efficiency back to clients.",
+   "final_verdict": "The rule is universal knowledge inside fixed income and barely a stock-market theme outside it. Clearing houses and custodians get a volume and workflow pool, futures/electronic venues can gain hedging flow, and balance-sheet-intensive basis trades face a higher explicit carrying cost. But this is not free revenue: netting can reduce dealer balance-sheet use, competition can crush fees, and exemptions can move the pool.",
+   "consensus_scores": {
+    "knowledge_saturation": 80,
+    "price_saturation": 55
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Originator \u00b7 event-to-ticker synthesis",
+     "knowledge_saturation": 80,
+     "price_saturation": 55,
+     "verdict": "Known 80 in rates markets; priced 55 in the public plumbing names. CME and ICE are obvious, but the under-modeled consequence is the migration of collateral, custody and hedge flow rather than a simple clearing-fee windfall."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Treasury CCPs",
+     "symbols": "CME \u00b7 ICE \u00b7 FICC (private)",
+     "knowledge_saturation": 90,
+     "price_saturation": 70,
+     "read": "Both CME and ICE are building Treasury clearing models against incumbent FICC. Volume is mandated; fee share and returns on required capital are not."
+    },
+    {
+     "layer": "Custody + collateral",
+     "symbols": "STT \u00b7 BK profile",
+     "knowledge_saturation": 70,
+     "price_saturation": 55,
+     "read": "Segregation, margin movement and sponsored access turn custody infrastructure into workflow revenue. STT near its high says some optimism is already paid."
+    },
+    {
+     "layer": "Dealers + basis books",
+     "symbols": "GS \u00b7 JPM \u00b7 BAC",
+     "knowledge_saturation": 90,
+     "price_saturation": 75,
+     "read": "Netting can release balance sheet while customer clearing creates operational and default-fund costs. Direction depends on each dealer\u2019s client franchise and internalization."
+    },
+    {
+     "layer": "Futures + electronification",
+     "symbols": "CME \u00b7 NDAQ \u00b7 MKTX",
+     "knowledge_saturation": 65,
+     "price_saturation": 40,
+     "read": "Higher explicit cash-market friction can push incremental hedging and price discovery toward futures and electronic venues. That flow shift is less modeled than CCP fees."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why mandated volume may not become profit",
+     "bullets": [
+      "FICC already clears enormous sponsored-repo volume; the migration is not a greenfield market.",
+      "CME and ICE competition can push fees toward cost while capital and technology spending rise first.",
+      "Portfolio margin, netting and lien models may reduce the collateral shock the thesis expects.",
+      "A rule delay, exemption or narrower scope can move billions of expected volume without changing the long-run direction."
+     ]
+    }
+   ],
+   "what_survived": [
+    "SEC dates are explicit: December 31, 2026 for cash and June 30, 2027 for repo.",
+    "Treasury reported more than $1.2T of money-market assets already cleared through sponsored repo, proving the workflow can scale.",
+    "CME and ICE are building public-company alternatives to FICC."
+   ],
+   "residual_edge": [
+    "Track client onboarding and cleared notional, not product announcements.",
+    "Underwrite collateral and custody fee capture separately from headline clearing volume.",
+    "Watch cash-to-futures basis and futures share of Treasury risk transfer as the mandate approaches.",
+    "Stress dealer and relative-value books for intraday margin rather than only end-of-day leverage."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "CME \u00b7 ICE \u00b7 STT",
+     "why": "Measure onboarding, pricing, capital requirements and actual cleared notional."
+    },
+    {
+     "bucket": "Second-order flow",
+     "symbols": "NDAQ \u00b7 MKTX",
+     "why": "Look for electronic cash trading and data revenue rather than assuming every venue wins."
+    },
+    {
+     "bucket": "Risk, not a short list",
+     "symbols": "GS \u00b7 JPM \u00b7 BAC",
+     "why": "Dealer economics can improve through netting even while margin and customer-clearing costs rise."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood historicals + fundamentals",
+    "date": "2026-07-24",
+    "note": "Friday regular-session closes; trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "CME",
+      "price": "$255.31",
+      "pe": "21.0\u00d7",
+      "off_high": "\u221222%"
+     },
+     {
+      "symbol": "ICE",
+      "price": "$145.79",
+      "pe": "20.6\u00d7",
+      "off_high": "\u221223%"
+     },
+     {
+      "symbol": "NDAQ",
+      "price": "$92.09",
+      "pe": "28.4\u00d7",
+      "off_high": "\u221210%"
+     },
+     {
+      "symbol": "STT",
+      "price": "$185.40",
+      "pe": "16.4\u00d7",
+      "off_high": "\u22124%"
+     },
+     {
+      "symbol": "GS",
+      "price": "$1,061.23",
+      "pe": "16.9\u00d7",
+      "off_high": "\u22128%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "SEC delays either mandate beyond 2027 or materially broadens exemptions.",
+    "CME/ICE client onboarding fails to convert into disclosed cleared notional.",
+    "Competition drives clearing economics below the return on incremental capital and technology.",
+    "Cross-margin and lien models neutralize the expected collateral drag on basis trades."
+   ],
+   "watch_next": [
+    "Quarterly FICC sponsored-repo and cleared-cash volumes.",
+    "CME and ICE Treasury-clearing launch dates, pricing and participant counts.",
+    "SEC margin, segregation and exemption decisions.",
+    "Cash/futures basis behavior into December 2026 and June 2027."
+   ],
+   "sources": [
+    {
+     "label": "SEC \u2014 Treasury clearing implementation and compliance dates",
+     "url": "https://www.sec.gov/featured-topics/treasury-clearing-implementation"
+    },
+    {
+     "label": "U.S. Treasury TBAC \u2014 central clearing implementation, Q2 2026",
+     "url": "https://home.treasury.gov/system/files/221/TBACCharge1Q22026.pdf"
+    },
+    {
+     "label": "CME \u2014 securities clearing for U.S. Treasuries",
+     "url": "https://www.cmegroup.com/solutions/clearing/cme-securities-clearing.html"
+    },
+    {
+     "label": "BNY \u2014 reassembly of the U.S. Treasury market",
+     "url": "https://www.bny.com/corporate/global/en/insights/reassembly-revisited-us-treasury-clearing-rule-sec-update.html"
+    }
+   ]
+  },
+  {
+   "id": "sector-medicaid-churn-economy",
+   "category": "Sectors",
+   "title": "Medicaid work rules \u2192 the coverage-churn economy",
+   "horizon": "Jan 2027\u20132030",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "Federal work requirements and more frequent eligibility checks begin January 1, 2027. CBO/KFF estimate millions lose coverage. The second order is not simply lower Medicaid spending: eligibility churn migrates revenue from managed-care premiums and hospital reimbursement into state IT, eligibility operations, patient collections, bad debt and revenue-cycle automation.",
+   "conviction": "High conviction on the administrative shock and direction of hospital uncompensated care. Medium conviction on ticker outcomes because state execution, payer mix and hospital geography create huge dispersion.",
+   "final_verdict": "The policy is known and hospital exposure is partly priced; the workflow reallocation is not. Medicaid-focused MCOs lose members and scale rather than cleanly winning on lower utilization, hospitals in expansion states absorb more self-pay and charity care, and WAY-style payment software can sell into the mess. The best trade is likely dispersion by Medicaid mix and state implementation\u2014not shorting healthcare wholesale.",
+   "consensus_scores": {
+    "knowledge_saturation": 80,
+    "price_saturation": 55
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Originator \u00b7 event-to-ticker synthesis",
+     "knowledge_saturation": 80,
+     "price_saturation": 55,
+     "verdict": "Known 80: the law and coverage-loss estimates are front-page healthcare policy. Priced 55: hospitals and MCOs carry a discount, but the revenue-cycle and state-administration spend is barely isolated in public estimates."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Medicaid managed care",
+     "symbols": "CNC \u00b7 MOH \u00b7 ELV",
+     "knowledge_saturation": 90,
+     "price_saturation": 70,
+     "read": "Lower membership cuts premium revenue and scale; lower utilization does not automatically rescue margins. CNC\u2019s loss and MOH\u2019s valuation show the market already knows policy and execution are messy."
+    },
+    {
+     "layer": "Hospitals + emergency care",
+     "symbols": "HCA \u00b7 THC",
+     "knowledge_saturation": 85,
+     "price_saturation": 65,
+     "read": "Uninsured patients still arrive. The mix shifts from Medicaid reimbursement to self-pay, bad debt and uncompensated care; state and facility exposure matter more than national averages."
+    },
+    {
+     "layer": "Revenue-cycle software",
+     "symbols": "WAY",
+     "knowledge_saturation": 45,
+     "price_saturation": 25,
+     "read": "Eligibility checks, denials, patient billing and collections all get harder. WAY is a direct workflow proxy, but healthcare IT budgets can lag the shock."
+    },
+    {
+     "layer": "State eligibility operations",
+     "symbols": "Public contractors \u00b7 mostly private",
+     "knowledge_saturation": 60,
+     "price_saturation": 20,
+     "read": "States need systems, staffing and verification. The purest spend pool is fragmented across private contractors and diversified government IT vendors."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why the obvious shorts can be wrong",
+     "bullets": [
+      "States can delay, soften or automate implementation and reduce disenrollment.",
+      "Hospital exposure varies sharply by state, service line and share of outpatient/ambulatory revenue.",
+      "MCO rates can reset after membership changes; lower acuity or administrative payments can offset some lost volume.",
+      "Revenue-cycle vendors benefit only if providers fund new software rather than add manual labor or absorb bad debt."
+     ]
+    }
+   ],
+   "what_survived": [
+    "KFF confirms January 1, 2027 implementation and an estimated 5.2M decline in federal Medicaid coverage by 2034.",
+    "Coverage loss shifts cost rather than deleting care, especially through emergency departments and uncompensated care.",
+    "Six-month eligibility checks create recurring administrative work instead of a one-time redetermination event."
+   ],
+   "residual_edge": [
+    "Build state-by-state exposure for HCA, THC, CNC, MOH and ELV instead of using national Medicaid share.",
+    "Track denial rates, self-pay balances and bad-debt expense before headline admissions weaken.",
+    "Look for WAY bookings tied explicitly to eligibility, denials and patient-pay workflows."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Map the downside",
+     "symbols": "CNC \u00b7 MOH \u00b7 HCA \u00b7 THC",
+     "why": "State mix and rate resets decide whether policy headlines become earnings."
+    },
+    {
+     "bucket": "Investigate the picks-and-shovels",
+     "symbols": "WAY \u00b7 government IT vendors",
+     "why": "Require disclosed bookings and implementation scope, not generic automation language."
+    },
+    {
+     "bucket": "Avoid broad baskets",
+     "symbols": "XLV",
+     "why": "Pharma, devices and Medicare-heavy businesses dilute the event almost completely."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood historicals + fundamentals",
+    "date": "2026-07-24",
+    "note": "Friday regular-session closes; trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "CNC",
+      "price": "$63.41",
+      "pe": "Loss-making",
+      "off_high": "\u22129%"
+     },
+     {
+      "symbol": "MOH",
+      "price": "$197.55",
+      "pe": "66.3\u00d7",
+      "off_high": "\u221219%"
+     },
+     {
+      "symbol": "ELV",
+      "price": "$377.68",
+      "pe": "16.6\u00d7",
+      "off_high": "\u221213%"
+     },
+     {
+      "symbol": "HCA",
+      "price": "$382.19",
+      "pe": "12.9\u00d7",
+      "off_high": "\u221231%"
+     },
+     {
+      "symbol": "THC",
+      "price": "$233.20",
+      "pe": "10.4\u00d7",
+      "off_high": "\u22126%"
+     },
+     {
+      "symbol": "WAY",
+      "price": "$22.51",
+      "pe": "34.6\u00d7",
+      "off_high": "\u221246%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "Congress or courts delay the January 2027 requirements.",
+    "States automate verification with minimal churn and coverage losses land far below CBO estimates.",
+    "Hospital bad debt and uncompensated care fail to rise in high-exposure states.",
+    "Managed-care rate resets fully offset membership and administrative pressure.",
+    "Revenue-cycle vendors disclose no demand inflection by late 2027."
+   ],
+   "watch_next": [
+    "CMS guidance and state implementation choices through H2 2026.",
+    "January 2027 application and six-month renewal data.",
+    "Hospital bad debt, self-pay and uncompensated-care disclosures.",
+    "CNC/MOH/ELV membership and rate-reset commentary.",
+    "WAY bookings and net revenue retention tied to patient-pay workflows."
+   ],
+   "sources": [
+    {
+     "label": "KFF \u2014 federal Medicaid work requirements and coverage estimates",
+     "url": "https://www.kff.org/medicaid/a-closer-look-at-the-work-requirement-provisions-in-the-2025-federal-budget-reconciliation-law/"
+    },
+    {
+     "label": "KFF \u2014 Medicaid implementation tracker",
+     "url": "https://www.kff.org/medicaid/medicaid-work-requirements-tracker-overview/"
+    },
+    {
+     "label": "Commonwealth Fund \u2014 hospital revenue and uncompensated-care impact",
+     "url": "https://www.commonwealthfund.org/publications/issue-briefs/2025/sep/impact-medicaid-work-requirements-hospital-revenues-margins"
+    },
+    {
+     "label": "CHCS \u2014 summary of national Medicaid work requirements",
+     "url": "https://www.chcs.org/resource/a-summary-of-national-medicaid-work-requirements/"
+    }
+   ]
+  },
+  {
+   "id": "sector-upper-cband-capex-echo",
+   "category": "Sectors",
+   "title": "Upper C-band auction \u2192 towers get a delayed capex echo",
+   "horizon": "Jul 2027\u20132030",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "The FCC has adopted a plan to auction 160 MHz of upper C-band by July 2027. Carriers must pay for spectrum before they can deploy it, creating a two-step equity path: auction spending pressures telecom balance sheets first; radios, antennas, tower amendments and site work follow only after licenses and clearing schedules are real.",
+   "conviction": "High conviction on the auction and eventual deployment work. Medium conviction on timing and magnitude because carrier spectrum holdings, auction prices and satellite relocation rules remain decisive.",
+   "final_verdict": "The auction is known in telecom policy and barely visible in battered tower valuations. AMT/CCI/SBAC gain a real 2028\u201330 amendment cycle if VZ/T/TMUS buy aggressively, while ERIC/NOK compete for radio spend. The catch is sequencing: a rich auction can delay capex and worsen carrier leverage before it helps towers, so this is a calendar spread\u2014not a buy-everything telecom theme.",
+   "consensus_scores": {
+    "knowledge_saturation": 55,
+    "price_saturation": 25
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Originator \u00b7 event-to-ticker synthesis",
+     "knowledge_saturation": 55,
+     "price_saturation": 25,
+     "verdict": "Known 55: the FCC decision is public but mostly specialist news. Priced 25: tower stocks sit 24\u201334% below highs and do not appear to discount a fresh national amendment cycle, though carrier auction costs arrive first."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Spectrum buyers",
+     "symbols": "VZ \u00b7 T \u00b7 TMUS",
+     "knowledge_saturation": 80,
+     "price_saturation": 55,
+     "read": "Capacity is strategic, but auction payments hit cash and leverage before new revenue. TMUS may need less spectrum than peers, changing bidding and deployment intensity."
+    },
+    {
+     "layer": "Tower landlords",
+     "symbols": "AMT \u00b7 CCI \u00b7 SBAC",
+     "knowledge_saturation": 55,
+     "price_saturation": 25,
+     "read": "New bands require equipment and lease amendments on existing sites. The stocks are depressed, but rates, tenant concentration and prior capex digestion remain larger near-term drivers."
+    },
+    {
+     "layer": "Radio access equipment",
+     "symbols": "ERIC \u00b7 NOK",
+     "knowledge_saturation": 60,
+     "price_saturation": 35,
+     "read": "A deployment cycle revives North American radio demand. Competition, carrier bargaining and Open RAN keep the revenue pool from becoming automatic margin."
+    },
+    {
+     "layer": "Satellite incumbents",
+     "symbols": "C-band operators \u00b7 mostly private/foreign",
+     "knowledge_saturation": 45,
+     "price_saturation": 30,
+     "read": "Clearing and compression costs are the mirror image of terrestrial capacity. Public U.S. expressions are poor, so treat this as execution risk rather than force a ticker."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "The sequencing trap",
+     "bullets": [
+      "Spectrum auction proceeds are not tower revenue; licenses, clearing and network design can delay site work by years.",
+      "High auction prices can crowd out the very carrier capex the tower thesis needs.",
+      "Carriers may use software, refarming and existing sites more efficiently than the last C-band cycle.",
+      "Tower valuations remain rate-sensitive; a correct operating thesis can be overwhelmed by financing costs."
+     ]
+    }
+   ],
+   "what_survived": [
+    "The FCC plan makes 160 MHz available through 3,248 flexible-use licenses in July 2027.",
+    "Upper C-band is valuable mid-band spectrum that requires terrestrial radio deployment, not just software activation.",
+    "AMT, CCI and SBAC are 24\u201334% below 52-week highs, so a full deployment echo is not obvious in price."
+   ],
+   "residual_edge": [
+    "Model each carrier\u2019s existing mid-band depth and likely auction need before sizing tower beneficiaries.",
+    "Track amendment revenue per site and equipment weight, not generic carrier capex.",
+    "Separate auction-date trades from 2028\u201330 deployment cash flow."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "AMT \u00b7 CCI \u00b7 SBAC",
+     "why": "Map U.S. tenant exposure, amendment economics, leverage and rate sensitivity."
+    },
+    {
+     "bucket": "Deployment suppliers",
+     "symbols": "ERIC \u00b7 NOK",
+     "why": "Wait for North American order commentary and margin evidence."
+    },
+    {
+     "bucket": "Funding source, not beneficiary",
+     "symbols": "VZ \u00b7 T \u00b7 TMUS",
+     "why": "Auction participation can be strategically necessary and financially painful at the same time."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood historicals + fundamentals",
+    "date": "2026-07-24",
+    "note": "Friday regular-session closes; trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "AMT",
+      "price": "$166.67",
+      "pe": "27.3\u00d7",
+      "off_high": "\u221227%"
+     },
+     {
+      "symbol": "CCI",
+      "price": "$74.90",
+      "pe": "16.0\u00d7",
+      "off_high": "\u221234%"
+     },
+     {
+      "symbol": "SBAC",
+      "price": "$173.57",
+      "pe": "19.5\u00d7",
+      "off_high": "\u221226%"
+     },
+     {
+      "symbol": "VZ",
+      "price": "$46.38",
+      "pe": "10.7\u00d7",
+      "off_high": "\u221210%"
+     },
+     {
+      "symbol": "T",
+      "price": "$24.13",
+      "pe": "7.4\u00d7",
+      "off_high": "\u221219%"
+     },
+     {
+      "symbol": "TMUS",
+      "price": "$180.09",
+      "pe": "20.5\u00d7",
+      "off_high": "\u221231%"
+     },
+     {
+      "symbol": "ERIC",
+      "price": "$9.34",
+      "pe": "12.6\u00d7",
+      "off_high": "\u221232%"
+     },
+     {
+      "symbol": "NOK",
+      "price": "$9.10",
+      "pe": "63.4\u00d7",
+      "off_high": "\u221248%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "The auction is delayed beyond July 2027 or materially fewer than 160 MHz are usable.",
+    "Carrier bidding is weak because existing spectrum is sufficient.",
+    "Clearing schedules push meaningful deployment beyond 2030.",
+    "Tower amendment revenue fails to respond despite carrier purchases.",
+    "Rates and refinancing costs absorb the operating upside for tower REITs."
+   ],
+   "watch_next": [
+    "FCC auction procedures and final clearing schedule.",
+    "VZ/T/TMUS spectrum-need and funding commentary.",
+    "Auction clearing prices and winner concentration in July 2027.",
+    "ERIC/NOK North American orders and tower amendment revenue from 2028."
+   ],
+   "sources": [
+    {
+     "label": "FCC \u2014 Upper C-band auction plan for July 2027",
+     "url": "https://www.fcc.gov/document/fcc-adopts-plan-c-band-auction-july-2027-0"
+    },
+    {
+     "label": "FCC \u2014 Upper C-band report and order",
+     "url": "https://docs.fcc.gov/public/attachments/DOC-423286A1.pdf"
+    },
+    {
+     "label": "Fierce Network \u2014 FCC frees 160 MHz for 2027 auction",
+     "url": "https://www.fierce-network.com/wireless/fcc-frees-160-mhz-upper-c-band-spectrum-terrestrial-wireless-use-nationwide"
+    }
+   ]
+  },
+  {
    "id": "emerging-intimacy-recession",
    "category": "Emerging",
    "title": "The intimacy recession \u2192 AI kills the swipe",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Dating apps are the first consumer category being structurally shrunk by AI. Bumble's paying users fell 21% in Q1; Tinder has declined eight straight quarters. The category's response is capitulation \u2014 Bumble is retiring the swipe itself for an AI matchmaker. And the stigma data (2 in 5 singles would refuse to date an AI-companion user) means companion AI grows as a substitute for the courtship funnel, not a feature inside it.",
    "conviction": "High conviction the category keeps shrinking \u2014 eight quarters is structure. Medium conviction on the substitution mechanism versus simple category fatigue. Low conviction anyone should bottom-fish the apps.",
    "final_verdict": "The apps are priced (crushed); the second order is not. Agentic matchmaking is deflationary to its own revenue \u2014 an agent that finds three good matches destroys the engagement-monetization model that paid for it. AI-generated profiles make proof-of-human verification dating-critical infrastructure (the same identity rails as the age-gated internet and agent-commerce themes). And the macro tail \u2014 dating apps mediated a large share of US couple formation; their decay plus substitution is a decade-scale drag on household formation nobody models in housing demand.",
    "consensus_scores": {
-    "knowledge_saturation": 50,
-    "price_saturation": 35
+    "knowledge_saturation": 62,
+    "price_saturation": 52
    },
    "model_reviews": [
     {
@@ -2245,6 +2991,13 @@
      "knowledge_saturation": 50,
      "price_saturation": 35,
      "verdict": "Known 50: Bumble's collapse made headlines. Priced 35 blended \u2014 the apps fully, the substitution and verification layers at roughly 10."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 75,
+     "price_saturation": 70,
+     "verdict": "Dating-app decay is fully visible in user and revenue trends, and MTCH/BMBL valuations already assume structural damage. AI may accelerate substitution and fraud, but it is not yet proven as the cause; verified-human infrastructure is interesting and mostly private, leaving little clean public-equity edge."
     }
    ],
    "layer_scorecard": [
@@ -2356,13 +3109,13 @@
    "category": "Emerging",
    "title": "Australia is patient zero \u2192 the age-gated internet",
    "horizon": "2026\u20132029",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Australia's under-16 ban has produced six months of real enforcement data: 4.7M accounts removed or restricted, under-16 account ownership down from 49.7% to 31.3%, five platforms under investigation with penalty decisions due mid-2026 against AUD $49.5M fines. The infrastructure layer is compounding \u2014 Yoti's revenue grew 62%, facial age estimation is regulator-approved in four major markets, NIST has begun global benchmarking, and the White House made age assurance a baseline requirement for AI. The UK's OSA and US state laws make Australia the template, not the outlier.",
    "conviction": "High conviction the regulatory wave spreads \u2014 the template exists and the politics are bipartisan everywhere. Medium conviction on which platforms lose versus quietly benefit.",
    "final_verdict": "Almost nothing here is priced. Age assurance and agent verification are converging into one identity layer \u2014 the rails proving 'this user is 16' also prove 'this agent may transact' \u2014 doubling the demand on infrastructure that is almost entirely private (the absence of a public pure-play is the signal: this arrives via M&A premiums). The engagement paradox is unpriced too: platforms purging minors will report better ad economics, flipping the narrative from threat to cleanup on the first 'users down, revenue fine' print. RBLX sits on both sides \u2014 defendant in a live age-verification securities suit, potential structural winner if compliance becomes its moat.",
    "consensus_scores": {
-    "knowledge_saturation": 35,
-    "price_saturation": 15
+    "knowledge_saturation": 50,
+    "price_saturation": 27
    },
    "model_reviews": [
     {
@@ -2371,6 +3124,13 @@
      "knowledge_saturation": 35,
      "price_saturation": 15,
      "verdict": "Known 35: policy circles and Australian press. Priced 15: no US equity carries an age-assurance premium or discount that survives inspection."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 65,
+     "price_saturation": 40,
+     "verdict": "Age assurance has moved from policy niche to an international compliance program, but the infrastructure value chain is still mostly private. Public platforms may lose teen engagement yet gain a compliance moat, making the direction company-specific rather than a blanket sector short."
     }
    ],
    "layer_scorecard": [
@@ -2491,13 +3251,13 @@
    "category": "Emerging",
    "title": "GLP-1's quietest second order \u2192 life vs annuity repricing",
    "horizon": "2026\u20132035",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "The reinsurers have done the math: RGA finds incretins could cut mortality up to 8.8%; Munich Re, across 41 million insured lives, finds lower all-cause mortality among GLP-1 users in diabetic and non-diabetic populations alike; Swiss Re projects up to \u22126.4% US all-cause mortality by 2045. The industry has stated the asymmetry plainly \u2014 lower death claims for life insurers, longer payouts for annuity and pension providers \u2014 and almost no equity analyst has translated it.",
    "conviction": "High conviction in the direction \u2014 the mortality studies are the industry's own. Low conviction on timing: actuarial tables move at glacial, regulated speed, which is exactly why the gap persists.",
    "final_verdict": "The widest known/priced gap on this ledger. The cleanest unbuilt trade in financials: long mortality-heavy life books against longevity-heavy annuity books \u2014 XLF internals no one splits this way. The pension-risk-transfer boom of the past five years was priced on pre-GLP-1 tables, making PRT-concentrated balance sheets the specific losers. And the strangest loop: insurers become GLP-1 payers \u2014 subsidizing a $50/month pill to avoid a death claim is arithmetic \u2014 adding a durable payer to pharma volume that pharma analysts don't model.",
    "consensus_scores": {
-    "knowledge_saturation": 20,
-    "price_saturation": 5
+    "knowledge_saturation": 27,
+    "price_saturation": 10
    },
    "model_reviews": [
     {
@@ -2506,6 +3266,13 @@
      "knowledge_saturation": 20,
      "price_saturation": 5,
      "verdict": "Known 20: the literature is the reinsurers' own publications. Priced 5: no insurer trades on a GLP-1-adjusted embedded value anywhere."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 35,
+     "price_saturation": 15,
+     "verdict": "The mortality evidence is public inside actuarial circles but barely present in equity models. The low price score is warranted only with a long horizon: insurers can reprice new business, treatment persistence is uncertain, and mortality improvement may arrive too slowly to create near-term earnings surprises."
     }
    ],
    "layer_scorecard": [
@@ -2622,13 +3389,13 @@
    "category": "Emerging",
    "title": "The uninsurable-mortgage loop \u2192 FAIR plans go load-bearing",
    "horizon": "2026\u20132030",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "California's insurer of last resort now holds ~684,000 policies and ~$750B of exposure \u2014 up 234% since 2022 \u2014 and 5.6% of Q1 2026 owner-occupied mortgage originations used it. The backstop of last resort is inside the mortgage machine. Rates jump 29% October 15. The private absorption valve is E&S: surplus-lines homeowners policies in California passed 300,000 \u2014 'without precedent' \u2014 with transactions up 119% year over year, now described as the only game in town for ordinary homeowners.",
    "conviction": "High conviction in the loop's mechanics \u2014 every number is regulator-published. Medium conviction on timing: the loop compounds slowly until a catastrophe makes it discontinuous.",
    "final_verdict": "The insurance crisis is known; the housing-finance transmission is not priced. Home equity in exposed zips is impaired before any price print shows it \u2014 a direct underwriting input for HELOC books (this desk's FIGR position carries it as an unwritten threat). MBS credit models do not distinguish FAIR/E&S collateral from admitted-market collateral \u2014 zip-level insurance status is a free credit signal until someone prices it. Muni credit in exposed counties compounds the same loop. E&S specialists inherit a captive market until the next major fire converts growth story to litigation story.",
    "consensus_scores": {
-    "knowledge_saturation": 45,
-    "price_saturation": 20
+    "knowledge_saturation": 60,
+    "price_saturation": 37
    },
    "model_reviews": [
     {
@@ -2637,6 +3404,13 @@
      "knowledge_saturation": 45,
      "price_saturation": 20,
      "verdict": "Known 45: the CA insurance crisis is covered. Priced 20: the mortgage, MBS and muni transmission channels are absent from spreads."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 75,
+     "price_saturation": 55,
+     "verdict": "The property-insurance crisis and its housing spillover are now broadly recognized in exposed states. The underpriced layer is security-level collateral and municipal dispersion, but broad insurers and national lenders are blunt proxies; zip-level underwriting data matters more than headline policy counts."
     }
    ],
    "layer_scorecard": [
@@ -2759,13 +3533,13 @@
    "category": "Emerging",
    "title": "Orbital deflation \u2192 $2,720/kg to a few hundred",
    "horizon": "2026\u20132032",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Starship finished its 12-flight test program in June and begins payload delivery later in 2026, targeting a flight every 7\u201310 days. Internal economics land around $200\u2013500/kg to LEO against Falcon 9's ~$2,720/kg customer price \u2014 an order of magnitude, even if aggressive targets miss. Cheap mass to orbit reprices everything designed around expensive mass.",
    "conviction": "High conviction the cost curve bends \u2014 the hardware has flown twelve times. Medium conviction on the 2026-27 cadence; Starship timelines have slipped before. Low conviction on which public equities capture any of it, which is most of the point.",
    "final_verdict": "Starship is famous; the downstream repricings are not started. Satellite design flips from mass-efficiency to mass-abundance \u2014 the exquisite rad-hard component chain (legacy space primes' margin pool) loses to COTS volume. GEO operators enter terminal managed decline. The rural telecom moat erodes: Starlink at 10x-cheaper deployment plus direct-to-cell undercuts rural cable/fiber build ROI and squeezes ASTS between SpaceX's scale and its own capital needs \u2014 this desk's scanner already carries ASTS on the short side. And SpaceX explicitly lists orbital AI compute as a Starship application: at a few hundred dollars per kilogram, the electricity-scarcity theme acquires its second duration cap, after the Gulf.",
    "consensus_scores": {
-    "knowledge_saturation": 55,
-    "price_saturation": 25
+    "knowledge_saturation": 70,
+    "price_saturation": 50
    },
    "model_reviews": [
     {
@@ -2774,6 +3548,13 @@
      "knowledge_saturation": 55,
      "price_saturation": 25,
      "verdict": "Known 55: Starship is a spectacle. Priced 25: the component-chain, GEO, rural-telecom and orbital-compute repricings are barely begun."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 85,
+     "price_saturation": 75,
+     "verdict": "Launch-cost deflation and LEO disruption are consensus space narratives, while the exact Starship cost and cadence remain targets rather than audited commercial economics. Downstream design changes are real, but most public tickers either already carry the story or face countervailing execution and financing risk."
     }
    ],
    "layer_scorecard": [
@@ -2892,13 +3673,13 @@
    "category": "Emerging",
    "title": "Prediction markets eat the sportsbooks \u2192 a regulatory tax arbitrage",
    "horizon": "2026\u20132028",
-   "status": "Theme hunt \u00b7 single reviewer",
+   "status": "Theme hunt \u00b7 2 reviewers",
    "owner_belief": "Combined Kalshi and Polymarket volume hit $44.8B in June \u2014 Kalshi alone $31B, up 70% month over month, with sports at 80% of its volume. The substitution is directly measured: Kalshi's daily actives grew 36% in late June while DraftKings and FanDuel lost 36\u201341% off their peaks in the same window. The engine is structural: CFTC event contracts pay none of the 20\u201351% state gaming taxes sportsbooks do.",
    "conviction": "High conviction in the substitution \u2014 it is measured in the same two weeks on both sides. Medium conviction on durability: the tax asymmetry is politically indefensible at scale, and this trade has a legislative stop-loss.",
    "final_verdict": "DKNG's decline is priced as competition; the tax asymmetry underneath is underappreciated. The gap forces an innovator's dilemma \u2014 launch event contracts and dilute the taxed book, or hold and lose share. The state-tax revenue hole guarantees a legislative war, so the theme is a timed trade, not a secular one. Downstream: event volatility becomes a hedgeable asset class (CME entry, brokerage distribution \u2014 HOOD's prediction leg is validated by every number here), and the marginal 0DTE dollar and marginal parlay dollar reveal themselves as the same dollar, linking options-volume revenue to the same pool.",
    "consensus_scores": {
-    "knowledge_saturation": 60,
-    "price_saturation": 35
+    "knowledge_saturation": 72,
+    "price_saturation": 55
    },
    "model_reviews": [
     {
@@ -2907,6 +3688,13 @@
      "knowledge_saturation": 60,
      "price_saturation": 35,
      "verdict": "Known 60: the Kalshi numbers made the financial press. Priced 35: DKNG's multiple reflects share loss, not the structural margin gap driving it."
+    },
+    {
+     "model": "GPT-5.6",
+     "role": "Independent known-vs-priced review",
+     "knowledge_saturation": 85,
+     "price_saturation": 75,
+     "verdict": "Sportsbook substitution and the state-tax arbitrage are now obvious to investors and regulators, and DKNG/FLUT weakness reflects it. The remaining gap is distribution and market-structure revenue at brokers and exchanges, but the same scale that creates the opportunity invites a fast legislative or CFTC response."
     }
    ],
    "layer_scorecard": [
@@ -3021,6 +3809,171 @@
     {
      "label": "Pew: prediction-market volume surge",
      "url": "https://www.pewresearch.org/short-reads/2026/05/27/trading-volume-on-prediction-markets-has-soared-in-recent-months/"
+    }
+   ]
+  },
+  {
+   "id": "emerging-pfas-testing-wave",
+   "category": "Emerging",
+   "title": "PFAS monitoring \u2192 testing first, treatment second",
+   "horizon": "Apr 2027\u20132031",
+   "status": "Active research \u00b7 single reviewer",
+   "owner_belief": "Public water systems must complete initial PFAS monitoring by 2027 and begin reporting results; treatment deadlines may move from 2029 toward 2031. That separates the value chain into two waves: analytical instruments, labs and measurement sell into a fixed near-term clock, while filtration and construction depend on contamination maps, municipal funding and the final compliance date.",
+   "conviction": "High conviction in the testing wave because the EPA says monitoring timelines remain. Medium conviction in treatment timing because the agency has proposed an extension and funding can lag detection by years.",
+   "final_verdict": "PFAS liability is known; the sequencing is mispriced. Investors jump to giant remediation totals, but the first investable revenue is measurement and recurring compliance data. XYL is the closest integrated public proxy; TMO/DHR sell broad analytical tools; DD has treatment technology but also legacy exposure; MMM is liability, not a picks-and-shovels winner. The extension risk shifts value toward testing rather than killing the theme.",
+   "consensus_scores": {
+    "knowledge_saturation": 70,
+    "price_saturation": 45
+   },
+   "model_reviews": [
+    {
+     "model": "GPT-5.6",
+     "role": "Originator \u00b7 event-to-ticker synthesis",
+     "knowledge_saturation": 70,
+     "price_saturation": 45,
+     "verdict": "Known 70: PFAS is a major legal and environmental story. Priced 45: treatment demand is partly in water-equipment multiples, but the 2027 testing/reporting wave and its recurring consumables are less isolated."
+    }
+   ],
+   "layer_scorecard": [
+    {
+     "layer": "Analytical instruments + labs",
+     "symbols": "TMO \u00b7 DHR",
+     "knowledge_saturation": 60,
+     "price_saturation": 35,
+     "read": "Monitoring creates sample, instrument, consumable and service demand before utilities choose treatment. PFAS is too small to drive these diversified giants alone."
+    },
+    {
+     "layer": "Water measurement + treatment",
+     "symbols": "XYL \u00b7 ECL",
+     "knowledge_saturation": 75,
+     "price_saturation": 60,
+     "read": "XYL spans testing, monitoring and treatment and therefore has the cleanest operational exposure. Its 31\u00d7 trailing P/E already pays for quality and water scarcity beyond PFAS."
+    },
+    {
+     "layer": "Membranes + filtration",
+     "symbols": "DD",
+     "knowledge_saturation": 65,
+     "price_saturation": 45,
+     "read": "Water technology can benefit, but legacy chemical liabilities and portfolio changes make the stock a two-sided expression."
+    },
+    {
+     "layer": "Legacy liabilities",
+     "symbols": "MMM \u00b7 DD",
+     "knowledge_saturation": 90,
+     "price_saturation": 80,
+     "read": "Settlement and cleanup risk are heavily litigated and broadly priced. Do not relabel a defendant as a remediation winner because it also sells materials."
+    }
+   ],
+   "adversarial_review": [
+    {
+     "title": "Why the TAM can stay theoretical",
+     "bullets": [
+      "EPA has proposed extending PFOA/PFOS treatment compliance to 2031, delaying construction revenue.",
+      "Municipal systems can wait for funding, consolidate samples or use contract labs instead of buying equipment.",
+      "PFAS revenue is immaterial inside TMO, DHR and ECL unless adoption broadens beyond drinking water.",
+      "Technology substitution and destruction/disposal rules can redirect the treatment profit pool."
+     ]
+    }
+   ],
+   "what_survived": [
+    "EPA says initial monitoring and public reporting remain due in 2027.",
+    "Compliance monitoring begins April 26, 2027 under the current rule.",
+    "Treatment timing is less certain, making testing the earlier and cleaner demand wave.",
+    "Recurring samples and consumables can outlast the one-time installation cycle."
+   ],
+   "residual_edge": [
+    "Track PFAS-specific instrument, consumable and service revenue rather than broad market-size reports.",
+    "Map utility test results to funded treatment projects and vendor awards.",
+    "Separate liability defendants from equipment and service beneficiaries."
+   ],
+   "research_priority": [
+    {
+     "bucket": "Investigate first",
+     "symbols": "XYL \u00b7 TMO \u00b7 DHR",
+     "why": "Look for PFAS-specific orders, installed base, consumables and recurring monitoring revenue."
+    },
+    {
+     "bucket": "Treatment follow-through",
+     "symbols": "ECL \u00b7 DD",
+     "why": "Require funded municipal projects and clear liability separation."
+    },
+    {
+     "bucket": "Liability, not exposure",
+     "symbols": "MMM",
+     "why": "The stock may benefit from legal certainty, not from the testing-and-treatment spend pool."
+    }
+   ],
+   "valuation_snapshot": {
+    "source": "Robinhood historicals + fundamentals",
+    "date": "2026-07-24",
+    "note": "Friday regular-session closes; trailing P/E and distance from 52-week high are context, not valuation conclusions.",
+    "rows": [
+     {
+      "symbol": "XYL",
+      "price": "$119.75",
+      "pe": "31.1\u00d7",
+      "off_high": "\u221222%"
+     },
+     {
+      "symbol": "TMO",
+      "price": "$568.26",
+      "pe": "29.9\u00d7",
+      "off_high": "\u221212%"
+     },
+     {
+      "symbol": "DHR",
+      "price": "$191.50",
+      "pe": "39.6\u00d7",
+      "off_high": "\u221221%"
+     },
+     {
+      "symbol": "ECL",
+      "price": "$268.75",
+      "pe": "37.3\u00d7",
+      "off_high": "\u221213%"
+     },
+     {
+      "symbol": "DD",
+      "price": "$137.70",
+      "pe": "Loss-making",
+      "off_high": "\u221213%"
+     },
+     {
+      "symbol": "MMM",
+      "price": "$172.62",
+      "pe": "31.2\u00d7",
+      "off_high": "\u22124%"
+     }
+    ]
+   },
+   "falsifiers": [
+    "EPA extends or weakens monitoring requirements, not only treatment deadlines.",
+    "2027 results show far fewer systems above limits than expected.",
+    "Federal and state funding fails to convert contaminated systems into vendor awards.",
+    "PFAS-specific revenue remains immaterial and undisclosed across the public proxies through 2028."
+   ],
+   "watch_next": [
+    "Final EPA decision on the proposed treatment-deadline extension.",
+    "April 26, 2027 start of compliance monitoring and first public reports.",
+    "State revolving-fund and federal grant awards for treatment.",
+    "XYL/TMO/DHR PFAS-specific bookings, consumables and service disclosures."
+   ],
+   "sources": [
+    {
+     "label": "EPA \u2014 PFAS drinking-water requirements and 2027 monitoring",
+     "url": "https://www.epa.gov/sdwa/and-polyfluoroalkyl-substances-pfas"
+    },
+    {
+     "label": "EPA \u2014 proposed PFOA/PFOS compliance extension",
+     "url": "https://www.epa.gov/sdwa/proposed-pfoa-and-pfos-compliance-extension-rule"
+    },
+    {
+     "label": "EPA \u2014 PFAS compliance monitoring quick reference",
+     "url": "https://www.epa.gov/system/files/documents/2025-01/pfas-compliance-monitoring-qrg-jan25.pdf"
+    },
+    {
+     "label": "Xylem \u2014 PFAS testing and treatment solutions",
+     "url": "https://www.xylem.com/en-us/making-waves/water-utilities-news/how-new-pfas-regulations-will-impact-water-sector/"
     }
    ]
   }

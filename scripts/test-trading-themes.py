@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 20)
+        self.assertEqual(len(self.payload["themes"]), 25)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -155,7 +155,17 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_hunt_themes_follow_ledger_rules(self) -> None:
         counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
-        hunt = [t for t in self.payload["themes"] if t["category"] in counts]
+        new_ids = {
+            "geo-eu-traceability-stack",
+            "sector-treasury-collateral-tax",
+            "sector-medicaid-churn-economy",
+            "sector-upper-cband-capex-echo",
+            "emerging-pfas-testing-wave",
+        }
+        hunt = [
+            t for t in self.payload["themes"]
+            if t["category"] in counts and t["id"] not in new_ids
+        ]
         for category, expected in counts.items():
             self.assertEqual(sum(1 for t in hunt if t["category"] == category), expected, category)
         self.assertEqual(len({t["id"] for t in hunt}), len(hunt))
@@ -165,12 +175,11 @@ class TradingThemesContractTest(unittest.TestCase):
             scores = theme["consensus_scores"]
             for value in scores.values():
                 self.assertTrue(isinstance(value, int) and 0 <= value <= 100, theme["id"])
-            # single-reviewer themes: consensus must equal the identified review, never invented
             reviews = theme["model_reviews"]
-            self.assertEqual(len(reviews), 1, theme["id"])
-            self.assertEqual(reviews[0]["knowledge_saturation"], scores["knowledge_saturation"], theme["id"])
-            self.assertEqual(reviews[0]["price_saturation"], scores["price_saturation"], theme["id"])
-            self.assertIn("single reviewer", theme["status"], theme["id"])
+            self.assertEqual([row["model"] for row in reviews], ["Claude Fable 5", "GPT-5.6"], theme["id"])
+            for field in ("knowledge_saturation", "price_saturation"):
+                self.assertEqual(scores[field], int(statistics.median(row[field] for row in reviews)), theme["id"])
+            self.assertIn("2 reviewers", theme["status"], theme["id"])
             # renderer accesses every section unconditionally
             for field in ("layer_scorecard", "adversarial_review", "what_survived",
                           "residual_edge", "research_priority", "falsifiers",
@@ -180,6 +189,34 @@ class TradingThemesContractTest(unittest.TestCase):
             for row in theme["layer_scorecard"]:
                 self.assertTrue(0 <= row["knowledge_saturation"] <= 100, theme["id"])
                 self.assertTrue(0 <= row["price_saturation"] <= 100, theme["id"])
+
+    def test_gpt_origin_second_order_themes_are_complete(self) -> None:
+        expected = {
+            "geo-eu-traceability-stack": "Geographies",
+            "sector-treasury-collateral-tax": "Sectors",
+            "sector-medicaid-churn-economy": "Sectors",
+            "sector-upper-cband-capex-echo": "Sectors",
+            "emerging-pfas-testing-wave": "Emerging",
+        }
+        found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
+        self.assertEqual(set(found), set(expected))
+        self.assertEqual(len({theme["id"] for theme in self.payload["themes"]}), len(self.payload["themes"]))
+        for theme_id, category in expected.items():
+            theme = found[theme_id]
+            self.assertEqual(theme["category"], category)
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6"])
+            self.assertIn("single reviewer", theme["status"])
+            review = theme["model_reviews"][0]
+            self.assertEqual(theme["consensus_scores"]["knowledge_saturation"], review["knowledge_saturation"])
+            self.assertEqual(theme["consensus_scores"]["price_saturation"], review["price_saturation"])
+            for field in (
+                "layer_scorecard", "adversarial_review", "what_survived", "residual_edge",
+                "research_priority", "falsifiers", "watch_next", "sources",
+            ):
+                self.assertTrue(theme[field], f"{theme_id}.{field}")
+            self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
+            self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 5)
+            self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
 
 if __name__ == "__main__":
