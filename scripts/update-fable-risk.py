@@ -1,25 +1,9 @@
 #!/usr/bin/env python3
-"""Append a Fable Risk daily entry.
-
-Reads an entry JSON (argv[1]), prepends it into the AUTO:FABLE_RISK block of
-trading/fable-risk/index.html (newest entry expanded, older ones collapsed),
-and appends it to trading/fable-risk.json.
-
-Entry schema:
-{
-  "date": "2026-07-25", "session": "pre-market",       # or "post-close"; omitted = pre-market
-  "assess_for": "Mon Jul 27 open",
-  "verdict": "NEUTRAL", "subtitle": "calm gauges, defensive internals",
-  "score": 1, "n_signals": 11, "composite": "+0.09",
-  "signals": [{"name","value","rule","score"}],          # score in -1/0/+1
-  "narrative": ["<p>…</p>", …],                            # html paragraphs
-  "flips": {"to_off": "…", "to_on": "…"},
-  "sources": [{"t": "title", "u": "url"}]
-}
-"""
+"""Append either a mechanical Fable rubric entry or an independent model journal entry."""
+import argparse
+import html as html_lib
 import json
 import os
-import sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "fable-risk", "index.html")
@@ -34,22 +18,19 @@ def session_of(entry):
 
 
 def rating_of(entry):
-    # 0–10 risk-appetite scale, derived from the rubric composite: (sum/n + 1) * 5.
-    # 0 = maximum risk-off, 10 = maximum risk-on, 5 = dead neutral.
     return round((entry["score"] / entry["n_signals"] + 1) * 5, 1)
 
 
 def render(entry, open_=True):
     rating = rating_of(entry)
     rows = ""
-    for s in entry["signals"]:
-        cls, label = SCLS[int(s["score"])]
-        rows += (f'<tr><td>{s["name"]}<span class="sub">{s["rule"]}</span></td>'
-                 f'<td class="num">{s["value"]}</td>'
+    for signal in entry["signals"]:
+        cls, label = SCLS[int(signal["score"])]
+        rows += (f'<tr><td>{signal["name"]}<span class="sub">{signal["rule"]}</span></td>'
+                 f'<td class="num">{signal["value"]}</td>'
                  f'<td><span class="tag {cls}">{label}</span></td></tr>')
-    src = " · ".join(f'<a href="{x["u"]}" rel="noopener">{x["t"]}</a>' for x in entry["sources"])
-    body = f"""
-<div class="fr-verdict {VCLS[entry["verdict"]]}">
+    sources = " · ".join(f'<a href="{item["u"]}" rel="noopener">{item["t"]}</a>' for item in entry["sources"])
+    body = f'''<div class="fr-verdict {VCLS[entry["verdict"]]}">
   <div class="fr-call">{entry["verdict"]}</div>
   <div class="fr-sub">{entry["subtitle"]} · signal sum {entry["score"]:+d} of {entry["n_signals"]} · composite {entry["composite"]}</div>
   <div class="fr-rating" title="0 = maximum risk-off · 10 = maximum risk-on">
@@ -65,8 +46,7 @@ def render(entry, open_=True):
 <div class="card"><h2>What flips this call</h2>
 <div class="mkt"><span class="lbl"><b>To risk-off:</b> {entry["flips"]["to_off"]}</span></div>
 <div class="mkt"><span class="lbl"><b>To risk-on:</b> {entry["flips"]["to_on"]}</span></div></div>
-<p class="footnote">Sources: {src}</p>
-"""
+<p class="footnote">Sources: {sources}</p>'''
     return (f'<details class="fr-entry"{" open" if open_ else ""}>'
             f'<summary><time datetime="{entry["date"]}">{entry["date"]}</time>'
             f'<span class="fr-sumverdict {VCLS[entry["verdict"]]}">{entry["verdict"]}</span>'
@@ -74,23 +54,77 @@ def render(entry, open_=True):
             f'<div class="fr-body">{body}</div></details>')
 
 
+def render_model_entry(entry, open_=True):
+    esc = lambda value: html_lib.escape(str(value), quote=True)
+    stance = entry["stance"]
+    verdict = stance.upper()
+    cls = {"Risk-on": "fr-on", "Neutral": "fr-neutral", "Risk-off": "fr-off"}[stance]
+    rating = float(entry["risk_appetite"])
+    paragraphs = "".join(f"<p>{esc(value)}</p>" for value in entry["journal"])
+    supports = "".join(f"<li>{esc(value)}</li>" for value in entry["what_supports_risk"])
+    restraints = "".join(f"<li>{esc(value)}</li>" for value in entry["what_holds_it_back"])
+    changes = "".join(f"<li>{esc(value)}</li>" for value in entry["what_changes_my_mind"])
+    sources = " · ".join(
+        f'<a href="{esc(source["url"])}" rel="noopener">{esc(source["title"])}</a>'
+        for source in entry["sources"]
+    )
+    body = f'''<div class="fr-verdict {cls}">
+  <div class="fr-call">{esc(verdict)}</div>
+  <div class="fr-sub">independent model-selected methodology · {esc(entry["confidence"])} confidence</div>
+  <div class="fr-rating" title="0 = maximum risk-off · 10 = maximum risk-on">
+    <span class="fr-rating-num">{rating:g}</span><span class="fr-rating-scale">/ 10</span>
+    <span class="fr-rating-bar"><span class="fr-rating-fill" style="width:{100 - rating * 10:g}%"></span></span>
+    <span class="fr-rating-cap">risk appetite</span>
+  </div>
+</div>
+<h2>{esc(entry["headline"])}</h2>{paragraphs}
+<div class="card"><h2>What supports risk</h2><ul>{supports}</ul></div>
+<div class="card"><h2>What holds it back</h2><ul>{restraints}</ul></div>
+<div class="card"><h2>What changes this call</h2><ul>{changes}</ul></div>
+<details class="trading-method"><summary>Methodology and limitations</summary><p><b>{esc(entry["methodology"]["name"])}</b> — {esc(entry["methodology"]["explanation"])}</p><p>{esc(" · ".join(entry["limitations"]))}</p></details>
+<p class="footnote">Sources: {sources}</p>'''
+    return (f'<details class="fr-entry fr-model-entry"{" open" if open_ else ""}>'
+            f'<summary><time datetime="{esc(entry["as_of_date"])}">{esc(entry["as_of_date"])}</time>'
+            f'<span class="fr-sumverdict {cls}">{esc(verdict)}</span>'
+            f'<span class="fr-sumsession">{esc(entry["session"])}</span>'
+            f'<span class="fr-sumfor">independent Claude Fable 5 journal</span>'
+            f'<span class="fr-sumrating">{rating:g}/10</span></summary>'
+            f'<div class="fr-body">{body}</div></details>')
+
+
 def main():
-    entry = json.load(open(sys.argv[1]))
-    data = {"schema_version": 1, "entries": []}
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("entry")
+    args = parser.parse_args()
+    entry = json.load(open(args.entry))
+    data = {"schema_version": 1, "entries": [], "model_entries": []}
     if os.path.exists(DATA):
         data = json.load(open(DATA))
-    entry["rating"] = rating_of(entry)
-    entry["session"] = session_of(entry)
-    data["entries"] = [e for e in data["entries"]
-                       if (e["date"], session_of(e)) != (entry["date"], entry["session"])]
-    data["entries"].insert(0, entry)
-    json.dump(data, open(DATA, "w"), indent=1)
+        data.setdefault("model_entries", [])
+    if entry.get("prompt_version") == "zonted-independent-risk-v1":
+        data["model_entries"] = [existing for existing in data["model_entries"]
+                                 if (existing["as_of_date"], existing["session"]) != (entry["as_of_date"], entry["session"])]
+        data["model_entries"].insert(0, entry)
+    else:
+        entry["rating"] = rating_of(entry)
+        entry["session"] = session_of(entry)
+        data["entries"] = [existing for existing in data["entries"]
+                           if (existing["date"], session_of(existing)) != (entry["date"], entry["session"])]
+        data["entries"].insert(0, entry)
+    with open(DATA, "w") as handle:
+        json.dump(data, handle, indent=1)
+        handle.write("\n")
 
     page = open(PAGE).read()
-    a, b = page.index(START) + len(START), page.index(END)
-    html = "\n" + "\n".join(render(e, i == 0) for i, e in enumerate(data["entries"])) + "\n"
-    open(PAGE, "w").write(page[:a] + html + page[b:])
-    print(f"fable-risk: {entry['date']} {entry['verdict']} ({entry['composite']}) · {len(data['entries'])} entries")
+    start, end = page.index(START) + len(START), page.index(END)
+    rendered = [render_model_entry(item, index == 0) for index, item in enumerate(data["model_entries"])]
+    rendered.extend(render(item, not rendered and index == 0) for index, item in enumerate(data["entries"]))
+    block = "\n" + "\n".join(rendered) + "\n"
+    open(PAGE, "w").write(page[:start] + block + page[end:])
+    if entry.get("prompt_version"):
+        print(f"fable-risk: {entry['as_of_date']} {entry['stance']} ({entry['risk_appetite']}/10) · independent model journal")
+    else:
+        print(f"fable-risk: {entry['date']} {entry['verdict']} ({entry['composite']}) · {len(data['entries'])} mechanical entries")
 
 
 if __name__ == "__main__":

@@ -28,8 +28,8 @@
     if (latest) setChip('gpt', 'GPT', Number(latest.risk_appetite), latest.stance);
   });
   fetch('/trading/fable-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('fable', 'Fable', Number(latest.rating), latest.verdict);
+    const latest = d && ((d.model_entries && d.model_entries[0]) || (d.entries && d.entries[0]));
+    if (latest) setChip('fable', 'Fable', Number(latest.risk_appetite ?? latest.rating), latest.stance || latest.verdict);
   });
   fetch('/trading/gemini-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
     const latest = d && d.entries && d.entries[0];
@@ -37,18 +37,11 @@
   });
   fetch('/trading/meta-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
     const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('meta', 'Meta', Number(latest.derived_rating), latest.stance);
+    if (latest) setChip('meta', 'Meta', Number(latest.rating ?? latest.derived_rating), latest.stance);
   });
-  fetch('/trading/grok-risk/', { cache: 'no-cache' }).then(r => r.ok ? r.text() : '').catch(() => '').then(html => {
-    const doc = new DOMParser().parseFromString(html, 'text/html');
-    const latest = doc.querySelector('.risk-assessment[data-rating]');
-    if (latest) {
-      setChip('grok', 'Grok', Number(latest.dataset.rating), latest.dataset.stance || '');
-      return;
-    }
-    const m = /Risk[\s-]*(On|Off|Neutral)\s*\((\d+(?:\.\d+)?)\s*\/\s*10\)/i.exec(html)
-      || /(?:^|[^\d.])(\d+(?:\.\d+)?)\s*\/\s*10\b/.exec(html);
-    if (m) setChip('grok', 'Grok', Number(m[2] !== undefined ? m[2] : m[1]), m[2] !== undefined ? 'Risk ' + m[1] : '');
+  fetch('/trading/grok-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
+    const latest = d && d.entries && d.entries[0];
+    if (latest) setChip('grok', 'Grok', Number(latest.risk_appetite), latest.stance);
   });
 
   /* ── position risk charts: levels + interactive metrics ─────────── */

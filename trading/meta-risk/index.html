@@ -8,7 +8,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/trading/desk.css?v=28db2a577653">
-<script defer src="/trading/desk.js?v=5cf2af955a08"></script>
+<script defer src="/trading/desk.js?v=dd240c48f51d"></script>
 <style>
 .meta-risk-report{max-width:920px;margin:0 auto 48px}.meta-risk-verdict{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:28px;align-items:center;background:var(--bl-card);border:1px solid var(--bl-border);border-radius:12px;padding:26px}.meta-risk-kicker,.meta-risk-prompt>span,.meta-risk-integrity>span{display:block;font:700 10.5px var(--bl-sans);letter-spacing:.09em;text-transform:uppercase;color:var(--bl-faint);margin-bottom:7px}.meta-risk-verdict h2{font:700 clamp(28px,5vw,44px)/1.05 var(--bl-sans);margin:0 0 10px}.meta-risk-verdict p{margin:0;max-width:68ch;color:var(--bl-muted);line-height:1.6}.meta-risk-score{text-align:right;min-width:150px}.meta-risk-score strong{font:700 46px var(--bl-mono)}.meta-risk-score>span{font:600 14px var(--bl-mono);color:var(--bl-faint)}.meta-risk-score small{display:block;max-width:155px;color:var(--bl-muted);font-size:11px;line-height:1.35}.meta-risk-dates{margin:12px 0 20px;color:var(--bl-faint);font:500 11.5px var(--bl-mono)}.meta-risk-prompt,.meta-risk-integrity{padding:18px 20px;border:1px solid var(--bl-divider);border-radius:9px;background:var(--bl-hover);margin-bottom:16px}.meta-risk-prompt p,.meta-risk-integrity p{margin:0;line-height:1.6}.meta-risk-exact{border:1px solid var(--bl-border);border-radius:10px;background:var(--bl-card);margin-bottom:16px}.meta-risk-exact summary{cursor:pointer;padding:14px 18px;font-weight:700}.meta-risk-response{padding:20px;border-top:1px solid var(--bl-divider);font-size:13px;line-height:1.65;color:var(--bl-ink2)}.meta-risk-response h3{font-size:15px;margin:24px 0 10px}.meta-risk-response h3:first-child{margin-top:0}.meta-risk-response p{margin:0 0 14px}.meta-risk-response ul{margin:0 0 18px;padding-left:20px;display:grid;gap:5px}.meta-risk-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}.meta-risk-grid section{padding:18px 20px;border:1px solid var(--bl-border);border-radius:10px;background:var(--bl-card)}.meta-risk-grid h2{font-size:15px;margin:0 0 12px}.meta-risk-grid ol,.meta-risk-grid ul{margin:0;padding-left:20px;display:grid;gap:8px;color:var(--bl-muted);font-size:12.5px;line-height:1.45}.meta-risk-grid p{font-size:11.5px;color:var(--bl-faint);line-height:1.5;margin:14px 0 0}.meta-risk-grid a{color:var(--bl-accent)}.meta-risk-integrity{border-color:#e8c88c;background:#fff9eb}@media(max-width:760px){.meta-risk-verdict{grid-template-columns:1fr;padding:20px}.meta-risk-score{text-align:left}.meta-risk-grid{grid-template-columns:1fr}.meta-risk-response{padding:16px;font-size:12.5px}}
 </style>
@@ -19,7 +19,7 @@
   <a class="brand" href="/trading/">Trading</a>
   <span class="stamp">Snapshot · July 29, 2026</span>
   <div class="status-metrics">
-    <span class="chipset"><a class="chip chip-gpt chip-on" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 5.5/10">GPT 5.5</a><a class="chip chip-grok chip-on" href="/trading/grok-risk/" title="Grok risk appetite — Mildly risk-on / neutral-constructive · 6/10">Grok 6</a><a class="chip chip-gemini chip-off" href="/trading/gemini-risk/" title="Gemini risk appetite — Neutral to Risk-Off · 4/10">Gemini 4</a><a class="chip chip-meta chip-off" href="/trading/meta-risk/" title="Meta risk appetite — Neutral, leaning Risk-Off · 4/10">Meta 4</a><a class="chip chip-fable chip-on" href="/trading/fable-risk/" title="Fable risk appetite — NEUTRAL · 5.5/10">Fable 5.5</a></span>
+    <span class="chipset"><a class="chip chip-gpt chip-off" href="/trading/gpt-risk/" title="GPT risk appetite — Risk-off · 3.5/10">GPT 3.5</a><a class="chip chip-grok chip-off" href="/trading/grok-risk/" title="Grok risk appetite — Risk-off · 3/10">Grok 3</a><a class="chip chip-gemini chip-off" href="/trading/gemini-risk/" title="Gemini risk appetite — Risk-off · 3/10">Gemini 3</a><a class="chip chip-meta chip-off" href="/trading/meta-risk/" title="Meta risk appetite — Risk-off · 3.5/10">Meta 3.5</a><a class="chip chip-fable chip-off" href="/trading/fable-risk/" title="Fable risk appetite — Risk-off · 2.5/10">Fable 2.5</a></span>
     <span class="metric" data-status-spy="729.46" data-status-spy-day="-1.5388"><span class="k">SPY</span>729.46 <span class="down">−1.5%</span></span>
     <span class="metric" data-status-vix="20.66"><span class="k">VIX</span>20.66</span>
     <span class="metric" data-status-open="2"><span class="k">Open</span>2</span>
@@ -27,22 +27,95 @@
 </div></div>
 <nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/themes/">Themes</a><a href="/trading/vwap-setups/">VWAP Setups</a><a href="/trading/momentum/">Momentum</a><a href="/trading/performance/">Performance</a></div></nav>
 <div class="wrap">
-<div class="phead"><h1>Meta Risk</h1><p class="take">Meta AI’s search-grounded answer to the same prompt used for GPT’s market-risk assessment.</p><p class="meta">Meta AI muse-spark-1.1 analysis supplied July 27, 2026 · exact provider response preserved · model output, not a mechanical signal</p></div>
+<div class="phead"><h1>Meta Risk</h1><p class="take">Meta Muse Spark 1.1’s independently searched market-risk journal and provider receipt.</p><p class="meta">Newest model journal entry · provider output and defects preserved · model output, not a mechanical signal</p></div>
 <!-- AUTO:META_RISK:START -->
-<article class="meta-risk-report" data-model="Meta AI muse-spark-1.1">
+<article class="meta-risk-report" data-model="Meta AI muse-spark-1.1" data-rating="3.5" data-stance="Risk-off">
   <header class="meta-risk-verdict">
-    <div><span class="meta-risk-kicker">Current market stance</span><h2>Neutral, leaning Risk-Off</h2><p>Meta said the market had shifted out of its strong first-half risk-on regime but had not entered full panic, citing weaker momentum, defensive rotation, higher volatility, tight-but-no-longer-improving credit, and softer sentiment.</p></div>
-    <div class="meta-risk-score"><strong>4</strong><span>/ 10</span><small>Zonted stance mapping · Meta supplied no number</small></div>
+    <div><span class="meta-risk-kicker">Current market stance</span><h2>Risk-off</h2><p>Fed holds 9-3 as oil spikes 7%+ on Iran attack, Dow drops 1,150 points worst since April 2025 with retail panic selling.</p></div>
+    <div class="meta-risk-score"><strong>3.5</strong><span>/ 10</span><small>Meta-supplied score</small></div>
   </header>
-  <p class="meta-risk-dates">Assessment 2026-07-27 · search-grounded API response · model Meta AI muse-spark-1.1</p>
-  <section class="meta-risk-prompt"><span>Exact prompt</span><p>Use all data sources that make sense to you. How would you rate the current stock market: risk on, risk off, or neutral? Why?</p></section>
-  <details class="meta-risk-exact" open><summary>Exact model response</summary><div class="meta-risk-response"><p>Current read as of July 27, 2026: <strong>NEUTRAL leaning RISK-OFF / Risk-off transition</strong></p><p>The market is not in a full risk-off panic, but it has clearly shifted out of the strong risk-on regime that defined H1 2026.</p><h3>Why it&#x27;s NOT risk-on anymore</h3><p><strong>1. Momentum and leadership are breaking down:</strong></p><ul><li>S&amp;P 500 has returned 7.8% this year but is now down 2 consecutive weeks. Nasdaq, S&amp;P and Dow finished down 2.1%, 0.6% and 0.4% respectively for the week.</li><li>The S&amp;P is off 3.32% from its record close of 7609.78 hit Tuesday, June 2, 2026.</li><li>VIX has rebounded. FRED monthly average for Jul 2026: 16.80 but the daily close jumped to 18.58 on July 24 - back above the 16-17 comfort zone seen mid-July.</li></ul><p><strong>2. Classic risk-on engine - small caps - surged then stalled:</strong></p><ul><li>That was risk-on: Russell 2000 surged 22% through June, marking its strongest first-half performance since 1991. It also beat the NASDAQ by 9%, its biggest first-half outperformance since 2001.</li><li>iShares Russell 2000 ETF has gained nearly 19% so far this year as of June 24, outpacing 7.4% for SPY.</li><li>But returns for small caps during July are rarely spectacular; Russell 2000 has averaged monthly gain of 0.6%, and July is showing the fade.</li></ul><p><strong>3. Sentiment collapsed from greed to fear:</strong></p><ul><li>CNN Fear &amp; Greed Index Current Score: 46 — Neutral, down from 53 one week ago and 78 Greed one month ago.</li><li>In six weeks the market has gone from 79 Greed to 46 Neutral — a 33-point sentiment collapse.</li><li>Other prints show Fear &amp; Greed Now: 30 (Fear).</li><li>AAII: Jul 22 Bullish 29.6% Neutral 28.1% Bearish 42.3%. Just a week before on Jul 15 bullish was 44.9%. Bullish is now well below its historical average of 38.0% and 37.5%.</li></ul><p><strong>4. Defensive rotation, not offensive:</strong></p><ul><li>Risk-off sentiment drove rotation into defensive stocks, leading to gains in the consumer defensive and utility sectors.</li><li>Investors are aggressively rotating into the defensive bunkers of Utilities and Energy.</li><li>Staples have become one of the sole areas of relative strength this year amid broader selloffs. Sector scorecard: Defensives leading month on month, like Utilities and Health Care in June 2026, is a textbook sign.</li></ul><p><strong>5. Rates and credit are tightening the risk budget:</strong></p><ul><li>Fed held federal funds rate steady in the 3.50%-3.75% range, keeping benchmark at 3.5% to 3.75%.</li><li>Futures: 0% chance the Fed will cut at its July 29 meeting.</li><li>Fed delivered a notably hawkish message, nine members project an increase.</li><li>Yield on 10-year finished July 2, 2026 at 4.49% while 2-year ended at 4.14% - elevated.</li><li>High yield still tight: US High Yield B Option-Adjusted Spread is 2.94% as of 2026-07-24 - which is why we are not in full risk-off, but spread is not compressing further.</li></ul><p><strong>6. Risk proxies - crypto - show risk appetite crashing:</strong></p><ul><li>Bitcoin risk appetite has fallen sharply since October 2025.</li><li>Bitcoin has been stuck in a $63,000 to $63,500 trading range for much of early July.</li><li>On July 9 Bitcoin rose 1.6% to $63,207.34 as risk appetite returned, but on July 8 Bitcoin and ether fell more than 2% after geopolitical headlines sink risk appetite.</li></ul><p><strong>7. Valuation ceiling:</strong></p><ul><li>S&amp;P 500 trades at forward P/E of 19.58 as of July 27, 2026. Other tracker: 19.32 as of July 27. Trendonify notes median 10yr sits at 19.85, putting today at Fair Value.</li><li>But EBC notes forward P/E at 20.4 versus 10-year average of 19.0 - pressure point. When S&amp;P 500 forward P/E is near five-month highs and roughly 30% above 10-year average rotation to staples happens.</li></ul><p><strong>Bottom line:</strong> H1 was risk-on driven by small-cap catch-up and AI breadth. Late July is neutral with risk-off tilt: lower highs in S&amp;P, VIX creeping to 18+, sentiment collapse to neutral/fear, defensive sector leadership, hawkish Fed on hold, and persistent geopolitical overhang - Markets enter July with a ceasefire that nobody quite trusts.</p><p>This is a stock-picker&#x27;s, de-risking market, not a chase-beta market. Not financial advice.</p></div></details>
+  <p class="meta-risk-dates">Assessment 2026-07-29 · search-grounded API response · model Meta AI muse-spark-1.1</p>
+  <section class="meta-risk-prompt"><span>Exact prompt</span><p># Zonted independent market-risk journal prompt
+
+Prompt version: `zonted-independent-risk-v1`
+
+This prompt deliberately standardizes only the publishable envelope. It does **not** give models a common signal list, scoring formula, market snapshot, mechanical baseline, prior journal entry, or another model&#x27;s answer.
+
+---
+
+You are `Meta Muse Spark 1.1`, writing an independent market-risk journal entry for Zonted.
+
+Assess general US stock-market risk as of `2026-07-29` for the `post-close` session.
+
+## Independence rules
+
+1. Choose your own methodology. Decide which market, macro, positioning, volatility, credit, liquidity, sentiment, geopolitical, crypto, or other evidence matters and how to weigh it.
+2. Use the current research/search tools and sources available to you. Do not claim access to data you cannot actually retrieve.
+3. Do not use any mechanical baseline, shared lens rubric, fixed signal weights, consensus score, prior journal entry, or another model&#x27;s output.
+4. Do not try to agree with the other models. A defensible disagreement is useful.
+5. Separate observations from inference. Attach a durable source URL to every material factual claim when your tools expose one. State material data lags or uncertainty.
+6. This is a market-wide research journal, not personalized investment advice. Do not recommend position sizes or orders.
+
+## Required assessment
+
+Create your own framework, then report:
+
+- `stance`: exactly `Risk-on`, `Neutral`, or `Risk-off`.
+- `risk_appetite`: a number from 0 to 10, where 0 is maximum risk-off, 5 is balanced, and 10 is maximum risk-on. You decide where stance boundaries belong and explain that interpretation.
+- `confidence`: `High`, `Medium`, or `Low`.
+- A concise explanation of the methodology you chose and the evidence that drove it.
+- What supports risk, what holds it back, and specific evidence that would change your mind.
+
+Return one JSON object and nothing else. Use real JSON types; do not wrap it in Markdown fences.
+
+```json
+{
+  &quot;schema_version&quot;: 1,
+  &quot;prompt_version&quot;: &quot;zonted-independent-risk-v1&quot;,
+  &quot;decision_status&quot;: &quot;publishable&quot;,
+  &quot;as_of_date&quot;: &quot;2026-07-29&quot;,
+  &quot;session&quot;: &quot;post-close&quot;,
+  &quot;author&quot;: &quot;Meta Muse Spark 1.1&quot;,
+  &quot;model_id&quot;: &quot;muse-spark-1.1&quot;,
+  &quot;stance&quot;: &quot;Neutral&quot;,
+  &quot;risk_appetite&quot;: 5.0,
+  &quot;score_interpretation&quot;: &quot;How this score maps to the model&#x27;s own framework.&quot;,
+  &quot;confidence&quot;: &quot;Medium&quot;,
+  &quot;headline&quot;: &quot;One sentence.&quot;,
+  &quot;methodology&quot;: {
+    &quot;name&quot;: &quot;A short name chosen by the model&quot;,
+    &quot;explanation&quot;: &quot;How the model assessed risk and why this method fits the current regime.&quot;,
+    &quot;selected_signals&quot;: [&quot;Signals the model chose; there is no required shared list.&quot;]
+  },
+  &quot;journal&quot;: [
+    &quot;Observation and regime read.&quot;,
+    &quot;Contradictory evidence and uncertainty.&quot;,
+    &quot;Bottom line and posture, without personalized trading instructions.&quot;
+  ],
+  &quot;what_supports_risk&quot;: [&quot;Specific point 1&quot;, &quot;Specific point 2&quot;, &quot;Specific point 3&quot;],
+  &quot;what_holds_it_back&quot;: [&quot;Specific point 1&quot;, &quot;Specific point 2&quot;, &quot;Specific point 3&quot;],
+  &quot;what_changes_my_mind&quot;: [&quot;Upgrade condition&quot;, &quot;Downgrade condition&quot;],
+  &quot;sources&quot;: [
+    {
+      &quot;title&quot;: &quot;Source title&quot;,
+      &quot;url&quot;: &quot;https://example.com/source&quot;,
+      &quot;as_of&quot;: &quot;YYYY-MM-DD or timestamp&quot;,
+      &quot;claim&quot;: &quot;The claim this source supports&quot;
+    }
+  ],
+  &quot;limitations&quot;: [&quot;Missing, stale, conflicting, or unavailable evidence&quot;]
+}
+```
+
+If current evidence is too incomplete to support a dated assessment, return the same metadata with `decision_status: &quot;insufficient_data&quot;`; set `stance`, `risk_appetite`, `score_interpretation`, `confidence`, `headline`, and `methodology` to `null`; return empty arrays for journal, support, restraint, change-my-mind, and sources; and explain the blocker in `limitations`.
+</p></section>
+  <details class="meta-risk-exact" open><summary>Model journal</summary><div class="meta-risk-response"><h3>Fed holds 9-3 as oil spikes 7%+ on Iran attack, Dow drops 1,150 points worst since April 2025 with retail panic selling.</h3><p>Observation: July 29 post-close is a policy+geopolitical shock day. Major indexes closed sharply lower with Dow shedding more than 1,150 points for its worst day in 17 months after Fed kept rates intact with 9-3 decision to hold, while 10-year yield rose to ~4.67% up 4bps and traders cut Sept hike odds from 79% to 54% pricing. Oil surged after Iran ballistic missile attempt on US forces and Trump &#x27;hitting them hard&#x27; threat, WTI +7.4% to $85.10 Brent +8.2% to $91. VIX elevated at 18.21 prior close, Nasdaq down for 5 sessions on AI spending fears ahead of Microsoft and Meta after bell.</p><p>Contradictory evidence: Macro not collapsing - Q2 GDP revised up to 3.3% from 3% with net exports contributing nearly 5 points highest on record and GDI +4.8%. Credit is not confirming equity stress: HYG/LQD ratio 0.7434 +2.21σ vs 1Y and +1.66σ vs 3Y classified TIGHT day 16 risk-on, HY outperforming IG. Bitcoin around $63,800 little changed and stable vs equity drawdown. This keeps selloff from being systemic credit event.</p><p>Bottom line: Near-term risk skewed to downside on rates staying higher and oil as tax plus positioning washout, but tight credit and strong GDP argue against max fear. Posture is defensive-neutral, watch earnings for Mag7 capex narrative and oil/yield evolution, without personalized trading instructions.</p><h3>What supports risk</h3><ul><li>Q2 GDP revised to 3.3% from 3% with net exports near 5 points contribution highest on record, plus GDI surge 4.8% indicating income resilience</li><li>Credit regime still risk-on: HYG/LQD 0.7434 Z +2.21σ 1Y TIGHT day 16, high yield outperforming investment grade, spreads compressed not widening</li><li>Crypto and broader risk proxy stable: Bitcoin around $63,800 little changed past 24h and latest price $63,428 down 27% YTD but not breaking in this shock</li></ul><h3>What holds it back</h3><ul><li>Fed 9-3 hold steady with Chair Warsh resolute on 2% inflation target; Dow -1150 (-2.2%), S&amp;P -1.5%, Nasdaq -1.7% worst day since April 2025 tariff sell-off and 10Y at 4.64-4.67% up 4bps</li><li>Geopolitical oil spike: WTI +7.4% to $85.10, Brent +8.2% to ~$91 after Iran surprise missile attack on US forces and Trump retaliation threat</li><li>Flow and sentiment deterioration: Retail largest net selling of individual stocks since Covid crash per Vanda Research, Nasdaq down 5 sessions on AI bubble worries, memory chip ETFs DRAM -6%, SOXX -5%</li></ul><h3>What changes my mind</h3><ul><li>Upgrade to Neutral/Risk-on if Microsoft/Meta after-close beat and guide stable AI capex, oil retraces below $80 and 10Y falls back under 4.5% and VIX drops back under 16</li><li>Downgrade to deeper Risk-off if oil holds above $85-90 for 3+ days and yields push above 4.8% and credit regime flips from TIGHT to WIDE with HYG/LQD z-score falling below -1σ and CCC OAS breaking above 10.5%</li></ul></div></details>
   <div class="meta-risk-grid">
-    <section><h2>Searches Meta ran</h2><ol><li>stock market risk on risk off July 2026</li><li>VIX index level July 2026</li><li>S&amp;P 500 performance July 2026</li><li>high yield credit spreads July 2026</li><li>Fed interest rate decision July 2026</li><li>AAII investor sentiment July 2026</li><li>Bitcoin crypto risk appetite July 2026</li><li>Nasdaq small caps Russell 2000 performance July 2026 risk on</li><li>CNN Fear Greed Index July 27 2026</li><li>stock market sector rotation defensive July 2026 utilities staples</li><li>S&amp;P 500 forward PE valuation July 2026</li><li>S&amp;P 500 closes July 25 2026 down week</li></ol></section>
-    <section><h2>Durable citations attached</h2><ul><li><a href="https://www.zacks.com/stock/news/2948862/can-small-cap-stocks-continue-to-outperform" rel="noopener">Can Small-Cap Stocks Continue to Outperform? - July 6, 2026 - Zacks.com</a></li><li><a href="https://www.aaii.com/sentimentsurvey/sent_results" rel="noopener">Sentiment Survey Past Results | AAII</a></li><li><a href="https://trendonify.com/united-states/stock-market/forward-pe-ratio" rel="noopener">S&amp;P 500 Forward PE Ratio</a></li></ul><p>Meta attached five citation spans pointing to 3 unique URLs.</p></section>
+    <section><h2>Searches Meta ran</h2><ol><li>US stock market performance July 29 2026 S&amp;P 500 Nasdaq close</li><li>VIX level July 29 2026</li><li>Federal Reserve meeting July 2026 FOMC</li><li>US 10 year Treasury yield July 29 2026</li><li>crypto Bitcoin price July 29 2026</li><li>credit spreads high yield July 2026</li><li>S&amp;P 500 earnings July 29 2026 Meta Microsoft</li><li>July 29 2026 market news tariff trade</li><li>US economy Q2 2026 GDP</li><li>Dow close July 29 2026 record</li></ol></section>
+    <section><h2>Durable citations attached</h2><ul><li><a href="https://www.investopedia.com/stock-market-today-dow-jones-s-and-p-500-07292026-12029108" rel="noopener">Markets News, July 29, 2026: Dow Closes Down 1,150 Points After Fed Holds Rates Steady; Oil Jumps on Surprise Iran Attack</a></li><li><a href="https://ycharts.com/indicators/vix_volatility_index" rel="noopener">VIX (Market Daily) - Historical Data</a></li><li><a href="https://countryeconomy.com/bonds/usa" rel="noopener">US Bonds - 10 Years 2026</a></li><li><a href="https://www.thetrading.tools/credit-spreads" rel="noopener">Credit Spreads Tracker: HYG/LQD Ratio</a></li><li><a href="https://stocktwits.com/news-articles/markets/equity/us-gdp-3-3-in-q2-revised-upwards-from-3/chs6JFbRdmZ" rel="noopener">GDP Grows At 3.3% In Q2 Revised</a></li><li><a href="https://statmuse.com/money/ask/bitcoin-price-chart-by-month-2026" rel="noopener">Bitcoin Price Chart By Month 2026</a></li></ul><p>Meta attached 6 source URLs.</p></section>
   </div>
-  <details class="trading-method"><summary>Provider receipt</summary><p>HTTP 200 · completed · response resp_6a67c8108e066bb2faf24bd2 · 164,117 input tokens · 4,581 output tokens · 1,939 reasoning tokens · 168,698 total tokens. Public structured receipt: <a href="/trading/meta-risk.json">/trading/meta-risk.json</a>.</p></details>
-  <section class="meta-risk-integrity"><span>Integrity note</span><p>This page preserves Meta AI’s search-grounded answer as model output, not as independently verified Zonted fact. The API attached durable URL citations to only five spans, and several uncited claims are internally inconsistent or time-sensitive. Meta did not provide a numeric score; Zonted maps its Neutral, leaning Risk-Off stance to 4/10 for cross-model navigation consistency.</p></section>
+  <details class="trading-method"><summary>Provider receipt</summary><p>HTTP 200 · completed · response resp_6a6a6e170186dfa8f64a4c32 · 122,377 input tokens · 6,148 output tokens · 3,023 reasoning tokens · 128,525 total tokens. Public structured receipt: <a href="/trading/meta-risk.json">/trading/meta-risk.json</a>.</p></details>
+  <section class="meta-risk-integrity"><span>Integrity note</span><p>This preserves Meta Muse&#x27;s output as model evidence, not Zonted fact. One cited GDP source is dated 2026-08-28—after this 2026-07-29 assessment—and is therefore a time-travel sourcing defect. The VIX figure is also stale versus the 20.66 same-session close. Both defects remain visible rather than being laundered away.</p></section>
 </article>
 <!-- AUTO:META_RISK:END -->
 </div>

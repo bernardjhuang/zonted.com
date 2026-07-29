@@ -17,8 +17,8 @@ END = "<!-- AUTO:GEMINI_RISK:END -->"
 def validate(payload: dict) -> dict:
     if payload.get("schema_version") != 1:
         raise ValueError("gemini-risk schema_version must be 1")
-    if payload.get("model") != "Gemini 3.1 Pro":
-        raise ValueError("gemini-risk model must be Gemini 3.1 Pro")
+    if payload.get("model") not in {"Gemini 3.1 Pro", "Gemini 3.1 Pro Preview"}:
+        raise ValueError("gemini-risk model must be Gemini 3.1 Pro or Preview")
     entries = payload.get("entries") or []
     if not entries:
         raise ValueError("gemini-risk requires at least one entry")
@@ -43,7 +43,7 @@ def render(entry: dict) -> str:
             f'<div><h2>{esc(section["title"])}</h2>{paragraphs}</div></section>'
         )
     rating = float(entry["rating"])
-    return f'''<article class="gemini-risk-report" data-model="Gemini 3.1 Pro" data-rating="{rating:g}">
+    return f'''<article class="gemini-risk-report" data-model="Gemini 3.1 Pro Preview" data-rating="{rating:g}" data-stance="{esc(entry["stance"])}">
   <header class="gemini-risk-verdict">
     <div><span class="gemini-risk-kicker">Current market stance</span><h2>{esc(entry["stance"])}</h2><p>{esc(entry["summary"])}</p></div>
     <div class="gemini-risk-score" aria-label="Risk appetite {rating:g} out of 10"><strong>{rating:g}</strong><span>/ 10</span><small>risk appetite</small></div>
