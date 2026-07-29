@@ -30,6 +30,7 @@ h2.pf-h,.pf-h{margin:0 0 3px;font:600 15px/1.3 var(--bl-sans);letter-spacing:-.0
 .pf-svg{display:block;width:100%;min-width:760px}
 .pf-hv{cursor:crosshair;transition:opacity .1s}
 .pf-hv:hover{opacity:.72}
+.pf-trade:focus-visible{outline:none;stroke:var(--bl-ink);stroke-width:2.5px;paint-order:stroke}
 .pf-note{margin-top:9px;font:500 11.5px var(--bl-mono);color:var(--bl-faint)}
 .pf-r{text-align:right}
 .up{color:var(--bl-gain)}.down{color:var(--bl-loss)}
@@ -74,6 +75,7 @@ table.pf-log tbody tr:last-child td{border-bottom:0}
 .pf-tip span{display:block;font:500 11px var(--bl-mono);color:var(--bl-muted);margin-top:2px}
 .pf-tip em{display:block;font:700 17px var(--bl-mono);font-style:normal;margin-top:5px}
 .pf-tip i{display:block;font:500 11px var(--bl-mono);font-style:normal;color:var(--bl-faint);margin-top:1px}
+.pf-tip small{display:inline-block;min-width:48px;margin-right:7px;color:var(--bl-faint);font:600 8.5px var(--bl-sans);letter-spacing:.05em;text-transform:uppercase}
 .pf-tip.pos em{color:var(--bl-gain)}
 .pf-tip.neg em{color:var(--bl-loss)}
 

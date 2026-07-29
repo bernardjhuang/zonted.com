@@ -339,6 +339,21 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("Subjective risk journal only", self.html)
         self.assertIn("no automated risk gate", self.html)
 
+    def test_performance_trade_tape_hover_lists_ticker_type_and_pnl(self):
+        script = (ROOT / "js" / "trading-performance.js").read_text()
+        styles = (ROOT / "trading" / "performance-tape.css").read_text()
+        self.assertIn('data-trade-detail="1"', script)
+        self.assertIn('tabindex="0"', script)
+        self.assertIn('role="img"', script)
+        self.assertIn('aria-label="${esc(tradeLabel)}"', script)
+        self.assertIn("<small>Ticker</small>", script)
+        self.assertIn("<small>Type</small>", script)
+        self.assertIn("<small>P&amp;L</small>", script)
+        self.assertIn("pointermove", script)
+        self.assertIn("focusin", script)
+        self.assertNotIn("const window = dates", script)
+        self.assertIn(".pf-trade:focus-visible", styles)
+
     def test_generated_asset_contracts(self):
         vwap = json.loads((ROOT / "trading" / "vwap-charts.json").read_text())
         crypto = json.loads((ROOT / "trading" / "crypto-charts.json").read_text())
