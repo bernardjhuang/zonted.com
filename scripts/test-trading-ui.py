@@ -413,8 +413,11 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_live_setups_collapsed_and_recent_activity_folded(self):
         combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
-        self.assertGreaterEqual(len(combined_pnl_rows), 6)
-        self.assertGreaterEqual(len({symbol for _, symbol in combined_pnl_rows}), 3)
+        public_positions = json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
+        expected_symbols = {row["symbol"] for row in public_positions}
+        self.assertTrue(combined_pnl_rows)
+        self.assertGreaterEqual(len(combined_pnl_rows), len(expected_symbols))
+        self.assertEqual({symbol for _, symbol in combined_pnl_rows}, expected_symbols)
         for symbol in {symbol for _, symbol in combined_pnl_rows}:
             values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
             self.assertEqual(len(values), 1, symbol)

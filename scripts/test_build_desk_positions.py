@@ -79,6 +79,11 @@ class DeskPositionBuilderTests(unittest.TestCase):
             "exposure_percent": 171.4,
             "premium_at_risk_percent": 19.2,
         })
+        self.assertEqual(result["sleeves"]["thesis"], {
+            "capital_percent": 0.0,
+            "exposure_percent": 0.0,
+            "premium_at_risk_percent": 0.0,
+        })
         self.assertEqual([row["symbol"] for row in result["positions"]], ["AAA"])
         self.assertEqual(result["positions"][0]["exposure_percent"], 171.4)
         self.assertEqual(result["positions"][0]["capital_percent"], 19.4)

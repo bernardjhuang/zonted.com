@@ -113,13 +113,21 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
             "thesis": profile["thesis"],
         })
     positions.sort(key=lambda row: (-row["exposure_percent"], row["symbol"]))
-    sleeves: dict[str, dict[str, float]] = {}
-    for row in positions:
-        sleeve = sleeves.setdefault(row["flair"], {
+    # Keep both authored sleeves explicit even when the live account temporarily
+    # has no position in one of them. Zero is honest; silently dropping the
+    # category makes the public risk contract change with every exit.
+    sleeves: dict[str, dict[str, float]] = {
+        name: {
             "capital_percent": 0.0,
             "exposure_percent": 0.0,
             "premium_at_risk_percent": 0.0,
-        })
+        }
+        for name in ("thesis", "momentum")
+    }
+    for row in positions:
+        if row["flair"] not in sleeves:
+            raise ValueError(f"{row['symbol']} has unsupported flair: {row['flair']}")
+        sleeve = sleeves[row["flair"]]
         for key in sleeve:
             sleeve[key] += float(row[key])
     for sleeve in sleeves.values():
