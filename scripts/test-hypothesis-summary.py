@@ -18,6 +18,14 @@ summary = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = summary
 SPEC.loader.exec_module(summary)
 
+CLASSIC_SCRIPT = ROOT / "scripts" / "sync-classic-hypotheses.py"
+CLASSIC_SPEC = importlib.util.spec_from_file_location("classic_hypotheses", CLASSIC_SCRIPT)
+if CLASSIC_SPEC is None or CLASSIC_SPEC.loader is None:
+    raise RuntimeError(f"Could not load {CLASSIC_SCRIPT}")
+classic_hypotheses = importlib.util.module_from_spec(CLASSIC_SPEC)
+sys.modules[CLASSIC_SPEC.name] = classic_hypotheses
+CLASSIC_SPEC.loader.exec_module(classic_hypotheses)
+
 
 class HypothesisSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
@@ -142,6 +150,42 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertNotIn("hyp-summary-chart-meta", body)
         self.assertIn('<th class="num">Beta vs SPY</th><th>Valuation</th>', body)
         self.assertIn("Beta uses up to two years of weekly adjusted-close returns versus SPY", body)
+
+    def test_net_dcf_receipt_matches_the_public_levels(self) -> None:
+        retired = {"BYDDY", "HPQ", "JBS", "NTDOY"}
+        self.assertFalse(retired & set(self.config["rows"]))
+        self.assertTrue(all(f'hypothesis-{symbol.lower()}-setup' not in self.page for symbol in retired))
+
+        receipt_path = ROOT / "trading" / "research" / "net-dcf-2026-07-29.json"
+        workbook_path = receipt_path.with_suffix(".xlsx")
+        receipt = json.loads(receipt_path.read_text())
+        levels = self.config["rows"]["NET"]["entry_levels"]
+        self.assertEqual(receipt["symbol"], "NET")
+        self.assertEqual(receipt["valuation_date"], "2026-07-29")
+        self.assertEqual(
+            levels,
+            {
+                case: round(receipt["scenarios"][case]["fair_value_per_share"], 2)
+                for case in ("bear", "base", "bull")
+            },
+        )
+        self.assertGreater(receipt["reverse_dcf_growth"]["constant_revenue_growth_2027_2035"], 0.40)
+        self.assertIn("net-dcf-2026-07-29.xlsx", self.page)
+        self.assertGreater(workbook_path.stat().st_size, 10_000)
+
+    def test_classic_hypothesis_mirror_has_exact_symbol_parity(self) -> None:
+        classic = (ROOT / "trading" / "classic" / "index.html").read_text()
+        self.assertEqual(
+            classic_hypotheses.render_classic(classic, self.page, self.config, self.charts),
+            classic,
+        )
+        card_symbols = re.findall(r'data-hypothesis-symbol="([A-Z0-9.-]+)"', classic)
+        detail_symbols = [symbol.upper() for symbol in re.findall(
+            r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"',
+            classic,
+        )]
+        self.assertEqual(card_symbols, list(self.config["rows"]))
+        self.assertEqual(detail_symbols, list(self.config["rows"]))
 
 
 if __name__ == "__main__":
