@@ -25,6 +25,8 @@ SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
 VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
 CHART_MODAL_SCRIPT = ROOT / "js" / "hypothesis-chart-modal.b42a9700.js"
 CHART_MODAL_STYLE = ROOT / "trading" / "hypothesis-summary.6e6f3b19.css"
+PERFORMANCE_SCRIPT = ROOT / "js" / "trading-performance.js"
+PERFORMANCE_STYLE = ROOT / "trading" / "performance-tape.css"
 
 
 @dataclass(frozen=True)
@@ -61,6 +63,8 @@ ROUTES = {
         "Performance",
         "The quantity-free public performance panel from the latest portfolio refresh.",
         ("RESULTS",),
+        (PERFORMANCE_SCRIPT,),
+        (PERFORMANCE_STYLE,),
     ),
 }
 
