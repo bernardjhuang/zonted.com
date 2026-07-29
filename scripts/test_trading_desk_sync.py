@@ -352,8 +352,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         page = DESK_HOME.read_text()
         expected = {
             "lth": ("52W low", "Cost basis", "52W high", "cost basis"),
-            "pg": ("52W low", "Cost basis", "Call strike", "cost basis"),
         }
+        self.assertNotIn('id="desk-detail-pg"', page)
         for symbol, display in expected.items():
             labels, comparison = display[:3], display[3]
             match = re.search(rf'<tr class="desk-detail-row" id="desk-detail-{symbol}".*?</tr>', page, re.S)

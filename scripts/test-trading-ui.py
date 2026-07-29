@@ -106,6 +106,7 @@ class TradingUiContractTest(unittest.TestCase):
             )
         }
         self.assertEqual(set(details), expected_symbols)
+        self.assertNotIn("PG", details)
         self.assertEqual(hypotheses_html.count('class="hypothesis-status"'), len(expected_symbols))
         self.assertIn('<span class="hypothesis-status">Unfolded · thesis only</span>', details["HIMS"])
         self.assertIn('<strong>No position.</strong>', details["HIMS"])
@@ -127,9 +128,6 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Life Time 2025 Form 10-K', details["LTH"])
         self.assertIn('July 30 earnings', details["LTH"])
         self.assertIn('Current market value is published only as a rounded percentage', details["LTH"])
-        self.assertIn('Fiscal Q4', details["PG"])
-        self.assertIn('not a claim that the shares are cheap', details["PG"])
-        self.assertIn('Current market value is published only as a percentage', details["PG"])
         self.assertIn('Slightly underpriced', details["HOOD"])
         self.assertIn('$940–980B', details["HOOD"])
         self.assertIn('$69.1B', details["HOOD"])
