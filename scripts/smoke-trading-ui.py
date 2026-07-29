@@ -90,7 +90,7 @@ def main() -> None:
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='benefit']").count() == 1, f"{symbol.upper()} benefit scan is missing")
             check(desktop.locator(f"#hypothesis-{symbol}-setup [data-thesis-scan='threat']").count() == 1, f"{symbol.upper()} threat scan is missing")
         check("below $25" in desktop.locator("#hypotheses-panel").inner_text(), "HIMS price trigger is missing")
-        desktop.goto(f"{origin}/trading/hypothesis-source.html", wait_until="networkidle")
+        desktop.goto(f"{origin}/trading/hypothesis-source/", wait_until="networkidle")
         hypothesis_links = desktop.locator(".hypothesis-chart-link")
         hypothesis_count = desktop.locator("article.hypothesis-detail").count()
         check(hypothesis_links.count() == hypothesis_count, "not every public hypothesis links to its VWAP setup chart")

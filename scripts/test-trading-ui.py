@@ -12,7 +12,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
 DESK_HOME = ROOT / "trading" / "index.html"
-HYPOTHESES_SOURCE = ROOT / "trading" / "hypothesis-source.html"
+HYPOTHESES_SOURCE = ROOT / "trading" / "hypothesis-source" / "index.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
@@ -173,7 +173,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
         self.assertEqual(desk.count('data-desk-kind="hypothesis"'), len(expected_symbols) - position_count)
         self.assertIn(f'data-desk-source-articles="{len(expected_symbols)}"', desk)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', desk)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source/"', desk)
         self.assertEqual(desk.count('class="desk-thesis-cell-button"'), len(expected_symbols))
         self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
         self.assertNotIn("Six are live positions.", hypotheses_route)

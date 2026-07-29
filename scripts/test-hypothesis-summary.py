@@ -29,7 +29,7 @@ CLASSIC_SPEC.loader.exec_module(classic_hypotheses)
 
 class HypothesisSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.page = (ROOT / "trading" / "hypothesis-source.html").read_text()
+        self.page = (ROOT / "trading" / "hypothesis-source" / "index.html").read_text()
         self.config = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())
         self.charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
 

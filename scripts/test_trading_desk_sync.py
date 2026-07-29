@@ -406,7 +406,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
         self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', page)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source/"', page)
         self.assertIn('data-thesis-summary', page)
         self.assertIn('data-thesis-body', page)
         self.assertIn("fetch(thesisSource", script)
@@ -466,7 +466,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         )
         status_pages = [
             path for path in (ROOT / "trading").glob("**/index.html")
-            if '<div class="status-metrics">' in path.read_text()
+            if path != ROOT / "trading" / "hypothesis-source" / "index.html"
+            and '<div class="status-metrics">' in path.read_text()
         ]
         self.assertEqual(len(status_pages), 10)
         for path in status_pages:
@@ -568,7 +569,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
-        pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
+        pages = sorted({
+            path for path in candidates
+            if path != ROOT / "trading" / "hypothesis-source" / "index.html"
+            and '<nav class="subnav"' in path.read_text()
+        })
         self.assertEqual(len(pages), 10)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
