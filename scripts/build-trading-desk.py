@@ -17,6 +17,7 @@ import math
 import re
 import statistics
 from pathlib import Path
+from zoneinfo import ZoneInfo
 
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading/index.html"
@@ -36,6 +37,7 @@ START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
 END_HYP = "<!-- AUTO:DESK_HYPOTHESES:END -->"
 COLGROUP = '<colgroup><col style="width:18%"><col style="width:7%"><col style="width:6%"><col style="width:10%"><col style="width:6%"><col style="width:6%"><col style="width:28%"><col style="width:13%"><col style="width:6%"></colgroup>'
 OTC = {"BYDDY", "NTDOY"}
+CT = ZoneInfo("America/Chicago")
 
 
 def load(path: Path):
@@ -115,6 +117,10 @@ def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.date
             raise ValueError(f"Invalid morning day change for {symbol}")
     status = payload.get("status_market")
     return quotes, stamp, validate_status_market(status) if isinstance(status, dict) else None
+
+
+def live_stamp(stamp: dt.datetime) -> str:
+    return stamp.astimezone(CT).strftime("Live · %B %-d, %Y · %-I:%M %p CT")
 
 
 def render_status_metrics(page: str, positions: int, status: dict[str, float]) -> str:
@@ -565,7 +571,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     page = page.replace('</body>', f'{modals()}\n<script defer src="{modal_ref}"></script>\n</body>', 1)
     page = render_status_metrics(page, len(positions), live_status or close_status_market())
     if mode == "morning" and quote_stamp:
-        stamp = quote_stamp.astimezone().strftime("Live · %B %-d, %Y · %-I:%M %p CT")
+        stamp = live_stamp(quote_stamp)
     else:
         stamp = f"Snapshot · {as_of.strftime('%B %-d, %Y')}"
     page = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', page, count=1)
