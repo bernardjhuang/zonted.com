@@ -99,11 +99,12 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Confidence measures model reliability—not expected upside", self.page)
         self.assertIn("Trading-reference rows are explicitly not intrinsic values", self.page)
         self.assertNotIn("bear / base / bull intrinsic entry levels", self.page)
-        for symbol in ("LTH", "PG"):
-            display = self.config["rows"][symbol]["entry_level_display"]
-            self.assertEqual(display["heading"], "Trading reference levels")
-            self.assertEqual(display["labels"]["base"], "Cost basis")
-            self.assertIn("not intrinsic value", self.config["rows"][symbol]["method"])
+        symbol = "LTH"
+        display = self.config["rows"][symbol]["entry_level_display"]
+        self.assertEqual(display["heading"], "Trading reference levels")
+        self.assertEqual(display["labels"]["base"], "Cost basis")
+        self.assertIn("not intrinsic value", self.config["rows"][symbol]["method"])
+        self.assertNotIn("PG", self.config["rows"])
 
     def test_summary_stylesheet_asset_is_unique(self) -> None:
         self.assertEqual(self.page.count(summary.CSS_HREF), 1)

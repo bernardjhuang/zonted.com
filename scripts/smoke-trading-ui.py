@@ -98,7 +98,7 @@ def main() -> None:
             level_lines = desktop.locator(f'.hyp-summary-chart [data-entry-level="{case}"]')
             check(level_lines.count() == hypothesis_count, f"not every summary chart has a {case} entry line")
             check(level_lines.first.evaluate("line => getComputedStyle(line).stroke") != "none", f"{case} entry line is not styled")
-        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "LTH", "PG", "HOOD", "HIMS", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "NET", "TMO")]
+        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "LTH", "HOOD", "HIMS", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "NET", "TMO")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis VWAP setup links are incomplete or misordered")
         desktop.goto(f"{origin}/trading/vwap-setups/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
