@@ -20,7 +20,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PAGE = ROOT / "trading" / "hypothesis-source.html"
+PAGE = ROOT / "trading" / "hypothesis-source" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
