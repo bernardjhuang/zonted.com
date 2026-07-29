@@ -12,7 +12,7 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading" / "classic" / "index.html"
 DESK_HOME = ROOT / "trading" / "index.html"
-HYPOTHESES_ROUTE = ROOT / "trading" / "hypotheses" / "index.html"
+HYPOTHESES_SOURCE = ROOT / "trading" / "hypothesis-source.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
@@ -94,7 +94,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('Asymmetry:', grok_brief_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
-        hypotheses_html = HYPOTHESES_ROUTE.read_text()
+        hypotheses_html = HYPOTHESES_SOURCE.read_text()
         expected_symbols = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"])
         self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), len(expected_symbols))
         details = {
@@ -116,7 +116,7 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', block)
             self.assertEqual(block.count('data-thesis-scan="benefit"'), 1, symbol)
             self.assertEqual(block.count('data-thesis-scan="threat"'), 1, symbol)
-        hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        hypotheses_route = HYPOTHESES_SOURCE.read_text()
         for symbol in details:
             self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', hypotheses_route)
         route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
@@ -158,7 +158,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('$193 bear / $275 base / $378 bull', details["TMO"])
 
     def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
-        hypotheses_route = HYPOTHESES_ROUTE.read_text()
+        hypotheses_route = HYPOTHESES_SOURCE.read_text()
         expected_symbols = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"])
         articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
         self.assertEqual(len(articles), len(expected_symbols))
@@ -173,7 +173,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
         self.assertEqual(desk.count('data-desk-kind="hypothesis"'), len(expected_symbols) - position_count)
         self.assertIn(f'data-desk-source-articles="{len(expected_symbols)}"', desk)
-        self.assertIn('data-thesis-source="/trading/hypotheses/"', desk)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', desk)
         self.assertEqual(desk.count('class="desk-thesis-cell-button"'), len(expected_symbols))
         self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
         self.assertNotIn("Six are live positions.", hypotheses_route)
@@ -482,7 +482,11 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
         self.assertNotIn(".chip .dot", styles)
         self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
-        self.assertTrue(HYPOTHESES_ROUTE.exists(), "canonical hypotheses source route must remain available")
+        self.assertTrue(HYPOTHESES_SOURCE.exists(), "canonical hypothesis source artifact must remain available")
+        self.assertFalse((ROOT / "trading" / "hypotheses").exists(), "retired hypotheses route directory remains")
+        redirects = (ROOT / "_redirects").read_text()
+        self.assertIn("/trading/hypotheses/* /trading/ 301", redirects)
+        self.assertIn("/trading/hypotheses /trading/ 301", redirects)
 
 
 

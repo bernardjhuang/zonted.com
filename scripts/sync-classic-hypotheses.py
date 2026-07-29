@@ -11,7 +11,7 @@ import tempfile
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-SOURCE = ROOT / "trading" / "hypotheses" / "index.html"
+SOURCE = ROOT / "trading" / "hypothesis-source.html"
 CLASSIC = ROOT / "trading" / "classic" / "index.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"

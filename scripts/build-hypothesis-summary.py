@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
-"""Build the hypotheses summary table from the public hypothesis registry.
+"""Build the hypotheses summary table from the canonical hypothesis source.
 
-The routed hypotheses page owns the ticker list. Valuation inputs are explicit and
+The non-routed source artifact owns the ticker list. Valuation inputs are explicit and
 frozen until the thesis/model changes; two-year prices refresh from Yahoo on each
 build. A new hypothesis cannot deploy without a matching valuation row and chart.
 """
@@ -20,7 +20,7 @@ from urllib.parse import urlencode
 from urllib.request import Request, urlopen
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PAGE = ROOT / "trading" / "hypotheses" / "index.html"
+PAGE = ROOT / "trading" / "hypothesis-source.html"
 VALUATIONS = ROOT / "trading" / "hypothesis-valuations.json"
 CHARTS = ROOT / "trading" / "hypothesis-charts.json"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"
