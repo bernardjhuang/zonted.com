@@ -42,10 +42,10 @@
   if (!actions.length) return;
 
   const dates = [...new Set(actions.map(a => a.date))].sort();
-  const window = dates.slice(-SESSIONS);
-  const inWindow = actions.filter(a => window.includes(a.date));
+  const sessionDates = dates.slice(-SESSIONS);
+  const inWindow = actions.filter(a => sessionDates.includes(a.date));
 
-  const daily = window.map(date => {
+  const daily = sessionDates.map(date => {
     const closed = inWindow.filter(a => a.date === date && a.side === 'sell');
     const all = inWindow.filter(a => a.date === date);
     const wins = closed.filter(a => a.pct > 0).length;
@@ -75,9 +75,12 @@
     const bars = tape.map((t, i) => {
       const h = Math.max(2, Math.abs(t.pct) / mx * 58);
       const y = t.pct > 0 ? MID - h : MID;
-      return `<rect class="pf-hv" x="${(i * step).toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(1, step - 1.6).toFixed(1)}"
+      const kind = t.type === 'option' ? 'Option' : 'Stock';
+      const tradeLabel = `${t.symbol}. Type: ${kind}. P&L: ${pct(t.pct)}. Closed ${short(t.date)}.`;
+      return `<rect class="pf-hv pf-trade" tabindex="0" role="img" aria-label="${esc(tradeLabel)}" data-trade-detail="1"
+        x="${(i * step).toFixed(1)}" y="${y.toFixed(1)}" width="${Math.max(1, step - 1.6).toFixed(1)}"
         height="${h.toFixed(1)}" rx="1.5" fill="${t.pct > 0 ? '#087a42' : '#c93a4a'}"
-        ${hv(`${t.symbol} · ${t.type === 'option' ? 'Option' : 'Stock'}`, short(t.date), pct(t.pct), '', t.pct > 0)}/>`;
+        ${hv(t.symbol, kind, pct(t.pct), short(t.date), t.pct > 0)}/>`;
     }).join('');
     const best = tape.reduce((a, b) => (b.pct > a.pct ? b : a));
     const worst = tape.reduce((a, b) => (b.pct < a.pct ? b : a));
@@ -224,16 +227,36 @@
   tip.className = 'pf-tip';
   tip.hidden = true;
   document.body.appendChild(tip);
-  document.addEventListener('mousemove', event => {
-    const el = event.target.closest ? event.target.closest('.pf-hv') : null;
-    if (!el) { tip.hidden = true; return; }
-    tip.innerHTML = `<b>${esc(el.dataset.t)}</b><span>${esc(el.dataset.s)}</span>`
-      + `<em>${esc(el.dataset.v)}</em>${el.dataset.x ? `<i>${esc(el.dataset.x)}</i>` : ''}`;
+
+  const showTip = el => {
+    tip.innerHTML = el.dataset.tradeDetail === '1'
+      ? `<b><small>Ticker</small> ${esc(el.dataset.t)}</b><span><small>Type</small> ${esc(el.dataset.s)}</span>`
+        + `<em><small>P&amp;L</small> ${esc(el.dataset.v)}</em>${el.dataset.x ? `<i>Closed ${esc(el.dataset.x)}</i>` : ''}`
+      : `<b>${esc(el.dataset.t)}</b><span>${esc(el.dataset.s)}</span>`
+        + `<em>${esc(el.dataset.v)}</em>${el.dataset.x ? `<i>${esc(el.dataset.x)}</i>` : ''}`;
     tip.className = `pf-tip ${el.dataset.pos === '1' ? 'pos' : 'neg'}`;
     tip.hidden = false;
     const box = tip.getBoundingClientRect();
-    tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - box.width - 12)}px`;
-    tip.style.top = `${Math.min(event.clientY + 14, window.innerHeight - box.height - 12)}px`;
+    const target = el.getBoundingClientRect();
+    const left = target.left + target.width / 2 - box.width / 2;
+    const above = target.top - box.height - 10;
+    tip.style.left = `${Math.max(12, Math.min(left, window.innerWidth - box.width - 12))}px`;
+    tip.style.top = `${above >= 12 ? above : Math.min(target.bottom + 10, window.innerHeight - box.height - 12)}px`;
+  };
+  document.addEventListener('pointermove', event => {
+    const el = event.target.closest ? event.target.closest('.pf-hv') : null;
+    if (!el) { tip.hidden = true; return; }
+    showTip(el);
+  });
+  document.addEventListener('focusin', event => {
+    const el = event.target.closest ? event.target.closest('.pf-hv') : null;
+    if (!el) return;
+    requestAnimationFrame(() => {
+      if (document.activeElement === el) showTip(el);
+    });
+  });
+  document.addEventListener('focusout', event => {
+    if (event.target.closest && event.target.closest('.pf-hv')) tip.hidden = true;
   });
 
   fetch('/trading/results-ytd.json', { cache: 'no-store' })
