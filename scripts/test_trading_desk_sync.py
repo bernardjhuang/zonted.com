@@ -382,7 +382,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             for label in labels:
                 self.assertIn(f'<span>{label}</span>', detail)
             self.assertIn(f"versus {comparison}", detail)
-        intrinsic = re.search(r'<tr class="desk-detail-row" id="desk-detail-abt".*?</tr>', page, re.S)
+        intrinsic = re.search(r'<tr class="desk-detail-row" id="desk-detail-hood".*?</tr>', page, re.S)
         self.assertIsNotNone(intrinsic)
         self.assertIn("Intrinsic entry levels", intrinsic.group(0) if intrinsic else "")
 
