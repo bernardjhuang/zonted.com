@@ -46,6 +46,10 @@ class MorningDeskChartTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "schema_version 1"):
                 builder.quotes_from(path)
 
+    def test_live_stamp_is_always_rendered_in_central_time(self):
+        stamp = dt.datetime.fromisoformat("2026-07-29T14:12:00+00:00")
+        self.assertEqual(builder.live_stamp(stamp), "Live · July 29, 2026 · 9:12 AM CT")
+
     def test_negative_cash_is_labeled_margin_debit(self):
         summary = {
             "gross_delta_leverage": 1.0,
