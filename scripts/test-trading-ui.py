@@ -121,8 +121,7 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn(f'href="/trading/vwap-setups/?chart={symbol}#scan"', hypotheses_route)
         route_details = re.findall(r'class="hypothesis-detail"\s+id="hypothesis-[a-z0-9-]+-setup"', hypotheses_route)
         self.assertEqual(hypotheses_route.count('class="hypothesis-chart-link"'), len(route_details))
-        self.assertIn('Exact Sciences', details["ABT"])
-        self.assertIn('Libre Assist', details["ABT"])
+
         self.assertIn('thesis play on gyms becoming social clubs', details["LTH"])
         self.assertIn('wellness third place', details["LTH"])
         self.assertIn('Life Time 2025 Form 10-K', details["LTH"])
@@ -133,7 +132,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('$69.1B', details["HOOD"])
         self.assertIn('Monthly operating metrics', details["HOOD"])
         self.assertIn('June 2026 month-to-date trading update', details["HOOD"])
-        for retired in ("BYDDY", "HPQ", "JBS", "NTDOY"):
+        for retired in ("ABT", "BYDDY", "HPQ", "JBS", "NTDOY"):
             self.assertNotIn(retired, details)
         self.assertIn('35% to 132M', details["RBLX"])
         self.assertIn('monetized over 50% better', details["RBLX"])

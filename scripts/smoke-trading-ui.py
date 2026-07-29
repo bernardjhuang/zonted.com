@@ -76,10 +76,10 @@ def main() -> None:
         check(hims_hypothesis.count() == 1, "HIMS hypothesis is missing")
         check("THESIS ONLY" in hims_hypothesis.inner_text(), "HIMS is not labeled thesis-only")
         check("below $25" in hims_hypothesis.inner_text() and "next PCAC meeting date" in hims_hypothesis.inner_text(), "HIMS thesis monitoring triggers are missing")
-        check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='ABT']").count() == 1, "ABT hypothesis is missing")
+
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='HOOD']").count() == 1, "HOOD hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='NET']").count() == 1, "NET hypothesis is missing")
-        for retired in ("BYDDY", "HPQ", "JBS", "NTDOY"):
+        for retired in ("ABT", "BYDDY", "HPQ", "JBS", "NTDOY"):
             check(desktop.locator(f"#hypotheses-panel [data-hypothesis-symbol='{retired}']").count() == 0, f"{retired} hypothesis was not removed")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='RBLX']").count() == 1, "RBLX hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='CEG']").count() == 1, "CEG hypothesis is missing")
@@ -98,7 +98,7 @@ def main() -> None:
             level_lines = desktop.locator(f'.hyp-summary-chart [data-entry-level="{case}"]')
             check(level_lines.count() == hypothesis_count, f"not every summary chart has a {case} entry line")
             check(level_lines.first.evaluate("line => getComputedStyle(line).stroke") != "none", f"{case} entry line is not styled")
-        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("ABT", "LTH", "HOOD", "HIMS", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "NET", "TMO")]
+        expected_hypothesis_hrefs = [f"/trading/vwap-setups/?chart={symbol}#scan" for symbol in ("LTH", "HOOD", "HIMS", "RBLX", "CEG", "RDDT", "FIGR", "FRMI", "NET", "TMO")]
         check(hypothesis_links.evaluate_all("links => links.map(link => link.getAttribute('href'))") == expected_hypothesis_hrefs, "hypothesis VWAP setup links are incomplete or misordered")
         desktop.goto(f"{origin}/trading/vwap-setups/?chart=RBLX#scan", wait_until="networkidle")
         desktop.wait_for_function("document.querySelectorAll('[data-scan-detail][data-scan-symbol=\"RBLX\"] svg').length === 2")
