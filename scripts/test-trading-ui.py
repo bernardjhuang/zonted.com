@@ -42,6 +42,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(labels[5:], ["VWAP", "Crypto", "Risk", "Performance"])
         self.assertNotIn('id="log-tab"', self.html)
 
+    def test_deploy_checks_the_active_desk_cadence(self):
+        workflow = (ROOT / ".github" / "workflows" / "deploy.yml").read_text()
+        self.assertIn('<span class=\\"stamp\\">Live ·', workflow)
+        self.assertIn("export ZONTED_DESK_MORNING_QUOTES=trading/desk-morning-quotes.json", workflow)
+        self.assertIn('build-trading-desk.py --mode morning --quotes "$ZONTED_DESK_MORNING_QUOTES" --check', workflow)
+        self.assertIn("build-trading-desk.py --mode close --check", workflow)
+
     def test_gpt_brief_is_slack_only(self):
         self.assertNotIn("AUTO:GPT_BRIEF", self.html)
         self.assertNotIn('id="gpt-brief-tab"', self.html)
