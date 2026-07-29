@@ -438,6 +438,8 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
 
 
 def risk_strip(summary: dict, sleeves: dict) -> str:
+    cash_percent = float(summary["cash_percent"])
+    cash_label = "Margin debit" if cash_percent < 0 else "Cash liquidity"
     sleeve_html = "".join(
         f'<span><b>{html.escape(name.title())}</b> · Δ$ {float(values["exposure_percent"]):.1f}% · capital {float(values["capital_percent"]):.1f}% · premium {float(values["premium_at_risk_percent"]):.1f}%</span>'
         for name, values in sorted(sleeves.items())
@@ -448,7 +450,7 @@ def risk_strip(summary: dict, sleeves: dict) -> str:
         f'<span>Net Δ$ <b>{float(summary["net_delta_exposure_percent"]):.1f}%</b></span>'
         f'<span>Premium risk <b>{float(summary["premium_at_risk_percent"]):.1f}%</b></span>'
         f'<span>Θ/day <b>{float(summary["theta_percent_per_day"]):+.2f}%</b></span>'
-        f'<span>Cash liquidity <b>{float(summary["cash_percent"]):.1f}%</b></span>'
+        f'<span>{cash_label} <b>{cash_percent:.1f}%</b></span>'
         f'<small>{html.escape(str(summary["quantity_basis"]))}</small>'
         '</div>'
         f'<div class="desk-sleeve-strip" aria-label="Sleeve risk summary">{sleeve_html}</div>'

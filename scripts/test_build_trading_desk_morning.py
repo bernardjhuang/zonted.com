@@ -46,6 +46,19 @@ class MorningDeskChartTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "schema_version 1"):
                 builder.quotes_from(path)
 
+    def test_negative_cash_is_labeled_margin_debit(self):
+        summary = {
+            "gross_delta_leverage": 1.0,
+            "net_delta_exposure_percent": 90.0,
+            "premium_at_risk_percent": 5.0,
+            "theta_percent_per_day": -0.1,
+            "cash_percent": -12.5,
+            "quantity_basis": "gross held positions; pending orders not netted",
+        }
+        rendered = builder.risk_strip(summary, {})
+        self.assertIn("Margin debit <b>-12.5%</b>", rendered)
+        self.assertNotIn("Cash liquidity", rendered)
+
 
 if __name__ == "__main__":
     unittest.main()

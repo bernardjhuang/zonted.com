@@ -237,7 +237,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(f'Net Δ$ <b>{risk_summary["net_delta_exposure_percent"]:.1f}%</b>', page)
         self.assertIn(f'Premium risk <b>{risk_summary["premium_at_risk_percent"]:.1f}%</b>', page)
         self.assertIn(f'Θ/day <b>{risk_summary["theta_percent_per_day"]:+.2f}%</b>', page)
-        self.assertIn(f'Cash liquidity <b>{risk_summary["cash_percent"]:.1f}%</b>', page)
+        cash_label = "Margin debit" if risk_summary["cash_percent"] < 0 else "Cash liquidity"
+        self.assertIn(f'{cash_label} <b>{risk_summary["cash_percent"]:.1f}%</b>', page)
         self.assertIn(risk_summary["quantity_basis"], page)
         sleeves = positions_artifact["sleeves"]
         self.assertEqual(set(sleeves), {"thesis", "momentum"})

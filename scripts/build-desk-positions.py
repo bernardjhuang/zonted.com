@@ -42,7 +42,7 @@ def render(holdings: dict[str, Any], profiles_payload: dict[str, Any]) -> dict[s
         "net_delta_exposure_percent": lambda value: True,
         "premium_at_risk_percent": lambda value: value >= 0,
         "theta_percent_per_day": lambda value: True,
-        "cash_percent": lambda value: 0 <= value <= 100,
+        "cash_percent": lambda value: True,
     }
     for key, valid in summary_rules.items():
         value = risk_summary.get(key)
