@@ -656,5 +656,124 @@
    "rating": 5.5,
    "session": "pre-market"
   }
+ ],
+ "model_entries": [
+  {
+   "schema_version": 1,
+   "prompt_version": "zonted-independent-risk-v1",
+   "decision_status": "publishable",
+   "as_of_date": "2026-07-29",
+   "session": "post-close",
+   "author": "Claude Fable 5",
+   "model_id": "claude-fable-5",
+   "stance": "Risk-off",
+   "risk_appetite": 2.5,
+   "score_interpretation": "On my scale, 0-3.5 is Risk-off (defensive posture warranted by converging stress), 3.5-6.5 is Neutral, and 6.5-10 is Risk-on. A 2.5 means multiple independent risk channels are deteriorating simultaneously but systemic plumbing (credit, funding) has not yet broken, so this is elevated caution rather than crisis-level defensiveness (which would be below 1.5).",
+   "confidence": "Medium",
+   "headline": "A hawkish Fed hold with three dissents for a hike, an oil spike tied to renewed Iran hostilities, multi-decade-high long-end yields, and a global semiconductor rout pushed the Nasdaq into correction and argue for a defensive posture into the heavy remainder of mega-cap earnings week.",
+   "methodology": {
+    "name": "Stress-Vector Convergence",
+    "explanation": "I assess risk by counting how many independent transmission channels are deteriorating at once: (1) monetary policy and rates, (2) geopolitics and energy, (3) equity price action, breadth, and volatility, (4) credit and cross-asset confirmation, and (5) earnings/fundamental momentum. When only one channel is stressed, markets usually absorb it; when three or more deteriorate simultaneously and reinforce each other (as an oil shock feeding inflation feeding a hiking bias feeding yields feeding equity multiples does now), drawdown tails fatten and I de-rate risk appetite. This method fits a regime where the shock is macro-policy-geopolitical rather than idiosyncratic.",
+    "selected_signals": [
+     "FOMC decision, dissent count, and rate-path pricing",
+     "Long-dated Treasury yields (10y/30y) as the equity-multiple discount channel",
+     "Crude oil price change as geopolitical inflation transmission",
+     "Index price action, Nasdaq drawdown from record, global semis contagion (Kospi circuit breakers)",
+     "VIX level and one-day change",
+     "High-yield credit spread level and direction",
+     "Bitcoin as a marginal-liquidity/risk-appetite proxy",
+     "Earnings-season signal from reporting mega-caps and cyclicals"
+    ]
+   },
+   "journal": [
+    "Regime read: today was a convergence day. The Fed held at 3.50%-3.75% by a 9-3 vote with all three dissents favoring a hike, and markets now lean toward a September hike with roughly two 25bp hikes priced for 2026. The bond market treated the hold as the Fed falling behind: the 10-year rose about 7bp above 4.67% and the 30-year jumped past 5.2%, near two-decade highs. Simultaneously, renewed hostilities with Iran (including reported missile fire toward US targets) drove Brent up roughly 7% above $88, directly feeding the inflation problem the Fed is fighting. Equities broke: the Dow fell 2.19% (worst day since April 2025), the S&P 500 lost 1.52% to 7,316, and the Nasdaq's slide deepened with the Nasdaq 100 in a technical correction about 11% off its record. Contagion is global, with Korea's Kospi triggering circuit breakers on back-to-back days amid a chip rout. The VIX jumped about 13% to just above 20, and bitcoin has slipped toward $63k - both consistent with retreating risk appetite.",
+    "Contradictory evidence and uncertainty: this is not (yet) a credit event. High-yield spreads near 2.77% remain in roughly the 16th percentile of the past decade - climbing, but far from stress levels - and the Fed's own statement describes activity as expanding at a solid pace with strong capital investment. Corporate results are not uniformly weak (Ford beat and raised guidance), gold above $4,000 partly reflects inflation hedging rather than pure panic, and Microsoft and Meta results landing after today's close (with Apple near a $5T market cap reporting tomorrow) could single-handedly reverse sentiment. There is also a plausible oversold-bounce setup after a multi-day tech drawdown. The main uncertainty is whether the oil/inflation/rates loop keeps tightening or whether Middle East de-escalation and cooler data let the Fed stay on hold.",
+    "Bottom line: the dominant driver is a policy-geopolitical feedback loop - an oil shock pushing inflation expectations and long yields higher while a hawkish-tilting Fed signals hikes rather than support - hitting an equity market that entered the episode at rich valuations with historically tight credit spreads offering thin cushion. With four of my five channels deteriorating and only credit still comparatively calm, I set risk appetite at 2.5 (Risk-off) with Medium confidence. This is a market-wide research view, not personalized advice."
+   ],
+   "what_supports_risk": [
+    "Credit is not confirming a crisis: US high-yield spreads around 2.77% remain historically tight (roughly 16th percentile over 10 years), and investment-grade spreads have been comparatively stable - the usual recession/credit-event canary is quiet.",
+    "The real economy still reads solid: the FOMC statement itself notes economic activity is expanding at a solid pace with strong productivity growth and capital investment, and earnings outside of semis are mixed-to-decent (e.g., Ford beat and raised 2026 guidance).",
+    "Sentiment washouts create setups: VIX above 20, Nasdaq already ~11% off its record, and heavy mega-cap earnings (Microsoft, Meta tonight; Apple, which just neared a $5T valuation, tomorrow) provide identifiable catalysts for a sharp relief rally if results beat."
+   ],
+   "what_holds_it_back": [
+    "The policy-inflation loop is hostile: a divided Fed held rates with three dissents for a hike, markets price hikes (not cuts) ahead, and long-end yields at or near two-decade highs (30y >5.2%, 10y >4.67%) directly compress equity multiples with no near-term Fed put.",
+    "An active geopolitical energy shock: renewed Iran conflict drove Brent up ~7% above $88 in a single session, mechanically worsening the inflation outlook and increasing the odds the Fed is forced to hike into a slowdown.",
+    "Concentrated-leadership breakdown with global contagion: the AI/semiconductor complex that drove the bull market is selling off hard (Nasdaq 100 in correction, Kospi circuit-breakered twice in two days, SK Hynix down ~13%), tech capex fears are spreading, and cross-asset confirmation (VIX +13% to ~20.6, bitcoin sliding toward $63k, HY spreads starting to widen from extreme tights) says risk appetite is retreating, not rotating."
+   ],
+   "what_changes_my_mind": [
+    "Upgrade toward Neutral/Risk-on: a credible Iran de-escalation that takes Brent back below the low $80s, a soft CPI/PCE print that removes the priced September hike, strong Microsoft/Meta/Apple results that stabilize the Nasdaq above its correction lows on improving breadth, VIX back below ~17, and 30-year yields retreating below ~5% would together justify moving back to 4.5-5.5.",
+    "Downgrade toward maximum defense: high-yield spreads widening decisively (through roughly 3.5-4% and rising fast), a VIX close above ~28-30, an actual Fed hike accompanied by further long-end yield spikes above ~5.5% on the 30-year, escalation to sustained direct US-Iran conflict disrupting oil supply, or mega-cap earnings misses that break the AI-capex investment thesis would push me toward 1 or below."
+   ],
+   "sources": [
+    {
+     "title": "CNBC - Stock market today live updates (July 29, 2026 close)",
+     "url": "https://www.cnbc.com/2026/07/28/stock-market-today-live-updates.html",
+     "as_of": "2026-07-29",
+     "claim": "Dow fell 1,153 points (-2.19%) to 51,594.14, worst day since April 2025; S&P 500 -1.52% to 7,316.15; Nasdaq -1.74% to 24,442.94, more than 10% off its high; 10y yield above 4.67%, 30y above 5.2%; Kospi triggered a circuit breaker a second straight day after an 8% plunge."
+    },
+    {
+     "title": "Federal Reserve - FOMC statement",
+     "url": "https://www.federalreserve.gov/newsevents/pressreleases/monetary20260729a.htm",
+     "as_of": "2026-07-29",
+     "claim": "FOMC maintained the fed funds target range at 3.50%-3.75% by a 9-3 vote and characterized economic activity as expanding at a solid pace amid Middle East conflict uncertainty."
+    },
+    {
+     "title": "CNBC - Fed rate decision July 2026: Divided Fed holds rates steady",
+     "url": "https://www.cnbc.com/2026/07/29/fed-rate-decision-july-2026.html",
+     "as_of": "2026-07-29",
+     "claim": "Three regional-president dissents favored a hike; recent price pressures reflect tariffs and Iran-conflict energy costs; markets largely expect a September hike."
+    },
+    {
+     "title": "Yahoo Finance - Stock market today (July 29, 2026)",
+     "url": "https://finance.yahoo.com/markets/live/stock-market-today-wednesday-july-29-dow-sp-500-nasdaq-082009165.html",
+     "as_of": "2026-07-29",
+     "claim": "Stocks fell as yields rose after the Fed's hawkish hold; oil rose on renewed Middle East tensions; chip-stock selloff deepened."
+    },
+    {
+     "title": "Bloomberg - Stock Market Today: Dow, S&P Live Updates",
+     "url": "https://www.bloomberg.com/news/articles/2026-07-28/stock-market-today-dow-s-p-live-updates",
+     "as_of": "2026-07-29",
+     "claim": "Longer-dated yields hit near two-decade highs on inflation concern after the Fed held rates amid an oil resurgence; the Nasdaq 100 entered a technical correction, roughly 11% off its record."
+    },
+    {
+     "title": "Advisor Perspectives (dshort) - Fed's Interest Rate Decision July 29, 2026",
+     "url": "https://www.advisorperspectives.com/dshort/updates/2026/07/29/feds-interest-rate-decision-july-29-2026",
+     "as_of": "2026-07-29",
+     "claim": "Markets currently price roughly two 25bp rate hikes in 2026; June dot plot shifted year-end projections up to 3.6%-4.1%."
+    },
+    {
+     "title": "ts2.tech - Stock Market Today live updates 29.07.2026",
+     "url": "https://ts2.tech/en/stock-market-today-29-07-2026/",
+     "as_of": "2026-07-29",
+     "claim": "Brent crude rose about 7.3% to close above $88 on fresh Iran clashes; gold moved back above $4,000 after the Fed decision."
+    },
+    {
+     "title": "Investing.com - CBOE Volatility Index historical data",
+     "url": "https://www.investing.com/indices/volatility-s-p-500-historical-data",
+     "as_of": "2026-07-29",
+     "claim": "VIX rose roughly 13% on the day to about 20.6, its highest level of the past month (monthly range ~15-20.9)."
+    },
+    {
+     "title": "MacroRadar - High Yield Spread (BAMLH0A0HYM2)",
+     "url": "https://www.macroradar.io/high-yield-spread",
+     "as_of": "2026-07-23",
+     "claim": "US high-yield OAS around 2.77%, roughly the 16th percentile of the past decade - historically tight but climbing."
+    },
+    {
+     "title": "TheStreet - Stock Market Today (July 28-29, 2026)",
+     "url": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-july-29-2026stock-market-today-july-29-2026",
+     "as_of": "2026-07-29",
+     "claim": "Microsoft and Meta results were due after the July 29 close; Apple briefly neared a $5 trillion market cap on July 28 ahead of its report; bitcoin traded near $63.5k amid the tech selloff."
+    }
+   ],
+   "limitations": [
+    "Microsoft and Meta earnings were scheduled for release after today's close and their results (plus Apple tomorrow) are not incorporated; they could materially change the tech-leadership picture overnight.",
+    "The high-yield spread reading is lagged (underlying FRED series data through roughly July 23) and likely understates today's widening; I could not retrieve a same-day OAS print.",
+    "The VIX close (~20.6) comes from a delayed secondary aggregator rather than a primary Cboe end-of-day confirmation.",
+    "No direct positioning data (CFTC futures, AAII/II sentiment surveys, fund flows, dealer gamma) was retrievable, so the positioning channel is inferred from price action and volatility rather than measured.",
+    "Details of the Iran escalation (scope of missile activity, supply impact on oil) come from same-day news summaries and may be revised; geopolitical headlines are inherently fast-moving and this assessment could be stale within hours.",
+    "Market internals (advance-decline, sector breadth) were only partially observable; the July 28 session showed broad non-tech strength, complicating a clean read on whether this is rotation or broad de-risking."
+   ]
+  }
  ]
 }
