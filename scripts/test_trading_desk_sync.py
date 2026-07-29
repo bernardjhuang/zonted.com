@@ -406,7 +406,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
         self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
-        self.assertIn('data-thesis-source="/trading/hypotheses/"', page)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', page)
         self.assertIn('data-thesis-summary', page)
         self.assertIn('data-thesis-body', page)
         self.assertIn("fetch(thesisSource", script)
@@ -468,7 +468,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             path for path in (ROOT / "trading").glob("**/index.html")
             if '<div class="status-metrics">' in path.read_text()
         ]
-        self.assertEqual(len(status_pages), 11)
+        self.assertEqual(len(status_pages), 10)
         for path in status_pages:
             source = path.read_text()
             for marker in expected:
@@ -569,7 +569,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({path for path in candidates if '<nav class="subnav"' in path.read_text()})
-        self.assertEqual(len(pages), 11)
+        self.assertEqual(len(pages), 10)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""

@@ -567,7 +567,7 @@
       var catalyst = row ? row.querySelector('.desk-catalyst') : null;
       summary.innerHTML = '<div class="desk-thesis-summary"><b>' + symbol + '</b><span>Next catalyst ' + (catalyst ? catalyst.textContent : '—') + '</span></div>';
     } catch (error) {
-      body.innerHTML = '<p class="bl-empty">Could not load the full thesis. <a href="/trading/hypotheses/#hypothesis-' + symbol.toLowerCase() + '-setup">Open the canonical page</a>.</p>';
+      body.innerHTML = '<p class="bl-empty">Could not load the full thesis. Reload the Trading Desk and try again.</p>';
       console.error(error);
     }
   }
