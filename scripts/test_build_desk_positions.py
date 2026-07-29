@@ -98,6 +98,15 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual([row["symbol"] for row in result["positions"]], ["AAA", "BBB"])
         self.assertGreater(result["positions"][0]["exposure_percent"], 100)
 
+    def test_signed_margin_cash_is_valid_public_summary(self):
+        signed_summary = summary()
+        signed_summary["cash_percent"] = -12.5
+        holdings = {"risk_summary": signed_summary, "desk_instruments": {
+            "AAA": {"equity_entry": 10.0, "equity_side": "long", **risk(7.8), "options": []},
+        }}
+        result = builder.render(holdings, self.profiles())
+        self.assertEqual(result["risk_summary"]["cash_percent"], -12.5)
+
     def test_unknown_held_symbol_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "need authored Desk profiles"):
             builder.render({"risk_summary": summary(), "desk_instruments": {"NEW": {"equity_entry": 5.0, "options": []}}}, self.profiles())
