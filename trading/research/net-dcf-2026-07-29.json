@@ -1,0 +1,596 @@
+{
+  "schema_version": 1,
+  "symbol": "NET",
+  "valuation_date": "2026-07-29",
+  "quote": 265.995,
+  "quote_timestamp": "2026-07-29T13:55:23.901427449Z",
+  "method": "SEC-first 10-year diluted per-share FCF DCF with a mid-year stub",
+  "capital_structure_treatment": "As-converted: use management's 375M FY2026 diluted-share guide, ignore capped-call offsets, and do not subtract convertible principal again; add cash and securities.",
+  "reported_inputs_b": {
+    "fy2025_revenue": 2.1679,
+    "fy2026_revenue_guide_midpoint": 2.809,
+    "cash_and_securities": 4.163878,
+    "restructuring_cash_midpoint": 0.1075,
+    "ttm_revenue": 2.328568,
+    "ttm_free_cash_flow": 0.291769,
+    "ttm_stock_based_compensation": 0.47016
+  },
+  "scenarios": {
+    "bear": {
+      "name": "bear",
+      "assumptions": {
+        "revenue_growth": [
+          null,
+          0.22,
+          0.18,
+          0.15,
+          0.13,
+          0.11,
+          0.09,
+          0.07,
+          0.055,
+          0.045
+        ],
+        "fcf_margin": [
+          0.11,
+          0.12,
+          0.14,
+          0.16,
+          0.18,
+          0.19,
+          0.2,
+          0.21,
+          0.22,
+          0.23
+        ],
+        "discount_rate": 0.125,
+        "terminal_growth": 0.025,
+        "annual_dilution": 0.012
+      },
+      "rows": [
+        {
+          "year": 2026,
+          "revenue_growth": null,
+          "revenue_b": 2.809,
+          "fcf_margin": 0.11,
+          "restructuring_cash_b": 0.1075,
+          "fcf_b": 0.20149000000000006,
+          "diluted_shares_b": 0.375,
+          "discount_period": 0.425,
+          "pv_per_share": 0.5110723755090325
+        },
+        {
+          "year": 2027,
+          "revenue_growth": 0.22,
+          "revenue_b": 3.42698,
+          "fcf_margin": 0.12,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.4112376,
+          "diluted_shares_b": 0.3795,
+          "discount_period": 1.425,
+          "pv_per_share": 0.9161966325431234
+        },
+        {
+          "year": 2028,
+          "revenue_growth": 0.18,
+          "revenue_b": 4.0438364,
+          "fcf_margin": 0.14,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.5661370960000001,
+          "diluted_shares_b": 0.384054,
+          "discount_period": 2.425,
+          "pv_per_share": 1.107858905695535
+        },
+        {
+          "year": 2029,
+          "revenue_growth": 0.15,
+          "revenue_b": 4.650411859999999,
+          "fcf_margin": 0.16,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.7440658975999999,
+          "diluted_shares_b": 0.388662648,
+          "discount_period": 3.425,
+          "pv_per_share": 1.278913599648525
+        },
+        {
+          "year": 2030,
+          "revenue_growth": 0.13,
+          "revenue_b": 5.254965401799999,
+          "fcf_margin": 0.18,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.9458937723239997,
+          "diluted_shares_b": 0.393326599776,
+          "discount_period": 4.425,
+          "pv_per_share": 1.4280359363664359
+        },
+        {
+          "year": 2031,
+          "revenue_growth": 0.11,
+          "revenue_b": 5.833011595997999,
+          "fcf_margin": 0.19,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.10827220323962,
+          "diluted_shares_b": 0.39804651897331206,
+          "discount_period": 5.425,
+          "pv_per_share": 1.4696373346005045
+        },
+        {
+          "year": 2032,
+          "revenue_growth": 0.09,
+          "revenue_b": 6.35798263963782,
+          "fcf_margin": 0.2,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.271596527927564,
+          "diluted_shares_b": 0.40282307720099175,
+          "discount_period": 6.425,
+          "pv_per_share": 1.481085171823082
+        },
+        {
+          "year": 2033,
+          "revenue_growth": 0.07,
+          "revenue_b": 6.803041424412467,
+          "fcf_margin": 0.21,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.428638699126618,
+          "diluted_shares_b": 0.40765695412740366,
+          "discount_period": 7.425,
+          "pv_per_share": 1.4615715331956367
+        },
+        {
+          "year": 2034,
+          "revenue_growth": 0.055,
+          "revenue_b": 7.177208702755153,
+          "fcf_margin": 0.22,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.5789859146061336,
+          "diluted_shares_b": 0.41254883757693256,
+          "discount_period": 8.425,
+          "pv_per_share": 1.4188709155936476
+        },
+        {
+          "year": 2035,
+          "revenue_growth": 0.045,
+          "revenue_b": 7.5001830943791346,
+          "fcf_margin": 0.23,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.725042111707201,
+          "diluted_shares_b": 0.41749942362785575,
+          "discount_period": 9.425,
+          "pv_per_share": 1.3615427977918841
+        }
+      ],
+      "explicit_pv_per_share": 12.434785202767406,
+      "terminal_pv_per_share": 13.95581367736681,
+      "cash_per_share": 11.103674666666668,
+      "fair_value_per_share": 37.49427354680088,
+      "terminal_value_share_of_operating_value": 0.5288176195149624,
+      "upside_downside_to_quote": -0.859041434813433
+    },
+    "base": {
+      "name": "base",
+      "assumptions": {
+        "revenue_growth": [
+          null,
+          0.25,
+          0.22,
+          0.19,
+          0.16,
+          0.13,
+          0.11,
+          0.09,
+          0.07,
+          0.05
+        ],
+        "fcf_margin": [
+          0.13,
+          0.15,
+          0.18,
+          0.21,
+          0.23,
+          0.25,
+          0.26,
+          0.27,
+          0.28,
+          0.28
+        ],
+        "discount_rate": 0.11,
+        "terminal_growth": 0.03,
+        "annual_dilution": 0.01
+      },
+      "rows": [
+        {
+          "year": 2026,
+          "revenue_growth": null,
+          "revenue_b": 2.809,
+          "fcf_margin": 0.13,
+          "restructuring_cash_b": 0.1075,
+          "fcf_b": 0.25767000000000007,
+          "diluted_shares_b": 0.375,
+          "discount_period": 0.425,
+          "pv_per_share": 0.6573101275432162
+        },
+        {
+          "year": 2027,
+          "revenue_growth": 0.25,
+          "revenue_b": 3.5112500000000004,
+          "fcf_margin": 0.15,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.5266875000000001,
+          "diluted_shares_b": 0.37875000000000003,
+          "discount_period": 1.425,
+          "pv_per_share": 1.1984367687836597
+        },
+        {
+          "year": 2028,
+          "revenue_growth": 0.22,
+          "revenue_b": 4.2837250000000004,
+          "fcf_margin": 0.18,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.7710705000000001,
+          "diluted_shares_b": 0.3825375,
+          "discount_period": 2.425,
+          "pv_per_share": 1.5649910173037889
+        },
+        {
+          "year": 2029,
+          "revenue_growth": 0.19,
+          "revenue_b": 5.097632750000001,
+          "fcf_margin": 0.21,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.0705028775,
+          "diluted_shares_b": 0.38636287500000005,
+          "discount_period": 3.425,
+          "pv_per_share": 1.9380333562484102
+        },
+        {
+          "year": 2030,
+          "revenue_growth": 0.16,
+          "revenue_b": 5.91325399,
+          "fcf_margin": 0.23,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.3600484177,
+          "diluted_shares_b": 0.39022650375,
+          "discount_period": 4.425,
+          "pv_per_share": 2.196258349355335
+        },
+        {
+          "year": 2031,
+          "revenue_growth": 0.13,
+          "revenue_b": 6.6819770087,
+          "fcf_margin": 0.25,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.670494252175,
+          "diluted_shares_b": 0.39412876878750003,
+          "discount_period": 5.425,
+          "pv_per_share": 2.4061887342512285
+        },
+        {
+          "year": 2032,
+          "revenue_growth": 0.11,
+          "revenue_b": 7.416994479657,
+          "fcf_margin": 0.26,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.92841856471082,
+          "diluted_shares_b": 0.3980700564753751,
+          "discount_period": 6.425,
+          "pv_per_share": 2.47765968675374
+        },
+        {
+          "year": 2033,
+          "revenue_growth": 0.09,
+          "revenue_b": 8.08452398282613,
+          "fcf_margin": 0.27,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 2.1828214753630553,
+          "diluted_shares_b": 0.40205075704012877,
+          "discount_period": 7.425,
+          "pv_per_share": 2.501578963695086
+        },
+        {
+          "year": 2034,
+          "revenue_growth": 0.07,
+          "revenue_b": 8.65044066162396,
+          "fcf_margin": 0.28,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 2.422123385254709,
+          "diluted_shares_b": 0.4060712646105301,
+          "discount_period": 8.425,
+          "pv_per_share": 2.475984425095219
+        },
+        {
+          "year": 2035,
+          "revenue_growth": 0.05,
+          "revenue_b": 9.08296269470516,
+          "fcf_margin": 0.28,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 2.543229554517445,
+          "diluted_shares_b": 0.4101319772566353,
+          "discount_period": 9.425,
+          "pv_per_share": 2.3189578506377497
+        }
+      ],
+      "explicit_pv_per_share": 19.735399279667433,
+      "terminal_pv_per_share": 29.856582326961025,
+      "cash_per_share": 11.103674666666668,
+      "fair_value_per_share": 60.69565627329513,
+      "terminal_value_share_of_operating_value": 0.602044551552471,
+      "upside_downside_to_quote": -0.7718165519152799
+    },
+    "bull": {
+      "name": "bull",
+      "assumptions": {
+        "revenue_growth": [
+          null,
+          0.28,
+          0.25,
+          0.22,
+          0.19,
+          0.16,
+          0.13,
+          0.11,
+          0.085,
+          0.06
+        ],
+        "fcf_margin": [
+          0.14,
+          0.17,
+          0.21,
+          0.25,
+          0.28,
+          0.3,
+          0.32,
+          0.33,
+          0.34,
+          0.34
+        ],
+        "discount_rate": 0.095,
+        "terminal_growth": 0.035,
+        "annual_dilution": 0.008
+      },
+      "rows": [
+        {
+          "year": 2026,
+          "revenue_growth": null,
+          "revenue_b": 2.809,
+          "fcf_margin": 0.14,
+          "restructuring_cash_b": 0.1075,
+          "fcf_b": 0.28576000000000007,
+          "diluted_shares_b": 0.375,
+          "discount_period": 0.425,
+          "pv_per_share": 0.7331944499501165
+        },
+        {
+          "year": 2027,
+          "revenue_growth": 0.28,
+          "revenue_b": 3.5955200000000005,
+          "fcf_margin": 0.17,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.6112384000000002,
+          "diluted_shares_b": 0.378,
+          "discount_period": 1.425,
+          "pv_per_share": 1.420867925199666
+        },
+        {
+          "year": 2028,
+          "revenue_growth": 0.25,
+          "revenue_b": 4.494400000000001,
+          "fcf_margin": 0.21,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 0.9438240000000001,
+          "diluted_shares_b": 0.38102400000000003,
+          "discount_period": 2.425,
+          "pv_per_share": 1.987739397550791
+        },
+        {
+          "year": 2029,
+          "revenue_growth": 0.22,
+          "revenue_b": 5.483168000000001,
+          "fcf_margin": 0.25,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.3707920000000002,
+          "diluted_shares_b": 0.384072192,
+          "discount_period": 3.425,
+          "pv_per_share": 2.615563926306406
+        },
+        {
+          "year": 2030,
+          "revenue_growth": 0.19,
+          "revenue_b": 6.524969920000001,
+          "fcf_margin": 0.28,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 1.8269915776000005,
+          "diluted_shares_b": 0.38714476953599997,
+          "discount_period": 4.425,
+          "pv_per_share": 3.1583166639316325
+        },
+        {
+          "year": 2031,
+          "revenue_growth": 0.16,
+          "revenue_b": 7.5689651072,
+          "fcf_margin": 0.3,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 2.27068953216,
+          "diluted_shares_b": 0.39024192769228805,
+          "discount_period": 5.425,
+          "pv_per_share": 3.5563314716715317
+        },
+        {
+          "year": 2032,
+          "revenue_growth": 0.13,
+          "revenue_b": 8.552930571135999,
+          "fcf_margin": 0.32,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 2.7369377827635195,
+          "diluted_shares_b": 0.3933638631138263,
+          "discount_period": 6.425,
+          "pv_per_share": 3.883602293241362
+        },
+        {
+          "year": 2033,
+          "revenue_growth": 0.11,
+          "revenue_b": 9.493752933960959,
+          "fcf_margin": 0.33,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 3.1329384682071164,
+          "diluted_shares_b": 0.39651077401873697,
+          "discount_period": 7.425,
+          "pv_per_share": 4.027606544941583
+        },
+        {
+          "year": 2034,
+          "revenue_growth": 0.085,
+          "revenue_b": 10.30072193334764,
+          "fcf_margin": 0.34,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 3.502245457338198,
+          "diluted_shares_b": 0.39968286021088684,
+          "discount_period": 8.425,
+          "pv_per_share": 4.079125826730421
+        },
+        {
+          "year": 2035,
+          "revenue_growth": 0.06,
+          "revenue_b": 10.9187652493485,
+          "fcf_margin": 0.34,
+          "restructuring_cash_b": 0.0,
+          "fcf_b": 3.7123801847784903,
+          "diluted_shares_b": 0.40288032309257393,
+          "discount_period": 9.425,
+          "pv_per_share": 3.917403580791338
+        }
+      ],
+      "explicit_pv_per_share": 29.37975208031485,
+      "terminal_pv_per_share": 67.57521176865058,
+      "cash_per_share": 11.103674666666668,
+      "fair_value_per_share": 108.0586385156321,
+      "terminal_value_share_of_operating_value": 0.6969752665156776,
+      "upside_downside_to_quote": -0.5937568807096671
+    }
+  },
+  "sensitivity": {
+    "0.095": {
+      "0.020": 68.29492963071118,
+      "0.025": 71.0441444541757,
+      "0.030": 74.21631540432706,
+      "0.035": 77.91718151283699,
+      "0.040": 82.29093236834872
+    },
+    "0.100": {
+      "0.020": 64.08783028806243,
+      "0.025": 66.40281065160434,
+      "0.030": 69.04850249565227,
+      "0.035": 72.1012238541691,
+      "0.040": 75.66273210577208
+    },
+    "0.105": {
+      "0.020": 60.39160128256753,
+      "0.025": 62.35765703574346,
+      "0.030": 64.5858535560095,
+      "0.035": 67.13236386488498,
+      "0.040": 70.07064499051053
+    },
+    "0.110": {
+      "0.020": 57.120596253561935,
+      "0.025": 58.80297743931873,
+      "0.030": 60.69565627329513,
+      "0.035": 62.84069228513505,
+      "0.040": 65.29216201295209
+    },
+    "0.115": {
+      "0.020": 54.20721843144566,
+      "0.025": 55.65657439540664,
+      "0.030": 57.27644282571599,
+      "0.035": 59.098794809814,
+      "0.040": 61.164127058458405
+    },
+    "0.120": {
+      "0.020": 51.59740743463389,
+      "0.025": 52.853571854471525,
+      "0.030": 54.249310098735585,
+      "0.035": 55.80925284232482,
+      "0.040": 57.5641884288627
+    },
+    "0.125": {
+      "0.020": 49.24741559170641,
+      "0.025": 50.34208412348943,
+      "0.030": 51.55198092177594,
+      "0.035": 52.89631069764983,
+      "0.040": 54.398796917744185
+    }
+  },
+  "reverse_dcf_growth": {
+    "constant_revenue_growth_2027_2035": 0.4031705396948534,
+    "implied_2035_revenue_b": 59.2305629124317,
+    "implied_2035_fcf_b": 16.58455761548088,
+    "matched_value_per_share": 265.99500000000023,
+    "held_fixed": "2026 guide; base FCF-margin path ending at 28%; 11% discount rate; 3% terminal growth; 1% annual dilution"
+  },
+  "reverse_dcf_margin": {
+    "terminal_fcf_margin": 1.6439143974998935,
+    "implied_2035_fcf_b": 14.931613145780242,
+    "matched_value_per_share": 265.995,
+    "held_fixed": "base revenue path; 11% discount rate; 3% terminal growth; 1% annual dilution"
+  },
+  "heroic_market_case": {
+    "fair_value_per_share": 252.5671408728556,
+    "2035_revenue_b": 29.788038738757013,
+    "2035_fcf_b": 11.915215495502807,
+    "assumptions": {
+      "revenue_growth": [
+        null,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3,
+        0.3
+      ],
+      "fcf_margin": [
+        0.14,
+        0.1688888888888889,
+        0.1977777777777778,
+        0.22666666666666668,
+        0.2555555555555556,
+        0.2844444444444445,
+        0.31333333333333335,
+        0.3422222222222222,
+        0.37111111111111117,
+        0.4
+      ],
+      "discount_rate": 0.1,
+      "terminal_growth": 0.035,
+      "annual_dilution": 0.008
+    }
+  },
+  "sources": [
+    {
+      "label": "Cloudflare Q1 2026 Form 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/1477333/000147733326000038/cloud-20260331.htm",
+      "use": "Revenue, FCF, RPO, customer metrics, cash/securities, converts, SBC, restructuring"
+    },
+    {
+      "label": "Cloudflare Q1 2026 earnings release (8-K/A exhibit)",
+      "url": "https://www.sec.gov/Archives/edgar/data/1477333/000147733326000035/q126exhibit991.htm",
+      "use": "FY2026 revenue guidance and restructuring cash range"
+    },
+    {
+      "label": "Cloudflare 2025 Form 10-K",
+      "url": "https://www.sec.gov/Archives/edgar/data/1477333/000147733326000016/cloud-20251231.htm",
+      "use": "FY2025 revenue, cash flow, capex, SBC and capital structure"
+    },
+    {
+      "label": "Robinhood NET quote and fundamentals",
+      "url": "https://robinhood.com/stocks/NET",
+      "use": "Timestamped quote and market capitalization"
+    }
+  ],
+  "limitations": [
+    "Reported FCF adds back stock compensation. The model represents that economic cost through explicit annual dilution instead of subtracting SBC twice.",
+    "The 2026 restructuring cash charge is deducted once at its disclosed midpoint.",
+    "The 375M share guide is an as-converted treatment; capped-call offsets are ignored conservatively.",
+    "Q2 2026 earnings on August 6 can make the near-term revenue and margin path stale immediately."
+  ]
+}

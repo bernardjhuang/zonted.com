@@ -17,6 +17,7 @@ import sync_trading_desk as sync
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CLASSIC = (ROOT / "trading" / "classic" / "index.html").read_text()
 DESK_HOME = ROOT / "trading" / "index.html"
+RETIRED_HYPOTHESES = {"BYDDY", "HPQ", "JBS", "NTDOY"}
 
 
 def _desk_rows(page: str, kind: str) -> list[str]:
@@ -258,7 +259,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
         total_symbols = expected_positions | expected_hypotheses
         source_charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
-        feed_count = len(total_symbols - {"BYDDY", "NTDOY"})
+        feed_count = len(total_symbols)
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})
@@ -274,12 +275,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
                 symbol = _row_symbol(row)
                 self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
 
-        for symbol in ("BYDDY", "NTDOY"):
-            row = next(row for row in thesis_rows if _row_symbol(row) == symbol)
-            self.assertIn('data-feed-state="no-feed"', row)
-            for label in ("Last", "Day", "Spread Z", "1Y"):
-                self.assertRegex(row, rf'data-label="{label}"[\s\S]*?—[\s\S]*?No feed')
-            self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
+        self.assertFalse(total_symbols & RETIRED_HYPOTHESES)
+        net_row = next(row for row in thesis_rows if _row_symbol(row) == "NET")
+        self.assertNotIn('data-feed-state="no-feed"', net_row)
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
         self.assertEqual(len(toggles), len(total_symbols))

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-07-28",
+  "as_of": "2026-07-29",
   "rows": {
     "ABT": {
       "valuation_metrics": [
@@ -42,21 +42,6 @@
       "method": "52-week low / live cost basis / call strike trading references; not intrinsic value",
       "confidence": "low"
     },
-    "JBS": {
-      "valuation_metrics": [
-        {"label": "Market cap", "value": "$15.3B"},
-        {"label": "TTM P/E", "value": "7.2×"},
-        {"label": "52-week range", "value": "$11.49–$18.65"}
-      ],
-      "entry_levels": {"bear": 11.49, "base": 13.82, "bull": 18.65},
-      "entry_level_display": {
-        "heading": "Trading reference levels",
-        "labels": {"bear": "52W low", "base": "Cost basis", "bull": "52W high"},
-        "base_comparison": "cost basis"
-      },
-      "method": "52-week low / live cost basis / 52-week high trading references; not intrinsic value",
-      "confidence": "low"
-    },
     "HOOD": {
       "valuation_metrics": [
         {"label": "Market cap", "value": "$85.5B"},
@@ -76,26 +61,6 @@
       "entry_levels": {"bear": 4.55, "base": 6.88, "bull": 9.52},
       "method": "10-year normalized cash-flow model",
       "confidence": "medium"
-    },
-    "BYDDY": {
-      "valuation_metrics": [
-        {"label": "Market cap", "value": "$101.4B"},
-        {"label": "TTM P/E", "value": "25.3×"},
-        {"label": "Net margin", "value": "3.5%"}
-      ],
-      "entry_levels": {"bear": 4.77, "base": 6.35, "bull": 7.94},
-      "method": "Normalized reported-earnings fallback",
-      "confidence": "low"
-    },
-    "NTDOY": {
-      "valuation_metrics": [
-        {"label": "Market cap", "value": "$49.0B"},
-        {"label": "TTM P/E", "value": "19.0×"},
-        {"label": "Balance sheet", "value": "Net cash"}
-      ],
-      "entry_levels": {"bear": 7.89, "base": 10.87, "bull": 14.39},
-      "method": "DCF + reported-earnings cross-check",
-      "confidence": "low"
     },
     "RBLX": {
       "valuation_metrics": [
@@ -147,14 +112,14 @@
       "method": "52-week low / cost basis / call strike trading references; not intrinsic value",
       "confidence": "low"
     },
-    "HPQ": {
+    "NET": {
       "valuation_metrics": [
-        {"label": "Market cap", "value": "$25.0B"},
-        {"label": "FY26 non-GAAP P/E", "value": "8.8×"},
-        {"label": "FY26 FCF yield", "value": "11–12%"}
+        {"label": "Market cap", "value": "$94.5B"},
+        {"label": "TTM price / sales", "value": "40.6×"},
+        {"label": "TTM FCF / SBC", "value": "$292M / $470M"}
       ],
-      "entry_levels": {"bear": 21.0, "base": 30.0, "bull": 39.0},
-      "method": "Normalized FY26 earnings-power multiple",
+      "entry_levels": {"bear": 37.49, "base": 60.7, "bull": 108.06},
+      "method": "SEC-first 10-year diluted per-share FCF DCF",
       "confidence": "medium"
     },
     "TMO": {

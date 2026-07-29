@@ -14,10 +14,15 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and verify hypothesis summary
+      - name: Build and verify trading hypotheses
         run: |
-          python3 scripts/build-hypothesis-summary.py
+          python3 scripts/build-net-dcf.py --check
+          python3 scripts/build-hypothesis-summary.py --cached
+          python3 scripts/sync-classic-hypotheses.py --check
+          python3 scripts/build-trading-desk.py --check
           python3 scripts/test-hypothesis-summary.py
+          python3 scripts/test-trading-ui.py
+          python3 scripts/test_trading_desk_sync.py
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
