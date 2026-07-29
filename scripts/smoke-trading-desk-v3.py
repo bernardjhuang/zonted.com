@@ -28,8 +28,8 @@ def exercise(page, url: str, screenshot: Path) -> None:
     exposures = page.locator('[data-desk-kind="position"]').evaluate_all("rows => rows.map(row => Number(row.dataset.exposurePercent))")
     check(exposures == sorted(exposures, reverse=True), "positions are not sorted by delta-dollar exposure descending")
     check(page.locator('.desk-position-exposure').count() == position_count, "position exposures are missing")
-    check(page.locator("th", has_text="IV").count() == 2, "IV did not replace Beta in both tables")
-    check(page.locator("th", has_text="Beta").count() == 0, "legacy Beta column remains")
+    check(page.locator("th", has_text="Beta").count() == 2, "Beta is missing from one or both tables")
+    check(page.locator("th", has_text="IV").count() == 0, "legacy IV column remains")
     check(page.locator("th", has_text="P&L").count() == 0, "P&L column should be removed")
     flair_count = page.locator(".desk-position-flair--momentum, .desk-position-flair--thesis").count()
     check(flair_count == position_count, "each live position needs exactly one authored flair")
@@ -81,12 +81,14 @@ def exercise(page, url: str, screenshot: Path) -> None:
     tooltip_text = tooltip.inner_text()
     check("Day" in tooltip_text and "1Y path" in tooltip_text, "hover metrics are incomplete")
 
-    chart_opener = page.locator(".desk-detail-row:not([hidden]) [data-hypothesis-chart-open]")
-    chart_opener.click()
-    page.locator("#hypothesis-chart-dialog[open] svg").nth(1).wait_for()
-    check(page.locator("#hypothesis-chart-dialog[open] svg").count() >= 2, "setup dialog did not render both charts")
-    page.keyboard.press("Escape")
-    check(chart_opener.evaluate("el => document.activeElement === el"), "chart opener did not regain focus")
+    check(page.locator(".desk-detail-row:not([hidden]) [data-hypothesis-chart-open]").count() == 0, "setup chart action still lives in the fold-out")
+    for selector in ('[data-desk-kind="position"] .desk-chart-cell-button', '[data-desk-kind="hypothesis"] .desk-chart-cell-button'):
+        chart_opener = page.locator(selector).first
+        chart_opener.click()
+        page.locator("#hypothesis-chart-dialog[open] svg").nth(1).wait_for()
+        check(page.locator("#hypothesis-chart-dialog[open] svg").count() >= 2, "setup dialog did not render both charts")
+        page.keyboard.press("Escape")
+        check(chart_opener.evaluate("el => document.activeElement === el"), "chart opener did not regain focus")
 
     thesis_opener = page.locator(".desk-main-row [data-thesis-open]").first
     thesis_opener.click()

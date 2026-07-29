@@ -222,7 +222,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(colgroups[0], colgroups[1], "positions and hypotheses tables must share one literal colgroup")
         self.assertEqual(
             re.findall(r'<col style="width:([^\"]+)">', colgroups[0]),
-            ["18%", "7%", "6%", "10%", "6%", "6%", "28%", "13%", "6%"],
+            ["18%", "7%", "6%", "10%", "5%", "6%", "6%", "23%", "13%", "6%"],
         )
         self.assertIn(".desk-blotter-table{table-layout:fixed", styles.replace(" ", ""))
 
@@ -289,10 +289,24 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertIn('data-desk-one-year-chart', detail)
             self.assertIn('data-desk-valuation', detail)
             self.assertIn('data-desk-entry-tiles', detail)
-            self.assertIn('data-hypothesis-chart-open=', detail)
+            self.assertNotIn('data-hypothesis-chart-open=', detail)
+            self.assertNotIn('desk-detail-actions', detail)
             self.assertNotIn('data-thesis-open=', detail)
 
         self.assertEqual(page.count('class="desk-thesis-cell-button"'), len(total_symbols))
+        self.assertEqual(page.count('<th>Chart</th>'), 2)
+        self.assertEqual(page.count('class="desk-chart-cell-button"'), len(total_symbols))
+        self.assertEqual(page.count('<td colspan="10">'), len(total_symbols))
+        for symbol in total_symbols:
+            launcher = re.search(
+                rf'<tr class="desk-main-row"[^>]+data-desk-symbol="{symbol}".*?<button[^>]+class="desk-chart-cell-button"[^>]+data-hypothesis-chart-open="{symbol}"[^>]*>',
+                page,
+                re.S,
+            )
+            self.assertIsNotNone(launcher, symbol)
+            self.assertIn(f'aria-label="Open {symbol} setup chart"', launcher.group(0) if launcher else "")
+            self.assertIn('aria-haspopup="dialog"', launcher.group(0) if launcher else "")
+            self.assertIn('aria-controls="hypothesis-chart-dialog"', launcher.group(0) if launcher else "")
         self.assertNotIn("Room to kill", page)
         self.assertNotIn("What would move it", page)
         self.assertNotIn("Canonical thesis", page)

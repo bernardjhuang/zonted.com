@@ -35,7 +35,7 @@ START_POS = "<!-- AUTO:DESK_POSITIONS:START -->"
 END_POS = "<!-- AUTO:DESK_POSITIONS:END -->"
 START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
 END_HYP = "<!-- AUTO:DESK_HYPOTHESES:END -->"
-COLGROUP = '<colgroup><col style="width:18%"><col style="width:7%"><col style="width:6%"><col style="width:10%"><col style="width:6%"><col style="width:6%"><col style="width:28%"><col style="width:13%"><col style="width:6%"></colgroup>'
+COLGROUP = '<colgroup><col style="width:18%"><col style="width:7%"><col style="width:6%"><col style="width:10%"><col style="width:5%"><col style="width:6%"><col style="width:6%"><col style="width:23%"><col style="width:13%"><col style="width:6%"></colgroup>'
 OTC = {"BYDDY", "NTDOY"}
 CT = ZoneInfo("America/Chicago")
 
@@ -382,7 +382,7 @@ def valuation_detail(symbol: str, market: dict, valuation: dict, position: dict 
     return f'''<div class="desk-fold-grid">
 <div>{detail_chart(symbol, market, levels, position, level_labels)}</div>
 <div class="desk-valuation" data-desk-valuation><h4>Valuation</h4>{metrics}<div><span>Last</span><b>{money(last)}</b></div><div><span>Sector</span><b>{html.escape(sector)}</b></div></div>
-<div class="desk-entry" data-desk-entry-tiles><h4>{html.escape(heading)}</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p><div class="desk-detail-actions"><button type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog">Setup chart</button></div></div>
+<div class="desk-entry" data-desk-entry-tiles><h4>{html.escape(heading)}</h4><div class="desk-entry-tiles">{tiles}</div><span class="desk-confidence">{html.escape(valuation["confidence"])} confidence</span><p>{html.escape(distance_line)}</p></div>
 </div>'''
 
 
@@ -393,6 +393,10 @@ def no_feed_market_cells() -> tuple[str, str, str, str]:
 
 def thesis_button(symbol: str) -> str:
     return f'<button class="desk-thesis-cell-button" type="button" data-thesis-open="{symbol}" aria-haspopup="dialog" aria-controls="desk-thesis-dialog">Full thesis</button>'
+
+
+def chart_button(symbol: str) -> str:
+    return f'<button class="desk-chart-cell-button" type="button" data-hypothesis-chart-open="{symbol}" aria-haspopup="dialog" aria-controls="hypothesis-chart-dialog" aria-label="Open {symbol} setup chart" title="Open {symbol} setup chart"><span aria-hidden="true">📊</span></button>'
 
 
 def position_rows(positions: list[dict], metadata: dict, markets: dict, valuations: dict, as_of: dt.date) -> str:
@@ -412,9 +416,9 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         exposure = float(position["exposure_percent"])
         main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-exposure">{exposure:.1f}% Δ$ exposure</span>{position_risk_lines(position)}</button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, None, float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, None, float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
-        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
+        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="10">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)
     return "\n".join(rows)
 
@@ -436,9 +440,9 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
             last, day, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
-{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
-        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="9">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
+        detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="10">{valuation_detail(symbol, market, valuations[symbol], None)}</td></tr>'
         rows.append(main + detail)
     return "\n".join(rows)
 
@@ -465,9 +469,9 @@ def risk_strip(summary: dict, sleeves: dict) -> str:
 
 def table(title: str, subtitle: str, body: str, hypotheses: bool = False, risk_summary: dict | None = None, sleeves: dict | None = None) -> str:
     if hypotheses:
-        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Thesis</th><th>Last</th><th>Day</th><th>Thesis</th><th>Chart</th><th>Beta</th><th>Spread Z</th><th>1Y</th><th>Next catalyst</th><th>In</th>'
     else:
-        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Beta</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
+        heads = '<th>Position</th><th>Last</th><th>Day</th><th>Thesis</th><th>Chart</th><th>Beta</th><th>Spread Z</th><th>1Y · levels</th><th>Next catalyst</th><th>In</th>'
     extra = risk_strip(risk_summary, sleeves or {}) if risk_summary else ""
     return f'<div class="desk-table-head"><h2>{title}</h2><span>{subtitle}</span></div>{extra}<div class="desk-table-scroll"><table class="desk-blotter-table">{COLGROUP}<thead><tr>{heads}</tr></thead><tbody>{body}</tbody></table></div>'
 
