@@ -7,9 +7,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="/trading/desk.css?v=6bd442af0f1f">
+<link rel="stylesheet" href="/trading/desk.css?v=28db2a577653">
 <script defer src="/trading/desk.js?v=b19a54393b8f"></script>
-<script defer src="/js/trading-themes.js?v=7a88509aaeb0"></script>
+<script defer src="/js/trading-themes.js?v=ef18e2dd6180"></script>
 <style>
 .model-provenance{display:flex;gap:5px;align-items:center;flex-wrap:wrap}
 .prov-chip{display:inline-flex;align-items:center;gap:4px;min-width:0;padding:2px 6px 2px 3px;border:1px solid var(--bl-border);border-radius:999px;background:#fff;color:var(--bl-muted);font:600 9.5px var(--bl-mono);line-height:1.2}
@@ -38,16 +38,6 @@
 .gapctl b{font:600 12px var(--bl-mono);color:var(--bl-ink2);min-width:2ch}
 .lcount{margin-left:auto;font:500 12px var(--bl-mono);color:var(--bl-faint)}
 
-/* ── dumbbell gap chart ── */
-.gap-map{border:1px solid var(--bl-border);border-radius:12px;background:var(--bl-card);padding:18px 18px 10px;margin-bottom:22px}
-.gap-map-head{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap;margin-bottom:6px}
-.gap-map-head h2{font-size:16px;letter-spacing:-.01em}
-.gap-map-head p{font-size:12.5px;color:var(--bl-muted);max-width:78ch}
-.db-scroll{overflow-x:auto}
-.db-scroll svg{display:block;width:100%;min-width:900px}
-.db-row{cursor:pointer}
-.db-row:hover .db-label{fill:var(--bl-accent);font-weight:600}
-.db-tip{position:fixed;z-index:70;max-width:300px;padding:8px 11px;border:1px solid var(--bl-border);border-radius:8px;background:var(--bl-card);color:var(--bl-ink2);font:500 12px/1.45 var(--bl-sans);box-shadow:0 8px 24px #10111926;pointer-events:none}
 
 /* ── sortable ledger ── */
 .ledger-wrap{overflow-x:auto;border:1px solid var(--bl-border);border-radius:12px;background:var(--bl-card)}
@@ -58,10 +48,11 @@
 .themes-ledger th .arrow{margin-left:4px;color:var(--bl-accent)}
 .themes-ledger th.r button,.themes-ledger td.r{text-align:right}
 .themes-ledger td{padding:8px 12px;border-bottom:1px solid var(--bl-divider);vertical-align:middle}
+.themes-ledger td:first-child{min-width:360px;white-space:normal}
 .themes-ledger tbody tr:last-child td{border-bottom:0}
 .lrow{cursor:pointer}
 .lrow:hover td{background:var(--bl-hover)}
-.lt-btn{all:unset;display:block;max-width:380px;font:600 13px/1.35 var(--bl-sans);color:var(--bl-ink);cursor:pointer}
+.lt-btn{all:unset;display:block;max-width:420px;font:600 13px/1.35 var(--bl-sans);color:var(--bl-ink);cursor:pointer;overflow-wrap:anywhere}
 .lrow:hover .lt-btn{color:var(--bl-accent)}
 .lcat{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--bl-muted);white-space:nowrap}
 .lcat i{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
@@ -119,7 +110,7 @@ body.rec-open{overflow:hidden}
 <nav class="subnav" aria-label="Sections"><div class="wrap"><a href="/trading/">Desk</a><a href="/trading/themes/" aria-current="page">Themes</a><a href="/trading/vwap-setups/">VWAP Setups</a><a href="/trading/momentum/">Momentum</a><a href="/trading/performance/">Performance</a></div></nav>
 <div class="wrap themes-shell">
 <div class="phead"><h1>Themes</h1><p class="take">Core beliefs scored for how widely known—and how fully priced—they already are. Independent model reviews are added when commissioned; missing scores stay missing.</p><p class="meta">Human thesis → evidence → adversarial review → saturation score · market snapshots use Friday’s close</p></div>
-<main id="themes-live" data-url="/trading/themes.json?v=ebfecc07da23" aria-live="polite"><p class="theme-loading">Loading theme ledger…</p></main>
+<main id="themes-live" data-url="/trading/themes.json?v=a716e9b7197d" aria-live="polite"><p class="theme-loading">Loading theme ledger…</p></main>
 <noscript><p class="theme-error">JavaScript is required for the scored theme ledger. The canonical research remains available in <a href="/trading/themes.json">themes.json</a>.</p></noscript>
 </div>
 </body>

@@ -36,7 +36,7 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
         self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 36)
+        self.assertEqual(len(self.payload["themes"]), 46)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -162,26 +162,34 @@ class TradingThemesContractTest(unittest.TestCase):
             self.assertIn(text, self.script)
         self.assertRegex(self.script, r"fetch\(shell\.dataset\.url")
 
-    def test_renderer_ships_ledger_dumbbell_and_record_overlay(self) -> None:
-        """v2 index: filters + dumbbell gap chart + sortable ledger + record overlay."""
+    def test_renderer_ships_filtered_sortable_ledger_and_record_overlay(self) -> None:
+        """The index keeps filters/sorts and the record overlay without the gap chart."""
         for token in (
-            "const renderDumbbell =",
             "const renderLedger =",
             "const renderControls =",
             "const stageOf =",
             "const openRecord =",
             "const syncFromHash =",
+            "data-gap-range",
+            "data-sort",
+            "aria-sort",
             "data-theme-id",
             "rec-overlay",
             "themes-ledger",
         ):
             self.assertIn(token, self.script)
+        for retired in ("const renderDumbbell =", "data-chart", "db-row", "db-tip", "gap-map"):
+            self.assertNotIn(retired, self.script)
+        self.assertIn("state.minGap === 0 || row.gap >= state.minGap", self.script)
         for token in (
             ".mi-claude", ".mi-gpt", ".mi-grok", ".mi-gemini", ".mi-meta",
             "model-icons/fable.svg",
-            ".rec-panel", ".fpill", ".themes-ledger", ".db-tip",
+            ".rec-panel", ".fpill", ".gapctl", ".themes-ledger",
+            ".themes-ledger td:first-child{min-width:360px;white-space:normal}",
         ):
             self.assertIn(token, self.page)
+        for retired in (".gap-map", ".db-scroll", ".db-tip"):
+            self.assertNotIn(retired, self.page)
 
     def test_hunt_themes_follow_ledger_rules(self) -> None:
         counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
@@ -209,6 +217,16 @@ class TradingThemesContractTest(unittest.TestCase):
             "meta-partial-reprogramming-humans",
             "meta-silicon-sovereignty-stack-split",
             "meta-y2q-post-quantum-rebuild",
+            "sector-ai-rights-cleared-data",
+            "sector-cms-prior-auth-api",
+            "geo-eu-wastewater-epr",
+            "geo-eu-methane-mrv",
+            "geo-einvoice-tax-rails",
+            "geo-subsea-repair-capacity",
+            "emerging-quantum-pnt",
+            "geo-de-minimis-customs-data",
+            "emerging-bess-insurability",
+            "geo-eu-cloud-egress-ban",
         }
         hunt = [
             t for t in self.payload["themes"]
@@ -365,6 +383,44 @@ class TradingThemesContractTest(unittest.TestCase):
                 self.assertTrue(theme[field], f"{theme_id}.{field}")
             self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
             self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 5)
+            self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
+
+    def test_frontier_catalyst_expansion_is_complete_and_honestly_single_reviewed(self) -> None:
+        expected = {
+            "sector-ai-rights-cleared-data": ("Sectors", 80, 50),
+            "sector-cms-prior-auth-api": ("Sectors", 65, 40),
+            "geo-eu-wastewater-epr": ("Geographies", 45, 25),
+            "geo-eu-methane-mrv": ("Geographies", 50, 30),
+            "geo-einvoice-tax-rails": ("Geographies", 60, 35),
+            "geo-subsea-repair-capacity": ("Geographies", 55, 35),
+            "emerging-quantum-pnt": ("Emerging", 45, 35),
+            "geo-de-minimis-customs-data": ("Geographies", 85, 70),
+            "emerging-bess-insurability": ("Emerging", 55, 70),
+            "geo-eu-cloud-egress-ban": ("Geographies", 70, 60),
+        }
+        found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
+        self.assertEqual(set(found), set(expected))
+        for theme_id, (category, known, priced) in expected.items():
+            theme = found[theme_id]
+            self.assertEqual(theme["category"], category)
+            self.assertEqual(theme["status"], "Frontier catalyst · 1 reviewer")
+            self.assertEqual(theme["source_model"], "GPT-5.6")
+            self.assertEqual(theme["reviewed_by"], [])
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["GPT-5.6"])
+            self.assertEqual(theme["consensus_scores"], {
+                "knowledge_saturation": known,
+                "price_saturation": priced,
+            })
+            review = theme["model_reviews"][0]
+            self.assertEqual((review["knowledge_saturation"], review["price_saturation"]), (known, priced))
+            for field in (
+                "owner_belief", "conviction", "final_verdict", "layer_scorecard", "adversarial_review",
+                "what_survived", "residual_edge", "research_priority", "falsifiers", "watch_next", "sources",
+            ):
+                self.assertTrue(theme[field], f"{theme_id}.{field}")
+            self.assertGreaterEqual(len(theme["layer_scorecard"]), 3)
+            self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 2)
+            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
             self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
 

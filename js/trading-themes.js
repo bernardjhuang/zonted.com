@@ -249,8 +249,8 @@
   };
 
   // ── Ledger index (v2) ──────────────────────────────────────────────
-  // The page is an index now: category filters + a dumbbell gap chart +
-  // a sortable ledger. Full records render on demand inside an overlay,
+  // The page is an index now: category filters + a sortable ledger.
+  // Full records render on demand inside an overlay,
   // addressed by the same #theme-id anchors the old long-scroll page
   // used, so shared deep links keep working.
 
@@ -300,7 +300,8 @@
   let methodRef = null;
 
   const visibleRows = () => rows.filter(row =>
-    (!state.cats.size || state.cats.has(row.category)) && (row.gap ?? 0) >= state.minGap);
+    (!state.cats.size || state.cats.has(row.category)) &&
+    (state.minGap === 0 || row.gap >= state.minGap));
 
   const NUMERIC_KEYS = new Set(['known', 'priced', 'gap', 'models']);
   const sortedRows = list => [...list].sort((a, b) => {
@@ -324,34 +325,6 @@
     </div>`;
   };
 
-  const renderDumbbell = list => {
-    const RH = 26, L = 360, R = 60, W = 1200, T = 30;
-    const H = T + list.length * RH + 34;
-    const x = value => L + value / 100 * (W - L - R);
-    let svg = `<svg viewBox="0 0 ${W} ${H}" role="img" aria-label="Themes ranked by gap between known and priced">`;
-    for (let g = 0; g <= 100; g += 25) {
-      svg += `<line x1="${x(g)}" y1="${T - 8}" x2="${x(g)}" y2="${H - 26}" stroke="var(--bl-divider)"/>`
-        + `<text x="${x(g)}" y="${H - 10}" font-size="10" text-anchor="middle" fill="var(--bl-faint)" font-family="var(--bl-mono)">${g}</text>`;
-    }
-    svg += `<text x="${x(0)}" y="${T - 14}" font-size="10.5" fill="var(--bl-warn)" font-weight="600" font-family="var(--bl-mono)">● PRICED</text>`
-      + `<text x="${x(0) + 74}" y="${T - 14}" font-size="10.5" fill="var(--bl-accent)" font-weight="600" font-family="var(--bl-mono)">● KNOWN</text>`;
-    list.forEach((row, index) => {
-      const y = T + index * RH + RH / 2;
-      const labelX = Math.max(x(row.known), x(row.priced)) + 12;
-      const title = row.title.length > 46 ? `${row.title.slice(0, 45)}…` : row.title;
-      svg += `<g class="db-row" data-theme-id="${esc(row.theme.id)}"
-        data-tip="${esc(`${row.title} — ${row.category} · known ${row.known} / priced ${row.priced} · gap ${fmtGap(row.gap)} · ${row.models} model${row.models === 1 ? '' : 's'}`)}">
-        <rect x="0" y="${y - RH / 2}" width="${W}" height="${RH}" fill="transparent"/>
-        <text class="db-label" x="${L - 14}" y="${y + 4}" font-size="12" text-anchor="end" fill="var(--bl-ink2)">${esc(title)}</text>
-        <line x1="${x(row.priced)}" y1="${y}" x2="${x(row.known)}" y2="${y}" stroke="${catColor(row.category)}" stroke-width="3" opacity=".55" stroke-linecap="round"/>
-        <circle cx="${x(row.priced)}" cy="${y}" r="5" fill="var(--bl-warn)" stroke="var(--bl-card)" stroke-width="1.6"/>
-        <circle cx="${x(row.known)}" cy="${y}" r="5" fill="var(--bl-accent)" stroke="var(--bl-card)" stroke-width="1.6"/>
-        <text x="${labelX}" y="${y + 4}" font-size="10.5" fill="${row.gap >= 0 ? 'var(--bl-gain)' : 'var(--bl-loss)'}" font-weight="600" font-family="var(--bl-mono)">${fmtGap(row.gap)}</text>
-      </g>`;
-    });
-    svg += '</svg>';
-    return svg;
-  };
 
   const LEDGER_COLUMNS = [
     ['title', 'Theme'], ['category', 'Category'], ['models', 'Models'], ['stage', 'Maturity'],
@@ -388,9 +361,7 @@
   </details>`;
 
   const updateViews = () => {
-    const chartList = [...visibleRows()].sort((a, b) => (b.gap ?? -1) - (a.gap ?? -1));
     const list = sortedRows(visibleRows());
-    shell.querySelector('[data-chart]').innerHTML = renderDumbbell(chartList);
     shell.querySelector('[data-ledger]').innerHTML = renderLedger(list);
     shell.querySelector('[data-count]').textContent = `${list.length} of ${rows.length} themes`;
   };
@@ -509,19 +480,6 @@
       updateViews();
     });
 
-    const tip = document.createElement('div');
-    tip.className = 'db-tip';
-    tip.hidden = true;
-    document.body.appendChild(tip);
-    shell.addEventListener('mousemove', event => {
-      const row = event.target.closest('.db-row');
-      if (!row) { tip.hidden = true; return; }
-      tip.textContent = row.dataset.tip;
-      tip.hidden = false;
-      tip.style.left = `${Math.min(event.clientX + 14, window.innerWidth - 320)}px`;
-      tip.style.top = `${event.clientY + 14}px`;
-    });
-    shell.addEventListener('mouseleave', () => { tip.hidden = true; });
   };
 
   fetch(shell.dataset.url, { cache: 'no-store' })
@@ -535,11 +493,6 @@
       rows = themes.map(rowOf);
       byId = new Map(themes.map(theme => [theme.id, theme]));
       shell.innerHTML = renderControls()
-        + `<section class="gap-map">
-            <div class="gap-map-head"><h2>The gap</h2>
-              <p>Each line runs from priced (amber) to known (blue) — the longer the line, the bigger the story the market has not paid for. Ranked by gap; click any row for the full record.</p></div>
-            <div class="db-scroll" data-chart></div>
-          </section>`
         + `<div class="ledger-wrap" data-ledger></div>
            <p class="ledger-foot">Colored icon sourced the theme · gray icons reviewed it · hover an icon for the model · click any row for the full record.</p>`
         + renderMethodFold(payload.method);

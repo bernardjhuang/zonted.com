@@ -337,6 +337,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count('class="desk-detail-grid"'), feed_count * 4)
         self.assertIn("price and date axes", page)
         self.assertIn(".desk-ytd-tooltip{position:fixed", styles.replace(" ", ""))
+        self.assertIn(
+            ".desk-ytd-hover-line[hidden],.desk-ytd-hover-dot[hidden]{display:none}",
+            styles.replace(" ", ""),
+        )
         self.assertNotIn("Up to 2 years", page)
         self.assertNotIn('<th>P&amp;L</th>', page)
         self.assertIn('<b>Q2 earnings</b><small>Jul 29</small>', page)
