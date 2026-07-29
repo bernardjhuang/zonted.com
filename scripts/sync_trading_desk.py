@@ -364,10 +364,14 @@ def render_route(target: str, classic: str, route: Route) -> str:
     )
     prefix = page_prefix(target, classic)
     for style in route.styles:
-        href = f'/{style.relative_to(ROOT).as_posix()}'
-        tag = f'<link rel="stylesheet" href="{href}">'
-        if tag not in prefix:
-            prefix = prefix.replace("</head>", tag + "\n</head>", 1)
+        # digest like the scripts above: without it a CSS edit never reaches
+        # browsers that already cached the unversioned file.
+        path = style.relative_to(ROOT).as_posix()
+        tag = f'<link rel="stylesheet" href="/{path}?v={digest(style)}">'
+        # drop any prior link to this stylesheet (versioned or not) so the
+        # digest is refreshed in place instead of stacking duplicates
+        prefix = re.sub(rf'[ \t]*<link rel="stylesheet" href="/{re.escape(path)}(?:\?v=[a-f0-9]+)?">\n?', '', prefix)
+        prefix = prefix.replace("</head>", tag + "\n</head>", 1)
     body = f'''<!-- AUTO:ROUTED_TRADING:START -->
 <div class="phead"><h1 id="{heading_id}">{route.title}</h1><p class="take">{route.description}</p><p class="meta">{route.meta}</p></div>
 {panels}

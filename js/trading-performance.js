@@ -208,12 +208,15 @@
   mount.className = 'pf-mount';
   const draw = points => {
     mount.innerHTML = renderHero(points) + renderTape() + renderDays() + renderLog();
-    // The cron-rendered chart and raw action list are superseded by the views above.
-    panel.querySelectorAll('.results-chart, .results-history, .performance-actions')
-      .forEach(node => { node.hidden = true; });
-    const anchor = panel.querySelector('.results-method') || panel.querySelector('.results-stats');
-    if (anchor && anchor.parentNode) anchor.parentNode.insertBefore(mount, anchor.nextSibling);
-    else panel.appendChild(mount);
+    // Superseded by the views above: the sparkline, the raw action list, and the
+    // giant headline the hero now carries.
+    // setAttribute, not `.hidden = true`: the sparkline is an <svg>, and the
+    // hidden IDL property lives on HTMLElement, so the property is a no-op there.
+    panel.querySelectorAll('.results-kicker, #results-heading, #results-heading + p, .results-chart, .results-history, .performance-actions')
+      .forEach(node => node.setAttribute('hidden', ''));
+    // Mount OUTSIDE .results-only: that wrapper is a 920px centred column whose
+    // `.results-only h2` rule (up to 104px) also outranks our section headings.
+    panel.appendChild(mount);
     mount.dataset.ready = 'true';
   };
 
