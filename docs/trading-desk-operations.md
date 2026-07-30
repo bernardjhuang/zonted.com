@@ -17,7 +17,7 @@ Only these checked-in page routes may exist under `trading/*/index.html`:
 - `/trading/meta-risk/`
 - `/trading/fable-risk/`
 
-`trading/hypothesis-source.html` is a noindex data asset used by the Desk Full thesis dialog. It is not a standalone interface route.
+`trading/hypothesis-source.txt` is a noindex data asset used by the Desk Full thesis dialog. It is not a standalone interface route.
 
 Legacy URLs are handled by `_redirects`. Do not recreate their directories.
 
@@ -38,7 +38,7 @@ Producer ownership:
 - `scripts/update-trading-vwap.py` → `AUTO:VWAP` → `trading/momentum/index.html`
 - `scripts/update-trading-crypto.py` → `AUTO:CRYPTO` → `trading/momentum/index.html`
 - external `zonted_trading_refresh.py` → `AUTO:RESULTS`, `trading/results-ytd.json`, and `trading/performance/index.html`
-- `scripts/build-hypothesis-summary.py` → `trading/hypothesis-source.html` and hypothesis chart metadata
+- `scripts/build-hypothesis-summary.py` → `trading/hypothesis-source.txt` and hypothesis chart metadata
 - `scripts/build-desk-positions.py` → `trading/desk-positions.json` from a private temporary holdings payload
 - `scripts/build-trading-desk.py` → `trading/index.html` and the shared Trading nav/status/asset shell
 - `scripts/sync_trading_desk.py` → routed copies of pipeline regions
