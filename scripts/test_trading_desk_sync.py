@@ -17,7 +17,7 @@ import sync_trading_desk as sync
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CLASSIC = (ROOT / "trading" / "classic" / "index.html").read_text()
 DESK_HOME = ROOT / "trading" / "index.html"
-RETIRED_HYPOTHESES = {"BYDDY", "HPQ", "JBS", "NTDOY"}
+RETIRED_HYPOTHESES = {"HPQ", "JBS", "NTDOY"}
 
 
 def _desk_rows(page: str, kind: str) -> list[str]:
@@ -257,7 +257,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
         expected_hypotheses = set(json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]) - expected_positions
         total_symbols = expected_positions | expected_hypotheses
         source_charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
-        feed_count = len(total_symbols)
+        feed_count = sum(
+            'data-feed-state="live"' in row
+            for row in (*position_rows, *thesis_rows)
+        )
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})

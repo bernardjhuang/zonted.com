@@ -63,6 +63,34 @@ class MorningDeskChartTests(unittest.TestCase):
         self.assertIn("Margin debit <b>-12.5%</b>", rendered)
         self.assertNotIn("Cash liquidity", rendered)
 
+    def test_no_feed_position_renders_without_intraday_fields(self):
+        position = {
+            "symbol": "BYDDY",
+            "instrument": "Equity",
+            "exposure_percent": 5.9,
+            "capital_percent": 5.9,
+            "premium_at_risk_percent": 0.0,
+            "theta_percent_per_day": 0.0,
+            "unstable_delta": False,
+            "kill": None,
+            "flair": "thesis",
+            "sector": "Consumer Discretionary",
+            "thesis": "China EV recovery thesis.",
+        }
+        metadata = {"BYDDY": {"catalyst": "2026-08-27", "catalyst-name": "August deliveries"}}
+        markets = {"BYDDY": {"feed": False, "beta": 0.8}}
+        valuations = {"BYDDY": {
+            "valuation_metrics": [{"label": "Market cap", "value": "$101B"}, {"label": "TTM P/E", "value": "25×"}],
+            "entry_levels": {"bear": 4.77, "base": 6.35, "bull": 7.94},
+            "method": "Reported earnings",
+            "confidence": "low",
+        }}
+        rendered = builder.position_rows([position], metadata, markets, valuations, dt.date(2026, 7, 30))
+        self.assertIn('data-desk-symbol="BYDDY"', rendered)
+        self.assertIn('data-edge="no-feed" data-feed-state="no-feed"', rendered)
+        self.assertIn("No feed", rendered)
+        self.assertIn('data-label="Beta">0.80<', rendered)
+
 
 if __name__ == "__main__":
     unittest.main()
