@@ -406,7 +406,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
         self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', page)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source.txt"', page)
         self.assertIn('data-thesis-summary', page)
         self.assertIn('data-thesis-body', page)
         self.assertIn("fetch(thesisSource", script)

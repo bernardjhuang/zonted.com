@@ -22,7 +22,7 @@ from zoneinfo import ZoneInfo
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading/index.html"
 PIPELINE = ROOT / "trading/pipeline.html"
-HYPOTHESES = ROOT / "trading/hypothesis-source.html"
+HYPOTHESES = ROOT / "trading/hypothesis-source.txt"
 POSITIONS = ROOT / "trading/desk-positions.json"
 VALUATIONS = ROOT / "trading/hypothesis-valuations.json"
 CHARTS = ROOT / "trading/hypothesis-charts.json"
@@ -492,7 +492,7 @@ def modals() -> str:
     config = json.dumps({"url": f"/trading/scan-charts.json?v={digest(SCAN)}", "vwap_url": f"/trading/vwap-charts.json?v={digest(VWAP)}"}, separators=(",", ":"))
     return f'''<dialog class="hyp-chart-dialog" id="hypothesis-chart-dialog" aria-labelledby="hypothesis-chart-dialog-title"><div class="hyp-chart-dialog-frame" data-hypothesis-chart-detail><header class="hyp-chart-dialog-head"><div><span>VWAP setup data</span><h2 id="hypothesis-chart-dialog-title"><span data-hypothesis-chart-title>Setup charts</span></h2></div><button type="button" class="hyp-chart-dialog-close" data-hypothesis-chart-close aria-label="Close chart dialog">×</button></header><div class="hyp-chart-dialog-body"><div class="scan-setup-chart" data-hypothesis-chart-shell></div></div></div></dialog>
 <script type="application/json" id="scan-chart-config">{config}</script>
-<dialog class="desk-thesis-dialog" id="desk-thesis-dialog" data-thesis-source="/trading/hypothesis-source.html" aria-labelledby="desk-thesis-title"><div class="desk-thesis-frame"><header><h2 id="desk-thesis-title">Full thesis</h2><button type="button" data-thesis-close aria-label="Close thesis dialog">×</button></header><div data-thesis-summary></div><div data-thesis-body><p>Loading thesis…</p></div></div></dialog>'''
+<dialog class="desk-thesis-dialog" id="desk-thesis-dialog" data-thesis-source="/trading/hypothesis-source.txt" aria-labelledby="desk-thesis-title"><div class="desk-thesis-frame"><header><h2 id="desk-thesis-title">Full thesis</h2><button type="button" data-thesis-close aria-label="Close thesis dialog">×</button></header><div data-thesis-summary></div><div data-thesis-body><p>Loading thesis…</p></div></div></dialog>'''
 
 
 def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = None) -> None:

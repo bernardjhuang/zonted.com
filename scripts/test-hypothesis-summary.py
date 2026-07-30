@@ -20,7 +20,7 @@ SPEC.loader.exec_module(summary)
 
 class HypothesisSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.page = (ROOT / "trading" / "hypothesis-source.html").read_text()
+        self.page = (ROOT / "trading" / "hypothesis-source.txt").read_text()
         self.config = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())
         self.charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
 
