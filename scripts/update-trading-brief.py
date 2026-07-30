@@ -23,6 +23,10 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
 BRIEF_GLOB_PRIMARY = os.path.join(os.path.dirname(ROOT), "tail-risk-scanner", "briefs", "*.md")
 BRIEF_GLOB_FALLBACK = os.path.expanduser("~/Documents/trading/briefs/*.md")
+# scripts/test-trading-ui.py gates deploys on the page staying under 425,000 bytes.
+# Cap the inline brief log so accumulating daily briefs can't push it over: always
+# render the newest brief, then include older ones only while they fit the budget.
+BRIEF_LOG_BUDGET_BYTES = 170_000
 
 
 def esc(s):
@@ -526,19 +530,33 @@ def main():
     if not all_paths:
         sys.exit("No brief *.md found")
 
-    # Render each brief — newest is fully expanded, rest are collapsed
-    entries = [render_brief_entry(p, is_newest=(idx == 0)) for idx, p in enumerate(all_paths)]
+    # Render each brief — newest is fully expanded, rest are collapsed.
+    # Older briefs drop off once the log exceeds the byte budget.
+    entries = []
+    used_bytes = 0
+    for idx, path in enumerate(all_paths):
+        entry = render_brief_entry(path, is_newest=(idx == 0))
+        entry_bytes = len(entry.encode("utf-8"))
+        if entries and used_bytes + entry_bytes > BRIEF_LOG_BUDGET_BYTES:
+            break
+        entries.append(entry)
+        used_bytes += entry_bytes
     entries_html = "\n\n".join(entries)
 
     latest_date = os.path.basename(all_paths[0]).replace(".md", "")
     latest_display = format_date_human(latest_date)
-    entry_count = len(all_paths)
+    total_count = len(all_paths)
+    entry_count = len(entries)
+    if entry_count < total_count:
+        count_display = f"last {entry_count} of {total_count} briefs"
+    else:
+        count_display = f"{entry_count} briefs"
 
     panel_lines = [
         '            <section class="trading-panel brief-panel" id="brief-panel" role="tabpanel" tabindex="0" aria-labelledby="brief-tab" hidden>',
         '                <div class="position-head">',
         '                    <h2 id="brief-heading">Morning Brief</h2>',
-        f'                    <span>{entry_count} briefs · latest {esc(latest_display)} · pre-market CT</span>',
+        f'                    <span>{count_display} · latest {esc(latest_display)} · pre-market CT</span>',
         '                </div>',
         "                <p class=\"trading-takeaway\">Daily tail-risk research in plain English. Each card breaks down what's happening, what could prove it wrong, and what to watch. Newest first.</p>",
         '                <div class="brief-log">',
@@ -618,9 +636,9 @@ def main():
     except (KeyError, ValueError):
         routed_changed = False
     if not page_changed and not routed_changed:
-        print(f"[brief] already current: {entry_count} briefs, latest {latest_date}")
+        print(f"[brief] already current: {entry_count} of {total_count} briefs, latest {latest_date}")
         return
-    print(f"[brief] injected {entry_count} briefs, latest {latest_date}")
+    print(f"[brief] injected {entry_count} of {total_count} briefs, latest {latest_date}")
 
 
 if __name__ == "__main__":
