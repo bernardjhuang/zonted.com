@@ -144,7 +144,8 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
         self.assertEqual(desk.count('data-desk-kind="hypothesis"'), len(expected_symbols) - position_count)
         self.assertIn(f'data-desk-source-articles="{len(expected_symbols)}"', desk)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source.txt"', desk)
+        source_hash = hashlib.sha256(HYPOTHESES_SOURCE.read_bytes()).hexdigest()[:12]
+        self.assertIn(f'data-thesis-source="/trading/hypothesis-source.txt?v={source_hash}"', desk)
         self.assertEqual(desk.count('class="desk-thesis-cell-button"'), len(expected_symbols))
         self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
         self.assertNotIn("Six are live positions.", hypotheses_route)
