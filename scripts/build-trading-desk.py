@@ -408,15 +408,21 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         catalyst = dt.date.fromisoformat(meta["catalyst"])
         days = max(0, (catalyst - as_of).days)
         kill = position.get("kill")
-        edge = "up" if market["day"] > .05 else "down" if market["day"] < -.05 else "flat"
-        edge_word = {"up":"Up", "down":"Down", "flat":"Flat"}[edge]
+        if market.get("feed"):
+            edge = "up" if market["day"] > .05 else "down" if market["day"] < -.05 else "flat"
+            edge_word = {"up":"Up", "down":"Down", "flat":"Flat"}[edge]
+            last, day, spread, ytd = money(market["last"]), pct(market["day"]), f'{market["spread"]:+.2f}', ytd_chart(symbol, market, None, float(kill) if kill else None)
+        else:
+            edge = "no-feed"
+            edge_word = "No feed"
+            last, day, spread, ytd = no_feed_market_cells()
         detail_id = f"desk-detail-{symbol.lower()}"
         flair = position.get("flair")
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
         exposure = float(position["exposure_percent"])
-        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}">
+        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-exposure">{exposure:.1f}% Δ$ exposure</span>{position_risk_lines(position)}</button></td>
-{feed_cell('Last', money(market['last']), 'desk-num')}{feed_cell('Day', pct(market['day']), 'desk-num desk-sign--'+edge)}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', f"{market['spread']:+.2f}", 'desk-num')}{feed_cell('1Y · levels', ytd_chart(symbol, market, None, float(kill) if kill else None))}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
+{feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num' + (' desk-sign--'+edge if market.get('feed') else ''))}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y · levels', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
         detail = f'<tr class="desk-detail-row" id="{detail_id}" hidden><td colspan="10">{valuation_detail(symbol, market, valuations[symbol], position)}<p class="desk-row-thesis">{html.escape(position["thesis"])}</p></td></tr>'
         rows.append(main + detail)

@@ -153,7 +153,7 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("Beta uses up to two years of weekly adjusted-close returns versus SPY", body)
 
     def test_net_dcf_receipt_matches_the_public_levels(self) -> None:
-        retired = {"BYDDY", "HPQ", "JBS", "NTDOY"}
+        retired = {"HPQ", "JBS", "NTDOY"}
         self.assertFalse(retired & set(self.config["rows"]))
         self.assertTrue(all(f'hypothesis-{symbol.lower()}-setup' not in self.page for symbol in retired))
 

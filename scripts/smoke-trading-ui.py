@@ -79,7 +79,7 @@ def main() -> None:
 
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='HOOD']").count() == 1, "HOOD hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='NET']").count() == 1, "NET hypothesis is missing")
-        for retired in ("ABT", "BYDDY", "HPQ", "JBS", "NTDOY"):
+        for retired in ("ABT", "HPQ", "JBS", "NTDOY"):
             check(desktop.locator(f"#hypotheses-panel [data-hypothesis-symbol='{retired}']").count() == 0, f"{retired} hypothesis was not removed")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='RBLX']").count() == 1, "RBLX hypothesis is missing")
         check(desktop.locator("#hypotheses-panel [data-hypothesis-symbol='CEG']").count() == 1, "CEG hypothesis is missing")
