@@ -406,7 +406,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
         self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source.txt"', page)
+        source_hash = hashlib.sha256((ROOT / "trading" / "hypothesis-source.txt").read_bytes()).hexdigest()[:12]
+        self.assertIn(f'data-thesis-source="/trading/hypothesis-source.txt?v={source_hash}"', page)
         self.assertIn('data-thesis-summary', page)
         self.assertIn('data-thesis-body', page)
         self.assertIn("fetch(thesisSource", script)
