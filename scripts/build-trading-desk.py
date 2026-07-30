@@ -148,7 +148,7 @@ def row_market(
     quote: dict | None,
     quote_date: dt.date | None = None,
 ) -> dict:
-    if symbol in OTC:
+    if symbol in OTC and not quote:
         return {"feed": False, "beta": float(hyp_chart["beta_2y_weekly_vs_spy"])}
     dates = list(hyp_chart["dates"])
     closes = [float(v) for v in hyp_chart["close"]]
@@ -391,6 +391,11 @@ def no_feed_market_cells() -> tuple[str, str, str, str]:
     return cell, cell, cell, cell
 
 
+def spread_cell(market: dict) -> str:
+    spread = market.get("spread")
+    return f"{float(spread):+.2f}" if spread is not None and math.isfinite(float(spread)) else no_feed_market_cells()[2]
+
+
 def thesis_button(symbol: str) -> str:
     return f'<button class="desk-thesis-cell-button" type="button" data-thesis-open="{symbol}" aria-haspopup="dialog" aria-controls="desk-thesis-dialog">Full thesis</button>'
 
@@ -411,7 +416,7 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         if market.get("feed"):
             edge = "up" if market["day"] > .05 else "down" if market["day"] < -.05 else "flat"
             edge_word = {"up":"Up", "down":"Down", "flat":"Flat"}[edge]
-            last, day, spread, ytd = money(market["last"]), pct(market["day"]), f'{market["spread"]:+.2f}', ytd_chart(symbol, market, None, float(kill) if kill else None)
+            last, day, spread, ytd = money(market["last"]), pct(market["day"]), spread_cell(market), ytd_chart(symbol, market, None, float(kill) if kill else None)
         else:
             edge = "no-feed"
             edge_word = "No feed"
@@ -441,7 +446,7 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
         edge_word = "No feed" if edge == "no-feed" else "Soon" if edge == "soon" else "Up" if edge == "up" else "Down"
         detail_id = f"desk-detail-{symbol.lower()}"
         if market.get("feed"):
-            last, day, spread, ytd = money(market["last"]), pct(market["day"]), f'{market["spread"]:+.2f}', ytd_chart(symbol, market)
+            last, day, spread, ytd = money(market["last"]), pct(market["day"]), spread_cell(market), ytd_chart(symbol, market)
         else:
             last, day, spread, ytd = no_feed_market_cells()
         main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">

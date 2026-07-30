@@ -35,6 +35,21 @@ class MorningDeskChartTests(unittest.TestCase):
         self.assertEqual(market["dates"], ["2026-07-27", "2026-07-28"])
         self.assertEqual(market["closes"], [10.0, 11.0])
 
+    def test_robinhood_quote_activates_otc_market_row(self):
+        market = builder.row_market(
+            "BYDDY",
+            self.chart(),
+            None,
+            {"price": 12.03, "day_pct": 1.52, "source": "robinhood"},
+            dt.date(2026, 7, 28),
+        )
+        self.assertTrue(market["feed"])
+        self.assertEqual(market["last"], 12.03)
+        self.assertEqual(market["day"], 1.52)
+        self.assertEqual(market["dates"][-1], "2026-07-28")
+        self.assertEqual(market["closes"][-1], 12.03)
+        self.assertIn("No feed", builder.spread_cell(market))
+
     def test_quote_requires_a_session_date(self):
         with self.assertRaisesRegex(ValueError, "no session date"):
             builder.row_market("AAA", self.chart(), self.scan(), {"price": 11.0, "day_pct": 10.0})
