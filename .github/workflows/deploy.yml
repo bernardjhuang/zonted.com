@@ -29,6 +29,9 @@ jobs:
           python3 scripts/test-trading-ui.py
           python3 scripts/test_trading_desk_sync.py
 
+      - name: Strip build-time pipeline buffer from deploy
+        run: rm -rf trading/classic
+
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
         with:

@@ -37,7 +37,7 @@ class Route:
     regions: tuple[str, ...]
     scripts: tuple[pathlib.Path, ...] = ()
     styles: tuple[pathlib.Path, ...] = ()
-    meta: str = "Cron-owned data · source of truth: /trading/classic/ and versioned JSON assets"
+    meta: str = "Cron-owned data · versioned JSON assets"
     view: str = "source"
 
 

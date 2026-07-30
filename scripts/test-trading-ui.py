@@ -310,7 +310,12 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_chart_payloads_are_external_and_small_shell(self):
         # Thesis + brief copy stay server-rendered for no-JS access; chart payloads remain external.
-        self.assertLess(PAGE.stat().st_size, 425_000)
+        # The classic dashboard is a build-time pipeline buffer — stripped before deploy and
+        # redirected in production — so the shell-size contract covers the deployed pages instead.
+        for name in ("momentum", "brief", "vwap-setups", "performance", "themes"):
+            deployed = ROOT / "trading" / name / "index.html"
+            self.assertLess(deployed.stat().st_size, 175_000, str(deployed))
+        self.assertLess(DESK_HOME.stat().st_size, 175_000)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):
