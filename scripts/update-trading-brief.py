@@ -17,16 +17,16 @@ import os
 import re
 import sys
 
-from sync_trading_desk import sync_sections
-
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
+ROUTED_PAGE = os.path.join(ROOT, "trading", "brief", "index.html")
 BRIEF_GLOB_PRIMARY = os.path.join(os.path.dirname(ROOT), "tail-risk-scanner", "briefs", "*.md")
 BRIEF_GLOB_FALLBACK = os.path.expanduser("~/Documents/trading/briefs/*.md")
-# scripts/test-trading-ui.py gates deploys on the page staying under 425,000 bytes.
-# Cap the inline brief log so accumulating daily briefs can't push it over: always
-# render the newest brief, then include older ones only while they fit the budget.
-BRIEF_LOG_BUDGET_BYTES = 170_000
+# The deploy gate (scripts/test-trading-ui.py) caps the public /trading/brief/
+# page at 175,000 bytes. Cap the inline brief log so accumulating daily briefs
+# can't push it over: always render the newest brief, then include older ones
+# only while they fit the budget (the routed page shell adds a few KB on top).
+BRIEF_LOG_BUDGET_BYTES = 165_000
 
 
 def esc(s):
@@ -523,6 +523,32 @@ def build_brief_css():
         .brief-details-body .brief-bullets li { font-size: 12px; }"""
 
 
+def write_routed_brief(panel):
+    """Refresh the public /trading/brief/ page from the classic panel markup.
+
+    The route is deliberately not in sync_trading_desk.ROUTES (see
+    test_public_brief_route_is_restored_and_old_model_routes_stay_retired);
+    this writer keeps it current instead so it can't go stale between runs.
+    """
+    routed_panel = panel.replace(
+        'aria-labelledby="brief-tab" hidden>',
+        'aria-labelledby="desk-route-heading">',
+        1,
+    )
+    page = open(ROUTED_PAGE).read()
+    new = re.sub(
+        r'(<div class="phead">.*?</div>\n).*?(<!-- AUTO:ROUTED_TRADING:END -->)',
+        lambda m: m.group(1) + routed_panel + "\n" + m.group(2),
+        page,
+        count=1,
+        flags=re.S,
+    )
+    if new == page:
+        return False
+    open(ROUTED_PAGE, "w").write(new)
+    return True
+
+
 def main():
     # Collect all brief files, newest first
     all_paths = sorted(set(glob.glob(BRIEF_GLOB_PRIMARY) + glob.glob(BRIEF_GLOB_FALLBACK)), reverse=True)
@@ -631,10 +657,7 @@ def main():
     page_changed = new != open(PAGE).read()
     if page_changed:
         open(PAGE, "w").write(new)
-    try:
-        routed_changed = bool(sync_sections(["brief"]))
-    except (KeyError, ValueError):
-        routed_changed = False
+    routed_changed = write_routed_brief(panel)
     if not page_changed and not routed_changed:
         print(f"[brief] already current: {entry_count} of {total_count} briefs, latest {latest_date}")
         return
