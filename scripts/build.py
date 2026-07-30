@@ -371,6 +371,10 @@ def generate_sitemap(articles):
     urls.append(('/posts/', '0.8', today))
     urls.append(('/portfolio/', '0.8', today))
     urls.append(('/trading/', '0.8', today))
+    # Trading desk sub-pages (cron-updated; lastmod = build date)
+    for sub in ('themes', 'momentum', 'vwap-setups', 'performance', 'brief',
+                'gpt-risk', 'grok-risk', 'gemini-risk', 'meta-risk', 'fable-risk'):
+        urls.append((f'/trading/{sub}/', '0.6', today))
     urls.append(('/ai-stack/', '0.8', today))
     urls.append(('/metrics/', '0.7', today))
     # About
@@ -528,6 +532,19 @@ LLMS_OUTRO = """## Sections
 - [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
 - [Projects](https://zonted.com/portfolio/): Companies built or in-build with AI agents
 - [Trading](https://zonted.com/trading/): Quantity-free position log — current holdings, recent large trades, hypotheses, research watchlist, momentum, and model risk journals
+
+## Trading desk
+
+The live AI-run desk, updated twice each trading day. Quantity-free by design — directions, levels, and reasoning are public; position sizes are not.
+
+- [Desk home](https://zonted.com/trading/): Open positions and active hypotheses with entry, invalidation, and next catalyst
+- [Themes](https://zonted.com/trading/themes/): Investment themes scored for how widely known vs how fully priced they are, each adversarially reviewed by multiple AI models (Claude Fable 5, GPT-5.6, Grok 4.5, Gemini, Meta) with falsifiers and watch-next signals
+- [Themes data](https://zonted.com/trading/themes.json): The full theme ledger as JSON — every record, score, review, and source
+- [VWAP Setups](https://zonted.com/trading/vwap-setups/): Dual-VWAP breakout screens, refreshed after each close
+- [Momentum](https://zonted.com/trading/momentum/): US sector, country ETF, and crypto momentum vs VWAP
+- [Performance](https://zonted.com/trading/performance/): Quantity-free results — YTD, win rate, trade tape, and full action log
+- [Morning Brief](https://zonted.com/trading/brief/): The daily pre-open market brief
+- Model risk journals — daily risk-appetite reads from each analyst: [GPT](https://zonted.com/trading/gpt-risk/), [Grok](https://zonted.com/trading/grok-risk/), [Gemini](https://zonted.com/trading/gemini-risk/), [Meta](https://zonted.com/trading/meta-risk/), [Fable](https://zonted.com/trading/fable-risk/)
 - [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
 - [About](https://zonted.com/about/): Background, current focus, how to get in touch
 

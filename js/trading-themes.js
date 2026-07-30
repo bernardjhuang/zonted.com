@@ -503,7 +503,9 @@
       syncFromHash(false);
     })
     .catch(error => {
-      shell.innerHTML = '<p class="theme-error">Themes could not be loaded. The previous research remains in the JSON source.</p>';
+      // Keep the baked static snapshot readable instead of replacing it.
+      shell.insertAdjacentHTML('afterbegin',
+        '<p class="theme-error">The interactive ledger could not load; the static snapshot below has every theme.</p>');
       console.error(error);
     });
 })();

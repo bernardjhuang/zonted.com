@@ -5,12 +5,12 @@
     <link>https://zonted.com/</link>
     <description>I test AI tools so you don't have to. Honest reviews, real data, and opinions from someone who actually builds with this stuff.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 28 Jul 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 30 Jul 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>I Watched a Neural Network Learn That Paris Is the Capital of France</title>
       <link>https://zonted.com/posts/watching-ai-learn-paris/</link>
-      <description>Pythia publishes a checkpoint every 1,000 training steps and its training data is public and countable. So I replayed training like a time-lapse and watched a fact form — and watched a brand with 64 mentions never form at all.</description>
+      <description>Pythia ships a checkpoint every 1,000 training steps with countable training data. I replayed training like a time-lapse and watched a fact form.</description>
       <content:encoded><![CDATA[This month I trained a model on my own Google history and read the files that teach models how to behave . Both left the same question hanging: knowledge ends up in a model — but how does it get there? Not metaphorically. Literally: at what point in training does a network start believing that Paris is the capital of France? Using a model that publishes checkpoints throughout training — and whose training data is public and countable — you can replay knowledge forming, step by step. At 2B tokens the model writes English but believes nothing — every candidate answer sits at 0% • Paris climbs 0% → 3% → 8% → 15% across 300B tokens. London has 2× the mentions and stays at 0.05% the whole way • There's an ignition threshold: a brand with 64 mentions never forms a belief at all , across the entire run • Fame never converts to belief; placement does — and the model knows the difference from the very first checkpoint]]></content:encoded>
       <pubDate>Tue, 28 Jul 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -46,7 +46,7 @@
     <item>
       <title>13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem</title>
       <link>https://zonted.com/posts/13f-congress-trade-data-lag/</link>
-      <description>How stale is disclosure-delayed market data? I measured it: congressional trades ran a 122-day median age, 13F holdings arrive up to 4.5 months late, and copying the disclosed buys lost to copying the sells.</description>
+      <description>How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.</description>
       <content:encoded><![CDATA[Two days ago I wrote about buying a stock into an FDA vote that the market had already spent three months pricing in. The lesson was about timing: information everyone can see, on a date everyone knows, is not an edge. This post is the same lesson pointed at my own tooling — because I had three dashboards guilty of exactly that, and I built every one of them myself. I built three data feeds into my trading page — hedge fund 13F filings, congressional stock trades, and YouTube creator sentiment. This week I deleted all three tabs. They were interesting. They were also, structurally, news about the past. The median congressional trade on my own dashboard was 122 days old . Legally disclosed, faithfully collected, four months stale. • Hedge funds report holdings 45 days after the quarter ends. The Q1 filings I was displaying described positions that could have been put on in January. • Alphabet was the top whale buy and the most-mentioned stock on YouTube. They bought near $287 ; the public found out at $397 . • Copying the disclosed buys underperformed. Copying the disclosed sells beat them by ~7 points. • Deleted from the terminal. Not deleted from my brain — there's a real job this data does, just not the one a dashboard implies.]]></content:encoded>
       <pubDate>Sat, 25 Jul 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -55,7 +55,7 @@
     <item>
       <title>Trade Log 7/24: The HIMS Chase</title>
       <link>https://zonted.com/posts/trade-log-2026-07-24/</link>
-      <description>I bought HIMS the night an FDA panel said yes to peptides — and was down 11% by the next morning. A journal entry on chasing catalysts the market already priced in, and what I&#x27;m changing.</description>
+      <description>I bought HIMS the night an FDA panel said yes to peptides — down 11% by morning. On chasing catalysts the market already priced in.</description>
       <content:encoded><![CDATA[Entry two of the trade journal, and it’s the useful kind: a loss, taken exactly the way the textbooks warn you about, less than 24 hours old as I write this. I got the event right and the trade wrong. Here’s the anatomy. I bought 1,000 shares of HIMS at $33.03 the night an FDA advisory panel started voting yes on the peptides story. By the next morning I was down 11%. The panel said yes; the stock said you’re late . The catalyst had a public date since April . The stock ran roughly +58% in the three months before the meeting — that run was the market pre-paying for the yes. • On vote day the panel backed peptide after peptide — and HIMS still fell, because an advisory yes was the most expected outcome in the room, and it isn’t even the final decision. • My own scanner graded HIMS AVOID the night I bought it. I overrode the tools for a story. • The fix: an agent now scans regulatory calendars for future decision points, so the next runway gets caught in month one, not hour eleven. Briefs publish on the trading page .]]></content:encoded>
       <pubDate>Fri, 24 Jul 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -64,7 +64,7 @@
     <item>
       <title>Trade Log 7/22: Three Open Trades</title>
       <link>https://zonted.com/posts/trade-log-2026-07-22/</link>
-      <description>A working trade journal: ABT, HOOD, and V — why I&#x27;m in each trade, where each one stands, and the exact levels where I&#x27;m out. Writing it down to get better at the craft.</description>
+      <description>A working trade journal: ABT, HOOD, and V — why I&#x27;m in each, where each stands, and the exact levels where I&#x27;m out.</description>
       <content:encoded><![CDATA[New habit: every time I put on a trade, I write down why — in plain English — and then let the next few weeks grade my homework. This is entry one. Three trades open — ABT, HOOD, and V. Why I’m in each one, where they stand, and what would make me get out. ABT: just climbed back above its key price levels. Healthy so far, but half my reason for buying hasn’t come true yet. • HOOD: my strongest chart. Big test on July 29 when they report earnings. • V: my steadiest chart. Reports July 28.]]></content:encoded>
       <pubDate>Wed, 22 Jul 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -100,7 +100,7 @@
     <item>
       <title>How to Turn a Photo Into Game-Ready Pixel Sprites for $5</title>
       <link>https://zonted.com/posts/pixelforge-launch/</link>
-      <description>PixelForge is live. Upload a portrait, get a game-ready pixel sprite pack — 4×4 walk sheet, transparent frames, engine files — for $5. The pipeline, plus the first $5.</description>
+      <description>PixelForge is live: upload a portrait, get a game-ready pixel sprite pack — 4x4 walk sheet, transparent frames, engine files — for $5. The pipeline inside.</description>
       <content:encoded><![CDATA[Sunday, June 7, 10:33 AM. A Stripe notification — not my first by a long shot, but it's been a while since one made me this ecstatic: “Congratulations, Bernard Huang! You've just received your first payment.” Five dollars. A stranger uploaded a photo, my pipeline turned it into a game character, and they paid for it while I was doing something else entirely. PixelForge is live. Here's what it is, how the pipeline works, and how a Discord full of strangers bullied me into actually shipping it. PixelForge turns a portrait photo into a game-ready pixel sprite pack — a strict 4×4 walk sheet, transparent frames, directional strips, and looping walk GIFs — for $5. No account, no subscription, money-back if it fails QA. The trick isn't the AI. AI draws the sheet; deterministic Python finishes it — key-color removal, per-frame feet alignment, transparent extraction. “Generated by AI, finished by code.” • Built in days with the plan-3x loop + GPT 5.5. The real work was the cleanup pipeline, not the generation. • Shipped inside Ship or Die — the community where you launch in 30 days or get kicked out forever. • First customer: June 7 , a Ship or Die crew member. $5, receipt below.]]></content:encoded>
       <pubDate>Wed, 10 Jun 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -118,7 +118,7 @@
     <item>
       <title>Does Threatening an AI Actually Get You Better Work? I Tested It 12 Times</title>
       <link>https://zonted.com/posts/stakes-priming-surface-area/</link>
-      <description>I re-ran my threaten-the-AI experiment properly: 3 tasks, 4 levels of stakes, 12 blind-graded sessions. The stakes dial doesn&#x27;t exist; discretionary surface area does.</description>
+      <description>I re-ran the threaten-the-AI experiment properly: 3 tasks, 4 stakes levels, 12 blind-graded sessions. The stakes dial doesn&#x27;t exist; surface area does.</description>
       <content:encoded><![CDATA[Three weeks ago I told an AI I'd lose my job, and the audit it produced scored 24% better than the polite version. People shared that post. So I did the thing the post itself asked for at the end — I stopped trusting one trial and ran it properly: three different tasks, four levels of stakes, twelve fresh sessions, every output graded blind by a different model. The clean “threaten it and the work gets better” story did not survive. Something smaller and weirder did — and it's more useful than the original. Higher stakes don't mean better work. Stakes help in exactly one situation: when there's discretionary work left on the table and you've signaled that it counts. The dial doesn't exist. Four framings — no stakes, a promotion bribe, “my job is on the line,” “my family will go hungry” — reshuffled their ranking on every task. Whichever threat won one test lost another. • A stakes version won every task; the control never did — but which stake won was noise. • The control only collapsed in one place: building from scratch. Asked to make something, the polite prompt shipped the happy path and stopped — zero mobile, zero accessibility, zero persistence. • The original 24% was a real effect inflated by a sample size of one. Both of that post's tests were audits — the regime where this barely matters.]]></content:encoded>
       <pubDate>Thu, 04 Jun 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
@@ -199,7 +199,7 @@
     <item>
       <title>I Made GPT, Claude, Gemini, Grok, GLM, MiniMax Take the MBTI Test: They All Came Back INTJ</title>
       <link>https://zonted.com/posts/every-ai-is-intj/</link>
-      <description>Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS administrations each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person. Here&#x27;s why that matters.</description>
+      <description>Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS runs each, 597 of 600 came back INTJ. Every frontier AI thinks it&#x27;s the same person. Why that matters.</description>
       <content:encoded><![CDATA[Six frontier AIs took the same personality test a hundred times each. 597 out of 600 came back INTJ. That’s not coincidence and it isn’t flattery — every helpful-assistant AI is being shaped toward the same archetype. Tested: Opus 4.7, GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, MiniMax 2.7. • 3 outliers across 600 runs. All landed one axis from INTJ, never in a different quadrant. • Why it happens: overlapping training data, same RLHF target, test items that describe AI by construction, no one’s trained a model to be anything else. • The user-side move: I open-sourced AgentTune ( agent-tune.com ) — drop-in tuning files for all 16 MBTI types. Paste yours into your agent’s system prompt and the style aligns to your type instead of the default.]]></content:encoded>
       <pubDate>Mon, 25 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>

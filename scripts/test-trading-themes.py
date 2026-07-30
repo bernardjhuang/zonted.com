@@ -191,6 +191,16 @@ class TradingThemesContractTest(unittest.TestCase):
         for retired in (".gap-map", ".db-scroll", ".db-tip"):
             self.assertNotIn(retired, self.page)
 
+    def test_static_snapshot_is_baked_and_in_sync(self) -> None:
+        """Crawler-visible snapshot must match themes.json — regenerate with
+        scripts/build-themes-static.py after any data edit."""
+        data_hash = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
+        self.assertIn(f"AUTO:THEMES_STATIC:START sha256[:12](themes.json)={data_hash}", self.page)
+        self.assertIn("AUTO:THEMES_STATIC:END", self.page)
+        for theme in self.payload["themes"]:
+            self.assertIn(f'id="static-{theme["id"]}"', self.page)
+        self.assertIn('href="/trading/themes.json"', self.page)
+
     def test_hunt_themes_follow_ledger_rules(self) -> None:
         counts = {"Geographies": 7, "Sectors": 5, "Emerging": 6}
         grok_review_ids = {
