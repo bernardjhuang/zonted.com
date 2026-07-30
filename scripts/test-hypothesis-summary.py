@@ -18,18 +18,9 @@ summary = importlib.util.module_from_spec(SPEC)
 sys.modules[SPEC.name] = summary
 SPEC.loader.exec_module(summary)
 
-CLASSIC_SCRIPT = ROOT / "scripts" / "sync-classic-hypotheses.py"
-CLASSIC_SPEC = importlib.util.spec_from_file_location("classic_hypotheses", CLASSIC_SCRIPT)
-if CLASSIC_SPEC is None or CLASSIC_SPEC.loader is None:
-    raise RuntimeError(f"Could not load {CLASSIC_SCRIPT}")
-classic_hypotheses = importlib.util.module_from_spec(CLASSIC_SPEC)
-sys.modules[CLASSIC_SPEC.name] = classic_hypotheses
-CLASSIC_SPEC.loader.exec_module(classic_hypotheses)
-
-
 class HypothesisSummaryTests(unittest.TestCase):
     def setUp(self) -> None:
-        self.page = (ROOT / "trading" / "hypothesis-source" / "index.html").read_text()
+        self.page = (ROOT / "trading" / "hypothesis-source.html").read_text()
         self.config = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())
         self.charts = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
 
@@ -173,21 +164,6 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertGreater(receipt["reverse_dcf_growth"]["constant_revenue_growth_2027_2035"], 0.40)
         self.assertIn("net-dcf-2026-07-29.xlsx", self.page)
         self.assertGreater(workbook_path.stat().st_size, 10_000)
-
-    def test_classic_hypothesis_mirror_has_exact_symbol_parity(self) -> None:
-        classic = (ROOT / "trading" / "classic" / "index.html").read_text()
-        self.assertEqual(
-            classic_hypotheses.render_classic(classic, self.page, self.config, self.charts),
-            classic,
-        )
-        card_symbols = re.findall(r'data-hypothesis-symbol="([A-Z0-9.-]+)"', classic)
-        detail_symbols = [symbol.upper() for symbol in re.findall(
-            r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"',
-            classic,
-        )]
-        self.assertEqual(card_symbols, list(self.config["rows"]))
-        self.assertEqual(detail_symbols, list(self.config["rows"]))
-
 
 if __name__ == "__main__":
     unittest.main()

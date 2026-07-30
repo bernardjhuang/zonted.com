@@ -7,6 +7,19 @@ from pathlib import Path
 from playwright.sync_api import sync_playwright
 
 
+LINKED_ROUTES = (
+    ("themes/", "Themes"),
+    ("vwap-setups/", "VWAP Setups"),
+    ("momentum/", "Momentum"),
+    ("performance/", "Performance"),
+    ("gpt-risk/", "GPT Risk"),
+    ("grok-risk/", "Grok Risk"),
+    ("gemini-risk/", "Gemini Risk"),
+    ("meta-risk/", "Meta Risk"),
+    ("fable-risk/", "Fable Risk"),
+)
+
+
 def check(condition: bool, message: str) -> None:
     if not condition:
         raise AssertionError(message)
@@ -100,6 +113,17 @@ def exercise(page, url: str, screenshot: Path) -> None:
     page.screenshot(path=str(screenshot), full_page=True)
 
 
+def exercise_linked_routes(page, origin: str) -> None:
+    for route, heading in LINKED_ROUTES:
+        errors: list[str] = []
+        page.on("pageerror", lambda error: errors.append(str(error)))
+        page.goto(f"{origin}/trading/{route}", wait_until="networkidle")
+        check(page.locator("h1").inner_text() == heading, f"{route} heading is wrong")
+        check(page.locator('.subnav a[aria-current="page"]').count() <= 1, f"{route} has ambiguous navigation state")
+        check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"{route} has horizontal overflow")
+        check(not errors, f"{route} JavaScript errors: " + "; ".join(errors))
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--url", default="http://127.0.0.1:8107/trading/")
@@ -110,12 +134,15 @@ def main() -> None:
         browser = p.chromium.launch(headless=True)
         desktop = browser.new_page(viewport={"width": 1440, "height": 1000})
         exercise(desktop, args.url, Path(args.desktop_shot))
+        origin = args.url.split("/trading/", 1)[0]
+        exercise_linked_routes(desktop, origin)
         mobile = browser.new_page(viewport={"width": 390, "height": 844}, is_mobile=True)
         exercise(mobile, args.url, Path(args.mobile_shot))
+        exercise_linked_routes(mobile, origin)
         browser.close()
     print(f"[smoke] desktop 1440x1000: {args.desktop_shot}")
     print(f"[smoke] mobile 390x844: {args.mobile_shot}")
-    print("[smoke] two tables, flairs, named catalysts, one-year hover metrics, modals, focus, overflow, JS: OK")
+    print(f"[smoke] Desk interactions + {len(LINKED_ROUTES)} linked routes, desktop/mobile overflow and JS: OK")
 
 
 if __name__ == "__main__":

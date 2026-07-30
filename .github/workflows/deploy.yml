@@ -18,7 +18,7 @@ jobs:
         run: |
           python3 scripts/build-net-dcf.py --check
           python3 scripts/build-hypothesis-summary.py --cached
-          python3 scripts/sync-classic-hypotheses.py --check
+
           if python3 -c "from pathlib import Path; raise SystemExit(0 if '<span class=\"stamp\">Live ·' in Path('trading/index.html').read_text() else 1)"; then
             export ZONTED_DESK_MORNING_QUOTES=trading/desk-morning-quotes.json
             python3 scripts/build-trading-desk.py --mode morning --quotes "$ZONTED_DESK_MORNING_QUOTES" --check
@@ -30,7 +30,7 @@ jobs:
           python3 scripts/test_trading_desk_sync.py
 
       - name: Strip build-time pipeline buffer from deploy
-        run: rm -rf trading/classic
+        run: rm -f trading/pipeline.html
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3

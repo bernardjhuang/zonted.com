@@ -15,7 +15,7 @@ import unittest
 import sync_trading_desk as sync
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-CLASSIC = (ROOT / "trading" / "classic" / "index.html").read_text()
+CLASSIC = (ROOT / "trading" / "pipeline.html").read_text()
 DESK_HOME = ROOT / "trading" / "index.html"
 RETIRED_HYPOTHESES = {"HPQ", "JBS", "NTDOY"}
 
@@ -92,23 +92,23 @@ class RoutedTradingSyncTests(unittest.TestCase):
         ):
             self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
-    def test_public_brief_route_is_restored_and_old_model_routes_stay_retired(self) -> None:
+    def test_unlinked_brief_routes_stay_retired(self) -> None:
         self.assertNotIn("brief", sync.ROUTES)
         self.assertNotIn("grok-brief", sync.ROUTES)
-        self.assertTrue((ROOT / "trading" / "brief" / "index.html").exists())
+        self.assertFalse((ROOT / "trading" / "brief" / "index.html").exists())
         self.assertFalse((ROOT / "trading" / "grok-brief" / "index.html").exists())
         redirects = (ROOT / "_redirects").read_text()
-        for retired_url in ("/trading/grok-brief", "/trading/horizon"):
+        for retired_url in ("/trading/brief", "/trading/grok-brief", "/trading/horizon"):
             self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
     def test_performance_route_matches_classic_results_and_history(self) -> None:
         page = (ROOT / "trading" / "performance" / "index.html").read_text()
         source = re.search(r'<!-- AUTO:RESULTS:START -->(.*?)<!-- AUTO:RESULTS:END -->', CLASSIC, re.S)
         if source is None:
-            self.fail("missing classic RESULTS region")
+            self.fail("missing pipeline RESULTS region")
         source_heading = re.search(r'<h2 id="results-heading">([^<]+)</h2>', source.group(1))
         if source_heading is None:
-            self.fail("missing classic results heading")
+            self.fail("missing pipeline results heading")
         self.assertIn(f'<h2 id="results-heading">{source_heading.group(1)}</h2>', page)
         results = json.loads((ROOT / "trading" / "results-ytd.json").read_text())
         self.assertIn(f'data-results-points="{len(results["points"])}"', page)
@@ -406,7 +406,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(config["vwap_url"], f'/trading/vwap-charts.json?v={sync.digest(sync.VWAP_CHARTS)}')
 
         self.assertEqual(page.count('id="desk-thesis-dialog"'), 1)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source/"', page)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', page)
         self.assertIn('data-thesis-summary', page)
         self.assertIn('data-thesis-body', page)
         self.assertIn("fetch(thesisSource", script)
