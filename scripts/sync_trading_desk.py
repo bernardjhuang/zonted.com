@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
-"""Sync cron-owned classic dashboard regions into the routed trading desk pages.
+"""Sync cron-owned pipeline regions into the routed trading desk pages.
 
-The scheduled generators continue to own ``trading/classic/index.html`` and the
-JSON chart assets. This bridge makes the routed production pages consume those
-same generated regions so the new layout cannot drift after a cron refresh.
+The scheduled generators own ``trading/pipeline.html`` and the JSON chart
+assets. The pipeline file is a build-only buffer removed before deployment;
+this bridge makes the linked production routes consume its generated regions.
 """
 from __future__ import annotations
 
@@ -18,7 +18,7 @@ import tempfile
 from dataclasses import dataclass
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-CLASSIC = ROOT / "trading" / "classic" / "index.html"
+CLASSIC = ROOT / "trading" / "pipeline.html"
 DESK_SCRIPT = ROOT / "trading" / "desk.js"
 BROKER_SCRIPT = ROOT / "js" / "trading-broker-light.js"
 SCAN_CHARTS = ROOT / "trading" / "scan-charts.json"

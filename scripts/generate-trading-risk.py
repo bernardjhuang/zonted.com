@@ -42,9 +42,6 @@ import trading_risk_core as core  # noqa: E402
 ROOT = SCRIPT_DIR.parent
 OUTPUT = ROOT / "trading" / "risk-ytd.json"
 EVALUATION = ROOT / "trading" / "risk-evaluation.json"
-PAGE = ROOT / "trading" / "classic" / "index.html"
-RISK_JS = ROOT / "js" / "trading-risk.js"
-RISK_CSS = ROOT / "css" / "trading-risk.css"
 ET = ZoneInfo("America/New_York")
 USER_AGENT = "zonted-risk-dashboard/2.0 hello@veracityapi.com"
 HISTORY_START = date(2013, 1, 1)
@@ -746,30 +743,6 @@ def serialize(payload: dict[str, Any]) -> str:
     return json.dumps(payload, indent=2, sort_keys=True, separators=(",", ": ")) + "\n"
 
 
-def update_asset_version(rendered: str) -> str:
-    digest = hashlib.sha256(rendered.encode()).hexdigest()[:12]
-    if not PAGE.exists() or 'id="risk-panel"' not in PAGE.read_text():
-        return digest
-    source = PAGE.read_text()
-    js_digest = hashlib.sha256(RISK_JS.read_bytes()).hexdigest()[:12]
-    css_digest = hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]
-    replacements = (
-        (r"/trading/risk-ytd\.json\?v=[a-f0-9]+", f"/trading/risk-ytd.json?v={digest}", 2, "risk data"),
-        (r"/js/trading-risk\.js\?v=[a-f0-9]+", f"/js/trading-risk.js?v={js_digest}", 1, "risk JS"),
-        (r"/css/trading-risk\.css\?v=[a-f0-9]+", f"/css/trading-risk.css?v={css_digest}", 1, "risk CSS"),
-    )
-    updated = source
-    for pattern, replacement, expected, label in replacements:
-        updated, count = re.subn(pattern, replacement, updated)
-        if count != expected:
-            raise RuntimeError(f"expected {expected} {label} asset URLs, found {count}")
-    if updated != source:
-        temporary = PAGE.with_suffix(".html.tmp")
-        temporary.write_text(updated)
-        os.replace(temporary, PAGE)
-    return digest
-
-
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--end", type=date.fromisoformat, help="inclusive data cutoff (YYYY-MM-DD)")
@@ -791,8 +764,6 @@ def main() -> int:
         finally:
             if os.path.exists(temporary):
                 os.unlink(temporary)
-        if args.output.resolve() == OUTPUT.resolve():
-            digest = update_asset_version(rendered)
     print(json.dumps({
         "as_of": payload["as_of"],
         "changed": changed,

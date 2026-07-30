@@ -22,7 +22,7 @@ import sys
 from sync_trading_desk import sync_sections
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PAGE = os.path.join(ROOT, "trading", "classic", "index.html")
+PAGE = os.path.join(ROOT, "trading", "pipeline.html")
 CHART_ASSET = os.path.join(ROOT, "trading", "vwap-charts.json")
 SCAN_GLOB = os.path.expanduser("~/trading/scans/sector-vwap-*.json")
 

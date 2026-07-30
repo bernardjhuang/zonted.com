@@ -10,15 +10,12 @@ import re
 import unittest
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PAGE = ROOT / "trading" / "classic" / "index.html"
+PAGE = ROOT / "trading" / "pipeline.html"
 DESK_HOME = ROOT / "trading" / "index.html"
-HYPOTHESES_SOURCE = ROOT / "trading" / "hypothesis-source" / "index.html"
+HYPOTHESES_SOURCE = ROOT / "trading" / "hypothesis-source.html"
 JS = ROOT / "js" / "trading-broker-light.js"
 RESULTS = ROOT / "trading" / "results-ytd.json"
 RISK = ROOT / "trading" / "risk-ytd.json"
-RISK_JS = ROOT / "js" / "trading-risk.js"
-RISK_CSS = ROOT / "css" / "trading-risk.css"
-GROK_BRIEF = ROOT / "trading" / "grok-brief.json"
 
 
 class TradingUiContractTest(unittest.TestCase):
@@ -28,19 +25,22 @@ class TradingUiContractTest(unittest.TestCase):
         cls.js = JS.read_text()
         cls.results = json.loads(RESULTS.read_text())
         cls.risk = json.loads(RISK.read_text())
-        cls.grok_brief = json.loads(GROK_BRIEF.read_text())
 
-    def test_answer_first_tabs(self):
-        tabs = re.findall(r'<button class="trading-tab" id="([^"]+)-tab"[^>]*>(.*?)</button>', self.html, re.S)
-        self.assertEqual([name for name, _ in tabs], ["positions", "hypotheses", "brief", "grok-brief", "scan", "vwap", "crypto", "risk", "results"])
-        labels = [" ".join(re.sub(r"<[^>]+>", "", body).split()) for _, body in tabs]
-        self.assertEqual(labels[0], "Portfolio")
-        self.assertRegex(labels[1], r"^Hypotheses \d+$")
-        self.assertEqual(labels[2], "Brief")
-        self.assertEqual(labels[3], "Grok brief")
-        self.assertRegex(labels[4], r"^Momentum \d+$")
-        self.assertEqual(labels[5:], ["VWAP", "Crypto", "Risk", "Performance"])
-        self.assertNotIn('id="log-tab"', self.html)
+    def test_pipeline_contains_only_live_route_regions(self):
+        markers = set(re.findall(r"<!-- AUTO:([A-Z_]+):START -->", self.html))
+        self.assertEqual(markers, {"SCAN", "VWAP", "CRYPTO", "RESULTS"})
+        for stale in ("ROBINHOOD", "TRADES", "HYPOTHESES", "BRIEF", "GROK_BRIEF", "RISK"):
+            self.assertNotIn(f"AUTO:{stale}", self.html)
+        self.assertFalse((ROOT / "trading" / "classic").exists())
+        self.assertFalse((ROOT / "trading" / "brief").exists())
+        public_routes = {
+            path.parent.name
+            for path in (ROOT / "trading").glob("*/index.html")
+        }
+        self.assertEqual(
+            public_routes,
+            {"themes", "vwap-setups", "momentum", "performance", "gpt-risk", "grok-risk", "gemini-risk", "meta-risk", "fable-risk"},
+        )
 
     def test_deploy_checks_the_active_desk_cadence(self):
         workflow = (ROOT / ".github" / "workflows" / "deploy.yml").read_text()
@@ -63,35 +63,6 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('class="alert"', home)
         self.assertIn('aria-label="Trading mentality reminders"', home)
 
-    def test_grok_brief_is_cross_agency_and_matches_json(self):
-        block_match = re.search(r'<!-- AUTO:GROK_BRIEF:START -->(.*?)<!-- AUTO:GROK_BRIEF:END -->', self.html, re.S)
-        self.assertIsNotNone(block_match)
-        block = block_match.group(1) if block_match else ""
-        theses = self.grok_brief["theses"]
-        self.assertIn('id="grok-brief-shell"', block)
-        self.assertIn('/trading/grok-brief.json?v=', block)
-        script_version = hashlib.sha256((ROOT / "js" / "trading-grok-brief.js").read_bytes()).hexdigest()[:12]
-        data_version = hashlib.sha256(GROK_BRIEF.read_bytes()).hexdigest()[:12]
-        self.assertIn(f'/js/trading-grok-brief.js?v={script_version}', self.html)
-        self.assertIn(f'/trading/grok-brief.json?v={data_version}', block)
-        self.assertEqual(self.grok_brief["scope"], "cross-agency-grok-brief-theses")
-        self.assertIn("06:30", self.grok_brief["cadence"])
-        self.assertLessEqual(len(theses), 10)
-        self.assertGreaterEqual(len(self.grok_brief["agencies_scanned"]), 5)
-        agencies = {row["agency"] for row in theses}
-        self.assertGreaterEqual(len(agencies), 4)
-        self.assertLessEqual(sum(row["agency"] == "FDA" for row in theses), 4)
-        self.assertGreaterEqual(sum(row["narrative_stage"] == "early" for row in theses), 1)
-        self.assertEqual(len({row["id"] for row in theses}), len(theses))
-        self.assertTrue(all(row["primary_tickers"] for row in theses))
-        self.assertTrue(all(len(row["catalyst_chain"]) >= 3 for row in theses))
-        self.assertTrue(all(row["what_happened"] and row["transmission"] and row["asymmetry"] for row in theses))
-        self.assertTrue(all(row["sources"] for row in theses))
-        grok_brief_js = (ROOT / "js" / "trading-grok-brief.js").read_text()
-        self.assertIn('6:30 AM CT trading days', grok_brief_js)
-        self.assertIn('Catalyst chain', grok_brief_js)
-        self.assertIn('Transmission:', grok_brief_js)
-        self.assertIn('Asymmetry:', grok_brief_js)
 
     def test_hypotheses_are_explicit_and_scannable(self):
         hypotheses_html = HYPOTHESES_SOURCE.read_text()
@@ -173,7 +144,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(desk.count('data-desk-kind="position"'), position_count)
         self.assertEqual(desk.count('data-desk-kind="hypothesis"'), len(expected_symbols) - position_count)
         self.assertIn(f'data-desk-source-articles="{len(expected_symbols)}"', desk)
-        self.assertIn('data-thesis-source="/trading/hypothesis-source/"', desk)
+        self.assertIn('data-thesis-source="/trading/hypothesis-source.html"', desk)
         self.assertEqual(desk.count('class="desk-thesis-cell-button"'), len(expected_symbols))
         self.assertIn("Current holdings are reconciled on the Desk.", hypotheses_route)
         self.assertNotIn("Six are live positions.", hypotheses_route)
@@ -230,19 +201,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(match.group(1) if match else "", latest)
         self.assertIn(f'data-results-points="{len(points)}"', self.html)
 
-    def test_forward_risk_dashboard_contract(self):
-        block = re.search(r'<!-- AUTO:RISK:START -->(.*?)<!-- AUTO:RISK:END -->', self.html, re.S)
-        self.assertIsNotNone(block)
-        self.assertIn('id="risk-panel"', block.group(1) if block else "")
-        self.assertIn('/css/trading-risk.css?', self.html)
-        self.assertIn('/js/trading-risk.js?', self.html)
-        digest = hashlib.sha256(RISK.read_bytes()).hexdigest()[:12]
-        self.assertEqual(self.html.count(f'/trading/risk-ytd.json?v={digest}'), 2)
-        self.assertIn(f'/js/trading-risk.js?v={hashlib.sha256(RISK_JS.read_bytes()).hexdigest()[:12]}', self.html)
-        self.assertIn(f'/css/trading-risk.css?v={hashlib.sha256(RISK_CSS.read_bytes()).hexdigest()[:12]}', self.html)
-        self.assertIn('bindChartInteractions', RISK_JS.read_text())
-        self.assertIn('risk-chart-tooltip', RISK_JS.read_text())
-        self.assertIn('.risk-chart-tooltip', RISK_CSS.read_text())
+    def test_forward_risk_data_contract(self):
         current = self.risk["current"]
         score = self.risk["score"]
         self.assertEqual(self.risk["schema_version"], 2)
@@ -257,16 +216,11 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(self.risk["model_status"]["endpoints_passed"], 0)
         self.assertEqual(self.risk["model_status"]["endpoints_total"], 4)
         self.assertIsNone(self.risk["model_status"]["live_probabilities"])
-        self.assertIn("Full Brier receipt", RISK_JS.read_text())
-        self.assertIn("S&P 500 (SPY)", RISK_JS.read_text())
-        self.assertIn("comparison_start", RISK_JS.read_text())
-        self.assertIn("Conditions Score", RISK_JS.read_text())
-        self.assertIn("Historical outcome frequencies", RISK_JS.read_text())
-        self.assertIn("constant-maturity", RISK_JS.read_text())
-        self.assertIn("VIX9D / VIX", RISK_JS.read_text())
-        self.assertIn("stale · zero weight", RISK_JS.read_text())
         self.assertGreaterEqual(len(self.risk["commentary"]), 3)
         self.assertLessEqual(len(self.risk["commentary"]), 5)
+        self.assertNotIn("AUTO:RISK", self.html)
+        self.assertFalse((ROOT / "js" / "trading-risk.js").exists())
+        self.assertFalse((ROOT / "css" / "trading-risk.css").exists())
 
     def test_heading_without_portfolio_tools(self):
         self.assertEqual(len(re.findall(r"<h1\b", self.html)), 1)
@@ -309,10 +263,9 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('aria-label="Full momentum scan of the tracked universe"', self.html)
 
     def test_chart_payloads_are_external_and_small_shell(self):
-        # Thesis + brief copy stay server-rendered for no-JS access; chart payloads remain external.
-        # The classic dashboard is a build-time pipeline buffer — stripped before deploy and
-        # redirected in production — so the shell-size contract covers the deployed pages instead.
-        for name in ("momentum", "brief", "vwap-setups", "performance", "themes"):
+        # Generated chart payloads stay external; the pipeline buffer is stripped
+        # before deploy, so shell-size limits cover only linked public routes.
+        for name in ("momentum", "vwap-setups", "performance", "themes"):
             deployed = ROOT / "trading" / name / "index.html"
             self.assertLess(deployed.stat().st_size, 175_000, str(deployed))
         self.assertLess(DESK_HOME.stat().st_size, 175_000)
@@ -414,32 +367,6 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn('data-crypto-select', self.html)
         self.assertIn('>Spread Z vs BTC</th>', self.html)
         self.assertIn("initChartGallery('#crypto-chart-grid'", self.js)
-
-    def test_live_setups_collapsed_and_recent_activity_folded(self):
-        combined_pnl_rows = re.findall(r'<li class="ticker" data-symbol-pnl="([^"]+)"><span class="ticker-symbol">([^<]+)</span>', self.html)
-        public_positions = json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
-        expected_symbols = {row["symbol"] for row in public_positions}
-        self.assertTrue(combined_pnl_rows)
-        actual_symbols = {symbol for _, symbol in combined_pnl_rows}
-        self.assertTrue(actual_symbols <= expected_symbols)
-        for symbol in {symbol for _, symbol in combined_pnl_rows}:
-            values = {value for value, row_symbol in combined_pnl_rows if row_symbol == symbol}
-            self.assertEqual(len(values), 1, symbol)
-            self.assertRegex(next(iter(values)), r"^[+−]\d+\.\d%$")
-        self.assertIn('aria-expanded="false" aria-controls="${detailId}"', self.js)
-        self.assertIn('>View setup</button>', self.js)
-        self.assertIn('data-position-symbol="${symbol}" hidden>', self.js)
-        self.assertIn("renderSetupChartForSymbol($('[data-position-chart-shell]', detail)", self.js)
-        self.assertIn("const combinedPnl = t.dataset.symbolPnl || '—';", self.js)
-        self.assertIn('Monitor FDA’s formal peptide-action schedule and the next PCAC meeting date', self.js)
-        self.assertIn('Wait for HIMS to sink below $25 before adding.', self.js)
-        self.assertIn('#positions-panel .portfolio-grid { grid-template-columns: 1fr; }', self.html)
-        self.assertRegex(self.js, r'<article class="portfolio-card[\s\S]*?<div class="bl-position-chart-detail[\s\S]*?</article>')
-        self.assertNotIn('class="portfolio-details"', self.js)
-        self.assertIn('.slice(0, 20)', self.js)
-        self.assertIn('<details class="bl-card activity-disclosure">', self.js)
-        self.assertIn('direction / type / P&amp;L', self.js)
-        self.assertEqual(self.html.count('class="activity-row"'), 40)
 
     def test_desk_pages_share_one_nav_and_stamp(self):
         """Guard against multi-agent drift: every routed desk page must carry the

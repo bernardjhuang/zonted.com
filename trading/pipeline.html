@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fafaf8">
+    <title>Trading Dashboard — Zonted</title>
+    <meta name="description" content="A quantity-free public portfolio with ticker hypotheses, momentum, VWAP, 13F, and crypto market views.">
+    <link rel="canonical" href="https://zonted.com/trading/classic/">
+    <meta property="og:title" content="Trading Dashboard — Zonted">
+    <meta property="og:description" content="A quantity-free public portfolio with ticker hypotheses, momentum, VWAP, 13F, and crypto market views.">
+    <meta property="og:url" content="https://zonted.com/trading/classic/">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta name="twitter:card" content="summary">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=optional" rel="stylesheet" media="print" onload="this.media='all'">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <style>
+        /* ── Broker Light (design handoff 2026-07-21) ─────────────────── */
+        .bl {
+            --bl-page: #fafaf8; --bl-card: #fff; --bl-rowhead: #f6f5f1; --bl-hover: #fbfaf7;
+            --bl-border: #e6e4de; --bl-divider: #f0eee8; --bl-input: #dcd9d2;
+            --bl-ink: #1c1e22; --bl-ink2: #34373d; --bl-muted: #5c5f66; --bl-faint: #666a70;
+            --bl-accent: #2f5fb3; --bl-chipbg: #e9eef8; --bl-chipbd: #c4d2ec;
+            --bl-gain: #087a42; --bl-loss: #c93a4a; --bl-spark: #8fa4c9; --bl-vwap: #9a621d;
+            --bl-sans: 'IBM Plex Sans', system-ui, sans-serif;
+            --bl-mono: 'IBM Plex Mono', ui-monospace, monospace;
+            background: var(--bl-page); color: var(--bl-ink); overflow-x: clip;
+            font-family: var(--bl-sans); font-size: 14px; line-height: 1.5;
+        }
+        .bl-header { background: var(--bl-card); border-bottom: 1px solid var(--bl-border); padding: 0 40px; }
+        .bl-header-row { display: flex; align-items: center; gap: 12px 16px; padding: 16px 0 10px; flex-wrap: wrap; }
+        .bl-title { margin: 0; font: 700 20px/1.2 var(--bl-sans); }
+        .bl-meta { font-size: 13px; color: var(--bl-muted); text-wrap: pretty; }
+        .bl-meta .trading-stamp { display: inline; padding: 0; border: 0; margin: 0; font: inherit; color: inherit; text-transform: none; letter-spacing: normal; }
+        .bl-meta .trading-stamp::before { content: none; }
+
+        .bl button, .bl summary { touch-action: manipulation; -webkit-tap-highlight-color: rgba(47, 95, 179, .14); }
+        .trading-tabs { display: flex; gap: 24px; border: 0; padding: 0; overflow-x: auto; }
+        .trading-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; margin-bottom: -1px; padding: 10px 0 12px; font: 500 13.5px var(--bl-sans); color: var(--bl-muted); cursor: pointer; white-space: nowrap; letter-spacing: 0; text-transform: none; }
+        .trading-tab:hover { color: var(--bl-ink); }
+        .trading-tab:focus-visible, .bl-chip:focus-visible, .bl-reset:focus-visible, .data-select:focus-visible, .segmented button:focus-visible, .bl summary:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
+        .trading-tab[aria-selected="true"] { color: var(--bl-ink); border-bottom-color: var(--bl-accent); }
+        .trading-tab-count { background: none; color: var(--bl-faint); font-size: 12px; padding: 0; margin-left: 4px; min-width: 0; }
+        .bl-filters { display: flex; align-items: center; gap: 8px; padding: 16px 40px; flex-wrap: wrap; }
+        .bl-filters[hidden] { display: none; }
+        .bl-fl { font-size: 12px; color: var(--bl-muted); margin-right: 2px; }
+        .bl-chip { font: 500 12.5px var(--bl-sans); padding: 6px 13px; border-radius: 20px; background: var(--bl-card); color: var(--bl-ink2); border: 1px solid var(--bl-input); cursor: pointer; }
+        .bl-chip.on { background: var(--bl-chipbg); color: var(--bl-accent); border-color: var(--bl-chipbd); }
+        .bl-reset { font-size: 12.5px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; padding: 6px; }
+        .bl-match { margin-left: auto; font-size: 12px; color: var(--bl-faint); }
+        .bl-body { padding: 4px 40px 40px; display: grid; gap: 18px; }
+        #bl-built, #bl-log-built { min-width: 0; display: grid; gap: 18px; }
+        .bl-card { min-width: 0; background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 8px; overflow-x: auto; }
+        .bl-card-title { padding: 16px 20px 12px; font-size: 15px; font-weight: 600; }
+        .bl-card-title span { font-size: 12.5px; font-weight: 400; color: var(--bl-muted); }
+        .bl-card-title a { margin-left: 8px; color: var(--bl-accent); font-size: 12px; font-weight: 500; text-underline-offset: 2px; }
+        .bl-card-title .bl-swipe-hint { display: none; }
+        .bl-card-title .bl-tgl { float: right; font-size: 12px; color: var(--bl-accent); background: none; border: 0; cursor: pointer; }
+        .bl-thead { display: grid; background: var(--bl-rowhead); padding: 7px 20px; font: 600 11px var(--bl-sans); color: var(--bl-muted); letter-spacing: .3px; text-transform: uppercase; }
+        .bl-thead > button { all: unset; cursor: pointer; font: inherit; color: inherit; text-align: left; }
+        .bl-thead > button:hover { color: var(--bl-ink); }
+        .bl-thead > .r, .bl-row > .r { text-align: right; }
+        .bl-row { display: grid; padding: 10px 20px; border-top: 1px solid var(--bl-divider); align-items: baseline; }
+        .bl-row:hover { background: var(--bl-hover); }
+        .bl-row.is-open { background: var(--bl-chipbg); }
+        .bl-row .sym { font: 600 13px var(--bl-mono); }
+        .bl-position-chart-toggle { all: unset; display: inline-flex; align-items: center; gap: 7px; color: var(--bl-ink); cursor: pointer; }
+        .bl-position-chart-toggle:hover { color: var(--bl-accent); }
+        .bl-position-chart-toggle:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; border-radius: 3px; }
+        .bl-position-chart-toggle[aria-expanded="true"] .scan-row-chevron { color: var(--bl-accent); transform: rotate(90deg); }
+        .bl-position-chart-detail { min-width: 0; margin-top: 16px; padding: 16px 0 2px; border-top: 1px solid var(--bl-chipbd); overflow-x: auto; }
+        .bl-position-chart-detail .scan-setup-chart { border-top: 0; padding-top: 0; }
+        .bl-row .mono { font-family: var(--bl-mono); font-size: 12.5px; }
+        .bl-row .mut { color: var(--bl-muted); }
+        .bl-gain { color: var(--bl-gain); } .bl-loss { color: var(--bl-loss); }
+        .bl-tag { display: block; font-size: 10px; color: var(--bl-faint); }
+        .bl-empty { padding: 14px 20px; font-size: 13px; color: var(--bl-faint); }
+        .bl-pair { min-width: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+        @media (max-width: 1100px) { .bl-pair { grid-template-columns: 1fr; } }
+        .g-pos { grid-template-columns: 86px 70px 64px 80px 100px 84px minmax(230px, 1.2fr) minmax(210px, 1fr); min-width: 1080px; column-gap: 10px; align-items: start; }
+        .g-pos .bl-plan { color: var(--bl-ink2); font-size: 12px; line-height: 1.45; overflow-wrap: anywhere; }
+        .g-pos .bl-invalidation { color: var(--bl-loss); }
+        .g-trade { grid-template-columns: 80px 1fr 60px 110px; min-width: 380px; }
+        .g-ext { grid-template-columns: 34px 70px 1fr 100px; padding-top: 6.5px; padding-bottom: 6.5px; }
+        .g-ext { border-top: 1px solid var(--bl-rowhead); }
+        .bl-foot { font-size: 12px; color: var(--bl-faint); max-width: 900px; }
+        .bl [hidden] { display: none !important; }
+        @media (max-width: 600px) {
+            .g-trade { grid-template-columns: 52px minmax(100px, 1fr) 70px; grid-template-rows: auto auto; min-width: 0; column-gap: 4px; }
+            .g-trade > :nth-child(1) { grid-column: 1; grid-row: 1 / span 2; }
+            .g-trade > :nth-child(2) { grid-column: 2; grid-row: 1; }
+            .g-trade > :nth-child(3) { grid-column: 2; grid-row: 2; }
+            .g-trade > :nth-child(4) { grid-column: 3; grid-row: 1 / span 2; align-self: center; }
+            .bl-thead.g-trade { grid-template-rows: auto; }
+            .bl-thead.g-trade > :nth-child(1), .bl-thead.g-trade > :nth-child(2), .bl-thead.g-trade > :nth-child(4) { grid-row: 1; }
+            .bl-thead.g-trade > :nth-child(3) { display: none; }
+            .bl-card-title .bl-swipe-hint { display: block; margin: 4px 0 0; }
+        }
+        /* raw cron markup hidden once enhanced (kept in DOM for the nightly cron) */
+        .bl-enhanced #bl-raw { display: none; }
+        /* ── legacy fallback + other-tab reskin (classes emitted by cron & injectors) ── */
+        .trading-panel { min-width: 0; padding: 0; }
+        .bl .position-head h2, .bl .scan-intro, .bl .position-group h3 { font-family: var(--bl-sans); }
+        .bl .position-head { display: flex; gap: 10px; align-items: baseline; padding: 16px 20px 4px; }
+        .bl .position-head h2 { font-size: 15px; font-weight: 600; letter-spacing: 0; }
+        .bl .position-head span { font: 400 12.5px var(--bl-sans); color: var(--bl-muted); letter-spacing: 0; text-transform: none; }
+        .bl .scan-intro { padding: 0 20px; margin: 4px 0 14px; color: var(--bl-muted); font-size: 12.5px; max-width: 860px; }
+        .bl .position-group { min-width: 0; padding: 0 20px 14px; }
+        .bl .position-group h3 { font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); margin: 10px 0 8px; }
+        .bl .ticker-list { display: flex; flex-wrap: wrap; gap: 8px; list-style: none; padding: 0; }
+        .bl .ticker { min-width: 84px; padding: 9px 12px; border: 1px solid var(--bl-border); border-radius: 6px; background: var(--bl-card); }
+        .bl .ticker-symbol { font: 600 13px var(--bl-mono); color: var(--bl-ink); letter-spacing: 0; }
+        .bl .ticker-name { display: block; font: 400 11.5px var(--bl-sans); color: var(--bl-muted); margin-top: 2px; }
+        .bl .scan-table-wrap { width: 100%; max-width: 100%; min-width: 0; overflow-x: auto; }
+        .bl .scan-table { width: 100%; min-width: 640px; border-collapse: collapse; border-top: 1px solid var(--bl-border); }
+        .bl .scan-table th { background: var(--bl-rowhead); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 12px 7px 20px; border-bottom: 0; white-space: nowrap; }
+        .bl .scan-table td { padding: 9px 12px 9px 20px; border-top: 1px solid var(--bl-divider); border-bottom: 0; font-size: 12.5px; white-space: nowrap; font-variant-numeric: tabular-nums; }
+        .bl .scan-table tr:hover td { background: var(--bl-hover); }
+        .bl .scan-sym { font: 600 13px var(--bl-mono); }
+        .bl .scan-sec { color: var(--bl-muted); }
+        .bl td.scan-num, .bl th.scan-num { text-align: right; font-family: var(--bl-mono); font-size: 12px; }
+        .bl .scan-price { min-width: 132px; }
+        .bl .scan-price-value { color: var(--bl-ink); }
+        .bl .scan-sort { display: inline-flex; align-items: center; justify-content: flex-end; gap: 5px; margin-left: auto; padding: 2px 0; border: 0; background: transparent; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; touch-action: manipulation; }
+        .bl .scan-sort:hover { color: var(--bl-ink); }
+        .bl .scan-sort:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
+        .bl .scan-z-pos { color: var(--bl-gain); } .bl .scan-z-neg { color: var(--bl-loss); }
+        .bl .scan-null { color: var(--bl-faint); }
+        .bl .scan-signal { font: 600 10.5px var(--bl-sans); letter-spacing: .4px; }
+        .bl .scan-signal--enter { color: var(--bl-gain); } .bl .scan-signal--short, .bl .scan-signal--avoid { color: var(--bl-loss); }
+        .bl .scan-signal--watch { color: var(--bl-muted); } .bl .scan-signal--nodata { color: var(--bl-faint); }
+        .bl .scan-risk-overlay { margin: -4px 20px 12px; padding: 9px 11px; border-left: 3px solid var(--bl-vwap); background: var(--bl-rowhead); color: var(--bl-ink2); font-size: 12px; }
+        .bl .scan-risk-note { margin-top: 3px; color: var(--bl-vwap); font-weight: 600; }
+        .bl .scan-chart-hint { margin: -6px 20px 12px; color: var(--bl-accent); font-size: 12px; }
+        .bl .scan-skip-full { margin: -4px 0 8px; font-size: 11.5px; }
+        .bl .scan-skip-full a { color: var(--bl-accent); text-decoration: underline; text-underline-offset: 2px; }
+        .bl #scan-method:focus { outline: 2px solid var(--bl-accent); outline-offset: 4px; }
+        .bl .scan-data-row { cursor: pointer; }
+        .bl .scan-data-row.is-open td { background: var(--bl-chipbg); }
+        .bl .scan-row-toggle { display: inline-flex; align-items: center; gap: 7px; min-height: 32px; padding: 2px 6px 2px 0; border: 0; background: transparent; color: var(--bl-ink); font: 600 13px var(--bl-mono); cursor: pointer; touch-action: manipulation; }
+        .bl .scan-row-toggle:hover { color: var(--bl-accent); }
+        .bl .scan-row-toggle:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; border-radius: 3px; }
+        .bl .scan-row-chevron { display: inline-block; color: var(--bl-faint); font: 600 18px/1 var(--bl-sans); transition: transform 140ms ease; transform-origin: center; }
+        .bl .scan-row-toggle[aria-expanded="true"] .scan-row-chevron { color: var(--bl-accent); transform: rotate(90deg); }
+        .bl .scan-detail-row td { padding: 0 !important; white-space: normal !important; background: var(--bl-card); }
+        .bl .scan-detail-row:hover td { background: var(--bl-card); }
+        .bl .scan-setup-chart { position: relative; min-width: 720px; padding: 16px 0 2px; border-top: 1px solid var(--bl-chipbd); }
+        .bl .scan-comparison-grid { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 12px; margin: 0 20px 12px; align-items: start; }
+        .bl .scan-comparison-grid > * { min-width: 0; }
+        .bl .scan-comparison-grid .setup-card, .bl .scan-comparison-grid .vwap-chart { margin: 0; }
+        .bl .scan-sector-chart { align-self: start; }
+        .bl .scan-setup-card { margin-bottom: 12px; }
+        .bl .scan-chart-loading { margin: 0; padding: 18px 20px; color: var(--bl-muted); font-size: 12px; }
+        .bl .scan-setup-card svg:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; }
+        @media (max-width: 900px) { .bl .scan-comparison-grid { grid-template-columns: 1fr; } }
+        @media (prefers-reduced-motion: reduce) { .bl .scan-row-chevron { transition: none; } }
+        .bl .scan-sectors { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 8px; list-style: none; padding: 2px 20px 10px; }
+        .bl .scan-sector { min-width: 0; padding: 11px 12px; border: 1px solid var(--bl-border); border-radius: 7px; background: var(--bl-card); color: var(--bl-muted); }
+        .bl .scan-sector-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; font: 600 11px var(--bl-mono); color: var(--bl-faint); }
+        .bl .scan-sector-head b { font-size: 14px; color: var(--bl-ink); }
+        .bl .scan-sector-name { display: block; margin-top: 3px; font-size: 12px; color: var(--bl-muted); }
+        .bl .scan-sector-score { display: block; margin-top: 8px; font: 700 14px var(--bl-mono); color: var(--bl-ink); }
+        .bl .scan-sector-score small { font: 500 9px var(--bl-sans); color: var(--bl-faint); letter-spacing: .06em; }
+        .bl .scan-sector--hot { border-color: var(--bl-gain); } .bl .scan-sector--cold { border-color: var(--bl-loss); }
+        .bl .trading-note { padding: 12px 20px 16px; margin: 0; border-top: 1px solid var(--bl-divider); font-size: 12px; color: var(--bl-faint); }
+        .brief-log { padding: 0 20px; max-width: 980px; }
+        .brief-entry { border-bottom: 1px solid var(--bl-border, #e5e5e5); padding: 0; }
+        .brief-entry:last-child { border-bottom: 0; }
+        .brief-entry > details > summary { cursor: pointer; padding: 12px 0; font-size: 14.5px; font-weight: 600; color: var(--bl-ink); list-style: none; display: flex; align-items: center; gap: 8px; }
+        .brief-entry > details > summary::before { content: '▾'; font-size: 12px; color: var(--bl-muted); transition: transform 0.15s; }
+        .brief-entry > details:not([open]) > summary::before { transform: rotate(-90deg); }
+        .brief-entry > details > summary time { font-variant-numeric: tabular-nums; }
+        .brief-entry-body { padding: 0 0 20px; font-size: 13.5px; line-height: 1.6; color: var(--bl-ink); }
+        .brief-risk-card { border: 1px solid var(--bl-border); border-radius: 10px; padding: 16px 18px; margin: 12px 0; background: var(--bl-card); }
+        .brief-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .brief-risk-title { font-size: 15px; font-weight: 600; margin: 0 0 4px; line-height: 1.35; }
+        .brief-num { color: var(--bl-faint); margin-right: 4px; }
+        .brief-score-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font: 600 13px var(--bl-sans); color: #fff; white-space: nowrap; flex-shrink: 0; }
+        .brief-score-detail { display: block; font: 400 11.5px var(--bl-mono); color: var(--bl-faint); margin: 2px 0 8px; }
+        .brief-evidence-tag { display: inline-block; padding: 2px 8px; border-radius: 4px; font: 600 11px var(--bl-sans); color: #fff; text-transform: uppercase; letter-spacing: .03em; }
+        .brief-sources { color: var(--bl-muted); margin-left: 8px; }
+        .brief-levers { display: flex; flex-wrap: wrap; gap: 5px; margin: 6px 0 10px; }
+        .brief-ticker { font: 500 12px var(--bl-mono); background: var(--bl-chipbg); color: var(--bl-accent); padding: 2px 8px; border-radius: 4px; border: 1px solid var(--bl-chipbd); }
+        .brief-section { margin: 8px 0; }
+        .brief-label { display: block; font-size: 12.5px; font-weight: 600; color: var(--bl-muted); margin-bottom: 3px; }
+        .brief-signals ul, .brief-bullets { margin: 4px 0 6px; padding-left: 20px; }
+        .brief-signals li, .brief-bullets li { margin: 3px 0; font-size: 13px; }
+        .brief-para { margin: 6px 0; }
+        .brief-section-header { font-size: 14px; font-weight: 600; margin: 16px 0 4px; color: var(--bl-muted); }
+        .brief-section-divider { font-size: 18px; font-weight: 700; margin: 24px 0 12px; padding: 10px 0; border-top: 2px solid var(--bl-border); border-bottom: 1px solid var(--bl-divider, #eee); color: var(--bl-ink); }
+        .brief-table-wrap { overflow-x: auto; margin: 10px 0; }
+        .brief-table { width: 100%; border-collapse: collapse; border-top: 1px solid var(--bl-border); font-size: 12.5px; }
+        .brief-table th { background: var(--bl-rowhead, #f5f5f5); font: 600 11px var(--bl-sans); letter-spacing: .3px; text-transform: uppercase; color: var(--bl-muted); text-align: left; padding: 7px 10px; border-bottom: 0; white-space: nowrap; }
+        .brief-table td { padding: 7px 10px; border-top: 1px solid var(--bl-divider, #eee); border-bottom: 0; white-space: normal; line-height: 1.5; font-variant-numeric: tabular-nums; }
+        .brief-table tr:hover td { background: var(--bl-hover, #f9f9f9); }
+        .brief-entry-today { border-left: 3px solid var(--bl-accent, #6366f1); padding-left: 12px; margin-left: -12px; }
+        .brief-entry-header h3 { font-size: 17px; font-weight: 700; margin: 16px 0 4px; color: var(--bl-ink); }
+        .brief-entry-header { border-bottom: 1px solid var(--bl-divider, #eee); padding-bottom: 8px; margin-bottom: 4px; }
+        .brief-details { margin-top: 10px; border-top: 1px dashed var(--bl-divider, #ddd); padding-top: 8px; }
+        .brief-details > summary { cursor: pointer; font-size: 12px; color: var(--bl-faint); list-style: none; }
+        .brief-details > summary::before { content: '▸ '; }
+        .brief-details[open] > summary::before { content: '▾ '; }
+        .brief-details-body { padding: 6px 0; font-size: 12px; color: var(--bl-muted); }
+        .brief-details-body p { margin: 3px 0; }
+        .brief-details-body .brief-bullets { font-size: 12px; }
+        .brief-details-body .brief-bullets li { font-size: 12px; }
+
+        .bl .vwap-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
+        .bl .vwap-chart { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; position: relative; margin: 0; }
+        .bl .vwap-chart--spy { grid-column: 1 / -1; }
+        .bl .vwap-chart figcaption { display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px; }
+        .bl .vwap-chart figcaption b { font: 600 13px var(--bl-mono); }
+        .bl .vwap-chart figcaption span { font-size: 12px; color: var(--bl-muted); }
+        .bl .vwap-chart figcaption em { margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal; }
+        .bl .vwap-chart figcaption .vwap-z-badge { font: 600 11px var(--bl-mono); white-space: nowrap; }
+        .bl .vwap-chart svg { display: block; width: 100%; height: auto; }
+        .bl .vg { stroke: var(--bl-divider); } .bl .va { fill: var(--bl-faint); font: 10px var(--bl-mono); }
+        .bl .vlp { fill: none; stroke: var(--bl-accent); stroke-width: 2; }
+        .bl .vlv { fill: none; stroke: var(--bl-vwap); stroke-width: 1.5; stroke-dasharray: 5 4; }
+        .bl .vfp { fill: rgba(47, 95, 179, 0.06); } .bl .vfn { fill: rgba(201, 58, 74, 0.07); }
+        .bl .vmu { fill: var(--bl-gain); } .bl .vmd { fill: var(--bl-loss); }
+        .bl .vxh { stroke: var(--bl-faint); stroke-dasharray: 2 3; }
+        .bl .vzt { stroke: var(--bl-divider); stroke-dasharray: 3 4; }
+        .bl .vzp, .bl .vzn, .bl .vzm { fill: none; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+        .bl .vzp { stroke: var(--bl-gain); } .bl .vzn { stroke: var(--bl-loss); } .bl .vzm { stroke: var(--bl-faint); }
+        .bl .vzl { fill: var(--bl-faint); font: 10px var(--bl-mono); letter-spacing: .04em; }
+        .bl .vzl.scan-z-pos { fill: var(--bl-gain); } .bl .vzl.scan-z-neg { fill: var(--bl-loss); } .bl .vzl.scan-sec { fill: var(--bl-muted); }
+        .bl .vwap-tip, .bl .setup-tip { position: absolute; pointer-events: none; z-index: 2; padding: 6px 9px; background: var(--bl-card); border: 1px solid var(--bl-border); border-radius: 6px; font: 400 11px var(--bl-mono); color: var(--bl-muted); }
+        .bl .vwap-tip b, .bl .setup-tip b { color: var(--bl-ink); }
+        .bl .setup-card { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); margin: 0 20px 16px; padding: 14px 14px 8px; position: relative; }
+        .bl .setup-card header { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+        .bl .setup-card header b { font: 600 14px var(--bl-mono); }
+        .bl .setup-card header > span { font-size: 12px; color: var(--bl-muted); }
+        .bl .setup-stats { margin-left: auto; font: 400 11px var(--bl-mono); }
+        .bl .setup-stats b { color: var(--bl-ink); }
+        .bl .setup-b { font: 600 10px var(--bl-sans); letter-spacing: .5px; text-transform: uppercase; padding: 2px 9px; border-radius: 20px; border: 1px solid; }
+        .bl .setup-b--long { color: var(--bl-gain); border-color: var(--bl-gain); }
+        .bl .setup-b--short { color: var(--bl-loss); border-color: var(--bl-loss); }
+        .bl .setup-b--break { color: var(--bl-vwap); border-color: var(--bl-vwap); }
+        .bl .setup-b--watch { color: var(--bl-muted); border-color: var(--bl-input); }
+        .bl .setup-read { color: var(--bl-muted); font-size: 12.5px; margin: 4px 0 10px; max-width: 960px; }
+        .bl .setup-card svg { display: block; width: 100%; height: auto; }
+        .bl .sg { stroke: var(--bl-divider); } .bl .sz { stroke: var(--bl-input); } .bl .sd { stroke: var(--bl-input); stroke-dasharray: 2 3; }
+        .bl .sa, .bl .sl { fill: var(--bl-faint); font: 10px var(--bl-mono); } .bl .sl { text-transform: uppercase; letter-spacing: .4px; }
+        .bl .st { font: 600 10.5px var(--bl-mono); } .bl .sx { stroke: var(--bl-faint); stroke-dasharray: 2 3; }
+        .bl .whale-summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 10px; padding: 0 20px 14px; }
+        .bl .whale-summary > div { min-width: 0; padding: 12px 14px; border: 1px solid var(--bl-border); border-radius: 7px; background: var(--bl-card); }
+        .bl .whale-summary span { display: block; color: #686b70; font-size: 10.5px; letter-spacing: .35px; text-transform: uppercase; }
+        .bl .whale-summary strong { display: block; margin-top: 3px; font: 600 16px var(--bl-mono); font-variant-numeric: tabular-nums; }
+        .bl .whale-summary small { display: block; margin-top: 2px; color: #686b70; font-size: 10.5px; }
+        .bl .whale-flow-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin: 0 20px 8px; }
+        .bl .whale-flow-head h3 { margin: 0; color: var(--bl-ink); font: 600 12px var(--bl-sans); text-transform: uppercase; letter-spacing: .3px; }
+        .bl .whale-flow-head p { margin: 0; color: #686b70; font-size: 11.5px; }
+        .bl .whale-flow-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding: 0 20px 18px; }
+        .bl .whale-card { min-width: 0; padding: 15px 16px 13px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .bl .whale-card-head { display: flex; justify-content: space-between; gap: 16px; align-items: flex-start; }
+        .bl .whale-card-head > div:first-child { min-width: 0; }
+        .bl .whale-card h3 { margin: 0; color: var(--bl-ink); font: 600 13px var(--bl-sans); text-wrap: balance; }
+        .bl .whale-card-head p { margin: 3px 0 0; color: #686b70; font-size: 11.5px; overflow-wrap: anywhere; }
+        .bl .whale-stale { display: inline-block; margin-left: 5px; color: var(--bl-vwap); }
+        .bl .whale-net { flex: 0 0 auto; text-align: right; }
+        .bl .whale-net span { display: block; color: #686b70; font-size: 9.5px; letter-spacing: .35px; text-transform: uppercase; }
+        .bl .whale-net strong { display: block; margin-top: 2px; font: 600 15px var(--bl-mono); font-variant-numeric: tabular-nums; }
+        .bl .whale-flow-stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 13px 0 8px; padding: 9px 0; border-top: 1px solid var(--bl-divider); border-bottom: 1px solid var(--bl-divider); }
+        .bl .whale-flow-stats div { padding: 0 10px; border-left: 1px solid var(--bl-divider); }
+        .bl .whale-flow-stats div:first-child { padding-left: 0; border-left: 0; }
+        .bl .whale-flow-stats dt { color: #686b70; font-size: 9.5px; letter-spacing: .35px; text-transform: uppercase; }
+        .bl .whale-flow-stats dd { margin: 2px 0 0; font: 600 12px var(--bl-mono); font-variant-numeric: tabular-nums; }
+        .bl .whale-diverge { position: relative; display: grid; grid-template-columns: 1fr 1fr; align-items: center; height: 10px; margin: 8px 0 13px; }
+        .bl .whale-diverge i { position: absolute; left: 50%; top: 0; bottom: 0; width: 1px; background: var(--bl-input); }
+        .bl .whale-diverge span { display: block; height: 7px; }
+        .bl .whale-sold { justify-self: end; background: var(--bl-loss); border-radius: 4px 0 0 4px; opacity: .82; }
+        .bl .whale-bought { justify-self: start; background: var(--bl-gain); border-radius: 0 4px 4px 0; }
+        .bl .whale-card h4 { margin: 0 0 5px; color: #686b70; font: 600 9.5px var(--bl-sans); letter-spacing: .35px; text-transform: uppercase; }
+        .bl .whale-moves { list-style: none; margin: 0; padding: 0; }
+        .bl .whale-moves li { display: flex; justify-content: space-between; gap: 12px; padding: 4px 0; border-top: 1px solid var(--bl-divider); font-size: 11.5px; }
+        .bl .whale-moves li:first-child { border-top: 0; }
+        .bl .whale-moves span { min-width: 0; color: var(--bl-ink2); overflow-wrap: anywhere; }
+        .bl .whale-moves strong { flex: 0 0 auto; font: 600 11px var(--bl-mono); font-variant-numeric: tabular-nums; }
+        .bl .whale-cols { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 0 20px 8px; }
+        .bl .whale-cols .scan-table { min-width: 0; }
+        .bl .whale-cols td, .bl .whale-cols th { white-space: normal; }
+        .bl .agg-bar { display: block; height: 6px; border-radius: 3px; background: var(--bl-spark); }
+        @media (max-width: 900px) { .bl .whale-flow-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 720px) { .bl .whale-flow-head { display: block; } .bl .whale-flow-head p { margin-top: 3px; } .bl .whale-cols { grid-template-columns: 1fr; } .bl-header, .bl-filters, .bl-body { padding-left: 20px; padding-right: 20px; } }
+            .crypto-panel { padding: 0; }
+        .crypto-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; padding: 0 20px 16px; margin-top: 12px; }
+        @media (max-width: 1100px) { .crypto-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+        @media (max-width: 720px) { .crypto-grid { grid-template-columns: 1fr; } }
+        .crypto-card { border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); padding: 14px 14px 8px; margin: 0; }
+        .crypto-card figcaption { display: flex; gap: 8px; align-items: baseline; margin-bottom: 8px; }
+        .crypto-card figcaption b { font: 600 13px var(--bl-mono); }
+        .crypto-card figcaption span { font-size: 12px; color: var(--bl-muted); }
+        .crypto-card figcaption em { margin-left: auto; font: 600 11px var(--bl-mono); font-style: normal; }
+        .crypto-card svg { display: block; width: 100%; height: auto; }
+        .crypto-subtitle { fill: var(--bl-muted); font: 600 9px var(--bl-mono); letter-spacing: .06em; }
+        .cg { stroke: var(--bl-divider); } .czero { stroke: #c8c5bd; } .clvl { stroke: #c8c5bd; stroke-dasharray: 2 3; }
+        .ca { fill: var(--bl-faint); font: 10px var(--bl-mono); }
+        .cpos { stroke: #0f8a4d; } .cneg { stroke: #c93a4a; }
+        .ctag { font: 600 10.5px var(--bl-mono); }
+        .cvlp { stroke: var(--bl-accent); stroke-width: 2; }
+        .cvlv { stroke: #c9862f; stroke-width: 1.5; stroke-dasharray: 5 4; }
+        .cvfp { fill: rgba(47, 95, 179, 0.06); } .cvfn { fill: rgba(201, 58, 74, 0.07); }
+
+        /* ── Answer-first trading UI ─────────────────────────────────── */
+        .bl button, .bl summary { touch-action: manipulation; }
+        .trading-takeaway { margin: 4px 20px 14px; max-width: 980px; color: var(--bl-ink); font-size: 16px; font-weight: 600; text-wrap: pretty; }
+        .data-meta, .signal-legend { margin: -6px 20px 14px; color: var(--bl-muted); font-size: 13px; }
+        .signal-legend b { color: var(--bl-ink); font-family: var(--bl-mono); font-size: 12px; }
+        .sector-summary { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 0 20px 12px; }
+        .sector-summary > span { padding: 7px 10px; border: 1px solid var(--bl-border); border-radius: 6px; background: var(--bl-card); font-size: 13px; }
+        .sector-summary details { position: relative; flex: 1 0 100%; min-width: 0; }
+        .sector-summary summary, .trading-method summary, .data-disclosure summary, .scan-universe-disclosure > summary { color: var(--bl-accent); cursor: pointer; font-weight: 600; }
+        .sector-summary .scan-sectors { margin-top: 10px; padding: 10px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .trading-method, .data-disclosure, .scan-universe-disclosure { margin: 16px 20px; padding: 12px 14px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .trading-method p { max-width: 900px; margin: 10px 0 0; color: var(--bl-muted); }
+        .scan-universe-tools { display: flex; align-items: center; gap: 8px; margin: 14px 0 10px; }
+        .scan-universe-tools label { color: var(--bl-muted); font-size: 13px; }
+        .scan-universe-tools input { width: min(260px, 100%); padding: 8px 10px; border: 1px solid var(--bl-input); border-radius: 6px; font: inherit; }
+        .scan-table--decision { min-width: 640px; }
+        .scan-table--compact { min-width: 640px; }
+        .scan-table-wrap { overscroll-behavior-x: contain; }
+        .scan-table-wrap thead { position: sticky; top: 0; z-index: 1; }
+        .data-select { all: unset; color: var(--bl-ink); cursor: pointer; font: 600 13px var(--bl-mono); }
+        .data-select:hover { color: var(--bl-accent); }
+        .data-select:focus-visible { outline: 2px solid var(--bl-accent); outline-offset: 3px; border-radius: 2px; }
+        .data-toolbar { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin: 0 20px 12px; }
+        .segmented { display: inline-flex; padding: 3px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-rowhead); }
+        .segmented button { padding: 6px 10px; border: 0; border-radius: 5px; background: transparent; color: var(--bl-muted); font: 600 13px var(--bl-sans); cursor: pointer; }
+        .segmented button.on { background: var(--bl-card); color: var(--bl-ink); box-shadow: 0 1px 2px rgba(0,0,0,.08); }
+        .quick-select { display: flex; gap: 6px; flex-wrap: wrap; margin: 0 20px 12px; }
+        .data-toolbar .quick-select { margin: 0; }
+        .quick-select .bl-chip.on { background: var(--bl-chipbg); color: var(--bl-accent); border-color: var(--bl-chipbd); }
+        .selected-chart { min-height: 260px; margin: 14px 20px 18px; }
+        .selected-chart .vwap-chart, .selected-chart .crypto-card { margin: 0; }
+        .selected-chart .crypto-card { padding: 16px; }
+        .vwap-market-section > h3 { margin: 20px 20px 8px; font-size: 13px; letter-spacing: .04em; text-transform: uppercase; }
+        .vwap-country-section { margin-top: 30px; padding-top: 8px; border-top: 1px solid var(--bl-divider); }
+        .vwap-chart-grid, .crypto-chart-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 14px 20px 18px; }
+        .vwap-chart-grid .vwap-chart { min-width: 0; margin: 0; }
+        .vwap-chart-grid .vwap-chart--spy { grid-column: auto; }
+        .crypto-chart-grid .crypto-card { min-width: 0; margin: 0; padding: 16px; }
+        .portfolio-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)); gap: 12px; }
+        #positions-panel .portfolio-grid { grid-template-columns: 1fr; }
+        .portfolio-card { min-width: 0; padding: 15px 16px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .portfolio-card-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+        .portfolio-card h2 { margin: 0; font: 700 16px var(--bl-mono); }
+        .portfolio-instruments { margin: 4px 0 12px; color: var(--bl-muted); font-size: 13px; }
+        .portfolio-label { margin: 10px 0 2px; color: var(--bl-muted); font-size: 11px; font-weight: 700; letter-spacing: .35px; text-transform: uppercase; }
+        .portfolio-copy { margin: 0; color: var(--bl-ink2); font-size: 13.5px; }
+        .portfolio-risk { color: var(--bl-loss); }
+        .portfolio-card .bl-position-chart-toggle { margin-top: 12px; color: var(--bl-accent); font: 600 13px var(--bl-sans); }
+        .hypothesis-panel .portfolio-grid { margin-top: 12px; }
+        .hypothesis-card { border-color: var(--bl-chipbd); background: var(--bl-chipbg); }
+        .hypothesis-status { color: var(--bl-accent); font: 600 11px var(--bl-mono); text-transform: uppercase; letter-spacing: .04em; }
+        .hypothesis-price { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; margin: 4px 0 12px; color: var(--bl-muted); font-size: 13px; }
+        .hypothesis-price strong { color: var(--bl-ink); font: 600 14px var(--bl-mono); }
+        .hypothesis-detail { min-width: 0; padding: 18px 20px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .hypothesis-detail-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+        .hypothesis-chart-link { display: inline-flex; align-items: center; min-height: 34px; margin-left: auto; padding: 5px 10px; border: 1px solid var(--bl-chipbd); border-radius: 6px; background: var(--bl-chipbg); color: var(--bl-accent); font: 600 11.5px var(--bl-sans); text-decoration: none; white-space: nowrap; }
+        .hypothesis-chart-link:hover { border-color: var(--bl-accent); text-decoration: none; }
+        .hypothesis-detail-head .hypothesis-status { flex-basis: 100%; }
+        .hypothesis-detail h3 { margin: 0; font: 700 15px var(--bl-mono); }
+        .hypothesis-bottom-line { max-width: 980px; margin: 8px 0 16px; color: var(--bl-ink); font-size: 15px; font-weight: 600; text-wrap: pretty; }
+        .hypothesis-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; }
+        .hypothesis-block { min-width: 0; padding: 13px 14px; border: 1px solid var(--bl-divider); border-radius: 7px; background: var(--bl-hover); }
+        .hypothesis-block h4 { margin: 0 0 5px; color: var(--bl-muted); font: 700 10.5px var(--bl-sans); letter-spacing: .04em; text-transform: uppercase; }
+        .hypothesis-block p { margin: 0; color: var(--bl-ink2); font-size: 13px; }
+        .hypothesis-block strong { color: var(--bl-ink); }
+        .hypothesis-block ul { margin: 0; padding-left: 18px; color: var(--bl-ink2); font-size: 13px; }
+        .hypothesis-block li + li { margin-top: 4px; }
+        .hypothesis-block--benefit { border-color: rgba(8, 122, 66, .28); }
+        .hypothesis-block--threat { border-color: rgba(201, 58, 74, .28); }
+        .hypothesis-sources { margin: 14px 0 0; color: var(--bl-faint); font-size: 12px; }
+        .hypothesis-sources a { color: var(--bl-accent); text-underline-offset: 2px; }
+        .activity-disclosure { overflow: hidden; }
+        .activity-disclosure > summary { display: flex; align-items: baseline; gap: 8px; cursor: pointer; list-style: none; }
+        .activity-disclosure > summary::-webkit-details-marker { display: none; }
+        .activity-disclosure > summary::before { content: '›'; color: var(--bl-faint); font: 700 18px/1 var(--bl-sans); transition: transform 140ms ease; }
+        .activity-disclosure[open] > summary::before { color: var(--bl-accent); transform: rotate(90deg); }
+        .activity-source { display: flex; justify-content: space-between; gap: 12px; padding: 0 14px 10px; color: var(--bl-faint); font-size: 12px; }
+        .activity-source a { color: var(--bl-accent); }
+        .activity-columns-head, .activity-row-compact { display: grid; grid-template-columns: 70px minmax(110px, 1fr) 130px 90px; gap: 10px; align-items: center; }
+        .activity-columns-head { padding: 8px 14px; border-top: 1px solid var(--bl-divider); background: var(--bl-hover); color: var(--bl-faint); font: 600 10px var(--bl-mono); letter-spacing: .05em; text-transform: uppercase; }
+        .activity-columns-head span:last-child { text-align: right; }
+        .activity-feed { display: grid; }
+        .activity-row-compact { padding: 10px 14px; border-top: 1px solid var(--bl-divider); }
+        .activity-row-compact:first-child { border-top: 0; }
+        .activity-side { color: var(--bl-muted); font-size: 12px; text-transform: capitalize; }
+        .results-panel { min-height: min(760px, 78vh); place-items: center; }
+        .results-panel:not([hidden]) { display: grid; }
+        .results-only { box-sizing: border-box; width: min(920px, 100%); padding: clamp(34px, 5vw, 58px) 20px; text-align: center; }
+        .results-kicker { color: var(--bl-muted); font: 700 12px var(--bl-mono); letter-spacing: .12em; text-transform: uppercase; }
+        .results-only h2 { margin: 14px 0 8px; color: var(--bl-ink); font: 700 clamp(54px, 11vw, 104px)/.9 var(--bl-mono); letter-spacing: -.08em; }
+        .results-only > p.positive, .results-only > p.negative { margin: 0; font: 600 clamp(14px, 2.2vw, 20px) var(--bl-sans); }
+        .results-stats { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); margin: 30px 0 0; border-block: 1px solid var(--bl-divider); text-align: left; }
+        .results-stat { min-width: 0; padding: 16px; border-left: 1px solid var(--bl-divider); }
+        .results-stat:first-child { border-left: 0; }
+        .results-stat strong, .results-stat span, .results-stat small { display: block; }
+        .results-stat strong { color: var(--bl-ink); font: 700 25px var(--bl-mono); font-variant-numeric: tabular-nums; letter-spacing: -.04em; }
+        .results-stat-primary strong { color: var(--bl-gain); }
+        .results-stat span { margin-top: 4px; color: var(--bl-ink2); font: 700 11px var(--bl-sans); letter-spacing: .05em; text-transform: uppercase; }
+        .results-stat small { margin-top: 4px; color: var(--bl-faint); font: 500 11px/1.35 var(--bl-sans); }
+        .results-statline { margin: 13px 0 0; color: var(--bl-muted); font: 600 12px var(--bl-mono); }
+        .results-method { max-width: 720px; margin: 7px auto 0; color: var(--bl-faint); font: 500 12px/1.5 var(--bl-sans); }
+        .results-chart { display: block; width: 100%; height: auto; margin: 26px auto 12px; overflow: visible; }
+        .results-grid { stroke: var(--bl-divider); stroke-width: 1; vector-effect: non-scaling-stroke; }
+        .results-axis { fill: var(--bl-faint); font: 600 11px var(--bl-mono); }
+        .results-area { fill: color-mix(in srgb, var(--bl-gain) 12%, transparent); }
+        .results-line { fill: none; stroke: var(--bl-gain); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
+        .results-dot { fill: var(--bl-card); stroke: var(--bl-gain); stroke-width: 4; vector-effect: non-scaling-stroke; }
+        .results-chart[data-results-sign="negative"] .results-area { fill: color-mix(in srgb, var(--bl-loss) 12%, transparent); }
+        .results-chart[data-results-sign="negative"] .results-line, .results-chart[data-results-sign="negative"] .results-dot { stroke: var(--bl-loss); }
+        .results-history { margin: 8px 0 0; color: var(--bl-faint); font: 600 11px var(--bl-mono); letter-spacing: .02em; }
+        .whale-card > summary { cursor: pointer; list-style: none; }
+        .whale-card > summary::-webkit-details-marker { display: none; }
+        .whale-card > summary::before { content: '›'; flex: 0 0 auto; color: var(--bl-faint); font: 700 18px/1 var(--bl-sans); transition: transform 140ms ease; }
+        .whale-card[open] > summary::before { color: var(--bl-accent); transform: rotate(90deg); }
+        .whale-card-head > span:first-child { min-width: 0; }
+        .whale-card-head b { display: block; color: var(--bl-ink); font-size: 14px; text-wrap: balance; }
+        .whale-card-head small { display: block; margin-top: 3px; color: var(--bl-muted); font-size: 12px; overflow-wrap: anywhere; }
+        .whale-card:not([open]) { padding-bottom: 15px; }
+        .whale-card:not([open]) > :not(summary) { display: none; }
+        .data-disclosure > .scan-table-wrap { margin-top: 12px; }
+        .youtube-summary-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; margin: 12px 20px 18px; }
+        .youtube-stat { padding: 14px 16px; border: 1px solid var(--bl-border); border-radius: 8px; background: var(--bl-card); }
+        .youtube-stat b { display: block; font: 600 22px var(--bl-sans); color: var(--bl-ink); font-variant-numeric: tabular-nums; }
+        .youtube-stat span { display: block; margin-top: 3px; color: var(--bl-muted); font: 500 11px var(--bl-sans); letter-spacing: .35px; text-transform: uppercase; }
+        .youtube-data-shell { margin-top: 12px; }
+        .youtube-table .youtube-wide-cell, .youtube-table .youtube-title-cell { min-width: 300px; white-space: normal; }
+        .youtube-table a { color: var(--bl-accent); }
+        .youtube-download { margin: 12px 20px 18px; font-size: 12.5px; color: var(--bl-muted); }
+        .youtube-download a { color: var(--bl-accent); font-weight: 600; }
+        @media (max-width: 900px) { .portfolio-grid, .hypothesis-grid, .vwap-chart-grid, .crypto-chart-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 720px) {
+            .bl-header, .bl-filters, .bl-body { padding-left: 16px; padding-right: 16px; }
+            .bl-header-row { align-items: flex-start; }
+            .bl-meta { flex: 1 1 calc(100% - 90px); }
+            .bl-chip, .bl-reset, .segmented button, .data-select { min-height: 44px; }
+            .trading-tabs { gap: 18px; scroll-padding-inline: 16px; -webkit-overflow-scrolling: touch; }
+            .trading-tab { min-height: 44px; }
+            .trading-takeaway { margin-left: 16px; margin-right: 16px; font-size: 15px; }
+            .data-meta, .signal-legend, .sector-summary, .data-toolbar, .quick-select, .selected-chart, .vwap-chart-grid, .crypto-chart-grid, .trading-method, .data-disclosure, .scan-universe-disclosure { margin-left: 16px; margin-right: 16px; }
+            .youtube-summary-grid, .results-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-left: 16px; margin-right: 16px; }
+            .results-stat:nth-child(3) { border-left: 0; border-top: 1px solid var(--bl-divider); }
+            .results-stat:nth-child(4) { border-top: 1px solid var(--bl-divider); }
+            .results-statline, .results-method { margin-left: 16px; margin-right: 16px; }
+            .youtube-download { margin-left: 16px; margin-right: 16px; }
+            .scan-table-wrap { margin-left: 0; margin-right: 0; }
+            .selected-chart { min-height: 200px; }
+            .activity-columns-head { display: none; }
+            .activity-row-compact { grid-template-columns: 58px minmax(100px, 1fr) 72px; grid-template-areas: 'date trade pnl' '. side pnl'; gap: 2px 8px; }
+            .activity-date-compact { grid-area: date; }
+            .activity-trade { grid-area: trade; }
+            .activity-side { grid-area: side; display: block; }
+            .activity-pnl-compact { grid-area: pnl; }
+            .whale-flow-grid { padding-left: 16px; padding-right: 16px; }
+            /* keep the leading (ticker) column pinned while wide tables scroll sideways */
+            .bl .scan-table th:first-child, .bl .scan-table td:first-child:not([colspan]),
+            .brief-table th:first-child, .brief-table td:first-child:not([colspan]) {
+                position: sticky; left: 0; z-index: 2; background: var(--bl-card);
+                box-shadow: 1px 0 0 var(--bl-border);
+                max-width: 96px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+            }
+            /* skip offscreen layout/paint inside the long panels */
+            .brief-risk-card, .hypothesis-block, .whale-card { content-visibility: auto; contain-intrinsic-size: auto 600px; }
+        }
+        /* right-edge fade on regions that actually scroll sideways (class set by enhancer) */
+        .scan-table-wrap.is-scrollable, .brief-table-wrap.is-scrollable, .bl-card.is-scrollable, .bl-position-chart-detail.is-scrollable {
+            -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 26px), transparent);
+        }
+        /* tab strip: fade the edge that has more tabs hiding behind it */
+        .trading-tabs.tabs-fade-r {
+            -webkit-mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(90deg, #000 0, #000 calc(100% - 28px), transparent);
+        }
+        .trading-tabs.tabs-fade-l {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000);
+            mask-image: linear-gradient(90deg, transparent, #000 28px, #000);
+        }
+        .trading-tabs.tabs-fade-l.tabs-fade-r {
+            -webkit-mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+            mask-image: linear-gradient(90deg, transparent, #000 28px, #000 calc(100% - 28px), transparent);
+        }
+        .brief-more-btn {
+            display: block; width: calc(100% - 32px); margin: 14px 16px; padding: 12px; min-height: 44px;
+            font: 600 13.5px var(--bl-sans); color: var(--bl-ink); background: var(--bl-card);
+            border: 1px solid var(--bl-border); border-radius: 8px; cursor: pointer;
+        }
+</style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Projects</a>
+                <a href="/trading/">Trading</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+    <main id="main" class="bl">
+        <header class="bl-header">
+            <div class="bl-header-row">
+                <h1 class="bl-title">Trading</h1>
+                <span class="bl-meta">Public portfolio · <span class="trading-stamp">Live · July 30, 2026 · 11:02 AM CT</span> · quantity-free</span>
+
+            </div>
+            <div class="trading-tabs" role="tablist" aria-label="Trading page sections">
+                <button class="trading-tab" id="scan-tab" type="button" role="tab" aria-selected="false" aria-controls="scan-panel">Momentum <span class="trading-tab-count" id="scan-tab-count">17</span></button>
+                <button class="trading-tab" id="vwap-tab" type="button" role="tab" aria-selected="false" aria-controls="vwap-panel">VWAP</button>
+                <button class="trading-tab" id="crypto-tab" type="button" role="tab" aria-selected="false" aria-controls="crypto-panel">Crypto</button>
+                <button class="trading-tab" id="results-tab" type="button" role="tab" aria-selected="false" aria-controls="results-panel">Performance</button>
+            </div>
+        </header>
+
+
+            <!-- AUTO:RESULTS:START -->
+            <section class="trading-panel results-panel" id="results-panel" role="tabpanel" tabindex="0" aria-labelledby="results-tab" hidden>
+                <div class="results-only" aria-labelledby="results-heading">
+                    <span class="results-kicker">Robinhood · YTD</span>
+                    <h2 id="results-heading">+326.52%</h2>
+                    <p class="positive">YTD portfolio performance</p>
+                    <div class="results-stats" aria-label="Quantity-free YTD outcome statistics" data-results-wins="136" data-results-losses="104" data-results-breakevens="2" data-results-decided="240" data-results-win-rate="56.7">
+                        <div class="results-stat results-stat-primary"><strong>56.7%</strong><span>Win rate</span><small>136 wins · 104 losses</small></div>
+                        <div class="results-stat"><strong>68.3%</strong><span>Last 7 days</span><small>28 wins · 41 decided</small></div>
+                        <div class="results-stat"><strong>61.2%</strong><span>Last 30 days</span><small>60 wins · 98 decided</small></div>
+                        <div class="results-stat"><strong>6</strong><span>Current wins streak</span><small>Longest win 13 · loss 16</small></div>
+                    </div>
+                    <p class="results-statline">Outcome-majority days: 30 of 55 · 2 breakeven · 4 unavailable</p>
+                    <p class="results-method">Each broker realized-P&amp;L record counts once. Quantities and dollar amounts are ignored; breakevens are excluded from win rate.</p>
+                    <svg class="results-chart" viewBox="0 0 720 270" role="img" aria-labelledby="results-chart-title results-chart-desc" data-results-points="5" data-results-sign="positive">
+                        <title id="results-chart-title">Robinhood YTD performance over time</title>
+                        <desc id="results-chart-desc">Daily end-of-day YTD percentage snapshots from July 23, 2026 through July 29, 2026.</desc>
+                        <line class="results-grid" x1="48.00" y1="24.00" x2="676.00" y2="24.00" /><text class="results-axis" x="676.00" y="19.00" text-anchor="end">+358.64%</text><line class="results-grid" x1="48.00" y1="91.33" x2="676.00" y2="91.33" /><text class="results-axis" x="676.00" y="86.33" text-anchor="end">+330.59%</text><line class="results-grid" x1="48.00" y1="158.67" x2="676.00" y2="158.67" /><text class="results-axis" x="676.00" y="153.67" text-anchor="end">+302.54%</text><line class="results-grid" x1="48.00" y1="226.00" x2="676.00" y2="226.00" /><text class="results-axis" x="676.00" y="221.00" text-anchor="end">+274.49%</text>
+                        <polygon class="results-area" points="48.00,226.00 48.00,80.48 205.00,202.69 362.00,138.67 519.00,47.31 676.00,101.10 676.00,226.00" />
+                        <polyline class="results-line" points="48.00,80.48 205.00,202.69 362.00,138.67 519.00,47.31 676.00,101.10" />
+                        <circle class="results-dot" cx="676.00" cy="101.10" r="5" />
+                        <text class="results-axis" x="48.00" y="254" text-anchor="start">Jul 23</text><text class="results-axis" x="676.00" y="254" text-anchor="end">Jul 29</text>
+                    </svg>
+                    <p class="results-history">Daily EOD snapshots · tracking since Jul 23, 2026</p>
+                    <section class="performance-actions" aria-labelledby="performance-actions-heading">
+                        <div class="position-head"><h3 id="performance-actions-heading">Last 14 days</h3><span>85 actions · most recent first</span></div>
+                        <ul class="performance-action-list" aria-label="Last 14 days of dated, ticker-attributed buy and sell actions with percentage P and L"><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="FIGR" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="negative">−3.5%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="FIGR" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Option</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+1.0%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="LTH" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>LTH</b> · Buy · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+1.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="TMO" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>TMO</b> · Buy · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+0.6%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="ABT" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>ABT</b> · Sell · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+7.7%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>ABT</b> · Sell · Option</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+90.6%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="LTH" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>LTH</b> · Sell · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+1.4%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="TMO" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>TMO</b> · Sell · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="positive">+0.6%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="PG" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>PG</b> · Sell · Option</span><time datetime="2026-07-29">Jul 29</time></div><strong class="negative">−97.2%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="PG" data-performance-date="2026-07-29"><div class="performance-action-copy"><span><b>PG</b> · Sell · Stock</span><time datetime="2026-07-29">Jul 29</time></div><strong class="negative">−5.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="PG" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>PG</b> · Buy · Option</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−97.2%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="JBS" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>JBS</b> · Buy · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+0.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="LTH" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>LTH</b> · Buy · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+1.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="PG" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>PG</b> · Buy · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−5.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="FRMI" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>FRMI</b> · Buy · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−8.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="FIGR" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Option</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−14.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="FIGR" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−7.4%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="HPQ" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>HPQ</b> · Sell · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+5.6%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="HPQ" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>HPQ</b> · Sell · Option</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+28.8%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="JBS" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>JBS</b> · Sell · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+0.4%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>ABT</b> · Sell · Option</span><time datetime="2026-07-28">Jul 28</time></div><strong class="positive">+56.4%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Option</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−20.0%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="HOOD" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−5.2%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="CEG" data-performance-date="2026-07-28"><div class="performance-action-copy"><span><b>CEG</b> · Sell · Stock</span><time datetime="2026-07-28">Jul 28</time></div><strong class="negative">−2.6%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="HPQ" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>HPQ</b> · Buy · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+5.6%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="FRMI" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>FRMI</b> · Buy · Option</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−22.0%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="FRMI" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>FRMI</b> · Buy · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−19.3%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="HPQ" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>HPQ</b> · Buy · Option</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+28.8%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="RDDT" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>RDDT</b> · Buy · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+0.2%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="CEG" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>CEG</b> · Buy · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−2.6%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="FIGR" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Option</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−30.2%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="FIGR" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>FIGR</b> · Buy · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−14.4%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="RDDT" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>RDDT</b> · Sell · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+0.2%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>ABT</b> · Sell · Option</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+22.3%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Option</span><time datetime="2026-07-27">Jul 27</time></div><strong class="negative">−30.7%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="HOOD" data-performance-date="2026-07-27"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Stock</span><time datetime="2026-07-27">Jul 27</time></div><strong class="positive">+1.6%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="HOOD" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HOOD</b> · Buy · Stock</span><time datetime="2026-07-24">Jul 24</time></div><strong class="positive">+1.5%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HOOD</b> · Buy · Option</span><time datetime="2026-07-24">Jul 24</time></div><strong class="negative">−23.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="HIMS" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HIMS</b> · Buy · Stock</span><time datetime="2026-07-24">Jul 24</time></div><strong class="negative">−10.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="HIMS" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HIMS</b> · Buy · Option</span><time datetime="2026-07-24">Jul 24</time></div><strong class="negative">−22.4%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="HIMS" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HIMS</b> · Sell · Stock</span><time datetime="2026-07-24">Jul 24</time></div><strong class="negative">−10.9%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="HIMS" data-performance-date="2026-07-24"><div class="performance-action-copy"><span><b>HIMS</b> · Sell · Option</span><time datetime="2026-07-24">Jul 24</time></div><strong class="negative">−22.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="HIMS" data-performance-date="2026-07-23"><div class="performance-action-copy"><span><b>HIMS</b> · Buy · Stock</span><time datetime="2026-07-23">Jul 23</time></div><strong class="negative">−10.9%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="V" data-performance-date="2026-07-23"><div class="performance-action-copy"><span><b>V</b> · Sell · Stock</span><time datetime="2026-07-23">Jul 23</time></div><strong class="negative">−2.5%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="V" data-performance-date="2026-07-23"><div class="performance-action-copy"><span><b>V</b> · Sell · Option</span><time datetime="2026-07-23">Jul 23</time></div><strong class="negative">−24.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>ABT</b> · Buy · Option</span><time datetime="2026-07-22">Jul 22</time></div><strong class="positive">+98.6%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="TSLA" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>TSLA</b> · Buy · Stock</span><time datetime="2026-07-22">Jul 22</time></div><strong class="negative">−2.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>HOOD</b> · Buy · Option</span><time datetime="2026-07-22">Jul 22</time></div><strong class="negative">−30.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="TSLA" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>TSLA</b> · Buy · Option</span><time datetime="2026-07-22">Jul 22</time></div><strong class="negative">−12.5%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="TSLA" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>TSLA</b> · Sell · Stock</span><time datetime="2026-07-22">Jul 22</time></div><strong class="negative">−2.7%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="TSLA" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>TSLA</b> · Sell · Option</span><time datetime="2026-07-22">Jul 22</time></div><strong class="negative">−12.5%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Option</span><time datetime="2026-07-22">Jul 22</time></div><strong class="positive">+20.6%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="XOM" data-performance-date="2026-07-22"><div class="performance-action-copy"><span><b>XOM</b> · Sell · Stock</span><time datetime="2026-07-22">Jul 22</time></div><strong class="positive">+2.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>ABT</b> · Buy · Option</span><time datetime="2026-07-21">Jul 21</time></div><strong class="positive">+99.3%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="V" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>V</b> · Buy · Option</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−24.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="V" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>V</b> · Buy · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−2.5%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="CEG" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>CEG</b> · Buy · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−0.1%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="XOM" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>XOM</b> · Buy · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="positive">+2.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="NET" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>NET</b> · Buy · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−1.8%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="WTS" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>WTS</b> · Buy · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−2.0%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="CEG" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>CEG</b> · Sell · Stock</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−0.1%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="option" data-performance-symbol="NET" data-performance-date="2026-07-21"><div class="performance-action-copy"><span><b>NET</b> · Sell · Option</span><time datetime="2026-07-21">Jul 21</time></div><strong class="negative">−3.3%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="HOOD" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>HOOD</b> · Buy · Option</span><time datetime="2026-07-20">Jul 20</time></div><strong class="negative">−6.5%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="HOOD" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>HOOD</b> · Buy · Stock</span><time datetime="2026-07-20">Jul 20</time></div><strong class="positive">+1.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="DOCN" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>DOCN</b> · Buy · Stock</span><time datetime="2026-07-20">Jul 20</time></div><strong class="negative">−12.1%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="ABT" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>ABT</b> · Buy · Option</span><time datetime="2026-07-20">Jul 20</time></div><strong class="positive">+39.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="NET" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>NET</b> · Buy · Stock</span><time datetime="2026-07-20">Jul 20</time></div><strong class="negative">−2.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="ABT" data-performance-date="2026-07-20"><div class="performance-action-copy"><span><b>ABT</b> · Buy · Stock</span><time datetime="2026-07-20">Jul 20</time></div><strong class="positive">+7.7%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="NET" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>NET</b> · Buy · Option</span><time datetime="2026-07-17">Jul 17</time></div><strong class="negative">−3.3%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="GLD" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GLD</b> · Buy · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="negative">−0.2%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="WEN" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>WEN</b> · Buy · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="GRAB" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GRAB</b> · Buy · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.1%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="option" data-performance-symbol="GRAB" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GRAB</b> · Buy · Option</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.0%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="GLD" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GLD</b> · Sell · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="negative">−0.2%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="option" data-performance-symbol="GRAB" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GRAB</b> · Sell · Option</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.0%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="WEN" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>WEN</b> · Sell · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.9%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="GRAB" data-performance-date="2026-07-17"><div class="performance-action-copy"><span><b>GRAB</b> · Sell · Stock</span><time datetime="2026-07-17">Jul 17</time></div><strong class="positive">+0.1%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="WEN" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>WEN</b> · Buy · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="positive">+0.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="NVO" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>NVO</b> · Buy · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="positive">+0.4%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="CYPH" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>CYPH</b> · Buy · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="negative">−7.9%</strong></li><li class="performance-action" data-performance-side="buy" data-performance-type="stock" data-performance-symbol="BYDDY" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>BYDDY</b> · Buy · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="negative">−0.1%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="CYPH" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>CYPH</b> · Sell · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="negative">−7.9%</strong></li><li class="performance-action performance-action--win" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="NVO" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>NVO</b> · Sell · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="positive">+0.4%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="BYDDY" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>BYDDY</b> · Sell · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="negative">−0.1%</strong></li><li class="performance-action performance-action--loss" data-performance-side="sell" data-performance-type="stock" data-performance-symbol="HOOD" data-performance-date="2026-07-16"><div class="performance-action-copy"><span><b>HOOD</b> · Sell · Stock</span><time datetime="2026-07-16">Jul 16</time></div><strong class="negative">−2.4%</strong></li></ul>
+                        <p class="results-method">Buy P&amp;L is marked to the latest quote; sell P&amp;L is realized. Dates and tickers are shown; quantities, execution details, and dollar values stay private.</p>
+                    </section>
+                </div>
+            </section>
+            <!-- AUTO:RESULTS:END -->
+
+            <!-- AUTO:SCAN:START -->
+            <section class="trading-panel scan-panel" id="scan-panel" role="tabpanel" tabindex="0" aria-labelledby="scan-tab" hidden>
+                <div class="position-head">
+                    <h2 id="scan-heading">Momentum</h2>
+                    <span>Signals July 29, 2026 close · Prices July 29, 2026 close</span>
+                </div>
+                <p class="trading-takeaway">16 qualified longs and 1 qualified short across Consumer Disc, Health Care, Real Estate, Staples. SPY 729.46, below its 50-day average.</p>
+                <p class="scan-risk-overlay">Subjective risk journal only · no automated risk gate; momentum signals are published unchanged.</p>
+                <p class="signal-legend"><b>ENTER+</b> = qualified + persistent · <b>ENTER</b> = qualified · <b>WATCH</b> = watch · <b>AVOID</b> = not qualified</p>
+                <div class="sector-summary">
+                    <span><b>Leading</b> Staples · Health Care</span>
+                    <span><b>Lagging</b> Consumer Disc · Technology</span>
+                    <details open><summary>All sectors · 50-day Z-score</summary><ul class="scan-sectors" aria-label="Sector 50-session z-scores, ranked">
+                        <li class="scan-sector scan-sector--hot">
+                            <span class="scan-sector-head"><b>XLP</b><span>#1</span></span>
+                            <span class="scan-sector-name">Staples</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+1.80</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector scan-sector--hot">
+                            <span class="scan-sector-head"><b>XLV</b><span>#2</span></span>
+                            <span class="scan-sector-name">Health Care</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+1.39</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector scan-sector--hot">
+                            <span class="scan-sector-head"><b>XLRE</b><span>#3</span></span>
+                            <span class="scan-sector-name">Real Estate</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+1.37</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLF</b><span>#4</span></span>
+                            <span class="scan-sector-name">Financials</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+1.18</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLB</b><span>#5</span></span>
+                            <span class="scan-sector-name">Materials</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.88</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLE</b><span>#6</span></span>
+                            <span class="scan-sector-name">Energy</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.84</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLI</b><span>#7</span></span>
+                            <span class="scan-sector-name">Industrials</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.26</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLU</b><span>#8</span></span>
+                            <span class="scan-sector-name">Utilities</span>
+                            <span class="scan-sector-score"><span class="scan-z-pos">+0.16</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLC</b><span>#9</span></span>
+                            <span class="scan-sector-name">Comm Services</span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-0.61</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector">
+                            <span class="scan-sector-head"><b>XLK</b><span>#10</span></span>
+                            <span class="scan-sector-name">Technology</span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-0.66</span> <small>50D Z</small></span>
+                        </li>
+                        <li class="scan-sector scan-sector--cold">
+                            <span class="scan-sector-head"><b>XLY</b><span>#11</span></span>
+                            <span class="scan-sector-name">Consumer Disc</span>
+                            <span class="scan-sector-score"><span class="scan-z-neg">-1.33</span> <small>50D Z</small></span>
+                        </li>
+                    </ul></details>
+                </div>
+                <p class="scan-chart-hint">Open a ticker for its setup and matching sector chart.</p>
+                <div class="position-group">
+                    <h3>Long setups · 16</h3>
+<p class="scan-qualified-links"><b>Long setups</b> · <a href="?chart=KO#scan" translate="no">KO</a> · <a href="?chart=AMGN#scan" translate="no">AMGN</a> · <a href="?chart=PM#scan" translate="no">PM</a> · <a href="?chart=SMA#scan" translate="no">SMA</a> · <a href="?chart=SPG#scan" translate="no">SPG</a> · <a href="?chart=JNJ#scan" translate="no">JNJ</a> · <a href="?chart=O#scan" translate="no">O</a> · <a href="?chart=MRK#scan" translate="no">MRK</a> · <a href="?chart=ABBV#scan" translate="no">ABBV</a> · <a href="?chart=MO#scan" translate="no">MO</a> · <a href="?chart=NVO#scan" translate="no">NVO</a> · <a href="?chart=CL#scan" translate="no">CL</a> · <a href="?chart=LLY#scan" translate="no">LLY</a> · <a href="?chart=ABT#scan" translate="no">ABT</a> · <a href="?chart=TMO#scan" translate="no">TMO</a> · <a href="?chart=JBS#scan" translate="no">JBS</a></p>
+                </div>
+                <div class="position-group">
+                    <h3>Short setups · 1</h3>
+<p class="scan-qualified-links"><b>Short setups</b> · <a href="?chart=TSLA#scan" translate="no">TSLA</a></p>
+                </div>
+                <details class="scan-universe-disclosure" id="scan-universe" open>
+                    <summary>Browse full universe · 189 symbols</summary>
+                    <div class="scan-universe-tools"><label for="scan-universe-q">Find symbol</label><input type="search" id="scan-universe-q" name="scan-universe-symbol" placeholder="AAPL…" autocomplete="off" spellcheck="false"></div>
+                    <div id="scan-universe-shell" data-url="/trading/scan-universe.json?v=3e4f977c09bb"><p class="bl-empty">Loading universe…</p></div>
+                </details>
+                <script type="application/json" id="scan-chart-config">{"url":"/trading/scan-charts.json?v=ebacebd6e4a6"}</script>
+                <details class="trading-method" id="scan-method"><summary>How this works</summary><p>Sector strength is the 50-session z-score of the sector ETF. Spread Z compares each stock with SPY; Dist Z measures distance from YTD VWAP. ENTER needs a hot sector, relative strength, and price above earnings VWAP; the + adds persistence above YTD VWAP. SHORT mirrors that setup in a weak sector. Watchful halves longs; validated Elevated gates them to WATCH; shorts stay. ⚠ marks earnings within about 9 days. Bars are adjusted and intraday price/day marks refresh during regular hours. This is a mechanical screen, not a recommendation.</p></details>
+            </section>
+            <!-- AUTO:SCAN:END -->
+<!-- AUTO:VWAP:START -->
+            <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
+                <div class="position-head">
+                    <h2 id="vwap-heading">VWAP</h2>
+                    <span>July 29, 2026 close · anchor Jan 2, 2026</span>
+                </div>
+                <p class="trading-takeaway">11 of 13 US markets are above YTD VWAP. Staples leads the 50-day trend; Consumer Disc lags.</p>
+                <section class="vwap-market-section" aria-labelledby="vwap-us-heading">
+                <h3 id="vwap-us-heading">US market + sectors + themes</h3>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="US market, sector, and theme year-to-date VWAP summary">
+                    <thead><tr><th>Symbol</th><th>Market</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
+                    <tbody>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLP</span></td>
+                        <td class="scan-sec">Staples</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.80</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.7%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (4d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">ESPO</span></td>
+                        <td class="scan-sec">Gaming</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.41</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.0%</span></td>
+                        <td class="scan-num">▲ since Jul 29 (1d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLV</span></td>
+                        <td class="scan-sec">Health Care</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.39</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+9.1%</span></td>
+                        <td class="scan-num">▲ since Jun 23 (26d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLRE</span></td>
+                        <td class="scan-sec">Real Estate</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.37</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.5%</span></td>
+                        <td class="scan-num">▲ since Apr 6 (80d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLF</span></td>
+                        <td class="scan-sec">Financials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.18</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+8.8%</span></td>
+                        <td class="scan-num">▲ since Jun 4 (38d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLB</span></td>
+                        <td class="scan-sec">Materials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.88</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.7%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (4d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLE</span></td>
+                        <td class="scan-sec">Energy</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.84</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.7%</span></td>
+                        <td class="scan-num">▲ since Jul 8 (16d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLI</span></td>
+                        <td class="scan-sec">Industrials</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.26</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+3.7%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (78d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLU</span></td>
+                        <td class="scan-sec">Utilities</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.16</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.4%</span></td>
+                        <td class="scan-num">▲ since Jun 22 (27d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">SPY</span></td>
+                        <td class="scan-sec">S&amp;P 500</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.17</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+4.8%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (78d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLC</span></td>
+                        <td class="scan-sec">Comm Services</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.6%</span></td>
+                        <td class="scan-num">▼ since Jun 2 (40d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLK</span></td>
+                        <td class="scan-sec">Technology</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.66</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+7.5%</span></td>
+                        <td class="scan-num">▲ since Apr 8 (78d)</td>
+                    </tr>
+                    <tr data-vwap-scope="us">
+                        <td class="scan-sym"><span translate="no">XLY</span></td>
+                        <td class="scan-sec">Consumer Disc</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.33</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.8%</span></td>
+                        <td class="scan-num">▼ since Jul 17 (9d)</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="vwap-chart-grid" id="vwap-chart-grid" data-url="/trading/vwap-charts.json?v=39d746086a23" data-symbols="XLP,ESPO,XLV,XLRE,XLF,XLB,XLE,XLI,XLU,SPY,XLC,XLK,XLY" aria-live="polite">
+                    <p class="bl-empty">Loading SPY, 11 sector charts, and ESPO Gaming…</p>
+                </div>
+                </section>
+                <section class="vwap-market-section vwap-country-section" aria-labelledby="vwap-countries-heading">
+                <h3 id="vwap-countries-heading">Country markets</h3>
+                <p class="data-meta">Country ETFs are separated from US sectors and ranked by 50-day Z-score, descending.</p>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="Country market year-to-date VWAP summary">
+                    <thead><tr><th>Symbol</th><th>Country</th><th class="scan-num">50D Z</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th></tr></thead>
+                    <tbody>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWG</span></td>
+                        <td class="scan-sec">Germany</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.56</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+2.0%</span></td>
+                        <td class="scan-num">▲ since Jul 24 (4d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">KWEB</span></td>
+                        <td class="scan-sec">China Internet</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.39</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-7.2%</span></td>
+                        <td class="scan-num">▼ since Jan 30 (124d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">MCHI</span></td>
+                        <td class="scan-sec">China</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.32</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.3%</span></td>
+                        <td class="scan-num">▼ since May 14 (52d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">INDA</span></td>
+                        <td class="scan-sec">India</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.24</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.2%</span></td>
+                        <td class="scan-num">▼ since Jun 23 (26d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">THD</span></td>
+                        <td class="scan-sec">Thailand</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.22</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+6.1%</span></td>
+                        <td class="scan-num">▲ since Mar 30 (84d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWZ</span></td>
+                        <td class="scan-sec">Brazil</td>
+                        <td class="scan-num"><span class="scan-z-pos">+0.09</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-3.3%</span></td>
+                        <td class="scan-num">▼ since May 13 (53d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWJ</span></td>
+                        <td class="scan-sec">Japan</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.73</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+1.5%</span></td>
+                        <td class="scan-num">▲ since Apr 30 (62d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EZA</span></td>
+                        <td class="scan-sec">South Africa</td>
+                        <td class="scan-num"><span class="scan-z-neg">-0.85</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-10.2%</span></td>
+                        <td class="scan-num">▼ since Apr 21 (69d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">EWY</span></td>
+                        <td class="scan-sec">South Korea</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.25</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-7.2%</span></td>
+                        <td class="scan-num">▼ since Jul 28 (2d)</td>
+                    </tr>
+                    <tr data-vwap-scope="countries">
+                        <td class="scan-sym"><span translate="no">VNM</span></td>
+                        <td class="scan-sec">Vietnam</td>
+                        <td class="scan-num"><span class="scan-z-neg">-1.52</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-9.3%</span></td>
+                        <td class="scan-num">▼ since Jul 6 (18d)</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <div class="vwap-chart-grid" id="vwap-country-chart-grid" data-url="/trading/vwap-charts.json?v=39d746086a23" data-symbols="EWG,KWEB,MCHI,INDA,THD,EWZ,EWJ,EZA,EWY,VNM" aria-live="polite">
+                    <p class="bl-empty">Loading 10 country charts…</p>
+                </div>
+                </section>
+                <details class="trading-method"><summary>How this works</summary><p>YTD VWAP estimates the average cost basis of shares traded this year. Above it, the average buyer is in profit; below it, the average buyer is underwater. Solid line is close, dashed line is VWAP, and triangles mark crosses. Sector, theme, and country charts show the same smoothed 50-session Z-score beneath price. Descriptive market data, not investment advice.</p></details>
+            </section>
+            <!-- AUTO:VWAP:END -->
+
+            <!-- AUTO:CRYPTO:START -->
+            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
+                <div class="position-head">
+                    <h2 id="crypto-heading">Crypto</h2>
+                    <span>Jul 26 UTC close · BTC $65,366 · z -0.02</span>
+                </div>
+                <p class="trading-takeaway">ETH leads BTC. ETH is improving versus BTC but remain below YTD VWAP. DOGE, HYPE lag.</p>
+                <div class="scan-table-wrap">
+                <table class="scan-table scan-table--compact" aria-label="Crypto relative strength versus BTC and YTD VWAP">
+                    <thead><tr><th>Coin</th><th class="scan-num">Spread Z vs BTC</th><th class="scan-num">vs VWAP</th><th class="scan-num">Trend</th><th>Status</th></tr></thead>
+                    <tbody>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">ETH</span><span class="bl-tag">Ethereum</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">z +0.52</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-9.8%</span></td>
+                        <td class="scan-num">▼ 77d</td>
+                        <td>Improving vs BTC, below VWAP</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">ZEC</span><span class="bl-tag">Zcash</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">z +0.21</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+19.0%</span></td>
+                        <td class="scan-num">▲ 25d</td>
+                        <td>Strong trend, leading BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">SOL</span><span class="bl-tag">Solana</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.11</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-13.7%</span></td>
+                        <td class="scan-num">▼ 76d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">XRP</span><span class="bl-tag">XRP</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.33</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-23.8%</span></td>
+                        <td class="scan-num">▼ 194d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">BNB</span><span class="bl-tag">BNB</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.39</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-13.4%</span></td>
+                        <td class="scan-num">▼ 55d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">HYPE</span><span class="bl-tag">Hyperliquid</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.44</span></td>
+                        <td class="scan-num"><span class="scan-z-pos">+31.2%</span></td>
+                        <td class="scan-num">▲ 149d</td>
+                        <td>Strong trend, weakening vs BTC</td>
+                    </tr>
+                    <tr>
+                        <td class="scan-sym"><span translate="no">DOGE</span><span class="bl-tag">Dogecoin</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">z -0.61</span></td>
+                        <td class="scan-num"><span class="scan-z-neg">-27.7%</span></td>
+                        <td class="scan-num">▼ 70d</td>
+                        <td>Weak trend, lagging BTC</td>
+                    </tr>
+                    </tbody>
+                </table>
+                </div>
+                <section class="crypto-chart-grid" id="crypto-chart-grid" data-url="/trading/crypto-charts.json?v=7dd44c164e5f" aria-live="polite">
+                    <p class="bl-empty">Loading all 7 charts…</p>
+                </section>
+                <details class="trading-method"><summary>How this works</summary><p>Spread Z compares each coin's 50-day trend with BTC's. Positive means relative leadership; negative means lagging. YTD VWAP estimates the year's volume-weighted cost basis on Hyperliquid perpetual markets. Both axes matter: a coin can be above its own VWAP while weakening versus BTC. Descriptive market data, not a recommendation.</p></details>
+            </section>
+            <!-- AUTO:CRYPTO:END -->
+
+        </div>
+    </main>
+
+    <footer class="zn-footer">
+        <div class="zn-container zn-footer-inner">
+            <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+            <span class="zn-footer-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Projects</a>
+                <a href="/games/">Games</a>
+                <a href="/trading/">Trading</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/feed.xml">RSS</a>
+                <a href="https://x.com/bernardjhuang">X</a>
+                <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+            </span>
+        </div>
+    </footer>
+    <script src="/js/trading-broker-light.js?v=68c18f340228"></script>
+</body>
+</html>
