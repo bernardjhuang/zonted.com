@@ -1,9 +1,11 @@
 #!/usr/bin/env python3
 """Append either a mechanical Fable rubric entry or an independent model journal entry."""
 import argparse
+import glob
 import html as html_lib
 import json
 import os
+import re
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "fable-risk", "index.html")
@@ -11,6 +13,7 @@ DATA = os.path.join(ROOT, "trading", "fable-risk.json")
 START, END = "<!-- AUTO:FABLE_RISK:START -->", "<!-- AUTO:FABLE_RISK:END -->"
 VCLS = {"RISK-ON": "fr-on", "NEUTRAL": "fr-neutral", "RISK-OFF": "fr-off"}
 SCLS = {1: ("enter", "+1 on"), 0: ("watch", "0 neutral"), -1: ("short", "−1 off")}
+FCLS = {"off": ("short", "leans off"), "watch": ("watch", "watch"), "on": ("enter", "leans on")}
 SESSION_RANK = {"pre-market": 0, "intraday": 1, "post-close": 2}
 
 
@@ -20,6 +23,25 @@ def session_of(entry):
 
 def rating_of(entry):
     return round((entry["score"] / entry["n_signals"] + 1) * 5, 1)
+
+
+def render_forward(forward):
+    if not forward:
+        return ""
+    rows = ""
+    for item in forward["watch"]:
+        cls, label = FCLS[item["lean"]]
+        rows += (f'<tr><td>{item["name"]}<span class="sub">{item["why"]}</span></td>'
+                 f'<td class="num">{item["detail"]}</td>'
+                 f'<td><span class="tag {cls}">{label}</span></td></tr>')
+    forecast = forward["forecast"]
+    grading = (f'\n<div class="mkt"><span class="lbl"><b>Grading:</b> {forward["grading"]}</span></div>'
+               if forward.get("grading") else "")
+    return f'''<div class="card"><h2>Forward watch<span class="card-r">rubric v2 · {forward["horizon"]} · advisory, not in the composite</span></h2>
+<div class="tw"><table style="min-width:560px"><thead><tr><th>Watch item</th><th class="num">Reading</th><th>Lean</th></tr></thead>
+<tbody>{rows}</tbody></table></div>
+<div class="mkt"><span class="lbl"><b>Falsifiable call:</b> {forecast["claim"]} — <b>{forecast["prob"]}</b> · resolves {forecast["resolves"]}</span></div>{grading}</div>
+'''
 
 
 def render(entry, open_=True):
@@ -47,7 +69,7 @@ def render(entry, open_=True):
 <div class="card"><h2>What flips this call</h2>
 <div class="mkt"><span class="lbl"><b>To risk-off:</b> {entry["flips"]["to_off"]}</span></div>
 <div class="mkt"><span class="lbl"><b>To risk-on:</b> {entry["flips"]["to_on"]}</span></div></div>
-<p class="footnote">Sources: {sources}</p>'''
+{render_forward(entry.get("forward"))}<p class="footnote">Sources: {sources}</p>'''
     return (f'<details class="fr-entry"{" open" if open_ else ""}>'
             f'<summary><time datetime="{entry["date"]}">{entry["date"]}</time>'
             f'<span class="fr-sumverdict {VCLS[entry["verdict"]]}">{entry["verdict"]}</span>'
@@ -93,6 +115,25 @@ def render_model_entry(entry, open_=True):
             f'<div class="fr-body">{body}</div></details>')
 
 
+def refresh_fable_chip(data):
+    """Point the sitewide Fable nav chip at the newest entry (either type)."""
+    newest = max(data["entries"] + data["model_entries"],
+                 key=lambda e: ((e.get("date") or e["as_of_date"]), SESSION_RANK.get(session_of(e), 1)))
+    value = float(newest.get("risk_appetite", newest.get("rating")))
+    stance = str(newest.get("stance", newest.get("verdict")))
+    state = "on" if value > 5 else "off" if value < 5 else "neutral"
+    chip = (f'<a class="chip chip-fable chip-{state}" href="/trading/fable-risk/" '
+            f'title="Fable risk appetite — {html_lib.escape(stance)} · {value:g}/10">Fable {value:g}</a>')
+    pattern = r'<a class="chip chip-fable [^"]+" href="/trading/fable-risk/".*?</a>'
+    for path in sorted(glob.glob(os.path.join(ROOT, "trading", "**", "index.html"), recursive=True)) + [os.path.join(ROOT, "trading", "pipeline.html")]:
+        if not os.path.exists(path):
+            continue
+        source = open(path).read()
+        updated = re.sub(pattern, chip, source)
+        if updated != source:
+            open(path, "w").write(updated)
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("entry")
@@ -125,6 +166,7 @@ def main():
     rendered = [renderer(item, index == 0) for index, (_, _, renderer, item) in enumerate(combined)]
     block = "\n" + "\n".join(rendered) + "\n"
     open(PAGE, "w").write(page[:start] + block + page[end:])
+    refresh_fable_chip(data)
     if entry.get("prompt_version"):
         print(f"fable-risk: {entry['as_of_date']} {entry['stance']} ({entry['risk_appetite']}/10) · independent model journal")
     else:

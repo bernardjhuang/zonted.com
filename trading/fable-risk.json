@@ -85,6 +85,52 @@
     "<p>Trend is the row to stare at. SPY needs 742.03 to stop scoring \u22121 \u2014 forty cents, 0.05%. It closed 741.63. This ledger's most negative signal is now a rounding error, and I am not going to pretend that reads as conviction. Two caveats stay on the record: the vol feed did not refresh after the required 10-minute recheck, so VIX, the curve and VVIX are all Jul 24 vintage \u2014 though spot VIX at 18.01 midday happens to sit right where the stale print says it does, so for once the staleness is not hiding anything. And Alpaca's SIP entitlement returned 403, so Trend and Size are scored on IEX closes (cross-checked against Yahoo: 741.69 vs 741.63, four basis points apart).</p>",
     "<p>Into Friday: the Bank of Japan decides overnight, <a href=\"https://www.babypips.com/analysis/event-guide-forex-japan-boj-statement-july-2026-07-30\" rel=\"noopener\">expected to hold at 1.00%</a> with the yen near 1986 lows, and it is month-end. The setup is asymmetric. A hawkish Ueda re-arms the carry-unwind channel I flagged this morning and the FX row goes straight back to \u22121; a hold with soft language leaves the intervention as a one-day event and the 30-year at a 19-year high as the real problem. I stay neutral, which after today is the position the tape has earned rather than the one I wanted.</p>"
    ],
+   "forward": {
+    "horizon": "next 5 sessions \u00b7 Fri Jul 31 \u2013 Thu Aug 6",
+    "watch": [
+     {
+      "name": "Overnight collision",
+      "why": "three catalysts land before Friday's open",
+      "detail": "AMZN +8% after hours on AWS reacceleration; AAPL \u22124 to \u22126% on guidance and supply constraints; BoJ decides overnight, expected hold at 1.00% \u2014 Ueda's tone sets the yen",
+      "lean": "watch"
+     },
+     {
+      "name": "Yen carry fuel",
+      "why": "CFTC COT \u2014 positioning is the amplifier, not the timer",
+      "detail": "leveraged funds net short \u00a5 ~96k contracts (81k long / 177k short), asset managers ~80k more \u00b7 Jul 21 vintage \u2014 crowded shorts plus fresh intervention is the Aug-2024 setup; a hawkish BoJ is the spark candidate",
+      "lean": "off"
+     },
+     {
+      "name": "Vol regime",
+      "why": "SPY realized vol, 10-session vs 21-session",
+      "detail": "10d 14.4% vs 21d 11.8% \u2014 clustering upward; two \u00b11.5% days in the last five sessions after weeks of calm",
+      "lean": "off"
+     },
+     {
+      "name": "Long-end supply",
+      "why": "scheduled Treasury stress with the 30y at a 19-year high",
+      "detail": "quarterly refunding announcement expected Wed Aug 5; auction sizes and tails are the checkable stressor while the long bond is the market's sore spot",
+      "lean": "off"
+     },
+     {
+      "name": "Credit non-confirmation",
+      "why": "divergence \u2014 stress gauges vs the equity tape",
+      "detail": "HY OAS moved just +6bp through a 1,100-point Dow rout and full recovery; credit is not confirming the equity drama, and breadth held 10 of 13",
+      "lean": "on"
+     },
+     {
+      "name": "Month-end",
+      "why": "flow mechanics \u2014 Friday is Jul 31",
+      "detail": "equities beat bonds by a wide margin in July (30y yield at 5.21%), so month-end rebalance flow leans sell-equities / buy-bonds into Friday's close",
+      "lean": "watch"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close down \u22651% within the next 5 sessions",
+     "prob": "60%",
+     "resolves": "2026-08-06"
+    }
+   },
    "flips": {
     "to_off": "Sum \u22123 (composite \u2264 \u22120.25) needs three points from here. Cleanest path: BoJ turns hawkish and the five-session yen move exceeds 1% \u2014 USDJPY under about 161.3 \u2014 taking FX 0 \u2192 \u22121; a vol-feed refresh confirming VIX above 20 (0 \u2192 \u22121); and either the curve losing contango below +0.5 or HY OAS widening past 10bp in five sessions, i.e. above 2.81% (+1 \u2192 0). Two of those three still only gets to \u22122.",
     "to_on": "Sum +3 needs a +3 swing. Start with the cheap one: SPY above 745.75 flips Trend \u22121 \u2192 +1 for two points \u2014 that is 0.56% from today's close, less than a third of what the tape just did in a session. Then either IWM closing the 20-session gap inside one point (\u22121 \u2192 0), a second alt joining ETH above BTC on 50-day spread z (\u22121 \u2192 0), or a VIX refresh under 16 (0 \u2192 +1). One of those plus the Trend flip does it."
@@ -105,6 +151,14 @@
     {
      "t": "BabyPips \u2014 event guide: BoJ statement, July 2026",
      "u": "https://www.babypips.com/analysis/event-guide-forex-japan-boj-statement-july-2026-07-30"
+    },
+    {
+     "t": "NAI500 \u2014 Apple \u22126%, Amazon +8% after hours",
+     "u": "https://nai500.com/blog/2026/07/apple-amazon-diverge-post-earnings-6-slump-vs-8-rally/"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures (Jul 21)",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
     }
    ],
    "rating": 5.0
