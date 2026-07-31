@@ -182,6 +182,7 @@
       </div>
       ${renderProvenance(theme)}
       <h2>${esc(theme.title)}</h2>
+      ${theme.disqualified ? `<div class="theme-disqualified"><strong>Disqualified</strong><span>${esc(theme.disqualified.reason)}</span></div>` : ''}
       <p class="theme-belief">${esc(theme.owner_belief)}</p>
       <div class="hero-scores">
         <div class="hero-meters">
@@ -296,6 +297,7 @@
 
   const state = { cats: new Set(), minGap: 0, sortKey: 'gap', sortDir: -1 };
   let rows = [];
+  let disqualifiedRows = [];
   let byId = new Map();
   let methodRef = null;
 
@@ -348,6 +350,26 @@
       <td class="lhor">${esc(row.horizon)}</td>
     </tr>`).join('')}</tbody>
   </table>`;
+
+  const renderDisqualified = list => {
+    if (!list.length) return '';
+    return `<section class="disqualified-themes" aria-labelledby="disqualified-themes-heading">
+      <div class="dq-head">
+        <h2 id="disqualified-themes-heading">Disqualified themes</h2>
+        <p>Retained so rejected ideas don't get recreated.</p>
+      </div>
+      <div class="dq-wrap">
+        <table class="dq-table" aria-label="Disqualified themes">
+          <thead><tr><th>Theme</th><th>Reason</th><th>Flagged tickers</th></tr></thead>
+          <tbody>${list.map(row => `<tr class="dq-row" data-theme-id="${esc(row.theme.id)}">
+            <td><button type="button" class="lt-btn">${esc(row.title)}</button></td>
+            <td>${esc(row.theme.disqualified.reason)}</td>
+            <td class="dq-symbols">${esc(row.theme.disqualified.symbols.join(' · '))}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </section>`;
+  };
 
   const renderMethodFold = method => `<details class="theme-method ledger-method">
     <summary>How to read these scores</summary>
@@ -490,11 +512,13 @@
     .then(payload => {
       methodRef = payload.method;
       const themes = sortThemesByGapDescending(payload.themes);
-      rows = themes.map(rowOf);
+      rows = themes.filter(theme => !theme.disqualified).map(rowOf);
+      disqualifiedRows = themes.filter(theme => theme.disqualified).map(rowOf);
       byId = new Map(themes.map(theme => [theme.id, theme]));
       shell.innerHTML = renderControls()
         + `<div class="ledger-wrap" data-ledger></div>
            <p class="ledger-foot">Colored icon sourced the theme · gray icons reviewed it · hover an icon for the model · click any row for the full record.</p>`
+        + renderDisqualified(disqualifiedRows)
         + renderMethodFold(payload.method);
       buildOverlay();
       updateViews();

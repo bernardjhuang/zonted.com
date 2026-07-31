@@ -191,6 +191,25 @@ class TradingThemesContractTest(unittest.TestCase):
         for retired in (".gap-map", ".db-scroll", ".db-tip"):
             self.assertNotIn(retired, self.page)
 
+    def test_disqualified_theme_is_retained_but_separated_from_core_ledger(self) -> None:
+        theme = next(
+            theme for theme in self.payload["themes"]
+            if theme["id"] == "emerging-precision-fermentation-molecules"
+        )
+        self.assertEqual(theme["disqualified"]["symbols"], ["LNZA", "DNA"])
+        self.assertIn("too suspicious", theme["disqualified"]["reason"])
+        self.assertIn("hard to buy", theme["disqualified"]["reason"])
+        self.assertEqual(
+            [theme["id"] for theme in self.payload["themes"] if theme.get("disqualified")],
+            ["emerging-precision-fermentation-molecules"],
+        )
+        self.assertIn("const renderDisqualified =", self.script)
+        self.assertIn("themes.filter(theme => !theme.disqualified)", self.script)
+        self.assertIn("themes.filter(theme => theme.disqualified)", self.script)
+        self.assertIn("Disqualified themes", self.script)
+        self.assertIn("Retained so rejected ideas don't get recreated.", self.script)
+        self.assertIn("disqualified-themes", self.page)
+
     def test_static_snapshot_is_baked_and_in_sync(self) -> None:
         """Crawler-visible snapshot must match themes.json — regenerate with
         scripts/build-themes-static.py after any data edit."""
