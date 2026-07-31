@@ -343,7 +343,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         )
         self.assertNotIn("Up to 2 years", page)
         self.assertNotIn('<th>P&amp;L</th>', page)
-        self.assertIn('<b>Q2 earnings</b><small>Jul 29</small>', page)
+        for label, date in (
+            ("Est. July deliveries", "Aug 3"),
+            ("Est. Q3 earnings", "Oct 29"),
+            ("Est. Q3 earnings", "Nov 3"),
+            ("Est. Q3 earnings", "Nov 4"),
+        ):
+            self.assertIn(f'<b>{label}</b><small>{date}</small>', page)
         for position in positions_payload:
             symbol = position["symbol"]
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
