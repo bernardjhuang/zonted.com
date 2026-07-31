@@ -425,6 +425,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("Know the difference between a momentum play, a narrative play, and gambling.", mentality)
         self.assertIn("Always do your own research.", mentality)
         self.assertIn("How much is your thinking already priced in?", mentality)
+        self.assertIn("You will not buy the bottom or sell the top.", mentality)
+        self.assertIn("momentum does not reward patience", mentality)
 
     def test_status_bar_sector_pills_match_vwap_leaders_and_laggards(self) -> None:
         scores = trading_shell.sector_z_scores()
