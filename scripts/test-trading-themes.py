@@ -192,16 +192,25 @@ class TradingThemesContractTest(unittest.TestCase):
             self.assertNotIn(retired, self.page)
 
     def test_disqualified_theme_is_retained_but_separated_from_core_ledger(self) -> None:
-        theme = next(
-            theme for theme in self.payload["themes"]
-            if theme["id"] == "emerging-precision-fermentation-molecules"
-        )
-        self.assertEqual(theme["disqualified"]["symbols"], ["LNZA", "DNA"])
-        self.assertIn("too suspicious", theme["disqualified"]["reason"])
-        self.assertIn("hard to buy", theme["disqualified"]["reason"])
+        themes = {
+            theme["id"]: theme
+            for theme in self.payload["themes"]
+            if theme.get("disqualified")
+        }
+        fermentation = themes["emerging-precision-fermentation-molecules"]
+        self.assertEqual(fermentation["disqualified"]["symbols"], ["LNZA", "DNA"])
+        self.assertIn("too suspicious", fermentation["disqualified"]["reason"])
+        self.assertIn("hard to buy", fermentation["disqualified"]["reason"])
+        actuarial = themes["emerging-glp1-actuarial"]
+        self.assertEqual(actuarial["disqualified"]["symbols"], ["MET", "PRU"])
+        self.assertIn("Not enough publicly tradable tickers", actuarial["disqualified"]["reason"])
+        self.assertIn("too diversified", actuarial["disqualified"]["reason"])
         self.assertEqual(
-            [theme["id"] for theme in self.payload["themes"] if theme.get("disqualified")],
-            ["emerging-precision-fermentation-molecules"],
+            list(themes),
+            [
+                "emerging-glp1-actuarial",
+                "emerging-precision-fermentation-molecules",
+            ],
         )
         self.assertIn("const renderDisqualified =", self.script)
         self.assertIn("themes.filter(theme => !theme.disqualified)", self.script)
@@ -209,6 +218,7 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertIn("Disqualified themes", self.script)
         self.assertIn("Retained so rejected ideas don't get recreated.", self.script)
         self.assertIn("disqualified-themes", self.page)
+        self.assertIn(".dq-table .lt-btn{white-space:normal;overflow-wrap:anywhere}", self.page)
 
     def test_static_snapshot_is_baked_and_in_sync(self) -> None:
         """Crawler-visible snapshot must match themes.json — regenerate with
