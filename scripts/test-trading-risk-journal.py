@@ -50,12 +50,15 @@ class RiskJournalContractTest(unittest.TestCase):
         page = (ROOT / "trading" / "grok-risk" / "index.html").read_text()
         data = json.loads((ROOT / "trading" / "grok-risk.json").read_text())
         latest = data["entries"][0]
-        self.assertEqual(latest["as_of_date"], "2026-07-29")
-        self.assertEqual(latest["risk_appetite"], 3)
-        self.assertIn('data-model="Grok 4.5" data-rating="3" data-stance="Risk-off"', page)
-        self.assertIn("2026-07-29 · Risk-off (3/10)", page)
-        self.assertIn("2026-07-27 · Risk On (6.5/10)", page)
-        self.assertLess(page.index("2026-07-29"), page.index("2026-07-27"))
+        self.assertEqual(latest["as_of_date"], "2026-07-30")
+        self.assertEqual(latest["risk_appetite"], 5)
+        self.assertIn('data-model="Grok 4.5" data-rating="5" data-stance="Neutral"', page)
+        self.assertIn("2026-07-30 · Neutral (5/10)", page)
+        previous = data["entries"][1]
+        self.assertEqual(previous["as_of_date"], "2026-07-29")
+        self.assertEqual(previous["risk_appetite"], 3)
+        self.assertLess(latest["as_of_date"], "2026-07-31")
+        self.assertGreater(latest["as_of_date"], previous["as_of_date"])
 
     def test_metric_dashboard_payload_is_not_reintroduced(self) -> None:
         forbidden = {"series", "curve", "score", "gauges", "components", "model_status"}

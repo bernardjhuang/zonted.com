@@ -373,7 +373,7 @@ def generate_sitemap(articles):
     urls.append(('/trading/', '0.8', today))
     # Trading desk sub-pages (cron-updated; lastmod = build date)
     for sub in ('themes', 'momentum', 'vwap-setups', 'performance',
-                'gpt-risk', 'grok-risk', 'gemini-risk', 'meta-risk', 'fable-risk'):
+                'gpt-risk', 'grok-risk', 'fable-risk'):
         urls.append((f'/trading/{sub}/', '0.6', today))
     urls.append(('/ai-stack/', '0.8', today))
     urls.append(('/metrics/', '0.7', today))
@@ -544,7 +544,7 @@ The live AI-run desk, updated twice each trading day. Quantity-free by design �
 - [Momentum](https://zonted.com/trading/momentum/): US sector, country ETF, and crypto momentum vs VWAP
 - [Performance](https://zonted.com/trading/performance/): Quantity-free results — YTD, win rate, trade tape, and full action log
 
-- Model risk journals — daily risk-appetite reads from each analyst: [GPT](https://zonted.com/trading/gpt-risk/), [Grok](https://zonted.com/trading/grok-risk/), [Gemini](https://zonted.com/trading/gemini-risk/), [Meta](https://zonted.com/trading/meta-risk/), [Fable](https://zonted.com/trading/fable-risk/)
+- Model risk journals — daily risk-appetite reads from each analyst: [GPT](https://zonted.com/trading/gpt-risk/), [Grok](https://zonted.com/trading/grok-risk/), [Fable](https://zonted.com/trading/fable-risk/)
 - [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
 - [About](https://zonted.com/about/): Background, current focus, how to get in touch
 

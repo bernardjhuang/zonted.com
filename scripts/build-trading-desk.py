@@ -501,8 +501,6 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
     modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
     gpt = load(ROOT / "trading" / "risk-journal.json")["entries"][0]
     grok = load(ROOT / "trading" / "grok-risk.json")["entries"][0]
-    gemini = load(ROOT / "trading" / "gemini-risk.json")["entries"][0]
-    meta = load(ROOT / "trading" / "meta-risk.json")["entries"][0]
     fable_payload = load(ROOT / "trading" / "fable-risk.json")
     fable_rank = {"pre-market": 0, "intraday": 1, "post-close": 2}
     fable = max(fable_payload["entries"] + fable_payload.get("model_entries", []),
@@ -510,8 +508,6 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
     models = {
         "gpt": ("GPT", "gpt-risk", float(gpt["risk_appetite"]), gpt["stance"]),
         "grok": ("Grok", "grok-risk", float(grok["risk_appetite"]), grok["stance"]),
-        "gemini": ("Gemini", "gemini-risk", float(gemini["rating"]), gemini["stance"]),
-        "meta": ("Meta", "meta-risk", float(meta.get("rating") if meta.get("rating") is not None else meta["derived_rating"]), meta["stance"]),
         "fable": ("Fable", "fable-risk", float(fable.get("risk_appetite", fable.get("rating"))), fable.get("stance", fable.get("verdict"))),
     }
     model_chips = {}
@@ -522,6 +518,14 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
             f'<a class="chip chip-{key} chip-{state}" href="/trading/{route}/" '
             f'title="{html.escape(label)} risk appetite — {html.escape(str(stance))} · {score}/10">{html.escape(label)} {score}</a>'
         )
+    if status_metrics:
+        for retired in ("gemini", "meta"):
+            status_metrics = re.sub(
+                rf'<a class="chip chip-{retired} [^"]+" href="/trading/{retired}-risk/".*?</a>',
+                "",
+                status_metrics,
+                count=1,
+            )
     shell_paths = sorted((ROOT / "trading").glob("**/index.html")) + [PIPELINE]
     for path in shell_paths:
         source = path.read_text()
@@ -529,7 +533,14 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
         source = re.sub(r'/trading/desk\.js\?v=[a-f0-9]+', js_ref, source)
         source = re.sub(r'<a href="/trading/hypotheses/"(?: aria-current="page")?>Hypotheses</a>', '', source)
         source = re.sub(r'<a href="/trading/watchlist/"(?: aria-current="page")?>Watchlist</a>', '', source)
-        for risk_route, label in (("grok-risk", "Grok Risk"), ("gpt-risk", "GPT Risk"), ("gemini-risk", "Gemini Risk"), ("meta-risk", "Meta Risk"), ("fable-risk", "Fable Risk")):
+        for retired in ("gemini", "meta"):
+            source = re.sub(
+                rf'<a class="chip chip-{retired} [^"]+" href="/trading/{retired}-risk/".*?</a>',
+                "",
+                source,
+                count=1,
+            )
+        for risk_route, label in (("grok-risk", "Grok Risk"), ("gpt-risk", "GPT Risk"), ("fable-risk", "Fable Risk")):
             source = re.sub(rf'<a href="/trading/{risk_route}/"(?: aria-current="page")?>{label}</a>', '', source)
         source = source.replace('/trading/watchlist/?chart=', '/trading/vwap-setups/?chart=')
         source = source.replace('Market · YTD', 'Market · trailing 1Y')

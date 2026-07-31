@@ -28,17 +28,15 @@
     if (latest) setChip('gpt', 'GPT', Number(latest.risk_appetite), latest.stance);
   });
   fetch('/trading/fable-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const latest = d && ((d.model_entries && d.model_entries[0]) || (d.entries && d.entries[0]));
+    const sessionRank = { 'pre-market': 0, intraday: 1, 'post-close': 2 };
+    const rows = d ? [...(d.entries || []), ...(d.model_entries || [])] : [];
+    const latest = rows.sort((a, b) => {
+      const dateOrder = String(b.date || b.as_of_date).localeCompare(String(a.date || a.as_of_date));
+      return dateOrder || (sessionRank[b.session] ?? 1) - (sessionRank[a.session] ?? 1);
+    })[0];
     if (latest) setChip('fable', 'Fable', Number(latest.risk_appetite ?? latest.rating), latest.stance || latest.verdict);
   });
-  fetch('/trading/gemini-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('gemini', 'Gemini', Number(latest.rating), latest.stance);
-  });
-  fetch('/trading/meta-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('meta', 'Meta', Number(latest.rating ?? latest.derived_rating), latest.stance);
-  });
+
   fetch('/trading/grok-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
     const latest = d && d.entries && d.entries[0];
     if (latest) setChip('grok', 'Grok', Number(latest.risk_appetite), latest.stance);

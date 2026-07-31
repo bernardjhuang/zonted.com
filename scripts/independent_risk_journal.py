@@ -37,18 +37,6 @@ MODELS = (
         "journal_target": "trading/fable-risk.json",
     },
     {
-        "slug": "meta",
-        "model_id": "muse-spark-1.1",
-        "model_name": "Meta Muse Spark 1.1",
-        "journal_target": "trading/meta-risk.json",
-    },
-    {
-        "slug": "gemini",
-        "model_id": "gemini-3.1-pro-preview",
-        "model_name": "Gemini 3.1 Pro Preview",
-        "journal_target": "trading/gemini-risk.json",
-    },
-    {
         "slug": "grok",
         "model_id": "grok-4.5",
         "model_name": "Grok 4.5",

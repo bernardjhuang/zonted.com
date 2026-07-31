@@ -39,7 +39,7 @@ class TradingUiContractTest(unittest.TestCase):
         }
         self.assertEqual(
             public_routes,
-            {"themes", "vwap-setups", "momentum", "performance", "gpt-risk", "grok-risk", "gemini-risk", "meta-risk", "fable-risk"},
+            {"themes", "vwap-setups", "momentum", "performance", "gpt-risk", "grok-risk", "fable-risk"},
         )
 
     def test_deploy_checks_the_active_desk_cadence(self):
@@ -413,12 +413,15 @@ class TradingUiContractTest(unittest.TestCase):
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
         self.assertNotIn("/trading/hypotheses/", hrefs)
-        for risk_route in ("grok-risk", "gpt-risk", "gemini-risk", "meta-risk", "fable-risk"):
+        for risk_route in ("grok-risk", "gpt-risk", "fable-risk"):
             self.assertNotIn(f"/trading/{risk_route}/", hrefs)
-        for model in ("gpt", "grok", "gemini", "meta", "fable"):
+        for model in ("gpt", "grok", "fable"):
             self.assertIn(f".chip-{model}::before", styles)
             self.assertIn(f"/trading/model-icons/{model}.svg", styles)
             self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
+        for retired in ("gemini", "meta"):
+            self.assertNotIn(f".chip-{retired}::before", styles)
+            self.assertFalse((ROOT / "trading" / "model-icons" / f"{retired}.svg").exists())
         self.assertNotIn(".chip .dot", styles)
         self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
         self.assertTrue(HYPOTHESES_SOURCE.exists(), "canonical hypothesis source artifact must remain available")
