@@ -132,7 +132,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(".risk-journal-entry", styles)
         self.assertEqual(journal["author"], "GPT-5.6")
         self.assertGreaterEqual(len(journal["entries"]), 1)
-        self.assertEqual(journal["entries"][0]["stance"], "Risk-off")
+        self.assertEqual(journal["entries"][0]["stance"], "Neutral")
         self.assertTrue(all(entry["author"] == "GPT-5.6" for entry in journal["entries"]))
         for junk in ("Metrics over time", "VVIX", "SKEW", "HY OAS", "VIX futures curve", "risk-evaluation.json"):
             self.assertNotIn(junk, page)
@@ -593,7 +593,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
-            self.assertIn('<a class="chip chip-gpt chip-off" href="/trading/gpt-risk/" title="GPT risk appetite — Risk-off · 3.5/10">GPT 3.5</a>', page, path.as_posix())
+            self.assertIn('<a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 5/10">GPT 5</a>', page, path.as_posix())
             self.assertIn('<a class="chip chip-grok chip-off" href="/trading/grok-risk/" title="Grok risk appetite — Risk-off · 3/10">Grok 3</a>', page, path.as_posix())
             self.assertRegex(page, r'class="chip chip-gemini [^"]+" href="/trading/gemini-risk/"')
             self.assertRegex(page, r'class="chip chip-meta [^"]+" href="/trading/meta-risk/"')
