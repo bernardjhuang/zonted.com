@@ -96,7 +96,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('thesis play on gyms becoming social clubs', details["LTH"])
         self.assertIn('wellness third place', details["LTH"])
         self.assertIn('Life Time 2025 Form 10-K', details["LTH"])
-        self.assertIn('July 30 earnings', details["LTH"])
+        self.assertIn('November 3', details["LTH"])
         self.assertIn('Current market value is published only as a rounded percentage', details["LTH"])
         self.assertIn('Slightly underpriced', details["HOOD"])
         self.assertIn('$940–980B', details["HOOD"])
@@ -107,7 +107,7 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertNotIn(retired, details)
         self.assertIn('35% to 132M', details["RBLX"])
         self.assertIn('monetized over 50% better', details["RBLX"])
-        self.assertIn('July 30, 2026', details["RBLX"])
+        self.assertIn('October 29, 2026', details["RBLX"])
         self.assertIn('$596M', details["RBLX"])
         self.assertIn('55 GW', details["CEG"])
         self.assertIn('1,121 MW', details["CEG"])
@@ -115,7 +115,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('$11.00–$12.00', details["CEG"])
         self.assertIn('69% to $663M', details["RDDT"])
         self.assertIn('126.8M', details["RDDT"])
-        self.assertIn('July 30, 2026', details["RDDT"])
+        self.assertIn('October 29, 2026', details["RDDT"])
         self.assertIn('$715–725M', details["RDDT"])
         self.assertIn('Open position · profitable fintech', details["FIGR"])
         self.assertIn('record loan volume', details["FIGR"])
@@ -134,8 +134,14 @@ class TradingUiContractTest(unittest.TestCase):
         articles = re.findall(r'<article class="hypothesis-detail" id="hypothesis-([a-z0-9.-]+)-setup"([^>]*)>', hypotheses_route)
         self.assertEqual(len(articles), len(expected_symbols))
         self.assertEqual({symbol.upper() for symbol, _attrs in articles}, expected_symbols)
+        completed_session = json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"]
         for symbol, attrs in articles:
             self.assertRegex(attrs, r'data-desk-catalyst="\d{4}-\d{2}-\d{2}"', symbol)
+            catalyst_match = re.search(r'data-desk-catalyst="(\d{4}-\d{2}-\d{2})"', attrs)
+            if catalyst_match is None:
+                self.fail(f"{symbol} catalyst date is missing")
+            catalyst_date = catalyst_match.group(1)
+            self.assertGreater(catalyst_date, completed_session, f"{symbol} catalyst is not after the latest completed session")
             self.assertRegex(attrs, r'data-desk-trigger="[^"]+"', symbol)
             self.assertRegex(attrs, r'data-desk-stance="(constructive|speculative|research-only|open-position)"', symbol)
 
