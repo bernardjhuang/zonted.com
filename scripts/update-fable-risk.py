@@ -11,6 +11,7 @@ DATA = os.path.join(ROOT, "trading", "fable-risk.json")
 START, END = "<!-- AUTO:FABLE_RISK:START -->", "<!-- AUTO:FABLE_RISK:END -->"
 VCLS = {"RISK-ON": "fr-on", "NEUTRAL": "fr-neutral", "RISK-OFF": "fr-off"}
 SCLS = {1: ("enter", "+1 on"), 0: ("watch", "0 neutral"), -1: ("short", "−1 off")}
+SESSION_RANK = {"pre-market": 0, "intraday": 1, "post-close": 2}
 
 
 def session_of(entry):
@@ -86,7 +87,7 @@ def render_model_entry(entry, open_=True):
     return (f'<details class="fr-entry fr-model-entry"{" open" if open_ else ""}>'
             f'<summary><time datetime="{esc(entry["as_of_date"])}">{esc(entry["as_of_date"])}</time>'
             f'<span class="fr-sumverdict {cls}">{esc(verdict)}</span>'
-            f'<span class="fr-sumsession">{esc(entry["session"])}</span>'
+            f'<span class="fr-sumsession">{esc(entry["session"])} · journal</span>'
             f'<span class="fr-sumfor">independent Claude Fable 5 journal</span>'
             f'<span class="fr-sumrating">{rating:g}/10</span></summary>'
             f'<div class="fr-body">{body}</div></details>')
@@ -117,8 +118,11 @@ def main():
 
     page = open(PAGE).read()
     start, end = page.index(START) + len(START), page.index(END)
-    rendered = [render_model_entry(item, index == 0) for index, item in enumerate(data["model_entries"])]
-    rendered.extend(render(item, not rendered and index == 0) for index, item in enumerate(data["entries"]))
+    combined = [(item.get("date") or item["as_of_date"], SESSION_RANK.get(session_of(item), 1), renderer, item)
+                for items, renderer in ((data["entries"], render), (data["model_entries"], render_model_entry))
+                for item in items]
+    combined.sort(key=lambda row: row[:2], reverse=True)
+    rendered = [renderer(item, index == 0) for index, (_, _, renderer, item) in enumerate(combined)]
     block = "\n" + "\n".join(rendered) + "\n"
     open(PAGE, "w").write(page[:start] + block + page[end:])
     if entry.get("prompt_version"):
