@@ -205,10 +205,20 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual(actuarial["disqualified"]["symbols"], ["MET", "PRU"])
         self.assertIn("Not enough publicly tradable tickers", actuarial["disqualified"]["reason"])
         self.assertIn("too diversified", actuarial["disqualified"]["reason"])
+        live_experience = themes["emerging-live-experience-k"]
+        self.assertEqual(live_experience["disqualified"]["symbols"], ["SPHR", "VIK", "RCL", "LYV"])
+        self.assertIn("near all-time highs", live_experience["disqualified"]["reason"])
+        self.assertIn("Revisit", live_experience["disqualified"]["reason"])
+        orbital = themes["emerging-orbital-deflation"]
+        self.assertEqual(orbital["disqualified"]["symbols"], ["SpaceX (private)", "RKLB", "ASTS"])
+        self.assertIn("Not enough ticker diversity", orbital["disqualified"]["reason"])
+        self.assertIn("already-known space trades", orbital["disqualified"]["reason"])
         self.assertEqual(
             list(themes),
             [
                 "emerging-glp1-actuarial",
+                "emerging-orbital-deflation",
+                "emerging-live-experience-k",
                 "emerging-precision-fermentation-molecules",
             ],
         )
