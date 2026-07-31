@@ -55,12 +55,12 @@ class IndependentRiskJournalTest(unittest.TestCase):
         manifest = risk.prepare_run(run_dir, "2026-07-27", "post-close")
         return run_dir, manifest
 
-    def test_prepare_creates_five_blind_prompts_without_touching_journals(self) -> None:
+    def test_prepare_creates_three_blind_prompts_without_touching_journals(self) -> None:
         targets = [ROOT / model["journal_target"] for model in risk.MODELS]
         before = {path: path.read_bytes() for path in targets}
         with tempfile.TemporaryDirectory() as tmp:
             run_dir, manifest = self.prepare(pathlib.Path(tmp))
-            self.assertEqual(len(manifest["models"]), 5)
+            self.assertEqual(len(manifest["models"]), 3)
             self.assertEqual(manifest["execution_policy"], "deferred-explicit-user-trigger-only")
             self.assertEqual(
                 manifest["method_policy"], "independent-model-selected-methodology"
@@ -84,7 +84,7 @@ class IndependentRiskJournalTest(unittest.TestCase):
         )
 
     def test_validate_rejects_missing_methodology_and_identity_drift(self) -> None:
-        model = risk.MODELS_BY_SLUG["meta"]
+        model = risk.MODELS_BY_SLUG["gpt"]
         no_method = self.valid_entry(model)
         no_method["methodology"] = None
         with self.assertRaisesRegex(risk.ContractError, "methodology must be an object"):
@@ -130,7 +130,7 @@ class IndependentRiskJournalTest(unittest.TestCase):
                 )
             output = root / "bundle.json"
             bundle = risk.bundle_run(run_dir, output)
-            self.assertEqual(len(bundle["entries"]), 5)
+            self.assertEqual(len(bundle["entries"]), 3)
             self.assertEqual(
                 [entry["model_id"] for entry in bundle["entries"]],
                 [model["model_id"] for model in risk.MODELS],

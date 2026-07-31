@@ -138,50 +138,19 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotIn(junk, page)
             self.assertNotIn(junk, script)
 
-    def test_gemini_risk_route_matches_structured_model_output(self) -> None:
-        page = (ROOT / "trading" / "gemini-risk" / "index.html").read_text()
-        payload = json.loads((ROOT / "trading" / "gemini-risk.json").read_text())
+    def test_retired_meta_and_gemini_risk_surfaces_stay_removed(self) -> None:
         script = (ROOT / "trading" / "desk.js").read_text()
-        entry = payload["entries"][0]
-        self.assertEqual(payload["schema_version"], 1)
-        self.assertEqual(payload["model"], "Gemini 3.1 Pro Preview")
-        self.assertEqual(entry["stance"], "Risk-off")
-        self.assertEqual(entry["rating"], 3)
-        self.assertEqual(entry["market_data_through"], "2026-07-29")
-        self.assertEqual(len(entry["sections"]), 5)
-        self.assertIn("<title>Gemini Risk", page)
-        self.assertIn("<h1>Gemini Risk</h1>", page)
-        self.assertRegex(page, r'class="chip chip-gemini [^"]+" href="/trading/gemini-risk/"')
-        self.assertIn('data-model="Gemini 3.1 Pro Preview"', page)
-        self.assertIn('data-rating="3"', page)
-        self.assertEqual(page.count('class="gemini-risk-card"'), 5)
-        self.assertEqual(page.count("Hawkish Fed dissents"), 1)
-        self.assertIn("Attribution and citation note", page)
-        self.assertIn("/trading/gemini-risk.json", script)
-        self.assertIn("setChip('gemini', 'Gemini'", script)
-
-    def test_meta_risk_route_preserves_the_search_grounded_model_output(self) -> None:
-        page = (ROOT / "trading" / "meta-risk" / "index.html").read_text()
-        payload = json.loads((ROOT / "trading" / "meta-risk.json").read_text())
-        entry = payload["entries"][0]
-        self.assertEqual(payload["schema_version"], 1)
-        self.assertEqual(payload["model"], "Meta AI muse-spark-1.1")
-        self.assertIn('"prompt_version": "zonted-independent-risk-v1"', payload["prompt"])
-        self.assertEqual(entry["as_of"], "2026-07-29")
-        self.assertEqual(entry["stance"], "Risk-off")
-        self.assertEqual(entry["rating"], 3.5)
-        self.assertEqual(entry["derived_rating"], 3.5)
-        self.assertGreaterEqual(len(entry["search_queries"]), 10)
-        self.assertGreaterEqual(len(entry["sources"]), 3)
-        self.assertIn("<title>Meta Risk", page)
-        self.assertIn("<h1>Meta Risk</h1>", page)
-        self.assertRegex(page, r'class="chip chip-meta [^"]+" href="/trading/meta-risk/"')
-        self.assertIn('data-model="Meta AI muse-spark-1.1"', page)
-        self.assertIn("Model journal", page)
-        self.assertIn('class="meta-risk-response"', page)
-        self.assertNotIn("### Why", page)
-        self.assertIn("Integrity note", page)
-        self.assertIn("/trading/meta-risk.json", page)
+        redirects = (ROOT / "_redirects").read_text()
+        for model in ("gemini", "meta"):
+            self.assertFalse((ROOT / "trading" / f"{model}-risk").exists())
+            self.assertFalse((ROOT / "trading" / f"{model}-risk.json").exists())
+            self.assertFalse((ROOT / "scripts" / f"update-{model}-risk.py").exists())
+            self.assertNotIn(f"/trading/{model}-risk", script)
+            self.assertIn(f"/trading/{model}-risk/* /trading/ 301", redirects)
+            self.assertIn(f"/trading/{model}-risk.json /trading/ 301", redirects)
+        self.assertIn("const sessionRank = { 'pre-market': 0, intraday: 1, 'post-close': 2 }", script)
+        self.assertIn("[...(d.entries || []), ...(d.model_entries || [])]", script)
+        self.assertNotIn("((d.model_entries && d.model_entries[0]) ||", script)
 
     def test_trading_desk_v3_generator_is_network_free_and_idempotent(self) -> None:
         script = ROOT / "scripts" / "build-trading-desk.py"
@@ -476,7 +445,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<div class="status-metrics">' in path.read_text()
         ]
-        self.assertEqual(len(status_pages), 10)
+        self.assertEqual(len(status_pages), 8)
         for path in status_pages:
             source = path.read_text()
             for marker in expected:
@@ -581,7 +550,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<nav class="subnav"' in path.read_text()
         })
-        self.assertEqual(len(pages), 10)
+        self.assertEqual(len(pages), 8)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""
@@ -594,11 +563,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertIn('<a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 5/10">GPT 5</a>', page, path.as_posix())
-            self.assertIn('<a class="chip chip-grok chip-off" href="/trading/grok-risk/" title="Grok risk appetite — Risk-off · 3/10">Grok 3</a>', page, path.as_posix())
-            self.assertRegex(page, r'class="chip chip-gemini [^"]+" href="/trading/gemini-risk/"')
-            self.assertRegex(page, r'class="chip chip-meta [^"]+" href="/trading/meta-risk/"')
-            self.assertEqual(page.count('class="chip chip-gemini '), 1, path.as_posix())
-            self.assertEqual(page.count('class="chip chip-meta '), 1, path.as_posix())
+            self.assertIn('<a class="chip chip-grok chip-neutral" href="/trading/grok-risk/" title="Grok risk appetite — Neutral · 5/10">Grok 5</a>', page, path.as_posix())
+            self.assertIn('<a class="chip chip-fable chip-neutral" href="/trading/fable-risk/" title="Fable risk appetite — NEUTRAL · 5/10">Fable 5</a>', page, path.as_posix())
+            self.assertNotIn('class="chip chip-gemini ', page, path.as_posix())
+            self.assertNotIn('class="chip chip-meta ', page, path.as_posix())
             self.assertIn(f'<span class="stamp">{desk_stamp}</span>', page, path.as_posix())
             self.assertIn(f'/trading/desk.css?v={css_hash}', page, path.as_posix())
             self.assertIn(f'/trading/desk.js?v={js_hash}', page, path.as_posix())
