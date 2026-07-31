@@ -504,7 +504,9 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
     gemini = load(ROOT / "trading" / "gemini-risk.json")["entries"][0]
     meta = load(ROOT / "trading" / "meta-risk.json")["entries"][0]
     fable_payload = load(ROOT / "trading" / "fable-risk.json")
-    fable = (fable_payload.get("model_entries") or fable_payload["entries"])[0]
+    fable_rank = {"pre-market": 0, "intraday": 1, "post-close": 2}
+    fable = max(fable_payload["entries"] + fable_payload.get("model_entries", []),
+                key=lambda e: ((e.get("date") or e["as_of_date"]), fable_rank.get(e.get("session", "pre-market"), 1)))
     models = {
         "gpt": ("GPT", "gpt-risk", float(gpt["risk_appetite"]), gpt["stance"]),
         "grok": ("Grok", "grok-risk", float(grok["risk_appetite"]), grok["stance"]),
