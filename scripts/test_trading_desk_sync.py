@@ -251,7 +251,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn('data-feed-state="no-feed"', net_row)
         byddy_row = next(row for row in thesis_rows if _row_symbol(row) == "BYDDY")
         self.assertIn('data-feed-state="live" data-feed-source="robinhood"', byddy_row)
-        fallback = json.loads((ROOT / "trading" / "desk-close-quotes.json").read_text())
+        morning_quotes = os.environ.get("ZONTED_DESK_MORNING_QUOTES")
+        if morning_quotes:
+            fallback = json.loads(pathlib.Path(morning_quotes).read_text())
+        else:
+            fallback = json.loads((ROOT / "trading" / "desk-close-quotes.json").read_text())
         chart_date = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["as_of"]
         self.assertEqual(fallback["generated_at"][:10], chart_date)
         self.assertIn("BYDDY", fallback["quotes"])
