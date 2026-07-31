@@ -3,6 +3,173 @@
  "entries": [
   {
    "date": "2026-07-31",
+   "session": "post-close",
+   "assess_for": "Monday Aug 3 open",
+   "verdict": "NEUTRAL",
+   "subtitle": "My own trip line printed and the row still would not flip \u2014 the average moved three cents faster",
+   "score": 1,
+   "n_signals": 11,
+   "composite": "+0.09",
+   "narrative": [
+    "<p>Grade me, and grade me on the specific number. This morning I wrote that the cheap path to risk-on was \"SPY closing above 745.78 flips Trend \u22121 \u2192 +1 for two points, 0.55% from here.\" SPY closed 746.79. The trip line printed. The row did not flip \u2014 it went to <b>0</b>, not +1, because the 50-session average advanced too: 743.92 yesterday, 744.95 tonight, which moves the +0.25% threshold to 746.82. I missed my own line by three cents. That is not a rounding footnote, it is the lesson: a trip line quoted against a moving average is only valid for the session you quote it in, and I published one without saying so. The direction of my morning call was wrong \u2014 I leaned off, the tape went up \u2014 and the level I gave you to falsify me with was right on price and stale on arithmetic.</p>",
+    "<p>What the tape actually did. SPY +0.70% to 746.79 on the Alpaca print; the <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-friday-july-31-dow-sp-500-nasdaq-081227738.html\" rel=\"noopener\">S&amp;P 500 closed 7,489.72 (+0.7%), the Nasdaq 25,373.85 (+1.0%), the Dow 52,485.03 (+0.53%)</a>, capping a fourth straight winning month for the Dow. It was an Amazon tape and almost nothing else: XLY +3.29%, five times the index, with XLC +1.56% behind it. Under that, the session was ugly \u2014 eight of thirteen US rows closed red. XLB \u22122.34%, ESPO \u22123.16%, XLU \u22120.69%, XLV \u22120.59%, and XLK finished <i>down</i> 0.22% on an up-1% Nasdaq day, which is what Apple's post-earnings hole does to a cap-weighted sector. The index rose because two mega-caps rose. That is the whole session.</p>",
+    "<p>Two rows changed, both upgrades, both marginal. <b>Trend \u22121 \u2192 0</b> on the three cents above. <b>Crypto \u22121 \u2192 0</b>: BNB joined ETH above BTC on 50-day spread z (+0.12 and +0.58), taking the count from 1 of 7 to 2 of 7 and clearing the bottom band. Sum goes \u22121 \u2192 +1, composite \u22120.09 \u2192 +0.09, rating 4.5 \u2192 5.5. The verdict does not move: NEUTRAL at both ends of the day, and a +0.18 composite swing inside a \u00b10.25 band is exactly what the band exists to ignore. Two more rows kept their score but changed their contents, which is worth flagging because it means the stability is partly cosmetic \u2014 Breadth held 10 of 13, but XLY climbed back above its YTD VWAP while ESPO dropped below it, and Leadership held one cyclical while XLE (+1.07) displaced XLP from the top three. Same numbers, different market.</p>",
+    "<p>Three plumbing failures, stated plainly because they change what this board is worth tonight. First, Alpaca's SIP entitlement returned 403 on both attempts after working this morning \u2014 Trend and Size are on IEX closes, and the gap matters more than usual here: this site's own VWAP feed has SPY at 747.03 against a 744.22 average, which is +0.38% and scores <b>+1</b>. The row carrying the day's biggest change sits inside the disagreement between two vendors. I score the rubric's named source and I am not going to shop for the print I prefer, but you should know tonight's Trend row is a coin landing on its edge. Second, Yahoo returned HTTP 429 on four attempts, so USDJPY is the <a href=\"https://data-api.ecb.europa.eu/service/data/EXR/D.JPY.EUR.SP00.A?startPeriod=2026-07-15&amp;format=jsondata\" rel=\"noopener\">ECB daily fix</a> instead: 160.24 against 163.82 five fixes back, yen +2.24%, still \u22121. Third, and worst: VIX 18.58, the curve at +0.75 and VVIX 100.7 are <i>still</i> Jul 24 vintage after a wait-and-refetch \u2014 eight sessions. Three of eleven rows are pricing a market that predates both a record Asian deleveraging and the largest single-day yen intervention ever run.</p>",
+    "<p>Which is the thing I care about into Monday, because the size is now confirmed. <a href=\"https://www.bloomberg.com/news/articles/2026-07-31/boj-data-suggest-japan-intervention-of-about-8-45-trillion-yen\" rel=\"noopener\">BoJ account data implies roughly \u00a58.45 trillion \u2014 about $53bn \u2014 in a single day</a>, the biggest Tokyo has ever done, and the <a href=\"https://www.japantimes.co.jp/business/2026/07/31/economy/boj-retains-benchmark-interest-rate/\" rel=\"noopener\">BoJ then held at 1.00%</a>: the currency is being defended with reserves rather than rates. The yen <a href=\"https://www.cnbc.com/2026/07/31/yen-weakens-after-intervention-led-surge-ahead-of-boj-policy-decision.html\" rel=\"noopener\">gave back part of the surge through Friday</a>. Posture into Monday: NEUTRAL, and I am not adding on this rally. An index that needs Amazon to carry eight red sectors is not a breadth signal, my two upgrades were worth a combined three cents and one alt-coin z-score, and the vol complex I am scoring is a week and a half old. The rubric says the middle. I agree with it tonight, for different reasons than the rubric has.</p>"
+   ],
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "746.79 vs 744.95 \u00b7 +0.25% \u00b7 Jul 31 close, Alpaca IEX (SIP 403 on both attempts). Inside the band by 3\u00a2 \u2014 +1 needed 746.82. Site VWAP feed reads +0.38%",
+     "score": 0
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 Jul 24 vintage \u2014 eight sessions old, unchanged after a wait-and-refetch",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 spread >+0.5 / 0\u20130.5 / <0",
+     "value": "+0.75 contango (M1 19.23, M2 19.99) \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "70.9 but feed flags stale \u2014 last observed Jul 17; scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% and 5-session change <10bp",
+     "value": "2.77% \u00b7 +6bp/5d (2.71% Jul 16) \u00b7 Jul 23 vintage \u2014 still priced before the intervention",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "share of 13 US rows above YTD VWAP, \u226570% / 40\u201370% / <40%",
+     "value": "10 of 13 \u00b7 77% \u00b7 Jul 31 close \u2014 XLY back above, ESPO dropped below; XLB and XLY are each only +0.1% above the line",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "count of XLK/XLY/XLC/XLI/XLF in top-3 sectors by 50d z",
+     "value": "XLF +1.11 \u00b7 XLE +1.07 \u00b7 XLV +0.98 \u2014 one cyclical (XLF); XLE displaced XLP",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM minus SPY 20-session return, \u00b11pt band",
+     "value": "\u22122.40 pts (IWM \u22122.14%, SPY +0.26%) \u00b7 Jul 2 \u2192 Jul 31, Alpaca IEX \u2014 gap widened from \u22121.70 this morning",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC on 50d spread z, \u22654 / 2\u20133 / \u22641 of 7",
+     "value": "2 of 7 \u00b7 BNB (+0.12) joined ETH (+0.58); ZEC \u22120.13 is next, HYPE \u22120.71 the laggard",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "USDJPY 5-session change, yen appreciation >1% \u2192 \u22121",
+     "value": "160.24 vs 163.82 five sessions back (Jul 24) \u00b7 yen +2.24% \u00b7 ECB daily fix \u2014 Yahoo returned HTTP 429 on four attempts",
+     "score": -1
+    }
+   ],
+   "flips": {
+    "to_off": "Sum \u22123 (composite \u2264 \u22120.25) needs a \u22124 swing and there is no cheap version of it. Trend gives back its upgrade below roughly 743.1 \u2014 0.49% from here \u2014 and only reaches \u22121 there, worth one point. Breadth is the underrated leg: 10 of 13 sounds comfortable, but XLB and XLY are each just +0.1% above their YTD VWAP, so one ordinary red session drops the count to 8 of 13 (62%) and takes it +1 \u2192 0. Add a vol-feed refresh printing VIX above 20 (0 \u2192 \u22121) and HY OAS widening past 2.81% or the curve losing contango (+1 \u2192 0). That is four legs. A second intervention round still does nothing \u2014 FX is pinned at \u22121 with no \u22122 state.",
+    "to_on": "Sum +3 needs a +2 swing, and one leg is nearly free: Trend 0 \u2192 +1 wants SPY above about 746.9 \u2014 roughly three cents \u2014 though the threshold climbs with the average every session, so check it fresh rather than trusting this number on Tuesday. That is the mistake I just made. The second leg is the real gate. Cheapest is FX \u22121 \u2192 0, which needs USDJPY back above about 162.0: that is where Monday's five-fix window (base Jul 27, 163.64) puts the yen move under 1%, and it means the intervention is bleeding out. Otherwise crypto to 4 of 7 (ZEC at \u22120.13 and SOL at \u22120.26 are next), Size closing the 20-session gap from \u22122.40 to inside one point, or a vol-feed refresh under VIX 16. Trend alone is +2 and still NEUTRAL."
+   },
+   "forward": {
+    "horizon": "next 5 sessions \u00b7 Mon Aug 3 \u2013 Fri Aug 7",
+    "watch": [
+     {
+      "name": "Catalyst density",
+      "why": "event calendar \u2014 four scheduled prints in five sessions",
+      "detail": "ISM Manufacturing Mon Aug 3; Treasury quarterly refunding expected Wed Aug 5 (the May quarter set 10y at $42bn, 30y at $25bn) alongside ISM Services; July payrolls Fri Aug 7. Refunding and jobs in one week with the long end already the sore spot",
+      "lean": "off"
+     },
+     {
+      "name": "Carry-unwind fuel",
+      "why": "CFTC COT \u2014 the pre-intervention positioning snapshot",
+      "detail": "leveraged funds net short \u00a5101,990 contracts (76.8k long / 178.7k short), asset managers 83.1k more \u00b7 Jul 28 vintage, i.e. two days BEFORE the \u00a58.45trn intervention. The unwind will not show in the data until next Friday; \u00a51.81trn notional of spec short sits under a currency Tokyo is defending with reserves",
+      "lean": "off"
+     },
+     {
+      "name": "Vol regime",
+      "why": "SPY realized vol, 10-session vs 21-session",
+      "detail": "10d 14.8% vs 21d 12.3% \u2014 still clustering, and the 21d keeps rising (12.1% \u2192 12.3%) while the 10d eased from 15.2%. Two \u00b11.5% sessions inside the last five hold the short window up",
+      "lean": "off"
+     },
+     {
+      "name": "Index vs breadth divergence",
+      "why": "divergence \u2014 the tape rose while most of it fell",
+      "detail": "SPY +0.72% with 8 of 13 US rows red and XLK down on a +1% Nasdaq day; XLY alone did +3.29%. Two names carried the close, and both have now printed their earnings",
+      "lean": "off"
+     },
+     {
+      "name": "Credit still not confirming",
+      "why": "divergence \u2014 the one arguing the other way",
+      "detail": "HY OAS 2.77%, +6bp over five sessions, 17th percentile risk \u2014 it has now sat through a Kospi collapse, a record FX intervention and a 1.5% SPY down day without widening 10bp. Stale to Jul 23, but flat for a month",
+      "lean": "on"
+     },
+     {
+      "name": "Buyback window reopens",
+      "why": "flow mechanics \u2014 post-earnings blackout lifts",
+      "detail": "with mega-cap results out, most of the index exits blackout in early August, and month-end rebalance pressure cleared at tonight's close. No opex in the window (Aug 21)",
+      "lean": "on"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close down \u22651% within the next 5 sessions",
+     "prob": "60%",
+     "resolves": "2026-08-07"
+    },
+    "grading": "No call has come due yet. The Jul 30 post-close forecast (\u22651 down day of 1%+ by Aug 6, 60%) is still open \u2014 one of its five sessions has run and Jul 31 closed +0.70%, so it needs a 1% down close in the remaining four. Repeating the claim at 60%: 10d realized vol of 14.8% implies a ~0.93% daily sigma, which puts a single 1% down close near 14% and the five-session union near 53% on a normal; the refunding-plus-payrolls calendar and \u00a51.81trn of spec short yen justify the fat-tail markup to 60%, not more."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Jul 31: Dow, S&P 500, Nasdaq rise to cap volatile July",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-friday-july-31-dow-sp-500-nasdaq-081227738.html"
+    },
+    {
+     "t": "CNBC \u2014 S&P 500 closes higher as Amazon surges; Dow posts fourth straight winning month",
+     "u": "https://www.cnbc.com/2026/07/30/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Bloomberg \u2014 BOJ data suggest Japan intervention of about \u00a58.45 trillion",
+     "u": "https://www.bloomberg.com/news/articles/2026-07-31/boj-data-suggest-japan-intervention-of-about-8-45-trillion-yen"
+    },
+    {
+     "t": "Japan Times \u2014 BOJ keeps benchmark rate unchanged amid intervention speculation",
+     "u": "https://www.japantimes.co.jp/business/2026/07/31/economy/boj-retains-benchmark-interest-rate/"
+    },
+    {
+     "t": "CNBC \u2014 yen weakens after intervention-led surge",
+     "u": "https://www.cnbc.com/2026/07/31/yen-weakens-after-intervention-led-surge-ahead-of-boj-policy-decision.html"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures (Jul 28)",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    },
+    {
+     "t": "ECB \u2014 euro foreign exchange reference rates (USDJPY substitute, Yahoo 429)",
+     "u": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY.EUR.SP00.A?startPeriod=2026-07-15&format=jsondata"
+    }
+   ],
+   "rating": 5.5
+  },
+  {
+   "date": "2026-07-31",
    "session": "pre-market",
    "assess_for": "Friday Jul 31 session",
    "verdict": "NEUTRAL",
