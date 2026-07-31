@@ -11,6 +11,7 @@ LINKED_ROUTES = (
     ("themes/", "Themes"),
     ("vwap-setups/", "VWAP Setups"),
     ("momentum/", "Momentum"),
+    ("mentality/", "Mentality"),
     ("performance/", "Performance"),
     ("gpt-risk/", "GPT Risk"),
     ("grok-risk/", "Grok Risk"),
@@ -27,6 +28,9 @@ def exercise(page, url: str, screenshot: Path) -> None:
     errors: list[str] = []
     page.on("pageerror", lambda error: errors.append(str(error)))
     page.goto(url, wait_until="networkidle")
+    check(page.locator(".desk-rail").count() == 0, "retired Desk rail remains")
+    check(page.locator(".sector-chip--leader").count() == 2, "expected two leading-sector pills")
+    check(page.locator(".sector-chip--laggard").count() == 2, "expected two lagging-sector pills")
     check(page.locator(".desk-blotter-table").count() == 2, "expected two blotter tables")
     position_count = page.locator('[data-desk-kind="position"]').count()
     hypothesis_count = page.locator('[data-desk-kind="hypothesis"]').count()
@@ -118,6 +122,8 @@ def exercise_linked_routes(page, origin: str) -> None:
         page.goto(f"{origin}/trading/{route}", wait_until="networkidle")
         check(page.locator("h1").inner_text() == heading, f"{route} heading is wrong")
         check(page.locator('.subnav a[aria-current="page"]').count() <= 1, f"{route} has ambiguous navigation state")
+        if route == "mentality/":
+            check(page.locator(".mentality-rule").count() == 3, "Mentality needs all three lessons")
         check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"{route} has horizontal overflow")
         check(not errors, f"{route} JavaScript errors: " + "; ".join(errors))
 

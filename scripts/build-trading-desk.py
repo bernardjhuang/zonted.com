@@ -20,6 +20,8 @@ import statistics
 from pathlib import Path
 from zoneinfo import ZoneInfo
 
+from trading_shell import normalize_trading_subnav, render_sector_status_pills, replace_sector_status_pills
+
 ROOT = Path(__file__).resolve().parents[1]
 PAGE = ROOT / "trading/index.html"
 PIPELINE = ROOT / "trading/pipeline.html"
@@ -149,7 +151,14 @@ def render_status_metrics(page: str, positions: int, status: dict[str, float]) -
         f'\n    <span class="metric" data-status-open="{positions}"><span class="k">Open</span>{positions}</span>\n  '
     )
     pattern = r'(<div class="status-metrics">\s*<span class="chipset">.*?</span>).*?(</div>)'
-    rendered, count = re.subn(pattern, lambda match: match.group(1) + metrics + match.group(2), page, count=1, flags=re.S)
+    sector_chips = render_sector_status_pills()
+    rendered, count = re.subn(
+        pattern,
+        lambda match: match.group(1) + sector_chips + metrics + match.group(2),
+        page,
+        count=1,
+        flags=re.S,
+    )
     if count != 1:
         raise ValueError("Status metrics region not found")
     return rendered
@@ -558,6 +567,10 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
             source = re.sub(rf'<a href="/trading/{risk_route}/"(?: aria-current="page")?>{label}</a>', '', source)
         source = source.replace('/trading/watchlist/?chart=', '/trading/vwap-setups/?chart=')
         source = source.replace('Market · YTD', 'Market · trailing 1Y')
+        if '<nav class="subnav"' in source:
+            source = normalize_trading_subnav(source, path)
+        if '<div class="status-metrics">' in source:
+            source = replace_sector_status_pills(source)
         for key, chip in model_chips.items():
             source = re.sub(
                 rf'<a class="chip chip-{key} [^"]+" href="/trading/(?:gpt|grok|gemini|meta|fable)-risk/".*?</a>',

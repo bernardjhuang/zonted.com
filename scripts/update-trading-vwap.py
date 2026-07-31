@@ -20,6 +20,7 @@ import re
 import sys
 
 from sync_trading_desk import sync_sections
+from trading_shell import refresh_sector_status_pills
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 PAGE = os.path.join(ROOT, "trading", "pipeline.html")
@@ -338,8 +339,9 @@ def main():
         open(PAGE, "w").write(new)
     if asset_changed:
         open(CHART_ASSET, "w").write(asset_json)
+    sector_shell_changed = bool(refresh_sector_status_pills())
     routed_changed = bool(sync_sections(["vwap"]))
-    if not page_changed and not asset_changed and not routed_changed:
+    if not page_changed and not asset_changed and not sector_shell_changed and not routed_changed:
         print(f"[vwap] already current: {os.path.basename(path)}, {len(summary)} charts, last bar {p['last_bar']}")
         return
     print(f"[vwap] injected {os.path.basename(path)}: {len(summary)} charts, last bar {p['last_bar']}")

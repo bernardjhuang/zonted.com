@@ -39,7 +39,7 @@ class TradingUiContractTest(unittest.TestCase):
         }
         self.assertEqual(
             public_routes,
-            {"themes", "vwap-setups", "momentum", "performance", "gpt-risk", "grok-risk", "fable-risk"},
+            {"themes", "vwap-setups", "momentum", "mentality", "performance", "gpt-risk", "grok-risk", "fable-risk"},
         )
 
     def test_deploy_checks_the_active_desk_cadence(self):
@@ -61,7 +61,8 @@ class TradingUiContractTest(unittest.TestCase):
         home = (ROOT / "trading" / "index.html").read_text()
         self.assertNotIn("Needs attention", home)
         self.assertNotIn('class="alert"', home)
-        self.assertIn('aria-label="Trading mentality reminders"', home)
+        self.assertNotIn('aria-label="Trading mentality reminders"', home)
+        self.assertNotIn('id="market-overview-live"', home)
 
 
     def test_hypotheses_are_explicit_and_scannable(self):

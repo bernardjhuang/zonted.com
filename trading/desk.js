@@ -9,9 +9,15 @@
   const signed = (v, dp = 2, suf = '') => (v >= 0 ? '+' : '−') + Math.abs(v).toFixed(dp) + suf;
   const prettyDate = iso => new Date(iso + 'T12:00:00').toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
 
+  const subnav = $('.subnav .wrap');
+  const activeNav = subnav && $('a[aria-current="page"]', subnav);
+  if (activeNav && subnav.scrollWidth > subnav.clientWidth) {
+    subnav.scrollLeft = Math.max(0, activeNav.offsetLeft - (subnav.clientWidth - activeNav.offsetWidth) / 2);
+  }
+
   const riskJournalData = fetch('/trading/risk-journal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
 
-  /* ── status chips: five independent risk-appetite reads, all 0–10.
+  /* ── status chips: three independent risk-appetite reads, all 0–10.
      Each updates on its own; a failed fetch leaves that chip's static
      fallback text in place. Scores above 5 are green, below 5 are red,
      and exactly 5 keeps the neutral treatment. ── */
@@ -148,133 +154,6 @@
     });
     svg.addEventListener('blur', hideMetrics);
   });
-
-  /* ── market rail: SPY/VIX trailing 1Y + cross-asset leadership ─── */
-  const marketRoot = $('#market-overview-live');
-  if (marketRoot) {
-    const feed = path => fetch(path, { cache: 'no-cache' }).then(r => {
-      if (!r.ok) throw new Error(path + ' returned ' + r.status);
-      return r.json();
-    });
-    const parseMarkup = markup => {
-      const template = document.createElement('template');
-      template.innerHTML = markup || '';
-      return template.content.firstElementChild;
-    };
-    const lastFinite = values => {
-      for (let i = values.length - 1; i >= 0; i -= 1) if (values[i] != null && Number.isFinite(Number(values[i]))) return Number(values[i]);
-      return null;
-    };
-    const rankVwap = (payload, symbols) => symbols.map(symbol => {
-      const figure = parseMarkup(payload.charts && payload.charts[symbol]);
-      if (!figure || !figure.dataset.d) return null;
-      const data = JSON.parse(figure.dataset.d);
-      return { symbol, name: symbol, z: lastFinite(data.z50 || []) };
-    }).filter(row => row && Number.isFinite(row.z)).sort((a, b) => b.z - a.z);
-    const rankCrypto = payload => Object.entries(payload.charts || {}).map(([symbol, markup]) => {
-      const figure = parseMarkup(markup);
-      if (!figure) return null;
-      const name = $('figcaption span', figure)?.textContent.split('·')[0].trim() || symbol;
-      return { symbol, name, z: Number(figure.dataset.spreadZ) };
-    }).filter(row => row && Number.isFinite(row.z)).sort((a, b) => b.z - a.z);
-    const splitRanks = rows => ({ leaders: rows.slice(0, 2), laggards: rows.slice(-2).reverse() });
-    const rankGroup = (label, ranks, queryKey, hash) => {
-      const chips = (rows, kind) => rows.map(row => {
-        const href = '/trading/momentum/?' + queryKey + '=' + encodeURIComponent(row.symbol) + '#' + hash;
-        return '<a class="market-rank-chip ' + kind + '" href="' + href + '" title="' + esc(row.name) + '"><b>' + esc(row.symbol) + '</b><em>' + signed(row.z, 2) + 'z</em></a>';
-      }).join('');
-      return '<section class="market-rank-group"><h4>' + esc(label) + '</h4>' +
-        '<div class="market-rank-row"><span>Leaders</span><div>' + chips(ranks.leaders, 'leader') + '</div></div>' +
-        '<div class="market-rank-row"><span>Laggards</span><div>' + chips(ranks.laggards, 'laggard') + '</div></div></section>';
-    };
-
-    Promise.all([
-      feed('/trading/market-ytd.json'),
-      feed('/trading/vwap-charts.json'),
-      feed('/trading/crypto-charts.json'),
-    ]).then(([market, vwap, crypto]) => {
-      const points = Array.isArray(market.points) ? market.points : [];
-      if (points.length < 2) throw new Error('market one-year history is empty');
-      const W = 360, H = 210, x0 = 18, x1 = 342;
-      const spyTop = 32, spyBottom = 91, vixTop = 124, vixBottom = 183;
-      const x = i => x0 + i / (points.length - 1) * (x1 - x0);
-      const domain = (values, includeZero) => {
-        let low = Math.min(...values), high = Math.max(...values);
-        if (includeZero) { low = Math.min(low, 0); high = Math.max(high, 0); }
-        const padding = Math.max((high - low) * .08, .5);
-        return [low - padding, high + padding];
-      };
-      const spyValues = points.map(row => Number(row.spy_1y_percent));
-      const vixValues = points.map(row => Number(row.vix));
-      const [spyLow, spyHigh] = domain(spyValues, true), [vixLow, vixHigh] = domain(vixValues, false);
-      const spyY = value => spyTop + (spyHigh - value) / (spyHigh - spyLow || 1) * (spyBottom - spyTop);
-      const vixY = value => vixTop + (vixHigh - value) / (vixHigh - vixLow || 1) * (vixBottom - vixTop);
-      const line = (values, y) => values.map((value, i) => x(i).toFixed(2) + ',' + y(value).toFixed(2)).join(' ');
-      const latest = points[points.length - 1];
-      const tooltipId = 'market-ytd-tooltip';
-      marketRoot.innerHTML = '<div class="market-ytd-head"><strong>SPY <em class="' + (latest.spy_1y_percent >= 0 ? 'up' : 'down') + '">$' + num(latest.spy) + ' · ' + signed(latest.spy_1y_percent, 1, '%') + '</em></strong>' +
-        '<strong>VIX <em>' + num(latest.vix) + '</em></strong></div>' +
-        '<div class="market-ytd-wrap"><svg class="market-ytd-chart" viewBox="0 0 ' + W + ' ' + H + '" role="img" tabindex="0" aria-describedby="' + tooltipId + '" aria-label="SPY trailing one-year return and VIX level through ' + esc(market.as_of) + '. Hover or use arrow keys for daily values.">' +
-        '<line class="market-chart-grid" x1="' + x0 + '" x2="' + x1 + '" y1="' + spyY(0).toFixed(2) + '" y2="' + spyY(0).toFixed(2) + '"></line>' +
-        '<line class="market-chart-grid" x1="' + x0 + '" x2="' + x1 + '" y1="' + vixBottom + '" y2="' + vixBottom + '"></line>' +
-        '<text class="market-chart-label" x="' + x0 + '" y="20">SPY · TRAILING 1Y %</text><text class="market-chart-label" x="' + x0 + '" y="112">VIX · LEVEL</text>' +
-        '<polyline class="market-spy-line" points="' + line(spyValues, spyY) + '"></polyline>' +
-        '<polyline class="market-vix-line" points="' + line(vixValues, vixY) + '"></polyline>' +
-        '<circle class="market-spy-dot" cx="' + x(points.length - 1).toFixed(2) + '" cy="' + spyY(latest.spy_1y_percent).toFixed(2) + '" r="3.5"></circle>' +
-        '<circle class="market-vix-dot" cx="' + x(points.length - 1).toFixed(2) + '" cy="' + vixY(latest.vix).toFixed(2) + '" r="3.5"></circle>' +
-        '<line class="market-hover-line" x1="0" x2="0" y1="' + spyTop + '" y2="' + vixBottom + '" hidden></line>' +
-        '<circle class="market-hover-dot market-hover-spy" cx="0" cy="0" r="3.5" hidden></circle><circle class="market-hover-dot market-hover-vix" cx="0" cy="0" r="3.5" hidden></circle>' +
-        '<text class="market-chart-axis" x="' + x0 + '" y="204">' + esc(points[0].date) + '</text><text class="market-chart-axis market-chart-axis-end" x="' + x1 + '" y="204">' + esc(latest.date) + '</text></svg>' +
-        '<div class="market-ytd-tooltip" id="' + tooltipId + '" role="status" aria-live="polite" hidden></div></div>' +
-        '<div class="market-leadership">' +
-        rankGroup('Sectors', splitRanks(rankVwap(vwap, ['XLB','XLC','XLE','XLF','XLI','XLK','XLP','XLRE','XLU','XLV','XLY'])), 'vwap', 'vwap') +
-        rankGroup('Crypto', splitRanks(rankCrypto(crypto)), 'crypto', 'crypto') +
-        rankGroup('Countries', splitRanks(rankVwap(vwap, (vwap.groups && vwap.groups.countries) || [])), 'vwap', 'vwap') + '</div>' +
-        '<p class="market-source">As of ' + esc(market.as_of) + ' close · SPY/VIX + 50D relative momentum</p>';
-
-      const svg = $('.market-ytd-chart', marketRoot), tooltip = $('.market-ytd-tooltip', marketRoot);
-      const hoverLine = $('.market-hover-line', svg), spyDot = $('.market-hover-spy', svg), vixDot = $('.market-hover-vix', svg);
-      let activeIndex = points.length - 1;
-      const hide = () => {
-        tooltip.hidden = true;
-        [hoverLine, spyDot, vixDot].forEach(node => node.setAttribute('hidden', ''));
-      };
-      const show = index => {
-        activeIndex = Math.max(0, Math.min(points.length - 1, index));
-        const point = points[activeIndex], hoverX = x(activeIndex);
-        tooltip.innerHTML = '<b>' + esc(prettyDate(point.date)) + '</b><span>SPY <em>$' + num(point.spy) + ' · ' + signed(point.spy_1y_percent, 1, '%') + '</em></span><span>VIX <em>' + num(point.vix) + '</em></span>';
-        hoverLine.setAttribute('x1', hoverX.toFixed(2)); hoverLine.setAttribute('x2', hoverX.toFixed(2));
-        spyDot.setAttribute('cx', hoverX.toFixed(2)); spyDot.setAttribute('cy', spyY(point.spy_1y_percent).toFixed(2));
-        vixDot.setAttribute('cx', hoverX.toFixed(2)); vixDot.setAttribute('cy', vixY(point.vix).toFixed(2));
-        [hoverLine, spyDot, vixDot].forEach(node => node.removeAttribute('hidden'));
-        tooltip.hidden = false;
-        const svgRect = svg.getBoundingClientRect(), wrapRect = svg.parentElement.getBoundingClientRect();
-        const pointLeft = svgRect.left - wrapRect.left + hoverX / W * svgRect.width;
-        tooltip.style.left = Math.min(Math.max(6, pointLeft + 8), svg.parentElement.clientWidth - tooltip.offsetWidth - 6) + 'px';
-        tooltip.style.top = '34px';
-      };
-      const pointerIndex = event => {
-        const rect = svg.getBoundingClientRect();
-        return Math.round((((event.clientX - rect.left) / rect.width * W) - x0) / (x1 - x0) * (points.length - 1));
-      };
-      svg.addEventListener('pointermove', event => show(pointerIndex(event)));
-      svg.addEventListener('pointerdown', event => show(pointerIndex(event)));
-      svg.addEventListener('pointerleave', () => { if (document.activeElement !== svg) hide(); });
-      svg.addEventListener('focus', () => show(activeIndex));
-      svg.addEventListener('keydown', event => {
-        let next = null;
-        if (event.key === 'ArrowLeft') next = activeIndex - 1;
-        if (event.key === 'ArrowRight') next = activeIndex + 1;
-        if (event.key === 'Home') next = 0;
-        if (event.key === 'End') next = points.length - 1;
-        if (next == null) return;
-        event.preventDefault(); show(next);
-      });
-      svg.addEventListener('blur', hide);
-    }).catch(() => {
-      marketRoot.innerHTML = '<p class="market-loading">Market charts are temporarily unavailable.</p>';
-    });
-  }
 
   /* ── risk page: subjective post-close journal ────────────────────── */
   const riskRoot = $('#risk-live');

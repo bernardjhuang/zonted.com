@@ -13,6 +13,7 @@ import sys
 import unittest
 
 import sync_trading_desk as sync
+import trading_shell
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 CLASSIC = (ROOT / "trading" / "pipeline.html").read_text()
@@ -404,28 +405,38 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertRegex(styles, r'\.desk-thesis-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertNotIn('height="auto"', page + script)
-        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)280px', styles.replace(" ", ""))
+        self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)', styles.replace(" ", ""))
 
-    def test_market_rail_uses_trailing_one_year_chart_and_live_leadership_groups(self) -> None:
+    def test_desk_home_is_full_width_and_mentality_has_its_own_route(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
         script = (ROOT / "trading" / "desk.js").read_text()
         styles = (ROOT / "trading" / "desk.css").read_text()
-        payload = json.loads((ROOT / "trading" / "market-ytd.json").read_text())
-        self.assertIn('id="market-overview-live"', page)
-        self.assertNotIn("Risk regime", page)
-        self.assertNotIn("MOVE · HY OAS", page)
-        for asset in ("market-ytd.json", "vwap-charts.json", "crypto-charts.json"):
-            self.assertIn(asset, script)
-        for marker in ("market-ytd-chart", "market-leadership", "Sectors", "Crypto", "Countries"):
-            self.assertIn(marker, script + styles)
-        self.assertEqual(payload["schema_version"], 2)
-        self.assertEqual(payload["period"], "1Y")
-        self.assertGreaterEqual(len(payload["points"]), 240)
-        self.assertLessEqual(len(payload["points"]), 260)
-        self.assertTrue(all("spy_1y_percent" in point for point in payload["points"]))
-        self.assertIn("Market · trailing 1Y", page)
-        self.assertIn("SPY · TRAILING 1Y %", script)
-        self.assertEqual(payload["points"][-1]["date"], payload["as_of"])
+        mentality = (ROOT / "trading" / "mentality" / "index.html").read_text()
+        self.assertNotIn('class="desk-rail"', page)
+        self.assertNotIn('id="market-overview-live"', page)
+        self.assertNotIn('aria-label="Trading mentality reminders"', page)
+        self.assertNotIn("market rail", script)
+        self.assertNotIn("market-ytd-chart", script + styles)
+        self.assertIn(".desk{display:grid;grid-template-columns:minmax(0,1fr)", styles.replace(" ", ""))
+        self.assertIn("Know the difference between a momentum play, a narrative play, and gambling.", mentality)
+        self.assertIn("Always do your own research.", mentality)
+        self.assertIn("How much is your thinking already priced in?", mentality)
+
+    def test_status_bar_sector_pills_match_vwap_leaders_and_laggards(self) -> None:
+        scores = trading_shell.sector_z_scores()
+        expected = trading_shell.rank_sector_pills(scores)
+        page = (ROOT / "trading" / "index.html").read_text()
+        pills = re.findall(
+            r'<a class="sector-chip sector-chip--(leader|laggard)"[^>]+data-sector-symbol="([A-Z]+)"[^>]+data-sector-z="([+-]?\d+\.\d+)"',
+            page,
+        )
+        self.assertEqual(len(pills), 4)
+        self.assertEqual(
+            [(kind, symbol, float(value)) for kind, symbol, value in pills],
+            [(row["kind"], row["symbol"], round(row["z"], 2)) for row in expected],
+        )
+        updater = (ROOT / "scripts" / "update-trading-vwap.py").read_text()
+        self.assertIn("refresh_sector_status_pills", updater)
 
     def test_status_bar_matches_market_snapshot_and_open_positions_across_routes(self) -> None:
         page = (ROOT / "trading" / "index.html").read_text()
@@ -452,7 +463,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<div class="status-metrics">' in path.read_text()
         ]
-        self.assertEqual(len(status_pages), 8)
+        self.assertEqual(len(status_pages), 9)
         for path in status_pages:
             source = path.read_text()
             for marker in expected:
@@ -557,7 +568,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<nav class="subnav"' in path.read_text()
         })
-        self.assertEqual(len(pages), 8)
+        self.assertEqual(len(pages), 9)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""
@@ -569,6 +580,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotRegex(page, r'href="/trading/watchlist/"[^>]*>Watchlist</a>')
             self.assertRegex(page, r'href="/trading/vwap-setups/"[^>]*>VWAP Setups</a>')
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
+            self.assertRegex(page, r'href="/trading/mentality/"[^>]*>Mentality</a>')
+            self.assertLess(page.index('href="/trading/mentality/"'), page.index('href="/trading/performance/"'))
             self.assertIn('<a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 5/10">GPT 5</a>', page, path.as_posix())
             self.assertIn('<a class="chip chip-grok chip-neutral" href="/trading/grok-risk/" title="Grok risk appetite — Neutral · 5/10">Grok 5</a>', page, path.as_posix())
             self.assertIn('<a class="chip chip-fable chip-neutral" href="/trading/fable-risk/" title="Fable risk appetite — NEUTRAL · 5/10">Fable 5</a>', page, path.as_posix())
