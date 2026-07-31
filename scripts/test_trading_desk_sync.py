@@ -578,10 +578,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""
-        fable_match = re.search(r'<a class="chip chip-fable [^"]+" href="/trading/fable-risk/"[^>]*>Fable [\d.]+</a>',
-                                DESK_HOME.read_text())
-        self.assertIsNotNone(fable_match)
-        fable_chip = fable_match.group(0) if fable_match else ""
+        model_chips = {}
+        for model, label in (("gpt", "GPT"), ("grok", "Grok"), ("fable", "Fable")):
+            match = re.search(
+                rf'<a class="chip chip-{model} [^"]+" href="/trading/{model}-risk/"[^>]*>{label} [\d.]+</a>',
+                DESK_HOME.read_text(),
+            )
+            self.assertIsNotNone(match)
+            model_chips[model] = match.group(0) if match else ""
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
@@ -592,9 +596,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/mentality/"[^>]*>Mentality</a>')
             self.assertLess(page.index('href="/trading/mentality/"'), page.index('href="/trading/performance/"'))
-            self.assertIn('<a class="chip chip-gpt chip-neutral" href="/trading/gpt-risk/" title="GPT risk appetite — Neutral · 5/10">GPT 5</a>', page, path.as_posix())
-            self.assertIn('<a class="chip chip-grok chip-neutral" href="/trading/grok-risk/" title="Grok risk appetite — Neutral · 5/10">Grok 5</a>', page, path.as_posix())
-            self.assertIn(fable_chip, page, path.as_posix())
+            for chip in model_chips.values():
+                self.assertIn(chip, page, path.as_posix())
             self.assertNotIn('class="chip chip-gemini ', page, path.as_posix())
             self.assertNotIn('class="chip chip-meta ', page, path.as_posix())
             self.assertIn(f'<span class="stamp">{desk_stamp}</span>', page, path.as_posix())

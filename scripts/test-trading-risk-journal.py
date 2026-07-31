@@ -25,7 +25,8 @@ class RiskJournalContractTest(unittest.TestCase):
         dates = [row["date"] for row in entries]
         self.assertEqual(dates, sorted(dates, reverse=True))
         self.assertEqual(len(dates), len(set(dates)))
-        self.assertEqual(dates[0], "2026-07-30")
+        market_as_of = json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"]
+        self.assertEqual(dates[0], market_as_of)
         self.assertIn("2026-07-27", dates)
 
     def test_each_entry_is_an_honest_journal_read(self) -> None:
@@ -50,14 +51,19 @@ class RiskJournalContractTest(unittest.TestCase):
         page = (ROOT / "trading" / "grok-risk" / "index.html").read_text()
         data = json.loads((ROOT / "trading" / "grok-risk.json").read_text())
         latest = data["entries"][0]
-        self.assertEqual(latest["as_of_date"], "2026-07-30")
-        self.assertEqual(latest["risk_appetite"], 5)
-        self.assertIn('data-model="Grok 4.5" data-rating="5" data-stance="Neutral"', page)
-        self.assertIn("2026-07-30 · Neutral (5/10)", page)
+        market_as_of = json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"]
+        self.assertEqual(latest["as_of_date"], market_as_of)
+        rating = float(latest["risk_appetite"])
+        rating_text = f"{rating:g}"
+        self.assertIn(
+            f'data-model="Grok 4.5" data-rating="{rating_text}" data-stance="{latest["stance"]}"',
+            page,
+        )
+        self.assertIn(
+            f'{latest["as_of_date"]} · {latest["stance"]} ({rating_text}/10)',
+            page,
+        )
         previous = data["entries"][1]
-        self.assertEqual(previous["as_of_date"], "2026-07-29")
-        self.assertEqual(previous["risk_appetite"], 3)
-        self.assertLess(latest["as_of_date"], "2026-07-31")
         self.assertGreater(latest["as_of_date"], previous["as_of_date"])
 
     def test_metric_dashboard_payload_is_not_reintroduced(self) -> None:
