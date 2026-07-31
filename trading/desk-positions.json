@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "risk_summary": {
-    "gross_delta_leverage": 2.03,
-    "net_delta_exposure_percent": 202.9,
-    "premium_at_risk_percent": 17.4,
+    "gross_delta_leverage": 2.21,
+    "net_delta_exposure_percent": 221.4,
+    "premium_at_risk_percent": 16.9,
     "theta_percent_per_day": -0.09,
-    "cash_percent": -70.9,
+    "cash_percent": -90.3,
     "quantity_basis": "gross held positions; pending orders not netted"
   },
   "sleeves": {
     "thesis": {
-      "capital_percent": 170.9,
-      "exposure_percent": 202.9,
-      "premium_at_risk_percent": 17.4
+      "capital_percent": 190.3,
+      "exposure_percent": 221.4,
+      "premium_at_risk_percent": 16.9
     },
     "momentum": {
       "capital_percent": 0.0,
@@ -24,13 +24,13 @@
     {
       "symbol": "FIGR",
       "instrument": "Equity · Jan 2027 $40 call",
-      "exposure_percent": 188.4,
-      "capital_percent": 159.2,
-      "premium_at_risk_percent": 12.1,
+      "exposure_percent": 196.2,
+      "capital_percent": 167.9,
+      "premium_at_risk_percent": 11.2,
       "theta_percent_per_day": -0.08,
-      "implied_volatility_percent": 86.4,
-      "delta_used": 0.3373,
-      "min_dte": 169,
+      "implied_volatility_percent": 86.7,
+      "delta_used": 0.3033,
+      "min_dte": 168,
       "unstable_delta": false,
       "kill": null,
       "flair": "thesis",
@@ -41,19 +41,53 @@
     {
       "symbol": "FRMI",
       "instrument": "Equity · Jan 2028 $15 call · Dec 2028 $10 call",
-      "exposure_percent": 14.5,
-      "capital_percent": 11.7,
-      "premium_at_risk_percent": 5.3,
+      "exposure_percent": 14.9,
+      "capital_percent": 12.1,
+      "premium_at_risk_percent": 5.7,
       "theta_percent_per_day": -0.01,
-      "implied_volatility_percent": 106.8,
-      "delta_used": 0.6635,
-      "min_dte": 540,
+      "implied_volatility_percent": 116.4,
+      "delta_used": 0.6712,
+      "min_dte": 539,
       "unstable_delta": false,
       "kill": null,
       "flair": "thesis",
       "sector": "Real Estate / Infrastructure",
       "sector_etf": "XLRE",
       "thesis": "A development-stage bet on Project Matador becoming a scarce, gigawatt-scale powered AI campus. Commercial agreements and funded delivery—not headline capacity—must validate it."
+    },
+    {
+      "symbol": "LTH",
+      "instrument": "Equity",
+      "exposure_percent": 9.7,
+      "capital_percent": 9.7,
+      "premium_at_risk_percent": 0.0,
+      "theta_percent_per_day": 0.0,
+      "implied_volatility_percent": null,
+      "delta_used": null,
+      "min_dte": null,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "thesis",
+      "sector": "Consumer Discretionary",
+      "sector_etf": "XLY",
+      "thesis": "Life Time is turning the gym into a high-retention social club and wellness third place. Family-heavy memberships, recurring dues, and resort-like centers can deepen engagement; Q2 must prove that community value converts into durable center economics."
+    },
+    {
+      "symbol": "CEG",
+      "instrument": "Equity",
+      "exposure_percent": 0.6,
+      "capital_percent": 0.6,
+      "premium_at_risk_percent": 0.0,
+      "theta_percent_per_day": 0.0,
+      "implied_volatility_percent": null,
+      "delta_used": null,
+      "min_dte": null,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "thesis",
+      "sector": "Utilities",
+      "sector_etf": "XLU",
+      "thesis": "Existing nuclear scarcity, Calpine diversification, and long-duration customer contracts. Q2 must prove integration and cash conversion."
     }
   ]
 }
