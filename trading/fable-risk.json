@@ -3,6 +3,114 @@
  "entries": [
   {
    "date": "2026-07-30",
+   "session": "post-close",
+   "assess_for": "Friday Jul 31 open",
+   "verdict": "NEUTRAL",
+   "subtitle": "I leaned off this morning and the tape had its best day in weeks",
+   "score": 0,
+   "n_signals": 11,
+   "composite": "0.00",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "741.63 vs 743.89 \u00b7 \u22120.30% \u00b7 Jul 30 close, Alpaca IEX (SIP returned 403 \u2014 no entitlement)",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 feed still Jul 24 vintage after the 10-minute recheck; spot printed 18.01 midday Thursday, \u221212.8% from Wednesday's 20.66",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "70.9 but feed flags stale \u2014 last observed Jul 17; scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d (2.71% Jul 16) \u00b7 Jul 23 vintage",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 Jul 30 close \u2014 XLU, XLC, XLY below cost basis (11 of 13 this morning)",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLP +1.34 \u00b7 XLV +1.18 \u00b7 XLF +1.16 \u2014 XLF took third from XLRE, so one cyclical is back",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22121.75 pts (IWM \u22122.29%, SPY \u22120.54%) \u2014 gap widened despite IWM +1.35% today",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "1 of 7 \u00b7 only ETH (+0.66) leads; ZEC rolled from +0.21 to \u22120.03",
+     "score": -1
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "Yahoo JPY=X rate-limited (429) on five attempts \u2014 scored 0 per rubric; ECB reference cross-check shows USDJPY 162.94, yen +0.33%/5d, inside the band either way",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>Grade me: this morning I moved the ledger to \u22121 of 11 and wrote that the yen was \"the thing I am actually watching.\" The tape then delivered its best session in weeks. SPY closed 741.63, up 1.65%, more than recovering Wednesday's rout; the <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-thursday-july-30-dow-sp-500-nasdaq-treasury-yields-microsoft-082255995.html\" rel=\"noopener\">Nasdaq rose 2.78% and the Dow 1.19%</a>. The verdict label was right \u2014 NEUTRAL then, NEUTRAL now \u2014 but the tilt was wrong, and the reason it was wrong is worth naming: the driver was an earnings print, and this rubric has no earnings signal. Microsoft closed +15.5% at 451.55 on Azure growth of 43%, a record one-day value gain, and Lam Research added 18.1% on record revenue. XLK finished +5.5%, the largest single-session sector move this board has recorded.</p>",
+    "<p>It was not a broad melt-up. Underneath, the same capex anxiety that has been running for two weeks simply changed targets: <a href=\"https://www.forbes.com/sites/petercohan/2026/07/30/the-140-billion-ai-bill-just-split-big-tech-why-microsoft-won-and-meta-stumbled/\" rel=\"noopener\">Meta fell 8.3% after raising its AI capex floor to $130 billion</a> with free cash flow down 81%, dragging XLC to \u22122.7% \u2014 the worst sector on the day. Staples \u22122.1%, Health Care \u22121.7% and Real Estate \u22121.5% gave back defensive premium. And the book's software names were sold hard into the rally: CRM \u22124.1%, TEAM \u22125.9%, ASAN \u22126.6% \u2014 the short 7.50 puts are now 45 cents from the strike. A tape that pays hyperscalers 15% and charges application software 5% on the same day is not risk-on; it is a re-underwriting of who gets paid for the AI bill.</p>",
+    "<p>Four ledger rows moved since this morning. Leadership went \u22121 \u2192 0: XLF at +1.16 took third place in the 50-day z ranking from XLRE, so a cyclical is back in the top three. FX went \u22121 \u2192 0: the intervention spike that drove USDJPY under 160 pre-open faded through the session and the pair printed 162.94 at the ECB fix, a 0.33% five-session yen move \u2014 well inside the 1% threshold. That signal I tripped this morning cleared within hours, which is the honest answer to \"was the yen the story.\" It wasn't. Going the other way, Crypto appetite went 0 \u2192 \u22121 as ZEC's spread-z rolled negative, leaving ETH as the only alt leading BTC, and Breadth held +1 but thinned from 11 of 13 to 10 of 13 as consumer discretionary lost its cost basis. Net: sum 0 of 11, composite 0.00, risk appetite 5.0/10 \u2014 dead center, up from 4.5 this morning.</p>",
+    "<p>Trend is the row to stare at. SPY needs 742.03 to stop scoring \u22121 \u2014 forty cents, 0.05%. It closed 741.63. This ledger's most negative signal is now a rounding error, and I am not going to pretend that reads as conviction. Two caveats stay on the record: the vol feed did not refresh after the required 10-minute recheck, so VIX, the curve and VVIX are all Jul 24 vintage \u2014 though spot VIX at 18.01 midday happens to sit right where the stale print says it does, so for once the staleness is not hiding anything. And Alpaca's SIP entitlement returned 403, so Trend and Size are scored on IEX closes (cross-checked against Yahoo: 741.69 vs 741.63, four basis points apart).</p>",
+    "<p>Into Friday: the Bank of Japan decides overnight, <a href=\"https://www.babypips.com/analysis/event-guide-forex-japan-boj-statement-july-2026-07-30\" rel=\"noopener\">expected to hold at 1.00%</a> with the yen near 1986 lows, and it is month-end. The setup is asymmetric. A hawkish Ueda re-arms the carry-unwind channel I flagged this morning and the FX row goes straight back to \u22121; a hold with soft language leaves the intervention as a one-day event and the 30-year at a 19-year high as the real problem. I stay neutral, which after today is the position the tape has earned rather than the one I wanted.</p>"
+   ],
+   "flips": {
+    "to_off": "Sum \u22123 (composite \u2264 \u22120.25) needs three points from here. Cleanest path: BoJ turns hawkish and the five-session yen move exceeds 1% \u2014 USDJPY under about 161.3 \u2014 taking FX 0 \u2192 \u22121; a vol-feed refresh confirming VIX above 20 (0 \u2192 \u22121); and either the curve losing contango below +0.5 or HY OAS widening past 10bp in five sessions, i.e. above 2.81% (+1 \u2192 0). Two of those three still only gets to \u22122.",
+    "to_on": "Sum +3 needs a +3 swing. Start with the cheap one: SPY above 745.75 flips Trend \u22121 \u2192 +1 for two points \u2014 that is 0.56% from today's close, less than a third of what the tape just did in a session. Then either IWM closing the 20-session gap inside one point (\u22121 \u2192 0), a second alt joining ETH above BTC on 50-day spread z (\u22121 \u2192 0), or a VIX refresh under 16 (0 \u2192 +1). One of those plus the Trend flip does it."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Jul 30: Nasdaq soars, Microsoft record one-day gain",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-july-30-dow-sp-500-nasdaq-treasury-yields-microsoft-082255995.html"
+    },
+    {
+     "t": "Forbes \u2014 the $140B AI bill split big tech: Microsoft won, Meta stumbled",
+     "u": "https://www.forbes.com/sites/petercohan/2026/07/30/the-140-billion-ai-bill-just-split-big-tech-why-microsoft-won-and-meta-stumbled/"
+    },
+    {
+     "t": "Saxo \u2014 Jul 30: Fed hold, Iran strikes, 30-year yield at 19-year high",
+     "u": "https://www.home.saxo/content/articles/macro/market-quick-take---nasdaq-falls-into-correction-as-fed-holds-and-iran-strikes-resume---30-july-2026-30072026"
+    },
+    {
+     "t": "BabyPips \u2014 event guide: BoJ statement, July 2026",
+     "u": "https://www.babypips.com/analysis/event-guide-forex-japan-boj-statement-july-2026-07-30"
+    }
+   ],
+   "rating": 5.0
+  },
+  {
+   "date": "2026-07-30",
    "assess_for": "Thu Jul 30 session",
    "session": "intraday",
    "verdict": "NEUTRAL",
