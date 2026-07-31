@@ -248,6 +248,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertFalse(total_symbols & RETIRED_HYPOTHESES)
         net_row = next(row for row in thesis_rows if _row_symbol(row) == "NET")
         self.assertNotIn('data-feed-state="no-feed"', net_row)
+        byddy_row = next(row for row in thesis_rows if _row_symbol(row) == "BYDDY")
+        self.assertIn('data-feed-state="live" data-feed-source="robinhood"', byddy_row)
+        fallback = json.loads((ROOT / "trading" / "desk-close-quotes.json").read_text())
+        chart_date = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["as_of"]
+        self.assertEqual(fallback["generated_at"][:10], chart_date)
+        self.assertIn("BYDDY", fallback["quotes"])
+        self.assertIn(f'>${float(fallback["quotes"]["BYDDY"]["price"]):,.2f}<', byddy_row)
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
         self.assertEqual(len(toggles), len(total_symbols))

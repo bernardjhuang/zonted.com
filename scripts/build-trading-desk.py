@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 """Build the merged Zonted trading desk from checked-in source data.
 
-The default/close mode consumes completed-session artifacts only. Morning mode accepts
-an explicit validated quote file, overlays the current session on Desk charts, and leaves
-completed-session statistical artifacts untouched.
+The default/close mode consumes completed-session artifacts plus a date-matched,
+privacy-safe fallback quote file for OTC symbols omitted by primary feeds. Morning mode
+accepts an explicit validated quote file, overlays the current session on Desk charts,
+and leaves completed-session statistical artifacts untouched.
 No network calls are made in any mode.
 """
 from __future__ import annotations
@@ -32,6 +33,7 @@ MARKET = ROOT / "trading/market-ytd.json"
 DESK_CSS = ROOT / "trading/desk.css"
 DESK_JS = ROOT / "trading/desk.js"
 CHART_MODAL_JS = ROOT / "js/hypothesis-chart-modal.b42a9700.js"
+CLOSE_QUOTES = ROOT / "trading/desk-close-quotes.json"
 START_POS = "<!-- AUTO:DESK_POSITIONS:START -->"
 END_POS = "<!-- AUTO:DESK_POSITIONS:END -->"
 START_HYP = "<!-- AUTO:DESK_HYPOTHESES:START -->"
@@ -106,18 +108,29 @@ def quotes_from(path: Path | None) -> tuple[dict[str, dict[str, float]], dt.date
         return {}, None, None
     payload = load(path)
     if payload.get("schema_version") != 1:
-        raise ValueError("Morning quote payload must use schema_version 1")
+        raise ValueError("Desk quote payload must use schema_version 1")
     quotes = payload.get("quotes") or {}
     stamp = dt.datetime.fromisoformat(str(payload["generated_at"]).replace("Z", "+00:00"))
     for symbol, quote in quotes.items():
         price = quote.get("price")
         day = quote.get("day_pct")
         if not isinstance(price, (int, float)) or price <= 0:
-            raise ValueError(f"Invalid morning price for {symbol}")
+            raise ValueError(f"Invalid Desk price for {symbol}")
         if not isinstance(day, (int, float)) or not -100 < day < 1000:
-            raise ValueError(f"Invalid morning day change for {symbol}")
+            raise ValueError(f"Invalid Desk day change for {symbol}")
+        source = quote.get("source")
+        if source not in {"alpaca_iex", "robinhood"}:
+            raise ValueError(f"Invalid Desk quote source for {symbol}: {source!r}")
     status = payload.get("status_market")
     return quotes, stamp, validate_status_market(status) if isinstance(status, dict) else None
+
+
+def resolve_quote_path(mode: str, explicit: Path | None, fallback: Path = CLOSE_QUOTES) -> Path | None:
+    if explicit is not None:
+        return explicit
+    if mode == "close" and fallback.is_file():
+        return fallback
+    return None
 
 
 def live_stamp(stamp: dt.datetime) -> str:
@@ -150,7 +163,7 @@ def row_market(
     quote_date: dt.date | None = None,
 ) -> dict:
     if symbol in OTC and not quote:
-        return {"feed": False, "beta": float(hyp_chart["beta_2y_weekly_vs_spy"])}
+        return {"feed": False, "source": "none", "beta": float(hyp_chart["beta_2y_weekly_vs_spy"])}
     dates = list(hyp_chart["dates"])
     closes = [float(v) for v in hyp_chart["close"]]
     if scan_chart:
@@ -173,7 +186,7 @@ def row_market(
         last = float(quote["price"])
         day = float(quote["day_pct"])
         if quote_date is None:
-            raise ValueError(f"Morning quote for {symbol} has no session date")
+            raise ValueError(f"Desk quote for {symbol} has no session date")
         date_text = quote_date.isoformat()
         if date_text == dates[-1]:
             closes[-1] = last
@@ -181,9 +194,10 @@ def row_market(
             dates.append(date_text)
             closes.append(last)
         else:
-            raise ValueError(f"Morning quote for {symbol} predates chart history")
+            raise ValueError(f"Desk quote for {symbol} predates chart history")
     return {
         "feed": True,
+        "source": str(quote.get("source")) if quote else "market_history",
         "last": last,
         "day": day,
         "spread": spread,
@@ -426,7 +440,7 @@ def position_rows(positions: list[dict], metadata: dict, markets: dict, valuatio
         flair = position.get("flair")
         flair_html = f'<span class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>' if flair else ""
         exposure = float(position["exposure_percent"])
-        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
+        main = f'''<tr class="desk-main-row" data-desk-kind="position" data-desk-symbol="{symbol}" data-exposure-percent="{exposure:.1f}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}" data-feed-source="{html.escape(str(market.get('source', 'none')))}">
 <td data-label="Position"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><span class="desk-position-title"><b>{symbol}</b>{flair_html}</span><small>{html.escape(position['instrument'])}</small><span class="desk-position-exposure">{exposure:.1f}% Δ$ exposure</span>{position_risk_lines(position)}</button></td>
 {feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num' + (' desk-sign--'+edge if market.get('feed') else ''))}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y · levels', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
@@ -450,7 +464,7 @@ def hypothesis_rows(symbols: list[str], metadata: dict, markets: dict, valuation
             last, day, spread, ytd = money(market["last"]), pct(market["day"]), spread_cell(market), ytd_chart(symbol, market)
         else:
             last, day, spread, ytd = no_feed_market_cells()
-        main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}">
+        main = f'''<tr class="desk-main-row" data-desk-kind="hypothesis" data-desk-symbol="{symbol}" data-catalyst-date="{meta['catalyst']}" data-edge="{edge}" data-feed-state="{'live' if market.get('feed') else 'no-feed'}" data-feed-source="{html.escape(str(market.get('source', 'none')))}">
 <td data-label="Thesis"><button class="desk-row-toggle" type="button" aria-expanded="false" aria-controls="{detail_id}"><span class="desk-edge-word">{edge_word}</span><b>{symbol}</b><span class="desk-stance desk-stance--{stance}">{stance.replace('-', ' ')}</span></button></td>
 {feed_cell('Last', last, 'desk-num')}{feed_cell('Day', day, 'desk-num')}{feed_cell('Thesis', thesis_button(symbol))}{feed_cell('Chart', chart_button(symbol), 'desk-chart-cell')}{feed_cell('Beta', f"{market['beta']:.2f}", 'desk-num')}{feed_cell('Spread Z', spread, 'desk-num')}{feed_cell('1Y', ytd)}{feed_cell('Next catalyst', f'<span class="desk-catalyst {"desk-catalyst--soon" if days <= 7 else ""}"><b>{html.escape(meta["catalyst-name"])}</b><small>{catalyst.strftime("%b %-d")}</small></span>')}{feed_cell('In', f'{days}d', 'desk-num')}
 </tr>'''
@@ -594,11 +608,16 @@ def render(mode: str, quote_path: Path | None) -> str:
     quotes, quote_stamp, live_status = quotes_from(quote_path)
     symbols = sorted(metadata)
     quote_date = quote_stamp.date() if quote_stamp else None
+    chart_date = dt.date.fromisoformat(charts_payload["as_of"])
+    if mode == "close" and quote_date and quote_date != chart_date:
+        raise ValueError(
+            f"Close fallback quotes must match chart date {chart_date.isoformat()}: {quote_date.isoformat()}"
+        )
     markets = {
         symbol: row_market(symbol, charts[symbol], scan.get(symbol), quotes.get(symbol), quote_date)
         for symbol in symbols
     }
-    as_of = quote_stamp.date() if quote_stamp else dt.date.fromisoformat(charts_payload["as_of"])
+    as_of = quote_stamp.date() if mode == "morning" and quote_stamp else chart_date
     position_symbols = {p["symbol"] for p in positions}
     tracked = [s for s in symbols if s not in position_symbols]
     for symbol in tracked:
@@ -634,11 +653,12 @@ def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--check", action="store_true", help="verify checked-in artifacts without network access")
     parser.add_argument("--mode", choices=("close", "morning"), default="close")
-    parser.add_argument("--quotes", type=Path, help="validated explicit quote JSON for morning mode")
+    parser.add_argument("--quotes", type=Path, help="validated explicit quote JSON; close defaults to trading/desk-close-quotes.json")
     args = parser.parse_args()
     if args.mode == "morning" and args.quotes is None:
         parser.error("--mode morning requires --quotes")
-    rendered = render(args.mode, args.quotes)
+    quote_path = resolve_quote_path(args.mode, args.quotes)
+    rendered = render(args.mode, quote_path)
     if args.check:
         if rendered != PAGE.read_text():
             print("[trading-desk] stale: run python3 scripts/build-trading-desk.py")

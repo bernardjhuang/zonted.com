@@ -36,9 +36,10 @@ Producer ownership:
 - `scripts/update-trading-vwap.py` → `AUTO:VWAP` → `trading/momentum/index.html`
 - `scripts/update-trading-crypto.py` → `AUTO:CRYPTO` → `trading/momentum/index.html`
 - external `zonted_trading_refresh.py` → `AUTO:RESULTS`, `trading/results-ytd.json`, and `trading/performance/index.html`
+- external `zonted_desk_close_quotes.py` → privacy-safe `trading/desk-close-quotes.json` Robinhood fallback for OTC/no-feed Desk symbols
 - `scripts/build-hypothesis-summary.py` → `trading/hypothesis-source.txt` and hypothesis chart metadata
 - `scripts/build-desk-positions.py` → `trading/desk-positions.json` from a private temporary holdings payload
-- `scripts/build-trading-desk.py` → `trading/index.html` and the shared Trading nav/status/asset shell
+- `scripts/build-trading-desk.py` → `trading/index.html` and the shared Trading nav/status/asset shell; close mode automatically consumes `trading/desk-close-quotes.json`
 - `scripts/sync_trading_desk.py` → routed copies of pipeline regions
 - `scripts/build-themes-static.py` → crawler-visible Themes snapshot from canonical `trading/themes.json`
 
@@ -62,7 +63,7 @@ The retired hourly scan quote publisher and watchdog have no owner and must rema
 Before publishing:
 
 1. Run all `scripts/test*.py` Trading suites.
-2. Run builder `--check` modes for the active morning or close cadence.
+2. Run builder `--check` modes for the active morning or close cadence. For close builds, require the fallback quote date to equal `trading/hypothesis-charts.json` `as_of` and verify OTC rows name `robinhood` as their feed source.
 3. Run `python3 scripts/sync_trading_desk.py --check`.
 4. Run `python3 scripts/build-themes-static.py` after every `trading/themes.json` edit.
 5. Run the external publisher tests and a no-write candidate render.

@@ -48,7 +48,15 @@ class MorningDeskChartTests(unittest.TestCase):
         self.assertEqual(market["day"], 1.52)
         self.assertEqual(market["dates"][-1], "2026-07-28")
         self.assertEqual(market["closes"][-1], 12.03)
+        self.assertEqual(market["source"], "robinhood")
         self.assertIn("No feed", builder.spread_cell(market))
+
+    def test_close_mode_defaults_to_checked_in_fallback_quotes(self):
+        with tempfile.TemporaryDirectory() as root:
+            fallback = Path(root) / "desk-close-quotes.json"
+            fallback.write_text("{}")
+            self.assertEqual(builder.resolve_quote_path("close", None, fallback), fallback)
+            self.assertIsNone(builder.resolve_quote_path("morning", None, fallback))
 
     def test_quote_requires_a_session_date(self):
         with self.assertRaisesRegex(ValueError, "no session date"):
