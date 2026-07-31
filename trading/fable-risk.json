@@ -2,6 +2,114 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-07-31",
+   "session": "pre-market",
+   "assess_for": "Friday Jul 31 session",
+   "verdict": "NEUTRAL",
+   "subtitle": "Tokyo intervened, the yen row flipped back to \u22121, and the ledger cannot see Korea",
+   "score": -1,
+   "n_signals": 11,
+   "composite": "\u22120.09",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "741.69 vs 743.92 \u00b7 \u22120.30% \u00b7 Jul 30 close, Alpaca SIP (entitlement returned data today after yesterday's 403)",
+     "score": -1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 feed still Jul 24 vintage, now seven sessions old",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+0.75 contango (M1 19.23, M2 19.99) \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "70.9 but feed flags stale \u2014 last observed Jul 17; scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.77% \u00b7 +6bp/5d (2.71% Jul 16) \u00b7 Jul 23 vintage \u2014 priced before Korea broke",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 Jul 30 close \u2014 XLU, XLC, XLY below cost basis",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "XLP +1.34 \u00b7 XLV +1.18 \u00b7 XLF +1.16 \u2014 one cyclical (XLF), unchanged",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22121.70 pts (IWM \u22122.25%, SPY \u22120.55%) \u00b7 Jul 1 \u2192 Jul 30, Alpaca SIP",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "1 of 7 \u00b7 only ETH (+0.66) leads; ZEC \u22120.03, HYPE \u22120.70 the laggard",
+     "score": -1
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "USDJPY 159.68 vs 163.83 five feed-sessions back (Jul 23) \u00b7 yen +2.60% \u00b7 Yahoo cleared on the third attempt; ECB Jul 30 fix 162.94 confirms the direction",
+     "score": -1
+    }
+   ],
+   "narrative": [
+    "<p>Grade me. Last night I wrote that the Bank of Japan was the asymmetry into Friday and put the FX trip line at \"USDJPY under about 161.3.\" It tripped \u2014 and the mechanism was not the one I named. The BoJ <a href=\"https://www.investing.com/news/economy-news/morning-bid-yen-sinks-as-boj-holds--and-its-the-kospis-best-day-4826736\" rel=\"noopener\">held short rates at 1%</a>, exactly as consensus said it would; the move came from Japan's Ministry of Finance, which intervened Thursday to prop the currency. USDJPY prints 159.68 against 163.83 five feed-sessions back \u2014 a 2.60% yen move, well through the 1% threshold. FX goes 0 \u2192 \u22121. Right row, wrong reason, and I will take the row.</p>",
+    "<p>Nothing else moved, and that is a property of the rubric rather than a statement about the market. Every equity signal is scored on the Jul 30 close, so Trend, Breadth, Leadership, Size and Crypto are identical to last night's ledger by construction. Trend is still the row on the knife: 741.69 versus a 743.92 average, \u22120.30%, thirty-seven cents from 742.06 where it stops scoring \u22121. One upgrade to note \u2014 Alpaca's SIP entitlement returned data this morning after yesterday's 403, so Trend and Size are on consolidated closes for the first time this week. The difference from the IEX print I used last night is six cents. Sum \u22121 of 11, composite \u22120.09, risk appetite 4.5 of 10.</p>",
+    "<p>What this board cannot see is the actual story of the week. South Korea's Kospi <a href=\"https://www.investing.com/news/economy-news/morning-bid-yen-sinks-as-boj-holds--and-its-the-kospis-best-day-4826736\" rel=\"noopener\">leapt 14% at the open and Japan's Nikkei rose 5%</a>, and the Kospi is still down roughly 24% on the month by Reuters' tally \u2014 its worst month since 1997, with other counts running worse. The cause was mechanical: reports of China mass-producing domestic DUV lithography tools on Jul 28, an SK Hynix earnings miss the next day, and leveraged ETFs force-rebalancing into the hole. Eleven US signals have exactly one channel for that, and it is the yen row that just lit. The signal I would actually want is Credit, and it is blind \u2014 HY OAS at 2.77% carries a Jul 23 observation date, priced a full week before Korea broke.</p>",
+    "<p>Say the staleness plainly, because it is now three of eleven rows. VIX 18.58, the curve at +0.75 and VVIX 100.7 are all Jul 24 vintage \u2014 seven sessions \u2014 and MOVE is Jul 17 and flagged, scored 0 per rubric. The entire vol complex on this ledger predates a record deleveraging in Asian equities and a currency intervention. I am not permitted to override the rubric and I am not going to pretend the readings are fresh: 18.58 is what a calm market looked like last Friday, not necessarily what this one is.</p>",
+    "<p>Into the session: futures are green on earnings, not on breadth. S&amp;P futures <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-friday-july-31-dow-sp-500-nasdaq-081227738.html\" rel=\"noopener\">+0.27%, Nasdaq-100 futures +1.09%</a>, with Amazon +10% pre-market on its chip business and Apple \u22127% on Services and China, following Microsoft's +15% Thursday. University of Michigan sentiment lands at 10:00 ET and it is month-end. The <a href=\"https://tradingeconomics.com/united-states/government-bond-yield\" rel=\"noopener\">10-year sits near 4.67%</a> after a Fed hold with three dissents for a hike and roughly 63% priced for September; WTI is near $84 and Brent near $88 on Strait of Hormuz tension. NEUTRAL is what the ledger says and I am not overriding it \u2014 but 5.0 became 4.5 because the one signal that refreshed refreshed negative, and the yen is now a scored problem rather than a thing I am watching.</p>"
+   ],
+   "flips": {
+    "to_off": "Sum \u22123 (composite \u2264 \u22120.25) needs two more points. Cheapest pair: a vol-feed refresh printing VIX above 20 (0 \u2192 \u22121), plus HY OAS widening past 10bp in five sessions \u2014 above 2.81% \u2014 or losing the 3% level entirely (+1 \u2192 0). Alternative second leg: the top-3 sector z ranking losing XLF, which sits at +1.16 against XLRE's +1.045, taking Leadership 0 \u2192 \u22121. A second MoF intervention round does not help the count \u2014 FX is already at \u22121 and has no \u22122 state.",
+    "to_on": "Sum +3 needs a +4 swing, and there is a clean path. SPY closing above 745.78 flips Trend \u22121 \u2192 +1 for two points, 0.55% from here. The yen giving back the intervention \u2014 USDJPY back above roughly 161.3, which is where the five-session move drops under 1% \u2014 takes FX \u22121 \u2192 0. Then either a second alt joining ETH above BTC on 50-day spread z (\u22121 \u2192 0) or IWM closing the 20-session gap to inside one point from \u22121.70 (\u22121 \u2192 0). All four is +0.27 and RISK-ON; three of the four leaves it neutral."
+   },
+   "sources": [
+    {
+     "t": "Reuters \u2014 Morning Bid: yen sinks as BoJ holds, and it's the Kospi's best day",
+     "u": "https://www.investing.com/news/economy-news/morning-bid-yen-sinks-as-boj-holds--and-its-the-kospis-best-day-4826736"
+    },
+    {
+     "t": "Reuters \u2014 yen swings sharply as traders stay alert to intervention risk",
+     "u": "https://www.investing.com/news/economy-news/yen-weakens-after-interventionled-surge-ahead-of-boj-policy-decision-4826616"
+    },
+    {
+     "t": "Yahoo Finance \u2014 Jul 31 live: futures higher, Amazon +10%, Apple \u22127%",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-friday-july-31-dow-sp-500-nasdaq-081227738.html"
+    },
+    {
+     "t": "Trading Economics \u2014 US 10-year Treasury yield",
+     "u": "https://tradingeconomics.com/united-states/government-bond-yield"
+    }
+   ],
+   "rating": 4.5
+  },
+  {
    "date": "2026-07-30",
    "session": "post-close",
    "assess_for": "Friday Jul 31 open",
