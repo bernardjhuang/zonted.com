@@ -197,6 +197,14 @@ class TradingThemesContractTest(unittest.TestCase):
             for theme in self.payload["themes"]
             if theme.get("disqualified")
         }
+        glp1_staples = themes["sector-glp1-oral-inflection"]
+        self.assertEqual(glp1_staples["disqualified"]["symbols"], ["XLP", "PEP", "GIS"])
+        self.assertIn("primarily short", glp1_staples["disqualified"]["reason"])
+        self.assertIn("asymmetric long", glp1_staples["disqualified"]["reason"])
+        prediction_tax = themes["emerging-prediction-tax-arb"]
+        self.assertEqual(prediction_tax["disqualified"]["symbols"], ["DKNG", "FLUT"])
+        self.assertIn("primarily short", prediction_tax["disqualified"]["reason"])
+        self.assertIn("asymmetric long", prediction_tax["disqualified"]["reason"])
         fermentation = themes["emerging-precision-fermentation-molecules"]
         self.assertEqual(fermentation["disqualified"]["symbols"], ["LNZA", "DNA"])
         self.assertIn("too suspicious", fermentation["disqualified"]["reason"])
@@ -216,8 +224,10 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual(
             list(themes),
             [
+                "sector-glp1-oral-inflection",
                 "emerging-glp1-actuarial",
                 "emerging-orbital-deflation",
+                "emerging-prediction-tax-arb",
                 "emerging-live-experience-k",
                 "emerging-precision-fermentation-molecules",
             ],
