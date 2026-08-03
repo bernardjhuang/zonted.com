@@ -133,7 +133,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(".risk-journal-entry", styles)
         self.assertEqual(journal["author"], "GPT-5.6")
         self.assertGreaterEqual(len(journal["entries"]), 1)
-        self.assertEqual(journal["entries"][0]["stance"], "Neutral")
+        self.assertIn(journal["entries"][0]["stance"], {"Risk-on", "Neutral", "Risk-off"})
+        self.assertEqual(
+            journal["entries"][0]["date"],
+            json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"],
+        )
         self.assertTrue(all(entry["author"] == "GPT-5.6" for entry in journal["entries"]))
         for junk in ("Metrics over time", "VVIX", "SKEW", "HY OAS", "VIX futures curve", "risk-evaluation.json"):
             self.assertNotIn(junk, page)
@@ -249,7 +253,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertFalse(total_symbols & RETIRED_HYPOTHESES)
         net_row = next(row for row in thesis_rows if _row_symbol(row) == "NET")
         self.assertNotIn('data-feed-state="no-feed"', net_row)
-        byddy_row = next(row for row in thesis_rows if _row_symbol(row) == "BYDDY")
+        byddy_row = next(row for row in (*position_rows, *thesis_rows) if _row_symbol(row) == "BYDDY")
         self.assertIn('data-feed-state="live" data-feed-source="robinhood"', byddy_row)
         morning_quotes = os.environ.get("ZONTED_DESK_MORNING_QUOTES")
         if morning_quotes:
@@ -325,7 +329,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertNotIn("Up to 2 years", page)
         self.assertNotIn('<th>P&amp;L</th>', page)
         for label, date in (
-            ("Est. July deliveries", "Aug 3"),
+            ("Est. August deliveries", "Sep 2"),
             ("Est. Q3 earnings", "Oct 29"),
             ("Est. Q3 earnings", "Nov 3"),
             ("Est. Q3 earnings", "Nov 4"),

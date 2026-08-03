@@ -133,7 +133,7 @@ def fetch_chart(symbol: str) -> dict:
         if not math.isfinite(value) or value <= 0:
             continue
         date = dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc).date().isoformat()
-        points.append((date, round(value, 4)))
+        points.append((date, round(value, 2)))
     if len(points) < 80:
         raise ValueError(f"{symbol} returned only {len(points)} valid two-year points")
 
@@ -220,12 +220,24 @@ def refresh_charts(symbols: list[str], existing: dict) -> dict:
         charts[symbol]["beta_observations"] = cached["beta_observations"]
     if warnings:
         print("[hypothesis-summary] chart refresh warnings: " + " | ".join(warnings), file=sys.stderr)
-    return {
+    payload = {
         "schema_version": 1,
-        "generated_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat(),
         "as_of": max(chart["dates"][-1] for chart in charts.values()),
         "beta_method": "up to 2 years of weekly adjusted-close returns versus SPY",
         "charts": charts,
+    }
+    unchanged = all(existing.get(key) == value for key, value in payload.items())
+    generated_at = (
+        existing.get("generated_at")
+        if unchanged and existing.get("generated_at")
+        else dt.datetime.now(dt.timezone.utc).replace(microsecond=0).isoformat()
+    )
+    return {
+        "schema_version": payload["schema_version"],
+        "generated_at": generated_at,
+        "as_of": payload["as_of"],
+        "beta_method": payload["beta_method"],
+        "charts": payload["charts"],
     }
 
 

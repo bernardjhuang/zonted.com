@@ -10,6 +10,7 @@ Only these checked-in page routes may exist under `trading/*/index.html`:
 - `/trading/themes/`
 - `/trading/vwap-setups/`
 - `/trading/momentum/`
+- `/trading/mentality/`
 - `/trading/performance/`
 - `/trading/gpt-risk/`
 - `/trading/grok-risk/`

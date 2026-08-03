@@ -8,6 +8,7 @@ import pathlib
 import re
 import sys
 import unittest
+from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "scripts" / "build-hypothesis-summary.py"
@@ -83,6 +84,18 @@ class HypothesisSummaryTests(unittest.TestCase):
         )
         self.assertEqual(beta, 2.0)
         self.assertEqual(observations, 59)
+
+    def test_unchanged_chart_refresh_preserves_generation_stamp(self) -> None:
+        symbols = list(self.charts["charts"])
+
+        def fetch(symbol: str) -> dict:
+            if symbol == "SPY":
+                raise RuntimeError("benchmark deliberately unavailable")
+            return json.loads(json.dumps(self.charts["charts"][symbol]))
+
+        with mock.patch.object(summary, "fetch_chart", side_effect=fetch):
+            refreshed = summary.refresh_charts(symbols, self.charts)
+        self.assertEqual(refreshed, self.charts)
 
     def test_confidence_labels_are_explained(self) -> None:
         self.assertIn("Medium confidence means", self.page)

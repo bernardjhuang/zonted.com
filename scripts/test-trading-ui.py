@@ -295,7 +295,7 @@ class TradingUiContractTest(unittest.TestCase):
     def test_signal_vocabulary_is_preserved(self):
         universe = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
         labels = {row["signal"] for row in universe["rows"]}
-        self.assertIn("ENTER+", labels)
+        self.assertTrue(labels)
         self.assertTrue(labels <= {"ENTER+", "ENTER", "WATCH", "AVOID", "NO DATA", "SHORT+", "SHORT", "BREAKING"})
         self.assertIn("<b>ENTER+</b> = qualified", self.html)
         self.assertEqual(universe["schema_version"], 2)

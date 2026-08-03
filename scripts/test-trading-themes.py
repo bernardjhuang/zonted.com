@@ -224,12 +224,24 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual(
             list(themes),
             [
+                "geo-barrels-to-flops",
+                "geo-india-binary",
+                "sector-xlre-stealth-ai",
                 "sector-glp1-oral-inflection",
+                "emerging-intimacy-recession",
+                "emerging-age-gated-internet",
                 "emerging-glp1-actuarial",
                 "emerging-orbital-deflation",
                 "emerging-prediction-tax-arb",
                 "emerging-live-experience-k",
+                "emerging-orbital-compute-relief-valve",
                 "emerging-precision-fermentation-molecules",
+                "meta-partial-reprogramming-humans",
+                "sector-cms-prior-auth-api",
+                "geo-eu-methane-mrv",
+                "geo-subsea-repair-capacity",
+                "emerging-quantum-pnt",
+                "emerging-bess-insurability",
             ],
         )
         self.assertIn("const renderDisqualified =", self.script)

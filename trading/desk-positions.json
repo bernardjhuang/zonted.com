@@ -1,35 +1,35 @@
 {
   "schema_version": 3,
   "risk_summary": {
-    "gross_delta_leverage": 2.0,
-    "net_delta_exposure_percent": 199.5,
-    "premium_at_risk_percent": 18.5,
+    "gross_delta_leverage": 2.17,
+    "net_delta_exposure_percent": 217.4,
+    "premium_at_risk_percent": 18.9,
     "theta_percent_per_day": -0.15,
-    "cash_percent": -42.0,
+    "cash_percent": -62.3,
     "quantity_basis": "gross held positions; pending orders not netted"
   },
   "sleeves": {
     "thesis": {
-      "capital_percent": 139.7,
-      "exposure_percent": 171.8,
-      "premium_at_risk_percent": 16.5
+      "capital_percent": 160.3,
+      "exposure_percent": 192.9,
+      "premium_at_risk_percent": 17.1
     },
     "momentum": {
-      "capital_percent": 2.3,
-      "exposure_percent": 27.7,
-      "premium_at_risk_percent": 2.1
+      "capital_percent": 1.9,
+      "exposure_percent": 24.5,
+      "premium_at_risk_percent": 1.8
     }
   },
   "positions": [
     {
       "symbol": "FIGR",
       "instrument": "Equity · Jan 2027 $40 call",
-      "exposure_percent": 159.6,
-      "capital_percent": 129.9,
-      "premium_at_risk_percent": 12.1,
+      "exposure_percent": 159.0,
+      "capital_percent": 128.7,
+      "premium_at_risk_percent": 12.6,
       "theta_percent_per_day": -0.08,
-      "implied_volatility_percent": 85.6,
-      "delta_used": 0.3401,
+      "implied_volatility_percent": 85.8,
+      "delta_used": 0.3552,
       "min_dte": 165,
       "unstable_delta": false,
       "kill": null,
@@ -41,12 +41,12 @@
     {
       "symbol": "ZM",
       "instrument": "Equity · Aug 2026 $100 call",
-      "exposure_percent": 27.7,
-      "capital_percent": 2.3,
-      "premium_at_risk_percent": 2.1,
+      "exposure_percent": 24.5,
+      "capital_percent": 1.9,
+      "premium_at_risk_percent": 1.8,
       "theta_percent_per_day": -0.06,
-      "implied_volatility_percent": 45.0,
-      "delta_used": 0.4951,
+      "implied_volatility_percent": 45.6,
+      "delta_used": 0.4568,
       "min_dte": 18,
       "unstable_delta": false,
       "kill": null,
@@ -56,14 +56,31 @@
       "thesis": "Momentum position in profitable collaboration software: the breakout above the 50-day and 200-day averages must hold through the August 21 call expiry; Q2 earnings follows August 25."
     },
     {
+      "symbol": "BYDDY",
+      "instrument": "Equity",
+      "exposure_percent": 21.7,
+      "capital_percent": 21.7,
+      "premium_at_risk_percent": 0.0,
+      "theta_percent_per_day": 0.0,
+      "implied_volatility_percent": null,
+      "delta_used": null,
+      "min_dte": null,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "thesis",
+      "sector": "Consumer Discretionary",
+      "sector_etf": "XLY",
+      "thesis": "China EV recovery plus export growth and geopolitical-risk compression. Robotics is credible optionality but remains unproven; August deliveries must hold above 400K."
+    },
+    {
       "symbol": "FRMI",
       "instrument": "Equity · Jan 2028 $15 call · Dec 2028 $10 call",
       "exposure_percent": 12.2,
-      "capital_percent": 9.8,
-      "premium_at_risk_percent": 4.4,
+      "capital_percent": 9.9,
+      "premium_at_risk_percent": 4.5,
       "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 109.9,
-      "delta_used": 0.6386,
+      "implied_volatility_percent": 110.8,
+      "delta_used": 0.6456,
       "min_dte": 536,
       "unstable_delta": false,
       "kill": null,
