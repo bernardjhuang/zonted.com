@@ -128,6 +128,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('$1.68B', details["TMO"])
         self.assertIn('October 21, 2026', details["TMO"])
         self.assertIn('$193 bear / $275 base / $378 bull', details["TMO"])
+        self.assertIn('Open position · momentum', details["ZM"])
+        self.assertIn('$69.15 bear / $98.82 base / $114.74 bull', details["ZM"])
+        self.assertIn('5.5% to $1.239B', details["ZM"])
+        self.assertIn('August 21 $100 calls', details["ZM"])
+        self.assertIn('August 25, 2026', details["ZM"])
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        self.assertEqual(profiles["ZM"]["flair"], "momentum")
 
     def test_hypothesis_source_metadata_feeds_the_merged_desk(self):
         hypotheses_route = HYPOTHESES_SOURCE.read_text()
