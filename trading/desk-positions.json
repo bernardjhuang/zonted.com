@@ -1,35 +1,35 @@
 {
   "schema_version": 3,
   "risk_summary": {
-    "gross_delta_leverage": 1.77,
-    "net_delta_exposure_percent": 176.9,
-    "premium_at_risk_percent": 16.4,
-    "theta_percent_per_day": -0.09,
-    "cash_percent": -44.8,
+    "gross_delta_leverage": 2.04,
+    "net_delta_exposure_percent": 204.3,
+    "premium_at_risk_percent": 18.5,
+    "theta_percent_per_day": -0.15,
+    "cash_percent": -46.8,
     "quantity_basis": "gross held positions; pending orders not netted"
   },
   "sleeves": {
     "thesis": {
-      "capital_percent": 144.8,
-      "exposure_percent": 176.9,
-      "premium_at_risk_percent": 16.5
+      "capital_percent": 144.5,
+      "exposure_percent": 176.6,
+      "premium_at_risk_percent": 16.4
     },
     "momentum": {
-      "capital_percent": 0.0,
-      "exposure_percent": 0.0,
-      "premium_at_risk_percent": 0.0
+      "capital_percent": 2.3,
+      "exposure_percent": 27.6,
+      "premium_at_risk_percent": 2.1
     }
   },
   "positions": [
     {
       "symbol": "FIGR",
       "instrument": "Equity · Jan 2027 $40 call",
-      "exposure_percent": 164.7,
-      "capital_percent": 135.0,
-      "premium_at_risk_percent": 12.1,
+      "exposure_percent": 164.4,
+      "capital_percent": 134.7,
+      "premium_at_risk_percent": 12.0,
       "theta_percent_per_day": -0.08,
-      "implied_volatility_percent": 85.6,
-      "delta_used": 0.34,
+      "implied_volatility_percent": 85.5,
+      "delta_used": 0.3401,
       "min_dte": 165,
       "unstable_delta": false,
       "kill": null,
@@ -39,14 +39,31 @@
       "thesis": "Profitable fintech below the $31 base case; August 13 earnings must prove record loan volume converts into durable earnings."
     },
     {
+      "symbol": "ZM",
+      "instrument": "Equity · Aug 2026 $100 call",
+      "exposure_percent": 27.6,
+      "capital_percent": 2.3,
+      "premium_at_risk_percent": 2.1,
+      "theta_percent_per_day": -0.06,
+      "implied_volatility_percent": 45.4,
+      "delta_used": 0.4943,
+      "min_dte": 18,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "momentum",
+      "sector": "Technology",
+      "sector_etf": "XLK",
+      "thesis": "Momentum position in profitable collaboration software: the breakout above the 50-day and 200-day averages must hold through the August 21 call expiry; Q2 earnings follows August 25."
+    },
+    {
       "symbol": "FRMI",
       "instrument": "Equity · Jan 2028 $15 call · Dec 2028 $10 call",
       "exposure_percent": 12.2,
       "capital_percent": 9.8,
       "premium_at_risk_percent": 4.4,
       "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 109.5,
-      "delta_used": 0.6369,
+      "implied_volatility_percent": 109.6,
+      "delta_used": 0.6379,
       "min_dte": 536,
       "unstable_delta": false,
       "kill": null,
