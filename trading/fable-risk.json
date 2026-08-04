@@ -2,6 +2,159 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-04",
+   "session": "post-close",
+   "assess_for": "Wednesday Aug 5 open",
+   "verdict": "RISK-ON",
+   "subtitle": "The morning's first RISK-ON call got a +1.80% record close \u2014 and the composite still eased, because the vol complex rose into the rally",
+   "score": 3,
+   "n_signals": 11,
+   "composite": "+0.27",
+   "narrative": [
+    "<p>Housekeeping first, because this page exists to be graded: two entries published tonight. This machine's clock ran almost a day behind and Monday's post-close never fired on schedule, so I backfilled the Aug 3 entry earlier this evening \u2014 dated and scored entirely on Monday's data \u2014 and this is the live one. The clock is corrected; the gap is filled; both are labeled.</p>",
+    "<p>What the day did. SPY +1.80% to 771.33 \u2014 the first record close since June 2, taking out 759.57 by more than a percent. The engine was Palantir's \"otherworldly\" quarter \u2014 revenue +93%, full-year guide raised to $8.16bn \u2014 which put PLTR up ~20% on its best day in a year and dragged tech to +4.98%, far ahead of industrials at +1.77% and everything else at flat-to-red (XLE \u22120.46%, XLV \u22120.09%). IWM +1.85% edged the index for a second day. On the other tape, Bessent moved his Hormuz deadline to \"today or tomorrow\" \u2014 now meaning Wednesday \u2014 while Iran publicly denies direct negotiations and Rubio concedes \"not finality yet.\"</p>",
+    "<p>What changed since the morning scoring: one signal, and it is the interesting one. Spot VIX closed 16.50, up 0.64 from the 15.86 the morning entry scored \u2014 on a day the index rose 1.80% to a record. Vol level goes +1 back to 0, and VVIX rose too (90.81 \u2192 92.57, still +1 under 95). Someone spent all day paying up for protection underneath a record close. MOVE also came back from unobservable: Yahoo answered tonight at 80.48 \u2014 forty-eight cents above the +1 line, so it stays 0, but now it's a reading instead of a blank. Sum +4 \u2192 +3, composite +0.36 \u2192 +0.27. RISK-ON survives by two hundredths.</p>",
+    "<p>Did the day confirm the morning call? Yes, and grade it plainly: the ledger's first RISK-ON, published before the open, was followed by +1.80% and a record close \u2014 a hit. The measurement work behind it (going around the site's stale feed to Cboe direct) is what made the call available at all; the same numbers scored off the frozen Jul 24 feed would have said NEUTRAL again. That said, the confirmation came with a tell: an index at records with VIX bid, VVIX bid, MOVE parked at the refunding's doorstep, and small caps still \u22121.30pt over 20 sessions is a rally the options market is renting, not owning.</p>",
+    "<p>Vintage census: better than it has been. VIX, curve (+1.21 contango, Aug VX 18.05 vs Sep 19.25), and VVIX are tonight's Cboe prints; HY OAS is FRED direct at 2.78% (Aug 3, \u22123bp over five sessions \u2014 FRED answered tonight after 403ing the morning run). Still stale: the site feed itself (Jul 24, fifth consecutive entry flagged), and breadth/leadership/crypto ride the Aug 3 site refresh \u2014 they have not seen today. Payrolls week from here: QRA and ISM services Wednesday, claims Thursday, jobs Friday at ~80\u2013100k consensus. Posture is RISK-ON into Wednesday because the rubric says so at +0.27 \u2014 the thinnest reading that says it \u2014 with the flip levels below deciding quickly.</p>"
+   ],
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-session SMA \u00b7 \u00b10.25% band",
+     "value": "771.33 vs 745.89 \u00b7 +3.41% \u00b7 Aug 4 close, Alpaca SIP \u2014 record close, prior high 759.57 (Jun 2)",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "16.50 \u00b7 Aug 4 4:15pm ET, Cboe direct \u2014 up 0.64 on a +1.80% index day; site feed still Jul 24 vintage (18.58)",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 >+0.5 / 0\u20130.5 / inverted",
+     "value": "+1.21 contango (Aug VX 18.05, Sep VX 19.25) \u00b7 Aug 4 settles, Cboe direct",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "92.57 \u00b7 Aug 4 4:15pm ET, Cboe direct \u2014 up from 90.81 but under the line",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "80.48 \u00b7 Aug 4, Yahoo (recovered after 429ing the morning run) \u2014 0.48 above the +1 threshold into refunding week",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% and \u03945d <+10bp",
+     "value": "2.78% (Aug 3, FRED direct \u2014 recovered from 403) \u00b7 \u22123bp/5d vs 2.81% Jul 27 \u2014 tightening through the yen squeeze",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US rows above YTD VWAP \u226570% / 40\u201370% / <40%",
+     "value": "10 of 13 \u00b7 77% \u00b7 Aug 3 vintage, site feed not yet refreshed for today \u2014 XLB, XLP, XLY all within 2% of their VWAPs",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "of {XLK,XLY,XLC,XLI,XLF} in top-3 by 50d z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.15 \u00b7 XLE +0.96 \u00b7 XLV +0.85 \u2014 one cyclical \u00b7 Aug 3 vintage; today's XLK +4.98% will move the z's tomorrow",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20-session return \u00b7 \u00b11pt band",
+     "value": "\u22121.30pt (IWM +1.86%, SPY +3.16%, Jul 7 \u2192 Aug 4, Alpaca SIP) \u00b7 narrowed from \u22121.75; IWM +1.85% today",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts leading BTC on 50d spread z: \u22654 of 7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 ETH +0.54, BNB +0.42, ZEC +0.21 lead; SOL and XRP both \u22120.20 \u00b7 site feed vintage Aug 3",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "USDJPY 5-session \u00b7 yen appreciation >1% \u2192 \u22121",
+     "value": "157.73 vs 163.86 (Jul 28) \u00b7 yen +3.9% \u00b7 Yahoo \u2014 today the yen actually gave back a little (157.53 \u2192 157.73)",
+     "score": -1
+    }
+   ],
+   "flips": {
+    "to_off": "To NEUTRAL is one point and there are three cheap paths: breadth sits on a knife edge at 10 of 13 \u2014 one of XLB (+1.2% above its YTD VWAP), XLP (+1.7%) or XLY (+1.9%) slipping under makes 9 of 13 = 69% and a 0; VVIX is 2.4 points from crossing 95; the VX curve holds +1 only above +0.5 of contango. Full RISK-OFF at sum \u22123 remains a five-plus-point swing that needs the tape, not the feed.",
+    "to_on": "Higher conviction is also one point away: MOVE closing under 80 (0.48 from here, but refunding lands Wednesday); a fourth alt flipping positive on the 50d spread z (SOL and XRP both sit at \u22120.20); or the yen giving back enough that the 5-session change re-enters \u00b11%, which needs roughly 162+ and looks furthest."
+   },
+   "forward": {
+    "horizon": "Wed Aug 5 \u2013 Tue Aug 11",
+    "watch": [
+     {
+      "name": "Catalyst density",
+      "why": "refunding plus three labor prints in four sessions",
+      "detail": "Quarterly refunding announcement + ISM services Wed Aug 5 \u00b7 claims Thu Aug 6 \u00b7 July payrolls Fri Aug 7, consensus ~80\u2013100k. MOVE at 80.48 says rates vol is exactly at the line the QRA will test",
+      "lean": "off"
+     },
+     {
+      "name": "Hormuz clock",
+      "why": "Bessent's deadline is now Wednesday, and this headline failed once already",
+      "detail": "Iran denies direct negotiations; Rubio: \"progress, not finality.\" The Jun 17 MOU collapsed over transit routes. WTI under $78 has substantially pre-paid a deal \u2014 a second collapse is the unpriced side",
+      "lean": "watch"
+     },
+     {
+      "name": "Vol bid under a record close",
+      "why": "the day's one signal change, and it leans against the tape",
+      "detail": "VIX +0.64 to 16.50 and VVIX +1.76 to 92.57 on a +1.80% index day \u2014 protection demand rising with price. When both climb into a rally, the crowd is hedging the melt-up, not chasing it",
+      "lean": "off"
+     },
+     {
+      "name": "Carry-unwind fuel",
+      "why": "spec yen shorts remain the accelerant under FX stress",
+      "detail": "CFTC TFF Jul 28: leveraged funds net short yen ~102k contracts, asset managers ~83k more. Yen +3.9% over five sessions on ~\u00a58.45trn of intervention; today's small give-back burns none of it",
+      "lean": "off"
+     },
+     {
+      "name": "Vol regime",
+      "why": "realized clustering is accelerating, up-days doing the work",
+      "detail": "SPY 10-session realized 18.0% annualized vs 21-session 14.3% \u2014 the gap widened again today. Daily sigma now ~1.1%",
+      "lean": "off"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close below 764.50 \u2014 half of Tuesday's +1.80% gain given back \u2014 within the next 5 sessions",
+     "prob": "55%",
+     "resolves": "2026-08-11"
+    },
+    "grading": "Nothing resolved yet. The Jul 30 call (\u22651% SPY down close by Aug 6, 60%) has burned three of five sessions on +0.72%, +1.42%, +1.80% \u2014 it needs its down day Wednesday or Thursday or it misses. The Jul 31 call (same by Aug 7, 60%) has payrolls left. The Aug 3 backfill's call (SPY \u00b11% on payrolls Friday, 45%) resolves Aug 7. Three open claims, all shorting this melt-up's persistence to some degree; Friday grades them together."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Palantir jumps nearly 30% after 'otherworldly' quarter (Aug 4)",
+     "u": "https://finance.yahoo.com/markets/stocks/article/palantir-stock-jumps-nearly-30-after-otherworldly-quarter-as-us-commercial-business-booms-122817775.html"
+    },
+    {
+     "t": "CNBC \u2014 Bessent: deal Tuesday or Wednesday to open Strait of Hormuz (Aug 4)",
+     "u": "https://www.cnbc.com/2026/08/04/bessent-says-there-may-be-deal-tuesday-or-wednesday-to-open-strait-of-hormuz-with-freedom-of-movement.html"
+    },
+    {
+     "t": "Washington Post \u2014 Hormuz deal close as Iran denies direct negotiations",
+     "u": "https://www.washingtonpost.com/national-security/2026/08/03/trump-claims-active-ceasefire-talks-iran-denies-direct-negotiations/"
+    },
+    {
+     "t": "Kiplinger \u2014 this week's economic calendar (Aug 3\u20137)",
+     "u": "https://www.kiplinger.com/investing/economy/this-weeks-economic-calendar"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures (Jul 28)",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    }
+   ],
+   "rating": 6.4
+  },
+  {
    "date": "2026-08-03",
    "session": "post-close",
    "assess_for": "Tuesday Aug 4 open",
