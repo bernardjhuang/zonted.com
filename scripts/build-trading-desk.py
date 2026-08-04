@@ -53,6 +53,21 @@ def digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()[:12]
 
 
+def content_asset_path(source: Path) -> Path:
+    return source.with_name(f"{source.stem}.{digest(source)}{source.suffix}")
+
+
+def content_asset_ref(source: Path) -> str:
+    return f"/trading/{content_asset_path(source).name}"
+
+
+def emit_content_assets() -> None:
+    for source in (DESK_CSS, DESK_JS):
+        target = content_asset_path(source)
+        if not target.exists() or target.read_bytes() != source.read_bytes():
+            target.write_bytes(source.read_bytes())
+
+
 def money(value: float | None) -> str:
     if value is None:
         return "—"
@@ -519,8 +534,9 @@ def modals() -> str:
 
 
 def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = None) -> None:
-    css_ref = f'/trading/desk.css?v={digest(DESK_CSS)}'
-    js_ref = f'/trading/desk.js?v={digest(DESK_JS)}'
+    emit_content_assets()
+    css_ref = content_asset_ref(DESK_CSS)
+    js_ref = content_asset_ref(DESK_JS)
     modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
     gpt = load(ROOT / "trading" / "risk-journal.json")["entries"][0]
     grok = load(ROOT / "trading" / "grok-risk.json")["entries"][0]
@@ -552,8 +568,8 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
     shell_paths = sorted((ROOT / "trading").glob("**/index.html")) + [PIPELINE]
     for path in shell_paths:
         source = path.read_text()
-        source = re.sub(r'/trading/desk\.css\?v=[a-f0-9]+', css_ref, source)
-        source = re.sub(r'/trading/desk\.js\?v=[a-f0-9]+', js_ref, source)
+        source = re.sub(r'/trading/desk(?:\.[a-f0-9]{12})?\.css(?:\?v=[a-f0-9]+)?', css_ref, source)
+        source = re.sub(r'/trading/desk(?:\.[a-f0-9]{12})?\.js(?:\?v=[a-f0-9]+)?', js_ref, source)
         source = re.sub(r'<a href="/trading/hypotheses/"(?: aria-current="page")?>Hypotheses</a>', '', source)
         source = re.sub(r'<a href="/trading/watchlist/"(?: aria-current="page")?>Watchlist</a>', '', source)
         for retired in ("gemini", "meta"):
@@ -659,6 +675,16 @@ def render(mode: str, quote_path: Path | None) -> str:
     else:
         stamp = f"Snapshot · {as_of.strftime('%B %-d, %Y')}"
     page = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', page, count=1)
+    page = re.sub(
+        r'/trading/desk(?:\.[a-f0-9]{12})?\.css(?:\?v=[a-f0-9]+)?',
+        content_asset_ref(DESK_CSS),
+        page,
+    )
+    page = re.sub(
+        r'/trading/desk(?:\.[a-f0-9]{12})?\.js(?:\?v=[a-f0-9]+)?',
+        content_asset_ref(DESK_JS),
+        page,
+    )
     return page
 
 
