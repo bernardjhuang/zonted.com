@@ -1,35 +1,35 @@
 {
   "schema_version": 3,
   "risk_summary": {
-    "gross_delta_leverage": 2.39,
-    "net_delta_exposure_percent": 239.1,
-    "premium_at_risk_percent": 23.5,
-    "theta_percent_per_day": -0.25,
-    "cash_percent": -55.3,
+    "gross_delta_leverage": 2.33,
+    "net_delta_exposure_percent": 233.4,
+    "premium_at_risk_percent": 19.9,
+    "theta_percent_per_day": -0.14,
+    "cash_percent": -71.7,
     "quantity_basis": "gross held positions; pending orders not netted"
   },
   "sleeves": {
     "thesis": {
-      "capital_percent": 130.6,
-      "exposure_percent": 164.3,
-      "premium_at_risk_percent": 17.6
+      "capital_percent": 135.8,
+      "exposure_percent": 168.6,
+      "premium_at_risk_percent": 17.3
     },
     "momentum": {
-      "capital_percent": 24.8,
-      "exposure_percent": 74.8,
-      "premium_at_risk_percent": 5.9
+      "capital_percent": 35.8,
+      "exposure_percent": 64.8,
+      "premium_at_risk_percent": 2.6
     }
   },
   "positions": [
     {
       "symbol": "FIGR",
       "instrument": "Equity · Jan 2027 $40 call",
-      "exposure_percent": 152.5,
-      "capital_percent": 121.1,
-      "premium_at_risk_percent": 13.3,
+      "exposure_percent": 151.2,
+      "capital_percent": 120.6,
+      "premium_at_risk_percent": 12.7,
       "theta_percent_per_day": -0.08,
-      "implied_volatility_percent": 84.4,
-      "delta_used": 0.3821,
+      "implied_volatility_percent": 84.5,
+      "delta_used": 0.3679,
       "min_dte": 164,
       "unstable_delta": false,
       "kill": null,
@@ -39,31 +39,14 @@
       "thesis": "Profitable fintech below the $31 base case; August 13 earnings must prove record loan volume converts into durable earnings."
     },
     {
-      "symbol": "MDB",
-      "instrument": "Equity · Aug 2026 $400 call",
-      "exposure_percent": 44.9,
-      "capital_percent": 22.3,
-      "premium_at_risk_percent": 3.6,
-      "theta_percent_per_day": -0.11,
-      "implied_volatility_percent": 82.4,
-      "delta_used": 0.4223,
-      "min_dte": 24,
-      "unstable_delta": false,
-      "kill": 333.6,
-      "flair": "momentum",
-      "sector": "Technology",
-      "sector_etf": "XLK",
-      "thesis": "Momentum position in database software: the recovery above the 50-day and 200-day averages must hold into tentative August 25 earnings and the August 28 $400 call expiry."
-    },
-    {
       "symbol": "ZM",
       "instrument": "Equity · Aug 2026 $100 call",
-      "exposure_percent": 29.9,
-      "capital_percent": 2.5,
-      "premium_at_risk_percent": 2.3,
+      "exposure_percent": 48.7,
+      "capital_percent": 19.7,
+      "premium_at_risk_percent": 2.6,
       "theta_percent_per_day": -0.06,
-      "implied_volatility_percent": 43.4,
-      "delta_used": 0.587,
+      "implied_volatility_percent": 43.7,
+      "delta_used": 0.6134,
       "min_dte": 17,
       "unstable_delta": false,
       "kill": null,
@@ -75,12 +58,12 @@
     {
       "symbol": "FRMI",
       "instrument": "Equity · Jan 2028 $15 call · Dec 2028 $10 call",
-      "exposure_percent": 11.8,
-      "capital_percent": 9.5,
-      "premium_at_risk_percent": 4.3,
+      "exposure_percent": 17.4,
+      "capital_percent": 15.2,
+      "premium_at_risk_percent": 4.6,
       "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 108.8,
-      "delta_used": 0.6512,
+      "implied_volatility_percent": 114.7,
+      "delta_used": 0.676,
       "min_dte": 535,
       "unstable_delta": false,
       "kill": null,
@@ -88,6 +71,23 @@
       "sector": "Real Estate / Infrastructure",
       "sector_etf": "XLRE",
       "thesis": "A development-stage bet on Project Matador becoming a scarce, gigawatt-scale powered AI campus. Commercial agreements and funded delivery—not headline capacity—must validate it."
+    },
+    {
+      "symbol": "MDB",
+      "instrument": "Equity",
+      "exposure_percent": 16.1,
+      "capital_percent": 16.1,
+      "premium_at_risk_percent": 0.0,
+      "theta_percent_per_day": 0.0,
+      "implied_volatility_percent": null,
+      "delta_used": null,
+      "min_dte": null,
+      "unstable_delta": false,
+      "kill": 333.6,
+      "flair": "momentum",
+      "sector": "Technology",
+      "sector_etf": "XLK",
+      "thesis": "Momentum position in database software: the recovery above the 50-day and 200-day averages must hold into tentative August 25 earnings and the August 28 $400 call expiry."
     }
   ]
 }

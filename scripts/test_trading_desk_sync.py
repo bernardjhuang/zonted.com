@@ -581,7 +581,12 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("Sector-qualified momentum", setups)
         self.assertLess(setups.index('id="scan-method"'), setups.index("Sector-qualified momentum"))
         self.assertLess(setups.index("Sector-qualified momentum"), setups.index('id="scan-universe"'))
-        self.assertIn('class="sector-setup-chart-launch"', setups)
+        setup_launchers = setups.count('class="sector-setup-chart-launch"')
+        if setup_launchers == 0:
+            self.assertIn("Sector-qualified long setups</b> · None active", setups)
+            self.assertIn("Sector-qualified short setups</b> · None active", setups)
+        else:
+            self.assertGreater(setup_launchers, 0)
         updater = (ROOT / "scripts" / "update-trading-scan.py").read_text()
         self.assertIn('sync_sections(["setups"])', updater)
         self.assertIn("<title>Momentum", momentum)

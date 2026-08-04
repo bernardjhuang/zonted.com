@@ -226,7 +226,7 @@ def setup_table(rows, aria, table_id, quotes):
 def setup_links(rows, label):
     """Render the qualified subset once without duplicating full chart accordions."""
     if not rows:
-        return f'<p class="bl-empty">No qualified {label.lower()} today.</p>'
+        return f'<p class="scan-qualified-links"><b>{html.escape(label)}</b> · No qualified {label.lower()} today.</p>'
     links = " · ".join(
         f'<a href="?chart={html.escape(row["symbol"], quote=True)}#scan" translate="no">{html.escape(row["symbol"])}</a>'
         for row in rows
