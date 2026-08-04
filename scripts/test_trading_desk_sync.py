@@ -351,8 +351,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if position["unstable_delta"]:
                 self.assertIn(f'⚠ {position["min_dte"]}-DTE delta', row)
             if position.get("kill") is not None:
+                kill = float(position["kill"])
+                kill_label = f"${kill:,.2f}" if abs(kill) < 100 else f"${kill:,.0f}"
                 self.assertIn(f'data-desk-ytd-kill="{position["kill"]}"', row)
-                self.assertIn(f'<title>Kill ${float(position["kill"]):.2f}</title>', row)
+                self.assertIn(f'<title>Kill {kill_label}</title>', row)
         self.assertIn("--desk-chart-bear", styles)
         self.assertIn("--desk-chart-base", styles)
         self.assertIn("--desk-chart-bull", styles)
