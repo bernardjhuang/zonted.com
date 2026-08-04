@@ -427,7 +427,7 @@
       var article = thesisDocument.querySelector('article.hypothesis-detail#hypothesis-' + symbol.toLowerCase() + '-setup');
       if (!article) throw new Error('No canonical thesis found for ' + symbol);
       var clone = article.cloneNode(true);
-      clone.querySelectorAll('details').forEach(function (details) { details.setAttribute('open', ''); });
+      clone.querySelectorAll('details').forEach(function (details) { details.removeAttribute('open'); });
       body.replaceChildren(clone);
       var row = button.closest('.desk-main-row');
       if (!row) {
