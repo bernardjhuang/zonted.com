@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "updated_at": "2026-08-04",
-  "as_of": "2026-07-24",
+  "as_of": "2026-08-04",
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
@@ -7852,6 +7852,708 @@
         ],
         "reason": "By its own verdict, 'the policy is more under-modeled than the obvious beneficiaries are underpriced' — no underpriced expression means no ticker we benefit from; IBM/NTNX are partial maps at best."
       }
+    },
+    {
+      "id": "energy-coal-stay-of-execution",
+      "category": "Energy",
+      "title": "Coal's stay of execution → retirement delays reprice the duration of cash flows",
+      "horizon": "2026–2030",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "The famous AI-power trade is IPPs, gas and nuclear; the unfashionable derivative is that the same load growth keeps coal plants alive. 2025 had the fewest US coal retirements in 15 years (2.6 GW retired vs 8.0 GW planned), DOE has issued 43+ Section 202(c) emergency orders since May 2025 (latest Jul 14, 2026 directing PJM dispatch), five delayed plants are ~a year past planned closure, and PJM's capacity auction cleared near the cap a third straight time. ARLP's Q2 call put numbers on it: 21.2M tons of fresh commitments, data-center demand keeping plants running 'potentially until 2034.' The market prices these as melting ice cubes on a fixed clock; every deferred retirement extends the annuity.",
+      "conviction": "High on the duration mechanism — every input is a government order or a signed contract. Medium on the volume year: cheap gas means 2026 burn falls even as capacity persists.",
+      "final_verdict": "Known 75, priced 48. The reliability leg (delays, 202(c) orders, capacity prices) is strengthening while the equities sit 9–47% below their highs after BTU's idiosyncratic met-mine washout. The honest tension is pre-registered: Henry Hub at ~$2.75 is the falsifier actively flashing — this is a duration-of-cash-flows trade, not a volume-growth trade, and it is cheap precisely because the volume year looks bad. ARLP (pure Illinois-Basin thermal, 9%+ yield, contracted out to 2027) is the cleanest expression; CNR the largest US thermal; BTU only for leverage with Centurion noise priced.",
+      "consensus_scores": {
+        "knowledge_saturation": 75,
+        "price_saturation": 48
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt",
+          "knowledge_saturation": 75,
+          "price_saturation": 48,
+          "verdict": "Known 75: retirement delays make trade press constantly. Priced 48: the equities still trade on EIA's −9% 2026 burn forecast, not on the extended terminal dates."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Pure contracted thermal",
+          "symbols": "ARLP",
+          "knowledge_saturation": 70,
+          "price_saturation": 62,
+          "read": "29.4M tons already committed for 2027; the 9.2% yield is the market pricing decline that keeps not arriving."
+        },
+        {
+          "layer": "Largest US thermal",
+          "symbols": "CNR",
+          "knowledge_saturation": 70,
+          "price_saturation": 45,
+          "read": "Post-merger (CEIX+ARCH) scale at 1.1x book, −30% from its high; prints Aug 6."
+        },
+        {
+          "layer": "Leveraged/met-diluted",
+          "symbols": "BTU",
+          "knowledge_saturation": 75,
+          "price_saturation": 35,
+          "read": "−47% from the high after a met-mine commissioning miss that has nothing to do with the US thermal thesis — the washed-out option."
+        },
+        {
+          "layer": "Demand-side relief valve",
+          "symbols": "PJM data-center curtailment",
+          "knowledge_saturation": 40,
+          "price_saturation": 20,
+          "read": "DOE just let PJM curtail data centers in heat events — a new mechanism that reduces emergency coal dispatch at the margin. Watch it."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "Gas at $2.71–2.82 means 2026 coal burn falls ~9% — duration without dispatch is a stranded asset with better paperwork.",
+            "States are suing DOE over the Campbell delay; one adverse ruling collapses the 202(c) lever.",
+            "PJM's new data-center curtailment authority is a demand-side fix that substitutes for keeping coal warm.",
+            "ARLP is an MLP with a K-1 and limited float — the cleanest thesis expression is the least ownable for many accounts."
+          ]
+        }
+      ],
+      "what_survived": [
+        "Retirement deferrals are published schedule facts, not forecasts — 15 plants and counting.",
+        "ARLP's 2027 contracted tonnage makes the near-term cash flows a signed number."
+      ],
+      "residual_edge": [
+        "Nobody models terminal dates plant-by-plant; the EIA retirement schedule vs actual is a free quarterly scorecard.",
+        "The BTU met/thermal sum-of-parts after Centurion — the market currently prices the whole company off the broken part."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "CNR",
+          "why": "Aug 6 print: 2027 contracting commentary and any Gavin-style plant-life extensions."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "Henry Hub · PJM auctions · DOE 202(c) log",
+          "why": "The falsifier and the two catalysts, all published on calendars."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-03",
+        "note": "All three below highs; BTU freshly washed out on an idiosyncratic met miss.",
+        "rows": [
+          {
+            "symbol": "BTU",
+            "price": "$21.79",
+            "pe": "—",
+            "off_high": "-46.9%"
+          },
+          {
+            "symbol": "CNR",
+            "price": "$80.25",
+            "pe": "—",
+            "off_high": "-30.0%"
+          },
+          {
+            "symbol": "ARLP",
+            "price": "$26.12",
+            "pe": "—",
+            "off_high": "-9.2%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "Gas stays below ~$3 through winter and 2026 burn undershoots even EIA's −9%.",
+        "A court vacates a 202(c) delay order and the deferral pipeline reverses.",
+        "Two consecutive PJM auctions clear materially below the cap."
+      ],
+      "watch_next": [
+        "CNR Q2 (Aug 6) — 2027 commitments and plant-life commentary.",
+        "The next DOE 202(c) order or court ruling on the existing ones.",
+        "EIA's monthly retirement-schedule revisions — the thesis's actual scoreboard."
+      ],
+      "sources": [
+        {
+          "label": "POWER — 40+ Section 202(c) orders log",
+          "url": "https://www.powermag.com/doe-has-issued-more-than-40-section-202c-emergency-orders-since-may-2025-heres-an-updated-log/"
+        },
+        {
+          "label": "EIA — retirement delays continue in 2026",
+          "url": "https://www.eia.gov/todayinenergy/detail.php?id=67206"
+        },
+        {
+          "label": "ARLP Q2 2026 results",
+          "url": "https://www.stocktitan.net/news/ARLP/alliance-resource-partners-l-p-reports-second-quarter-financial-and-faevof2koyyw.html"
+        },
+        {
+          "label": "Utility Dive — PJM data-center curtailment order",
+          "url": "https://www.utilitydive.com/news/pjm-doe-emergency-order-curtail-data-centers/820571/"
+        }
+      ]
+    },
+    {
+      "id": "sectors-phosphate-sulfur-mask",
+      "category": "Sectors",
+      "title": "China's phosphate lockout × the sulfur mask → scarcity priced as a margin miss",
+      "horizon": "2026–2028",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "China's export suspension holds 50–80% of its fertilizer export volume off the world market through at least August 2026, retail DAP/MAP sits at $800–900/st, and the World Bank warns fertilizer prices could rise >30% in 2026 — yet MOS trades ~15% above its June low and −39% from its high, because tripled sulfur and +15% ammonia costs crushed H1 margins and the market read a cost-cyclical miss. The structural read nobody models: the scarcity is policy-durable, the input spike is refinery-byproduct economics that mean-revert — and the Aug 1 Iran framework accelerates exactly that reversion (Gulf sulfur/ammonia supply normalizing) while touching the China leg not at all.",
+      "conviction": "High on the two-leg structure (policy scarcity + cyclical cost mask). Medium on timing: the China expiry decision lands within weeks and could go either way.",
+      "final_verdict": "Known 70, priced 40 — the widest gap of the August hunt, with two dated catalysts inside 30 days: MOS's Q2 call (Aug 5) and the China export-window expiry this month. The de-escalation framework is asymmetric help: it lifts the cost mask (sulfur/ammonia) faster than it adds supply (Gulf phosphate flows were never the binding constraint — China's policy is). NTR is deliberately NOT the lead expression here: its nitrogen windfall is unwinding (see the nitrogen-unwind theme) and blends against the phosphate story.",
+      "consensus_scores": {
+        "knowledge_saturation": 70,
+        "price_saturation": 40
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt",
+          "knowledge_saturation": 70,
+          "price_saturation": 40,
+          "verdict": "Known 70: the export ban is trade-press furniture. Priced 40: MOS near lows with record product prices is the definition of an unpriced second order."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Pure phosphate+potash",
+          "symbols": "MOS",
+          "knowledge_saturation": 65,
+          "price_saturation": 30,
+          "read": "~70% phosphate/potash revenue, −39% off the high, Q2 printed tonight with the call tomorrow — the dislocation IS the entry question."
+        },
+        {
+          "layer": "Israeli specialty/phosphate",
+          "symbols": "ICL",
+          "knowledge_saturation": 55,
+          "price_saturation": 35,
+          "read": "Bromine+phosphate specialty at −27% from its high; second expression, thinner story."
+        },
+        {
+          "layer": "Blended ag majors",
+          "symbols": "NTR CF",
+          "knowledge_saturation": 75,
+          "price_saturation": 55,
+          "read": "Both carry nitrogen-windfall unwind risk — reference names for the complex, not expressions of this thesis."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "Beijing reopens exports in September (trade expectation is quota-capped, not closed) and DAP normalizes before sulfur costs do — MOS eats both sides.",
+            "The 'mask lifts' logic depends on Gulf supply chains restarting on the framework's schedule; the deal has already collapsed once (July 9 precedent).",
+            "Tonight's Q2 print traded −2.2% after hours — if the margin miss extends into H2 guidance, cheap gets cheaper.",
+            "Only ~3 clean tickers; the same thinness that has killed themes before."
+          ]
+        }
+      ],
+      "what_survived": [
+        "The export restriction and its August window are dated policy facts.",
+        "Record product price + bombed-out producer is a measured dislocation, not a narrative."
+      ],
+      "residual_edge": [
+        "Sulfur spot vs DAP spread as a weekly margin nowcast nobody publishes for equities.",
+        "The China expiry decision is a binary with a date — position sizing can be built around it."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "MOS",
+          "why": "Tomorrow's 11am call: H2 margin guide and any sulfur-cost relief commentary."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "NDRC export decision · NOLA DAP · sulfur spot",
+          "why": "The three dials that resolve the thesis inside a quarter."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-03",
+        "note": "MOS/ICL are the expressions; NTR listed as complex reference only (see nitrogen-unwind).",
+        "rows": [
+          {
+            "symbol": "MOS",
+            "price": "$21.81",
+            "pe": "—",
+            "off_high": "-39.4%"
+          },
+          {
+            "symbol": "ICL",
+            "price": "$5.08",
+            "pe": "—",
+            "off_high": "-26.7%"
+          },
+          {
+            "symbol": "NTR",
+            "price": "$65.96",
+            "pe": "—",
+            "off_high": "-21.7%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "China announces resumed DAP/MAP exports without tight quotas.",
+        "Sulfur/ammonia costs stay elevated two more quarters despite Gulf normalization.",
+        "MOS guides H2 margins down again with volumes soft — cost-cyclical read wins."
+      ],
+      "watch_next": [
+        "MOS Q2 call (Aug 5, 11am ET).",
+        "Beijing's September export decision — the binary.",
+        "NOLA DAP holding >$600/st as Gulf logistics normalize."
+      ],
+      "sources": [
+        {
+          "label": "Fertilizer Daily — China restrictions through Aug 2026",
+          "url": "https://www.fertilizerdaily.com/20260729-china-phosphate-export-restrictions-august-2026-russia-quotas/"
+        },
+        {
+          "label": "World Bank — fertilizer price warning",
+          "url": "https://blogs.worldbank.org/en/opendata/fertilizer-prices-surge-as-strait-of-hormuz-disruptions-tighten-"
+        },
+        {
+          "label": "Mosaic Q2 2026 earnings dates",
+          "url": "https://investors.mosaicco.com/press-releases/news-details/2026/MOSAIC-ANNOUNCES-SECOND-QUARTER-2026-EARNINGS-RESULTS-DATES/default.aspx"
+        },
+        {
+          "label": "farmdoc — Hormuz scenarios and fertilizer risk",
+          "url": "https://farmdocdaily.illinois.edu/2026/04/strait-of-hormuz-disruption-scenarios-and-fertilizer-purchasing-risks-for-u-s-crop-producers.html"
+        }
+      ]
+    },
+    {
+      "id": "emerging-glp1-mortality-death-care",
+      "category": "Emerging",
+      "title": "The GLP-1 mortality dividend → death care's air pocket",
+      "horizon": "2026–2032",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "The CDC just reported 2025's US death rate at a record low — 689.2 per 100k, −4.6% year over year — and reinsurers (RGA, Munich Re, Swiss Re) project GLP-1-class drugs could cut all-cause mortality up to 6–9% over coming decades. Death care is pure inverse-mortality exposure: SCI's Q2 core funeral volumes fell 1.7%, management's own explanation was 'much softer mortality' — and the stock rallied to within 6% of its all-time high at 22x because pricing and preneed sales offset it. A structural volume headwind, essentially unpriced, with the short entry offered near the top. This resurrects the disqualified life-vs-annuity theme's mechanism through the side door that fixes its disqualification: SCI and CSV are pure mortality exposure, not diversified carriers.",
+      "conviction": "High on the direction (mortality improvement is measured, not forecast). Low on the cadence: boomer demographics partially offset, and the freshest quarter ran AGAINST the short (volumes only −1.7%, July flat, guide raised).",
+      "final_verdict": "Known 45, priced 15 in the short direction. The record-low-mortality headline is public; its translation into a decade of funeral-volume decay is in nobody's SCI model — the street writes up pricing power instead. Honest warning pre-registered: this is a slow-burn short against a quality compounder with momentum at its back; the thesis needs 4–8 quarters of volume misses, and CDC attributes 2025's drop mainly to overdose declines, not GLP-1 — the drug-driven leg is still building. Size accordingly; CSV is already crushed (wrong entry side) and MATW is a conglomerate mid-breakup.",
+      "consensus_scores": {
+        "knowledge_saturation": 45,
+        "price_saturation": 15
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt",
+          "knowledge_saturation": 45,
+          "price_saturation": 15,
+          "verdict": "Known 45: record-low mortality made headlines July 2. Priced 15: SCI at a 52-week high days after reporting mortality-driven volume declines is the gap, stated as a price."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Pure funeral/cemetery scale",
+          "symbols": "SCI",
+          "knowledge_saturation": 40,
+          "price_saturation": 10,
+          "read": "The expression: liquid, pure, at highs, 22x — shorting momentum requires the volume data to re-crack first."
+        },
+        {
+          "layer": "Small pure play",
+          "symbols": "CSV",
+          "knowledge_saturation": 35,
+          "price_saturation": 55,
+          "read": "Already −22% from its high — the market found this one; wrong side for a fresh short."
+        },
+        {
+          "layer": "Casket/memorial supplier",
+          "symbols": "MATW",
+          "knowledge_saturation": 30,
+          "price_saturation": 30,
+          "read": "Conglomerate mid-breakup; reference only."
+        },
+        {
+          "layer": "The offset",
+          "symbols": "preneed backlog + boomer curve",
+          "knowledge_saturation": 60,
+          "price_saturation": 50,
+          "read": "Deaths of 80+ cohort still rise structurally; the fight is drug-driven rate vs demographic volume."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "CDC credits 2025's decline mostly to overdose reduction — a one-time normalization, not a durable GLP-1 slope; if 2026 mortality flattens, the thesis loses its engine.",
+            "Boomer cohort aging into peak-mortality years can swamp rate improvement with volume for a decade.",
+            "SCI just proved pricing + preneed can offset −1.7% volumes; the short needs bigger declines than the drugs may deliver.",
+            "One-and-a-half clean tickers; a graveyard filter this ledger has enforced on others."
+          ]
+        }
+      ],
+      "what_survived": [
+        "Record-low death rate is a published CDC number, not a projection.",
+        "SCI management's own call language attributes softness to mortality — the mechanism confessed."
+      ],
+      "residual_edge": [
+        "Quarterly CDC provisional mortality vs SCI volume guidance — a two-series model nobody runs.",
+        "Preneed backlog quality as the duration cushion the bulls lean on — testable from disclosures."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "CSV",
+          "why": "Reports Aug 5 pm — a second volume datapoint within 24 hours."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "CDC provisional mortality · SCI volume prints",
+          "why": "The thesis's only two dials."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-03",
+        "note": "Short thesis — the at-highs filter inverts: SCI near its top is the correct entry side.",
+        "rows": [
+          {
+            "symbol": "SCI",
+            "price": "$85.93",
+            "pe": "—",
+            "off_high": "-5.6%"
+          },
+          {
+            "symbol": "CSV",
+            "price": "$40.61",
+            "pe": "—",
+            "off_high": "-21.6%"
+          },
+          {
+            "symbol": "MATW",
+            "price": "$28.07",
+            "pe": "—",
+            "off_high": "-8.4%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "2026 CDC data shows mortality flattening (overdose effect exhausted).",
+        "SCI posts two consecutive quarters of positive comparable funeral volumes.",
+        "Preneed maturities smooth revenue so thoroughly that volumes stop mattering to EPS."
+      ],
+      "watch_next": [
+        "CSV earnings (Aug 5 pm).",
+        "Next CDC provisional mortality release.",
+        "SCI Q3 volume print and any change to the 'softer mortality' language."
+      ],
+      "sources": [
+        {
+          "label": "CNN — 2025 US death rate record low (CDC)",
+          "url": "https://www.cnn.com/2026/07/02/health/us-death-rate-record-low-cdc-report-longevity"
+        },
+        {
+          "label": "SCI Q2 2026 results",
+          "url": "https://www.stocktitan.net/news/SCI/service-corporation-international-announces-second-quarter-2026-0d2g5ih187wt.html"
+        },
+        {
+          "label": "The Hill — record-low death rate",
+          "url": "https://thehill.com/policy/healthcare/5952060-us-death-rate-2025-record-low/"
+        }
+      ]
+    },
+    {
+      "id": "emerging-saas-datacenter-capex-tax",
+      "category": "Emerging",
+      "title": "SaaS becomes a datacenter buyer → the FCF-margin regime change, confessed one print at a time",
+      "horizon": "2026–2028",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "Software's famous 25–30% FCF margins were built on renting infrastructure cheaply. AI is ending that: Zscaler cut its FCF-margin guide from ~27% to ~23% in May citing a datacenter capex ramp (and added a capacity-procurement risk factor), ServiceNow's GAAP gross margin fell 81% → 77.9% on self-hosted AI buildout, Akamai runs capex at 19–24% of revenue for GPU deployment, and multiple SaaS 10-Qs began disclosing inference costs at 4–9% of revenue this year. The market treats each confession as idiosyncratic — ZS fell 27.5% alone — while the un-confessed names (NET, DDOG) sit at 52-week highs into this week's prints. The repricing is systemic and it arrives one earnings call at a time.",
+      "conviction": "High that the cost regime is real (it's in filings, not commentary). Medium on the dispersion trade's timing — each name's confession date is unknowable in advance.",
+      "final_verdict": "Known 45, priced 22 — and the pricing is maximally bifurcated: the confessed (ZS −54% from high, NOW −41%) already carry the tax in their multiples while the unconfessed carry none of it at all-time highs. The expression is dispersion, not direction: the confessed-and-derated names are the long leg (the market extrapolated one guide cut into permanence), the at-high infrastructure-cost-deniers are the short/avoid leg into their own future confessions. This week is a live experiment: DDOG (Aug 6 am) and NET (Aug 6 pm) print from record highs.",
+      "consensus_scores": {
+        "knowledge_saturation": 45,
+        "price_saturation": 22
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt",
+          "knowledge_saturation": 45,
+          "price_saturation": 22,
+          "verdict": "Known 45: every confession was covered loudly — as a company story. Priced 22: the systemic read (AI turns SaaS into capex businesses) appears in no sector multiple; the at-high names price zero probability of joining."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Confessed and derated",
+          "symbols": "ZS NOW",
+          "knowledge_saturation": 60,
+          "price_saturation": 45,
+          "read": "ZS still guides ~23% FCF margins — a good business repriced as a broken one. NOW at −41% with $1B AI ACV. The long leg."
+        },
+        {
+          "layer": "Unconfessed at highs",
+          "symbols": "NET DDOG",
+          "knowledge_saturation": 35,
+          "price_saturation": 5,
+          "read": "Both set 52-week highs this week and print Aug 6; NET runs its own global network into a GPU buildout, DDOG eats LLM-observability inference. Zero capex-tax in either price."
+        },
+        {
+          "layer": "The swing name",
+          "symbols": "AKAM",
+          "knowledge_saturation": 55,
+          "price_saturation": 60,
+          "read": "Already spends 19–24% of revenue on capex — the market has long priced it as infrastructure; the question is whether AI inference re-rates it as a seller."
+        },
+        {
+          "layer": "Asset-light control group",
+          "symbols": "FTNT-profile",
+          "knowledge_saturation": 40,
+          "price_saturation": 40,
+          "read": "Record 38% op margins with no confession — proof the tax is architecture-specific, which is what makes it a dispersion trade."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "Inference deflation (distillation, cheaper accelerators) could shrink the tax faster than confessions accumulate — the mechanism has a technology half-life.",
+            "ZS management framed the capex as pull-forward, not regime — if FY27 guidance restores ~26% FCF margins, the long leg's premise weakens.",
+            "DDOG/NET may simply beat: both have pricing power to pass inference costs through, converting the tax into a toll.",
+            "Shorting best-in-class names at highs into prints is exactly what this desk's earnings-drift study says has no edge — the short leg must be structural, not event-timed."
+          ]
+        }
+      ],
+      "what_survived": [
+        "The confessions are in SEC filings with numbers (guide cuts, margin bridges, risk factors) — not analyst narrative.",
+        "The bifurcation is measurable today: −41–54% vs at-highs for the same underlying cost exposure."
+      ],
+      "residual_edge": [
+        "A filings-based 'confession watchlist': capex/revenue, inference-cost disclosures, and datacenter risk-factor language as leading indicators nobody screens.",
+        "ZS FY27 capex guide (early Sept) is a dated test of pull-forward vs regime."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "DDOG NET",
+          "why": "Aug 6 prints from record highs — gross-margin bridges and any first capex language."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "ZS FY27 guide · 10-Q inference-cost disclosures",
+          "why": "The regime-vs-pull-forward question resolves in September."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-03",
+        "note": "The dispersion in one table: confessed names crushed, unconfessed at highs, same cost regime.",
+        "rows": [
+          {
+            "symbol": "ZS",
+            "price": "$154.46",
+            "pe": "—",
+            "off_high": "-54.2%"
+          },
+          {
+            "symbol": "NOW",
+            "price": "$114.19",
+            "pe": "—",
+            "off_high": "-41.4%"
+          },
+          {
+            "symbol": "NET",
+            "price": "$282.74",
+            "pe": "—",
+            "off_high": "-3.8%"
+          },
+          {
+            "symbol": "DDOG",
+            "price": "$273.60",
+            "pe": "—",
+            "off_high": "-1.9%"
+          },
+          {
+            "symbol": "AKAM",
+            "price": "$117.88",
+            "pe": "—",
+            "off_high": "-28.8%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "DDOG and NET print clean FCF beats with no capex language and guide up — the tax stays idiosyncratic.",
+        "ZS restores FCF-margin guidance toward 26%+ for FY27 — pull-forward confirmed, regime refuted.",
+        "Inference unit costs fall >50% within a year, absorbing the buildout without margin damage."
+      ],
+      "watch_next": [
+        "DDOG (Aug 6 am) and NET (Aug 6 pm) gross-margin and capex commentary.",
+        "ZS Q4/FY27 guide (early September) — the regime test.",
+        "Each new 10-Q inference-cost disclosure joining the 4–9% club."
+      ],
+      "sources": [
+        {
+          "label": "SiliconANGLE — ZS FCF guide cut",
+          "url": "https://siliconangle.com/2026/05/26/zscaler-tops-estimates-lifts-guidance-free-cash-flow-cut-sends-shares-lower/"
+        },
+        {
+          "label": "ServiceNow Q2 2026 results",
+          "url": "https://newsroom.servicenow.com/press-releases/details/2026/ServiceNow-Reports-Second-Quarter-2026-Financial-Results/default.aspx"
+        },
+        {
+          "label": "SaaS inference-cost disclosures survey",
+          "url": "https://www.saasmag.com/ai-cogs-saas-gross-margin-compression/"
+        },
+        {
+          "label": "AKAM capex deep-dive",
+          "url": "https://markets.financialcontent.com/stocks/article/finterra-2026-2-19-the-edge-of-innovation-a-deep-dive-into-akamai-technologies-akam-in-2026"
+        }
+      ]
+    },
+    {
+      "id": "sectors-nitrogen-unwind",
+      "category": "Sectors",
+      "title": "The nitrogen unwind → the deal is priced in oil, not in fertilizer equities",
+      "horizon": "H2 2026–2027",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "The February war shut Hormuz — ~25% of global urea and 27% of ammonia exports transit it — and urea spiked from ~$400 to $850/t, handing nitrogen producers a windfall (CF nearly doubled off its December low). The commodity has already given most of it back: urea is ~$420, −40% from the peak, as Hormuz management talks progress and China relaxes curbs. The equities have not followed — CF sits just −16% from its March high at ~10x windfall earnings the forward curve says are ending. The Aug 1 framework, with 'total opening of the Hormuz Strait' explicitly on the table, is priced as a crude-oil event; its fertilizer second order — Iranian ammonia and Qatari urea returning to a normalizing market — is in no nitrogen equity model.",
+      "conviction": "Medium-high on the mechanism (the commodity has already voted). Medium on the path: the deal collapsed once before (July 9), and a re-spike squeezes every leg of the short.",
+      "final_verdict": "Known 35, priced 15 — the freshest gap of the hunt and the mirror image of the phosphate theme: same complex, opposite policy direction. Phosphate is policy-TIGHT (China ban); nitrogen is war-premium UNWINDING (Hormuz reopening). NTR is the name caught in the middle — its nitrogen windfall unwinds while its phosphate/potash legs benefit — which is exactly why it leads neither theme. The short expression is CF (purest nitrogen, closest to its high, reports Aug 5 pm at peak-windfall estimates) with MEOH as the methanol analog on the same Iranian-supply-return mechanism.",
+      "consensus_scores": {
+        "knowledge_saturation": 35,
+        "price_saturation": 15
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt",
+          "knowledge_saturation": 35,
+          "price_saturation": 15,
+          "verdict": "Known 35: urea's round-trip is visible to anyone who looks; almost nobody outside ag trade press has. Priced 15: CF at 10x peak earnings with the input of those earnings down 40% is a windfall priced as a plateau."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Pure nitrogen",
+          "symbols": "CF",
+          "knowledge_saturation": 35,
+          "price_saturation": 12,
+          "read": "The expression: −16% from high, prints Aug 5 pm on the peak quarter; the guide, not the print, is the event."
+        },
+        {
+          "layer": "Methanol analog",
+          "symbols": "MEOH",
+          "knowledge_saturation": 25,
+          "price_saturation": 20,
+          "read": "Iranian methanol return is the same supply mechanism; −18% from high."
+        },
+        {
+          "layer": "Blended majors",
+          "symbols": "NTR",
+          "knowledge_saturation": 45,
+          "price_saturation": 30,
+          "read": "The caught-in-the-middle name — nitrogen unwind vs phosphate tightness; reference for both themes, expression for neither."
+        },
+        {
+          "layer": "The freight tell",
+          "symbols": "INSW-profile tankers",
+          "knowledge_saturation": 55,
+          "price_saturation": 70,
+          "read": "Tanker equities at ATHs are pricing deal FAILURE (war rates persisting) — the cross-asset disagreement is itself the signal."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "The framework collapsed once already; a second collapse re-spikes urea toward $700 and the short is squeezed on both legs.",
+            "CF's capital returns (buybacks) and cheap US gas give it a structural floor that outlasts the windfall.",
+            "India tender season or a China quota reversal can re-tighten urea independent of Iran.",
+            "The commodity already fell 40% — the easy 60% of the unwind may be done, leaving equity-vs-commodity convergence as the only leg."
+          ]
+        }
+      ],
+      "what_survived": [
+        "Urea's −40% round-trip is a printed market fact while CF sits near its high — the divergence is measured, not argued.",
+        "The MoU window and Hormuz transit data give the thesis dated checkpoints."
+      ],
+      "residual_edge": [
+        "Equity-vs-commodity convergence trades resolve fast when the guide arrives — CF's is hours away.",
+        "War-risk hull premiums (7.5–10% vs 0.25% pre-war) as a daily deal-probability gauge nobody maps to fertilizer names."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "CF",
+          "why": "Aug 5 pm print: H2 realization guidance against a $420 urea deck."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "Urea FOB · war-risk premiums · MoU window (~Aug 16)",
+          "why": "Three dated dials on deal conversion."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-03",
+        "note": "Short-leaning thesis: CF near high with its commodity down 40% from peak; INSW shown as the cross-asset tell.",
+        "rows": [
+          {
+            "symbol": "CF",
+            "price": "$118.30",
+            "pe": "—",
+            "off_high": "-16.3%"
+          },
+          {
+            "symbol": "MEOH",
+            "price": "$54.31",
+            "pe": "—",
+            "off_high": "-18.4%"
+          },
+          {
+            "symbol": "NTR",
+            "price": "$65.96",
+            "pe": "—",
+            "off_high": "-21.7%"
+          },
+          {
+            "symbol": "INSW",
+            "price": "$95.23",
+            "pe": "—",
+            "off_high": "-3.1%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "Deal collapse: strikes resume or the MoU window lapses without extension — urea re-spikes.",
+        "CF guides H2 realizations only modestly lower and the market accepts mid-cycle framing.",
+        "China re-tightens export quotas, replacing the war premium with a policy premium."
+      ],
+      "watch_next": [
+        "CF and NTR prints (Aug 5 pm) — the windfall-persistence guides.",
+        "The ~Aug 16 MoU window and Hormuz transit/war-premium data.",
+        "Urea FOB Egypt/NOLA weekly — the thesis's speedometer."
+      ],
+      "sources": [
+        {
+          "label": "TradingEconomics — urea ~$420, −40% from peak",
+          "url": "https://tradingeconomics.com/commodity/urea"
+        },
+        {
+          "label": "World Bank — Hormuz fertilizer transit shares",
+          "url": "https://blogs.worldbank.org/en/opendata/fertilizer-prices-surge-as-strait-of-hormuz-disruptions-tighten-"
+        },
+        {
+          "label": "The National — war-risk shipping premiums",
+          "url": "https://www.thenationalnews.com/business/2026/07/17/war-risk-shipping-premium-surges-again-as-tensions-escalate-at-strait-of-hormuz/"
+        },
+        {
+          "label": "CNBC — wartime fertilizer surge",
+          "url": "https://www.cnbc.com/2026/03/25/fertilizer-price-iran-war-food-security-inflation-urea-potash-nitrogen-farmers.html"
+        }
+      ]
     }
   ]
 }
