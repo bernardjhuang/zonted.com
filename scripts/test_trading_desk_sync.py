@@ -406,7 +406,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("fetch(thesisSource", script)
         self.assertIn("article.hypothesis-detail", script)
         self.assertIn("details", script)
-        self.assertIn("setAttribute('open'", script)
+        self.assertIn("removeAttribute('open'", script)
+        self.assertNotIn("setAttribute('open'", script)
         self.assertIn("data-thesis-open", script)
         self.assertIn("cancel", script)
         self.assertIn("focus", script)
@@ -414,6 +415,22 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(".hyp-chart-dialog", styles)
         self.assertRegex(styles, r'\.desk-thesis-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
+        self.assertIn(".hypothesis-simple-thesis", styles)
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        simple_theses = {
+            "FIGR": ["previously founded SoFi", "Real-world assets", "$25 is the working floor"],
+            "MDB": ["AI tailwinds support Atlas", "earnings and yearly VWAPs", "Strong hiring numbers"],
+            "FRMI": ["Energy demand from SpaceX", "deep industry knowledge remains bullish"],
+            "ZM": ["tech sector feels like it is resuscitating", "broke above both VWAPs"],
+        }
+        for symbol, expected_lines in simple_theses.items():
+            match = re.search(rf'<article class="hypothesis-detail" id="hypothesis-{symbol.lower()}-setup".*?</article>', source, re.S)
+            self.assertIsNotNone(match, f"Missing {symbol} thesis")
+            article = match.group(0) if match else ""
+            self.assertIn('class="hypothesis-bottom-line hypothesis-simple-thesis"', article)
+            self.assertNotRegex(article, r'<details[^>]*\sopen(?:\s|=|>)')
+            for expected in expected_lines:
+                self.assertIn(expected, article)
         self.assertNotIn('height="auto"', page + script)
         self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)', styles.replace(" ", ""))
 

@@ -108,7 +108,11 @@ def exercise(page, url: str, screenshot: Path) -> None:
     thesis_opener = page.locator(".desk-main-row [data-thesis-open]").first
     thesis_opener.click()
     page.locator("#desk-thesis-dialog[open] article.hypothesis-detail").wait_for()
-    check(page.locator("#desk-thesis-dialog[open] article.hypothesis-detail details[open]").count() >= 1, "full thesis work is not expanded")
+    thesis_details = page.locator("#desk-thesis-dialog[open] article.hypothesis-detail details")
+    check(thesis_details.count() >= 1, "full thesis work disclosure is missing")
+    check(page.locator("#desk-thesis-dialog[open] article.hypothesis-detail details[open]").count() == 0, "full thesis work should be folded by default")
+    thesis_details.first.locator("summary").click()
+    check(thesis_details.first.get_attribute("open") is not None, "full thesis work disclosure did not open")
     page.locator("[data-thesis-close]").click()
     check(thesis_opener.evaluate("el => document.activeElement === el"), "thesis opener did not regain focus")
     check(not errors, "JavaScript errors: " + "; ".join(errors))
