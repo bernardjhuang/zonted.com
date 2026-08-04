@@ -2,6 +2,155 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-03",
+   "session": "post-close",
+   "assess_for": "Tuesday Aug 4 open",
+   "verdict": "NEUTRAL",
+   "subtitle": "The tape printed +1.42% on a peace headline and my score did not move \u2014 +2 twice in one day, with five signals still reading July",
+   "score": 2,
+   "n_signals": 11,
+   "composite": "+0.18",
+   "narrative": [
+    "<p>What the day did. SPY +1.42% to 757.67 \u2014 a quarter percent shy of the June 2 high of 759.57 \u2014 after Treasury Secretary Bessent said the US and Iran could reach a deal \"today or tomorrow\" to reopen the Strait of Hormuz, and WTI fell about 3% to under $78. Communications led at +2.86%, tech +1.53%, energy the only red sector at \u22121.28%. IWM +1.72% actually beat the index for a day, which is worth noting precisely because its 20-session ledger still doesn't.</p>",
+    "<p>What changed since the morning scoring: nothing that a threshold noticed. Trend's margin went from +0.27% above the 50-day to +1.66% \u2014 same +1, but the flip level is now out of reach of a normal Tuesday instead of three cents away. Crypto went 2-of-7 to 3-of-7 leading (ZEC flipped positive on the 50d spread z) \u2014 still 0. The yen eased from +4.32% to +4.1% over five sessions \u2014 still \u22121. Size appetite narrowed from \u22122.45pt to \u22121.75pt on today's outperformance \u2014 still \u22121. Score +2, composite +0.18, identical to the intraday entry down to the decimal.</p>",
+    "<p>Did the day confirm the morning call? By arithmetic, yes \u2014 I said NEUTRAL at +0.18 this morning and the ledger closed at +0.18. By tape, NEUTRAL undersold a +1.42% session, and I said as much this morning: I flagged that the risk-on case was a headline the counterparty had already denied once. Tonight the counterparty is in the room and the Treasury Secretary is naming a date, so the headline half of my morning skepticism is aging badly and the structural half \u2014 yen +4.1% in five sessions on roughly \u00a58.45trn of intervention, small caps lagging by 1.75 points over a month \u2014 is fully intact. Confirmed by construction, not vindicated by it.</p>",
+    "<p>The staleness census, fourth consecutive entry: VIX 18.58, curve +0.75, and VVIX 100.7 are July 24 vintage \u2014 unchanged after the wait-and-refetch the rubric prescribes. MOVE last observed July 17 and stale-flagged, scored 0. HY OAS is July 23. Five of eleven signals are frozen a week-plus back, which means this composite's day-over-day stability is partly an artifact: the half of the ledger that could react to an Iran deal or a yen squeeze is not being measured. A refreshed feed is the single biggest pending revision in either direction.</p>",
+    "<p>Posture into Tuesday: NEUTRAL, per the rubric. The calendar gets loud from here \u2014 JOLTS Tuesday, quarterly refunding plus ISM services Wednesday, claims Thursday, July payrolls Friday with consensus near 80\u2013100k \u2014 and the Hormuz deal is a live binary on Bessent's own \"today or tomorrow\" clock. Watch USDJPY: above 160 the intervention is bleeding out and the FX signal starts arguing for the bulls; below 155 the carry-unwind story gets louder than the peace story, and there are roughly 185k contracts of spec yen shorts (CFTC, Jul 28) still fueling it.</p>"
+   ],
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-session SMA \u00b7 \u00b10.25% band",
+     "value": "757.67 vs 745.32 \u00b7 +1.66% \u00b7 Aug 3 close, Alpaca SIP",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "18.58 \u00b7 Jul 24 vintage \u2014 unrefreshed after wait-and-refetch, fourth consecutive entry flagged",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 >+0.5 / 0\u20130.5 / inverted",
+     "value": "+0.75 contango \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "100.7 \u00b7 Jul 24 vintage \u2014 unrefreshed",
+     "score": 0
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100 \u00b7 stale-flagged \u2192 0",
+     "value": "70.9 but series last observed Jul 17, eleven sessions \u2014 scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% and \u03945d <+10bp",
+     "value": "2.77% \u00b7 +6bp/5d (2.71% Jul 16) \u00b7 Jul 23 vintage \u2014 priced before the intervention and the Iran headlines",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US rows above YTD VWAP \u226570% / 40\u201370% / <40%",
+     "value": "10 of 13 \u00b7 77% \u00b7 fresh through Aug 3 close \u2014 ESPO, XLC, XLU below",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "of {XLK,XLY,XLC,XLI,XLF} in top-3 by 50d z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.15 \u00b7 XLE +0.96 \u00b7 XLV +0.85 \u2014 one cyclical (XLF). XLC led today at +2.86% but sits below its YTD VWAP",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20-session return \u00b7 \u00b11pt band",
+     "value": "\u22121.75pt (IWM \u22120.90%, SPY +0.85%, Jul 6 \u2192 Aug 3) \u00b7 narrowed from \u22122.45pt; IWM beat SPY today +1.72% vs +1.42%",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts leading BTC on 50d spread z: \u22654 of 7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 ETH +0.54, BNB +0.42, ZEC +0.21 \u2014 ZEC flipped positive since the morning scoring; SOL and XRP next at \u22120.20",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "USDJPY 5-session \u00b7 yen appreciation >1% \u2192 \u22121",
+     "value": "157.37 vs 163.77 (Jul 27) \u00b7 yen +4.1% \u00b7 intervention-led, ~\u00a58.45trn per BOJ data",
+     "score": -1
+    }
+   ],
+   "flips": {
+    "to_off": "Sum \u22123 (composite \u2264 \u22120.25) needs a five-point swing and cannot happen from drift. Trend gives back its point below roughly 747.2 (50SMA +0.25%, recomputed daily) and reaches \u22121 below about 743.4. The real single-shot path is a refreshed vol feed printing the week that actually happened: VIX above 20 with the curve inverted would be three points at once.",
+    "to_on": "Sum +3 (composite \u2265 +0.25) is one point away, and there are three one-point paths: a refreshed feed printing MOVE under 80 does it alone; a fourth alt flipping positive on the 50d spread z (SOL and XRP both sit at \u22120.20); or the yen giving back to roughly 162+ so the 5-session change re-enters the \u00b11% band."
+   },
+   "forward": {
+    "horizon": "Tue Aug 4 \u2013 Mon Aug 10",
+    "watch": [
+     {
+      "name": "Catalyst density",
+      "why": "four labor prints plus refunding in five sessions",
+      "detail": "JOLTS Tue Aug 4 \u00b7 quarterly refunding announcement + ISM services Wed Aug 5 \u00b7 claims Thu Aug 6 \u00b7 July payrolls Fri Aug 7, consensus ~80\u2013100k. Jobs data and duration supply stacked in one week with the long end already the sore spot",
+      "lean": "off"
+     },
+     {
+      "name": "Hormuz binary",
+      "why": "Bessent named a date \u2014 \"today or tomorrow\"",
+      "detail": "WTI already \u22123% to under $78, so a deal is substantially pre-paid; a breakdown is not. Asymmetry runs risk-off from here even though the headline flow feels risk-on",
+      "lean": "watch"
+     },
+     {
+      "name": "Carry-unwind fuel",
+      "why": "spec yen shorts are the accelerant under FX stress",
+      "detail": "CFTC TFF Jul 28: leveraged funds net short yen ~102k contracts, asset managers ~83k more. Yen +4.1% in five sessions on ~\u00a58.45trn of intervention and the fuel is mostly unburned",
+      "lean": "off"
+     },
+     {
+      "name": "Vol regime",
+      "why": "realized vol is clustering, not compressing",
+      "detail": "SPY 10-session realized 16.4% annualized vs 21-session 13.3% \u2014 rising above, even with up-days doing the clustering. Daily sigma ~1.0%",
+      "lean": "off"
+     },
+     {
+      "name": "Index vs everything divergence",
+      "why": "the index is the outlier in its own ledger",
+      "detail": "SPY a quarter percent from its June 2 high while the yen is +4.1%, small caps lag by 1.75pt over 20 sessions, and the spot-vol complex is unmeasurable (feed frozen Jul 24)",
+      "lean": "watch"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes \u22651% away from Thursday's close, in either direction, on payrolls Friday Aug 7",
+     "prob": "45%",
+     "resolves": "2026-08-07"
+    },
+    "grading": "Nothing has come due. The Jul 30 call (\u22651% SPY down close by Aug 6, 60%) has run two of five sessions, +0.72% and +1.42% \u2014 it needs a hit in the remaining three. The Jul 31 call (same claim by Aug 7, 60%) has run one. Both are losing runway to a tape that only goes up; payrolls Friday is where they live or die."
+   },
+   "sources": [
+    {
+     "t": "TheStreet \u2014 S&P 500 surges as oil slides on renewed Iran talks (Aug 3)",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-aug-3-2026-dow-futures-climb-as-oil-slides-on-renewed-iran-talks"
+    },
+    {
+     "t": "CNBC \u2014 stock market today live updates (Aug 3)",
+     "u": "https://www.cnbc.com/2026/08/03/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Kiplinger \u2014 this week's economic calendar (Aug 3\u20137)",
+     "u": "https://www.kiplinger.com/investing/economy/this-weeks-economic-calendar"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures (Jul 28)",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    }
+   ],
+   "rating": 5.9
+  },
+  {
    "date": "2026-08-04",
    "session": "intraday",
    "assess_for": "Tuesday Aug 4 session",
