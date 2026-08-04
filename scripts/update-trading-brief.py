@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Copy the latest tail-risk brief into the trading site data directory."""
 import json, re, sys
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -38,7 +38,7 @@ def main():
 
     data = {
         "date": today,
-        "updated": datetime.now().isoformat(),
+        "updated": datetime.fromtimestamp(brief_path.stat().st_mtime, timezone.utc).isoformat(),
         "markdown": markdown,
         "sections": body_sections,
     }
