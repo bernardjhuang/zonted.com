@@ -2,6 +2,121 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-04",
+   "session": "intraday",
+   "assess_for": "Tuesday Aug 4 session",
+   "verdict": "RISK-ON",
+   "subtitle": "First risk-on in the ledger \u2014 the vol block was hiding three points behind a twelve-session-stale feed, so I went around it to Cboe direct",
+   "score": 4,
+   "n_signals": 11,
+   "composite": "+0.36",
+   "narrative": [
+    "<p>Twelve entries, and the first verdict that isn't NEUTRAL. Be precise about why, because most of the move is measurement, not tape. The site's vol feed is <b>still Jul 24 vintage</b> \u2014 twelve sessions now, fourth consecutive entry flagged, and a local regeneration attempt died on a missing FRED credential. So today I stopped waiting and pulled the same primary the feed itself reads: Cboe's own historical endpoints. Monday's actual closes: VIX <b>15.86</b> (the feed still says 18.58), VVIX <b>90.81</b> (feed: 100.7), and the Aug/Sep VX settle spread <b>+1.23</b> of contango (feed: +0.75). That's VIX 0 \u2192 +1, VVIX 0 \u2192 +1, curve holding +1 with more room. The vol block goes +1 \u2192 +3, the sum goes +2 \u2192 +4, and +0.36 clears the +0.25 line. Yesterday's closing sentence was that +0.18 was 'an artifact of what refreshed.' Confirmed: score Monday's ledger with Monday's actual vol closes and it was already +4. The market didn't flip today \u2014 my measurement caught up.</p>",
+    "<p>The tape is earning the number, though. Day two of de-escalation: <a href=\"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-4-2026\" rel=\"noopener\">the S&amp;P topped its June closing record Monday in a fourth straight day of gains, oil is sliding further on hopes for a U.S.\u2013Iran agreement, and Palantir is up ~17% on blockbuster results</a>, with AMD tonight. VIX has closed under 16 two sessions running (17.09 \u2192 15.99 \u2192 15.86). High yield sits at 2.85% \u2014 still under 3% and drifting, not gapping. Ten of thirteen US rows are above their YTD cost basis. SPY is +1.66% above its 50-session average on the SIP feed the rubric names. The stress gauges and the appetite gauges finally point the same direction.</p>",
+    "<p>Flip accountability, because I named three paths yesterday and none of them fired. Size: the gap improved \u22122.45 \u2192 <b>\u22121.75</b> points \u2014 the yield-drop mechanism is working on small caps, but it's still outside the one-point band, so the row stays \u22121. Crypto: I said ZEC and SOL both had to cross; ZEC did (+0.21), SOL didn't (\u22120.20), so <b>3 of 7</b> alts lead \u2014 one name short of the upgrade, row stays 0. FX: pinned. The ECB fix is 157.41, yen +4.0% over five sessions \u2014 off Monday's extreme of 156.68 but nowhere near the ~162 that would unpin it. The verdict changed on none of these; it changed because three rows got measured properly.</p>",
+    "<p>What this RISK-ON is and what it isn't. The two \u22121s are the structural kind: <a href=\"https://japantoday.com/category/business/update2-yen-surges-to-lower-157-versus-dollar-japan-authorities-step-in\" rel=\"noopener\">a confirmed, ongoing yen-buying intervention</a> that my scoring caps at one point no matter how large it runs, and a month of small-cap avoidance that has only half-healed. MOVE is still dark \u2014 Yahoo rate-limited every attempt this morning and the feed's last observation is Jul 17 \u2014 so Rates vol scores 0 per rubric, a point of resolution I simply don't have. And the VIX +1 is <b>fourteen cents thick</b>: 15.86 against a 16.00 boundary. This is a 6.8/10 risk-on, not a table-pound. The cheapest reversal is the same headline that built it \u2014 an Iran negotiation the other side keeps half-denying \u2014 and a headline is cheap to reverse by lunchtime.</p>"
+   ],
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY close vs 50-session SMA \u00b7 >+0.25% +1 / \u00b10.25% 0 / <\u22120.25% \u22121",
+     "value": "757.67 vs 745.32 \u00b7 +1.66% \u00b7 Aug 3 close, Alpaca SIP. Trip line 747.18 \u2014 ten points below the print, the most room this row has had all summer",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX \u00b7 <16 +1 / 16\u201320 0 / >20 \u22121",
+     "value": "15.86 \u00b7 Aug 3 close, Cboe historical endpoint direct \u2014 site feed still Jul 24 vintage (18.58), twelve sessions stale. Second straight close under 16, but only 14 cents under the boundary",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 \u00b7 >+0.5 +1 / 0 to +0.5 0 / <0 \u22121",
+     "value": "+1.23 contango (Aug VX 17.95, Sep VX 19.18) \u00b7 Aug 3 settles, Cboe contract files direct \u2014 spread widened from the feed's stale +0.75",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX \u00b7 <95 +1 / 95\u2013110 0 / >110 \u22121",
+     "value": "90.81 \u00b7 Aug 3 close, Cboe direct \u2014 feed's stale 100.7 was holding this at 0; actual print is 4 points under the +1 boundary",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE \u00b7 <80 +1 / 80\u2013100 0 / >100 \u22121 \u00b7 stale \u2192 0",
+     "value": "Unobservable \u2014 feed's last print 70.9 on Jul 17 (flagged stale), Yahoo 429'd every attempt on both hosts this morning, no alternative publisher reachable. Scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS \u00b7 <3% and widening <10bp +1 / 10\u201325bp 0 / >25bp or level >4% \u22121",
+     "value": "2.85% Jul 31 \u00b7 ICE series via YCharts (FRED returned 403 all morning) \u00b7 +4bp vs Jul 27's 2.81%; the exact 5-session base (Jul 24) is unpublished, but even against Jul 23's 2.77% it's +8bp \u2014 under 10 on any base",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US rows above YTD VWAP \u00b7 \u226570% +1 / 40\u201370% 0 / <40% \u22121",
+     "value": "10 of 13 \u00b7 77% \u00b7 Aug 3 close, site feed refreshed. Below the line: XLC \u22121.9%, ESPO \u22121.0%, XLU \u22120.8%. Thin holders: XLB +1.2%, XLP +1.7%, XLY +1.9%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "count of {XLK, XLY, XLC, XLI, XLF} in top-3 US sectors by 50d z \u00b7 \u22652 +1 / 1 0 / 0 \u22121",
+     "value": "XLF +1.15 \u00b7 XLE +0.96 \u00b7 XLV +0.85 \u2014 one cyclical, same shape as Friday. XLI +0.60 is the next candidate and closing. (ESPO's +1.25 tops the raw board but a gaming thematic isn't a sector)",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM minus SPY 20-session return \u00b7 >+1pt +1 / \u00b11pt 0 / <\u22121pt \u22121",
+     "value": "\u22121.75 pts (IWM \u22120.90%, SPY +0.85%) \u00b7 Jul 6 \u2192 Aug 3, Alpaca SIP. Improved from \u22122.45 \u2014 the yield-drop mechanism is working but hasn't cleared the band",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC on 50d spread z \u00b7 \u22654 of 7 +1 / 2\u20133 0 / \u22641 \u22121",
+     "value": "3 of 7 \u00b7 ETH +0.54, BNB +0.42, ZEC +0.21 lead \u2014 ZEC crossed as named yesterday; SOL \u22120.20 is the one name between this row and +1",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "USDJPY 5-session change \u00b7 yen appreciation >1% \u22121 / else 0 (no +1 state)",
+     "value": "157.41 vs 163.91 five sessions back \u00b7 yen +4.0% \u00b7 ECB Aug 4 fix (Yahoo 429'd; ECB was yesterday's cross-check, today it's primary). Eased from Monday's 156.68 but pinned at \u22121",
+     "score": -1
+    }
+   ],
+   "flips": {
+    "to_off": "NEUTRAL is one net point away and the cheapest path is fourteen cents wide: VIX closing back above 16.00 takes the freshest +1 straight back to 0 and the composite to +0.27 \u2014 then any second downgrade (two of the three thin breadth holders XLB +1.2% / XLP +1.7% / XLY +1.9% slipping below their lines makes it 8 of 13 \u2192 62% \u2192 0; or HY OAS through roughly 2.91%, the Jul 27 base plus 10bp) lands +0.18 NEUTRAL. Full RISK-OFF at composite \u2264 \u22120.25 needs a seven-point swing \u2014 VIX through 20, contango gone, credit gapping \u2014 a regime change, not a red day.",
+    "to_on": "Deeper, since the call is already on: Size inside one point from \u22121.75 (small caps need to outrun SPY by ~0.75pt over the rolling window; the mechanism is live), or SOL's spread-z through zero for 4 of 7 alts, or XLI (+0.60) passing XLV (+0.85) for a second cyclical in the top three \u2014 any single one is +0.45. FX stays pinned until USDJPY is back above roughly 162 on the rolling base, which means betting against two governments that keep confirming they're still buying. Re-derive every level fresh; the bases roll daily."
+   },
+   "sources": [
+    {
+     "t": "TheStreet \u2014 Stock Market Today Aug 4: S&P 500 jumps as Palantir surges, oil slides",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-4-2026"
+    },
+    {
+     "t": "Japan Today \u2014 Yen surges to lower 157 vs dollar as Japan authorities step in",
+     "u": "https://japantoday.com/category/business/update2-yen-surges-to-lower-157-versus-dollar-japan-authorities-step-in"
+    },
+    {
+     "t": "Cboe \u2014 VIX / VVIX historical index closes (primary, bypassing the stale site feed)",
+     "u": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/_VIX.json"
+    },
+    {
+     "t": "Cboe \u2014 VX Aug/Sep 2026 contract settlement files (curve)",
+     "u": "https://cdn.cboe.com/data/us/futures/market_statistics/historical_data/VX/VX_2026-08-19.csv"
+    },
+    {
+     "t": "YCharts \u2014 ICE BofA US High Yield OAS (FRED unreachable)",
+     "u": "https://ycharts.com/indicators/us_high_yield_master_ii_optionadjusted_spread"
+    },
+    {
+     "t": "ECB \u2014 euro foreign exchange reference rates (USDJPY cross)",
+     "u": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY+USD.EUR.SP00.A?lastNObservations=12&format=csvdata"
+    }
+   ],
+   "rating": 6.8
+  },
+  {
    "date": "2026-08-03",
    "session": "intraday",
    "assess_for": "Monday Aug 3 session",
