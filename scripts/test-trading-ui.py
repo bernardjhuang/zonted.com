@@ -400,6 +400,10 @@ class TradingUiContractTest(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
+        css_asset = ROOT / "trading" / f"desk.{css_hash}.css"
+        js_asset = ROOT / "trading" / f"desk.{js_hash}.js"
+        self.assertEqual(css_asset.read_bytes(), (ROOT / "trading" / "desk.css").read_bytes())
+        self.assertEqual(js_asset.read_bytes(), (ROOT / "trading" / "desk.js").read_bytes())
         for p in pages:
             s = pathlib.Path(p).read_text()
             nav = s[s.find("subnav"):s.find("</nav>")]
@@ -415,8 +419,9 @@ class TradingUiContractTest(unittest.TestCase):
                 expected = "on" if value > 5 else "off" if value < 5 else "neutral"
                 self.assertEqual(state, expected, f"risk pill color mismatch at {value}: {p}")
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
-            self.assertIn(f'/trading/desk.css?v={css_hash}', s, p)
-            self.assertIn(f'/trading/desk.js?v={js_hash}', s, p)
+            self.assertIn(f'/trading/desk.{css_hash}.css', s, p)
+            self.assertIn(f'/trading/desk.{js_hash}.js', s, p)
+            self.assertNotRegex(s, r'/trading/desk\.(?:css|js)\?v=')
         self.assertEqual(len(nav_sets), 1, f"{len(nav_sets)} different nav sets across desk pages")
         if os.environ.get("ZONTED_DESK_MORNING_QUOTES"):
             live_stamps = {stamp for stamp in stamps if stamp.startswith("Live · ")}

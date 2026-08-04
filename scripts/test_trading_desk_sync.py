@@ -591,6 +591,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         styles = (ROOT / "trading" / "desk.css").read_text()
         css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
+        self.assertEqual(
+            (ROOT / "trading" / f"desk.{css_hash}.css").read_bytes(),
+            (ROOT / "trading" / "desk.css").read_bytes(),
+        )
+        self.assertEqual(
+            (ROOT / "trading" / f"desk.{js_hash}.js").read_bytes(),
+            (ROOT / "trading" / "desk.js").read_bytes(),
+        )
         candidates = [ROOT / "trading" / "index.html", *(ROOT / "trading").glob("*/index.html")]
         pages = sorted({
             path for path in candidates
@@ -624,8 +632,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotIn('class="chip chip-gemini ', page, path.as_posix())
             self.assertNotIn('class="chip chip-meta ', page, path.as_posix())
             self.assertIn(f'<span class="stamp">{desk_stamp}</span>', page, path.as_posix())
-            self.assertIn(f'/trading/desk.css?v={css_hash}', page, path.as_posix())
-            self.assertIn(f'/trading/desk.js?v={js_hash}', page, path.as_posix())
+            self.assertIn(f'/trading/desk.{css_hash}.css', page, path.as_posix())
+            self.assertIn(f'/trading/desk.{js_hash}.js', page, path.as_posix())
+            self.assertNotRegex(page, r'/trading/desk\.(?:css|js)\?v=')
         self.assertIn(".trade-z-logo", styles)
         self.assertIn(".vwap-chart-grid,.crypto-chart-grid{grid-template-columns:repeat(3,minmax(0,1fr))}", styles)
 
