@@ -1,16 +1,20 @@
 #!/usr/bin/env python3
-"""Prepare and validate deferred, independent market-risk model runs.
+"""Prepare, run, and validate deferred independent market-risk model runs.
 
-This CLI never calls a model and never edits public journal data. It creates one
-blind prompt per model, validates returned JSON, and bundles complete runs for a
-later human/agent-reviewed publish step.
+This CLI never edits public journal data. It creates one blind prompt per model,
+can explicitly run the Fable leg through Claude Code's claude.ai OAuth session,
+validates returned JSON, and bundles complete runs for a later human/agent-reviewed
+publish step.
 """
 from __future__ import annotations
 
 import argparse
 import datetime as dt
 import json
+import os
 import pathlib
+import shutil
+import subprocess
 import sys
 from typing import Any
 from urllib.parse import urlparse
@@ -22,6 +26,13 @@ SCHEMA_VERSION = 1
 SESSIONS = {"pre-market", "post-close"}
 STANCES = {"Risk-on", "Neutral", "Risk-off"}
 CONFIDENCE = {"High", "Medium", "Low"}
+CLAUDE_NON_OAUTH_ENV = (
+    "ANTHROPIC_API_KEY",
+    "ANTHROPIC_AUTH_TOKEN",
+    "CLAUDE_CODE_USE_BEDROCK",
+    "CLAUDE_CODE_USE_VERTEX",
+    "CLAUDE_CODE_USE_FOUNDRY",
+)
 
 MODELS = (
     {
@@ -108,6 +119,79 @@ def prepare_run(run_dir: pathlib.Path, as_of_date: str, session: str) -> dict[st
     }
     (run_dir / "manifest.json").write_text(json.dumps(manifest, indent=2) + "\n")
     return manifest
+
+
+def run_fable(run_dir: pathlib.Path) -> dict[str, Any]:
+    manifest = load_manifest(run_dir)
+    model = MODELS_BY_SLUG["fable"]
+    row = next(
+        (candidate for candidate in manifest.get("models", []) if candidate.get("slug") == "fable"),
+        None,
+    )
+    if row is None or any(row.get(key) != value for key, value in model.items()):
+        raise ContractError("manifest Fable metadata mismatch")
+
+    prompt_path = run_dir / row["prompt_file"]
+    response_path = run_dir / row["response_file"]
+    if not prompt_path.is_file():
+        raise ContractError(f"missing Fable prompt: {prompt_path}")
+    if response_path.exists():
+        raise ContractError(f"refusing to overwrite Fable response: {response_path}")
+
+    claude = shutil.which("claude")
+    if not claude:
+        raise ContractError("Claude Code CLI is not installed")
+    env = os.environ.copy()
+    for key in CLAUDE_NON_OAUTH_ENV:
+        env.pop(key, None)
+
+    auth = subprocess.run(
+        [claude, "auth", "status"],
+        cwd=ROOT,
+        env=env,
+        text=True,
+        capture_output=True,
+        timeout=30,
+    )
+    if auth.returncode:
+        raise ContractError(f"Claude Code auth check failed: {(auth.stderr or auth.stdout).strip()}")
+    try:
+        auth_status = json.loads(auth.stdout)
+    except json.JSONDecodeError as exc:
+        raise ContractError("Claude Code auth status was not JSON") from exc
+    if not auth_status.get("loggedIn") or auth_status.get("authMethod") != "claude.ai":
+        raise ContractError("Fable requires a logged-in claude.ai OAuth session")
+
+    result = subprocess.run(
+        [
+            claude,
+            "--print",
+            "--model",
+            model["model_id"],
+            "--output-format",
+            "text",
+            "--no-session-persistence",
+            "--permission-mode",
+            "dontAsk",
+            "--tools",
+            "WebSearch,WebFetch",
+            prompt_path.read_text(),
+        ],
+        cwd=ROOT,
+        env=env,
+        text=True,
+        capture_output=True,
+        timeout=900,
+    )
+    if result.returncode:
+        raise ContractError(f"Claude Fable 5 failed: {(result.stderr or result.stdout).strip()}")
+    try:
+        entry = json.loads(result.stdout)
+    except json.JSONDecodeError as exc:
+        raise ContractError("Claude Fable 5 did not return one JSON object") from exc
+    validate_entry(entry, model, manifest["as_of_date"], manifest["session"])
+    response_path.write_text(json.dumps(entry, indent=2, ensure_ascii=False) + "\n")
+    return entry
 
 
 def _require_text(payload: dict[str, Any], key: str) -> str:
@@ -284,6 +368,11 @@ def build_parser() -> argparse.ArgumentParser:
     prepare.add_argument("--session", choices=sorted(SESSIONS), required=True)
     prepare.add_argument("--run-dir", type=pathlib.Path, required=True)
 
+    fable = commands.add_parser(
+        "run-fable", help="run only Fable through claude -p with claude.ai OAuth"
+    )
+    fable.add_argument("--run-dir", type=pathlib.Path, required=True)
+
     validate = commands.add_parser("validate", help="validate all staged model responses")
     validate.add_argument("--run-dir", type=pathlib.Path, required=True)
 
@@ -301,6 +390,12 @@ def main(argv: list[str] | None = None) -> int:
             print(
                 f"prepared {len(manifest['models'])} independent prompts in {args.run_dir}; "
                 "no models called and no journals changed"
+            )
+        elif args.command == "run-fable":
+            entry = run_fable(args.run_dir)
+            print(
+                f"staged Fable response for {entry['as_of_date']} {entry['session']} "
+                "through claude -p OAuth; public journals unchanged"
             )
         elif args.command == "validate":
             entries = validate_run(args.run_dir)

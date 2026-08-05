@@ -3,9 +3,12 @@ from __future__ import annotations
 
 import importlib.util
 import json
+import os
 import pathlib
+import subprocess
 import tempfile
 import unittest
+from unittest import mock
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 MODULE_PATH = ROOT / "scripts" / "independent_risk_journal.py"
@@ -75,6 +78,65 @@ class IndependentRiskJournalTest(unittest.TestCase):
                 self.assertFalse((run_dir / "responses" / f"{model['slug']}.json").exists())
         after = {path: path.read_bytes() for path in targets}
         self.assertEqual(before, after)
+
+    def test_run_fable_uses_claude_print_oauth_and_strips_api_billing(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir, _ = self.prepare(pathlib.Path(tmp))
+            entry = self.valid_entry(risk.MODELS_BY_SLUG["fable"])
+            completed = [
+                subprocess.CompletedProcess(
+                    ["claude", "auth", "status"],
+                    0,
+                    stdout=json.dumps({"loggedIn": True, "authMethod": "claude.ai"}),
+                    stderr="",
+                ),
+                subprocess.CompletedProcess(
+                    ["claude", "--print"], 0, stdout=json.dumps(entry), stderr=""
+                ),
+            ]
+            inherited = {
+                **os.environ,
+                "ANTHROPIC_API_KEY": "must-not-leak",
+                "ANTHROPIC_AUTH_TOKEN": "must-not-leak",
+                "CLAUDE_CODE_USE_BEDROCK": "1",
+            }
+            with mock.patch.object(risk.shutil, "which", return_value="/opt/homebrew/bin/claude"), mock.patch.object(
+                risk.os, "environ", inherited
+            ), mock.patch.object(risk.subprocess, "run", side_effect=completed) as run:
+                output = risk.run_fable(run_dir)
+
+            self.assertEqual(output, entry)
+            self.assertEqual(run.call_count, 2)
+            auth_call, model_call = run.call_args_list
+            self.assertEqual(
+                auth_call.args[0], ["/opt/homebrew/bin/claude", "auth", "status"]
+            )
+            command = model_call.args[0]
+            self.assertIn("--print", command)
+            self.assertEqual(command[command.index("--model") + 1], "claude-fable-5")
+            self.assertEqual(command[command.index("--tools") + 1], "WebSearch,WebFetch")
+            self.assertNotIn("ANTHROPIC_API_KEY", model_call.kwargs["env"])
+            self.assertNotIn("ANTHROPIC_AUTH_TOKEN", model_call.kwargs["env"])
+            self.assertNotIn("CLAUDE_CODE_USE_BEDROCK", model_call.kwargs["env"])
+            self.assertEqual(
+                json.loads((run_dir / "responses" / "fable.json").read_text()), entry
+            )
+
+    def test_run_fable_refuses_non_claude_ai_auth_before_model_call(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            run_dir, _ = self.prepare(pathlib.Path(tmp))
+            api_auth = subprocess.CompletedProcess(
+                ["claude", "auth", "status"],
+                0,
+                stdout=json.dumps({"loggedIn": True, "authMethod": "api_key"}),
+                stderr="",
+            )
+            with mock.patch.object(risk.shutil, "which", return_value="claude"), mock.patch.object(
+                risk.subprocess, "run", return_value=api_auth
+            ) as run:
+                with self.assertRaisesRegex(risk.ContractError, "claude.ai OAuth"):
+                    risk.run_fable(run_dir)
+            self.assertEqual(run.call_count, 1)
 
     def test_validate_accepts_independent_publishable_entry(self) -> None:
         model = risk.MODELS_BY_SLUG["grok"]
