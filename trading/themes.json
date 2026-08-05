@@ -5,7 +5,7 @@
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented. The August 5 SLM workload-repricing theme is a single Claude Fable 5 origination built on four parallel deep-research passes; no independent scores were invented.",
+    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented. Eight August 5 Claude Fable 5 origin themes received independent GPT-5.6 known-vs-priced reviews; each consensus is the median of those two scored reviews.",
     "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
   },
   "themes": [
@@ -7859,15 +7859,17 @@
       "category": "Energy",
       "title": "Coal's stay of execution → retirement delays reprice the duration of cash flows",
       "horizon": "2026–2030",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The famous AI-power trade is IPPs, gas and nuclear; the unfashionable derivative is that the same load growth keeps coal plants alive. 2025 had the fewest US coal retirements in 15 years (2.6 GW retired vs 8.0 GW planned), DOE has issued 43+ Section 202(c) emergency orders since May 2025 (latest Jul 14, 2026 directing PJM dispatch), five delayed plants are ~a year past planned closure, and PJM's capacity auction cleared near the cap a third straight time. ARLP's Q2 call put numbers on it: 21.2M tons of fresh commitments, data-center demand keeping plants running 'potentially until 2034.' The market prices these as melting ice cubes on a fixed clock; every deferred retirement extends the annuity.",
       "conviction": "High on the duration mechanism — every input is a government order or a signed contract. Medium on the volume year: cheap gas means 2026 burn falls even as capacity persists.",
       "final_verdict": "Known 75, priced 48. The reliability leg (delays, 202(c) orders, capacity prices) is strengthening while the equities sit 9–47% below their highs after BTU's idiosyncratic met-mine washout. The honest tension is pre-registered: Henry Hub at ~$2.75 is the falsifier actively flashing — this is a duration-of-cash-flows trade, not a volume-growth trade, and it is cheap precisely because the volume year looks bad. ARLP (pure Illinois-Basin thermal, 9%+ yield, contracted out to 2027) is the cleanest expression; CNR the largest US thermal; BTU only for leverage with Centurion noise priced.",
       "consensus_scores": {
-        "knowledge_saturation": 75,
-        "price_saturation": 48
+        "knowledge_saturation": 79,
+        "price_saturation": 56
       },
       "model_reviews": [
         {
@@ -7876,6 +7878,13 @@
           "knowledge_saturation": 75,
           "price_saturation": 48,
           "verdict": "Known 75: retirement delays make trade press constantly. Priced 48: the equities still trade on EIA's −9% 2026 burn forecast, not on the extended terminal dates."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 84,
+          "price_saturation": 64,
+          "verdict": "Known 84: DOE delay orders, PJM scarcity and contracted tons are visible to coal investors. Priced 64: ARLP's yield and BTU/CNR discounts already compensate for terminal decline, while cheap gas and litigation make deferred retirement less valuable than deferred high dispatch. The edge is plant-by-plant contract duration, not a broad coal rerating."
         }
       ],
       "layer_scorecard": [
@@ -7998,15 +8007,17 @@
       "category": "Sectors",
       "title": "China's phosphate lockout × the sulfur mask → scarcity priced as a margin miss",
       "horizon": "2026–2028",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "China's export suspension holds 50–80% of its fertilizer export volume off the world market through at least August 2026, retail DAP/MAP sits at $800–900/st, and the World Bank warns fertilizer prices could rise >30% in 2026 — yet MOS trades ~15% above its June low and −39% from its high, because tripled sulfur and +15% ammonia costs crushed H1 margins and the market read a cost-cyclical miss. The structural read nobody models: the scarcity is policy-durable, the input spike is refinery-byproduct economics that mean-revert — and the Aug 1 Iran framework accelerates exactly that reversion (Gulf sulfur/ammonia supply normalizing) while touching the China leg not at all.",
       "conviction": "High on the two-leg structure (policy scarcity + cyclical cost mask). Medium on timing: the China expiry decision lands within weeks and could go either way.",
       "final_verdict": "Known 70, priced 40 — the widest gap of the August hunt, with two dated catalysts inside 30 days: MOS's Q2 call (Aug 5) and the China export-window expiry this month. The de-escalation framework is asymmetric help: it lifts the cost mask (sulfur/ammonia) faster than it adds supply (Gulf phosphate flows were never the binding constraint — China's policy is). NTR is deliberately NOT the lead expression here: its nitrogen windfall is unwinding (see the nitrogen-unwind theme) and blends against the phosphate story.",
       "consensus_scores": {
-        "knowledge_saturation": 70,
-        "price_saturation": 40
+        "knowledge_saturation": 76,
+        "price_saturation": 49
       },
       "model_reviews": [
         {
@@ -8015,6 +8026,13 @@
           "knowledge_saturation": 70,
           "price_saturation": 40,
           "verdict": "Known 70: the export ban is trade-press furniture. Priced 40: MOS near lows with record product prices is the definition of an unpriced second order."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 82,
+          "price_saturation": 58,
+          "verdict": "Known 82: China's export controls, DAP strength and MOS's sulfur/ammonia squeeze are explicit in trade data and earnings. Priced 58: MOS's drawdown discounts real margin damage and an imminent policy binary, so a low price is not proof the second order is missed. Edge exists only if product prices stay firm after input costs normalize."
         }
       ],
       "layer_scorecard": [
@@ -8130,15 +8148,17 @@
       "category": "Emerging",
       "title": "The GLP-1 mortality dividend → death care's air pocket",
       "horizon": "2026–2032",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The CDC just reported 2025's US death rate at a record low — 689.2 per 100k, −4.6% year over year — and reinsurers (RGA, Munich Re, Swiss Re) project GLP-1-class drugs could cut all-cause mortality up to 6–9% over coming decades. Death care is pure inverse-mortality exposure: SCI's Q2 core funeral volumes fell 1.7%, management's own explanation was 'much softer mortality' — and the stock rallied to within 6% of its all-time high at 22x because pricing and preneed sales offset it. A structural volume headwind, essentially unpriced, with the short entry offered near the top. This resurrects the disqualified life-vs-annuity theme's mechanism through the side door that fixes its disqualification: SCI and CSV are pure mortality exposure, not diversified carriers.",
       "conviction": "High on the direction (mortality improvement is measured, not forecast). Low on the cadence: boomer demographics partially offset, and the freshest quarter ran AGAINST the short (volumes only −1.7%, July flat, guide raised).",
       "final_verdict": "Known 45, priced 15 in the short direction. The record-low-mortality headline is public; its translation into a decade of funeral-volume decay is in nobody's SCI model — the street writes up pricing power instead. Honest warning pre-registered: this is a slow-burn short against a quality compounder with momentum at its back; the thesis needs 4–8 quarters of volume misses, and CDC attributes 2025's drop mainly to overdose declines, not GLP-1 — the drug-driven leg is still building. Size accordingly; CSV is already crushed (wrong entry side) and MATW is a conglomerate mid-breakup.",
       "consensus_scores": {
-        "knowledge_saturation": 45,
-        "price_saturation": 15
+        "knowledge_saturation": 55,
+        "price_saturation": 30
       },
       "model_reviews": [
         {
@@ -8147,6 +8167,13 @@
           "knowledge_saturation": 45,
           "price_saturation": 15,
           "verdict": "Known 45: record-low mortality made headlines July 2. Priced 15: SCI at a 52-week high days after reporting mortality-driven volume declines is the gap, stated as a price."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 65,
+          "price_saturation": 45,
+          "verdict": "Known 65: lower mortality and death-care volume softness are public, but assigning the decline to GLP-1s rather than overdose normalization and demographics remains speculative. Priced 45: SCI's premium multiple prices pricing power, preneed backlog and boomer volume—not zero awareness. The clean expression is a slow short, which fails the asymmetric-long mandate."
         }
       ],
       "layer_scorecard": [
@@ -8258,22 +8285,31 @@
           "label": "The Hill — record-low death rate",
           "url": "https://thehill.com/policy/healthcare/5952060-us-death-rate-2025-record-low/"
         }
-      ]
+      ],
+      "disqualified": {
+        "symbols": [
+          "SCI",
+          "CSV"
+        ],
+        "reason": "Disqualified under the desk mandate: the clean public-market expression is primarily short SCI/CSV death-care exposure, not an asymmetric long opportunity. The mortality mechanism may be valid, but the available long offsets are too diversified or indirect."
+      }
     },
     {
       "id": "emerging-saas-datacenter-capex-tax",
       "category": "Emerging",
       "title": "SaaS becomes a datacenter buyer → the FCF-margin regime change, confessed one print at a time",
       "horizon": "2026–2028",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "Software's famous 25–30% FCF margins were built on renting infrastructure cheaply. AI is ending that: Zscaler cut its FCF-margin guide from ~27% to ~23% in May citing a datacenter capex ramp (and added a capacity-procurement risk factor), ServiceNow's GAAP gross margin fell 81% → 77.9% on self-hosted AI buildout, Akamai runs capex at 19–24% of revenue for GPU deployment, and multiple SaaS 10-Qs began disclosing inference costs at 4–9% of revenue this year. The market treats each confession as idiosyncratic — ZS fell 27.5% alone — while the un-confessed names (NET, DDOG) sit at 52-week highs into this week's prints. The repricing is systemic and it arrives one earnings call at a time.",
       "conviction": "High that the cost regime is real (it's in filings, not commentary). Medium on the dispersion trade's timing — each name's confession date is unknowable in advance.",
       "final_verdict": "Known 45, priced 22 — and the pricing is maximally bifurcated: the confessed (ZS −54% from high, NOW −41%) already carry the tax in their multiples while the unconfessed carry none of it at all-time highs. The expression is dispersion, not direction: the confessed-and-derated names are the long leg (the market extrapolated one guide cut into permanence), the at-high infrastructure-cost-deniers are the short/avoid leg into their own future confessions. This week is a live experiment: DDOG (Aug 6 am) and NET (Aug 6 pm) print from record highs.",
       "consensus_scores": {
-        "knowledge_saturation": 45,
-        "price_saturation": 22
+        "knowledge_saturation": 60,
+        "price_saturation": 40
       },
       "model_reviews": [
         {
@@ -8282,6 +8318,13 @@
           "knowledge_saturation": 45,
           "price_saturation": 22,
           "verdict": "Known 45: every confession was covered loudly — as a company story. Priced 22: the systemic read (AI turns SaaS into capex businesses) appears in no sector multiple; the at-high names price zero probability of joining."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 75,
+          "price_saturation": 58,
+          "verdict": "Known 75: AI infrastructure and inference-cost pressure now appear across software filings and gross-margin bridges. Priced 58: ZS/NOW already absorbed the confession, while NET/DDOG at highs may reflect superior pass-through and architecture rather than denial. Residual edge is a filings-based dispersion screen, not a sector-wide capex-tax multiple reset."
         }
       ],
       "layer_scorecard": [
@@ -8416,15 +8459,17 @@
       "category": "Sectors",
       "title": "The nitrogen unwind → the deal is priced in oil, not in fertilizer equities",
       "horizon": "H2 2026–2027",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The February war shut Hormuz — ~25% of global urea and 27% of ammonia exports transit it — and urea spiked from ~$400 to $850/t, handing nitrogen producers a windfall (CF nearly doubled off its December low). The commodity has already given most of it back: urea is ~$420, −40% from the peak, as Hormuz management talks progress and China relaxes curbs. The equities have not followed — CF sits just −16% from its March high at ~10x windfall earnings the forward curve says are ending. The Aug 1 framework, with 'total opening of the Hormuz Strait' explicitly on the table, is priced as a crude-oil event; its fertilizer second order — Iranian ammonia and Qatari urea returning to a normalizing market — is in no nitrogen equity model.",
       "conviction": "Medium-high on the mechanism (the commodity has already voted). Medium on the path: the deal collapsed once before (July 9), and a re-spike squeezes every leg of the short.",
       "final_verdict": "Known 35, priced 15 — the freshest gap of the hunt and the mirror image of the phosphate theme: same complex, opposite policy direction. Phosphate is policy-TIGHT (China ban); nitrogen is war-premium UNWINDING (Hormuz reopening). NTR is the name caught in the middle — its nitrogen windfall unwinds while its phosphate/potash legs benefit — which is exactly why it leads neither theme. The short expression is CF (purest nitrogen, closest to its high, reports Aug 5 pm at peak-windfall estimates) with MEOH as the methanol analog on the same Iranian-supply-return mechanism.",
       "consensus_scores": {
-        "knowledge_saturation": 35,
-        "price_saturation": 15
+        "knowledge_saturation": 47,
+        "price_saturation": 30
       },
       "model_reviews": [
         {
@@ -8433,6 +8478,13 @@
           "knowledge_saturation": 35,
           "price_saturation": 15,
           "verdict": "Known 35: urea's round-trip is visible to anyone who looks; almost nobody outside ag trade press has. Priced 15: CF at 10x peak earnings with the input of those earnings down 40% is a windfall priced as a plateau."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 60,
+          "price_saturation": 45,
+          "verdict": "Known 60: urea's retracement and the Hormuz reopening path are visible to commodity desks and CF investors. Priced 45: CF's discount, cheap US gas, buybacks and policy optionality already price meaningful normalization; the equity need not track spot one-for-one. The direct expression is short CF/MEOH and is ineligible for the asymmetric-long ledger."
         }
       ],
       "layer_scorecard": [
@@ -8554,22 +8606,31 @@
           "label": "CNBC — wartime fertilizer surge",
           "url": "https://www.cnbc.com/2026/03/25/fertilizer-price-iran-war-food-security-inflation-urea-potash-nitrogen-farmers.html"
         }
-      ]
+      ],
+      "disqualified": {
+        "symbols": [
+          "CF",
+          "MEOH"
+        ],
+        "reason": "Disqualified under the desk mandate: the clean public-market expression is primarily short CF/MEOH as the nitrogen windfall unwinds, not an asymmetric long opportunity. The commodity-divergence thesis remains useful research, but it does not produce a clean eligible long."
+      }
     },
     {
       "id": "emerging-compute-financialization",
       "category": "Emerging",
       "title": "Compute becomes a traded commodity → the clearinghouse for cognition",
       "horizon": "2026–2030",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "GPUs are 'the largest unhedged corporate treasury asset in existence' (OneChronos): five companies now spend more on compute annually than the entire global oil and gas industry spends on exploration and production, with no reference price, no forward curve, and no way to hedge. That is ending on a dated calendar: CME and ICE have each announced cash-settled chip-price-index futures targeting launch later this year (Silicon Data supplying CME's indices, Ornn supplying ICE's), ElectronX won its CFTC exchange and clearinghouse licenses for direct-access power derivatives in August 2025, and crypto/prediction venues (Hyperliquid, Polymarket, Kalshi) are already listing H100 spot and GPU-availability markets as proto-price-discovery. The end-state instrument — a power-adjusted compute forward locking the 'compute spread,' AI's version of the spark spread — would attach exchange economics to the largest capex stream on earth.",
       "conviction": "High that financialization happens (the commodity-market playbook — standardize, spot, hedge, clear — has run identically for grain, oil, and electricity). Medium on timing and venue: first-generation contracts can flop before the durable ones stick.",
       "final_verdict": "Known 25, priced 10 — the widest gap on the current ledger. The AI-infrastructure trade has repriced everything that MAKES compute; nothing in CME or ICE multiples reflects compute as a new listed asset class, and both trade ~18-20% below their highs on rate-cycle volume worries. Distinct from the Treasury-clearing theme despite sharing venues: that thesis is a regulatory mandate taxing collateral velocity; this is a brand-new commodity class arriving on the same rails. The deepest prize may be the index/data layer (Silicon Data, Ornn — private; the Platts/Argus position of the token era), which makes venue equities the accessible expression and M&A the watch item.",
       "consensus_scores": {
-        "knowledge_saturation": 25,
-        "price_saturation": 10
+        "knowledge_saturation": 37,
+        "price_saturation": 20
       },
       "model_reviews": [
         {
@@ -8578,6 +8639,13 @@
           "knowledge_saturation": 25,
           "price_saturation": 10,
           "verdict": "Known 25: the futures launches are announced but covered only in derivatives trade press. Priced 10: no analyst model carries compute-complex volumes for either exchange."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 50,
+          "price_saturation": 30,
+          "verdict": "Known 50: compute-price indices and announced futures are niche but no longer obscure to exchange and AI-infrastructure investors. Priced 30: CME/ICE carry no material compute revenue mostly because first-generation contracts may never develop liquidity—not because the market missed guaranteed earnings. The edge begins only after open interest proves a real two-sided market."
         }
       ],
       "layer_scorecard": [
@@ -8690,15 +8758,17 @@
       "category": "Energy",
       "title": "The Fairchild effect → AI demand buys frontier energy down its cost curve",
       "horizon": "2026–2030",
-      "status": "Frontier catalyst · 1 reviewer",
+      "status": "Frontier catalyst · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "In 1962 the Apollo program paid $43.50 a chip and bought Fairchild down the learning curve until chips cost $1 — guaranteed demand did what no subsidy could. AI datacenters are running the same play on frontier power: Bloom Energy's backlog has gone $3.2B (2019) to ~$20B (2025, ~36% CAGR) on multi-gigawatt deals with Oracle, Equinix/AEP sites, and a $5B Brookfield partnership — because fuel cells deploy in months while grid interconnection takes years, and 'time-to-power' now carries a structural premium hyperscalers gladly pay. The same solid-oxide platform produces electrolyzers, so the demand pull is simultaneously funding the green-hydrogen learning curve. What two decades of climate policy couldn't finance, eighteen months of hyperscaler capex is financing at commercial rates.",
       "conviction": "High on the mechanism (backlogs are contracts, not forecasts). Medium on the equity: this is close to a one-name theme, and fuel cells still cost more per MWh than combined-cycle gas — the thesis needs the curve to keep bending.",
       "final_verdict": "Known 60, priced 40. The Bloom story got famous in 2025 and then washed out — BE now sits 35% below its high, which is what makes it currently ownable rather than chased. The honest structural weakness is ticker breadth, pre-registered here: BE is the only pure expression (GNRC is the backup-power adjacency at −26%, CAT the diversified genset reference), while PLUG and FCEL are explicitly flagged as broken vehicles this theme refuses to include — the precision-fermentation precedent. If a second clean expression never emerges, this theme should expect the graveyard's thin-ticker rule to come for it; until then, the demand-pull evidence is the strongest in frontier energy.",
       "consensus_scores": {
-        "knowledge_saturation": 60,
-        "price_saturation": 40
+        "knowledge_saturation": 72,
+        "price_saturation": 57
       },
       "model_reviews": [
         {
@@ -8707,6 +8777,13 @@
           "knowledge_saturation": 60,
           "price_saturation": 40,
           "verdict": "Known 60: Bloom's datacenter pivot is covered. Priced 40: a $20B backlog against a washed-out multiple, with the electrolyzer option priced at roughly zero."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 85,
+          "price_saturation": 75,
+          "verdict": "Known 85: BE's time-to-power pitch, hyperscaler backlog and Brookfield/Oracle deals are central to the rerating. Priced 75: a 35% drawdown from a huge run does not make the backlog cheap, and electrolyzer optionality cannot rescue one-name concentration or conversion risk. Ownable only if backlog converts faster than the premium multiple assumes."
         }
       ],
       "layer_scorecard": [
@@ -8821,13 +8898,13 @@
       "category": "Sectors",
       "title": "Small language models → the workload-mix repricing",
       "horizon": "2026–2028",
-      "status": "Active research · 1 reviewer",
+      "status": "Active research · 2 reviewers",
       "owner_belief": "The capability gap collapsed: sub-10B-parameter models now beat last year's 30B+ flagships, and production agent stacks route most calls to small models, escalating only the hard queries — NVIDIA's own June 2025 paper ('SLMs are the future of agentic AI') is now operating doctrine. Inference crossed half of all AI compute in H1 2026, heading to two-thirds-plus. The investable version is not 'SLMs win'; it is the workload-mix repricing: tokens migrate to cheap capacity-bound serving (LPDDR, SRAM, ASICs), software AI COGS deflate, and value leaks out of anything priced for durable frontier-API economics.",
       "conviction": "High conviction the workload shift is real — NVIDIA paid ~$20B to license Groq's SRAM serving tech, and Microsoft is routing production Copilot traffic to in-house models explicitly to cut its Anthropic/OpenAI bill. Low conviction in the label: 'SLM' is a treadmill category — distillation resets the small-model leaderboard every six months, and the best small models are free and increasingly Chinese.",
       "final_verdict": "The technology story is ~16 months into consensus — Gartner's 3x-by-2027 call is dated April 2025, and CES/MWC 2026 keynotes were saturated with it — and the clean proxies (ARM, AMBA, CBRS) already re-rated in H1 and started breaking on earnings. Three layers are still mispriced: SaaS COGS relief (the market spent 2026 pricing AI as a revenue threat to software and gave zero credit for the cost side deflating — DUOL already printed the proof), SLM-shaped datacenter silicon at value multiples (QCOM's LPDDR-capacity AI200 racks at ~17.5x), and model-maker franchises nobody capitalizes (IBM Granite, Microsoft MAI/Phi). The live counter-trade is Jevons: cheap small inference grows total compute — a point the sell side is only one Jefferies note into writing.",
       "consensus_scores": {
-        "knowledge_saturation": 78,
-        "price_saturation": 55
+        "knowledge_saturation": 84,
+        "price_saturation": 63
       },
       "model_reviews": [
         {
@@ -8836,6 +8913,13 @@
           "knowledge_saturation": 78,
           "price_saturation": 55,
           "verdict": "Known 78: tech-consensus everywhere (Gartner, NVIDIA's own paper, keynote saturation) but not yet a tier-1 equity label — no bulge-bracket note uses 'SLM' as a headline stock thesis. Priced 55 with extreme dispersion: the edge proxies are fully paid; the SaaS cost side and the SLM-shaped datacenter silicon are not."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 90,
+          "price_saturation": 72,
+          "verdict": "Known 90: small-model routing, distillation and inference deflation are established industry doctrine. Priced 72: edge-silicon proxies already rerated, while cheap QCOM/software beneficiaries reflect many unrelated risks; lower COGS can be competed away instead of retained. Residual edge is security-level margin proof, not the SLM label."
         }
       ],
       "layer_scorecard": [
@@ -9000,7 +9084,9 @@
         }
       ],
       "source_model": "Claude Fable 5",
-      "reviewed_by": []
+      "reviewed_by": [
+        "GPT-5.6"
+      ]
     }
   ]
 }

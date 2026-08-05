@@ -488,6 +488,50 @@ class TradingThemesContractTest(unittest.TestCase):
             self.assertSnapshotDated(theme)
             self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
+    def test_august_fable_themes_have_independent_gpt_reviews(self) -> None:
+        expected = {
+            "energy-coal-stay-of-execution": ((84, 64), (79, 56)),
+            "sectors-phosphate-sulfur-mask": ((82, 58), (76, 49)),
+            "emerging-glp1-mortality-death-care": ((65, 45), (55, 30)),
+            "emerging-saas-datacenter-capex-tax": ((75, 58), (60, 40)),
+            "sectors-nitrogen-unwind": ((60, 45), (47, 30)),
+            "emerging-compute-financialization": ((50, 30), (37, 20)),
+            "energy-fairchild-time-to-power": ((85, 75), (72, 57)),
+            "sector-slm-workload-repricing": ((90, 72), (84, 63)),
+        }
+        found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
+        self.assertEqual(set(found), set(expected))
+        for theme_id, (gpt_scores, consensus_scores) in expected.items():
+            theme = found[theme_id]
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], ["Claude Fable 5", "GPT-5.6"])
+            gpt = theme["model_reviews"][1]
+            self.assertEqual(gpt["role"], "Independent known-vs-priced review")
+            self.assertEqual(
+                (gpt["knowledge_saturation"], gpt["price_saturation"]),
+                gpt_scores,
+                theme_id,
+            )
+            self.assertEqual(
+                theme["consensus_scores"],
+                {"knowledge_saturation": consensus_scores[0], "price_saturation": consensus_scores[1]},
+                theme_id,
+            )
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"])
+            self.assertIn("2 reviewers", theme["status"])
+        self.assertIn("Eight August 5 Claude Fable 5 origin themes", self.payload["method"]["consensus"])
+
+    def test_short_first_august_themes_are_disqualified_from_the_long_ledger(self) -> None:
+        found = {theme["id"]: theme for theme in self.payload["themes"]}
+        expected = {
+            "emerging-glp1-mortality-death-care": ["SCI", "CSV"],
+            "sectors-nitrogen-unwind": ["CF", "MEOH"],
+        }
+        for theme_id, symbols in expected.items():
+            record = found[theme_id]["disqualified"]
+            self.assertEqual(record["symbols"], symbols)
+            self.assertIn("primarily short", record["reason"])
+            self.assertIn("asymmetric long", record["reason"])
+
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
