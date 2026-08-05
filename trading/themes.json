@@ -5,7 +5,7 @@
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented.",
+    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented. The August 5 SLM workload-repricing theme is a single Claude Fable 5 origination built on four parallel deep-research passes; no independent scores were invented.",
     "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
   },
   "themes": [
@@ -8815,6 +8815,192 @@
           "url": "https://investor.bloomenergy.com/"
         }
       ]
+    },
+    {
+      "id": "sector-slm-workload-repricing",
+      "category": "Sectors",
+      "title": "Small language models → the workload-mix repricing",
+      "horizon": "2026–2028",
+      "status": "Active research · 1 reviewer",
+      "owner_belief": "The capability gap collapsed: sub-10B-parameter models now beat last year's 30B+ flagships, and production agent stacks route most calls to small models, escalating only the hard queries — NVIDIA's own June 2025 paper ('SLMs are the future of agentic AI') is now operating doctrine. Inference crossed half of all AI compute in H1 2026, heading to two-thirds-plus. The investable version is not 'SLMs win'; it is the workload-mix repricing: tokens migrate to cheap capacity-bound serving (LPDDR, SRAM, ASICs), software AI COGS deflate, and value leaks out of anything priced for durable frontier-API economics.",
+      "conviction": "High conviction the workload shift is real — NVIDIA paid ~$20B to license Groq's SRAM serving tech, and Microsoft is routing production Copilot traffic to in-house models explicitly to cut its Anthropic/OpenAI bill. Low conviction in the label: 'SLM' is a treadmill category — distillation resets the small-model leaderboard every six months, and the best small models are free and increasingly Chinese.",
+      "final_verdict": "The technology story is ~16 months into consensus — Gartner's 3x-by-2027 call is dated April 2025, and CES/MWC 2026 keynotes were saturated with it — and the clean proxies (ARM, AMBA, CBRS) already re-rated in H1 and started breaking on earnings. Three layers are still mispriced: SaaS COGS relief (the market spent 2026 pricing AI as a revenue threat to software and gave zero credit for the cost side deflating — DUOL already printed the proof), SLM-shaped datacenter silicon at value multiples (QCOM's LPDDR-capacity AI200 racks at ~17.5x), and model-maker franchises nobody capitalizes (IBM Granite, Microsoft MAI/Phi). The live counter-trade is Jevons: cheap small inference grows total compute — a point the sell side is only one Jefferies note into writing.",
+      "consensus_scores": {
+        "knowledge_saturation": 78,
+        "price_saturation": 55
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · four-pass deep research (models / silicon / SaaS / adversarial)",
+          "knowledge_saturation": 78,
+          "price_saturation": 55,
+          "verdict": "Known 78: tech-consensus everywhere (Gartner, NVIDIA's own paper, keynote saturation) but not yet a tier-1 equity label — no bulge-bracket note uses 'SLM' as a headline stock thesis. Priced 55 with extreme dispersion: the edge proxies are fully paid; the SaaS cost side and the SLM-shaped datacenter silicon are not."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Edge / pure-play SLM silicon",
+          "symbols": "ARM · AMBA · CBRS · CEVA",
+          "knowledge_saturation": 90,
+          "price_saturation": 82,
+          "read": "The ran-and-corrected leg: H1 2026 re-rate, July drawdown, and late-July earnings that refused to validate (QCOM revenue −4%, handsets −20%; ARM sold off on its print). Cerebras IPO'd in May at the expensive end of the inference-specialist curve (~190x). You pay full freight here."
+        },
+        {
+          "layer": "SLM-shaped datacenter inference",
+          "symbols": "QCOM · NVDA+Groq · AVGO · AMD",
+          "knowledge_saturation": 55,
+          "price_saturation": 45,
+          "read": "The tell at the top: NVIDIA's ~$20B Groq license is the incumbent buying the small-fast-model serving playbook. QCOM's AI200/AI250 (768GB LPDDR per card, capacity over bandwidth) is the most SLM-shaped silicon in public markets and gets near-zero credit at ~17.5x post a −37% correction. AMD ironically IS the small/mid-model inference chip today but is priced and punished as a frontier challenger."
+        },
+        {
+          "layer": "SaaS COGS relief",
+          "symbols": "ZM · DUOL · CRM · INTU · TEAM",
+          "knowledge_saturation": 35,
+          "price_saturation": 15,
+          "read": "The SaaSpocalypse de-rated the exact names whose AI COGS are deflating fastest. DUOL quantified it: +190bp gross margin attributed to falling per-unit AI costs, at 15.8x earnings after a −70% drawdown. ZM serves a free AI Companion off a ~2B-param federated screener at 41% op margins, at ~14x. Goldman and Morgan Stanley have written the token-deflation note; software multiples have not heard it."
+        },
+        {
+          "layer": "Model-maker franchises",
+          "symbols": "IBM · MSFT · GOOGL",
+          "knowledge_saturation": 45,
+          "price_saturation": 30,
+          "read": "Nobody pays for Phi, Granite, Gemma, or Nemotron as assets. IBM is the most direct beneficiary per dollar of market cap if Gartner's task-model forecast lands — Granite plus a >$12B gen-AI book at a value multiple, post the July 14 crash. Microsoft's MAI routing at 30M+ Copilot seats is a free gross-margin option the Street is only starting to model."
+        },
+        {
+          "layer": "Wrong side of the shift",
+          "symbols": "ORCL · ALAB · frontier-API resellers",
+          "knowledge_saturation": 20,
+          "price_saturation": 20,
+          "read": "The un-narrated negative. ORCL is a leveraged bet on centralized frontier inference (30% AI-infra gross margins, $122B+ debt) exactly as tokens deflate and inference migrates on-prem. ALAB at ~216x is scale-up interconnect beta in a world where small-model fleets need fewer giant coherent domains. Priced as credit/capex fear, not yet as inference-deflation risk."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "Sixteen months late to the narrative: Gartner's 3x call is April 2025, NVIDIA's SLM-agents paper is June 2025, and CES/MWC 2026 keynotes were wall-to-wall — the information edge on the story itself is gone.",
+            "Frontier API deflation (~88% below 2023 rates, with batch and caching discounts stacking on top) makes the SLM TCO advantage a wasting asset; the MLOps overhead of running model fleets eats what remains.",
+            "The economically valuable workloads are long-horizon agentic, where task horizon scales with parameters — doubling autonomous task length takes ~4x the params. The revenue concentrates exactly where small models are structurally behind.",
+            "Open-weight commoditization: Chinese models were ~61% of OpenRouter tokens by May 2026. If the best small models are free and Chinese, no US-listed equity captures the model layer at all.",
+            "The proxies' own earnings just refused to validate the theme — QCOM and ARM both broke on their late-July prints, and the cloud memory boom is actively squeezing edge-device BOMs."
+          ]
+        }
+      ],
+      "what_survived": [
+        "The workload shift is capital-verified, not narrative: NVIDIA paid ~$20B for Groq's serving tech; Microsoft routes production Copilot traffic to in-house models to cut its frontier-API bill.",
+        "The COGS relief is now quantified in at least one public P&L (DUOL: +190bp GM from falling per-unit AI costs) and architecturally explicit at ZM, CRM, NOW, and INTU."
+      ],
+      "residual_edge": [
+        "The SaaS cost side: 2026's software de-rate priced AI as a revenue threat and ignored the same models deflating AI COGS — the same thesis family as this desk's CRM/TEAM software book, one layer down.",
+        "QCOM's AI200/AI250 as the most SLM-shaped datacenter silicon in public markets, with the DC optionality priced at roughly zero.",
+        "The short side nobody narrates: leveraged centralized-inference capacity (ORCL) and scale-up interconnect multiples (ALAB) if inference fragments into small-model fleets."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "QCOM · DUOL · ZM",
+          "why": "QCOM: does a second AI200 anchor customer appear behind Humain. DUOL/ZM: the two cleanest live P&L reads on whether inference deflation actually reaches software margins."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "CBRS 8/12 · BABA 8/17 · NVDA 8/26 · IBM",
+          "why": "Cerebras' first public print is the pure-play referendum; BABA tests whether Qwen ubiquity converts to cloud revenue; NVDA is the first Groq-integrated quarter; IBM software growth validates or breaks the Granite story."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Robinhood SIP daily closes",
+        "date": "2026-08-04",
+        "note": "The dispersion is the trade: edge proxies corrected but still rich; the SaaS beneficiaries are bombed out.",
+        "rows": [
+          {
+            "symbol": "QCOM",
+            "price": "$162.67",
+            "pe": "~17.5x",
+            "off_high": "-37.4%"
+          },
+          {
+            "symbol": "ARM",
+            "price": "$280.56",
+            "pe": "~245x",
+            "off_high": "-38.0%"
+          },
+          {
+            "symbol": "CBRS",
+            "price": "$227.15",
+            "pe": "~190x",
+            "off_high": "—"
+          },
+          {
+            "symbol": "ZM",
+            "price": "$102.12",
+            "pe": "~14.4x",
+            "off_high": "—"
+          },
+          {
+            "symbol": "DUOL",
+            "price": "$137.75",
+            "pe": "~15.8x",
+            "off_high": "-70.6%"
+          },
+          {
+            "symbol": "IBM",
+            "price": "$235.15",
+            "pe": "~20.1x",
+            "off_high": "—"
+          }
+        ]
+      },
+      "falsifiers": [
+        "Frontier API prices keep falling 60–80%/yr while no second public software P&L shows SLM-driven margin relief — the cost advantage never reaches earnings.",
+        "QCOM books no AI200 anchor beyond Humain through 2027.",
+        "SaaS gross margins fail to inflect through FY27 because the savings get competed away into pricing (DUOL's own guide-down to ~69% GM as it broadens free access is the honest warning).",
+        "Agentic revenue keeps concentrating in frontier-model workloads as task-horizon scaling holds.",
+        "Memory stays short past 2027, keeping edge BOMs squeezed and the device leg of the theme starved."
+      ],
+      "watch_next": [
+        "CBRS first public print (Aug 12) — the purest-play referendum on inference-specialist economics.",
+        "BABA earnings (Aug 17) — Qwen ubiquity vs. cloud revenue.",
+        "NVDA earnings (Aug 26) — first Groq-integrated quarter and inference-mix commentary.",
+        "DUOL and ZM next prints — the quantified COGS-relief reads.",
+        "The first bulge-bracket note using 'SLM' as a headline stock thesis — the consensus clock striking."
+      ],
+      "sources": [
+        {
+          "label": "NVIDIA Research — Small Language Models are the Future of Agentic AI (Jun 2025)",
+          "url": "https://arxiv.org/abs/2506.02153"
+        },
+        {
+          "label": "CNBC — Nvidia ~$20B Groq license deal (Dec 24, 2025)",
+          "url": "https://www.cnbc.com/2025/12/24/nvidia-buying-ai-chip-startup-groq-for-about-20-billion-biggest-deal.html"
+        },
+        {
+          "label": "Gartner — small task-specific models 3x LLM usage by 2027 (Apr 9, 2025)",
+          "url": "https://www.gartner.com/en/newsroom/press-releases/2025-04-09-gartner-predicts-by-2027-organizations-will-use-small-task-specific-ai-models-three-times-more-than-general-purpose-large-language-models"
+        },
+        {
+          "label": "Tom's Hardware — Qualcomm AI200/AI250 LPDDR inference racks",
+          "url": "https://www.tomshardware.com/tech-industry/artificial-intelligence/qualcomm-unveils-ai200-and-ai250-ai-inference-accelerators-hexagon-takes-on-amd-and-nvidia-in-the-booming-data-center-realm"
+        },
+        {
+          "label": "CNBC — Qualcomm fiscal Q3 2026 print (Jul 29, 2026)",
+          "url": "https://www.cnbc.com/2026/07/29/qualcomm-qcom-earnings-report-q3-2026-.html"
+        },
+        {
+          "label": "the-decoder — Microsoft routes Copilot to in-house models to cut costs (Jul 2026)",
+          "url": "https://the-decoder.com/copilot-goes-cheap-as-microsoft-phases-out-openai-and-anthropic-models-to-cut-costs/"
+        },
+        {
+          "label": "TechCrunch — Cerebras $5.5B IPO (May 14, 2026)",
+          "url": "https://techcrunch.com/2026/05/14/cerebras-raises-5-5b-kicking-off-2026s-ipo-season-with-a-bang/"
+        },
+        {
+          "label": "Xinhua — Qwen passes 1B downloads, overtakes Llama (Jan 13, 2026)",
+          "url": "https://english.news.cn/20260113/004b0522f987475cbf83ffc3a8d009aa/c.html"
+        }
+      ],
+      "source_model": "Claude Fable 5",
+      "reviewed_by": []
     }
   ]
 }
