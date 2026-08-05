@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.css?v=2026-05-21-scrollpad">
+    <title>Option Expiry Date Risk: My MDB Earnings Trade Mistake — Zonted</title>
+    <meta name="description" content="I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.">
+    <link rel="canonical" href="https://zonted.com/posts/mdb-option-expiry-date-risk/">
+    <meta property="og:title" content="Option Expiry Date Risk: My MDB Earnings Trade Mistake — Zonted">
+    <meta property="og:description" content="I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png">
+    <meta property="og:url" content="https://zonted.com/posts/mdb-option-expiry-date-risk/">
+    <meta property="article:published_time" content="2026-08-05">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Option Expiry Date Risk: My MDB Earnings Trade Mistake","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-05","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/mdb-option-expiry-date-risk/","description":"I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.","image":"https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The MDB expiry-date mistake","item":"https://zonted.com/posts/mdb-option-expiry-date-risk/"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure > img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.8rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Projects</a>
+                <a href="/trading/">Trading</a>
+                <a href="/metrics/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#snapshot">The trade, in plain numbers</a></li>
+            <li><a href="#date">The date was never confirmed</a></li>
+            <li><a href="#mark">The green mark was not an exit</a></li>
+            <li><a href="#mistakes">Three mistakes, one screenshot</a></li>
+            <li><a href="#rules">The new house rules</a></li>
+            <li><a href="#disclosure">Disclosure (NFA)</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#snapshot">The trade, in plain numbers</a></li>
+        <li><a href="#date">The date was never confirmed</a></li>
+        <li><a href="#mark">The green mark was not an exit</a></li>
+        <li><a href="#mistakes">Three mistakes, one screenshot</a></li>
+        <li><a href="#rules">The new house rules</a></li>
+        <li><a href="#disclosure">Disclosure (NFA)</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+    <!-- OPTIONAL: "By the numbers" sidebar block — copy from posts/google-trends-stock-attention -->
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>The Option Was Green. The Trade Wasn’t.</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">August 5, 2026 &middot; 6 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+    <p class="dropcap">The MongoDB thesis was working. The stock was up 6.89%, my $400 calls were marked up 14.95% on the day, and Robinhood showed a green position. Then a two-line press release exposed the operational mistake: MongoDB’s newly confirmed earnings date was September 1. My calls expired August 28.</p>
+
+    <div class="tldr">
+        <div class="tldr-label">TL;DR</div>
+        <p class="tldr-thesis">I built an earnings swing around an estimated date, then bought an expiration with almost no schedule buffer. When MongoDB finally confirmed the real date, the contract no longer reached the event.</p>
+        <ul>
+            <li><strong>Two August 28 $400 calls</strong> cost $17.25 each, or $3,450 total. The official earnings call landed four calendar days after expiration.</li>
+            <li>The app’s $18.68 “current price” was the rounded midpoint of a <strong>$16.95 bid and $20.40 ask</strong>. Midpoint P&amp;L said +$286; crossing to the bid said −$60 before fees.</li>
+            <li>The new rule: an event-dependent option does not get bought until the date is confirmed by company IR. If the date is still estimated, use materially more time or do nothing.</li>
+        </ul>
+        <p class="tldr-tail">The lesson is about process, not MongoDB. A good thesis expressed through the wrong contract is still a bad trade. NFA—not financial advice.</p>
+    </div>
+
+    <figure>
+        <a href="/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png" aria-label="Open the full-size MDB earnings and option screenshot">
+            <img src="/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png" width="1836" height="859" alt="Side-by-side screenshot showing MongoDB’s September 1 earnings announcement and a Robinhood position in two August 28 MDB $400 calls, with a blue arrow marking the option chart’s sudden drop." />
+        </a>
+        <figcaption>August 4, 2026, 2:39 p.m.: the company confirms September 1 earnings while the August 28 call chart reprices. The screenshot is the whole lesson in one frame. Click to open it full-size.</figcaption>
+    </figure>
+
+    <h2 id="snapshot">The trade, in plain numbers</h2>
+
+    <p>This was a momentum swing into MongoDB earnings. The stock had reclaimed its earnings and yearly VWAPs, and I expressed that view with two out-of-the-money calls.</p>
+
+    <table>
+        <tbody>
+            <tr><th scope="row">Contract</th><td class="num">MDB Aug. 28 $400 call</td></tr>
+            <tr><th scope="row">Position</th><td class="num">2 contracts</td></tr>
+            <tr><th scope="row">Average cost</th><td class="num">$17.25 / $3,450 total</td></tr>
+            <tr><th scope="row">Underlying in screenshot</th><td class="num">$382.64 (+6.89%)</td></tr>
+            <tr><th scope="row">Option mark</th><td class="num">$18.68 (+14.95% that day)</td></tr>
+            <tr><th scope="row">Displayed market</th><td class="num">$16.95 bid / $20.40 ask</td></tr>
+            <tr><th scope="row">Confirmed earnings</th><td class="num">Sept. 1, after close</td></tr>
+            <tr><th scope="row">Expiration mismatch</th><td class="num">4 calendar days too early</td></tr>
+        </tbody>
+    </table>
+
+    <p>At $382.64, the stock was still $17.36—or 4.54%—below the strike. There were 24 calendar days left until expiration. That is not automatically reckless for a momentum call. It became reckless because the trade’s named catalyst sat outside the contract.</p>
+
+    <h2 id="date">The date was never confirmed</h2>
+
+    <p>I had been treating August 25 as the earnings date because that was the estimate in the market-data feed. The August 28 expiration looked like it cleared the event by three days. That was false precision.</p>
+
+    <p>On August 4, MongoDB <a href="https://investors.mongodb.com/news-releases/news-release-details/mongodb-inc-announces-date-second-quarter-fiscal-2027-earnings" rel="noopener">officially announced</a> that fiscal Q2 results would arrive after the market close on Tuesday, September 1. The company did not move a confirmed date. <strong>I promoted an estimate into a fact.</strong></p>
+
+    <p>The timing in the screenshot is brutal and useful. The press release appears at 2:39 p.m.; the option chart shows a sharp cliff at the same point. The clean interpretation is that the market no longer needed to price this August contract as a possible earnings vehicle. The screenshot cannot explain every tick, but it clearly shows the date confirmation and repricing arriving together.</p>
+
+    <blockquote>The catalyst did not disappear. It moved outside the instrument I had chosen to own it with.</blockquote>
+
+    <h2 id="mark">The green mark was not an exit</h2>
+
+    <p>Robinhood showed the calls at $18.68 and the position at $3,736. Against a $3,450 cost, that is a pleasant-looking <strong>+$286, or +8.3%</strong>.</p>
+
+    <p>But $18.68 was not a trade. It was the rounded midpoint of a $16.95 bid and a $20.40 ask. The spread was $3.45—<strong>18.5% of the midpoint</strong>. Selling immediately into the displayed bid would have produced about $3,390, or <strong>−$60 (−1.7%)</strong> before fees. A patient limit order might have done better, but the green app mark was not executable proof of profit.</p>
+
+    <p>This is the second lesson hiding inside the first one: illiquid options let the interface tell a flattering story. Mark-to-mid is useful for estimating. Bid-side liquidation is useful for humility.</p>
+
+    <h2 id="mistakes">Three mistakes, one screenshot</h2>
+
+    <ol>
+        <li><strong>I traded an estimated catalyst as if it were confirmed.</strong> The source hierarchy was backwards. A broker calendar is a lead; company investor relations is the fact.</li>
+        <li><strong>I bought almost no schedule buffer.</strong> Even if August 25 had been right, three days after earnings left little room for a reschedule, delayed report, or post-event trade management.</li>
+        <li><strong>I let the midpoint flatter the position.</strong> An 18.5% spread meant the displayed P&amp;L and the immediate exit P&amp;L described different trades.</li>
+    </ol>
+
+    <p>Notice what is not on the list: “the MongoDB thesis was wrong.” The underlying was ripping higher. This was an instrument-selection failure, not a company-analysis failure. That distinction matters because otherwise the wrong lesson would be “don’t trade earnings.” The right lesson is “don’t rent optionality for an event the contract cannot reach.”</p>
+
+    <h2 id="rules">The new house rules</h2>
+
+    <ul>
+        <li><strong>Every event gets a source label:</strong> confirmed, estimated, or unreleased. Only company IR or an SEC filing upgrades earnings to confirmed.</li>
+        <li><strong>Expiration must clear a confirmed event by at least one full weekly cycle.</strong> For a normal earnings swing, I want more than a three-day landing strip. If the date is estimated, I use materially longer duration or wait.</li>
+        <li><strong>Liquidity gets its own gate.</strong> I record bid, ask, midpoint, spread as a percentage of midpoint, and open interest before entry. A double-digit spread needs a damn good reason.</li>
+        <li><strong>P&amp;L is shown two ways:</strong> mark-to-mid and executable-side. If the story changes depending on which one I use, the position is less liquid than the headline suggests.</li>
+        <li><strong>A thesis and its instrument are reviewed separately.</strong> “Still bullish” is not a reason to keep the wrong expiration.</li>
+    </ul>
+
+    <p>This was a cheap lesson precisely because the stock moved in my direction. That is also what makes it dangerous: a profitable outcome can launder a bad process. Writing it down prevents “green means smart” from becoming the rule.</p>
+
+    <h2 id="disclosure">Disclosure (NFA)</h2>
+
+    <p><strong>Not financial advice.</strong> The screenshot shows an open position of two MDB August 28 $400 calls at that moment; the position may change after publication. Prices and quotes are a timestamped snapshot, not a promise of available execution. This is a personal trading journal—me showing the mistake, not recommending MongoDB or any option strategy.</p>
+
+    <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:2rem;">Sources: MongoDB’s August 4, 2026 earnings-date announcement via <a href="https://investors.mongodb.com/news-events/news-releases" rel="noopener">Investor Relations</a>, plus the supplied Robinhood position screenshot. Calculations use the visible two-contract position, $17.25 average cost, $18.68 mark, and $16.95/$20.40 market.</p>
+
+</div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/watching-ai-learn-paris/">I Watched a Neural Network Learn That Paris Is the Capital of France</a><p class="zn-recommended-dek">Pythia ships a checkpoint every 1,000 training steps with countable training data. I replayed training like a time-lapse and watched a fact form.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/inside-ai-training-data/">I Read Anthropic&#x27;s and Nvidia&#x27;s Public Training Data. Here&#x27;s What&#x27;s Actually In There.</a><p class="zn-recommended-dek">Anthropic&#x27;s and Nvidia&#x27;s preference-training data is public. I read it: where refusals come from, what the rubric rewards, and what&#x27;s barely…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/where-ai-personalities-come-from/">The Files Where AI Personalities Come From</a><p class="zn-recommended-dek">An AI&#x27;s personality is a file you can read. Inside Anthropic&#x27;s 2022 preference data: the exact rows that installed politeness, refusals, and…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/games/">Games</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
