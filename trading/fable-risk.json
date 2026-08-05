@@ -2,6 +2,148 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-05",
+   "session": "pre-market",
+   "assess_for": "Wednesday Aug 5 session",
+   "verdict": "RISK-ON",
+   "subtitle": "Leadership flips cyclical and the composite firms to +0.36 \u2014 the run's strongest reading, published into QRA day",
+   "score": 4,
+   "n_signals": 11,
+   "composite": "+0.36",
+   "narrative": [
+    "<p>Third RISK-ON call, and for the first time it isn't a squeaker. The composite firms from last night's +0.27 to +0.36 on exactly one signal change: the site's momentum feed refreshed to Aug 4 overnight, and Monday's tech-and-industrial surge did what last night's entry said it would \u2014 moved the 50-day z-scores. The top three US sectors are now XLF (+1.25), XLI (+1.06), XLE (+0.83). Two of those are cyclicals, so Leadership goes 0 \u2192 +1. Compare Jul 25, when the top three were Energy, Real Estate, and Utilities \u2014 zero cyclicals, the ledger's picture of defense. Financials and industrials leading is what a broadening rally looks like, and notably it is <i>not</i> XLK doing the leading despite tech's +4.98% day \u2014 the z ranks steadiness, not one splashy session.</p>",
+    "<p>The overnight tape agrees so far: <a href=\"https://www.benzinga.com/markets/equities/26/08/60939272/stock-market-today-sp-500-dow-futures-gain-after-scott-bessent-signals-strait-of-hormuz-deal-with-iran-in-sight-amd-spacex-sandisk-in-focus\" rel=\"noopener\">S&amp;P futures +0.4%</a> on top of Tuesday's +1.80% record close, with Bessent's Hormuz deal window \u2014 \"today or tomorrow,\" said Tuesday \u2014 now meaning today, and WTI already under $78 after a 3% slide. The warning shot came from the AI complex itself: AMD is down ~8% pre-market after beating and guiding higher \u2014 a tape that sells a strong print is a tape that has pre-paid perfection. Disney and Shopify report today; the quarterly refunding statement landed this morning, ISM services prints at 10am ET, then claims Thursday and July payrolls Friday at ~80\u2013100k consensus.</p>",
+    "<p>What still leans against: the same three signals as yesterday, unmoved. The yen has appreciated 4.1% in five sessions (157.41 per ECB fix vs 163.91 on Jul 28) with roughly 185k contracts of spec yen shorts as accelerant \u2014 that's the ledger's loudest \u22121. Small caps still lag by 1.30 points over 20 sessions despite two straight days of IWM outperformance. And the vol complex is still bid under a record close: VIX 16.50 (+0.64 on a +1.80% index day), VVIX 92.57 rising a second day, MOVE parked at 80.48 \u2014 half a point above the calm line \u2014 on the morning Treasury announces its borrowing plans. Protection demand rising with price is renting, not owning.</p>",
+    "<p>Vintage census, because receipts matter: trend and size are Aug 4 Alpaca SIP closes; VIX, VVIX, and the VX curve (+1.21 of contango, Aug 18.05 / Sep 19.25) are Aug 4 Cboe prints pulled direct; breadth, leadership, and crypto are the site feed's fresh Aug 4 refresh \u2014 the first morning run of this stretch where none of the internals ride a stale vintage. The exceptions: HY OAS is Aug 3 (2.78%, \u22123bp over five sessions, via YCharts \u2014 FRED was unreachable this morning), MOVE is last night's 80.48 print (Yahoo 429s again today; it scores 0 in the 80\u2013100 band either way), and the site's own risk feed remains frozen at Jul 24, sixth consecutive entry flagged. Posture: RISK-ON at +0.36 because the rubric says so \u2014 with room to spare for once \u2014 into the week's three loudest catalysts, with the flip levels below doing the watching.</p>"
+   ],
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-session SMA \u00b7 \u00b10.25% band",
+     "value": "771.33 vs 745.89 \u00b7 +3.41% \u00b7 Aug 4 record close, Alpaca SIP",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "16.50 \u00b7 Aug 4 close, Cboe direct \u2014 up 0.64 on a +1.80% index day; 0.51 from re-entering +1",
+     "score": 0
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 >+0.5 / 0\u20130.5 / inverted",
+     "value": "+1.21 contango (Aug VX 18.05, Sep VX 19.25) \u00b7 Aug 4 settles, Cboe direct",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "92.57 \u00b7 Aug 4 close, Cboe direct \u2014 second day rising, 2.4 points under the line",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "80.48 \u00b7 Aug 4 close (last night's Yahoo print; Yahoo 429s this morning, site feed stale since Jul 17) \u2014 in the 0 band either way, QRA lands today",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% and \u03945d <+10bp",
+     "value": "2.78% (Aug 3, YCharts/ICE \u2014 FRED unreachable this morning) \u00b7 \u22123bp/5d vs 2.81% Jul 27 \u2014 tightening through the yen squeeze",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US rows above YTD VWAP \u226570% / 40\u201370% / <40%",
+     "value": "10 of 13 \u00b7 77% \u00b7 fresh Aug 4 vintage \u2014 below: ESPO \u22120.2%, XLC \u22121.2%, XLU \u22121.4%; XLY +1.9% is the thinnest cushion above",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "of {XLK,XLY,XLC,XLI,XLF} in top-3 by 50d z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.25 \u00b7 XLI +1.06 \u00b7 XLE +0.83 \u2014 two cyclicals \u00b7 fresh Aug 4 vintage; first +1 of the ledger's run",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20-session return \u00b7 \u00b11pt band",
+     "value": "\u22121.30pt (IWM +1.86%, SPY +3.16%, Jul 7 \u2192 Aug 4, Alpaca SIP) \u00b7 IWM has outperformed two straight days but the window still says no",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts leading BTC on 50d spread z: \u22654 of 7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.50, ETH +0.46, ZEC +0.25 lead; SOL \u22120.17 is the nearest fourth \u00b7 fresh Aug 4 vintage",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "USDJPY 5-session \u00b7 yen appreciation >1% \u2192 \u22121",
+     "value": "157.41 vs 163.91 (Jul 28) \u00b7 yen +4.1% \u00b7 ECB fix, Aug 4 (Yahoo 429) \u2014 Monday's small give-back changed nothing",
+     "score": -1
+    }
+   ],
+   "flips": {
+    "to_off": "The call finally has cushion: sum +4 with NEUTRAL at +2, so it takes two one-point drops (or one two-point swing). The live candidates: VVIX crossing 95 (2.4 points away, rising two days straight); breadth slipping to 9 of 13 = 69% if XLY (+1.9% above its YTD VWAP) or XLP (+2.3%) rolls under; the VX curve's +1.21 compressing below +0.5 as the Aug contract ages toward its Aug 19 expiry; leadership reverting if XLI's z fades behind XLE and XLV (0.23 and 0.29 back). Full RISK-OFF at sum \u22123 is a seven-point swing \u2014 a regime break, not a drift.",
+    "to_on": "Sum +5 (+0.45) is one point away on any of: MOVE closing under 80 (0.48 from the line \u2014 today's QRA and Friday's payrolls are exactly its test); VIX closing under 16 (0.51 away; it was there Aug 3); SOL's 50d spread z flipping positive (\u22120.17) for a fourth alt; or the yen's 5-session change re-entering \u00b11%, which needs USDJPY back near 162 and remains the furthest ask."
+   },
+   "forward": {
+    "horizon": "Thu Aug 6 \u2013 Wed Aug 12",
+    "watch": [
+     {
+      "name": "QRA + ISM services + payrolls stack",
+      "why": "three rate catalysts in three sessions with MOVE half a point over the calm line",
+      "detail": "Refunding statement this morning, ISM services 10am ET (a hot print reignites wage fears), claims Thursday, July payrolls Friday ~80\u2013100k consensus. MOVE 80.48 sits exactly where supply news hurts",
+      "lean": "off"
+     },
+     {
+      "name": "Hormuz deadline day",
+      "why": "Bessent's window closes today and this headline has failed once before",
+      "detail": "WTI under $78 has pre-paid a deal; Iran still denies direct talks. The Jun 17 MOU collapsed over transit routes \u2014 a second collapse is the unpriced side, a signed deal is mostly spent fuel",
+      "lean": "watch"
+     },
+     {
+      "name": "AI earnings priced past perfection",
+      "why": "the market just told us what a beat is worth",
+      "detail": "AMD \u22128% pre-market after beating and raising \u2014 following PLTR's +29%. When beats sell off, the marginal buyer is exhausted at the exact theme leading the tape",
+      "lean": "off"
+     },
+     {
+      "name": "Vol bid under record closes",
+      "why": "carried forward \u2014 still the tape's most honest dissent",
+      "detail": "VIX +0.64 and VVIX +1.76 on Tuesday's +1.80% record day; spec yen shorts ~185k contracts (CFTC TFF Jul 28) keep the carry-unwind accelerant loaded under a 4.1% five-session yen surge",
+      "lean": "off"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one VIX close above 17.50 within the next 5 sessions",
+     "prob": "55%",
+     "resolves": "2026-08-12"
+    },
+    "grading": "Friday is judgment day for the open book. The Jul 30 call (\u22651% SPY down close by Aug 6, 60%) has burned four of five sessions on up days \u2014 it needs the down day today or tomorrow or it misses. The Jul 31 call (same by Aug 7, 60%) has payrolls left. The Aug 3 backfill call (SPY \u00b11% move on payrolls day, 45%) resolves Friday. The Aug 4 call (a close below 764.50 by Aug 11, 55%) opens with futures pointing the wrong way. All four short this melt-up's persistence to some degree; the ledger will grade them without flinching."
+   },
+   "sources": [
+    {
+     "t": "Benzinga \u2014 futures gain as Bessent signals Hormuz deal in sight; AMD, SpaceX in focus (Aug 5)",
+     "u": "https://www.benzinga.com/markets/equities/26/08/60939272/stock-market-today-sp-500-dow-futures-gain-after-scott-bessent-signals-strait-of-hormuz-deal-with-iran-in-sight-amd-spacex-sandisk-in-focus"
+    },
+    {
+     "t": "TheStreet \u2014 S&P futures gain ahead of Disney, Shopify earnings (Aug 5)",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-5-2026"
+    },
+    {
+     "t": "CNBC \u2014 record closes for S&P 500 as tech comeback continues (Aug 4)",
+     "u": "https://www.cnbc.com/2026/08/04/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "US Treasury \u2014 quarterly refunding documents (Aug 2026)",
+     "u": "https://home.treasury.gov/policy-issues/financing-the-government/quarterly-refunding/most-recent-quarterly-refunding-documents"
+    }
+   ],
+   "rating": 6.8
+  },
+  {
    "date": "2026-08-04",
    "session": "post-close",
    "assess_for": "Wednesday Aug 5 open",
