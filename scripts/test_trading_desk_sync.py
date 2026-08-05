@@ -418,7 +418,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(".hypothesis-simple-thesis", styles)
         source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
         simple_theses = {
-            "BMNR": ["ETH treasury with staking yield", "Weekly ETH accumulation", "50-day average"],
+            "BMNR": ["Robinhood Chain validates ETH", "Cheap Web3 valuations", "compound ETH per share"],
             "FIGR": ["previously founded SoFi", "Real-world assets", "$25 is the working floor"],
             "MDB": ["AI tailwinds support Atlas", "earnings and yearly VWAPs", "Strong hiring numbers"],
             "FRMI": ["Energy demand from SpaceX", "deep industry knowledge remains bullish"],
