@@ -345,6 +345,18 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn("const window = dates", script)
         self.assertIn(".pf-trade:focus-visible", styles)
 
+    def test_performance_trade_log_only_shows_pnl_for_sells(self):
+        script = (ROOT / "js" / "trading-performance.js").read_text()
+        self.assertIn("a.side === 'sell' ? pct(a.pct) : '—'", script)
+        self.assertIn("P&amp;L is shown only for sells", script)
+        self.assertNotIn("a buy row's number keeps moving", script)
+
+    def test_performance_daily_pnl_section_is_removed(self):
+        script = (ROOT / "js" / "trading-performance.js").read_text()
+        self.assertNotIn("P&amp;L % by day", script)
+        self.assertNotIn("const renderDays", script)
+        self.assertNotIn("renderDays()", script)
+
     def test_generated_asset_contracts(self):
         vwap = json.loads((ROOT / "trading" / "vwap-charts.json").read_text())
         crypto = json.loads((ROOT / "trading" / "crypto-charts.json").read_text())
