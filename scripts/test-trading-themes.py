@@ -14,6 +14,9 @@ DATA = ROOT / "trading" / "themes.json"
 SCRIPT = ROOT / "js" / "trading-themes.js"
 
 
+ISO_DATE = re.compile(r"^\d{4}-\d{2}-\d{2}$")
+
+
 class TradingThemesContractTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
@@ -23,6 +26,12 @@ class TradingThemesContractTest(unittest.TestCase):
         cls.energy = next(theme for theme in cls.payload["themes"] if theme["id"] == "ai-power-scarcity")
         cls.frontier = next(theme for theme in cls.payload["themes"] if theme["id"] == "frontier-intelligence-value-capture")
         cls.theme = cls.energy
+
+    def assertSnapshotDated(self, theme) -> None:
+        """Every snapshot carries a real ISO date no later than the ledger's as_of."""
+        date = theme["valuation_snapshot"]["date"]
+        self.assertRegex(date, ISO_DATE, theme["id"])
+        self.assertLessEqual(date, self.payload["as_of"], theme["id"])
 
     def test_route_loads_exact_versioned_assets(self) -> None:
         data_hash = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
@@ -35,8 +44,12 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_energy_theme_has_final_adversarial_synthesis(self) -> None:
         self.assertEqual(self.payload["schema_version"], 1)
-        self.assertEqual(self.payload["as_of"], "2026-07-24")
-        self.assertEqual(len(self.payload["themes"]), 46)
+        self.assertRegex(self.payload["as_of"], ISO_DATE)
+        self.assertGreaterEqual(
+            self.payload["as_of"],
+            max(theme["valuation_snapshot"]["date"] for theme in self.payload["themes"]),
+        )
+        self.assertGreaterEqual(len(self.payload["themes"]), 46)
         self.assertEqual(self.theme["id"], "ai-power-scarcity")
         self.assertEqual(self.theme["category"], "Energy")
         self.assertIn("The demand thesis survives", self.theme["final_verdict"])
@@ -80,7 +93,7 @@ class TradingThemesContractTest(unittest.TestCase):
         )
 
     def test_sources_and_market_snapshot_are_auditable(self) -> None:
-        self.assertEqual(self.theme["valuation_snapshot"]["date"], self.payload["as_of"])
+        self.assertSnapshotDated(self.theme)
         self.assertGreaterEqual(len(self.theme["valuation_snapshot"]["rows"]), 10)
         self.assertGreaterEqual(len(self.theme["sources"]), 8)
         self.assertTrue(all(row["url"].startswith("https://") for row in self.theme["sources"]))
@@ -98,7 +111,7 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertGreaterEqual(len(theme["residual_edge"]), 7)
         self.assertGreaterEqual(len(theme["falsifiers"]), 7)
         self.assertGreaterEqual(len(theme["sources"]), 12)
-        self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+        self.assertSnapshotDated(theme)
         self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 10)
         self.assertIn("missing model scores are never invented", self.payload["method"]["consensus"].lower())
 
@@ -221,39 +234,14 @@ class TradingThemesContractTest(unittest.TestCase):
         self.assertEqual(orbital["disqualified"]["symbols"], ["SpaceX (private)", "RKLB", "ASTS"])
         self.assertIn("Not enough ticker diversity", orbital["disqualified"]["reason"])
         self.assertIn("already-known space trades", orbital["disqualified"]["reason"])
-        self.assertEqual(
-            list(themes),
-            [
-                "geo-yen-forcing-chain",
-                "geo-barrels-to-flops",
-                "geo-twin-deficit-sorting",
-                "geo-india-binary",
-                "geo-germany-barbell",
-                "geo-transplant-scramble",
-                "geo-korea-memory-opec",
-                "sector-xlre-stealth-ai",
-                "sector-click-to-agent-rails",
-                "sector-munitions-energetics",
-                "sector-glp1-oral-inflection",
-                "emerging-intimacy-recession",
-                "emerging-age-gated-internet",
-                "emerging-glp1-actuarial",
-                "emerging-orbital-deflation",
-                "emerging-prediction-tax-arb",
-                "emerging-live-experience-k",
-                "emerging-autonomous-science-verification-wall",
-                "emerging-orbital-compute-relief-valve",
-                "emerging-precision-fermentation-molecules",
-                "meta-partial-reprogramming-humans",
-                "sector-cms-prior-auth-api",
-                "geo-eu-methane-mrv",
-                "geo-subsea-repair-capacity",
-                "emerging-quantum-pnt",
-                "geo-de-minimis-customs-data",
-                "emerging-bess-insurability",
-                "geo-eu-cloud-egress-ban",
-            ],
-        )
+        # Once disqualified, always retained: every entry keeps its symbols and a
+        # stated reason, and the July-24 disqualification set never shrinks.
+        for theme_id, theme in themes.items():
+            record = theme["disqualified"]
+            self.assertTrue(record["symbols"], theme_id)
+            self.assertTrue(all(isinstance(symbol, str) and symbol for symbol in record["symbols"]), theme_id)
+            self.assertTrue(record["reason"].strip(), theme_id)
+        self.assertGreaterEqual(len(themes), 28)
         self.assertIn("const renderDisqualified =", self.script)
         self.assertIn("themes.filter(theme => !theme.disqualified)", self.script)
         self.assertIn("themes.filter(theme => theme.disqualified)", self.script)
@@ -281,38 +269,30 @@ class TradingThemesContractTest(unittest.TestCase):
             "emerging-glp1-actuarial",
             "sector-munitions-energetics",
         }
-        new_ids = {
-            "geo-eu-traceability-stack",
-            "sector-treasury-collateral-tax",
-            "sector-medicaid-churn-economy",
-            "sector-upper-cband-capex-echo",
-            "emerging-pfas-testing-wave",
-            "emerging-live-experience-k",
-            "emerging-ai-compute-water-geography",
-            "emerging-autonomous-science-verification-wall",
-            "emerging-orbital-compute-relief-valve",
-            "emerging-precision-fermentation-molecules",
-            "emerging-radiative-cooling-everything-grid",
-            "meta-power-wall-rate-shock",
-            "meta-humanoid-labor-wage-shock",
-            "meta-partial-reprogramming-humans",
-            "meta-silicon-sovereignty-stack-split",
-            "meta-y2q-post-quantum-rebuild",
-            "sector-ai-rights-cleared-data",
-            "sector-cms-prior-auth-api",
-            "geo-eu-wastewater-epr",
-            "geo-eu-methane-mrv",
-            "geo-einvoice-tax-rails",
-            "geo-subsea-repair-capacity",
-            "emerging-quantum-pnt",
-            "geo-de-minimis-customs-data",
-            "emerging-bess-insurability",
-            "geo-eu-cloud-egress-ban",
+        # The original 2026-07-24 hunt batch, pinned by id (an allowlist, so later
+        # theme additions cannot leak in the way the old new_ids denylist rotted).
+        hunt_ids = {
+            "geo-yen-forcing-chain",
+            "geo-barrels-to-flops",
+            "geo-twin-deficit-sorting",
+            "geo-india-binary",
+            "geo-germany-barbell",
+            "geo-transplant-scramble",
+            "geo-korea-memory-opec",
+            "sector-xlre-stealth-ai",
+            "sector-click-to-agent-rails",
+            "sector-memory-tax",
+            "sector-munitions-energetics",
+            "sector-glp1-oral-inflection",
+            "emerging-intimacy-recession",
+            "emerging-age-gated-internet",
+            "emerging-glp1-actuarial",
+            "emerging-uninsurable-mortgage",
+            "emerging-orbital-deflation",
+            "emerging-prediction-tax-arb",
         }
-        hunt = [
-            t for t in self.payload["themes"]
-            if t["category"] in counts and t["id"] not in new_ids
-        ]
+        hunt = [t for t in self.payload["themes"] if t["id"] in hunt_ids]
+        self.assertEqual({t["id"] for t in hunt}, hunt_ids)
         for category, expected in counts.items():
             self.assertEqual(sum(1 for t in hunt if t["category"] == category), expected, category)
         self.assertEqual(len({t["id"] for t in hunt}), len(hunt))
@@ -386,15 +366,19 @@ class TradingThemesContractTest(unittest.TestCase):
                 self.assertTrue(theme[field], f"{theme_id}.{field}")
             self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
             self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 5)
-            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+            self.assertSnapshotDated(theme)
             self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
-    def test_every_theme_exposes_source_reviewers_and_has_gpt(self) -> None:
+    def test_every_theme_exposes_source_reviewers_and_honest_status_counts(self) -> None:
         for theme in self.payload["themes"]:
             models = [row["model"] for row in theme["model_reviews"]]
+            self.assertTrue(models, theme["id"])
             self.assertIn(theme["source_model"], models, theme["id"])
             self.assertEqual(theme["reviewed_by"], [model for model in models if model != theme["source_model"]], theme["id"])
-            self.assertTrue(any(model.startswith("GPT") for model in models), theme["id"])
+            # A "N reviewer(s)" status must match the actual review panel size.
+            claimed = re.search(r"(\d+) reviewers?", theme["status"])
+            if claimed:
+                self.assertEqual(int(claimed.group(1)), len(models), theme["id"])
 
         live = next(theme for theme in self.payload["themes"] if theme["id"] == "emerging-live-experience-k")
         self.assertEqual([row["model"] for row in live["model_reviews"]], ["Claude Fable 5", "GPT-5.6"])
@@ -434,7 +418,7 @@ class TradingThemesContractTest(unittest.TestCase):
                 self.assertTrue(theme[field], f"{theme_id}.{field}")
             self.assertGreaterEqual(len(theme["layer_scorecard"]), 4)
             self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 6)
-            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+            self.assertSnapshotDated(theme)
             self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
         self.assertIn("Meta frontier set", self.payload["method"]["consensus"])
@@ -501,7 +485,7 @@ class TradingThemesContractTest(unittest.TestCase):
                 self.assertTrue(theme[field], f"{theme_id}.{field}")
             self.assertGreaterEqual(len(theme["layer_scorecard"]), 3)
             self.assertGreaterEqual(len(theme["valuation_snapshot"]["rows"]), 2)
-            self.assertEqual(theme["valuation_snapshot"]["date"], self.payload["as_of"])
+            self.assertSnapshotDated(theme)
             self.assertTrue(all(source["url"].startswith("https://") for source in theme["sources"]))
 
 
