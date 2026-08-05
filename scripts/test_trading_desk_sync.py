@@ -418,10 +418,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(".hypothesis-simple-thesis", styles)
         source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
         simple_theses = {
+            "BMNR": ["ETH treasury with staking yield", "Weekly ETH accumulation", "50-day average"],
             "FIGR": ["previously founded SoFi", "Real-world assets", "$25 is the working floor"],
             "MDB": ["AI tailwinds support Atlas", "earnings and yearly VWAPs", "Strong hiring numbers"],
             "FRMI": ["Energy demand from SpaceX", "deep industry knowledge remains bullish"],
-            "ZM": ["tech sector feels like it is resuscitating", "broke above both VWAPs"],
         }
         for symbol, expected_lines in simple_theses.items():
             match = re.search(rf'<article class="hypothesis-detail" id="hypothesis-{symbol.lower()}-setup".*?</article>', source, re.S)
