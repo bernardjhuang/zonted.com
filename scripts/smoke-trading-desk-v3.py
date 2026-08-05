@@ -127,7 +127,9 @@ def exercise_linked_routes(page, origin: str) -> None:
         check(page.locator("h1").inner_text() == heading, f"{route} heading is wrong")
         check(page.locator('.subnav a[aria-current="page"]').count() <= 1, f"{route} has ambiguous navigation state")
         if route == "mentality/":
-            check(page.locator(".mentality-rule").count() == 4, "Mentality needs all four lessons")
+            check(page.locator(".mentality-rule").count() == 4, "Mentality needs all four core lessons")
+            check(page.locator(".mentality-tactical-card").count() == 1, "Mentality needs one tactical learning")
+            check(page.locator('.mentality-tactical-card[href="/posts/mdb-option-expiry-date-risk/"]').count() == 1, "Tactical learning must link to the MDB trade post")
         check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"{route} has horizontal overflow")
         check(not errors, f"{route} JavaScript errors: " + "; ".join(errors))
 

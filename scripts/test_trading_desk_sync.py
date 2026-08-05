@@ -451,6 +451,16 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("How much is your thinking already priced in?", mentality)
         self.assertIn("You will not buy the bottom or sell the top.", mentality)
         self.assertIn("momentum does not reward patience", mentality)
+        self.assertEqual(
+            len(re.findall(r'<article class="mentality-rule(?: mentality-rule--wide)?">', mentality)),
+            4,
+        )
+        self.assertEqual(mentality.count('class="mentality-tactical-card"'), 1)
+        self.assertIn('aria-labelledby="tactical-learnings-heading"', mentality)
+        self.assertIn("Make sure the contract reaches the catalyst.", mentality)
+        self.assertIn('href="/posts/mdb-option-expiry-date-risk/"', mentality)
+        self.assertLess(mentality.index('class="mentality-page"'), mentality.index('class="mentality-tactical"'))
+        self.assertIn(".mentality-tactical-card", styles)
 
     def test_status_bar_sector_pills_match_vwap_leaders_and_laggards(self) -> None:
         scores = trading_shell.sector_z_scores()
