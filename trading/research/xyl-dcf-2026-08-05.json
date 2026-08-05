@@ -1,0 +1,207 @@
+{
+  "schema_version": 1,
+  "symbol": "XYL",
+  "as_of": "2026-08-05T11:49:05-0500",
+  "model": "10-year FCFE-style DCF using company-defined adjusted free cash flow",
+  "inputs": {
+    "2026_revenue_guidance_b": 9.2,
+    "adjusted_fcf_margin_midpoint": 0.106,
+    "starting_adjusted_fcf_b": 0.9752,
+    "diluted_shares_b": 0.239545548647968,
+    "current_price": 121.66
+  },
+  "scenarios": {
+    "bear": {
+      "fcf_growth": 0.04,
+      "discount_rate": 0.095,
+      "terminal_growth": 0.02,
+      "terminal_value_b": 19.632065,
+      "terminal_pv_b": 7.921817,
+      "equity_value_b": 15.347671,
+      "fair_value_per_share": 64.07,
+      "forecast": [
+        {
+          "year": 1,
+          "fcf_b": 1.014208,
+          "pv_b": 0.926217
+        },
+        {
+          "year": 2,
+          "fcf_b": 1.054776,
+          "pv_b": 0.879695
+        },
+        {
+          "year": 3,
+          "fcf_b": 1.096967,
+          "pv_b": 0.835509
+        },
+        {
+          "year": 4,
+          "fcf_b": 1.140846,
+          "pv_b": 0.793543
+        },
+        {
+          "year": 5,
+          "fcf_b": 1.18648,
+          "pv_b": 0.753685
+        },
+        {
+          "year": 6,
+          "fcf_b": 1.233939,
+          "pv_b": 0.715829
+        },
+        {
+          "year": 7,
+          "fcf_b": 1.283297,
+          "pv_b": 0.679874
+        },
+        {
+          "year": 8,
+          "fcf_b": 1.334629,
+          "pv_b": 0.645725
+        },
+        {
+          "year": 9,
+          "fcf_b": 1.388014,
+          "pv_b": 0.613291
+        },
+        {
+          "year": 10,
+          "fcf_b": 1.443534,
+          "pv_b": 0.582487
+        }
+      ]
+    },
+    "base": {
+      "fcf_growth": 0.06,
+      "discount_rate": 0.09,
+      "terminal_growth": 0.025,
+      "terminal_value_b": 27.539931,
+      "terminal_pv_b": 11.633165,
+      "equity_value_b": 20.024376,
+      "fair_value_per_share": 83.59,
+      "forecast": [
+        {
+          "year": 1,
+          "fcf_b": 1.033712,
+          "pv_b": 0.94836
+        },
+        {
+          "year": 2,
+          "fcf_b": 1.095735,
+          "pv_b": 0.922258
+        },
+        {
+          "year": 3,
+          "fcf_b": 1.161479,
+          "pv_b": 0.896875
+        },
+        {
+          "year": 4,
+          "fcf_b": 1.231168,
+          "pv_b": 0.87219
+        },
+        {
+          "year": 5,
+          "fcf_b": 1.305038,
+          "pv_b": 0.848185
+        },
+        {
+          "year": 6,
+          "fcf_b": 1.38334,
+          "pv_b": 0.82484
+        },
+        {
+          "year": 7,
+          "fcf_b": 1.46634,
+          "pv_b": 0.802138
+        },
+        {
+          "year": 8,
+          "fcf_b": 1.554321,
+          "pv_b": 0.780061
+        },
+        {
+          "year": 9,
+          "fcf_b": 1.64758,
+          "pv_b": 0.758592
+        },
+        {
+          "year": 10,
+          "fcf_b": 1.746435,
+          "pv_b": 0.737713
+        }
+      ]
+    },
+    "bull": {
+      "fcf_growth": 0.08,
+      "discount_rate": 0.08,
+      "terminal_growth": 0.03,
+      "terminal_value_b": 43.370903,
+      "terminal_pv_b": 20.08912,
+      "equity_value_b": 29.84112,
+      "fair_value_per_share": 124.57,
+      "forecast": [
+        {
+          "year": 1,
+          "fcf_b": 1.053216,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 2,
+          "fcf_b": 1.137473,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 3,
+          "fcf_b": 1.228471,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 4,
+          "fcf_b": 1.326749,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 5,
+          "fcf_b": 1.432889,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 6,
+          "fcf_b": 1.54752,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 7,
+          "fcf_b": 1.671321,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 8,
+          "fcf_b": 1.805027,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 9,
+          "fcf_b": 1.949429,
+          "pv_b": 0.9752
+        },
+        {
+          "year": 10,
+          "fcf_b": 2.105384,
+          "pv_b": 0.9752
+        }
+      ]
+    }
+  },
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1524472/000152447226000108/xyl07282026ex991.htm",
+    "https://www.sec.gov/Archives/edgar/data/1524472/000152447226000110/xyl-20260630.htm"
+  ],
+  "notes": [
+    "Adjusted free cash flow is management-defined cash from operations less capital expenditures, adjusted for specified non-operational items.",
+    "The model treats that cash flow as an equity cash-flow proxy and therefore does not subtract net debt.",
+    "Growth, discount rates, terminal growth, and resulting values are independent Zonted scenarios\u2014not company guidance."
+  ]
+}
