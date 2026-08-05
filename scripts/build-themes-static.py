@@ -36,7 +36,8 @@ def gap_of(scores) -> int:
 
 def render_static(payload: dict, data_hash: str) -> str:
     all_themes = sorted(payload["themes"], key=lambda t: gap_of(t["consensus_scores"]), reverse=True)
-    themes = [theme for theme in all_themes if not theme.get("disqualified")]
+    qualified = [theme for theme in all_themes if theme.get("qualified") and not theme.get("disqualified")]
+    themes = [theme for theme in all_themes if not theme.get("disqualified") and not theme.get("qualified")]
     disqualified = [theme for theme in all_themes if theme.get("disqualified")]
     cats: dict[str, int] = {}
     for theme in themes:
@@ -51,12 +52,13 @@ def render_static(payload: dict, data_hash: str) -> str:
         f"and how fully <strong>priced</strong> it already is. The gap between the two is the signal. "
         f"Categories: {esc(cat_line)}. Scores are the median of named AI-model reviews "
         f"(Claude Fable 5, GPT-5.6, Grok 4.5, Gemini, Meta); missing scores are never invented. "
+        f"{len(qualified)} qualified {'theme backs' if len(qualified) == 1 else 'themes back'} live desk positions (listed below, before the graveyard). "
         f"{len(disqualified)} disqualified {'theme is' if len(disqualified) == 1 else 'themes are'} retained below so rejected ideas are not recreated. "
         f'Full records, adversarial reviews, falsifiers and sources are in the interactive ledger and in '
         f'<a href="/trading/themes.json">themes.json</a>.</p>',
     ]
 
-    def append_theme(theme: dict, *, show_disqualification: bool = False) -> None:
+    def append_theme(theme: dict, *, show_disqualification: bool = False, show_qualification: bool = False) -> None:
         scores = theme["consensus_scores"]
         gap = gap_of(scores)
         assert {"knowledge_saturation", "price_saturation"} <= set(scores), theme["id"]
@@ -69,6 +71,12 @@ def render_static(payload: dict, data_hash: str) -> str:
                 f'<p class="ts-disqualification"><strong>Disqualified:</strong> {esc(details["reason"])} '
                 f'<strong>Flagged tickers:</strong> {esc(symbols)}</p>\n'
             )
+        if show_qualification:
+            details = theme["qualified"]
+            disqualification = (
+                f'<p class="ts-qualification"><strong>Qualified:</strong> {esc(details["note"])} '
+                f'<strong>Position:</strong> {esc(details["position"])} · {esc(details["date"])}</p>\n'
+            ) + disqualification
         blocks.append(
             f'<article id="static-{esc(theme["id"])}">\n'
             f'<h2><a href="/trading/themes/#{esc(theme["id"])}">{esc(theme["title"])}</a></h2>\n'
@@ -84,6 +92,15 @@ def render_static(payload: dict, data_hash: str) -> str:
     for theme in themes:
         append_theme(theme)
     blocks.append("</section>")
+    if qualified:
+        blocks.extend([
+            '<section class="themes-static themes-static-qualified">',
+            "<h2>Qualified themes</h2>",
+            "<p>Graduated from research to live desk positions. Scores stay frozen at qualification; the position note records what was bought and when.</p>",
+        ])
+        for theme in qualified:
+            append_theme(theme, show_qualification=True)
+        blocks.append("</section>")
     if disqualified:
         blocks.extend([
             '<section class="themes-static themes-static-disqualified">',
