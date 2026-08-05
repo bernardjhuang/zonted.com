@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "updated_at": "2026-08-04",
-  "as_of": "2026-08-04",
+  "updated_at": "2026-08-05",
+  "as_of": "2026-08-05",
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
@@ -5665,7 +5665,8 @@
         "PJM reserve margins recover without sustained capacity-price or tariff pressure.",
         "Data-center projects cancel or defer enough load to move energization queues materially lower.",
         "Onsite generation loses on fuel, emissions, permitting, or financing economics.",
-        "Equipment backlogs normalize before new generation and transmission projects reach construction."
+        "Equipment backlogs normalize before new generation and transmission projects reach construction.",
+        "Solid-state transformer entrants (Heron-class: smaller, bidirectional, intelligent) commoditize the incumbent electrification moat faster than the 40M-unit replacement TAM grows."
       ],
       "watch_next": [
         "PJM auction clearing price, reserve margin, backstop procurement, and load forecast revisions.",
@@ -8552,6 +8553,266 @@
         {
           "label": "CNBC — wartime fertilizer surge",
           "url": "https://www.cnbc.com/2026/03/25/fertilizer-price-iran-war-food-security-inflation-urea-potash-nitrogen-farmers.html"
+        }
+      ]
+    },
+    {
+      "id": "emerging-compute-financialization",
+      "category": "Emerging",
+      "title": "Compute becomes a traded commodity → the clearinghouse for cognition",
+      "horizon": "2026–2030",
+      "status": "Theme hunt · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "GPUs are 'the largest unhedged corporate treasury asset in existence' (OneChronos): five companies now spend more on compute annually than the entire global oil and gas industry spends on exploration and production, with no reference price, no forward curve, and no way to hedge. That is ending on a dated calendar: CME and ICE have each announced cash-settled chip-price-index futures targeting launch later this year (Silicon Data supplying CME's indices, Ornn supplying ICE's), ElectronX won its CFTC exchange and clearinghouse licenses for direct-access power derivatives in August 2025, and crypto/prediction venues (Hyperliquid, Polymarket, Kalshi) are already listing H100 spot and GPU-availability markets as proto-price-discovery. The end-state instrument — a power-adjusted compute forward locking the 'compute spread,' AI's version of the spark spread — would attach exchange economics to the largest capex stream on earth.",
+      "conviction": "High that financialization happens (the commodity-market playbook — standardize, spot, hedge, clear — has run identically for grain, oil, and electricity). Medium on timing and venue: first-generation contracts can flop before the durable ones stick.",
+      "final_verdict": "Known 25, priced 10 — the widest gap on the current ledger. The AI-infrastructure trade has repriced everything that MAKES compute; nothing in CME or ICE multiples reflects compute as a new listed asset class, and both trade ~18-20% below their highs on rate-cycle volume worries. Distinct from the Treasury-clearing theme despite sharing venues: that thesis is a regulatory mandate taxing collateral velocity; this is a brand-new commodity class arriving on the same rails. The deepest prize may be the index/data layer (Silicon Data, Ornn — private; the Platts/Argus position of the token era), which makes venue equities the accessible expression and M&A the watch item.",
+      "consensus_scores": {
+        "knowledge_saturation": 25,
+        "price_saturation": 10
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · theme hunt (sourced from Ribbit Power Letter, July 2026)",
+          "knowledge_saturation": 25,
+          "price_saturation": 10,
+          "verdict": "Known 25: the futures launches are announced but covered only in derivatives trade press. Priced 10: no analyst model carries compute-complex volumes for either exchange."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Listed venues",
+          "symbols": "CME ICE",
+          "knowledge_saturation": 30,
+          "price_saturation": 10,
+          "read": "Both launching chip-index futures this year; both hold the regulatory and clearing infrastructure that upstart venues lack. The accessible expression."
+        },
+        {
+          "layer": "Index/data providers",
+          "symbols": "Silicon Data · Ornn (private)",
+          "knowledge_saturation": 20,
+          "price_saturation": 5,
+          "read": "The Platts position: settlement-grade reference prices cemented into contracts and loan covenants. Watch for exchange equity stakes or acquisitions."
+        },
+        {
+          "layer": "Power-market convergence",
+          "symbols": "ElectronX (private) · PJM/ERCOT plumbing",
+          "knowledge_saturation": 25,
+          "price_saturation": 10,
+          "read": "Compute and power increasingly trade as one market; the compute-spread instrument is the end state."
+        },
+        {
+          "layer": "Proto-markets",
+          "symbols": "Hyperliquid · Polymarket · Kalshi (crypto/private)",
+          "knowledge_saturation": 35,
+          "price_saturation": 20,
+          "read": "24/7 perps and binaries seeding price discovery before regulated contracts — the pattern crypto ran on every prior asset class."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "Compute may be too heterogeneous to standardize — chip, memory, interconnect, location, latency, software stack — and first contracts can die illiquid (most new futures do).",
+            "Hyperscalers internalize risk on their own balance sheets and never need the hedge; without natural two-sided flow, open interest stalls.",
+            "Chip-generation turnover (H100→B200→Rubin) breaks index continuity in ways oil never faced — obsolescence is a basis risk with no analog.",
+            "Even in success, compute volumes could take years to matter against CME's $80B+ franchise — the theme may be right and immaterial for equity holders through 2028."
+          ]
+        }
+      ],
+      "what_survived": [
+        "Launch commitments from both venues are announced, dated corporate facts — not speculation.",
+        "The unhedged-exposure math (hundreds of billions of naked GPU treasury) is arithmetic, not narrative."
+      ],
+      "residual_edge": [
+        "First open-interest prints after launch are a free, dated verdict nobody will model in advance.",
+        "Index-provider M&A or stake-taking by CME/ICE would be the repricing starting gun for the data layer."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "CME ICE",
+          "why": "Launch specs and dates from the exchanges; which contract designs and index methodologies each has locked."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "OI prints · ElectronX volumes · index licensing deals",
+          "why": "Adoption is the entire question; all three are observable quarterly."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-04",
+        "note": "Both venues below highs on cyclical volume worries; zero compute-class volumes in either price. Index layer is private.",
+        "rows": [
+          {
+            "symbol": "CME",
+            "price": "$262.63",
+            "pe": "—",
+            "off_high": "-17.9%"
+          },
+          {
+            "symbol": "ICE",
+            "price": "$149.20",
+            "pe": "—",
+            "off_high": "-20.2%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "The CME/ICE contracts launch and open interest is negligible after four quarters.",
+        "Hyperscalers publicly internalize hedging (captive structures), removing the natural buy side.",
+        "Standardization fractures into bilateral bespoke deals — the market stays OTC and dark."
+      ],
+      "watch_next": [
+        "CME/ICE contract launch dates, specs, and first open-interest data.",
+        "ElectronX volume disclosures and any compute-adjacent listings.",
+        "Index-provider licensing or M&A announcements."
+      ],
+      "sources": [
+        {
+          "label": "Ribbit Capital — Power Letter, July 2026 (compute markets section)",
+          "url": "https://ribbitcap.com/"
+        },
+        {
+          "label": "CME Group — announcements",
+          "url": "https://www.cmegroup.com/media-room.html"
+        },
+        {
+          "label": "ICE — announcements",
+          "url": "https://ir.theice.com/press/news-releases"
+        }
+      ]
+    },
+    {
+      "id": "energy-fairchild-time-to-power",
+      "category": "Energy",
+      "title": "The Fairchild effect → AI demand buys frontier energy down its cost curve",
+      "horizon": "2026–2030",
+      "status": "Frontier catalyst · 1 reviewer",
+      "source_model": "Claude Fable 5",
+      "reviewed_by": [],
+      "owner_belief": "In 1962 the Apollo program paid $43.50 a chip and bought Fairchild down the learning curve until chips cost $1 — guaranteed demand did what no subsidy could. AI datacenters are running the same play on frontier power: Bloom Energy's backlog has gone $3.2B (2019) to ~$20B (2025, ~36% CAGR) on multi-gigawatt deals with Oracle, Equinix/AEP sites, and a $5B Brookfield partnership — because fuel cells deploy in months while grid interconnection takes years, and 'time-to-power' now carries a structural premium hyperscalers gladly pay. The same solid-oxide platform produces electrolyzers, so the demand pull is simultaneously funding the green-hydrogen learning curve. What two decades of climate policy couldn't finance, eighteen months of hyperscaler capex is financing at commercial rates.",
+      "conviction": "High on the mechanism (backlogs are contracts, not forecasts). Medium on the equity: this is close to a one-name theme, and fuel cells still cost more per MWh than combined-cycle gas — the thesis needs the curve to keep bending.",
+      "final_verdict": "Known 60, priced 40. The Bloom story got famous in 2025 and then washed out — BE now sits 35% below its high, which is what makes it currently ownable rather than chased. The honest structural weakness is ticker breadth, pre-registered here: BE is the only pure expression (GNRC is the backup-power adjacency at −26%, CAT the diversified genset reference), while PLUG and FCEL are explicitly flagged as broken vehicles this theme refuses to include — the precision-fermentation precedent. If a second clean expression never emerges, this theme should expect the graveyard's thin-ticker rule to come for it; until then, the demand-pull evidence is the strongest in frontier energy.",
+      "consensus_scores": {
+        "knowledge_saturation": 60,
+        "price_saturation": 40
+      },
+      "model_reviews": [
+        {
+          "model": "Claude Fable 5",
+          "role": "Author · frontier catalyst (sourced from Ribbit Power Letter, July 2026)",
+          "knowledge_saturation": 60,
+          "price_saturation": 40,
+          "verdict": "Known 60: Bloom's datacenter pivot is covered. Priced 40: a $20B backlog against a washed-out multiple, with the electrolyzer option priced at roughly zero."
+        }
+      ],
+      "layer_scorecard": [
+        {
+          "layer": "Fuel cells / time-to-power",
+          "symbols": "BE",
+          "knowledge_saturation": 60,
+          "price_saturation": 40,
+          "read": "The pure expression: backlog 6x in six years, −35% from the high, Oracle/Brookfield anchor deals."
+        },
+        {
+          "layer": "Bridge power / gensets",
+          "symbols": "GNRC CAT",
+          "knowledge_saturation": 55,
+          "price_saturation": 45,
+          "read": "Same time-to-power premium in cruder form; GNRC's datacenter push is young, CAT is the diversified giant reference."
+        },
+        {
+          "layer": "The refused vehicles",
+          "symbols": "PLUG FCEL",
+          "knowledge_saturation": 70,
+          "price_saturation": 30,
+          "read": "Cheap for structural reasons — dilution machines without demand-pull anchors. Excluded by rule, listed so nobody recreates the mistake."
+        },
+        {
+          "layer": "The option",
+          "symbols": "BE electrolyzers / green H2",
+          "knowledge_saturation": 40,
+          "price_saturation": 10,
+          "read": "Same platform, second market; priced at ~zero while the fuel-cell demand funds its learning curve."
+        }
+      ],
+      "adversarial_review": [
+        {
+          "title": "Where Fable breaks its own thesis",
+          "bullets": [
+            "One clean ticker — the graveyard's thin-ticker rule has killed themes for exactly this, and the honest response is pre-registered surveillance, not denial.",
+            "Fuel-cell LCOE still exceeds combined-cycle gas; if interconnection reform (FERC queue fixes, PJM fast-track) compresses time-to-power, the premium that funds the whole thesis deflates.",
+            "Backlog concentration: Oracle-linked demand is a large share — one hyperscaler capex pause marks the backlog down fast.",
+            "The 2025 run already monetized the easy repricing; −35% off the high may be the correct price, not an opportunity."
+          ]
+        }
+      ],
+      "what_survived": [
+        "The backlog series ($3.2B→$20B) is disclosed, contracted, and growing at 36% CAGR — the cleanest demand-pull evidence in frontier energy.",
+        "Time-to-power premiums are observable in every hyperscaler behind-the-meter deal signed since 2024."
+      ],
+      "residual_edge": [
+        "Backlog-to-revenue conversion rate as the quarterly tell — the market watches announcements, not conversion.",
+        "The electrolyzer attach: first commercial green-H2 order on the shared platform reprices an option currently at zero."
+      ],
+      "research_priority": [
+        {
+          "bucket": "Investigate first",
+          "symbols": "BE",
+          "why": "Next print: backlog growth, Oracle concentration disclosure, and margin on datacenter deployments vs legacy."
+        },
+        {
+          "bucket": "Monitor",
+          "symbols": "Interconnection-reform docket · GNRC datacenter orders",
+          "why": "The premium's half-life and the second-expression question."
+        }
+      ],
+      "valuation_snapshot": {
+        "source": "Alpaca SIP daily closes",
+        "date": "2026-08-04",
+        "note": "BE is the expression; GNRC adjacency; CAT reference. PLUG/FCEL deliberately excluded as broken vehicles.",
+        "rows": [
+          {
+            "symbol": "BE",
+            "price": "$228.11",
+            "pe": "—",
+            "off_high": "-35.1%"
+          },
+          {
+            "symbol": "GNRC",
+            "price": "$218.63",
+            "pe": "—",
+            "off_high": "-26.2%"
+          },
+          {
+            "symbol": "CAT",
+            "price": "$876.54",
+            "pe": "—",
+            "off_high": "-18.2%"
+          }
+        ]
+      },
+      "falsifiers": [
+        "Interconnection reform materially compresses grid connection timelines — the time-to-power premium collapses.",
+        "Backlog conversion stalls or a hyperscaler cancellation marks the book down.",
+        "Fuel-cell cost curve flattens above gas parity for two more years."
+      ],
+      "watch_next": [
+        "BE quarterly backlog and conversion.",
+        "First subsidy-free mainstream (non-datacenter) fuel-cell win — the Fairchild endgame.",
+        "FERC/PJM interconnection-reform milestones — the countdown clock on the premium."
+      ],
+      "sources": [
+        {
+          "label": "Ribbit Capital — Power Letter, July 2026 (Fairchild/frontier-energy section)",
+          "url": "https://ribbitcap.com/"
+        },
+        {
+          "label": "Bloom Energy — investor relations",
+          "url": "https://investor.bloomenergy.com/"
         }
       ]
     }
