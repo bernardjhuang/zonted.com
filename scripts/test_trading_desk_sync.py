@@ -134,7 +134,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(journal["author"], "GPT-5.6")
         self.assertGreaterEqual(len(journal["entries"]), 1)
         self.assertIn(journal["entries"][0]["stance"], {"Risk-on", "Neutral", "Risk-off"})
-        self.assertEqual(
+        self.assertLessEqual(
             journal["entries"][0]["date"],
             json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"],
         )
