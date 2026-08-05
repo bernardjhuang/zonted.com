@@ -48,17 +48,11 @@
   const daily = sessionDates.map(date => {
     const closed = inWindow.filter(a => a.date === date && a.side === 'sell');
     const all = inWindow.filter(a => a.date === date);
-    const wins = closed.filter(a => a.pct > 0).length;
     return {
       date,
-      closed,
       n: closed.length,
-      w: wins,
-      l: closed.filter(a => a.pct < 0).length,
       avg: closed.length ? closed.reduce((s, a) => s + a.pct, 0) / closed.length : 0,
-      total: closed.reduce((s, a) => s + a.pct, 0),
       actions: all.length,
-      opts: all.filter(a => a.type === 'option').length,
     };
   });
   const tape = inWindow.filter(a => a.side === 'sell')
@@ -97,44 +91,6 @@
     </section>`;
   };
 
-  // ── P&L % by day ───────────────────────────────────────────────────
-  const renderDays = () => {
-    const W = 1160, H = 252, MID = 96;
-    const step = W / daily.length;
-    const amax = Math.max(...daily.filter(d => d.n).map(d => Math.abs(d.avg)), 1);
-    const body = daily.map((d, i) => {
-      const cx = i * step + step / 2;
-      let out;
-      if (!d.n) {
-        out = `<rect class="pf-hv" x="${(i * step + 11).toFixed(1)}" y="${MID - 9}" width="${(step - 22).toFixed(1)}" height="18" rx="3"
-          fill="none" stroke="#d9d7d1" stroke-dasharray="4 3"
-          ${hv(long(d.date), `${d.actions} actions (${d.opts} options)`, 'no closed trades', 'nothing decided this session', false)}/>
-          <text x="${cx.toFixed(1)}" y="${MID - 18}" font-size="11.5" text-anchor="middle" fill="#8f9298" font-family="var(--bl-mono)">none closed</text>`;
-      } else {
-        const h = Math.max(2, Math.abs(d.avg) / amax * 62);
-        const y = d.avg >= 0 ? MID - h : MID;
-        const labelY = d.avg >= 0 ? y - 8 : y + h + 16;
-        out = `<rect class="pf-hv" x="${(i * step + 11).toFixed(1)}" y="${y.toFixed(1)}" width="${(step - 22).toFixed(1)}"
-          height="${h.toFixed(1)}" rx="3" fill="${d.avg >= 0 ? '#087a42' : '#c93a4a'}" fill-opacity=".88"
-          ${hv(long(d.date), `${d.w}W ${d.l}L · ${d.n} closed · ${d.actions} actions (${d.opts} options)`,
-            `${d.avg >= 0 ? '+' : ''}${d.avg.toFixed(2)}% avg`, `sum ${d.total >= 0 ? '+' : ''}${d.total.toFixed(1)} pts`, d.avg >= 0)}/>
-          <text x="${cx.toFixed(1)}" y="${labelY.toFixed(1)}" font-size="12.5" font-weight="700" text-anchor="middle"
-            fill="${d.avg >= 0 ? '#0b6b3c' : '#8d2b39'}" font-family="var(--bl-mono)">${pct(d.avg)}</text>`;
-      }
-      return `${out}
-        <text x="${cx.toFixed(1)}" y="${H - 24}" font-size="11" text-anchor="middle" fill="var(--bl-ink2)" font-family="var(--bl-mono)">${short(d.date)}</text>
-        <text x="${cx.toFixed(1)}" y="${H - 8}" font-size="10" text-anchor="middle" fill="var(--bl-faint)" font-family="var(--bl-mono)">${d.actions}a · ${d.n}c</text>`;
-    }).join('');
-    return `<section class="pf-card">
-      <h2 class="pf-h">P&amp;L % by day — last ${daily.length} sessions</h2>
-      <p class="pf-sub">Bar and label are the <b>average result per closed trade</b> that session, which is a real percentage. Underneath each bar: actions taken and trades closed. Hover for the full breakdown including the session total.</p>
-      <div class="pf-scroll"><svg viewBox="0 0 ${W} ${H}" class="pf-svg" role="img" aria-label="Average closed-trade result by session">
-        <line x1="0" y1="${MID}" x2="${W}" y2="${MID}" stroke="var(--bl-border)"/>
-        ${body}
-      </svg></div>
-    </section>`;
-  };
-
   // ── trade log ──────────────────────────────────────────────────────
   const renderLog = () => {
     const rows = [...daily].reverse().map(d => {
@@ -148,11 +104,11 @@
         <td><span class="pf-pill pf-${esc(a.side)}">${a.side === 'sell' ? 'Sell' : 'Buy'}</span></td>
         <td><span class="pf-pill pf-${esc(a.type)}">${a.type === 'option' ? 'Option' : 'Stock'}</span></td>
         <td class="pf-basis">${a.side === 'sell' ? 'realized' : 'marked'}</td>
-        <td class="pf-r pf-pnl ${a.pct >= 0 ? 'up' : 'down'}">${pct(a.pct)}</td></tr>`).join('');
+        <td class="pf-r pf-pnl ${a.side === 'sell' ? (a.pct >= 0 ? 'up' : 'down') : ''}">${a.side === 'sell' ? pct(a.pct) : '—'}</td></tr>`).join('');
     }).join('');
     return `<section class="pf-card">
       <h2 class="pf-h">Trade log — last ${daily.length} trading sessions</h2>
-      <p class="pf-sub">Every action, newest session first. Sells are realized results; buys are marked to the latest quote, so a buy row's number keeps moving until the position is closed.</p>
+      <p class="pf-sub">Every action, newest session first. P&amp;L is shown only for sells because those are realized results; buys stay listed without a moving mark.</p>
       <div class="pf-logwrap"><table class="pf-log">
         <thead><tr><th>Ticker</th><th>Side</th><th>Type</th><th>Basis</th><th class="pf-r">P&amp;L %</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
@@ -210,7 +166,7 @@
   const mount = document.createElement('div');
   mount.className = 'pf-mount';
   const draw = points => {
-    mount.innerHTML = renderHero(points) + renderTape() + renderDays() + renderLog();
+    mount.innerHTML = renderHero(points) + renderTape() + renderLog();
     // Superseded by the views above: the sparkline, the raw action list, and the
     // giant headline the hero now carries.
     // setAttribute, not `.hidden = true`: the sparkline is an <svg>, and the
