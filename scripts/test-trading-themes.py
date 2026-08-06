@@ -36,8 +36,12 @@ class TradingThemesContractTest(unittest.TestCase):
     def test_route_loads_exact_versioned_assets(self) -> None:
         data_hash = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
         script_hash = hashlib.sha256(SCRIPT.read_bytes()).hexdigest()[:12]
+        script_asset = SCRIPT.with_name(f"{SCRIPT.stem}.{script_hash}{SCRIPT.suffix}")
         self.assertIn(f'/trading/themes.json?v={data_hash}', self.page)
-        self.assertIn(f'/js/trading-themes.js?v={script_hash}', self.page)
+        self.assertIn(f'/js/{script_asset.name}', self.page)
+        self.assertTrue(script_asset.exists())
+        self.assertEqual(script_asset.read_bytes(), SCRIPT.read_bytes())
+        self.assertNotIn('/js/trading-themes.js?v=', self.page)
         self.assertIn('<title>Themes — Trading Desk — Zonted</title>', self.page)
         self.assertIn('aria-current="page">Themes</a>', self.page)
         self.assertIn('id="themes-live"', self.page)

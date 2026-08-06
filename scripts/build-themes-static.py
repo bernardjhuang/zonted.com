@@ -7,9 +7,10 @@ including every major AI crawler. This script writes a plain-HTML summary of
 every theme between AUTO:THEMES_STATIC markers inside the #themes-live mount.
 Browsers replace it the moment trading-themes.js renders; crawlers read it.
 
-Run this AFTER any edit to trading/themes.json, then commit both files.
-It also restamps the themes.json ?v= hash on the page, so no separate restamp
-step is needed. test-trading-themes.py fails loudly if page and data drift.
+Run this AFTER any edit to trading/themes.json or js/trading-themes.js, then
+commit the generated page and fingerprinted renderer asset. It restamps the
+themes.json query hash and emits a content-addressed renderer filename because
+Cloudflare's /js/* cache does not vary reliably on query strings.
 """
 from __future__ import annotations
 
@@ -22,6 +23,7 @@ import re
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 DATA = ROOT / "trading" / "themes.json"
 PAGE = ROOT / "trading" / "themes" / "index.html"
+SCRIPT = ROOT / "js" / "trading-themes.js"
 START = "<!-- AUTO:THEMES_STATIC:START"
 END = "<!-- AUTO:THEMES_STATIC:END -->"
 
@@ -122,6 +124,11 @@ def render_static(payload: dict, data_hash: str) -> str:
 def main() -> None:
     payload = json.loads(DATA.read_text())
     data_hash = hashlib.sha256(DATA.read_bytes()).hexdigest()[:12]
+    script_bytes = SCRIPT.read_bytes()
+    script_hash = hashlib.sha256(script_bytes).hexdigest()[:12]
+    script_asset = SCRIPT.with_name(f"{SCRIPT.stem}.{script_hash}{SCRIPT.suffix}")
+    if not script_asset.exists() or script_asset.read_bytes() != script_bytes:
+        script_asset.write_bytes(script_bytes)
     page = PAGE.read_text()
 
     static = render_static(payload, data_hash)
@@ -140,9 +147,22 @@ def main() -> None:
     page, n = re.subn(r"themes\.json\?v=[a-f0-9]{12}", f"themes.json?v={data_hash}", page)
     assert n >= 1, "themes.json ?v= stamp not found"
 
+    # Query-string cache busting is insufficient on the custom domain: /js/*
+    # can keep serving the old body under a new ?v=. Use a new path instead.
+    script_url = f"/js/{script_asset.name}"
+    page, n = re.subn(
+        r"/js/trading-themes(?:\.[a-f0-9]{12})?\.js(?:\?v=[a-f0-9]{12})?",
+        script_url,
+        page,
+    )
+    assert n >= 1, "trading themes script URL not found"
+
     PAGE.write_text(page)
     words = len(re.findall(r"\b\w+\b", re.sub(r"<[^>]+>", " ", static)))
-    print(f"[themes-static] {len(payload['themes'])} themes baked · ~{words} words · data hash {data_hash}")
+    print(
+        f"[themes-static] {len(payload['themes'])} themes baked · ~{words} words · "
+        f"data hash {data_hash} · script asset {script_asset.name}"
+    )
 
 
 if __name__ == "__main__":
