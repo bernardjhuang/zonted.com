@@ -116,6 +116,22 @@ class DeskPositionBuilderTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "need authored Desk profiles"):
             builder.render({"risk_summary": summary(), "desk_instruments": {"NEW": {"equity_entry": 5.0, "options": []}}}, self.profiles())
 
+    def test_pl_is_authored_as_a_thesis_position(self):
+        profiles = self.profiles()
+        profiles["profiles"]["PL"] = {
+            "kill": None,
+            "flair": "thesis",
+            "sector": "Technology",
+            "sector_etf": "XLK",
+            "thesis": "Daily Earth imagery and defense demand must convert backlog into durable recurring revenue.",
+        }
+        result = builder.render({"risk_summary": summary(), "desk_instruments": {
+            "PL": {"equity_entry": 22.63, "equity_side": "long", **risk(3.5, iv=None, delta=None, dte=None, premium=0, theta=0), "options": []},
+        }}, profiles)
+        self.assertEqual(result["positions"][0]["symbol"], "PL")
+        self.assertEqual(result["positions"][0]["flair"], "thesis")
+        self.assertEqual(result["positions"][0]["sector_etf"], "XLK")
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())

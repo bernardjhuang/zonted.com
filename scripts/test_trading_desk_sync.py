@@ -11,6 +11,7 @@ import re
 import subprocess
 import sys
 import unittest
+from zoneinfo import ZoneInfo
 
 import sync_trading_desk as sync
 import trading_shell
@@ -238,6 +239,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})
+        pl_row = next(row for row in position_rows if _row_symbol(row) == "PL")
+        self.assertIn('class="desk-position-flair desk-position-flair--thesis">Thesis</span>', pl_row)
+        pl_profile = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]["PL"]
+        self.assertEqual(pl_profile["flair"], "thesis")
+        self.assertEqual(pl_profile["sector_etf"], "XLK")
         exposures = [float(_row_attr(row, "data-exposure-percent")) for row in position_rows]
         self.assertEqual(exposures, sorted(exposures, reverse=True))
         self.assertGreater(max(exposures), 100)
@@ -261,7 +267,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
         else:
             fallback = json.loads((ROOT / "trading" / "desk-close-quotes.json").read_text())
         chart_date = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["as_of"]
-        self.assertEqual(fallback["generated_at"][:10], chart_date)
+        fallback_stamp = dt.datetime.fromisoformat(fallback["generated_at"].replace("Z", "+00:00"))
+        self.assertEqual(fallback_stamp.astimezone(ZoneInfo("America/Chicago")).date().isoformat(), chart_date)
         self.assertIn("BYDDY", fallback["quotes"])
         self.assertIn(f'>${float(fallback["quotes"]["BYDDY"]["price"]):,.2f}<', byddy_row)
 
