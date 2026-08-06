@@ -73,6 +73,8 @@ class GptRiskPublisherTests(unittest.TestCase):
             with (
                 mock.patch.object(publisher, "MARKET", market),
                 mock.patch.object(publisher, "JOURNAL", journal),
+                mock.patch.object(publisher, "refresh_market") as refresh_market,
+                mock.patch.object(publisher, "render_chart_page") as render_chart_page,
                 mock.patch.object(publisher.subprocess, "run") as run,
             ):
                 entry = publisher.publish(raw)
@@ -82,6 +84,9 @@ class GptRiskPublisherTests(unittest.TestCase):
             self.assertEqual(payload["entries"][1]["date"], "2026-08-04")
             self.assertEqual(entry["sources"][0]["url"], "https://example.com/official")
             self.assertIn("https://example.com/official", entry["source_note"])
+            refresh_market.assert_called_once()
+            self.assertEqual(refresh_market.call_args.args[1], "2026-08-05")
+            render_chart_page.assert_called_once()
             run.assert_called_once_with(
                 ["python3", "scripts/build-trading-desk.py", "--mode", "close"],
                 cwd=ROOT,
@@ -108,6 +113,78 @@ class GptRiskPublisherTests(unittest.TestCase):
         payload["sources"][0]["as_of"] = "2026-08-06"
         with self.assertRaisesRegex(ValueError, "after journal cutoff"):
             publisher.validate_source_dates(payload)
+
+    def test_refresh_market_requires_both_series_through_journal_date(self) -> None:
+        journal: dict = {
+            "entries": [{"date": "2026-08-05"}, {"date": "2026-08-04"}],
+        }
+        closes = {
+            "SPY": [["2026-08-04", 100.0], ["2026-08-05", 101.0]],
+            "QQQ": [["2026-08-04", 200.0], ["2026-08-05", 202.0]],
+        }
+        with mock.patch.object(publisher, "fetch_closes", return_value=closes):
+            publisher.refresh_market(journal, "2026-08-05")
+        self.assertEqual(journal["chart"]["market"]["updated"], "2026-08-05")
+        self.assertEqual(journal["chart"]["market"]["closes"], closes)
+
+        with mock.patch.object(
+            publisher,
+            "fetch_closes",
+            return_value={"SPY": closes["SPY"], "QQQ": closes["QQQ"][:-1]},
+        ):
+            with self.assertRaisesRegex(ValueError, "do not include completed session"):
+                publisher.refresh_market({"entries": journal["entries"]}, "2026-08-05")
+
+    def test_chart_matches_gpt_ratings_and_market_window(self) -> None:
+        payload = {
+            "entries": [
+                {"date": "2026-08-05", "risk_appetite": 6.8, "stance": "Risk-on"},
+                {"date": "2026-08-04", "risk_appetite": 5.0, "stance": "Neutral"},
+            ],
+            "chart": {
+                "market": {
+                    "updated": "2026-08-05",
+                    "closes": {
+                        "SPY": [["2026-08-04", 100.0], ["2026-08-05", 101.0]],
+                        "QQQ": [["2026-08-04", 200.0], ["2026-08-05", 198.0]],
+                    },
+                }
+            },
+        }
+        chart = publisher.build_chart(payload)
+        self.assertIn("Rating vs the tape", chart)
+        self.assertIn("GPT rating (0–10, left)", chart)
+        self.assertIn("SPY %", chart)
+        self.assertIn("QQQ %", chart)
+        self.assertIn("% from 2026-08-04 close · prices thru 2026-08-05", chart)
+        self.assertIn("2026-08-05 · model journal · Risk-on · 6.8/10", chart)
+        self.assertEqual(chart.count("<circle "), 2)
+
+    def test_chart_is_inserted_above_the_journal_mount(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            page = pathlib.Path(tmp) / "index.html"
+            page.write_text('<div class="phead"></div><div id="risk-live"></div>')
+            payload = {
+                "entries": [
+                    {"date": "2026-08-05", "risk_appetite": 6.8, "stance": "Risk-on"},
+                    {"date": "2026-08-04", "risk_appetite": 5.0, "stance": "Neutral"},
+                ],
+                "chart": {
+                    "market": {
+                        "updated": "2026-08-05",
+                        "closes": {
+                            "SPY": [["2026-08-04", 100.0], ["2026-08-05", 101.0]],
+                            "QQQ": [["2026-08-04", 200.0], ["2026-08-05", 198.0]],
+                        },
+                    }
+                },
+            }
+            with mock.patch.object(publisher, "PAGE", page):
+                publisher.render_chart_page(payload)
+                publisher.render_chart_page(payload)
+            rendered = page.read_text()
+            self.assertEqual(rendered.count(publisher.CHART_START), 1)
+            self.assertLess(rendered.index("Rating vs the tape"), rendered.index('id="risk-live"'))
 
 
 if __name__ == "__main__":
