@@ -119,21 +119,43 @@ class GptRiskPublisherTests(unittest.TestCase):
             "entries": [{"date": "2026-08-05"}, {"date": "2026-08-04"}],
         }
         closes = {
-            "SPY": [["2026-08-04", 100.0], ["2026-08-05", 101.0]],
-            "QQQ": [["2026-08-04", 200.0], ["2026-08-05", 202.0]],
+            "SPY": [["2026-08-04", 100.0], ["2026-08-05", 101.0], ["2026-08-06", 102.0]],
+            "QQQ": [["2026-08-04", 200.0], ["2026-08-05", 202.0], ["2026-08-06", 204.0]],
         }
         with mock.patch.object(publisher, "fetch_closes", return_value=closes):
             publisher.refresh_market(journal, "2026-08-05")
         self.assertEqual(journal["chart"]["market"]["updated"], "2026-08-05")
-        self.assertEqual(journal["chart"]["market"]["closes"], closes)
+        self.assertEqual(
+            journal["chart"]["market"]["closes"],
+            {symbol: rows[:-1] for symbol, rows in closes.items()},
+        )
 
         with mock.patch.object(
             publisher,
             "fetch_closes",
-            return_value={"SPY": closes["SPY"], "QQQ": closes["QQQ"][:-1]},
+            return_value={"SPY": closes["SPY"], "QQQ": closes["QQQ"][:1]},
         ):
             with self.assertRaisesRegex(ValueError, "do not include completed session"):
                 publisher.refresh_market({"entries": journal["entries"]}, "2026-08-05")
+
+    def test_refresh_market_trims_cached_future_rows(self) -> None:
+        journal = {
+            "entries": [{"date": "2026-08-05"}],
+            "chart": {
+                "market": {
+                    "updated": "2026-08-05",
+                    "start": "2026-07-26",
+                    "closes": {
+                        "SPY": [["2026-08-05", 101.0], ["2026-08-06", 102.0]],
+                        "QQQ": [["2026-08-05", 202.0], ["2026-08-06", 204.0]],
+                    },
+                }
+            },
+        }
+        with mock.patch.object(publisher, "fetch_closes", return_value=None):
+            publisher.refresh_market(journal, "2026-08-05")
+        self.assertEqual(journal["chart"]["market"]["closes"]["SPY"], [["2026-08-05", 101.0]])
+        self.assertEqual(journal["chart"]["market"]["closes"]["QQQ"], [["2026-08-05", 202.0]])
 
     def test_chart_matches_gpt_ratings_and_market_window(self) -> None:
         payload = {
