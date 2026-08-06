@@ -142,6 +142,11 @@ def refresh_market(journal: dict[str, Any], required_date: str) -> None:
     first = min(entry["date"] for entry in journal["entries"])
     start = (dt.date.fromisoformat(first) - dt.timedelta(days=10)).isoformat()
     closes = fetch_closes(start)
+    if closes:
+        closes = {
+            symbol: [row for row in closes.get(symbol, []) if row[0] <= required_date]
+            for symbol in ("SPY", "QQQ")
+        }
     if closes and all(any(date == required_date for date, _ in closes.get(symbol, [])) for symbol in ("SPY", "QQQ")):
         journal["chart"] = {
             "market": {"start": start, "closes": closes, "updated": required_date}
@@ -149,11 +154,15 @@ def refresh_market(journal: dict[str, Any], required_date: str) -> None:
         return
 
     cached = (journal.get("chart") or {}).get("market") or {}
-    cached_closes = cached.get("closes") or {}
+    cached_closes = {
+        symbol: [row for row in (cached.get("closes") or {}).get(symbol, []) if row[0] <= required_date]
+        for symbol in ("SPY", "QQQ")
+    }
     if cached.get("updated") == required_date and all(
         any(date == required_date for date, _ in cached_closes.get(symbol, []))
         for symbol in ("SPY", "QQQ")
     ):
+        journal["chart"]["market"] = {**cached, "closes": cached_closes, "updated": required_date}
         return
     raise ValueError(f"GPT risk chart prices do not include completed session {required_date}")
 
