@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import importlib.util
+import json
 from pathlib import Path
 import unittest
 
@@ -47,6 +48,13 @@ def summary():
 
 
 class DeskPositionBuilderTests(unittest.TestCase):
+    def test_live_position_profiles_cover_jci(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        self.assertIn("JCI", profiles)
+        self.assertEqual(profiles["JCI"]["sector"], "Industrials")
+        self.assertEqual(profiles["JCI"]["sector_etf"], "XLI")
+        self.assertEqual(profiles["JCI"]["flair"], "thesis")
+
     def profiles(self):
         return {
             "schema_version": 1,

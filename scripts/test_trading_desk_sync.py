@@ -239,11 +239,14 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual({_row_symbol(row) for row in position_rows}, expected_positions)
         self.assertEqual({_row_symbol(row) for row in thesis_rows}, expected_hypotheses)
         self.assertFalse({_row_symbol(row) for row in position_rows} & {_row_symbol(row) for row in thesis_rows})
-        pl_row = next(row for row in position_rows if _row_symbol(row) == "PL")
-        self.assertIn('class="desk-position-flair desk-position-flair--thesis">Thesis</span>', pl_row)
-        pl_profile = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]["PL"]
-        self.assertEqual(pl_profile["flair"], "thesis")
-        self.assertEqual(pl_profile["sector_etf"], "XLK")
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        for row in position_rows:
+            symbol = _row_symbol(row)
+            flair = profiles[symbol]["flair"]
+            self.assertIn(
+                f'class="desk-position-flair desk-position-flair--{flair}">{flair.title()}</span>',
+                row,
+            )
         exposures = [float(_row_attr(row, "data-exposure-percent")) for row in position_rows]
         self.assertEqual(exposures, sorted(exposures, reverse=True))
         self.assertGreater(max(exposures), 100)
@@ -426,6 +429,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
         simple_theses = {
             "XYL": ["AI data-center buildouts", "water systems", "small starter"],
+            "JCI": ["AI data-center cooling demand", "orders and backlog", "momentum starter"],
             "BMNR": ["Robinhood Chain validates ETH", "Cheap Web3 valuations", "compound ETH per share"],
             "FIGR": ["previously founded SoFi", "Real-world assets", "$25 is the working floor"],
             "MDB": ["AI tailwinds support Atlas", "earnings and yearly VWAPs", "Strong hiring numbers"],
