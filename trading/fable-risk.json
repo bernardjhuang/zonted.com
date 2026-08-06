@@ -2,6 +2,113 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-06",
+   "assess_for": "Thu Aug 6 session",
+   "session": "intraday",
+   "verdict": "RISK-ON",
+   "subtitle": "Same +6, new tape \u2014 a Hormuz deal in final stages sends Brent to $80 and the only off-rows are calendar echoes",
+   "score": 6,
+   "n_signals": 11,
+   "composite": "+0.55",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "769.79 vs 746.37 \u00b7 +3.14% \u00b7 Aug 5 close, Alpaca SIP",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.79 \u00b7 Aug 6 9:44am ET, Cboe direct \u2014 second session under 16; site feed still Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.28 contango (Aug VX 17.43, Sep VX 18.71) \u00b7 Aug 5 settles, Cboe direct",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "90.41 \u00b7 Aug 6 9:44am ET, Cboe direct \u2014 holding Tuesday's reversal lower",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "73.58 \u00b7 Aug 5 close \u2014 Yahoo 429s this morning; reusing last evening's verified print for the same data date",
+     "score": 1
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.73% (Aug 4, FRED direct \u2014 reachable again this morning) \u00b7 \u221211bp/5d vs 2.84% Jul 28",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 Aug 4 vintage \u2014 vwap feed still one close behind; below: ESPO \u22120.2%, XLC \u22121.2%, XLU \u22121.4%; XLY +1.9% the thinnest cushion",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.25 \u00b7 XLI +1.06 \u00b7 XLE +0.83 \u2014 two of the five \u00b7 Aug 4 vintage",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22121.13pt (IWM +2.14%, SPY +3.27%, Jul 8 \u2192 Aug 5, Alpaca SIP) \u00b7 unchanged overnight \u2014 still 0.13pt from the band",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.53, ZEC +0.40, ETH +0.38 positive; SOL \u22120.21 still the nearest fourth \u00b7 Aug 4 UTC vintage",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "157.83 vs 162.94 (Jul 30) \u00b7 yen +3.1% \u00b7 ECB fix (Yahoo 429) \u2014 pair flat three straight days; the \u22121 is the calendar, not the tape",
+     "score": -1
+    }
+   ],
+   "narrative": [
+    "<p>Second straight RISK-ON at signal sum +6, and the composite holds its run-high +0.55 (7.7/10 risk appetite). Every stress gauge is green and most got greener: VIX 15.79 for a second session under 16, the VX curve in steep +1.28 contango, VVIX at 90, MOVE at 73.6, and high-yield spreads at 2.73% \u2014 11bp <i>tighter</i> over five sessions, straight through refunding week.</p>",
+    "<p>The macro story finally matches the gauges. The oil shock that built July's defensive tape is unwinding: an Oman-brokered interim deal to reopen the <a href=\"https://www.benzinga.com/markets/equities/26/08/60983262/stock-market-today-dow-futures-gain-nasdaq-100-slips-as-hormuz-deal-talks-progress-spacex-sandisk-applovin-in-focus\" rel=\"noopener\">Strait of Hormuz is in its final stages</a>, and Brent has collapsed from $100+ in late July to <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-6-dow-sp-nasdaq-091620000.html\" rel=\"noopener\">about $80</a> after back-to-back 5% down days. Labor is steady going into tomorrow's payrolls: initial claims printed 199k, essentially flat, with July layoffs at a two-year low. The Dow set a record this morning; the soft spot is concentrated in AI-capex names (AMD, SanDisk, Western Digital punished on earnings), which is a rotation story, not a risk story \u2014 the 10-year sits quietly at 4.62%.</p>",
+    "<p>The two \u22121s are both echoes rather than fresh stress. The yen row scores off because the 5-session base still reaches back to Jul 30's 162.94 \u2014 the pair itself has sat flat near 157.6\u2013157.8 for three days. And small caps still lag by 1.13 points over 20 sessions, a gap that hasn't budged overnight and sits 0.13 from neutral. Crypto stays stuck at 3 of 7 alts beating BTC. Nothing in the off-column is deteriorating; it's all waiting on the calendar.</p>",
+    "<p>Tomorrow's July jobs report (consensus near 80k) is the one event that can move multiple rows at once. The cushion matters: from +6, even three simultaneous one-point drops leaves +3 \u2014 RISK-ON by the final increment. This call is mechanically hard to break before Friday's print, and after it, one bad number puts it on the fence.</p>"
+   ],
+   "flips": {
+    "to_off": "Four one-point drops needed to reach NEUTRAL at +2. Live candidates: VIX re-crossing 16 (0.21 away), VVIX over 95 (4.6 away), MOVE back over 80 (6.4 away), breadth to 9 of 13 if XLY (+1.9% above VWAP) slips. A hot-wages payrolls print Friday could sweep the vol rows at once; a Hormuz-deal breakdown re-spiking Brent toward $90 is the other sweep risk. Even three drops leaves +3 \u2014 still RISK-ON.",
+    "to_on": "Sum +7 (+0.64) needs one of: SOL's 50d spread z (\u22120.21) flipping positive for a fourth alt; the IWM\u2212SPY gap closing its last 0.13pt into the \u00b11 band; or the yen row expiring \u2014 not tomorrow (Friday's base is Jul 31's 160.24, still +1.5%), but by Monday the base rolls to Aug 3's 156.68 and an unchanged yen scores 0. The third needs no buying at all, just the weekend."
+   },
+   "sources": [
+    {
+     "t": "Benzinga \u2014 Aug 6 premarket: Hormuz deal talks, oil, futures",
+     "u": "https://www.benzinga.com/markets/equities/26/08/60983262/stock-market-today-dow-futures-gain-nasdaq-100-slips-as-hormuz-deal-talks-progress-spacex-sandisk-applovin-in-focus"
+    },
+    {
+     "t": "Yahoo Finance \u2014 Aug 6 live blog: claims 199k, Dow record, oil near $80",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-6-dow-sp-nasdaq-091620000.html"
+    },
+    {
+     "t": "FRED \u2014 ICE BofA US High Yield OAS",
+     "u": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+    },
+    {
+     "t": "Cboe \u2014 VIX quotes and VX settlements",
+     "u": "https://www.cboe.com/tradable_products/vix/"
+    }
+   ],
+   "rating": 7.7
+  },
+  {
    "date": "2026-08-05",
    "session": "post-close",
    "assess_for": "Thursday Aug 6 open",
