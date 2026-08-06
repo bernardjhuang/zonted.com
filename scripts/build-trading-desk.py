@@ -636,7 +636,7 @@ def render(mode: str, quote_path: Path | None) -> str:
     scan = load(SCAN)["charts"]
     quotes, quote_stamp, live_status = quotes_from(quote_path)
     symbols = sorted(metadata)
-    quote_date = quote_stamp.date() if quote_stamp else None
+    quote_date = quote_stamp.astimezone(CT).date() if quote_stamp else None
     chart_date = dt.date.fromisoformat(charts_payload["as_of"])
     if mode == "close" and quote_date and quote_date != chart_date:
         raise ValueError(
@@ -646,7 +646,7 @@ def render(mode: str, quote_path: Path | None) -> str:
         symbol: row_market(symbol, charts[symbol], scan.get(symbol), quotes.get(symbol), quote_date)
         for symbol in symbols
     }
-    as_of = quote_stamp.date() if mode == "morning" and quote_stamp else chart_date
+    as_of = quote_date if mode == "morning" and quote_date else chart_date
     position_symbols = {p["symbol"] for p in positions}
     tracked = [s for s in symbols if s not in position_symbols]
     for symbol in tracked:

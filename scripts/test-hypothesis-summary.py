@@ -109,6 +109,10 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertEqual(display["labels"]["base"], "Cost basis")
         self.assertIn("not intrinsic value", self.config["rows"][symbol]["method"])
         self.assertNotIn("PG", self.config["rows"])
+        self.assertIn("PL", self.config["rows"])
+        self.assertIn('id="hypothesis-pl-setup"', self.page)
+        self.assertIn('id="hypothesis-pl-setup" aria-labelledby="hypothesis-pl-title"', self.page)
+        self.assertRegex(self.page, r'id="hypothesis-pl-setup"[^>]+data-desk-stance="open-position"')
 
     def test_summary_stylesheet_asset_is_unique(self) -> None:
         self.assertEqual(self.page.count(summary.CSS_HREF), 1)

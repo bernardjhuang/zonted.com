@@ -166,13 +166,16 @@
   const mount = document.createElement('div');
   mount.className = 'pf-mount';
   const draw = points => {
-    mount.innerHTML = renderHero(points) + renderTape() + renderLog();
-    // Superseded by the views above: the sparkline, the raw action list, and the
-    // giant headline the hero now carries.
-    // setAttribute, not `.hidden = true`: the sparkline is an <svg>, and the
-    // hidden IDL property lives on HTMLElement, so the property is a no-op there.
-    panel.querySelectorAll('.results-kicker, #results-heading, #results-heading + p, .results-chart, .results-history, .performance-actions')
-      .forEach(node => node.setAttribute('hidden', ''));
+    const statsNodes = ['.results-stats', '.results-statline', '.results-method']
+      .map(selector => panel.querySelector(selector))
+      .filter(Boolean);
+    mount.innerHTML = renderHero(points) + '<section class="pf-winrates" data-pf-winrates></section>' + renderTape() + renderLog();
+    const statsHost = mount.querySelector('[data-pf-winrates]');
+    statsNodes.forEach(node => statsHost.appendChild(node));
+    // The cron block remains the no-JS fallback. Once enhanced, its headline,
+    // sparkline, and action ledger are replaced by the hero, win-rate rail,
+    // trade tape, and log above.
+    panel.querySelector('.results-only')?.setAttribute('hidden', '');
     // Mount OUTSIDE .results-only: that wrapper is a 920px centred column whose
     // `.results-only h2` rule (up to 104px) also outranks our section headings.
     panel.appendChild(mount);

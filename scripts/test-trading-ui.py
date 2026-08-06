@@ -193,9 +193,13 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn('class="results-chart"', block)
         self.assertIn('Daily EOD snapshots', block)
         self.assertIn('Quantity-free YTD outcome statistics', block)
-        self.assertIn('Last 7 days', block)
-        self.assertIn('Last 30 days', block)
-        self.assertRegex(block, r'Current (wins|losses|none) streak')
+        self.assertEqual(
+            re.findall(r'<span>(Last \d+ days)</span>', block),
+            ['Last 7 days', 'Last 30 days', 'Last 90 days'],
+        )
+        self.assertLess(block.index('class="results-chart"'), block.index('class="results-stats"'))
+        self.assertNotRegex(block, r'Current (wins|losses|none) streak')
+        self.assertNotIn('Longest win', block)
         self.assertIn('Quantities and dollar amounts are ignored', block)
         stats = re.search(
             r'data-results-wins="(\d+)" data-results-losses="(\d+)" '
@@ -350,6 +354,14 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertIn("a.side === 'sell' ? pct(a.pct) : '—'", script)
         self.assertIn("P&amp;L is shown only for sells", script)
         self.assertNotIn("a buy row's number keeps moving", script)
+
+    def test_performance_places_recent_win_rates_below_ytd_hero(self):
+        script = (ROOT / "js" / "trading-performance.js").read_text()
+        styles = (ROOT / "trading" / "performance-tape.css").read_text()
+        self.assertIn('data-pf-winrates', script)
+        self.assertIn("statsNodes.forEach(node => statsHost.appendChild(node))", script)
+        self.assertLess(script.index("renderHero(points)"), script.index("data-pf-winrates"))
+        self.assertIn("grid-template-columns:repeat(3,minmax(0,1fr))", styles)
 
     def test_performance_daily_pnl_section_is_removed(self):
         script = (ROOT / "js" / "trading-performance.js").read_text()
