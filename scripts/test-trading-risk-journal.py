@@ -47,6 +47,21 @@ class RiskJournalContractTest(unittest.TestCase):
                 self.assertGreaterEqual(len(entry[key]), 1, (entry["date"], key))
                 self.assertTrue(all(str(value).strip() for value in entry[key]))
 
+    def test_chart_tracks_every_rating_against_current_spy_and_qqq_closes(self) -> None:
+        chart = self.payload["chart"]["market"]
+        latest_date = self.payload["entries"][0]["date"]
+        self.assertEqual(chart["updated"], latest_date)
+        for symbol in ("SPY", "QQQ"):
+            rows = chart["closes"][symbol]
+            self.assertGreaterEqual(len(rows), len(self.payload["entries"]))
+            self.assertEqual(rows, sorted(rows))
+            self.assertIn(latest_date, {date for date, _ in rows})
+        page = (ROOT / "trading" / "gpt-risk" / "index.html").read_text()
+        self.assertIn("<!-- AUTO:GPT_RISK_CHART:START -->", page)
+        self.assertIn("Rating vs the tape", page)
+        self.assertIn("GPT rating (0–10, left)", page)
+        self.assertLess(page.index("Rating vs the tape"), page.index('id="risk-live"'))
+
     def test_grok_log_has_latest_structured_entry_and_history(self) -> None:
         page = (ROOT / "trading" / "grok-risk" / "index.html").read_text()
         data = json.loads((ROOT / "trading" / "grok-risk.json").read_text())
