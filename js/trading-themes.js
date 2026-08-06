@@ -183,6 +183,7 @@
       ${renderProvenance(theme)}
       <h2>${esc(theme.title)}</h2>
       ${theme.disqualified ? `<div class="theme-disqualified"><strong>Disqualified</strong><span>${esc(theme.disqualified.reason)}</span></div>` : ''}
+      ${theme.qualified && !theme.disqualified ? `<div class="theme-disqualified theme-qualified"><strong>Active play</strong><span>${esc(theme.qualified.position)} · ${esc(theme.qualified.date)} — ${esc(theme.qualified.note)}</span></div>` : ''}
       <p class="theme-belief">${esc(theme.owner_belief)}</p>
       <div class="hero-scores">
         <div class="hero-meters">
@@ -297,6 +298,7 @@
 
   const state = { cats: new Set(), minGap: 0, sortKey: 'gap', sortDir: -1 };
   let rows = [];
+  let qualifiedRows = [];
   let disqualifiedRows = [];
   let byId = new Map();
   let methodRef = null;
@@ -350,6 +352,26 @@
       <td class="lhor">${esc(row.horizon)}</td>
     </tr>`).join('')}</tbody>
   </table>`;
+
+  const renderQualified = list => {
+    if (!list.length) return '';
+    return `<section class="disqualified-themes qualified-themes" aria-labelledby="qualified-themes-heading">
+      <div class="dq-head">
+        <h2 id="qualified-themes-heading">Active plays</h2>
+        <p>Research graduated into live positions — click a row for the full record.</p>
+      </div>
+      <div class="dq-wrap">
+        <table class="dq-table" aria-label="Active plays">
+          <thead><tr><th>Theme</th><th>Position note</th><th>Position</th></tr></thead>
+          <tbody>${list.map(row => `<tr class="dq-row" data-theme-id="${esc(row.theme.id)}">
+            <td><button type="button" class="lt-btn">${esc(row.title)}</button></td>
+            <td>${esc(row.theme.qualified.note)}</td>
+            <td class="dq-symbols">${esc(row.theme.qualified.position)} · ${esc(row.theme.qualified.date)}</td>
+          </tr>`).join('')}</tbody>
+        </table>
+      </div>
+    </section>`;
+  };
 
   const renderDisqualified = list => {
     if (!list.length) return '';
@@ -512,10 +534,12 @@
     .then(payload => {
       methodRef = payload.method;
       const themes = sortThemesByGapDescending(payload.themes);
-      rows = themes.filter(theme => !theme.disqualified).map(rowOf);
+      rows = themes.filter(theme => !theme.disqualified && !theme.qualified).map(rowOf);
+      qualifiedRows = themes.filter(theme => theme.qualified && !theme.disqualified).map(rowOf);
       disqualifiedRows = themes.filter(theme => theme.disqualified).map(rowOf);
       byId = new Map(themes.map(theme => [theme.id, theme]));
-      shell.innerHTML = renderControls()
+      shell.innerHTML = renderQualified(qualifiedRows)
+        + renderControls()
         + `<div class="ledger-wrap" data-ledger></div>
            <p class="ledger-foot">Colored icon sourced the theme · gray icons reviewed it · hover an icon for the model · click any row for the full record.</p>`
         + renderDisqualified(disqualifiedRows)
