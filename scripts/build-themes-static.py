@@ -67,6 +67,7 @@ def render_static(payload: dict, data_hash: str) -> str:
                 f'<p class="ts-qualification"><strong>Qualified:</strong> {esc(details["note"])} '
                 f'<strong>Position:</strong> {esc(details["position"])} · {esc(details["date"])}</p>\n'
             ) + disqualification
+        verdict_label = "Verdict" if theme.get("reviewed_by") else "Source verdict — review pending"
         blocks.append(
             f'<article id="static-{esc(theme["id"])}">\n'
             f'<h2><a href="/trading/themes/#{esc(theme["id"])}">{esc(theme["title"])}</a></h2>\n'
@@ -75,7 +76,7 @@ def render_static(payload: dict, data_hash: str) -> str:
             f'sourced by {esc(theme["source_model"])} · reviewed by {esc(reviewers)}</p>\n'
             f'{disqualification}'
             f'<p>{esc(theme["owner_belief"])}</p>\n'
-            f'<p><strong>Verdict:</strong> {esc(theme["final_verdict"])}</p>\n'
+            f'<p><strong>{verdict_label}:</strong> {esc(theme["final_verdict"])}</p>\n'
             f"</article>"
         )
 

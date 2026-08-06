@@ -128,7 +128,7 @@
       <p class="bucket-why">${esc(row.why)}</p>
     </article>`).join('')}</div>`;
 
-  const renderValuation = snapshot => `<div class="val-wrap">
+  const renderValuation = snapshot => snapshot.rows.length ? `<div class="val-wrap">
     <table class="val-table">
       <thead><tr><th>Symbol</th><th class="num">Price</th><th class="num">Trailing P/E</th><th class="num">Off 52-wk high</th></tr></thead>
       <tbody>${snapshot.rows.map(row => `<tr>
@@ -139,7 +139,7 @@
       </tr>`).join('')}</tbody>
     </table>
     <p class="val-note">${esc(snapshot.source)} · ${esc(snapshot.date)} · ${esc(snapshot.note)}</p>
-  </div>`;
+  </div>` : `<div class="val-wrap"><p class="val-note">${esc(snapshot.source)} · ${esc(snapshot.date)} · ${esc(snapshot.note)}</p></div>`;
 
   const renderAdversarial = review => {
     const columns = Array.isArray(review) ? review : [
@@ -194,7 +194,7 @@
         <p class="theme-conviction">${esc(theme.conviction)}</p>
       </div>
       <div class="theme-verdict">
-        <p class="verdict-label">Final verdict</p>
+        <p class="verdict-label">${theme.reviewed_by?.length ? 'Final verdict' : 'Source verdict · review pending'}</p>
         <p>${esc(theme.final_verdict)}</p>
       </div>
     </header>
@@ -233,7 +233,7 @@
       renderModels(theme.model_reviews))}
 
     ${foldSection(sectionId('valuation'), 'Valuation snapshot',
-      `${theme.valuation_snapshot.rows.length} names · closing prices`,
+      theme.valuation_snapshot.rows.length ? `${theme.valuation_snapshot.rows.length} names · closing prices` : 'Not run · deeper review pending',
       renderValuation(theme.valuation_snapshot))}
 
     ${foldSection(sectionId('falsifiers'), 'Falsifiers',
