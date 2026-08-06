@@ -9755,7 +9755,13 @@
           "label": "Coinbase — stablecoin payments and x402",
           "url": "https://www.coinbase.com/blog/coinbase-payments-a-complete-solution-for-stablecoin-payments"
         }
-      ]
+      ],
+      "disqualified": {
+        "symbols": [
+          "COIN"
+        ],
+        "reason": "Owner call (8/6/26): one ticker, and not a clean one. COIN is the only named expression, and it is far too multi-faceted to isolate machine-to-machine settlement — exchange-cycle beta, custody, stablecoin economics, and regulatory risk dominate any agentic-payments contribution. Same two precedents that killed prior-auth APIs (one-ticker theme) and GLP-1 life-vs-annuity (diversified carriers can't target the exposure). The mechanism stays interesting; it returns only if a purer public expression lists."
+      }
     },
     {
       "id": "emerging-aim-act-a2l-retrofit",
