@@ -3,6 +3,172 @@
  "entries": [
   {
    "date": "2026-08-06",
+   "assess_for": "Fri Aug 7 open",
+   "session": "post-close",
+   "verdict": "RISK-ON",
+   "subtitle": "The tape confirmed the call and the ledger still slipped a point \u2014 MOVE went dark, not the market",
+   "score": 5,
+   "n_signals": 11,
+   "composite": "+0.45",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "768.56 vs 746.73 \u00b7 +2.92% \u00b7 Aug 6 close, Alpaca SIP",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.15 \u00b7 Aug 6 4:15pm ET close, Cboe direct \u2014 down 0.66 on a red equity day; site feed still Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.45 contango (Aug VX 17.10, Sep VX 18.54) \u00b7 Aug 6 settles, Cboe direct \u2014 steeper than this morning's +1.28",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "88.72 \u00b7 Aug 6 close, Cboe direct \u2014 down again from 90.43",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "no Aug 6 print \u2014 Yahoo unreachable tonight after retries, no alternate source; last verified 73.58 (Aug 5) \u00b7 scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.75% (Aug 5, FRED direct) \u00b7 \u221212bp/5d vs 2.87% Jul 29",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 vwap feed vintage unchanged from this morning; below: ESPO \u22120.2%, XLC \u22121.2%, XLU \u22121.4%; XLY +1.9% the thinnest cushion",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.25 \u00b7 XLI +1.06 \u00b7 XLE +0.83 \u2014 two of the five \u00b7 same vintage as breadth",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22121.90pt (IWM +0.34%, SPY +2.24%, Jul 9 \u2192 Aug 6, Alpaca SIP) \u2014 widened from \u22121.13 as the base rolled onto SPY's July ramp",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.53, ZEC +0.40, ETH +0.38 positive; SOL \u22120.21 still the nearest fourth \u00b7 feed vintage unchanged",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "157.83 vs 162.94 (Jul 30) \u00b7 yen +3.1% \u00b7 ECB Aug 6 fix (Yahoo 429) \u2014 pair flat four straight days; the \u22121 expires Monday when the base rolls",
+     "score": -1
+    }
+   ],
+   "narrative": [
+    "<p>The day did close to nothing, and the stress gauges got greener while it did it. SPY drifted \u22120.16% to 768.56 (the index \u22120.18% to 7,710), the <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-6-dow-sp-nasdaq-091620000.html\" rel=\"noopener\">Dow gave back 0.85% off yesterday's record</a>, and the Nasdaq finished flat. Energy was the only green sector: Brent bounced to about $83 after the <a href=\"https://www.cnbc.com/2026/08/05/stock-market-today-live-updates.html\" rel=\"noopener\">Hormuz corridor deal turned out to be tentative</a> \u2014 Iran's agreement with Oman is conditional on \"certain third parties\" not interfering \u2014 and the 10-year followed oil up 5bp to 4.67%. The AI-capex sore spot carried over (SanDisk and Western Digital extended their earnings losses; SpaceX faded a rally on lockup expiry). Against all of that, VIX closed 15.15, down 0.66 on a red equity day, with VVIX under 89.</p>",
+    "<p>One score changed since this morning's +6, and it wasn't the market: MOVE went dark. Yahoo 429'd every attempt tonight and there is no alternate source for the index, so the row scores 0 per rubric \u2014 bookkeeping, not stress; the last verified print (73.58, Aug 5) sat 6.4 points under the threshold. Every other row re-scored on tonight's closes and held: VIX 15.79 \u2192 15.15, VVIX 90.4 \u2192 88.7, the VX curve steepened to +1.45 on the settles, high-yield spreads still 12bp tighter over five sessions straight through refunding week. The small-cap gap widened from \u22121.13 to \u22121.90 points as the 20-day base rolled onto SPY's early-July ramp \u2014 deeper into its \u22121 without moving the score.</p>",
+    "<p>Grading the morning call: RISK-ON, confirmed \u2014 cheaply. A \u22120.16% drift proves little on its own; the real confirmation is that oil re-firming $3 and long yields backing up produced zero response from the vol complex. And grading the ledger's own forecast: the Jul 30 call \u2014 at least one SPY close down 1%+ by today, at 60% \u2014 <b>MISSES</b>. Its five sessions ran +0.72, +1.42, +1.80, \u22120.20, \u22120.16. Brier 0.36, the first call to resolve. The lesson goes into tonight's number: I've now paid twice for pricing downside off priors the tape keeps refusing.</p>",
+    "<p>Into Friday: July payrolls at 8:30am ET, consensus near 80k, and the options market prices the day at \u00b10.6% \u2014 the SPY Aug 7 at-the-money straddle settled tonight at about $4.64. From +5 the verdict is still mechanically hard to break: three simultaneous one-point drops are needed just to reach NEUTRAL, and the two likeliest candidates (VIX back over 16, VVIX over 95) both require the kind of print the straddle says is a coin flip at best. Meanwhile Monday hands the composite a free point back when the yen row's calendar base rolls forward. Risk-on, with the burden of proof on tomorrow's number.</p>"
+   ],
+   "flips": {
+    "to_off": "Three one-point drops from +5 reach NEUTRAL at +2 (+0.18). Live candidates: VIX back above 16 (0.85 away), VVIX above 95 (6.3 away), breadth to 9 of 13 if XLY (+1.9% above VWAP) gives way. Only a hot payrolls print \u2014 wages especially \u2014 plausibly takes all three at once, and the options market prices tomorrow at \u00b10.6%. An oil re-spike toward $90 on a Hormuz corridor breakdown is the slower-burning sweep risk.",
+    "to_on": "+6 (+0.55) restores by either of two mechanical routes: a reachable MOVE print under 80 (last verified 73.58), or Monday's calendar roll putting the yen 5-session base at Aug 3's 156.68, where an unchanged yen scores 0 instead of \u22121. Neither needs a dollar of buying. A fourth alt turning positive on 50d spread z (SOL at \u22120.21 the nearest) is the only route that requires actual risk appetite."
+   },
+   "forward": {
+    "horizon": "Fri Aug 7 \u2013 Thu Aug 13",
+    "watch": [
+     {
+      "name": "July payrolls \u2014 Fri Aug 7, 8:30am ET",
+      "why": "the one event that can move three vol rows at once",
+      "detail": "consensus ~80k \u00b7 SPY Aug 7 ATM straddle $4.64 \u2248 \u00b10.6%",
+      "lean": "watch"
+     },
+     {
+      "name": "July CPI \u2014 Wed Aug 12, 8:30am ET",
+      "why": "second macro print in the window; oil's bounce makes it live again",
+      "detail": "Brent back to ~$83 after the corridor deal turned conditional",
+      "lean": "watch"
+     },
+     {
+      "name": "Implied crushing into rising realized",
+      "why": "the one genuine divergence on the board",
+      "detail": "VIX 15.15 while SPY 10d realized 16.2% has crossed above 21d 14.2%",
+      "lean": "off"
+     },
+     {
+      "name": "Yen squeeze fuel",
+      "why": "carry unwind gauge \u2014 big short base against a 3% yen rally",
+      "detail": "COT leveraged funds net short ~102k JPY contracts (Jul 28); fresh TFF data Friday",
+      "lean": "watch"
+     },
+     {
+      "name": "Oil re-firming",
+      "why": "the July stress rebuilds if the corridor deal breaks",
+      "detail": "Brent ~$83, +$3 today; 10y followed to 4.67%, 30y 5.21%",
+      "lean": "watch"
+     },
+     {
+      "name": "Yen row roll-off \u2014 Monday",
+      "why": "mechanical +1 to the sum with no buying required",
+      "detail": "5-session base rolls to Aug 3's 156.68; unchanged yen scores 0",
+      "lean": "on"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close down \u22651% within the next 5 sessions (Fri Aug 7 \u2013 Thu Aug 13)",
+     "prob": "40%",
+     "resolves": "2026-08-13"
+    },
+    "grading": "Jul 30 call \u2014 at least one SPY close down \u22651% by Aug 6 at 60% \u2014 MISS: the five sessions ran +0.72, +1.42, +1.80, \u22120.20, \u22120.16, nothing within reach of \u22121%. Brier 0.36. First call to resolve; the two look-alike calls still open (Jul 31's \u22651% down close and Aug 3's \u00b11% payrolls-day move, both resolving Fri Aug 7) need tomorrow's print to deliver."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Aug 6 close: Dow slips from record as oil and yields rise",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-6-dow-sp-nasdaq-091620000.html"
+    },
+    {
+     "t": "CNBC \u2014 Aug 6 live: S&P falls as oil pressures stocks, Dow snaps streak",
+     "u": "https://www.cnbc.com/2026/08/05/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "Cboe \u2014 VX settlements Aug 6",
+     "u": "https://www.cboe.com/us/futures/market_statistics/settlement/"
+    },
+    {
+     "t": "FRED \u2014 HY OAS (BAMLH0A0HYM2)",
+     "u": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+    },
+    {
+     "t": "ECB \u2014 USD & JPY daily reference rates",
+     "u": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY+USD.EUR.SP00.A?lastNObservations=12&format=csvdata"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures, Jul 28",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    },
+    {
+     "t": "US Inflation Calculator \u2014 CPI release schedule (Jul CPI: Aug 12)",
+     "u": "https://www.usinflationcalculator.com/inflation/consumer-price-index-release-schedule/"
+    }
+   ],
+   "rating": 7.3
+  },
+  {
+   "date": "2026-08-06",
    "assess_for": "Thu Aug 6 session",
    "session": "intraday",
    "verdict": "RISK-ON",
@@ -2426,6 +2592,10 @@
     [
      "2026-08-05",
      769.79
+    ],
+    [
+     "2026-08-06",
+     768.56
     ]
    ],
    "QQQ": [
@@ -2492,9 +2662,13 @@
     [
      "2026-08-05",
      717.3
+    ],
+    [
+     "2026-08-06",
+     714.65
     ]
    ]
   },
-  "updated": "2026-08-05"
+  "updated": "2026-08-06"
  }
 }
