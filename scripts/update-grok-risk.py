@@ -202,6 +202,7 @@ def main() -> int:
     else:
         PAGE.write_text(updated)
         print(f"[grok-risk] rendered: {entry['as_of_date']} · {entry['risk_appetite']}/10")
+    page = updated
 
     # Build and insert chart
     chart = build_grok_chart(payload)
