@@ -201,7 +201,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertLess(block.index('class="results-chart"'), block.index('class="results-stats"'))
         self.assertNotRegex(block, r'Current (wins|losses|none) streak')
         self.assertNotIn('Longest win', block)
-        self.assertIn('Quantities and dollar amounts are ignored', block)
+        self.assertIn('Private quantities and dollar amounts are never published', block)
         stats = re.search(
             r'data-results-wins="(\d+)" data-results-losses="(\d+)" '
             r'data-results-breakevens="(\d+)" data-results-decided="(\d+)" '
@@ -357,8 +357,14 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertNotIn("a buy row's number keeps moving", script)
 
     def test_performance_places_recent_win_rates_below_ytd_hero(self):
+        page = (ROOT / "trading" / "performance" / "index.html").read_text()
         script = (ROOT / "js" / "trading-performance.js").read_text()
         styles = (ROOT / "trading" / "performance-tape.css").read_text()
+        self.assertEqual(page.count('data-results-sharpe="'), 3)
+        self.assertEqual(page.count('data-results-sharpe-samples="'), 3)
+        self.assertEqual(page.count('class="results-stat-values"'), 3)
+        self.assertIn('Trade-return Sharpe', page)
+        self.assertIn('not annualized', page)
         self.assertIn('data-pf-winrates', script)
         self.assertIn("statsNodes.forEach(node => statsHost.appendChild(node))", script)
         self.assertLess(script.index("renderHero(points)"), script.index("data-pf-winrates"))

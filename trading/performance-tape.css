@@ -11,6 +11,8 @@
 .pf-winrates{min-width:0;background:var(--bl-card);border:1px solid var(--bl-border);border-radius:12px;padding:0 20px 14px}
 #results-panel .results-stats{grid-template-columns:repeat(3,minmax(0,1fr));margin-top:0}
 #results-panel .results-stat:first-child{border-left:0}
+.results-stat-values{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+.results-sharpe{color:var(--bl-muted);font:700 12px var(--bl-mono);font-variant-numeric:tabular-nums;white-space:nowrap}
 #results-panel .results-statline,#results-panel .results-method{margin-left:0;margin-right:0;text-align:left;max-width:96ch}
 @media (max-width:820px){
   #results-panel .results-stats{grid-template-columns:1fr}
