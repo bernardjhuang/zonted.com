@@ -525,44 +525,70 @@ class TradingThemesContractTest(unittest.TestCase):
             self.assertIn("2 reviewers", theme["status"])
         self.assertIn("Eight August 5 Claude Fable 5 origin themes", self.payload["method"]["consensus"])
 
-    def test_august_6_source_intakes_are_single_reviewed_and_queued_honestly(self) -> None:
+    def test_august_6_source_intakes_have_independent_gpt_reviews(self) -> None:
         expected = {
-            "energy-haleu-nuclear-fuel-gate": ("Grok 4.5", "Energy", 65, 40, "Frontier signal"),
-            "emerging-rare-earth-magnet-sovereignty": ("Grok 4.5", "Emerging", 70, 45, "Theme hunt"),
-            "sectors-transformer-lead-time-tax": ("Grok 4.5", "Sectors", 75, 55, "Active research"),
-            "emerging-bioreactor-capacity-platform": ("Grok 4.5", "Emerging", 50, 30, "Theme hunt"),
-            "emerging-agentic-payment-rails": ("Grok 4.5", "Emerging", 55, 35, "Theme hunt"),
-            "emerging-aim-act-a2l-retrofit": ("Gemini", "Sectors", 65, 35, "Active research"),
-            "emerging-glp1-sarcopenia-dexa": ("Gemini", "Emerging", 75, 40, "Frontier catalyst"),
-            "energy-gets-ai-bridge": ("Gemini", "Energy", 68, 42, "Theme hunt"),
-            "sectors-glass-substrate-packaging": ("Gemini", "Sectors", 55, 25, "Meta frontier"),
-            "geo-biosecure-wuxi-exodus": ("Gemini", "Geographies", 70, 45, "Active research"),
+            "energy-haleu-nuclear-fuel-gate": ("Grok 4.5", "Energy", (65, 40), (85, 60), (75, 50), "Frontier signal"),
+            "emerging-rare-earth-magnet-sovereignty": ("Grok 4.5", "Emerging", (70, 45), (88, 58), (79, 51), "Theme hunt"),
+            "sectors-transformer-lead-time-tax": ("Grok 4.5", "Sectors", (75, 55), (94, 85), (84, 70), "Active research"),
+            "emerging-bioreactor-capacity-platform": ("Grok 4.5", "Emerging", (50, 30), (60, 50), (55, 40), "Theme hunt"),
+            "emerging-agentic-payment-rails": ("Grok 4.5", "Emerging", (55, 35), (75, 30), (65, 32), "Theme hunt"),
+            "emerging-aim-act-a2l-retrofit": ("Gemini", "Sectors", (65, 35), (85, 52), (75, 43), "Active research"),
+            "emerging-glp1-sarcopenia-dexa": ("Gemini", "Emerging", (75, 40), (92, 20), (83, 30), "Frontier catalyst"),
+            "energy-gets-ai-bridge": ("Gemini", "Energy", (68, 42), (88, 68), (78, 55), "Theme hunt"),
+            "sectors-glass-substrate-packaging": ("Gemini", "Sectors", (55, 25), (78, 60), (66, 42), "Meta frontier"),
+            "geo-biosecure-wuxi-exodus": ("Gemini", "Geographies", (70, 45), (92, 72), (81, 58), "Active research"),
         }
         found = {theme["id"]: theme for theme in self.payload["themes"] if theme["id"] in expected}
         self.assertEqual(set(found), set(expected))
-        for theme_id, (model, category, known, priced, stage) in expected.items():
+        for theme_id, (model, category, source_scores, gpt_scores, consensus_scores, stage) in expected.items():
             theme = found[theme_id]
             self.assertEqual(theme["source_model"], model, theme_id)
-            self.assertEqual(theme["reviewed_by"], [], theme_id)
+            self.assertEqual(theme["reviewed_by"], ["GPT-5.6"], theme_id)
             self.assertEqual(theme["category"], category, theme_id)
-            self.assertEqual(theme["status"], f"{stage} · 1 reviewer", theme_id)
-            self.assertEqual(theme["consensus_scores"], {
-                "knowledge_saturation": known,
-                "price_saturation": priced,
-            }, theme_id)
-            self.assertEqual([row["model"] for row in theme["model_reviews"]], [model], theme_id)
+            self.assertEqual(theme["status"], f"{stage} · 2 reviewers", theme_id)
+            self.assertEqual([row["model"] for row in theme["model_reviews"]], [model, "GPT-5.6"], theme_id)
             self.assertEqual(theme["model_reviews"][0]["role"], "Bernard-supplied source intake", theme_id)
-            self.assertIn("Not independently verified", theme["final_verdict"], theme_id)
+            self.assertEqual(theme["model_reviews"][1]["role"], "Independent known-vs-priced review", theme_id)
+            self.assertEqual(
+                (theme["model_reviews"][0]["knowledge_saturation"], theme["model_reviews"][0]["price_saturation"]),
+                source_scores,
+                theme_id,
+            )
+            self.assertEqual(
+                (theme["model_reviews"][1]["knowledge_saturation"], theme["model_reviews"][1]["price_saturation"]),
+                gpt_scores,
+                theme_id,
+            )
+            self.assertEqual(theme["consensus_scores"], {
+                "knowledge_saturation": consensus_scores[0],
+                "price_saturation": consensus_scores[1],
+            }, theme_id)
+            self.assertNotIn("Not independently verified", theme["final_verdict"], theme_id)
             self.assertEqual(theme["valuation_snapshot"]["rows"], [], theme_id)
             self.assertEqual(theme["valuation_snapshot"]["source"], "Not run", theme_id)
             self.assertTrue(theme["adversarial_review"], theme_id)
             self.assertTrue(theme["falsifiers"], theme_id)
             self.assertTrue(theme["watch_next"], theme_id)
-            self.assertTrue(theme["sources"], theme_id)
+            self.assertGreaterEqual(len(theme["sources"]), 2, theme_id)
+        glp = found["emerging-glp1-sarcopenia-dexa"]
+        self.assertEqual(glp["disqualified"]["symbols"], ["HOLX", "BRBR"])
+        self.assertIn("Hologic became private", glp["disqualified"]["reason"])
         self.assertIn("five Bernard-supplied Grok 4.5 themes", self.payload["method"]["consensus"])
         self.assertIn("five Bernard-supplied Gemini themes", self.payload["method"]["consensus"])
         self.assertIn("Source verdict · review pending", self.script)
         self.assertIn("Not run · deeper review pending", self.script)
+
+    def test_every_current_theme_has_a_gpt_review(self) -> None:
+        missing = [
+            theme["id"] for theme in self.payload["themes"]
+            if not any(review["model"].startswith("GPT") for review in theme["model_reviews"])
+        ]
+        self.assertEqual(missing, [])
+
+        rwa = next(theme for theme in self.payload["themes"] if theme["id"] == "emerging-rwa-credit-rails")
+        self.assertEqual(rwa["reviewed_by"], ["GPT-5.6"])
+        self.assertEqual(rwa["status"], "Theme hunt · 2 reviewers")
+        self.assertEqual(rwa["consensus_scores"], {"knowledge_saturation": 62, "price_saturation": 32})
 
     def test_short_first_august_themes_are_disqualified_from_the_long_ledger(self) -> None:
         found = {theme["id"]: theme for theme in self.payload["themes"]}

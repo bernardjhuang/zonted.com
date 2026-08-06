@@ -5,7 +5,7 @@
   "method": {
     "knowledge_saturation": "0 means obscure; 100 means the thesis is universal public-market consensus.",
     "price_saturation": "0 means little expected economics appear in prices; 100 means prices leave almost no room for execution error.",
-    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented. Eight August 5 Claude Fable 5 origin themes received independent GPT-5.6 known-vs-priced reviews; each consensus is the median of those two scored reviews. The August 6 source-intake set adds five Bernard-supplied Grok 4.5 themes and five Bernard-supplied Gemini themes as single-reviewer records for deeper review. Their supplied scores are carried through without independent validation; no desk or second-model scores are invented.",
+    "consensus": "Scores are the median of every named review that supplied a score. Energy uses GPT-5.6, Claude Fable, and Gemini 3.1 Pro; the July hunt themes use Claude Fable 5 plus GPT-5.6, with Grok 4.5 added to five named reviews supplied by Bernard. The frontier-signal set uses Bernard-supplied Grok 4.5 origin reviews plus independent GPT-5.6 reviews. The Meta frontier set uses Bernard-supplied Meta AI origin reviews plus independent GPT-5.6 reviews. Missing model scores are never invented. Claude Fable 5 independently reviewed the fifteen themes it neither authored nor had reviewed, on July 28, 2026. Ten July 29 frontier catalysts are single GPT-5.6 originations; no independent scores were invented. Eight August 5 Claude Fable 5 origin themes received independent GPT-5.6 known-vs-priced reviews; each consensus is the median of those two scored reviews. The August 6 source-intake set adds five Bernard-supplied Grok 4.5 themes and five Bernard-supplied Gemini themes; each now includes an independent GPT-5.6 known-vs-priced review, and consensus is the median of those two scored reviews. GPT-5.6 also independently reviewed the previously single-reviewed RWA credit-rails theme. No missing model scores are invented.",
     "warning": "A low price-saturation score is not a buy signal. It can mean the market correctly expects weak economics or failure."
   },
   "themes": [
@@ -9121,15 +9121,17 @@
       "category": "Emerging",
       "title": "RWA tokenization → credit rails move on-chain",
       "horizon": "2026–2030",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Claude Fable 5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "Real-world-asset tokenization is the one crypto thesis with institutional receipts: tokenized Treasury funds (BlackRock's BUIDL class), bank settlement pilots, and — the desk's expression — Figure Technology (FIGR), which originates HELOCs natively on the Provenance blockchain, warehouses and securitizes them as on-chain assets, and issued the first SEC-registered yield-bearing stable token (YLDS). If loan origination-to-securitization on-chain is structurally cheaper and faster than the legacy pipeline, the winner is whoever owns the rail AND the origination volume — and FIGR at −65% from its post-IPO high is priced as a cyclical mortgage originator, not as credit-rail infrastructure.",
-      "conviction": "Medium-high on the direction (tokenized credit is compounding through every rate regime), medium on FIGR specifically: the HELOC book is rate-sensitive and carries the California insurance-impairment exposure this ledger already tracks in the uninsurable-mortgage theme.",
-      "final_verdict": "Known 50, priced 25. RWA is loud inside crypto and quiet inside equity land — the public expressions trade at crypto-beta discounts (FIGR −65%, COIN −63%, GLXY −52% off highs) while the underlying tokenization volumes grind higher every quarter. The desk qualified this thesis by position (FIGR) before this record existed; the record was created 8/5/26 to document it honestly rather than backdate conviction. The bear case is simple and must be respected: if on-chain rails never print a demonstrable cost-of-capital advantage in securitization spreads, FIGR is a mortgage originator with extra steps.",
+      "conviction": "Medium on the rail thesis and FIGR's proxy purity; low confidence that blockchain efficiency has yet produced a durable, measurable funding-cost advantage.",
+      "final_verdict": "Figure makes this more than a crypto slogan: its filings show blockchain-native HELOC origination, securitization, and YLDS. The residual edge is proving that those rails lower funding costs or increase balance-sheet turns; until spreads and fee economics demonstrate that, FIGR is still a rate-sensitive lender at a growth valuation, not mispriced infrastructure by default.",
       "consensus_scores": {
-        "knowledge_saturation": 50,
-        "price_saturation": 25
+        "knowledge_saturation": 62,
+        "price_saturation": 32
       },
       "model_reviews": [
         {
@@ -9138,6 +9140,13 @@
           "knowledge_saturation": 50,
           "price_saturation": 25,
           "verdict": "Known 50: RWA headlines are everywhere in crypto media. Priced 25: the equity wrappers trade at deep discounts to highs with tokenization optionality marked near zero."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 75,
+          "price_saturation": 40,
+          "verdict": "Figure makes this more than a crypto slogan: its filings show blockchain-native HELOC origination, securitization, and YLDS. The residual edge is proving that those rails lower funding costs or increase balance-sheet turns; until spreads and fee economics demonstrate that, FIGR is still a rate-sensitive lender at a growth valuation, not mispriced infrastructure by default."
         }
       ],
       "layer_scorecard": [
@@ -9245,17 +9254,21 @@
       "sources": [
         {
           "label": "Figure Technology — investor relations",
-          "url": "https://investor.figure.com/"
+          "url": "https://investors.figure.com/"
         },
         {
           "label": "Ledger cross-reference — the uninsurable-mortgage loop",
           "url": "https://zonted.com/trading/themes/#emerging-uninsurable-mortgage"
+        },
+        {
+          "label": "Figure 2025 Form 10-K — SEC",
+          "url": "https://www.sec.gov/Archives/edgar/data/2064124/000206412426000009/figr-20251231.htm"
         }
       ],
       "qualified": {
         "position": "FIGR",
         "date": "2026-08-05",
-        "note": "Qualified at creation: the desk already holds FIGR; this record was written 8/5/26 at Bernard's direction to document the thesis behind the position (no prior RWA theme existed on the ledger). Scores are the founding review, not a retrofit."
+        "note": "Qualified at creation: the desk already held FIGR when this record was written on 8/5/26 at Bernard's direction (no prior RWA theme existed on the ledger). The position history is not backdated; an independent GPT-5.6 review added on 8/6/26 updated the consensus scores and sharpened the funding-cost falsifier."
       }
     },
     {
@@ -9263,15 +9276,17 @@
       "category": "Energy",
       "title": "HALEU / nuclear fuel-cycle capacity → the AI–nuclear fuel gate",
       "horizon": "2026–2032",
-      "status": "Frontier signal · 1 reviewer",
+      "status": "Frontier signal · 2 reviewers",
       "source_model": "Grok 4.5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "AI data-center load and advanced-reactor construction hit the nuclear fuel cycle before reactor deployment. The source thesis identifies HALEU enrichment, conversion, centrifuge manufacturing, qualified components, and specialized labor as the scarce chain.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: The market still frames nuclear mainly as uranium or long-dated reactor optionality, while the source argues that scarce enrichment capacity turns reactor offtakes into delayed but contractually visible revenue. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence that Western HALEU capacity is scarce; medium-low confidence that current public proxies preserve enough unpriced scarcity rent after execution and financing risk.",
+      "final_verdict": "HALEU scarcity is now policy consensus, not hidden: DOE has awarded multiple suppliers and Centrus has a $900 million contract to commercialize added output. The bottleneck is real, but LEU and CCJ already trade as strategic assets and value depends on reactor schedules, appropriations, execution, and financing; underwrite signed task orders and deliveries, not demand forecasts.",
       "consensus_scores": {
-        "knowledge_saturation": 65,
-        "price_saturation": 40
+        "knowledge_saturation": 75,
+        "price_saturation": 50
       },
       "model_reviews": [
         {
@@ -9280,15 +9295,22 @@
           "knowledge_saturation": 65,
           "price_saturation": 40,
           "verdict": "The market still frames nuclear mainly as uranium or long-dated reactor optionality, while the source argues that scarce enrichment capacity turns reactor offtakes into delayed but contractually visible revenue. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 85,
+          "price_saturation": 60,
+          "verdict": "HALEU scarcity is now policy consensus, not hidden: DOE has awarded multiple suppliers and Centrus has a $900 million contract to commercialize added output. The bottleneck is real, but LEU and CCJ already trade as strategic assets and value depends on reactor schedules, appropriations, execution, and financing; underwrite signed task orders and deliveries, not demand forecasts."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "LEU · CCJ",
-          "knowledge_saturation": 65,
-          "price_saturation": 40,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 75,
+          "price_saturation": 50,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9302,8 +9324,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Western HALEU capacity is a real, policy-backed bottleneck rather than a generic uranium narrative.",
+        "LEU is the purest liquid expression, but contract conversion, cascade delivery, financing, and dilution determine shareholder capture."
       ],
       "residual_edge": [
         "LEU is the source’s primary expression for a Western commercial HALEU path; backlog quality, award options, cascade timing, capex, and dilution require verification.",
@@ -9336,6 +9358,14 @@
         {
           "label": "User-supplied Grok 4.5 theme brief — 2026-08-06",
           "url": "https://x.ai/"
+        },
+        {
+          "label": "DOE — HALEU enrichment services awards",
+          "url": "https://www.energy.gov/ne/haleu-enrichment-services"
+        },
+        {
+          "label": "Centrus — $900 million DOE award and commercial transition",
+          "url": "https://www.centrusenergy.com/news/centrus-signs-contract-with-department-of-energy-for-900-million-award-intends-to-transition-haleu-production-cascade-to-commercial-operation/"
         }
       ]
     },
@@ -9344,15 +9374,17 @@
       "category": "Emerging",
       "title": "Rare-earth magnet sovereignty × humanoid actuator density",
       "horizon": "2026–2032",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Grok 4.5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis says humanoid actuator density increases demand for high-performance NdFeB magnets while China still dominates finished-magnet manufacturing. The scarce step is qualified non-Chinese magnet production and process know-how, not merely rare-earth ore.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Critical-minerals awareness is high, but the source argues that finished-magnet qualification and humanoid demand are only partly reflected in integrated North American capacity. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence in policy-backed non-Chinese magnet capacity; medium-low confidence that humanoid demand is incremental enough, soon enough, to justify the public proxy basket.",
+      "final_verdict": "Supply sovereignty is fully visible after the Department of Defense's 10-year support package for MP Materials; humanoids are optional upside, not required for the core policy case. The investable edge is qualification and profitable finished-magnet output, but a state-backed floor can protect a project without guaranteeing attractive shareholder returns, especially across pre-profit peers.",
       "consensus_scores": {
-        "knowledge_saturation": 70,
-        "price_saturation": 45
+        "knowledge_saturation": 79,
+        "price_saturation": 51
       },
       "model_reviews": [
         {
@@ -9361,15 +9393,22 @@
           "knowledge_saturation": 70,
           "price_saturation": 45,
           "verdict": "Critical-minerals awareness is high, but the source argues that finished-magnet qualification and humanoid demand are only partly reflected in integrated North American capacity. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 88,
+          "price_saturation": 58,
+          "verdict": "Supply sovereignty is fully visible after the Department of Defense's 10-year support package for MP Materials; humanoids are optional upside, not required for the core policy case. The investable edge is qualification and profitable finished-magnet output, but a state-backed floor can protect a project without guaranteeing attractive shareholder returns, especially across pre-profit peers."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "MP · UUUU · USAR",
-          "knowledge_saturation": 70,
-          "price_saturation": 45,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 79,
+          "price_saturation": 51,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9383,8 +9422,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Qualified non-Chinese finished-magnet capacity is strategically scarce and now backed by long-duration U.S. policy support.",
+        "Humanoid actuator demand remains speculative upside; qualification, yield, and finished-magnet economics are the real scoreboard."
       ],
       "residual_edge": [
         "MP is the source’s primary integrated mine-processing-magnet expression; production ramp, customer qualification, policy support, and valuation need review.",
@@ -9417,6 +9456,10 @@
         {
           "label": "User-supplied Grok 4.5 theme brief — 2026-08-06",
           "url": "https://x.ai/"
+        },
+        {
+          "label": "MP Materials — Department of Defense partnership",
+          "url": "https://mpmaterials.com/news/mp-materials-announces-transformational-public-private-partnership-with-the-department-of-defense-to-accelerate-u-s-rare-earth-magnet-independence/"
         }
       ]
     },
@@ -9425,15 +9468,17 @@
       "category": "Sectors",
       "title": "Large-power transformer lead times → the AI energization tax",
       "horizon": "2026–2030",
-      "status": "Active research · 1 reviewer",
+      "status": "Active research · 2 reviewers",
       "source_model": "Grok 4.5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis says the next AI-power bottleneck is physical transformers, switchgear, and skilled electrical labor. Multi-year lead times determine which data-center campuses energize on schedule even when generation and interconnection plans exist.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Utilities and developers know the lead-time problem, but the source argues that allocation power and multi-year scarcity remain less fully priced than headline generation stories. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence in the physical bottleneck; low confidence that the obvious public basket still offers broad asymmetric upside without contract-level differentiation.",
+      "final_verdict": "Multi-year transformer lead times are independently documented and utilities, hyperscalers, and investors already know the bottleneck. The easy trade is crowded across ETN, PWR, HUBB, and GEV, so the remaining edge is supplier-specific backlog quality, cancellation protection, and capacity-ramp execution; falling lead times can compress both margins and multiples.",
       "consensus_scores": {
-        "knowledge_saturation": 75,
-        "price_saturation": 55
+        "knowledge_saturation": 84,
+        "price_saturation": 70
       },
       "model_reviews": [
         {
@@ -9442,15 +9487,22 @@
           "knowledge_saturation": 75,
           "price_saturation": 55,
           "verdict": "Utilities and developers know the lead-time problem, but the source argues that allocation power and multi-year scarcity remain less fully priced than headline generation stories. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 94,
+          "price_saturation": 85,
+          "verdict": "Multi-year transformer lead times are independently documented and utilities, hyperscalers, and investors already know the bottleneck. The easy trade is crowded across ETN, PWR, HUBB, and GEV, so the remaining edge is supplier-specific backlog quality, cancellation protection, and capacity-ramp execution; falling lead times can compress both margins and multiples."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "ETN · HUBB · GEV · PWR",
-          "knowledge_saturation": 75,
-          "price_saturation": 55,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 84,
+          "price_saturation": 70,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9464,8 +9516,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Transformer, switchgear, and skilled-labor scarcity can directly delay energization even after generation and interconnection are secured.",
+        "The remaining edge is backlog quality and allocation power, not discovering the bottleneck before consensus."
       ],
       "residual_edge": [
         "ETN, HUBB, and GEV are the source’s equipment expressions across switchgear, transformers, grid components, HVDC, and turbines.",
@@ -9498,6 +9550,14 @@
         {
           "label": "User-supplied Grok 4.5 theme brief — 2026-08-06",
           "url": "https://x.ai/"
+        },
+        {
+          "label": "DOE — Distribution Transformer Working Group",
+          "url": "https://www.energy.gov/oe/distribution-transformers"
+        },
+        {
+          "label": "CISA — power-transformer shortage report",
+          "url": "https://www.cisa.gov/sites/default/files/2024-06/DRAFT_NIAC_Addressing%20the%20Critical%20Shortage%20of%20Power%20Transformers%20to%20Ensure%20Reliability%20of%20the%20U.S.%20Grid_Report_06052024_508c.pdf"
         }
       ]
     },
@@ -9506,15 +9566,17 @@
       "category": "Emerging",
       "title": "Bioreactor / precision-fermentation capacity as industrial manufacturing platform",
       "horizon": "2027–2033",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Grok 4.5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "AI and computational design can make biological strains and molecules cheaper to design, while large bioreactors and downstream processing remain slow, capital-intensive physical bottlenecks. The source frames industrial biomanufacturing capacity as strategic infrastructure.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Pure capacity owners are mostly private, so the source expresses the thesis through life-science equipment and downstream-processing vendors whose stocks still trade mainly on biopharma cycles. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "Medium confidence in the infrastructure bottleneck; low confidence in current public-equity proxy purity and near-term earnings materiality.",
+      "final_verdict": "U.S. capacity gaps and federally backed demonstration facilities validate industrial biomanufacturing as strategic infrastructure. The public basket is weak: TMO, DHR, and RGEN derive most economics from biopharma, while industrial fermentation remains small and often uneconomic, so the theme can be right while the listed proxies never feel it.",
       "consensus_scores": {
-        "knowledge_saturation": 50,
-        "price_saturation": 30
+        "knowledge_saturation": 55,
+        "price_saturation": 40
       },
       "model_reviews": [
         {
@@ -9523,15 +9585,22 @@
           "knowledge_saturation": 50,
           "price_saturation": 30,
           "verdict": "Pure capacity owners are mostly private, so the source expresses the thesis through life-science equipment and downstream-processing vendors whose stocks still trade mainly on biopharma cycles. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 60,
+          "price_saturation": 50,
+          "verdict": "U.S. capacity gaps and federally backed demonstration facilities validate industrial biomanufacturing as strategic infrastructure. The public basket is weak: TMO, DHR, and RGEN derive most economics from biopharma, while industrial fermentation remains small and often uneconomic, so the theme can be right while the listed proxies never feel it."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "TMO · DHR · RGEN",
-          "knowledge_saturation": 50,
-          "price_saturation": 30,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 55,
+          "price_saturation": 40,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9545,8 +9614,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Industrial biomanufacturing has a documented U.S. scale-up and demonstration-capacity gap.",
+        "Public life-science tool vendors are mostly biopharma-cycle exposures, not clean industrial-fermentation capacity owners."
       ],
       "residual_edge": [
         "TMO and DHR are the source’s diversified bioreactor-platform expressions; industrial-bio exposure may be too small to move either company.",
@@ -9579,6 +9648,14 @@
         {
           "label": "User-supplied Grok 4.5 theme brief — 2026-08-06",
           "url": "https://x.ai/"
+        },
+        {
+          "label": "BioMADE — Minnesota demonstration-scale facility",
+          "url": "https://www.biomade.org/news/biomade-announces-mn-demo-scale-facility"
+        },
+        {
+          "label": "GAO — DOD efforts to develop domestic biomanufacturing",
+          "url": "https://www.gao.gov/assets/gao-26-107797.pdf"
         }
       ]
     },
@@ -9587,15 +9664,17 @@
       "category": "Emerging",
       "title": "Agentic payment rails → machine-to-machine commerce settlement",
       "horizon": "2026–2030",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Grok 4.5",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis separates agentic payments from ordinary RWA credit rails: autonomous software agents need high-frequency settlement, identity, compliance, and machine-readable payment protocols, with early activity concentrated on stablecoin-native infrastructure.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: The equity market still prices Coinbase mostly as a crypto-beta trading venue, while the source argues that Base, USDC economics, x402, and agentic-market infrastructure create an underappreciated settlement layer. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "Medium confidence that agentic settlement becomes a real protocol category; low confidence that Coinbase captures material, defensible economics from it on the current evidence.",
+      "final_verdict": "x402 makes machine-readable USDC settlement real, but protocol activity is not yet material COIN economics. Open standards, low fees, bot spam, and identity or compliance constraints can push value to users or stablecoin issuers rather than the exchange; treat this as optionality inside COIN, not a standalone earnings thesis.",
       "consensus_scores": {
-        "knowledge_saturation": 55,
-        "price_saturation": 35
+        "knowledge_saturation": 65,
+        "price_saturation": 32
       },
       "model_reviews": [
         {
@@ -9604,15 +9683,22 @@
           "knowledge_saturation": 55,
           "price_saturation": 35,
           "verdict": "The equity market still prices Coinbase mostly as a crypto-beta trading venue, while the source argues that Base, USDC economics, x402, and agentic-market infrastructure create an underappreciated settlement layer. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 75,
+          "price_saturation": 30,
+          "verdict": "x402 makes machine-readable USDC settlement real, but protocol activity is not yet material COIN economics. Open standards, low fees, bot spam, and identity or compliance constraints can push value to users or stablecoin issuers rather than the exchange; treat this as optionality inside COIN, not a standalone earnings thesis."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "COIN",
-          "knowledge_saturation": 55,
-          "price_saturation": 35,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 65,
+          "price_saturation": 32,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9626,8 +9712,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Machine-readable stablecoin settlement exists as a working open protocol rather than a slide-deck concept.",
+        "COIN has distribution and USDC/Base adjacency, but protocol usage has not yet become disclosed, material shareholder economics."
       ],
       "residual_edge": [
         "COIN is the source’s sole liquid expression through Base, USDC economics, x402, and agentic developer infrastructure.",
@@ -9660,6 +9746,14 @@
         {
           "label": "User-supplied Grok 4.5 theme brief — 2026-08-06",
           "url": "https://x.ai/"
+        },
+        {
+          "label": "Coinbase Developer Platform — introducing x402",
+          "url": "https://www.coinbase.com/developer-platform/discover/launches/x402"
+        },
+        {
+          "label": "Coinbase — stablecoin payments and x402",
+          "url": "https://www.coinbase.com/blog/coinbase-payments-a-complete-solution-for-stablecoin-payments"
         }
       ]
     },
@@ -9668,15 +9762,17 @@
       "category": "Sectors",
       "title": "The 2029 AIM Act cliff → the mandated A2L refrigerant retrofit cycle",
       "horizon": "2026–2029",
-      "status": "Active research · 1 reviewer",
+      "status": "Active research · 2 reviewers",
       "source_model": "Gemini",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis says the AIM Act HFC phasedown and the shift to mildly flammable A2L refrigerants create a regulatory capex cycle because legacy commercial systems cannot accept A2L gases without equipment, sensing, ventilation, and mechanical changes.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Commercial HVAC names are still traded mainly on construction and rates, while the source argues that constrained legacy refrigerant supply can force non-deferrable retrofit economics for supermarkets and data centers. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence in the refrigerant phasedown; medium-low confidence in a broad forced-retrofit cycle and in FIX as a pure expression.",
+      "final_verdict": "The 2029 HFC step-down is statutory, but 'mandatory retrofit cycle' is too strong: technology-transition rules constrain new equipment while existing systems can often be serviced with reclaimed refrigerant. HDSN is the purer scarcity and reclamation exposure; FIX is a broad contractor already carrying data-center expectations, so only measurable retrofit and reclamation bookings turn this into an equity edge.",
       "consensus_scores": {
-        "knowledge_saturation": 65,
-        "price_saturation": 35
+        "knowledge_saturation": 75,
+        "price_saturation": 43
       },
       "model_reviews": [
         {
@@ -9685,15 +9781,22 @@
           "knowledge_saturation": 65,
           "price_saturation": 35,
           "verdict": "Commercial HVAC names are still traded mainly on construction and rates, while the source argues that constrained legacy refrigerant supply can force non-deferrable retrofit economics for supermarkets and data centers. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 85,
+          "price_saturation": 52,
+          "verdict": "The 2029 HFC step-down is statutory, but 'mandatory retrofit cycle' is too strong: technology-transition rules constrain new equipment while existing systems can often be serviced with reclaimed refrigerant. HDSN is the purer scarcity and reclamation exposure; FIX is a broad contractor already carrying data-center expectations, so only measurable retrofit and reclamation bookings turn this into an equity edge."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "HDSN · FIX",
-          "knowledge_saturation": 65,
-          "price_saturation": 35,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 75,
+          "price_saturation": 43,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9707,8 +9810,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "The statutory HFC phasedown creates durable refrigerant scarcity, reclamation, and equipment-transition work.",
+        "The source overstates mandatory retrofits: replacement timing, reclaimed supply, and system-specific economics decide the actual cycle."
       ],
       "residual_edge": [
         "HDSN is the source’s reclamation toll-road expression if virgin legacy HFC prices spike under quota pressure.",
@@ -9741,6 +9844,14 @@
         {
           "label": "User-supplied Gemini theme brief — 2026-08-06",
           "url": "https://gemini.google.com/"
+        },
+        {
+          "label": "EPA — HFC phasedown frequently asked questions",
+          "url": "https://www.epa.gov/hfcs/frequent-questions-phasedown-hydrofluorocarbons"
+        },
+        {
+          "label": "Federal Register — AIM Act technology-transition restrictions",
+          "url": "https://www.federalregister.gov/documents/2024/12/12/2024-29243/phasedown-of-hydrofluorocarbons-restrictions-on-the-use-of-hfcs-under-the-aim-act-in-variable"
         }
       ]
     },
@@ -9749,15 +9860,17 @@
       "category": "Emerging",
       "title": "GLP-1 sarcopenia → the DEXA and protein-preservation squeeze",
       "horizon": "2026–2030",
-      "status": "Frontier catalyst · 1 reviewer",
+      "status": "Frontier catalyst · 2 reviewers",
       "source_model": "Gemini",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis shifts the GLP-1 trade from food-volume shorts to the quality of weight loss. If lean-mass loss drives monitoring and preservation protocols, DEXA utilization and high-yield protein demand could rise as asymmetric long expressions.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: The prior short-staples angle was disqualified; the source argues that body-composition diagnostics and protein preservation offer cleaner long vectors through Hologic and BellRing Brands. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence in the clinical monitoring question; low confidence in the public-equity expression because the DEXA leader is private and protein demand is diffuse.",
+      "final_verdict": "Lean-mass loss during GLP-1 weight reduction is clinically real and widely discussed, but there is no evidence of broad insurer-mandated DEXA renewal testing. Hologic has been private since April 2026 and BRBR is a diffuse consumer-protein proxy, so the stated public-equity expression is broken even though muscle-preservation protocols may grow.",
       "consensus_scores": {
-        "knowledge_saturation": 75,
-        "price_saturation": 40
+        "knowledge_saturation": 83,
+        "price_saturation": 30
       },
       "model_reviews": [
         {
@@ -9766,15 +9879,22 @@
           "knowledge_saturation": 75,
           "price_saturation": 40,
           "verdict": "The prior short-staples angle was disqualified; the source argues that body-composition diagnostics and protein preservation offer cleaner long vectors through Hologic and BellRing Brands. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 92,
+          "price_saturation": 20,
+          "verdict": "Lean-mass loss during GLP-1 weight reduction is clinically real and widely discussed, but there is no evidence of broad insurer-mandated DEXA renewal testing. Hologic has been private since April 2026 and BRBR is a diffuse consumer-protein proxy, so the stated public-equity expression is broken even though muscle-preservation protocols may grow."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
-          "symbols": "HOLX · BRBR",
-          "knowledge_saturation": 75,
-          "price_saturation": 40,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "layer": "Theme-level synthesis — 2 reviews",
+          "symbols": "BRBR · private DEXA ecosystem",
+          "knowledge_saturation": 83,
+          "price_saturation": 30,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9788,18 +9908,18 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Lean-mass preservation is a real clinical issue during GLP-1-driven weight loss.",
+        "The original equity map fails: Hologic is no longer public, insurer-mandated DEXA is unproven, and BRBR is an indirect protein proxy."
       ],
       "residual_edge": [
-        "HOLX is the source’s DEXA installed-base expression; reimbursement, utilization, and incremental economics need verification.",
-        "BRBR is the protein-preservation expression, but brand substitution, nutrition evidence, and valuation could overwhelm the thematic link."
+        "Monitor whether clinical guidelines or payer policies create repeatable body-composition testing demand; no liquid Hologic expression remains.",
+        "BRBR only works if GLP-1-linked protein consumption becomes visible in brand-level volume rather than diffusing across food and private label."
       ],
       "research_priority": [
         {
-          "bucket": "Deeper review",
-          "symbols": "HOLX · BRBR",
-          "why": "Verify the bottleneck, ticker purity, timing, valuation, and failure modes before this record can graduate beyond source intake."
+          "bucket": "Monitor, not express",
+          "symbols": "BRBR · private DEXA ecosystem",
+          "why": "Require payer or guideline adoption plus company-level demand evidence before treating preservation as an investable theme."
         }
       ],
       "valuation_snapshot": {
@@ -9822,23 +9942,44 @@
         {
           "label": "User-supplied Gemini theme brief — 2026-08-06",
           "url": "https://gemini.google.com/"
+        },
+        {
+          "label": "PubMed — GLP-1 therapies and DXA-acquired outcomes meta-analysis",
+          "url": "https://pubmed.ncbi.nlm.nih.gov/39710882/"
+        },
+        {
+          "label": "Hologic — acquisition completed; company became private",
+          "url": "https://www.hologic.com/acquisition"
+        },
+        {
+          "label": "Hologic — DXA body-composition capabilities",
+          "url": "https://www.hologic.com/body-composition"
         }
-      ]
+      ],
+      "disqualified": {
+        "symbols": [
+          "HOLX",
+          "BRBR"
+        ],
+        "reason": "No clean eligible public expression: Hologic became private on April 7, 2026, broad insurer-mandated DEXA testing is unproven, and BRBR is a diffuse single-ticker protein proxy. The clinical question survives; the listed-equity map does not."
+      }
     },
     {
       "id": "energy-gets-ai-bridge",
       "category": "Energy",
       "title": "FERC Order 1920 × permit lag → grid-enhancing technologies as the AI bridge",
       "horizon": "2026–2031",
-      "status": "Theme hunt · 1 reviewer",
+      "status": "Theme hunt · 2 reviewers",
       "source_model": "Gemini",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "New high-voltage transmission can take a decade or more, so the source thesis treats advanced reconductoring and dynamic line rating as the pre-2030 bridge for extracting more capacity from existing rights-of-way. FERC Order 1920 is the regulatory forcing function.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: The market buys generation and utilities, while the source argues that forced evaluation of grid-enhancing technologies creates a faster picks-and-shovels opportunity in labor, sensing, and grid-edge equipment. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence that GETs can improve selected corridors; medium-low confidence that Order 1920 alone forces enough near-term, public-company earnings to beat embedded grid expectations.",
+      "final_verdict": "FERC Order 1920 requires planners to consider and explain grid-enhancing alternatives; it does not mandate deployment. Reconductoring and dynamic line ratings can accelerate capacity on suitable corridors, but PWR and HUBB already carry grid and AI premiums while ITRI is not a pure GET play; edge requires funded regional projects and disclosed revenue.",
       "consensus_scores": {
-        "knowledge_saturation": 68,
-        "price_saturation": 42
+        "knowledge_saturation": 78,
+        "price_saturation": 55
       },
       "model_reviews": [
         {
@@ -9847,15 +9988,22 @@
           "knowledge_saturation": 68,
           "price_saturation": 42,
           "verdict": "The market buys generation and utilities, while the source argues that forced evaluation of grid-enhancing technologies creates a faster picks-and-shovels opportunity in labor, sensing, and grid-edge equipment. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 88,
+          "price_saturation": 68,
+          "verdict": "FERC Order 1920 requires planners to consider and explain grid-enhancing alternatives; it does not mandate deployment. Reconductoring and dynamic line ratings can accelerate capacity on suitable corridors, but PWR and HUBB already carry grid and AI premiums while ITRI is not a pure GET play; edge requires funded regional projects and disclosed revenue."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "PWR · ITRI · HUBB",
-          "knowledge_saturation": 68,
-          "price_saturation": 42,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 78,
+          "price_saturation": 55,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9869,8 +10017,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Order 1920 makes GET evaluation part of long-term transmission planning, and the technologies can unlock existing rights-of-way faster than greenfield lines.",
+        "Consideration is not deployment; funded selections and company-level revenue disclosure are still missing links."
       ],
       "residual_edge": [
         "PWR is the source’s specialized reconductoring-labor expression.",
@@ -9903,6 +10051,14 @@
         {
           "label": "User-supplied Gemini theme brief — 2026-08-06",
           "url": "https://gemini.google.com/"
+        },
+        {
+          "label": "FERC — Order 1920 transmission planning explainer",
+          "url": "https://www.ferc.gov/explainer-transmission-planning-and-cost-allocation-final-rule"
+        },
+        {
+          "label": "FERC — dynamic line rating implementation explainer",
+          "url": "https://www.ferc.gov/explainer-implementation-dynamic-line-ratings"
         }
       ]
     },
@@ -9911,15 +10067,17 @@
       "category": "Sectors",
       "title": "Reticle limits × organic warping → the glass-substrate packaging leap",
       "horizon": "2026–2029",
-      "status": "Meta frontier · 1 reviewer",
+      "status": "Meta frontier · 2 reviewers",
       "source_model": "Gemini",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis says large multi-chiplet AI packages are pushing organic substrates into warping, thermal, and interconnect-density limits. Glass substrates require new through-glass-via processing and additional metrology, creating a materials and equipment bottleneck.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Consensus owns chip designers and foundries, while the source argues that glass processing and inspection remain underappreciated picks and shovels. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "Medium confidence in eventual glass adoption; low-to-medium confidence in timing, yield, and the public proxies' glass-specific earnings sensitivity.",
+      "final_verdict": "Glass substrates have credible technical advantages and production tooling exists, but broad volume adoption remains qualification- and yield-dependent. CAMT already trades like an advanced-packaging winner while its glass-specific revenue is undisclosed, and LPKF remains execution-heavy; this is a monitorable inflection, not yet a validated earnings bridge.",
       "consensus_scores": {
-        "knowledge_saturation": 55,
-        "price_saturation": 25
+        "knowledge_saturation": 66,
+        "price_saturation": 42
       },
       "model_reviews": [
         {
@@ -9928,15 +10086,22 @@
           "knowledge_saturation": 55,
           "price_saturation": 25,
           "verdict": "Consensus owns chip designers and foundries, while the source argues that glass processing and inspection remain underappreciated picks and shovels. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 78,
+          "price_saturation": 60,
+          "verdict": "Glass substrates have credible technical advantages and production tooling exists, but broad volume adoption remains qualification- and yield-dependent. CAMT already trades like an advanced-packaging winner while its glass-specific revenue is undisclosed, and LPKF remains execution-heavy; this is a monitorable inflection, not yet a validated earnings bridge."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "CAMT · LPK.DE",
-          "knowledge_saturation": 55,
-          "price_saturation": 25,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 66,
+          "price_saturation": 42,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -9950,8 +10115,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Glass can address warping, dimensional stability, and interconnect-density constraints in larger advanced packages.",
+        "The investable timing remains unproven: equipment readiness is not customer qualification or high-volume revenue."
       ],
       "residual_edge": [
         "CAMT is the source’s inspection and metrology expression if glass increases process steps and defect sensitivity.",
@@ -9984,6 +10149,14 @@
         {
           "label": "User-supplied Gemini theme brief — 2026-08-06",
           "url": "https://gemini.google.com/"
+        },
+        {
+          "label": "Intel — glass substrates for advanced packaging",
+          "url": "https://www.intel.com/content/www/us/en/newsroom/news/intel-unveils-industry-leading-glass-substrates.html"
+        },
+        {
+          "label": "LPKF — glass advanced-packaging systems",
+          "url": "https://lide.lpkf.com/en/"
         }
       ]
     },
@@ -9992,15 +10165,17 @@
       "category": "Geographies",
       "title": "The BIOSECURE Act → the WuXi exodus and the Western CDMO premium",
       "horizon": "2026–2030",
-      "status": "Active research · 1 reviewer",
+      "status": "Active research · 2 reviewers",
       "source_model": "Gemini",
-      "reviewed_by": [],
+      "reviewed_by": [
+        "GPT-5.6"
+      ],
       "owner_belief": "The source thesis says U.S. restrictions on Chinese biomanufacturing suppliers force pharma companies to begin multi-year tech transfers and re-validation before formal deadlines, reallocating work toward geopolitically secure Western preclinical and CDMO capacity.",
-      "conviction": "Source conviction only. Desk conviction is pending independent claim verification, valuation work, and adversarial review.",
-      "final_verdict": "Source verdict: Western tools and CDMOs still carry the hangover from the biotech funding drought, while the source argues that compliance-driven double ordering creates a zero-sum market-share shift before 2032. Not independently verified; retained as a source-intake candidate for deeper review.",
+      "conviction": "High confidence that procurement rules accelerate supply-chain diligence; medium-low confidence in a clean, deadline-driven WuXi-to-western-CDMO earnings transfer.",
+      "final_verdict": "The BIOSECURE framework enacted in 2025 is real, but it did not automatically name WuXi, so 'WuXi exodus' overstates certainty. Pharma tech transfer is slow and western CDMOs can gain, yet broad biotech recovery and already-rerated proxies muddy the signal; only named-entity designations plus disclosed transfer wins validate incremental earnings.",
       "consensus_scores": {
-        "knowledge_saturation": 70,
-        "price_saturation": 45
+        "knowledge_saturation": 81,
+        "price_saturation": 58
       },
       "model_reviews": [
         {
@@ -10009,15 +10184,22 @@
           "knowledge_saturation": 70,
           "price_saturation": 45,
           "verdict": "Western tools and CDMOs still carry the hangover from the biotech funding drought, while the source argues that compliance-driven double ordering creates a zero-sum market-share shift before 2032. This is the source model’s score and thesis, not a desk-validated conclusion."
+        },
+        {
+          "model": "GPT-5.6",
+          "role": "Independent known-vs-priced review",
+          "knowledge_saturation": 92,
+          "price_saturation": 72,
+          "verdict": "The BIOSECURE framework enacted in 2025 is real, but it did not automatically name WuXi, so 'WuXi exodus' overstates certainty. Pharma tech transfer is slow and western CDMOs can gain, yet broad biotech recovery and already-rerated proxies muddy the signal; only named-entity designations plus disclosed transfer wins validate incremental earnings."
         }
       ],
       "layer_scorecard": [
         {
-          "layer": "Source thesis — unreviewed",
+          "layer": "Theme-level synthesis — 2 reviews",
           "symbols": "CRL · LONN.SW",
-          "knowledge_saturation": 70,
-          "price_saturation": 45,
-          "read": "The only score supplied was theme-level, so it is shown once here rather than inventing security-level or sub-layer scores."
+          "knowledge_saturation": 81,
+          "price_saturation": 58,
+          "read": "Median of the source intake and independent GPT review; security-level scores remain unmodeled."
         }
       ],
       "adversarial_review": [
@@ -10031,8 +10213,8 @@
         }
       ],
       "what_survived": [
-        "The source hypothesis is retained intact so the desk can test it; no claim has passed an independent attack yet.",
-        "The candidate has at least one liquid public expression and a positive source-reported known-minus-priced gap."
+        "Federal procurement and grant restrictions create a real compliance incentive to map and diversify biotechnology suppliers.",
+        "The source title is too certain: the enacted framework did not automatically name WuXi, and waivers, designations, and transfer timing matter."
       ],
       "residual_edge": [
         "CRL is the source’s preclinical-exodus expression; its actual WuXi substitution exposure must be separated from ordinary biotech funding sensitivity.",
@@ -10065,6 +10247,14 @@
         {
           "label": "User-supplied Gemini theme brief — 2026-08-06",
           "url": "https://gemini.google.com/"
+        },
+        {
+          "label": "Congress.gov — BIOSECURE Act text",
+          "url": "https://www.congress.gov/bill/119th-congress/senate-bill/3469/text"
+        },
+        {
+          "label": "Latham & Watkins — enacted BIOSECURE Act scope",
+          "url": "https://www.lw.com/en/insights/biosecure-act-becomes-law-limiting-grants-with-biotechnology-companies-of-concern"
         }
       ]
     }
