@@ -224,9 +224,13 @@ def build_chart(data):
         pts = " ".join(f"{px(d):.1f},{py(v):.1f}" for d, v in pct[sym])
         svg.append(f'<polyline points="{pts}" fill="none" stroke="{color}" stroke-width="1.8" '
                    f'stroke-linejoin="round" stroke-linecap="round"/>')
+        close_of = dict(closes[sym])
+        for d, v in pct[sym]:
+            svg.append(f'<circle cx="{px(d):.1f}" cy="{py(v):.1f}" r="5" fill="transparent">'
+                       f'<title>{d} · {sym} {close_of[d]:g} · {v:+.2f}%</title></circle>')
         d_end, v_end = pct[sym][-1]
         svg.append(f'<text x="{px(d_end) - 4:.1f}" y="{py(v_end) - 6:.1f}" text-anchor="end" font-size="10" '
-                   f'fill="{color}" font-family="IBM Plex Mono,monospace" font-weight="600">{sym}</text>')
+                   f'fill="{color}" font-family="IBM Plex Mono,monospace" font-weight="600">{sym} {v_end:+.1f}%</text>')
     rpts = [(d, rating_of(daily[d]), daily[d]) for d in sorted(daily)]
     svg.append('<polyline points="' + " ".join(f"{px(d):.1f},{ry(r):.1f}" for d, r, _ in rpts) +
                '" fill="none" stroke="#1c1e22" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"/>')
@@ -250,8 +254,10 @@ def build_chart(data):
                        f'font-family="IBM Plex Sans,sans-serif">{label}</text>')
     svg.append("</svg>")
     basedate = next(d for d, _ in reversed(closes["SPY"]) if d <= first)
+    latest = {sym: (closes[sym][-1][1], pct[sym][-1][1]) for sym in ("SPY", "QQQ")}
+    tape = " · ".join(f"{sym} {c:g} ({v:+.1f}%)" for sym, (c, v) in latest.items())
     return (f'<div class="card fr-chartcard"><h2>Rating vs the tape'
-            f'<span class="card-r">Fable 0–10 vs SPY &amp; QQQ, % from {basedate} close · prices thru {market["updated"]}</span></h2>'
+            f'<span class="card-r">Fable 0–10 vs SPY &amp; QQQ, % from {basedate} close · thru {market["updated"]}: {tape}</span></h2>'
             f'<div class="tw">' + "".join(svg) + "</div></div>")
 
 
