@@ -237,6 +237,8 @@ def main():
             sys.exit(f"{sym} VWAP history is empty or misaligned")
         if dates != sorted(dates) or len(dates) != len(set(dates)):
             sys.exit(f"{sym} VWAP dates are not strictly increasing")
+        if dates[-1] != p["last_bar"]:
+            sys.exit(f"{sym} VWAP history is stale: {dates[-1]} != {p['last_bar']}")
         if any(not math.isfinite(float(value)) for value in [*(close or []), *(vwap or [])]):
             sys.exit(f"{sym} VWAP history contains a non-finite value")
         z_values = values.get("z50")
@@ -277,6 +279,7 @@ def main():
     us_symbols = [s["sym"] for s in us_summary]
     country_symbols = [s["sym"] for s in country_summary]
     asset_json = json.dumps({
+        "as_of": p["last_bar"],
         "default": "SPY",
         "groups": {"us": us_symbols, "countries": country_symbols},
         "charts": chart_map,
@@ -290,7 +293,7 @@ def main():
     takeaway = (f"{us_above} of {len(us_summary)} US markets are above YTD VWAP. "
                 f"{leaders[0]['name']} leads the 50-day trend; {laggards[0]['name']} lags.")
 
-    panel = f"""            <section class="trading-panel vwap-panel" id="vwap-panel" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
+    panel = f"""            <section class="trading-panel vwap-panel" id="vwap-panel" data-market-as-of="{p['last_bar']}" role="tabpanel" tabindex="0" aria-labelledby="vwap-tab" hidden>
                 <div class="position-head">
                     <h2 id="vwap-heading">VWAP</h2>
                     <span>{last_bar} close · anchor Jan 2, 2026</span>
