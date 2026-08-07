@@ -67,6 +67,7 @@ POSITION_KEYS = {
     "status",
     "thesis",
     "risk",
+    "return_since_entry_pct",
     "unrealized_pnl_pct_of_virtual_basis",
 }
 
@@ -158,7 +159,7 @@ def render_entry(entry: dict, latest: bool) -> str:
         f'''<article class="autonomous-position">
         <header><div><span>{esc(row["direction"])}</span><h3>{esc(row["symbol"])}</h3></div><strong>{esc(row["status"])}</strong></header>
         <p>{esc(row["thesis"])}</p><p class="autonomous-risk"><b>Risk:</b> {esc(row["risk"])}</p>
-        <p class="autonomous-position-pnl">Unrealized contribution to virtual basis: <b>{pct(float(row["unrealized_pnl_pct_of_virtual_basis"]))}</b></p>
+        <div class="autonomous-position-pnl"><span>Position return since entry <b>{pct(float(row["return_since_entry_pct"]))}</b></span><span>Contribution to virtual basis <b>{pct(float(row["unrealized_pnl_pct_of_virtual_basis"]))}</b></span></div>
         </article>'''
         for row in entry["positions"]
     ) or '<p class="autonomous-empty">No open positions.</p>'
