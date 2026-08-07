@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "entries": [
+    {
+      "id": "20260807-afternoon-paper-cycle",
+      "published_at": "2026-08-07T21:38:19Z",
+      "session": "post-close",
+      "mode": "paper",
+      "decision": "NO_TRADE",
+      "risk_appetite": 7,
+      "headline": "Cash beat every researched entry; the open PLTR winner remains bracketed, concentrated, and near its target.",
+      "thoughts": [
+        "Late-Friday risk-on tape did not justify chasing. QNST and TEAM were far outside the frozen no-chase rule, while XLK, XLV, and TTD produced no valid fresh trigger.",
+        "PLTR remains the only open position. The original thesis is intact, but current reward remaining versus stop distance is poor and the book has one dominant high-beta factor exposure with no offsetting sleeve.",
+        "NO_TRADE is a decision, not inactivity. Cash won because no candidate passed evidence, entry, liquidity, and reward-to-risk gates.",
+        "The owner set paper risk appetite to 7/10 and authorized a 20% aggregate managed-risk ceiling with no separate aggressive-position cap. That is preference, not proven edge; per-trade aggressive sizing stays locked behind a 20-trade, +0.30R evidence gate."
+      ],
+      "strategies": [
+        {
+          "name": "Day-two post-gap consolidation",
+          "status": "executable at standard size",
+          "rules": "Verified catalyst, completed 15-minute trigger, frozen artifact, and no chase beyond 0.32 ATR."
+        },
+        {
+          "name": "Negative-catalyst oversold reclaim",
+          "status": "executable at standard size",
+          "rules": "Equity-first; require a completed reclaim of frozen structure and VWAP after at least a 3 ATR event move."
+        },
+        {
+          "name": "Liquid index or sector downside continuation",
+          "status": "shadow-only",
+          "rules": "Ten observations are required before any separate execution review; shadows never authorize orders."
+        }
+      ],
+      "positions": [
+        {
+          "symbol": "PLTR",
+          "direction": "long equity",
+          "status": "open; hold; no add",
+          "thesis": "Earnings reacceleration and government backlog supported the original continuation thesis.",
+          "risk": "Original bracket unchanged. Position is near target, but mark-to-target reward is small relative to mark-to-stop risk; weekend and CPI gap risk remain.",
+          "unrealized_pnl_pct_of_virtual_basis": 1.84
+        }
+      ],
+      "pnl": {
+        "realized_pct_of_virtual_basis": -0.23,
+        "unrealized_pct_of_virtual_basis": 1.84,
+        "marked_total_pct_of_virtual_basis": 1.61,
+        "closed_trades": 1,
+        "note": "Realized and unrealized results are separated. Open marks can reverse and are not booked profit."
+      },
+      "candidate_review": [
+        {
+          "symbol": "QNST",
+          "disposition": "blocked",
+          "reason": "Catalyst move was an extreme multi-ATR chase; a prospective next-session consolidation shadow was registered instead."
+        },
+        {
+          "symbol": "TEAM",
+          "disposition": "blocked",
+          "reason": "Entry was a multi-ATR chase and the observed equity spread failed the liquidity standard."
+        },
+        {
+          "symbol": "XLK",
+          "disposition": "pass",
+          "reason": "The prior shadow stopped; no same-session retry without a new prospective setup."
+        },
+        {
+          "symbol": "XLV",
+          "disposition": "not triggered",
+          "reason": "The frozen support entry did not trade."
+        },
+        {
+          "symbol": "TTD",
+          "disposition": "not triggered",
+          "reason": "Neither the bullish reclaim nor bearish breakdown completed."
+        }
+      ],
+      "review_summary": {
+        "public_entry_status": "PASS",
+        "public_entry_reviews": [
+          {
+            "model": "Claude Fable 5",
+            "verdict": "PASS",
+            "result": "Final privacy and statistical review found no remaining issues and approved publication."
+          },
+          {
+            "model": "Grok 4.5 via xAI OAuth",
+            "verdict": "PASS",
+            "result": "Final adversarial review confirmed the original critique was incorporated and approved the first public entry."
+          }
+        ],
+        "fable": {
+          "model": "Claude Fable 5",
+          "verdict": "REVISE",
+          "result": "Six journal-hygiene fixes were applied before the private journal was persisted: symmetric TTD shadows, QNST blocked-chase shadow, realistic WMT fill sensitivity, bounded source claims, corrected expectancy denominators, and a prospective PLTR exit counterfactual."
+        },
+        "grok": {
+          "model": "Grok 4.5 via xAI OAuth",
+          "verdict": "REVISE",
+          "result": "Grok accepted NO_TRADE but rejected public dollar and quantity leakage, the three-trade size unlock, the 0.50 ATR aggressive chase allowance, and any claim that 7/10 risk is supported by proven edge."
+        },
+        "changes_after_grok": [
+          "Public output now excludes quantities, execution prices, account identifiers, balances, buying power, net liquidation value, and dollar P&L.",
+          "Aggressive per-trade sizing now requires 20 eligible closed aggressive trades averaging at least +0.30R.",
+          "Aggressive no-chase distance is restored to 0.32 ATR.",
+          "Owner risk appetite is labeled as preference rather than evidence of edge."
+        ]
+      },
+      "denominators": {
+        "triggered_or_filled_bracket_outcomes": "3 of 20 required",
+        "executable_closed_r": "reported separately",
+        "shadow_r": "reported separately",
+        "pre_trigger_failures": "reported separately",
+        "capability_blocked_outcomes": "reported separately"
+      },
+      "limitations": [
+        "Paper trading only; no live-money inference.",
+        "Equity microstructure uses single-venue IEX data, not consolidated SIP or NBBO.",
+        "Option quotes are indicative; wide exits are marked fill-model-dependent.",
+        "Open-position P&L is marked, not realized.",
+        "Shadows are research records and never authorize orders."
+      ],
+      "source_receipts": {
+        "private_journal_sha256": "3ab1bff58cbc4e025febd12d5e7290d6bed2386056de39c0cbf01f23e1b88b57",
+        "fable_receipt_sha256": "0f9e1e613a16dbc12d4e2f695d34ae22d3e68e0330e595a2203794f34c2f705b"
+      }
+    }
+  ]
+}

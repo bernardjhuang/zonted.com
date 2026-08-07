@@ -13,6 +13,7 @@ LINKED_ROUTES = (
     ("momentum/", "Momentum"),
     ("mentality/", "Mentality"),
     ("performance/", "Performance"),
+    ("autonomous/", "Autonomous"),
     ("gpt-risk/", "GPT Risk"),
     ("grok-risk/", "Grok Risk"),
     ("fable-risk/", "Fable Risk"),
@@ -130,6 +131,10 @@ def exercise_linked_routes(page, origin: str) -> None:
             check(page.locator(".mentality-rule").count() == 4, "Mentality needs all four core lessons")
             check(page.locator(".mentality-tactical-card").count() == 1, "Mentality needs one tactical learning")
             check(page.locator('.mentality-tactical-card[href="/posts/mdb-option-expiry-date-risk/"]').count() == 1, "Tactical learning must link to the MDB trade post")
+        if route == "autonomous/":
+            check(page.locator(".autonomous-entry").count() >= 1, "Autonomous needs at least one journal entry")
+            check(page.locator(".autonomous-reviews article").count() >= 2, "Autonomous needs dual-review receipts")
+            check("PAPER ONLY" in page.locator(".autonomous-entry").first.inner_text(), "Autonomous must disclose paper mode")
         check(page.evaluate("document.documentElement.scrollWidth <= window.innerWidth"), f"{route} has horizontal overflow")
         check(not errors, f"{route} JavaScript errors: " + "; ".join(errors))
 

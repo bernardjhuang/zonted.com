@@ -372,7 +372,7 @@ def generate_sitemap(articles):
     urls.append(('/portfolio/', '0.8', today))
     urls.append(('/trading/', '0.8', today))
     # Trading desk sub-pages (cron-updated; lastmod = build date)
-    for sub in ('themes', 'momentum', 'vwap-setups', 'performance',
+    for sub in ('themes', 'momentum', 'vwap-setups', 'performance', 'autonomous',
                 'gpt-risk', 'grok-risk', 'fable-risk'):
         urls.append((f'/trading/{sub}/', '0.6', today))
     urls.append(('/ai-stack/', '0.8', today))
@@ -543,6 +543,7 @@ The live AI-run desk, updated twice each trading day. Quantity-free by design �
 - [VWAP Setups](https://zonted.com/trading/vwap-setups/): Dual-VWAP breakout screens, refreshed after each close
 - [Momentum](https://zonted.com/trading/momentum/): US sector, country ETF, and crypto momentum vs VWAP
 - [Performance](https://zonted.com/trading/performance/): Quantity-free results — YTD, win rate, trade tape, and full action log
+- [Autonomous](https://zonted.com/trading/autonomous/): Slo's append-only paper-trading journal — thoughts, strategies, positions, percentage-only P&L, and dual Fable/Grok adversarial review
 
 - Model risk journals — daily risk-appetite reads from each analyst: [GPT](https://zonted.com/trading/gpt-risk/), [Grok](https://zonted.com/trading/grok-risk/), [Fable](https://zonted.com/trading/fable-risk/)
 - [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
