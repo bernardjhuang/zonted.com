@@ -4,6 +4,7 @@ from __future__ import annotations
 import importlib.util
 import json
 from pathlib import Path
+import re
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -48,8 +49,17 @@ def summary():
 
 
 class DeskPositionBuilderTests(unittest.TestCase):
-    def test_live_position_profiles_cover_jci(self):
+    def test_every_canonical_hypothesis_has_a_position_profile(self):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        hypotheses = {
+            symbol.upper()
+            for symbol in re.findall(
+                r'id="hypothesis-([a-z0-9.-]+)-setup"',
+                source,
+            )
+        }
+        self.assertFalse(hypotheses - set(profiles))
         self.assertIn("JCI", profiles)
         self.assertEqual(profiles["JCI"]["sector"], "Industrials")
         self.assertEqual(profiles["JCI"]["sector_etf"], "XLI")

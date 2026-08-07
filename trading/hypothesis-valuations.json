@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "as_of": "2026-08-04",
+  "as_of": "2026-08-07",
   "rows": {
         "LTH": {
       "valuation_metrics": [
@@ -185,6 +185,21 @@
         "base_comparison": "cost basis"
       },
       "method": "52-week low / live cost basis / 52-week high trading references; not intrinsic value",
+      "confidence": "low"
+    },
+    "ADBE": {
+      "valuation_metrics": [
+        {"label": "Market cap", "value": "$109.4B"},
+        {"label": "TTM P/E", "value": "14.4×"},
+        {"label": "Q2 revenue growth", "value": "13%"}
+      ],
+      "entry_levels": {"bear": 190.12, "base": 260.24, "bull": 370.86},
+      "entry_level_display": {
+        "heading": "Market reference levels",
+        "labels": {"bear": "52W low", "base": "Aug 6 close", "bull": "52W high"},
+        "base_comparison": "Aug 6 close"
+      },
+      "method": "52-week low / August 6 close / 52-week high market references; not intrinsic value",
       "confidence": "low"
     }
   }
