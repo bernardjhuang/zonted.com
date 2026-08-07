@@ -565,6 +565,17 @@ def evaluation_status(as_of: str) -> dict[str, Any]:
     return status
 
 
+def drop_in_progress_bar(rows: list[dict[str, Any]], today: date) -> list[dict[str, Any]]:
+    """Drop Yahoo's in-progress bar dated today when run before ~16:15 ET settlement.
+
+    Keeping it would set as_of ahead of settled sources (Cboe curve settlement,
+    FRED HY OAS, pre-open SPY), so publish the latest fully-settled session instead.
+    """
+    if rows and rows[-1]["date"] == today.isoformat() and datetime.now(ET) < datetime.combine(today, time(16, 15), tzinfo=ET):
+        return rows[:-1]
+    return rows
+
+
 def build(end: date | None = None) -> dict[str, Any]:
     today = datetime.now(ET).date()
     requested_end = min(end or today, today)
@@ -572,7 +583,7 @@ def build(end: date | None = None) -> dict[str, Any]:
 
     with ThreadPoolExecutor(max_workers=len(YAHOO_SYMBOLS)) as executor:
         yahoo_jobs = {name: executor.submit(yahoo_series, symbol, HISTORY_START, requested_end) for name, symbol in YAHOO_SYMBOLS.items()}
-        indices = {name: job.result() for name, job in yahoo_jobs.items()}
+        indices = {name: drop_in_progress_bar(job.result(), today) for name, job in yahoo_jobs.items()}
     futures, contracts = futures_history(HISTORY_START, requested_end)
 
     env = load_env(Path.home() / ".hermes" / ".env")
