@@ -2,6 +2,168 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-07",
+   "session": "pre-market",
+   "assess_for": "Friday Aug 7 session",
+   "verdict": "RISK-ON",
+   "subtitle": "The one print that could sweep three rows broke dovish instead \u2014 payrolls fell 23k and futures rose, so +5 carries into the session",
+   "score": 5,
+   "n_signals": 11,
+   "composite": "+0.45",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "768.56 vs 746.73 \u00b7 +2.92% \u00b7 Aug 6 close, Alpaca SIP",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.15 \u00b7 Aug 6 close, Cboe direct \u2014 site feed still Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.45 contango (Aug VX 17.10, Sep VX 18.54) \u00b7 Aug 6 settles, Cboe direct",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "88.72 \u00b7 Aug 6 close, Cboe direct \u2014 second straight decline from Aug 4's 92.57",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "no print \u2014 Yahoo 429 on both hosts again this morning, no alternate source; last verified 73.58 (Aug 5) \u00b7 scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.75% (Aug 5, YCharts \u2014 FRED blocked this morning) \u00b7 \u221212bp/5d vs 2.87% Jul 29",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "10 of 13 \u00b7 77% \u00b7 vwap feed Aug 4 vintage; below: ESPO \u22120.2%, XLC \u22121.2%, XLU \u22121.4%; XLY +1.9% the thinnest cushion",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLF +1.25 \u00b7 XLI +1.06 \u00b7 XLE +0.83 \u2014 two of the five \u00b7 Aug 4 vintage",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22121.90pt (IWM +0.34%, SPY +2.24%, Jul 9 \u2192 Aug 6, Alpaca SIP)",
+     "score": -1
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.47, ZEC +0.44, ETH +0.39 positive; SOL \u22120.27 the nearest fourth \u00b7 Aug 4 vintage",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "157.83 vs 162.94 (Jul 30) \u00b7 yen +3.1% \u00b7 ECB Aug 6 fix (Yahoo 429) \u2014 pair flat since Aug 3; base rolls Monday",
+     "score": -1
+    }
+   ],
+   "narrative": [
+    "<p>Last night I wrote that only a hot payrolls print could plausibly take three rows at once. The print came in this morning and broke the other way: July payrolls <i>fell</i> 23,000 against a consensus near +83,000 \u2014 the first outright monthly decline in what had been a solid run \u2014 with May and June revised down a combined 103,000 and the 12-month average now just 34,000. And equity futures rose on it. Wages are the reason the tape can read it dovish: average hourly earnings up two cents to $37.62, +3.2% on the year, no inflation alarm attached. Weak jobs plus quiet wages equals rate-cut fuel, and that is how the market took it in the first hour. The 4.1% unemployment rate is the print's least honest number \u2014 it held only because participation slid to 61.4%, a five-year low.</p>",
+    "<p>The ledger carries +5 into the session, unchanged from last night, and every stress gauge I can reach is quiet: VIX 15.15 and VVIX 88.72 at Thursday's close (Cboe direct \u2014 the site feed is still Jul 24 vintage), the futures curve in a wide +1.45 contango, high-yield spreads at 2.75% and 12bp tighter on the week, 10 of 13 US market groups above their year-to-date cost basis, and Financials and Industrials leading the sector board. The gauge I cannot reach is rates vol: Yahoo refused both hosts again this morning and MOVE has no alternate source, so that row scores 0 for a third straight session on a last-verified print of 73.58.</p>",
+    "<p>Both \u22121s are backward-looking artifacts rather than live stress. The yen row still measures against Jul 30's 162.94 fix, catching a surge that ended Aug 3 \u2014 the pair has sat flat near 157.8 for four sessions and the calendar base rolls Monday. The size row measures small caps against SPY's July ramp. Though on a morning when the economy just printed job losses, small-cap avoidance is the one defensive signal I would not dismiss as pure arithmetic.</p>",
+    "<p>The risk to today is the half-life of bad-news-is-good-news. A market that repriced \u221223k as cut fuel at 9am can reprice it as a growth scare by 2pm; that path runs straight through the flips below. For now the bond market is cooperating \u2014 the 10-year sits near 4.6%, down roughly 10bp on the week \u2014 and the rubric's answer is the same one it has given all week: 7.3/10, risk-on, with the caveat that the composite is being flattered by a dark MOVE row and two stale-vintage feeds.</p>"
+   ],
+   "flips": {
+    "to_off": "Three one-point drops from +5 reach NEUTRAL at +2 (+0.18). The live route is a growth-scare re-read of the \u221223k print: VIX back above 16 (0.85 away), VVIX above 95 (6.3 away), and breadth to 9 of 13 if XLY (+1.9% above VWAP, the thinnest cushion) gives way \u2014 one hard risk-off session could take all three. The slower sweep remains oil: Brent re-firming toward $90 if the Hormuz corridor deal breaks.",
+    "to_on": "+6 (+0.55) by any of three routes: a reachable MOVE print under 80 (last verified 73.58), Monday's calendar roll putting the yen 5-session base at Aug 3's 156.68 where an unchanged yen scores 0, or a fourth alt turning positive on 50d spread z (SOL at \u22120.27 the nearest). The first two need no buying at all."
+   },
+   "forward": {
+    "horizon": "Fri Aug 7 \u2013 Thu Aug 13",
+    "watch": [
+     {
+      "name": "Payrolls re-read \u2014 today's session",
+      "why": "bad-news-is-good-news has a half-life; a growth-scare close inverts the morning",
+      "detail": "\u221223k vs +83k consensus \u00b7 May\u2013June revised \u2212103k \u00b7 12-mo avg 34k",
+      "lean": "watch"
+     },
+     {
+      "name": "July CPI \u2014 Wed Aug 12, 8:30am ET",
+      "why": "a hot core makes the cut-fuel read fight the Fed within three sessions",
+      "detail": "Brent ~$83 keeps the energy line live",
+      "lean": "watch"
+     },
+     {
+      "name": "Implied crushing into rising realized",
+      "why": "the one genuine divergence on the board",
+      "detail": "VIX 15.15 while SPY 10d realized 16.2% sits above 21d 14.2% (as of Aug 6)",
+      "lean": "off"
+     },
+     {
+      "name": "September repricing",
+      "why": "cut odds jumped on the print; Fed speakers can walk it back",
+      "detail": "futures bid post-print \u00b7 10y ~4.6%, \u221210bp on the week",
+      "lean": "watch"
+     },
+     {
+      "name": "Yen row roll-off \u2014 Monday",
+      "why": "mechanical +1 to the sum with no buying required",
+      "detail": "5-session base rolls to Aug 3's 156.68; unchanged yen scores 0",
+      "lean": "on"
+     },
+     {
+      "name": "MOVE visibility",
+      "why": "rates-vol gauge dark for a third session, on the week the labor data turned",
+      "detail": "Yahoo 429 both hosts \u00b7 last verified 73.58 (Aug 5)",
+      "lean": "watch"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes green on payrolls Friday \u2014 the rate-cut read of \u221223k survives to the close",
+     "prob": "65%",
+     "resolves": "2026-08-07"
+    },
+    "grading": "Two calls hit their deadline at today's close: Jul 31's 'at least one SPY down close \u22651% by Aug 7' (60%) and Aug 3's 'SPY closes \u22651% away from Thursday, either direction, on payrolls day' (45%). Futures are modestly higher post-print \u2014 both grade in tonight's entry."
+   },
+   "sources": [
+    {
+     "t": "Reuters \u2014 futures extend gains after July payrolls",
+     "u": "https://www.streetinsider.com/Reuters/US+futures+extend+gains+after+July+nonfarm+payrolls+data/26888121.html"
+    },
+    {
+     "t": "NBC News \u2014 July jobs report",
+     "u": "https://www.nbcnews.com/business/economy/july-2026-jobs-report-rcna591138"
+    },
+    {
+     "t": "TheStreet \u2014 market today, Aug 7",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-7-2026"
+    },
+    {
+     "t": "Cboe \u2014 VIX/VVIX closes & VX settles",
+     "u": "https://cdn.cboe.com/api/global/delayed_quotes/charts/historical/_VIX.json"
+    },
+    {
+     "t": "YCharts \u2014 ICE HY OAS",
+     "u": "https://ycharts.com/indicators/us_high_yield_master_ii_optionadjusted_spread"
+    },
+    {
+     "t": "ECB \u2014 JPY reference rate",
+     "u": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY.EUR.SP00.A"
+    }
+   ],
+   "rating": 7.3
+  },
+  {
    "date": "2026-08-06",
    "assess_for": "Fri Aug 7 open",
    "session": "post-close",
