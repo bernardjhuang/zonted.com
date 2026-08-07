@@ -3,6 +3,176 @@
  "entries": [
   {
    "date": "2026-08-07",
+   "assess_for": "Mon Aug 10 open",
+   "session": "post-close",
+   "verdict": "RISK-ON",
+   "subtitle": "Payrolls \u221223k and a record close anyway \u2014 hike bets die, size appetite wakes up, and Monday has a free point queued",
+   "score": 6,
+   "n_signals": 11,
+   "composite": "+0.55",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "773.26 vs 747.19 \u00b7 +3.49% \u00b7 Aug 7 close, Alpaca SIP \u2014 record close, +0.61% on the day",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "14.90 \u00b7 Aug 7 4:15pm ET close, Cboe direct \u2014 third straight session under 16, lowest of the run; site feed still Jul 24 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.67 contango (Aug VX 16.99, Sep VX 18.66) \u00b7 Aug 7 settles, Cboe direct \u2014 steepest of the run",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "90.42 \u00b7 Aug 7 close, Cboe direct \u2014 up 1.7 on an up-tape day, the one gauge that leaned the wrong way",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "no print \u2014 Yahoo 429 on both hosts again after retries, third scoring session dark; last verified 73.58 (Aug 5) \u00b7 scored 0 per rubric",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.71% (Aug 6, FRED direct \u2014 reachable this evening) \u00b7 \u221213bp/5d vs 2.84% Jul 30",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed caught up from its Aug 4 vintage; below: only XLC \u22121.9% and XLU \u22122.5%; ESPO reclaimed VWAP at +4.0%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLB +1.45 \u00b7 XLF +1.14 \u00b7 XLI +1.13 \u2014 two of the five; XLY +1.12 fourth by 0.01",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.54pt (IWM +1.88%, SPY +2.43%, Jul 10 \u2192 Aug 7, Alpaca SIP) \u2014 back inside the band from \u22121.90 on IWM's +1.11% payrolls day",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.45, ETH +0.43, ZEC +0.41 positive; SOL \u22120.39 slipped further as the nearest fourth",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "158.34 vs 160.24 (Jul 31) \u00b7 yen +1.19% \u00b7 ECB Aug 7 fix (Yahoo 429) \u2014 over the line by 0.19pt on the last day of the old base; rolls off Monday",
+     "score": -1
+    }
+   ],
+   "narrative": [
+    "<p>The economy shed 23,000 jobs in July against a consensus gain of 80,000, May and June were revised down a combined 103,000 \u2014 and the S&P closed at a record. The resolution of that riddle is what kind of Fed debate this is: a hike debate. <a href=\"https://www.benzinga.com/markets/equities/26/08/61050255/stock-market-today-jobs-shock-sinks-rate-hike\" rel=\"noopener\">September hike odds collapsed from 58% to 42%</a> on the print, helped by wages rising just <a href=\"https://www.cnbc.com/2026/08/07/jobs-report-july-2026.html\" rel=\"noopener\">0.1% on the month and 3.2% on the year</a>, both under consensus. SPY closed +0.61% at 773.26; the rate-sensitive end led, with IWM +1.11%; VIX finished 14.90, a third straight session under 16 and the lowest close of the run.</p>",
+    "<p>The sum moves +5 \u2192 +6, and unlike yesterday's slip, today's change is tape: size appetite scored its first non-negative since the row entered the ledger's spotlight \u2014 the IWM\u2212SPY 20-session gap collapsed from \u22121.90 to \u22120.54 points as small caps did exactly what a dead hike-scenario says they should. Breadth improved to 11 of 13 (85%) as the vwap feed caught up and ESPO reclaimed its VWAP; the VX curve steepened to +1.67, high-yield spreads tightened again to 2.71%. Two dissents worth logging: VVIX rose 1.7 to 90.4 on an up-tape day \u2014 someone is paying up for vol-of-vol into CPI week \u2014 and the yen row stays \u22121 by all of 0.19 points against the expiring Jul 31 base. MOVE is dark a third scoring session (Yahoo unreachable after retries, no alternate source; last verified 73.58) and scores 0 per rubric.</p>",
+    "<p>Grading day, three calls due at this close. The morning entry called RISK-ON and forecast a green close at 65% \u2014 <b>HIT</b> (+0.61%), Brier 0.12. Aug 3's payrolls-day call \u2014 a \u00b11% close-to-close move at 45% \u2014 did not occur, and the sub-50% lean was right: Brier 0.20. Jul 31's carryover \u2014 at least one \u22651% down close by today at 60% \u2014 <b>MISSES</b> exactly as Jul 30's twin did: its window ran +1.42, +1.80, \u22120.20, \u22120.16, +0.61. Brier 0.36. Four calls have now resolved; the running Brier is <b>0.26</b>, and both misses are the same mistake \u2014 pricing downside at 60% into a tape that never delivered it. The morning call itself: confirmed in full.</p>",
+    "<p>Into Monday the composite has a free point queued: the yen row's 5-session base rolls to Aug 3's 156.68, and with the fix at 158.34 an unchanged yen scores 0 \u2014 that is +7 (+0.64), the high of the run, with no buying required. What it walks into is the week's real gauntlet: July CPI Wednesday 8:30am ET with the 10-year auction the same afternoon and the 30-year Thursday, long rates already at 5.21%. The market prices the Aug 12 straddle at \u00b10.9% through CPI morning. Weak labor plus a hot CPI print is the one combination that turns today's relief rally back into a stagflation tape \u2014 and it would hit the vol rows, the size row, and breadth all at once.</p>"
+   ],
+   "flips": {
+    "to_off": "Four one-point drops from +6 reach NEUTRAL at +2 (+0.18). Live candidates: VIX back above 16 (1.10 away), VVIX above 95 (4.6 away \u2014 and it rose today), size appetite back under \u22121pt (0.46 of cushion), breadth to 9 of 13 if two thin cushions (XLP +2.0%, XLY +3.3%) give way. A hot CPI Wednesday into a weak 10-year auction the same day is the one event that plausibly takes three rows at once; even that leaves +3, still RISK-ON by the final increment.",
+    "to_on": "+7 (+0.64) arrives Monday mechanically if the yen fix simply holds near 158 \u2014 the 5-session base rolls to Aug 3's 156.68 and the row scores 0. +8 additionally needs a reachable MOVE print under 80 (last verified 73.58). The only buying-required route, a fourth alt beating BTC on 50d spread z, moved farther away today (SOL \u22120.39)."
+   },
+   "forward": {
+    "horizon": "Mon Aug 10 \u2013 Fri Aug 14",
+    "watch": [
+     {
+      "name": "July CPI \u2014 Wed Aug 12, 8:30am ET",
+      "why": "arbitrates relief-rally vs stagflation re-read of \u221223k payrolls",
+      "detail": "SPY Aug 12 ATM straddle $6.98 \u2248 \u00b10.9% through CPI morning",
+      "lean": "watch"
+     },
+     {
+      "name": "Refunding auctions \u2014 3y Tue, 10y Wed, 30y Thu, 1pm ET",
+      "why": "10y prices hours after CPI with the 30y at 5.21%",
+      "detail": "settle Aug 17; long-end tails are the second leg of any hot-CPI sweep",
+      "lean": "watch"
+     },
+     {
+      "name": "Policy repricing after the jobs shock",
+      "why": "the near-term hike scenario is mostly priced out",
+      "detail": "Sept hike odds 58% \u2192 42%; wages +0.1% m/m, +3.2% y/y under consensus",
+      "lean": "on"
+     },
+     {
+      "name": "Implied below realized",
+      "why": "vol is priced for a calm that the tape hasn't delivered for two weeks",
+      "detail": "VIX 14.90 vs SPY 10d realized 16.1% (21d 14.0%); VVIX rose 1.7 on an up day",
+      "lean": "off"
+     },
+     {
+      "name": "Yen carry fuel half burned",
+      "why": "the unwind gauge de-risked itself",
+      "detail": "COT leveraged funds net short 61k JPY contracts (Aug 4) vs 102k the prior week",
+      "lean": "on"
+     },
+     {
+      "name": "Growth-scare second datapoint",
+      "why": "a \u221223k print reads as relief only until the next soft number confirms it as trend",
+      "detail": "jobless claims Thu Aug 13; revisions already \u2212103k for May\u2013June",
+      "lean": "watch"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes \u22651% away from Friday's 773.26, in either direction, on CPI Wednesday Aug 12",
+     "prob": "30%",
+     "resolves": "2026-08-12"
+    },
+    "grading": "Three calls resolved at today's close. Aug 7 pre-market: green close on payrolls day at 65% \u2014 HIT (+0.61%), Brier 0.12. Aug 3: \u00b11% payrolls-day move at 45% \u2014 did not occur, lean right, Brier 0.20. Jul 31: \u22651% down close by Aug 7 at 60% \u2014 MISS (window ran +1.42, +1.80, \u22120.20, \u22120.16, +0.61), Brier 0.36. With Jul 30's earlier MISS (0.36), four resolved: running Brier 0.26. Both misses are the same error \u2014 60% on downside the tape kept refusing."
+   },
+   "sources": [
+    {
+     "t": "CNBC \u2014 July jobs report: \u221223k payrolls, wages +0.1% m/m",
+     "u": "https://www.cnbc.com/2026/08/07/jobs-report-july-2026.html"
+    },
+    {
+     "t": "Benzinga \u2014 Aug 7: jobs shock sinks rate-hike bets, S&P 500 record",
+     "u": "https://www.benzinga.com/markets/equities/26/08/61050255/stock-market-today-jobs-shock-sinks-rate-hike"
+    },
+    {
+     "t": "Yahoo Finance \u2014 economy lost 23,000 jobs, hike odds reduced",
+     "u": "https://finance.yahoo.com/economy/articles/economy-lost-23-000-jobs-131436453.html"
+    },
+    {
+     "t": "Treasury \u2014 tentative auction schedule (3y/10y/30y Aug 11\u201313)",
+     "u": "https://home.treasury.gov/system/files/221/Tentative-Auction-Schedule.pdf"
+    },
+    {
+     "t": "Cboe \u2014 VX settlements Aug 7",
+     "u": "https://www.cboe.com/us/futures/market_statistics/settlement/"
+    },
+    {
+     "t": "FRED \u2014 HY OAS (BAMLH0A0HYM2)",
+     "u": "https://fred.stlouisfed.org/series/BAMLH0A0HYM2"
+    },
+    {
+     "t": "ECB \u2014 USD & JPY daily reference rates",
+     "u": "https://data-api.ecb.europa.eu/service/data/EXR/D.JPY+USD.EUR.SP00.A?lastNObservations=10&format=csvdata"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures, Aug 4",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    }
+   ],
+   "rating": 7.7
+  },
+  {
+   "date": "2026-08-07",
    "session": "pre-market",
    "assess_for": "Friday Aug 7 session",
    "verdict": "RISK-ON",
@@ -2758,6 +2928,10 @@
     [
      "2026-08-06",
      768.56
+    ],
+    [
+     "2026-08-07",
+     773.26
     ]
    ],
    "QQQ": [
@@ -2828,9 +3002,13 @@
     [
      "2026-08-06",
      714.65
+    ],
+    [
+     "2026-08-07",
+     723.03
     ]
    ]
   },
-  "updated": "2026-08-06"
+  "updated": "2026-08-07"
  }
 }
