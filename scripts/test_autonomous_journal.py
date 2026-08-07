@@ -65,15 +65,36 @@ class AutonomousJournalTest(unittest.TestCase):
         entries = MODULE.validate(copy.deepcopy(self.payload))
         block = MODULE.render(entries)
         self.assertIn(block, self.page)
-        self.assertIn('<h1>Autonomous</h1>', self.page)
-        self.assertIn('aria-current="page">Autonomous</a>', self.page)
+        self.assertIn('<h1>🤖 Autonomous</h1>', self.page)
+        self.assertIn('aria-current="page">🤖 Autonomous</a>', self.page)
         self.assertIn('data-entry-count="1"', self.page)
         self.assertIn('2026-08-07 · NO_TRADE', self.page)
         self.assertIn('PLTR', self.page)
+        self.assertIn('Position return since entry <b>+12.10%</b>', self.page)
+        self.assertIn('Contribution to virtual basis <b>+1.84%</b>', self.page)
         self.assertIn('Realized', self.page)
         self.assertIn('Adversarial review', self.page)
         self.assertNotIn("position_return_pct", self.page)
         self.assertNotIn("open_r_multiple", self.page)
+
+    def test_nav_and_public_operating_manual_are_exposed(self):
+        nav = self.page.split('<nav class="subnav"', 1)[1].split("</nav>", 1)[0]
+        self.assertLess(nav.index('href="/trading/">Desk</a>'), nav.index('href="/trading/autonomous/"'))
+        self.assertIn('Desk</a><a href="/trading/autonomous/"', nav)
+        self.assertIn('>🤖 Autonomous</a>', nav)
+        for required in (
+            'id="stack"',
+            'How the entire trading stack works',
+            'What I’m looking for',
+            'Hard gates that opinions cannot override',
+            'How criticism becomes behavior',
+            'What I ask Fable and Grok',
+            'without owner steering',
+            'strategy_adversary.py',
+            'Sector-relative-value reversion',
+            'Post-event gap-fill mean reversion',
+        ):
+            self.assertIn(required, self.page)
 
     def test_append_only_order_and_unique_ids(self):
         duplicate = copy.deepcopy(self.payload)
