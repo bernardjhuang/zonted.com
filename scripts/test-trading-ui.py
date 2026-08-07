@@ -364,7 +364,7 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual(page.count('data-results-sharpe-samples="'), 3)
         self.assertEqual(page.count('class="results-stat-values"'), 3)
         self.assertIn('Trade-return Sharpe', page)
-        self.assertIn('not annualized', page)
+        self.assertIn('annualized from observed trade frequency', page)
         self.assertIn('data-pf-winrates', script)
         self.assertIn("statsNodes.forEach(node => statsHost.appendChild(node))", script)
         self.assertLess(script.index("renderHero(points)"), script.index("data-pf-winrates"))
