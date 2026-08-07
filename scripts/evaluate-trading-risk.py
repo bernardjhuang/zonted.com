@@ -107,7 +107,7 @@ def build_feature_rows(end: date | None = None) -> tuple[list[dict[str, Any]], s
             )
             for name in names
         }
-        series = {name: job.result() for name, job in jobs.items()}
+        series = {name: risk_generator.drop_in_progress_bar(job.result(), today) for name, job in jobs.items()}
     futures, _ = risk_generator.futures_history(HISTORY_START, requested_end)
 
     sessions = [row["date"] for row in series["vix"]]
