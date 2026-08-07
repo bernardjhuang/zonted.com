@@ -486,9 +486,19 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertIn(f".chip-{model}::before", styles)
             self.assertIn(f"/trading/model-icons/{model}.svg", styles)
             self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
+        # Retired from the desk risk-chip system only. The SVGs themselves stay:
+        # the theme ledger masks them for source provenance (.mi-gemini/.mi-meta),
+        # and themes sourced by Gemini or Meta AI are still live.
+        themes_page = (ROOT / "trading" / "themes" / "index.html").read_text()
         for retired in ("gemini", "meta"):
             self.assertNotIn(f".chip-{retired}::before", styles)
-            self.assertFalse((ROOT / "trading" / "model-icons" / f"{retired}.svg").exists())
+            self.assertIn(f"/trading/model-icons/{retired}.svg", themes_page)
+        for model in ("fable", "gpt", "grok", "gemini", "meta"):
+            self.assertIn(f"/trading/model-icons/{model}.svg", themes_page)
+            self.assertTrue(
+                (ROOT / "trading" / "model-icons" / f"{model}.svg").exists(),
+                f"theme provenance icon {model}.svg is referenced but missing",
+            )
         self.assertNotIn(".chip .dot", styles)
         self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
         self.assertTrue(HYPOTHESES_SOURCE.exists(), "canonical hypothesis source artifact must remain available")
