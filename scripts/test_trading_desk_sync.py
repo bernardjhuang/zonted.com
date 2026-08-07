@@ -67,6 +67,15 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn(f'/js/trading-broker-light.js?v={broker_hash}', page)
         vwap = json.loads((ROOT / "trading" / "vwap-charts.json").read_text())
         crypto = json.loads((ROOT / "trading" / "crypto-charts.json").read_text())
+        self.assertRegex(vwap["as_of"], r"^\d{4}-\d{2}-\d{2}$")
+        self.assertRegex(crypto["as_of"], r"^\d{4}-\d{2}-\d{2}$")
+        self.assertIn(f'data-market-as-of="{vwap["as_of"]}"', page)
+        self.assertIn(
+            f'{dt.date.fromisoformat(vwap["as_of"]).strftime("%B %-d, %Y")} close',
+            page,
+        )
+        self.assertIn(f'data-crypto-as-of="{crypto["as_of"]}"', page)
+        self.assertIn(f'{dt.date.fromisoformat(crypto["as_of"]).strftime("%b %-d")} UTC close', page)
         self.assertEqual(len(vwap["groups"]["us"]), 13)
         self.assertEqual(len(vwap["groups"]["countries"]), 10)
         self.assertEqual(len(crypto["charts"]), 7)

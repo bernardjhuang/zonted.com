@@ -215,14 +215,14 @@ def main():
         for c in coins for b in [vwap_by_symbol[c["sym"]]])
     chart_map = {c["sym"]: combined_chart(c, vwap_by_symbol[c["sym"]]) for c in coins}
     default_symbol = coins[0]["sym"]
-    asset_json = json.dumps({"default": default_symbol, "charts": chart_map}, separators=(",", ":"), allow_nan=False)
+    asset_json = json.dumps({"as_of": p["last_bar"], "default": default_symbol, "charts": chart_map}, separators=(",", ":"), allow_nan=False)
     asset_hash = hashlib.sha256(asset_json.encode()).hexdigest()[:12]
     leaders = [c["sym"] for c in coins if c["spread"] >= 0]
     laggards = [c["sym"] for c in reversed(coins) if c["spread"] < 0]
     below_leaders = [c["sym"] for c in coins if c["spread"] >= 0 and not vwap_by_symbol[c["sym"]]["side"]]
     middle = f" {', '.join(below_leaders)} {'is' if len(below_leaders) == 1 else 'are'} improving versus BTC but remain below YTD VWAP." if below_leaders else ""
     takeaway = f"{leaders[0]} leads BTC.{middle} {', '.join(laggards[:2])} lag."
-    panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
+    panel = f"""            <section class="trading-panel crypto-panel" id="crypto-panel" data-crypto-as-of="{p['last_bar']}" role="tabpanel" tabindex="0" aria-labelledby="crypto-tab" hidden>
                 <div class="position-head">
                     <h2 id="crypto-heading">Crypto</h2>
                     <span>{fmt(p['last_bar'])} UTC close · BTC {'' if not p.get('btc') else f"${p['btc']['price']:,.0f} · z {p['btc']['z']:+.2f}"}</span>
