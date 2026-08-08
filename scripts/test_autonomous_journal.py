@@ -65,7 +65,7 @@ class AutonomousJournalTest(unittest.TestCase):
         entries = MODULE.validate(copy.deepcopy(self.payload))
         block = MODULE.render(entries)
         self.assertIn(block, self.page)
-        self.assertIn('<h1>🤖 Autonomous</h1>', self.page)
+        self.assertIn('<h1>🦥 Autonomous</h1>', self.page)
         self.assertIn('aria-current="page">🦥 Autonomous</a>', self.page)
         self.assertIn('data-entry-count="1"', self.page)
         self.assertIn('2026-08-07 · NO_TRADE', self.page)
@@ -73,7 +73,7 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertIn('Position return since entry <b>+12.10%</b>', self.page)
         self.assertIn('Contribution to virtual basis <b>+1.84%</b>', self.page)
         self.assertIn('Realized', self.page)
-        self.assertIn('Adversarial review', self.page)
+        self.assertIn('Publication review', self.page)
         self.assertNotIn("position_return_pct", self.page)
         self.assertNotIn("open_r_multiple", self.page)
 
@@ -83,17 +83,45 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertIn('Desk</a><a href="/trading/autonomous/"', nav)
         self.assertIn('>🦥 Autonomous</a>', nav)
         self.assertIn('href="/trading/autonomous-psy/">🦆 Autonomous</a>', nav)
+        self.assertLess(self.page.index('id="learning-board"'), self.page.index('class="autonomous-journal"'))
         for required in (
+            'id="learning-board"',
+            'First code-owned verdict pending',
+            '<strong>150</strong><span>frozen equities</span>',
+            '<strong>1:1</strong><span>matched controls</span>',
+            '<strong>4</strong><span>exit arms</span>',
+            'level_vwap_reclaim',
+            'sector_pair_reversion',
+            'quality_meanrev_3lower',
+            'gap_fill_reversion',
+            'overnight_decomp',
             'id="stack"',
             'How the entire trading stack works',
-            'What I’m looking for',
             'Hard gates that opinions cannot override',
-            'How criticism becomes behavior',
-            'What I ask Fable and Grok',
-            'without owner steering',
-            'strategy_adversary.py',
-            'Sector-relative-value reversion',
-            'Post-event gap-fill mean reversion',
+            'Reviewer A · Fable · evidence only',
+            'Reviewer B · Grok · quarantined diagnosis',
+            'ten newly terminal observations',
+            'review_learning.py',
+            'public_export.py',
+        ):
+            self.assertIn(required, self.page)
+
+    def test_publication_review_is_not_presented_as_a_strategy_verdict(self):
+        self.assertIn('Publication review', self.page)
+        self.assertIn('Publication PASS is not evidence of edge', self.page)
+        self.assertNotIn('Every entry requires final PASS reviews from both Fable and Grok 4.5.', self.page)
+        self.assertNotIn('Compatible feedback is folded into the next session automatically.', self.page)
+        self.assertNotIn('Each reviewer receives the current config, accepted strategy rules', self.page)
+
+    def test_learning_board_discloses_launch_state_and_thresholds(self):
+        for required in (
+            'No strategy has earned <code>PROMOTE</code> or <code>RETIRE</code> yet.',
+            'Production replay, reviewer scheduling, forward sample collection, and the final public allowlist wiring remain unfinished.',
+            'Effective N ≥ 20',
+            'Conservative R &gt; 0',
+            'Control lift &gt; 0',
+            'Concentration ≤ 30%',
+            'Research cannot authorize orders',
         ):
             self.assertIn(required, self.page)
 
