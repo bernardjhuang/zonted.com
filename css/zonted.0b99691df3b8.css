@@ -1,0 +1,989 @@
+/* Zonted — sitewide design tokens + base + components.
+   Loaded by every page. Per-page overrides go inline.
+   Tokens: paper/ink/ox palette, Fraunces/Source Serif/IBM Plex Mono fonts. */
+
+:root {
+  --paper: #fcfcfa;
+  --paper-2: #f4f1ea;
+  --ink: #1a1815;
+  --faded: #6b655c;
+  --ox: #6b1a1a;
+  --rule: #1a181522;
+  --green-live: #1a7a3c;
+
+  --serif: 'Source Serif 4', Georgia, serif;
+  --display: 'Fraunces', Georgia, serif;
+  --mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', Consolas, monospace;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 72px; /* clear the 60px sticky nav + breathing room on #anchor jumps */ }
+html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+
+body {
+  font-family: var(--serif);
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 1.0625rem;
+  line-height: 1.75;
+  font-feature-settings: 'kern' 1, 'liga' 1;
+}
+
+a { color: var(--ox); text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 2px; }
+a:hover { color: var(--ink); }
+img, video { max-width: 100%; height: auto; }
+
+/* ---------- Nav ---------- */
+.zn-nav {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--paper);
+  border-bottom: 1px solid var(--rule);
+}
+.zn-nav-inner {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.zn-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--ink);
+  letter-spacing: -0.02em;
+  text-decoration: none;
+}
+.zn-logo:hover { color: var(--ink); }
+.zn-avatar-sm {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--ink);
+  color: var(--paper);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--display);
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.zn-nav-links { display: flex; gap: 24px; align-items: center; }
+.zn-nav-links a {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--faded);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+/* Hit-area padding cancelled by negative margin: visual rhythm unchanged,
+   pointer target grows to ~40px tall. Desktop only — the mobile drawer
+   already gives links 14x24 padding, and the negative margin overflowed it. */
+@media (min-width: 721px) {
+  .zn-nav-links a { padding: 10px 6px; margin: -10px -6px; }
+}
+.zn-nav-links a:hover { color: #581c87; }
+.zn-nav-links a.active { color: var(--ink); }
+.zn-nav-links a.zn-nav-cta { color: var(--ox); }
+.zn-nav-links a.zn-nav-cta:hover { color: #581c87; }
+
+/* ---------- Hamburger menu (CSS-only, checkbox hack) ----------
+   width/height: 0 isn't enough to hide a checkbox in Chrome — form
+   controls render at the OS minimum interactive size regardless. Use
+   the clip pattern + appearance: none. */
+.zn-menu-toggle {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  overflow: hidden;
+  white-space: nowrap;
+  -webkit-appearance: none;
+  appearance: none;
+  pointer-events: none;
+}
+.zn-menu-btn { display: none; }
+@media (max-width: 720px) {
+  .zn-menu-toggle { pointer-events: auto; }
+  .zn-menu-btn {
+    display: inline-flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 8px;
+    cursor: pointer;
+    z-index: 101;
+    margin-right: -8px;
+  }
+  .zn-menu-btn span {
+    display: block;
+    height: 2px;
+    width: 100%;
+    background: var(--ink);
+    border-radius: 1px;
+    transition: transform 0.25s ease, opacity 0.2s ease;
+    transform-origin: center;
+  }
+  .zn-menu-toggle:focus-visible + .zn-menu-btn {
+    outline: 2px solid var(--ox);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+  /* Animate hamburger → X when checked */
+  .zn-menu-toggle:checked + .zn-menu-btn span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .zn-menu-toggle:checked + .zn-menu-btn span:nth-child(2) { opacity: 0; transform: scaleX(0); }
+  .zn-menu-toggle:checked + .zn-menu-btn span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+  /* Drop the nav-links into a panel below the nav bar */
+  .zn-nav-links {
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--paper);
+    border-bottom: 1px solid var(--rule);
+    box-shadow: 0 8px 24px rgba(26, 24, 21, 0.08);
+    padding: 4px 0 8px;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    transition: max-height 0.25s ease, opacity 0.2s ease, visibility 0s linear 0.25s;
+  }
+  .zn-nav-links a {
+    padding: 14px 24px;
+    font-size: 1rem;
+    border-top: 1px solid var(--rule);
+    color: var(--ink);
+  }
+  .zn-nav-links a:first-child { border-top: none; }
+  .zn-menu-toggle:checked ~ .zn-nav-links {
+    max-height: 80vh;
+    opacity: 1;
+    visibility: visible;
+    transition: max-height 0.3s ease, opacity 0.25s ease, visibility 0s linear 0s;
+  }
+}
+
+/* ---------- Trading dropdown (nav) ----------
+   <details>/<summary> so the toggle works without JS; zn-nav-dd.js only adds
+   outside-click and Escape close. The Trading link itself still navigates. */
+.zn-nav-dd { position: relative; display: inline-flex; align-items: center; gap: 5px; }
+.zn-dd summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: var(--faded);
+  transition: color 0.15s;
+}
+.zn-dd summary::-webkit-details-marker { display: none; }
+.zn-dd summary:hover { color: #581c87; }
+.zn-dd summary:focus-visible { outline: 2px solid var(--ox); outline-offset: 2px; border-radius: 3px; }
+.zn-dd summary svg { transition: transform 0.15s ease; }
+.zn-dd[open] summary svg { transform: rotate(180deg); }
+@media (min-width: 721px) {
+  /* Same hit-area trick as nav links: bigger target, unchanged rhythm. */
+  .zn-dd summary { padding: 12px 6px; margin: -12px -2px; }
+  .zn-dd-menu {
+    position: absolute;
+    top: calc(100% + 17px); /* clears the 60px nav bar's bottom border */
+    left: -14px;
+    min-width: 176px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(26, 24, 21, 0.12);
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 110;
+  }
+  /* Beat the nav-link hit-area negative margins inside the card. */
+  .zn-nav-links .zn-dd-menu a { padding: 9px 16px; margin: 0; color: var(--ink); }
+  .zn-nav-links .zn-dd-menu a:hover { color: #581c87; background: var(--paper-2); }
+}
+@media (max-width: 720px) {
+  /* In the drawer: Trading stays a full-width row, the caret overlays its
+     right edge, and the section links expand in flow, indented. */
+  .zn-nav-dd { display: block; position: relative; }
+  .zn-nav-dd > a { display: block; }
+  .zn-dd { position: static; }
+  .zn-dd summary {
+    position: absolute;
+    top: 3px; /* visually centers the 48px target in the ~53px drawer row */
+    right: 8px;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
+  .zn-dd-menu { display: flex; flex-direction: column; background: var(--paper-2); }
+  .zn-nav-links .zn-dd-menu a { padding-left: 40px; font-size: 0.95rem; }
+}
+
+/* ---------- Eyebrow / mono label ---------- */
+.zn-eyebrow {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  color: var(--faded);
+}
+.zn-eyebrow--ox { color: var(--ox); }
+
+/* ---------- Container widths ---------- */
+.zn-container {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.zn-container-wide {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ---------- Hero ---------- */
+.zn-hero {
+  position: relative;
+  padding: 56px 0 16px;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* Lab operational badge + cron feed — live activity pulse in the hero.
+   Spec: handoff-homepage-cron. Badge stacks above the feed, both
+   left-aligned, so the eye reads "status → live activity" in order. */
+.zn-hero-pulse {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 20px 0 0;
+}
+.zn-cron-status {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--mono);
+  font-size: 11px;
+  letter-spacing: 0.15em;
+  color: var(--faded);
+  text-transform: uppercase;
+}
+.zn-cron-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--green-live);
+  border-radius: 50%;
+  position: relative;
+  flex-shrink: 0;
+}
+.zn-cron-dot::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: 50%;
+  background: var(--green-live);
+  animation: znCronPing 1.8s cubic-bezier(0, 0, 0.2, 1) infinite;
+  opacity: 0;
+}
+@keyframes znCronPing {
+  0%   { transform: scale(0.8); opacity: 0.7; }
+  100% { transform: scale(2.4); opacity: 0; }
+}
+
+.zn-cron-feed {
+  width: 100%;
+  font-family: var(--mono);
+  font-size: 12px;
+  color: var(--faded);
+  /* Reserve room for exactly 3 lines so the byline doesn't shift on rotate */
+  min-height: calc(3 * (12px * 1.6 + 8px));
+}
+.zn-cron-line {
+  padding: 4px 0;
+  border-top: 1px dashed var(--rule);
+  display: flex;
+  gap: 14px;
+}
+.zn-cron-t { color: var(--ox); }
+.zn-cron-agent { color: var(--ox); font-weight: 700; }
+
+.zn-cron-new { animation: znCronNew 0.6s ease-out; }
+@keyframes znCronNew {
+  from { opacity: 0; transform: translateX(-4px); background: rgba(26, 122, 60, 0.07); }
+  to   { opacity: 1; transform: translateX(0); background: transparent; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .zn-cron-dot::after,
+  .zn-cron-new { animation: none !important; }
+}
+
+@media (max-width: 640px) {
+  .zn-cron-feed {
+    font-size: 11px;
+    min-height: calc(3 * (11px * 1.6 + 8px));
+  }
+}
+.zn-hero-eyebrow { margin-bottom: 18px; }
+.zn-hero-headline {
+  font-family: var(--display);
+  font-size: clamp(2rem, 4vw, 2.5rem);
+  font-weight: 500;
+  line-height: 1.1;
+  letter-spacing: -0.025em;
+  color: var(--ink);
+  margin-bottom: 28px;
+  max-width: 640px;
+}
+.zn-hero-byline {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-top: 8px;
+}
+.zn-avatar-md {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background-position: center;
+  background-size: cover;
+  background-color: var(--paper-2);
+  flex-shrink: 0;
+}
+.zn-hero-byline-text {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  color: var(--faded);
+}
+.zn-hero-byline-text strong { color: var(--ink); font-weight: 600; }
+.zn-hero-byline-text em { font-style: italic; }
+
+/* ---------- Subscribe module ---------- */
+.zn-subscribe {
+  padding: 36px 0;
+  border-bottom: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 40px;
+  align-items: start;
+}
+.zn-subscribe-copy {
+  font-family: var(--serif);
+  font-size: 1rem;
+  line-height: 1.6;
+  color: var(--ink);
+}
+.zn-subscribe-copy strong { font-weight: 600; }
+
+/* Agentic shimmer text — a bright stripe sweeps across muted ink, the
+   "thinking" look common in agent UIs (Claude Code, Cursor, etc.). Used
+   on the homepage subscribe CTA strong. */
+.zn-shimmer {
+  background: linear-gradient(90deg, var(--faded) 0%, var(--faded) 40%, var(--ink) 50%, var(--faded) 60%, var(--faded) 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: zn-shimmer 3s linear infinite;
+}
+@keyframes zn-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zn-shimmer {
+    animation: none;
+    background: none;
+    -webkit-text-fill-color: var(--ink);
+    color: var(--ink);
+  }
+}
+.zn-subscribe-meta {
+  margin-top: 10px;
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.05em;
+  color: var(--faded);
+}
+.zn-subscribe-form {
+  min-width: 0; /* grid items default to min-width:auto — the input's intrinsic 20ch width was propagating up and overflowing the module at 200% zoom */
+  display: flex;
+  align-items: baseline;
+  border-bottom: 1.5px solid var(--ink);
+  padding-bottom: 6px;
+}
+.zn-subscribe-form input[type=email] {
+  flex: 1;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-family: var(--serif);
+  font-size: 1rem;
+  color: var(--ink);
+  padding: 6px 0;
+  min-width: 0; /* let the flex input shrink — its intrinsic size forced overflow at 200% zoom */
+}
+.zn-subscribe-form input::placeholder { color: var(--faded); }
+.zn-subscribe-form button {
+  border: none;
+  background: transparent;
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: var(--ox);
+  cursor: pointer;
+  padding: 6px 0 6px 12px;
+  transition: color 0.15s;
+}
+.zn-subscribe-form button:hover { color: var(--ink); }
+.zn-subscribe-form button[disabled] { cursor: default; opacity: 0.7; }
+.zn-subscribe-status {
+  flex-basis: 100%;
+  font-family: var(--mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.03em;
+  color: var(--faded);
+  margin: 8px 0 0;
+  line-height: 1.4;
+}
+.zn-subscribe-status.is-error { color: var(--ox); }
+
+/* Compact variant for the TOC sidebar (220px column) — stacks input + button */
+.zn-subscribe-compact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  border: 0;
+  padding: 0;
+}
+.zn-subscribe-compact input[type=email] {
+  width: 100%;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 0.85rem;
+  padding: 8px 10px;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  outline: none;
+}
+.zn-subscribe-compact input::placeholder { color: var(--faded); }
+.zn-subscribe-compact input:focus { border-color: var(--ink); }
+.zn-subscribe-compact button {
+  width: 100%;
+  font-family: 'Inter', -apple-system, system-ui, sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 9px 12px;
+  border: 0;
+  border-radius: 6px;
+  background: var(--ink);
+  color: var(--paper);
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.zn-subscribe-compact button:hover { opacity: 0.85; }
+.zn-subscribe-compact button[disabled] { opacity: 0.7; cursor: default; }
+.zn-subscribe-compact .zn-subscribe-status { margin-top: 4px; }
+
+/* ---------- "Start here" cards ---------- */
+.zn-section { padding: 40px 0 24px; }
+.zn-section-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+.zn-section-title {
+  font-family: var(--display);
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+}
+.zn-section-meta { font-family: var(--mono); font-size: 0.75rem; color: var(--faded); letter-spacing: 0.05em; }
+
+.zn-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+.zn-card { text-decoration: none; display: block; color: var(--ink); }
+.zn-card-eyebrow { margin-bottom: 8px; }
+.zn-card-title {
+  font-family: var(--display);
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--ink);
+  margin-bottom: 8px;
+  text-decoration: none;
+}
+.zn-card:hover .zn-card-title { text-decoration: underline; text-underline-offset: 3px; }
+.zn-card-dek {
+  font-family: var(--serif);
+  font-size: 0.9rem;
+  line-height: 1.5;
+  color: var(--faded);
+}
+
+/* ---------- Filter tabs ---------- */
+.zn-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 22px;
+  border-bottom: 1px solid var(--rule);
+  margin-bottom: 12px;
+  padding-bottom: 0;
+}
+.zn-tab {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--faded);
+  background: none;
+  border: none;
+  padding: 8px 0;
+  cursor: pointer;
+  position: relative;
+  bottom: -1px;
+  border-bottom: 1.5px solid transparent;
+}
+.zn-tab:hover { color: var(--ink); }
+.zn-tab.active, .zn-tab[aria-pressed=true] {
+  color: var(--ink);
+  border-bottom-color: var(--ink);
+}
+
+/* ---------- Post list rows ---------- */
+.zn-rows { list-style: none; }
+.zn-row {
+  display: flex;
+  gap: 24px;
+  align-items: start;
+  padding: 20px 0;
+  border-bottom: 1px solid var(--rule);
+}
+
+/* JUST PUBLISHED stamp — appears on the newest post in /posts when it's
+   within 7 days of build. Pure CSS, once-on-load animation. Spec:
+   _inbox/handoff-posts-shipped/. */
+.zn-row-shipped { position: relative; }
+.zn-shipped-stamp {
+  position: absolute;
+  top: -10px;
+  right: 4px;
+  font-family: var(--mono);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  color: var(--green-live);
+  background: var(--paper);
+  border: 1.5px solid var(--green-live);
+  padding: 3px 7px;
+  transform: rotate(-6deg);
+  transform-origin: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  animation: znShippedStamp 1.4s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s forwards;
+}
+@keyframes znShippedStamp {
+  0%   { opacity: 0;    transform: rotate(-6deg) scale(1.8); }
+  60%  { opacity: 1;    transform: rotate(-6deg) scale(0.92); }
+  100% { opacity: 0.95; transform: rotate(-6deg) scale(1); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .zn-shipped-stamp { animation: none; opacity: 0.95; }
+}
+/* Left column: always 150px, always shows the date, optionally shows the
+   image below it. When there's no image, left column collapses to just the
+   date but the content still aligns at the same x-offset across rows. */
+.zn-row-left {
+  flex: 0 0 150px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.zn-row-date {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--faded);
+  letter-spacing: 0.05em;
+  padding-top: 4px;
+}
+.zn-row-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
+.zn-row-eyebrow { display: block; margin-bottom: 6px; }
+.zn-row-title {
+  font-family: var(--display);
+  font-size: 1.125rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+  color: var(--ink);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 8px;
+}
+.zn-row-title:hover { text-decoration: underline; text-underline-offset: 3px; color: var(--ink); }
+.zn-row-dek {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.55;
+  color: var(--faded);
+  max-width: 100%;
+  margin: 0;
+}
+
+/* Thumbnail — 150×105 box. Lives inside .zn-row-left, below the date.
+   Only emitted when the post has a usable image. */
+.zn-row-thumb {
+  display: block;
+  width: 150px;
+  height: 105px;
+  border-radius: 6px;
+  border: 1px solid var(--rule);
+  overflow: hidden;
+  background: var(--paper-2);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+.zn-row-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.zn-row:hover .zn-row-thumb { transform: translateY(-2px); border-color: var(--ink); }
+.zn-row-thumb-placeholder {
+  background:
+    repeating-linear-gradient(135deg,
+      var(--rule) 0,
+      var(--rule) 1px,
+      transparent 1px,
+      transparent 8px),
+    var(--paper-2);
+}
+.zn-row-thumb-placeholder::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  background: var(--ox);
+  border-radius: 1px;
+}
+
+/* ---------- Footer ---------- */
+.zn-footer {
+  margin-top: 80px;
+  padding: 32px 0;
+  border-top: 1px solid var(--rule);
+  /* Explicit paper ground: dark island pages (portfolio, ai-stack) otherwise
+     bleed their background under the footer and sink link contrast to ~3.5:1. */
+  background: var(--paper);
+}
+.zn-footer-inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  font-family: var(--serif);
+  font-size: 0.875rem;
+  color: var(--faded);
+}
+.zn-footer-inner a { color: var(--faded); text-decoration: none; margin-left: 18px; }
+.zn-footer-inner a:hover { color: var(--ink); }
+.zn-footer-links { display: flex; gap: 2px; flex-wrap: wrap; }
+.zn-footer-links a { display: inline-block; padding: 8px 9px; } /* ≥24px touch targets — the bare "X" link measured 9px wide */
+
+/* ---------- Article — top block (above 3-col grid) ---------- */
+.zn-article-head {
+  max-width: 720px;
+  margin: 56px auto 36px;
+  padding: 0 24px;
+}
+.zn-article-eyebrow { margin-bottom: 18px; }
+.zn-article-title {
+  font-family: var(--display);
+  font-size: clamp(2.25rem, 5vw, 3rem);
+  font-weight: 500;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  color: var(--ink);
+  margin-bottom: 20px;
+}
+.zn-article-dek {
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.375rem;
+  line-height: 1.45;
+  color: var(--ink);
+  margin-bottom: 28px;
+  font-weight: 400;
+}
+.zn-article-byline {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  padding-top: 18px;
+  border-top: 1px solid var(--rule);
+}
+.zn-article-byline-left { display: flex; align-items: center; gap: 12px; font-family: var(--serif); font-size: 0.875rem; color: var(--ink); }
+.zn-avatar-byline { width: 32px; height: 32px; border-radius: 50%; background: var(--paper-2) center/cover; }
+.zn-article-byline-meta { font-family: var(--mono); font-size: 0.7rem; color: var(--faded); letter-spacing: 0.05em; }
+.zn-article-byline-right { font-family: var(--mono); font-size: 0.7rem; color: var(--faded); letter-spacing: 0.05em; display: flex; gap: 14px; }
+.zn-article-byline-right a { color: var(--faded); text-decoration: none; }
+.zn-article-byline-right a:hover { color: var(--ink); }
+.zn-article-byline-right .ox { color: var(--ox); }
+
+/* ---------- Article — 3-column grid ---------- */
+.zn-article-grid {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 220px 720px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+.zn-article-rail {
+  position: sticky;
+  top: 84px;
+  padding-top: 8px;
+}
+.zn-rail-eyebrow { margin-bottom: 14px; }
+.zn-rail-nav { display: block; }
+.zn-rail-item {
+  display: block;
+  padding: 9px 0 9px 14px;
+  border-left: 1px solid var(--rule);
+  text-decoration: none;
+  color: var(--faded);
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  line-height: 1.3;
+  transition: color 0.15s, border-color 0.15s;
+}
+.zn-rail-item .zn-rail-num {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--faded);
+  letter-spacing: 0.1em;
+  margin-right: 8px;
+}
+.zn-rail-item:hover { color: var(--ink); }
+.zn-rail-item.active {
+  color: var(--ink);
+  border-left: 2px solid var(--ox);
+  padding-left: 13px;
+  font-weight: 500;
+}
+.zn-rail-numbers {
+  margin-top: 28px;
+  padding: 14px;
+  background: var(--paper-2);
+}
+.zn-rail-numbers-eyebrow { margin-bottom: 10px; }
+.zn-rail-numbers-eyebrow.zn-eyebrow--ox { color: var(--ox); font-weight: 700; }
+.zn-rail-numbers-line {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  line-height: 1.7;
+  color: var(--faded);
+}
+.zn-rail-numbers-line strong { color: var(--ink); font-weight: 700; }
+
+/* ---------- Article body ---------- */
+.zn-article-body {
+  font-family: var(--serif);
+  font-size: 1.0625rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+.zn-article-body > p { margin: 20px 0 0; }
+.zn-article-body > p:first-of-type::first-letter {
+  font-family: var(--display);
+  font-size: 4.5rem;
+  font-weight: 500;
+  color: var(--ox);
+  float: left;
+  line-height: 0.85;
+  padding-right: 0.1em;
+  padding-top: 0.1em;
+  margin: 8px 12px 0 0;
+}
+.zn-article-body h2 {
+  font-family: var(--display);
+  font-size: 1.625rem;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin: 40px 0 4px;
+  line-height: 1.2;
+}
+.zn-article-body h2 .zn-h2-num { color: var(--ox); margin-right: 4px; }
+.zn-article-body h3 {
+  font-family: var(--display);
+  font-size: 1.2rem;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin: 28px 0 4px;
+}
+.zn-article-body ul, .zn-article-body ol { margin: 12px 0 16px 1.5em; }
+.zn-article-body li { margin: 6px 0; line-height: 1.7; }
+.zn-article-body strong { color: var(--ink); font-weight: 700; }
+.zn-article-body em { font-style: italic; }
+.zn-article-body code {
+  font-family: var(--mono);
+  background: var(--paper-2);
+  padding: 0.1rem 0.35rem;
+  border-radius: 3px;
+  font-size: 0.875em;
+  color: var(--ink);
+}
+.zn-article-body pre { max-width: 100%; overflow-x: auto; padding: 12px; background: var(--paper-2); border-radius: 4px; }
+.zn-article-body pre code { background: none; padding: 0; }
+.zn-article-body blockquote {
+  border-left: 2px solid var(--ox);
+  padding: 4px 0 4px 24px;
+  margin: 32px 0 32px -26px;
+  font-family: var(--display);
+  font-style: italic;
+  font-size: 1.4rem;
+  line-height: 1.4;
+  color: var(--ox);
+}
+.zn-article-body figure { margin: 28px 0; }
+.zn-article-body figure img {
+  width: 100%;
+  height: auto;
+  border-radius: 4px;
+  border: 1px solid var(--rule);
+}
+.zn-article-body figcaption {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  color: var(--faded);
+  letter-spacing: 0.04em;
+  margin-top: 8px;
+  font-style: normal;
+}
+
+/* TL;DR — kept for backward compatibility on older posts */
+.zn-article-body .tldr,
+.article-body .tldr {
+  background: var(--paper-2);
+  border-left: 3px solid var(--ox);
+  border-radius: 0 6px 6px 0;
+  padding: 18px 24px;
+  margin: 28px 0;
+}
+.zn-article-body .tldr-label,
+.article-body .tldr-label {
+  font-family: var(--mono);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--ox);
+  margin-bottom: 8px;
+}
+.zn-article-body .tldr-thesis,
+.article-body .tldr-thesis { font-weight: 600; color: var(--ink); margin-bottom: 8px; line-height: 1.5; }
+.zn-article-body .tldr ul,
+.article-body .tldr ul { margin: 6px 0 8px 1.2em; }
+.zn-article-body .tldr li,
+.article-body .tldr li { font-size: 0.95rem; line-height: 1.55; margin: 4px 0; }
+.zn-article-body .tldr-tail,
+.article-body .tldr-tail { color: var(--faded); font-size: 0.95rem; line-height: 1.55; margin-top: 6px; }
+
+/* ---------- Article — inline subscribe ---------- */
+.zn-inline-subscribe {
+  margin: 48px 0;
+  padding: 28px 0;
+  border-top: 1px solid var(--rule);
+  border-bottom: 1px solid var(--rule);
+}
+.zn-inline-subscribe-headline {
+  font-family: var(--display);
+  font-size: 1.375rem;
+  font-weight: 500;
+  letter-spacing: -0.015em;
+  color: var(--ink);
+  margin-bottom: 14px;
+}
+
+/* ---------- Read next ---------- */
+.zn-read-next { margin: 56px 0 0; }
+.zn-read-next-eyebrow { margin-bottom: 18px; }
+.zn-read-next-list .zn-row { grid-template-columns: 1fr 60px; }
+
+/* ---------- Recommended Reading (end-of-article block) ---------- */
+.zn-recommended { margin: 56px 0 0; padding: 28px 0 0; border-top: 1px solid var(--rule); }
+.zn-recommended-label { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); margin: 0 0 18px; }
+.zn-recommended-list { list-style: none; padding: 0; margin: 0; }
+.zn-recommended-list li { padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.zn-recommended-list li:last-child { border-bottom: none; }
+.zn-recommended-title { font-family: var(--serif); font-size: 1.05rem; font-weight: 600; color: var(--ink); text-decoration: none; display: block; line-height: 1.35; }
+.zn-recommended-title:hover { color: var(--ox); }
+.zn-recommended-dek { font-family: var(--serif); font-size: 0.92rem; color: var(--faded); margin: 6px 0 0; line-height: 1.5; }
+
+/* ---------- Post-end subscribe (sibling block above Recommended Reading) ---------- */
+.zn-post-subscribe { margin: 56px 0 0; padding: 28px 0 0; border-top: 1px solid var(--rule); }
+.zn-post-subscribe-label { font-family: var(--mono); font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--faded); margin: 0 0 14px; }
+.zn-post-subscribe-headline { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; color: var(--ink); margin: 0 0 6px; letter-spacing: -0.01em; line-height: 1.25; }
+.zn-post-subscribe-sub { font-family: var(--serif); font-size: 0.95rem; color: var(--faded); margin: 0 0 18px; line-height: 1.55; }
+.zn-post-subscribe-form { max-width: 480px; width: 100%; }
+
+/* ---------- Skip link / focus ---------- */
+.skip-link { position: absolute; top: 0; left: 0; background: var(--ink); color: var(--paper); padding: 8px 16px; z-index: 200; font-family: var(--mono); font-size: 0.8rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+.skip-link:focus { transform: translateY(0); }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--ox); outline-offset: 2px; }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 960px) {
+  .zn-article-grid { grid-template-columns: 1fr; }
+  .zn-article-rail { position: static; padding-top: 0; margin-bottom: 24px; padding: 16px; background: var(--paper-2); border-radius: 4px; }
+  .zn-article-rail .zn-rail-numbers { margin-top: 18px; }
+}
+@media (max-width: 640px) {
+  .zn-subscribe { grid-template-columns: 1fr; gap: 18px; }
+  .zn-cards { grid-template-columns: 1fr; gap: 18px; }
+  .zn-row {
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px 0;
+  }
+  .zn-row-left { flex: 0 0 auto; width: 100%; gap: 6px; }
+  .zn-row-thumb { width: 100%; max-width: 320px; height: auto; aspect-ratio: 10 / 7; }
+  .zn-nav-inner { padding: 0 16px; }
+  .zn-nav-links { gap: 16px; }
+  .zn-nav-links a { font-size: 0.875rem; }
+  .zn-article-body blockquote { margin-left: 0; }
+}
