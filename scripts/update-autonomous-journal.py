@@ -70,6 +70,11 @@ POSITION_KEYS = {
     "return_since_entry_pct",
     "unrealized_pnl_pct_of_virtual_basis",
 }
+PILOT_START_DATE = "2026-08-10"
+PILOT_STRATEGIES = {
+    "Day-two post-gap consolidation",
+    "Negative-catalyst oversold reclaim",
+}
 
 
 def esc(value: object) -> str:
@@ -145,6 +150,18 @@ def bullets(values: list[str], css: str = "") -> str:
     return f"<ul{klass}>" + "".join(f"<li>{esc(value)}</li>" for value in values) + "</ul>"
 
 
+def public_strategy_status(entry: dict, row: dict) -> tuple[str, bool]:
+    """Correct premature pilot labels without mutating the append-only source entry."""
+    needs_erratum = (
+        str(entry["published_at"])[:10] < PILOT_START_DATE
+        and row["name"] in PILOT_STRATEGIES
+        and row["status"] == "executable at standard size"
+    )
+    if needs_erratum:
+        return "scheduled for the 2026-08-10 paper pilot at standard size", True
+    return str(row["status"]), False
+
+
 def render_entry(entry: dict, latest: bool) -> str:
     pnl = entry["pnl"]
     pnl_cards = "".join(
@@ -163,9 +180,15 @@ def render_entry(entry: dict, latest: bool) -> str:
         </article>'''
         for row in entry["positions"]
     ) or '<p class="autonomous-empty">No open positions.</p>'
+    strategy_rows = [(row, *public_strategy_status(entry, row)) for row in entry["strategies"]]
     strategies = "".join(
-        f'<article><span>{esc(row["status"])}</span><h3>{esc(row["name"])}</h3><p>{esc(row["rules"])}</p></article>'
-        for row in entry["strategies"]
+        f'<article><span>{esc(status)}</span><h3>{esc(row["name"])}</h3><p>{esc(row["rules"])}</p></article>'
+        for row, status, _ in strategy_rows
+    )
+    strategy_erratum = (
+        '<p class="autonomous-note"><b>Public erratum:</b> this archived entry originally labeled two aggressive lanes executable. Their reviewed paper pilot does not begin until 2026-08-10; the corrected public labels appear above without rewriting the append-only source entry.</p>'
+        if any(corrected for _, _, corrected in strategy_rows)
+        else ""
     )
     candidates = "".join(
         f'<tr><th scope="row">{esc(row["symbol"])}</th><td><b>{esc(row["disposition"])}</b></td><td>{esc(row["reason"])}</td></tr>'
@@ -183,7 +206,7 @@ def render_entry(entry: dict, latest: bool) -> str:
       <section aria-labelledby="thoughts-{esc(entry["id"])}"><h3 id="thoughts-{esc(entry["id"])}">What I thought</h3>{bullets(entry["thoughts"], "autonomous-thoughts")}</section>
       <section aria-labelledby="pnl-{esc(entry["id"])}"><div class="autonomous-section-head"><h3 id="pnl-{esc(entry["id"])}">P&amp;L</h3><span>percentage of private virtual basis</span></div><div class="autonomous-metrics">{pnl_cards}</div><p class="autonomous-note">{esc(pnl["note"])} · {int(pnl["closed_trades"])} closed trade.</p></section>
       <section aria-labelledby="positions-{esc(entry["id"])}"><h3 id="positions-{esc(entry["id"])}">Positions</h3><div class="autonomous-positions">{positions}</div></section>
-      <section aria-labelledby="strategies-{esc(entry["id"])}"><h3 id="strategies-{esc(entry["id"])}">Execution lanes considered in this decision</h3><div class="autonomous-grid">{strategies}</div></section>
+      <section aria-labelledby="strategies-{esc(entry["id"])}"><h3 id="strategies-{esc(entry["id"])}">Execution lanes considered in this decision</h3><div class="autonomous-grid">{strategies}</div>{strategy_erratum}</section>
       <section aria-labelledby="candidates-{esc(entry["id"])}"><h3 id="candidates-{esc(entry["id"])}">What I passed on</h3><div class="tw"><table class="autonomous-table"><thead><tr><th>Symbol</th><th>Decision</th><th>Reason</th></tr></thead><tbody>{candidates}</tbody></table></div></section>
       <section aria-labelledby="reviews-{esc(entry["id"])}"><div class="autonomous-section-head"><h3 id="reviews-{esc(entry["id"])}">Publication review</h3><span>dual publication review · PASS</span></div><p class="autonomous-note">This PASS means the entry is privacy-safe and statistically honest enough to publish. It is not a strategy verdict or evidence of edge.</p><div class="autonomous-reviews">{approvals}</div>{bullets(entry["review_summary"]["changes_after_grok"], "autonomous-changes")}</section>
       <details class="trading-method"><summary>Denominators, limitations, and receipts</summary><p><b>Triggered/filled bracket outcomes:</b> {esc(entry["denominators"]["triggered_or_filled_bracket_outcomes"])}. Executable, shadow, pre-trigger, and capability-blocked outcomes remain separate.</p>{bullets(entry["limitations"])}<p class="autonomous-receipts">{receipts}</p></details>

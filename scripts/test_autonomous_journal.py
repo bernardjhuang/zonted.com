@@ -88,7 +88,7 @@ class AutonomousJournalTest(unittest.TestCase):
             'id="learning-board"',
             'First code-owned verdict pending',
             '<strong>150</strong><span>frozen equities</span>',
-            '<strong>1:1</strong><span>matched controls</span>',
+            '<strong>≤1:1</strong><span>matched controls</span>',
             '<strong>4</strong><span>exit arms</span>',
             'level_vwap_reclaim',
             'sector_pair_reversion',
@@ -115,7 +115,8 @@ class AutonomousJournalTest(unittest.TestCase):
 
     def test_learning_board_discloses_launch_state_and_thresholds(self):
         for required in (
-            'No strategy has earned <code>PROMOTE</code> or <code>RETIRE</code> yet.',
+            'No current learning-ledger verdict has been generated yet',
+            '<code>PROMOTE</code>, <code>RETIRE</code>, <code>CONTINUE</code>, or <code>REDESIGN_HORIZON</code>',
             'Production replay, reviewer scheduling, forward sample collection, and the final public allowlist wiring remain unfinished.',
             'Effective N ≥ 20',
             'Conservative R &gt; 0',
@@ -124,6 +125,32 @@ class AutonomousJournalTest(unittest.TestCase):
             'Research cannot authorize orders',
         ):
             self.assertIn(required, self.page)
+
+    def test_post_deploy_factual_corrections_are_explicit(self):
+        for required in (
+            'Core research modules are partially built and unit-tested',
+            'Executable-style Tier 1 signals attempt one same-sector matched control when an eligible peer exists',
+            'measurement-only and emits no matched-control row',
+            'four executable-style Tier 1 scanners plus one measurement-only overnight decomposition scanner',
+            'current code records gap direction and ATR, not catalyst class',
+            '<code>review_learning.apply_review()</code> can manually validate',
+            'Automatic review application is not wired yet',
+            'scheduled for the 2026-08-10 paper pilot at standard size',
+            'Public erratum',
+            'current_strategies, new_strategy_hypotheses, autonomous_learning_plan',
+            'Promotion and retirement rules live in autonomous_learning_plan',
+        ):
+            self.assertIn(required, self.page)
+        for overstated in (
+            'No strategy has earned <code>PROMOTE</code> or <code>RETIRE</code> yet.',
+            'Each scanner emits a frozen signal plus one same-session matched-sector control.',
+            'The five implemented scanners above are Tier 1 evidence collectors.',
+            'while keeping catalyst class and direction attributable.',
+            'The orchestrator validates the reviewer-specific input hash',
+            '<span>executable at standard size</span>',
+            'The research machinery is built and tested.',
+        ):
+            self.assertNotIn(overstated, self.page)
 
     def test_append_only_order_and_unique_ids(self):
         duplicate = copy.deepcopy(self.payload)
