@@ -184,6 +184,62 @@ img, video { max-width: 100%; height: auto; }
   }
 }
 
+/* ---------- Trading dropdown (nav) ----------
+   <details>/<summary> so the toggle works without JS; zn-nav-dd.js only adds
+   outside-click and Escape close. The Trading link itself still navigates. */
+.zn-nav-dd { position: relative; display: inline-flex; align-items: center; gap: 5px; }
+.zn-dd summary {
+  list-style: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  color: var(--faded);
+  transition: color 0.15s;
+}
+.zn-dd summary::-webkit-details-marker { display: none; }
+.zn-dd summary:hover { color: #581c87; }
+.zn-dd summary:focus-visible { outline: 2px solid var(--ox); outline-offset: 2px; border-radius: 3px; }
+.zn-dd summary svg { transition: transform 0.15s ease; }
+.zn-dd[open] summary svg { transform: rotate(180deg); }
+@media (min-width: 721px) {
+  /* Same hit-area trick as nav links: bigger target, unchanged rhythm. */
+  .zn-dd summary { padding: 12px 6px; margin: -12px -2px; }
+  .zn-dd-menu {
+    position: absolute;
+    top: calc(100% + 17px); /* clears the 60px nav bar's bottom border */
+    left: -14px;
+    min-width: 176px;
+    background: var(--paper);
+    border: 1px solid var(--rule);
+    border-radius: 10px;
+    box-shadow: 0 12px 32px rgba(26, 24, 21, 0.12);
+    padding: 6px 0;
+    display: flex;
+    flex-direction: column;
+    z-index: 110;
+  }
+  /* Beat the nav-link hit-area negative margins inside the card. */
+  .zn-nav-links .zn-dd-menu a { padding: 9px 16px; margin: 0; color: var(--ink); }
+  .zn-nav-links .zn-dd-menu a:hover { color: #581c87; background: var(--paper-2); }
+}
+@media (max-width: 720px) {
+  /* In the drawer: Trading stays a full-width row, the caret overlays its
+     right edge, and the section links expand in flow, indented. */
+  .zn-nav-dd { display: block; position: relative; }
+  .zn-nav-dd > a { display: block; }
+  .zn-dd { position: static; }
+  .zn-dd summary {
+    position: absolute;
+    top: 3px; /* visually centers the 48px target in the ~53px drawer row */
+    right: 8px;
+    width: 48px;
+    height: 48px;
+    justify-content: center;
+  }
+  .zn-dd-menu { display: flex; flex-direction: column; background: var(--paper-2); }
+  .zn-nav-links .zn-dd-menu a { padding-left: 40px; font-size: 0.95rem; }
+}
+
 /* ---------- Eyebrow / mono label ---------- */
 .zn-eyebrow {
   font-family: var(--mono);
