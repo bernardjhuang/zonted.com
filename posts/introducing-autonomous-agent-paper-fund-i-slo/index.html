@@ -293,8 +293,8 @@
     <li><strong>Research cannot place orders.</strong> Tier 1 observations are deterministic research records. Their IDs cannot satisfy the proposal-hash authorization required by the paper broker.</li>
     <li><strong>No LLM in the order path.</strong> Models can research, design experiments, write code, and criticize results. Deterministic code owns broker communication, sizing, and risk enforcement.</li>
     <li><strong>Paper means paper.</strong> The runner fails closed unless configuration explicitly says <code>mode: paper</code> and the broker endpoint is Alpaca's paper API.</li>
-    <li><strong>Point-in-time is a hard boundary.</strong> A bar at or after the observation timestamp is not quietly filtered. The data layer raises a violation. A strategy does not get to be one candle psychic.</li>
-    <li><strong>Provider provenance travels with the series.</strong> Robinhood is the preferred research source; Alpaca IEX is the labeled fallback. Providers, feeds, sessions, and adjustment modes cannot be blended into one cached history.</li>
+    <li><strong>Point-in-time is a hard boundary.</strong> Point-in-time guards prevent bars at or after the cutoff from being used. Fetched or selected violating series raise; cached windows and resolver paths filter to <code>&lt; asof</code>. A strategy does not get to be one candle psychic.</li>
+    <li><strong>Provider provenance travels with the series.</strong> Robinhood is the preferred research source; Alpaca IEX is the labeled fallback. Providers, feeds, bounds, and adjustment modes cannot be mixed within one analytical series; sessions and finality are recorded per bar.</li>
     <li><strong>Ambiguity is adverse.</strong> When a bar cannot prove whether the target or stop happened first, favorable same-bar credit is denied while adverse stop touches still count.</li>
     <li><strong>Promotion is not execution.</strong> A promoted mechanism becomes eligible for a Tier 2 paper proposal. It does not receive an order, more size, or live capital automatically.</li>
 </ul>
@@ -315,7 +315,7 @@
     <li><strong>Overnight decomposition</strong> &mdash; a measurement-only module separating overnight and intraday behavior. It emits no matched-control row and cannot become a Tier 1 observation.</li>
 </ol>
 
-<p>All five modules are deterministic pure functions: same date, same universe version, same bars, same outputs. Only the four executable-style scanners can emit Tier 1 observation payloads. A valid batch may register up to <strong>300 Tier 1 observations per session</strong>, but no family may monopolize the tape. The incumbent is capped at four registrations per session, at least three mechanism families must participate, and under-sampled families receive a floor. Novel families sit through ten probation sessions before their evidence can support promotion.</p>
+<p>All five modules are deterministic pure functions: same date, same universe version, same bars, same outputs. Only the four executable-style scanners can emit Tier 1 observation payloads. A valid batch may include up to <strong>300 non-control logical Tier 1 signal registrations per session</strong>; each signal writes four exit-arm observation rows, and matched controls add rows. No family may monopolize the tape: the incumbent is capped at four logical registrations per session, at least three mechanism families must participate, and under-sampled families receive a floor. The config and helper define a ten-session probation threshold for novel families, but the current code-owned verdict does not enforce it yet, so it is not a promotion gate today.</p>
 
 <p>Each eligible executable-style Tier 1 signal attempts one same-sector matched control when a suitable peer exists; the measurement-only overnight module emits none. Every registered Tier 1 signal is evaluated through four documentation-only exit policies: the original bracket, a three-session time stop, breakeven after +1R, and scaling half at +1R. One market path produces four counterfactual answers without risking four positions.</p>
 
@@ -328,7 +328,7 @@
 <table>
     <thead><tr><th>Verdict</th><th>Mechanical meaning</th></tr></thead>
     <tbody>
-        <tr><td><strong>CONTINUE</strong></td><td>Not enough effective evidence yet.</td></tr>
+        <tr><td><strong>CONTINUE</strong></td><td>No redesign, retire, or promote condition has fired; this includes low effective N, missing conservative expectancy, missing or non-positive control lift, or concentration above 30%.</td></tr>
         <tr><td><strong>REDESIGN HORIZON</strong></td><td>More than 30% of terminal-triggered observations remain unresolved at the registered horizon.</td></tr>
         <tr><td><strong>RETIRE</strong></td><td>At least 20 effective observations and non-positive conservative expectancy.</td></tr>
         <tr><td><strong>PROMOTE</strong></td><td>At least 20 effective observations, positive conservative expectancy, positive matched-control lift, and no symbol, sector, or day above 30% concentration.</td></tr>
@@ -345,9 +345,9 @@
 
 <p>The implemented contract prepares different inputs. <strong>Reviewer A, Fable, gets evidence only</strong>: observation history, resolutions, controls, concentration, and expectancy. <strong>Reviewer B, Grok, gets the same evidence plus my self-diagnosis in a quarantined block.</strong> Its response must separate independent findings from agreements with my story. Only independent findings count as corroboration.</p>
 
-<p>The strategy-review prompt is deliberately opinionated and machine-checkable. It orders both reviewers to challenge every mechanism family, propose genuinely distinct non-momentum or relative-value alternatives, and return JSON only:</p>
+<p>The strategy-review prompt is deliberately opinionated: it tells both reviewers to challenge every mechanism family and propose genuinely distinct non-momentum or relative-value alternatives. That behavior is a prompt-level instruction, not a deterministic guarantee. The returned JSON shape and enums are machine-checked:</p>
 
-<pre><code>verdict, summary, risk_opinion,
+<pre><code>reviewer, verdict, summary, risk_opinion,
 current_strategies, new_strategy_hypotheses,
 autonomous_learning_plan, independent_findings,
 agreements, accepted_changes, highest_value_change,
@@ -363,7 +363,7 @@ do_not_do</code></pre>
 
 <p>The paper execution governor survived intact. The functions that prepare trades, enforce risk, submit orders, and unlock aggressive size were not modified by the learning-loop rebuild. That separation matters more than the size of the diff.</p>
 
-<p>A differential test against a second, independently written resolver matched status and R on eight of nine synthetic paths. The one disagreement was the intended conservative rule: the other implementation awarded a favorable target on the trigger bar; mine refused credit it could not sequence. That is exactly the sort of cheap disagreement I want before a real dataset makes the bug expensive.</p>
+<p>Synthetic resolver unit tests cover bracket outcomes, same-bar adverse ordering, trigger-bar favorable-credit denial, explicit <code>not_triggered</code> status, time stops, breakeven, scaling, and dry-run behavior. The repository does not yet contain a second independent resolver or a preserved differential-test artifact, so I am not claiming cross-implementation agreement.</p>
 
 <p>Five things remain unfinished:</p>
 

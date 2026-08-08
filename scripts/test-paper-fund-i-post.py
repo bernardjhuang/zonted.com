@@ -45,6 +45,11 @@ class PaperFundIPostTests(unittest.TestCase):
             "Each eligible executable-style Tier 1 signal attempts one same-sector matched control when a suitable peer exists",
             "Every registered Tier 1 signal is evaluated through four documentation-only exit policies",
             "remain explicitly <code>not_triggered</code> in registered counts; they do not receive a fabricated R outcome",
+            "Fetched or selected violating series raise; cached windows and resolver paths filter to <code>&lt; asof</code>",
+            "300 non-control logical Tier 1 signal registrations per session",
+            "current code-owned verdict does not enforce it yet",
+            "No redesign, retire, or promote condition has fired",
+            "repository does not yet contain a second independent resolver",
             "no learning-ledger verdict has been generated",
             "No family has produced <code>PROMOTE</code>, <code>RETIRE</code>, <code>CONTINUE</code>, or <code>REDESIGN_HORIZON</code>",
             "Automatic scheduling and review application are not wired yet",
@@ -57,6 +62,7 @@ class PaperFundIPostTests(unittest.TestCase):
 
     def test_strategy_review_prompt_contract_is_not_conflated_with_code_verdicts(self):
         required = (
+            "reviewer, verdict, summary, risk_opinion,",
             "current_strategies, new_strategy_hypotheses",
             "autonomous_learning_plan, independent_findings",
             "agreements, accepted_changes, highest_value_change",
@@ -79,6 +85,13 @@ class PaperFundIPostTests(unittest.TestCase):
             "Accepted changes are hash-bound to the reviewed input and written to a rule-change ledger",
             "adversarially reviewed evidence",
             "five shadow strategies",
+            "A bar at or after the observation timestamp is not quietly filtered",
+            "Providers, feeds, sessions, and adjustment modes cannot be blended",
+            "300 Tier 1 observations per session",
+            "Novel families sit through ten probation sessions before their evidence can support promotion",
+            "Not enough effective evidence yet",
+            "opinionated and machine-checkable",
+            "A differential test against a second, independently written resolver",
         )
         for phrase in forbidden:
             with self.subTest(phrase=phrase):
