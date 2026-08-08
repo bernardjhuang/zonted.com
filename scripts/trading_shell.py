@@ -31,6 +31,7 @@ NAV_ITEMS = (
     ("/trading/momentum/", "Momentum"),
     ("/trading/mentality/", "Mentality"),
     ("/trading/performance/", "Performance"),
+    ("/trading/autonomous-psy/", "Autonomous Psy"),
 )
 
 

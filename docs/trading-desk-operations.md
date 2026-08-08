@@ -15,6 +15,7 @@ Only these checked-in page routes may exist under `trading/*/index.html`:
 - `/trading/gpt-risk/`
 - `/trading/grok-risk/`
 - `/trading/fable-risk/`
+- `/trading/autonomous-psy/`
 
 `trading/hypothesis-source.txt` is a noindex data asset used by the Desk Full thesis dialog. It is not a standalone interface route.
 
