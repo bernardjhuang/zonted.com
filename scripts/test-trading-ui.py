@@ -39,7 +39,7 @@ class TradingUiContractTest(unittest.TestCase):
         }
         self.assertEqual(
             public_routes,
-            {"themes", "vwap-setups", "momentum", "mentality", "performance", "autonomous", "gpt-risk", "grok-risk", "fable-risk"},
+            {"themes", "vwap-setups", "momentum", "mentality", "performance", "autonomous", "autonomous-psy", "gpt-risk", "grok-risk", "fable-risk"},
         )
 
     def test_deploy_checks_the_active_desk_cadence(self):
