@@ -129,7 +129,7 @@ class AutonomousJournalTest(unittest.TestCase):
         ):
             self.assertIn(required, self.page)
 
-    def test_basis_epoch_boundary_is_explicit_without_rewriting_history(self):
+    def test_internal_basis_boundary_stays_auditable_while_launch_copy_is_plain_english(self):
         for required in (
             'Basis boundary · 2026-08-08.',
             'Epoch 1 used a $16,000 virtual book through the change.',
@@ -141,17 +141,22 @@ class AutonomousJournalTest(unittest.TestCase):
             'capacity, not a target',
         ):
             self.assertIn(required, self.page)
-        update = self.launch_post.index('Update &middot; August 8, 2026')
-        original = self.launch_post.index('The configured book starts with $16,000')
-        self.assertLess(update, original)
-        self.assertIn(
-            'The original launch text and receipt below are preserved as published.',
-            self.launch_post,
-        )
-        self.assertIn(
-            'Bernard separately elected to keep the configured 20% aggregate ceiling',
-            self.launch_post,
-        )
+        for required in (
+            'Think of Paper Fund I as one continuous portfolio with roughly <strong>$100,000</strong>',
+            'It already holds a small PLTR stock position from my initial trading.',
+            'The portfolio has roughly $100,000 of simulated capital',
+            'Models can criticize, not trade.',
+            'no strategy has passed the evidence bar yet',
+        ):
+            self.assertIn(required, self.launch_post)
+        for reader_jargon in (
+            '$16,000',
+            'Epoch 1',
+            'epoch 2',
+            'measurement boundary',
+            'aggressive-unlock threshold',
+        ):
+            self.assertNotIn(reader_jargon, self.launch_post)
         self.assertEqual(
             self.payload["entries"][0]["pnl"]["realized_pct_of_virtual_basis"], -0.23
         )
