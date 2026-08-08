@@ -25,7 +25,7 @@ SECTOR_NAMES = {
 }
 NAV_ITEMS = (
     ("/trading/", "Desk"),
-    ("/trading/autonomous/", "🤖 Autonomous"),
+    ("/trading/autonomous/", "🦥 Autonomous"),
     ("/trading/autonomous-psy/", "🦆 Autonomous"),
     ("/trading/themes/", "Themes"),
     ("/trading/vwap-setups/", "VWAP Setups"),

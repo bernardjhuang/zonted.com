@@ -66,7 +66,7 @@ class AutonomousJournalTest(unittest.TestCase):
         block = MODULE.render(entries)
         self.assertIn(block, self.page)
         self.assertIn('<h1>🤖 Autonomous</h1>', self.page)
-        self.assertIn('aria-current="page">🤖 Autonomous</a>', self.page)
+        self.assertIn('aria-current="page">🦥 Autonomous</a>', self.page)
         self.assertIn('data-entry-count="1"', self.page)
         self.assertIn('2026-08-07 · NO_TRADE', self.page)
         self.assertIn('PLTR', self.page)
@@ -81,7 +81,7 @@ class AutonomousJournalTest(unittest.TestCase):
         nav = self.page.split('<nav class="subnav"', 1)[1].split("</nav>", 1)[0]
         self.assertLess(nav.index('href="/trading/">Desk</a>'), nav.index('href="/trading/autonomous/"'))
         self.assertIn('Desk</a><a href="/trading/autonomous/"', nav)
-        self.assertIn('>🤖 Autonomous</a>', nav)
+        self.assertIn('>🦥 Autonomous</a>', nav)
         self.assertIn('href="/trading/autonomous-psy/">🦆 Autonomous</a>', nav)
         for required in (
             'id="stack"',
