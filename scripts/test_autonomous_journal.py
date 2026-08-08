@@ -82,6 +82,7 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertLess(nav.index('href="/trading/">Desk</a>'), nav.index('href="/trading/autonomous/"'))
         self.assertIn('Desk</a><a href="/trading/autonomous/"', nav)
         self.assertIn('>🤖 Autonomous</a>', nav)
+        self.assertIn('href="/trading/autonomous-psy/">🦆 Autonomous</a>', nav)
         for required in (
             'id="stack"',
             'How the entire trading stack works',
