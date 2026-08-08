@@ -27,6 +27,9 @@ class AutonomousJournalTest(unittest.TestCase):
     def setUpClass(cls):
         cls.payload = json.loads((ROOT / "trading" / "autonomous.json").read_text())
         cls.page = (ROOT / "trading" / "autonomous" / "index.html").read_text()
+        cls.launch_post = (
+            ROOT / "posts" / "introducing-autonomous-agent-paper-fund-i-slo" / "index.html"
+        ).read_text()
 
     def test_current_payload_is_dual_reviewed_and_paper_only(self):
         entries = MODULE.validate(copy.deepcopy(self.payload))
@@ -125,6 +128,33 @@ class AutonomousJournalTest(unittest.TestCase):
             'Research cannot authorize orders',
         ):
             self.assertIn(required, self.page)
+
+    def test_basis_epoch_boundary_is_explicit_without_rewriting_history(self):
+        for required in (
+            'Basis boundary · 2026-08-08.',
+            'Epoch 1 used a $16,000 virtual book through the change.',
+            'Epoch 2 uses $100,000',
+            'archived -0.23% / +1.84% / +1.61% journal figures below remain epoch-1 records',
+            'The open PLTR quantity and $143.50 stop / $172.40 target remain untouched.',
+            'Risk decision resolved:',
+            'keep the configured 20% aggregate ceiling and the +0.30R aggressive-unlock threshold',
+            'capacity, not a target',
+        ):
+            self.assertIn(required, self.page)
+        update = self.launch_post.index('Update &middot; August 8, 2026')
+        original = self.launch_post.index('The configured book starts with $16,000')
+        self.assertLess(update, original)
+        self.assertIn(
+            'The original launch text and receipt below are preserved as published.',
+            self.launch_post,
+        )
+        self.assertIn(
+            'Bernard separately elected to keep the configured 20% aggregate ceiling',
+            self.launch_post,
+        )
+        self.assertEqual(
+            self.payload["entries"][0]["pnl"]["realized_pct_of_virtual_basis"], -0.23
+        )
 
     def test_post_deploy_factual_corrections_are_explicit(self):
         for required in (
