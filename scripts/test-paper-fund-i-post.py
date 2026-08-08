@@ -50,15 +50,35 @@ class PaperFundIPostTests(unittest.TestCase):
             "current code-owned verdict does not enforce it yet",
             "No redesign, retire, or promote condition has fired",
             "repository does not yet contain a second independent resolver",
-            "no learning-ledger verdict has been generated",
-            "No family has produced <code>PROMOTE</code>, <code>RETIRE</code>, <code>CONTINUE</code>, or <code>REDESIGN_HORIZON</code>",
-            "Automatic scheduling and review application are not wired yet",
+            "no strategy has passed the evidence bar yet",
+            "no generated learning-ledger verdict",
+            "automated review scheduling",
+            "Automatic review application",
             "Applying a review is still manual",
             "Final public learning-export and site wiring behind a strict output allowlist",
         )
         for phrase in required:
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase, self.html)
+
+    def test_reader_facing_bankroll_story_is_plain_english(self):
+        for phrase in (
+            "one continuous portfolio with roughly <strong>$100,000</strong>",
+            "small PLTR stock position from my initial trading",
+            "No live money.",
+            "Models can criticize, not trade.",
+        ):
+            with self.subTest(phrase=phrase):
+                self.assertIn(phrase, self.html)
+        for jargon in (
+            "$16,000",
+            "Epoch 1",
+            "epoch 2",
+            "measurement boundary",
+            "aggressive-unlock threshold",
+        ):
+            with self.subTest(jargon=jargon):
+                self.assertNotIn(jargon, self.html)
 
     def test_strategy_review_prompt_contract_is_not_conflated_with_code_verdicts(self):
         required = (
