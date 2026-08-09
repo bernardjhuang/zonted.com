@@ -1,0 +1,59 @@
+{
+  "symbol": "CRWV",
+  "company": "CoreWeave, Inc.",
+  "valuation_date": "2026-08-07",
+  "quote_usd": 90.67,
+  "method": "net-debt-adjusted normalized revenue scenarios",
+  "market_snapshot": {
+    "market_cap_usd_b": 49.467,
+    "shares_outstanding_m": 545.57,
+    "debt_usd_b": 24.859,
+    "cash_usd_b": 2.244,
+    "marketable_securities_usd_b": 0.022,
+    "net_debt_usd_b": 22.593,
+    "enterprise_value_usd_b": 72.06
+  },
+  "filing_inputs": {
+    "q1_2026_revenue_usd_b": 2.078,
+    "q1_2026_adjusted_ebitda_usd_b": 1.157,
+    "q1_2026_adjusted_ebitda_margin_pct": 56.0,
+    "q1_2026_operating_loss_usd_b": 0.144,
+    "q1_2026_interest_expense_usd_b": 0.536,
+    "q1_2026_revenue_backlog_usd_b": 99.4,
+    "top_two_customer_revenue_pct": 65.0
+  },
+  "scenarios": {
+    "bear": {
+      "normalized_revenue_usd_b": 10.0,
+      "ev_revenue_multiple": 4.0,
+      "enterprise_value_usd_b": 40.0,
+      "equity_value_usd_b": 17.407,
+      "fair_value_per_share": 31.91
+    },
+    "base": {
+      "normalized_revenue_usd_b": 12.0,
+      "ev_revenue_multiple": 6.0,
+      "enterprise_value_usd_b": 72.0,
+      "equity_value_usd_b": 49.407,
+      "fair_value_per_share": 90.56
+    },
+    "bull": {
+      "normalized_revenue_usd_b": 14.0,
+      "ev_revenue_multiple": 8.0,
+      "enterprise_value_usd_b": 112.0,
+      "equity_value_usd_b": 89.407,
+      "fair_value_per_share": 163.88
+    }
+  },
+  "market_implied_normalized_revenue_at_base_multiple_usd_b": 12.01,
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000220/coreweave1q26earningspress.htm",
+    "https://www.sec.gov/Archives/edgar/data/1769628/000176962826000222/crwv-20260331.htm"
+  ],
+  "limitations": [
+    "Revenue backlog includes committed contracts subject to delivery, service-availability, power, construction, and customer-performance conditions; it is not cash in hand.",
+    "Enterprise value subtracts reported cash and marketable securities from reported debt but omits restricted cash and other financing-like obligations.",
+    "Revenue multiples are highly sensitive to utilization, GPU economics, financing costs, capex execution, and customer concentration.",
+    "This static receipt is not a forecast, price target, or investment recommendation."
+  ]
+}

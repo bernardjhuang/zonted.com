@@ -187,6 +187,8 @@ class HypothesisSummaryTests(unittest.TestCase):
             "MU": ("mu-normalized-earnings-2026-08-07.json", {"bear": 300.0, "base": 700.0, "bull": 1280.0}),
             "ZS": ("zs-dcf-2026-08-07.json", {"bear": 75.18, "base": 150.96, "bull": 275.22}),
             "SIEGY": ("siegy-normalized-earnings-2026-08-07.json", {"bear": 93.43, "base": 152.26, "bull": 224.93}),
+            "CRM": ("crm-valuation-2026-08-07.json", {"bear": 143.28, "base": 220.0, "bull": 309.98}),
+            "CRWV": ("crwv-valuation-2026-08-07.json", {"bear": 31.91, "base": 90.56, "bull": 163.88}),
         }
         for symbol, (filename, expected) in specs.items():
             receipt_path = ROOT / "trading" / "research" / filename
