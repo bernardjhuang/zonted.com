@@ -237,6 +237,14 @@ def main() -> None:
     parser.add_argument("--era-prefix", type=str, default="pons")
     parser.add_argument("--eth-usd", type=float, default=0.0)
     parser.add_argument("--resume", action="store_true", help="Skip launch_ids already in output")
+    parser.add_argument("--shard-index", type=int, default=0, help="0-based shard index")
+    parser.add_argument("--shard-count", type=int, default=1, help="total shards (>=1)")
+    parser.add_argument(
+        "--out",
+        type=str,
+        default="",
+        help="Optional output jsonl path (default: data/labels/honest_outcomes.jsonl)",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     cfg = load_config()
@@ -258,15 +266,21 @@ def main() -> None:
     sample = rows[start:end]
     now_ts = max(r["first_liq_ts"] for r in rows)
     sample = [r for r in sample if r["first_liq_ts"] + EXIT_OFFSET_SEC <= now_ts]
+    if args.shard_count < 1 or args.shard_index < 0 or args.shard_index >= args.shard_count:
+        raise SystemExit("invalid shard-index/shard-count")
+    if args.shard_count > 1:
+        sample = [r for i, r in enumerate(sample) if i % args.shard_count == args.shard_index]
+    out_path = Path(args.out) if args.out else HONEST
     print(
         f"[honest] era_prefix={args.era_prefix!r} sample={len(sample)} "
-        f"eth_usd={eth_usd} notional_usd={NOTIONAL_USD}"
+        f"shard={args.shard_index}/{args.shard_count} eth_usd={eth_usd} "
+        f"notional_usd={NOTIONAL_USD} out={out_path}"
     )
 
     done: set[str] = set()
     existing: list[dict[str, Any]] = []
-    if args.resume and HONEST.exists():
-        for line in HONEST.read_text().splitlines():
+    if args.resume and out_path.exists():
+        for line in out_path.read_text().splitlines():
             if not line.strip():
                 continue
             row = json.loads(line)
@@ -274,8 +288,8 @@ def main() -> None:
             done.add(row["launch_id"])
         print(f"[honest] resume existing={len(done)}")
 
-    HONEST.parent.mkdir(parents=True, exist_ok=True)
-    tmp = HONEST.with_suffix(".tmp")
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = out_path.with_suffix(out_path.suffix + ".tmp")
     # Rewrite full file each run (append-safe via resume merge).
     written = list(existing)
     with tmp.open("w") as handle:
@@ -291,14 +305,20 @@ def main() -> None:
                 out["rt_log_return_250_failed"] = True
             handle.write(json.dumps(out, separators=(",", ":"), sort_keys=True) + "\n")
             written.append(out)
-            if (len(written) - len(existing)) % 10 == 0:
+            n_new = len(written) - len(existing)
+            if n_new % 5 == 0 or n_new == 1:
                 print(
-                    f"[honest] new={len(written)-len(existing)}/{len(sample)-len(done)} "
+                    f"[honest] new={n_new}/{len(sample)-len(done)} "
                     f"winners={sum(1 for r in written if r.get('executable_winner_250'))} "
                     f"rugs={sum(1 for r in written if r.get('rug'))} "
-                    f"credits={credits_remaining()}"
+                    f"credits={credits_remaining()}",
+                    flush=True,
                 )
-    tmp.replace(HONEST)
+    tmp.replace(out_path)
+
+    if args.shard_count > 1:
+        print(f"[done] shard wrote {len(written)} -> {out_path} (thresholds deferred to merge)")
+        return
 
     # Freeze thresholds from chronological first 70% (dev) only.
     written.sort(key=lambda r: r["first_liq_block"])
