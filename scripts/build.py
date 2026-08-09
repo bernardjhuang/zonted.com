@@ -905,6 +905,7 @@ CURATED_RELATED = {
     "posts/google-trends-stock-attention": ["posts/vibe-trading", "posts/trade-log-2026-07-22", "posts/back-to-the-tables"],
     "posts/i-trained-a-gpt-on-my-life": ["posts/inside-ai-training-data", "posts/where-ai-personalities-come-from", "posts/every-ai-is-intj"],
     "posts/inside-ai-training-data": ["posts/where-ai-personalities-come-from", "posts/i-trained-a-gpt-on-my-life", "posts/training-data-is-the-moat"],
+    "posts/agentic-rails": ["posts/plan-3x-build-once", "posts/ai-resilience-planning", "posts/how-my-agent-made-a-viral-video"],
     "posts/where-ai-personalities-come-from": ["posts/inside-ai-training-data", "posts/i-trained-a-gpt-on-my-life", "posts/every-ai-is-intj"],
     "posts/pixelforge-launch": ["posts/plan-3x-build-once", "posts/stakes-priming-surface-area", "posts/kapiko-postmortem"],
     "posts/back-to-the-tables": ["posts/vibe-trading", "posts/may-2026-recap", "posts/pixelforge-launch"],
