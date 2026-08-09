@@ -182,10 +182,11 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("net-dcf-2026-07-29.xlsx", self.page)
         self.assertGreater(workbook_path.stat().st_size, 10_000)
 
-    def test_mu_and_zs_valuation_receipts_match_public_levels(self) -> None:
+    def test_new_valuation_receipts_match_public_levels(self) -> None:
         specs = {
             "MU": ("mu-normalized-earnings-2026-08-07.json", {"bear": 300.0, "base": 700.0, "bull": 1280.0}),
             "ZS": ("zs-dcf-2026-08-07.json", {"bear": 75.18, "base": 150.96, "bull": 275.22}),
+            "SIEGY": ("siegy-normalized-earnings-2026-08-07.json", {"bear": 93.96, "base": 153.12, "bull": 226.2}),
         }
         for symbol, (filename, expected) in specs.items():
             receipt_path = ROOT / "trading" / "research" / filename
