@@ -91,7 +91,7 @@ Cell is thin (12 val rows). Treat as directional only.
 | **model_v0** | **1.00** | **1.00** | 0.67 | 0.0 |
 | B1 first-window volume | 0.90 | 1.00 | 0.60 | 0.0 |
 | B3 unique traders | 0.90 | 1.00 | 0.60 | 0.0 |
-| B2 msg.value | 0.70 | 1.00 | 0.47 | 0.0 |
+| B2 msg.value | 0.30 | 0.00 | 0.20 | 0.0 |
 | B4 random | 0.70 | 1.00 | 0.47 | 0.0 |
 
 **Lift vs best baseline (B1):** `1.00 / 0.90 = 1.11×` — **promotion failed** (bar ≥1.5×).  
