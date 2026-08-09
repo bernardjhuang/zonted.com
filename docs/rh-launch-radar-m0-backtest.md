@@ -137,11 +137,47 @@ On the **800-launch** labeled Pons cohort (still `high_value_proxy` — circular
 
 ### Revised next steps (in order)
 
-1. **Honest labels on existing 800** — continuous $250 entry@T+10m → exit@24h (tape/TWAP or historical quote math); measured rug flag (sell-path fail / −90% / LP gone). No model retune until this lands.
-2. **Re-run Phase 0 gate on honest labels** — if C1 still ≈ model, freeze reputation-first architecture; else keep flow features.
-3. **Sample lineage-dedupe** on first-window traders for a 100-launch slice (Blockscout PRO funder hops); compare raw vs deduped breadth ranks.
-4. **Walk-forward + paper EV harness** (top-K/day, $250, rule exits) — promotion metrics become EV / rug-rate / decay, not P@K lift alone.
-5. V4 InstantLaunch path + remaining vetoes (V2/V4) once the above evaluation spine exists.
+1. ~~Honest labels on existing 800~~ → **done (Round D below)**.
+2. **Redesign exit policy** — hold-to-24h is economically dead; primary labels should be T+1h (and rule-based TP), not T+24h.
+3. **Sample lineage-dedupe** on first-window traders for a 100-launch slice.
+4. **Walk-forward + paper EV harness** with the short-horizon exit rule.
+5. V4 InstantLaunch path + remaining vetoes (V2/V4) once EV spine exists.
+
+---
+
+## Round D — honest $250 labels (2026-08-09)
+
+TVL-capped single-tick v3 math; entry T+10m; checkpoints 1h / 6h / 24h; binary winner = full $250 fill ∧ not rug ∧ gross multiple ≥ **3×** (spec band).
+
+### Hold-to-24h (`executable_winner_250`)
+
+| Metric | Value |
+|---|---:|
+| Labeled launches | 800 |
+| Full $250 entry fill | 146 |
+| `executable_exit` (≥0.85× at 24h) | **1** |
+| `executable_winner_250` (≥3× at 24h) | **0** |
+| Rug flag | 798 / 800 |
+| Proxy “winners” that are rugs under honest labels | **50 / 50** |
+| Veto survivors that are rugs under honest labels | **91 / 91** |
+
+Validation money metric (all 800, chronological 70/30): model mean gross@10 ≈ **0.066** vs B1 ≈ **0.058** — both lose ~94¢ per dollar. rug-rate@10 = 1.0. **Promotion fails.** P@K is undefined/0 (no positives).
+
+### Same inventory, exit@1h (derived from checkpoints)
+
+| Metric | Value |
+|---|---:|
+| Full-fill rows with 1h recovery ≥ 0.85 | 17 |
+| ≥1× at 1h | 15 |
+| ≥3× at 1h (`executable_winner_250_1h`) | **3** |
+| Of those 3 in veto-survivor set | **0** |
+
+So: (1) the circular proxy label was counting pumps that are not holdable; (2) any edge is **short-horizon**; (3) current vetoes may be dropping the only 3×@1h names (needs confirmation on a larger 1h-positive set).
+
+### Round D decision
+
+- Stop iterating the scorecard against `high_value_proxy` or hold-to-24h 3× — both are the wrong target for this cohort.
+- Next build: freeze an **exit@1h / staged-exit** label, rebuild vetoes with that objective, then re-run Phase 0 + walk-forward EV.
 
 ## How to reproduce
 
