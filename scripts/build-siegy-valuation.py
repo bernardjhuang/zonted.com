@@ -13,7 +13,7 @@ OUT = ROOT / "trading" / "research"
 STEM = "siegy-normalized-earnings-2026-08-07"
 
 
-def scenario(normalized_eps_eur: float, multiple: float, fx: float = 1.16) -> dict[str, float]:
+def scenario(normalized_eps_eur: float, multiple: float, fx: float = 1.1535) -> dict[str, float]:
     ordinary_value_eur = normalized_eps_eur * multiple
     adr_value_usd = ordinary_value_eur * fx / 2.0
     return {
@@ -26,7 +26,7 @@ def scenario(normalized_eps_eur: float, multiple: float, fx: float = 1.16) -> di
 
 def build_payload() -> dict[str, Any]:
     quote = 161.95
-    fx = 1.16
+    fx = 1.1535
     base_multiple = 22.0
     return {
         "symbol": "SIEGY",
@@ -88,6 +88,16 @@ def build_payload() -> dict[str, Any]:
                 "label": "Siemens ADR terms",
                 "url": "https://www.siemens.com/en-us/company/investor-relations/share-bonds-rating/american-depository-receipt/",
                 "use": "Two SIEGY ADRs represent one Siemens ordinary share",
+            },
+            {
+                "label": "Siemens Healthineers spin-off timeline",
+                "url": "https://press.siemens.com/global/en/pressrelease/siemens-clarifies-timeline-spin-siemens-healthineers-shares",
+                "use": "Targeted February 2027 shareholder vote",
+            },
+            {
+                "label": "Frankfurter EUR/USD reference",
+                "url": "https://api.frankfurter.app/latest?from=EUR&to=USD",
+                "use": "August 7 valuation-date FX translation reference",
             },
         ],
         "limitations": [
