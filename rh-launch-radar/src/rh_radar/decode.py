@@ -47,16 +47,59 @@ def decode_pons_launch_log(log: dict[str, Any], *, factory_name: str, mechanism_
         "launch_id": launch_id(token, pool),
         "token": token,
         "pool": pool,
+        "pool_id": None,
         "creator": creator,
         "quote": quote,
         "dex_factory": dex_factory,
+        "lp_recipient": None,  # filled for Pons via locker provenance in veto stage
         "factory": log["address"].lower(),
         "factory_name": factory_name,
         "mechanism_era": mechanism_era,
+        "venue": "v3",
         "first_liq_block": block,
         "tx_hash": tx,
         "log_index": int(log["logIndex"], 16),
         "msg_value_wei": msg_value,
+        "source_topic0": topics[0],
+    }
+
+
+def decode_pools_instant_launch_log(log: dict[str, Any], *, factory_name: str, mechanism_era: str) -> dict[str, Any]:
+    """InstantLaunchStrategy TokenLaunched(poolId, token, finalPositionRecipient, PoolKey)."""
+    topics = log["topics"]
+    data = log["data"]
+    pool_id = topics[1]
+    token = topic_address(topics[2])
+    lp_recipient = topic_address(topics[3])
+    currency0 = word_address(data, 0)
+    currency1 = word_address(data, 1)
+    fee = word_uint(data, 2)
+    # native ETH represented as 0x0 in v4
+    quote = currency0 if currency0 != "0x0000000000000000000000000000000000000000" else "0x0000000000000000000000000000000000000000"
+    if token == currency0:
+        quote = currency1
+    elif token == currency1:
+        quote = currency0
+    block = int(log["blockNumber"], 16)
+    # v4 has no pool address; use pool_id for launch_id stability.
+    return {
+        "launch_id": "0x" + keccak(bytes.fromhex(token[2:] + pool_id[2:])).hex()[:16],
+        "token": token,
+        "pool": pool_id,  # bytes32 pool id used as primary pool key for v4
+        "pool_id": pool_id,
+        "creator": None,  # resolve later from tx.from if needed
+        "quote": quote,
+        "dex_factory": None,
+        "lp_recipient": lp_recipient,
+        "factory": log["address"].lower(),
+        "factory_name": factory_name,
+        "mechanism_era": mechanism_era,
+        "venue": "v4",
+        "fee": fee,
+        "first_liq_block": block,
+        "tx_hash": log["transactionHash"],
+        "log_index": int(log["logIndex"], 16),
+        "msg_value_wei": 0,
         "source_topic0": topics[0],
     }
 

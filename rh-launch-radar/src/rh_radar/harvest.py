@@ -3,15 +3,19 @@ from __future__ import annotations
 import argparse
 import json
 import time
-from pathlib import Path
-from typing import Any
+from typing import Any, Callable
 
 from rh_radar.config import DATA, RAW, ensure_data_dirs, load_config
-from rh_radar.decode import decode_pons_launch_log
+from rh_radar.decode import decode_pons_launch_log, decode_pools_instant_launch_log
 from rh_radar.rpc import block_number, credits_remaining, get_logs
 
 CHECKPOINT = RAW / "harvest_checkpoint.json"
 LAUNCHES = DATA / "launches.jsonl"
+
+DECODERS: dict[str, Callable[..., dict[str, Any]]] = {
+    "pons_launch_final": decode_pons_launch_log,
+    "pools_instant_token_launched": decode_pools_instant_launch_log,
+}
 
 
 def _load_checkpoint() -> dict[str, Any]:
@@ -54,10 +58,12 @@ def harvest_factory(
     address: str,
     start_block: int,
     mechanism_era: str,
+    event_key: str,
     topic0: str,
     end_block: int,
     chunk: int,
 ) -> int:
+    decoder = DECODERS[event_key]
     cp = _load_checkpoint()
     factories = cp.setdefault("factories", {})
     state = factories.setdefault(name, {"next_block": start_block, "launches": 0})
@@ -70,7 +76,6 @@ def harvest_factory(
         try:
             logs = get_logs(address, topic0, cursor, to_block)
         except Exception as exc:
-            # Adaptive shrink on provider range errors.
             if chunk > 2_000:
                 chunk = max(2_000, chunk // 2)
                 print(f"[{name}] shrink chunk -> {chunk} after error: {exc}")
@@ -78,12 +83,11 @@ def harvest_factory(
             raise
         rows: list[dict[str, Any]] = []
         for log in logs:
-            row = decode_pons_launch_log(log, factory_name=name, mechanism_era=mechanism_era)
-            if row["pool"] == "0x0000000000000000000000000000000000000000":
+            row = decoder(log, factory_name=name, mechanism_era=mechanism_era)
+            if not row.get("token") or row["token"] == "0x0000000000000000000000000000000000000000":
                 continue
             if row["launch_id"] in seen:
                 continue
-            # Timestamps filled by stamp_launches (anchor interpolation or exact).
             row["first_liq_ts"] = None
             row["available_at"] = None
             rows.append(row)
@@ -105,19 +109,23 @@ def harvest_factory(
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Harvest Pons factory launch events (M0 corpus spine)")
+    parser = argparse.ArgumentParser(description="Harvest launchpad factory events (corpus spine)")
     parser.add_argument("--chunk", type=int, default=40_000)
     parser.add_argument("--max-blocks", type=int, default=0, help="Optional cap from each factory cursor")
-    parser.add_argument("--to-latest", action="store_true", default=True)
     parser.add_argument("--end-block", type=int, default=0)
+    parser.add_argument("--only", type=str, default="", help="Comma-separated factory names")
     args = parser.parse_args()
 
     ensure_data_dirs()
     cfg = load_config()
-    topic0 = cfg["events"]["pons_launch_final"]["topic0"]
     latest = block_number() if not args.end_block else args.end_block
+    only = {x.strip() for x in args.only.split(",") if x.strip()}
     total = 0
     for name, meta in cfg["factories"].items():
+        if only and name not in only:
+            continue
+        event_key = meta.get("event") or "pons_launch_final"
+        topic0 = cfg["events"][event_key]["topic0"]
         start = int(meta["start_block"])
         end = latest
         if args.max_blocks:
@@ -129,6 +137,7 @@ def main() -> None:
             address=meta["address"],
             start_block=start,
             mechanism_era=meta["mechanism_era"],
+            event_key=event_key,
             topic0=topic0,
             end_block=end,
             chunk=args.chunk,
