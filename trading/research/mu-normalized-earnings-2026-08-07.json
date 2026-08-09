@@ -1,0 +1,62 @@
+{
+  "symbol": "MU",
+  "valuation_date": "2026-08-07",
+  "quote": 877.56,
+  "quote_timestamp": "2026-08-07T23:00:00Z",
+  "method": "cycle-normalized GAAP earnings-power scenarios",
+  "inputs": {
+    "fq3_2026_revenue_b": 41.456,
+    "fq3_2026_gaap_eps": 24.67,
+    "fq3_2026_adjusted_fcf_b": 18.3,
+    "fq4_2026_revenue_guide_b": 50.0,
+    "fq4_2026_gaap_eps_guide": 30.73,
+    "cash_investments_restricted_cash_b": 30.2,
+    "long_term_debt_b": 5.14
+  },
+  "scenarios": {
+    "bear": {
+      "normalized_eps": 30.0,
+      "earnings_multiple": 10.0,
+      "fair_value_per_share": 300.0,
+      "upside_downside_to_quote": -0.658143032955
+    },
+    "base": {
+      "normalized_eps": 50.0,
+      "earnings_multiple": 14.0,
+      "fair_value_per_share": 700.0,
+      "upside_downside_to_quote": -0.202333743562
+    },
+    "bull": {
+      "normalized_eps": 80.0,
+      "earnings_multiple": 16.0,
+      "fair_value_per_share": 1280.0,
+      "upside_downside_to_quote": 0.458589726059
+    }
+  },
+  "sources": [
+    {
+      "label": "Micron fiscal Q3 2026 earnings release",
+      "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000013/a2026q3ex991-pressrelease.htm",
+      "use": "Q3 results, adjusted FCF, Q4 revenue/EPS outlook, HBM4 milestones"
+    },
+    {
+      "label": "Micron fiscal Q3 2026 Form 10-Q",
+      "url": "https://www.sec.gov/Archives/edgar/data/723125/000072312526000015/mu-20260528.htm",
+      "use": "Cash, securities, debt, capex and strategic customer agreement terms"
+    },
+    {
+      "label": "Robinhood MU quote and fundamentals",
+      "url": "https://robinhood.com/stocks/MU",
+      "use": "August 7 quote and market data"
+    }
+  ],
+  "limitations": [
+    "Micron is at an extreme memory-cycle peak; applying peak quarterly economics to a perpetuity would be fake precision.",
+    "The normalized EPS cases are judgmental and must be reset when DRAM/NAND pricing, HBM mix or FY2027 guidance changes.",
+    "Scenario values are valuation references, not automatic buy or sell targets."
+  ],
+  "reverse_earnings_power": {
+    "normalized_eps_required_at_base_multiple": 62.682857142857,
+    "held_fixed": "14x cycle-normalized GAAP earnings multiple"
+  }
+}
