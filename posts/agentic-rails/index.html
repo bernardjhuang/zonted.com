@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
     <title>Agentic Rails: How to Benefit From Every AI Model Upgrade, Free</title>
-    <meta name="description" content="Seedance 1.5 → 2 made every video in my pipeline better overnight, free. Work on agentic rails inherits each model release. Legacy doesn't.">
+    <meta name="description" content="Seedance 1.5 → 2 → 2.5 made my video pipeline better twice, free. Work on agentic rails inherits each model release. Legacy doesn't.">
     <link rel="canonical" href="https://zonted.com/posts/agentic-rails/">
     <meta property="og:title" content="Run on Agentic Rails">
-    <meta property="og:description" content="Artifacts depreciate. Rails appreciate. Seedance 1.5 → 2 upgraded my pipelines while I slept. Rebuild on agentic rails now.">
+    <meta property="og:description" content="Artifacts depreciate. Rails appreciate. Seedance 1.5 → 2 → 2.5 upgraded my pipelines twice while I slept. Rebuild on agentic rails now.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -24,7 +24,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Agentic Rails: How to Benefit From Every AI Model Upgrade, Free","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-08","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/agentic-rails/","description":"Seedance 1.5 → 2 made every video in my pipeline better overnight, free. Work on agentic rails inherits each model release. Legacy doesn't.","image":"https://img.zonted.com/og/operator-notes.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"Agentic Rails: How to Benefit From Every AI Model Upgrade, Free","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-08","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/agentic-rails/","description":"Seedance 1.5 → 2 → 2.5 made my video pipeline better twice, free. Work on agentic rails inherits each model release. Legacy doesn't.","image":"https://img.zonted.com/og/operator-notes.png"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Run on Agentic Rails"}]}
@@ -237,13 +237,13 @@
 
                 <div class="article-body">
 
-            <p class="dropcap">Sometime in the last few days, every video my pipeline produces got better. I didn't touch a prompt. I didn't redeploy a cron. I didn't even notice at first. ByteDance shipped Seedance 2, Tabiji's reel pipeline started pulling it through <a href="https://wavespeed.ai/?ref=zonted" rel="noopener">Wavespeed</a>, and the same queue JSON that made <a href="/posts/how-my-agent-made-a-viral-video/">a 3.9-million-view reel</a> on Seedance 1.5 started spitting out sharper ones. Engineering work on my side: none.</p>
+            <p class="dropcap">Sometime in the last few days, every video my pipeline produces got better. I didn't touch a prompt. I didn't redeploy a cron. I didn't even notice at first. ByteDance shipped Seedance 2, Tabiji's reel pipeline started pulling it through <a href="https://wavespeed.ai/?ref=zonted" rel="noopener">Wavespeed</a>, and the same queue JSON that made <a href="/posts/how-my-agent-made-a-viral-video/">a 3.9-million-view reel</a> on Seedance 1.5 started spitting out sharper ones. Then Seedance 2.5 landed and it happened again. Engineering work on my side, both times: none.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
                 <p class="tldr-thesis">Code you ship is frozen the day it ships. Work that runs on agentic rails &mdash; prompts, pipelines, agents around a model slot &mdash; quietly gets better every time the labs drop a new model.</p>
                 <ul>
-                    <li><strong>Seedance 1.5 &rarr; 2 made my videos better overnight.</strong> Same prompts. Same crons. Free upgrade.</li>
+                    <li><strong>Seedance 1.5 &rarr; 2 &rarr; 2.5 made my videos better twice.</strong> Same prompts. Same crons. Two free upgrades.</li>
                     <li>My <a href="/ai-stack/">AI-stack board</a> is mostly just swapped labels now: Opus 4.7 &rarr; 4.8, Codex &rarr; GPT 5.5 &rarr; 5.6, Fable 5 on the desk. The slots didn't change. Everything under them did.</li>
                     <li>Same pattern for content, support, trading, this website. One model release upgrades all of it.</li>
                     <li>If you're still on hand-built legacy systems, the painful move is rebuild now. The gap widens every release, not every year.</li>
@@ -254,6 +254,8 @@
             <h2 id="free-upgrade">The upgrade I didn't work for</h2>
 
             <p>What actually happened is almost boring. A lab spent months and a mountain of compute making video generation better. They shipped. That improvement went through an API, into one slot in my pipeline, and came out the other side as better product while I was asleep. ByteDance has no idea my pipeline exists. I didn't open a ticket. I didn't migrate anything. I didn't retrain a person.</p>
+
+            <p>And it isn't one event. It's a chain: 1.5, then 2, then 2.5 &mdash; each landing in the same slot, days apart. Version numbers used to be migration projects. On rails they're just weather, and my pipelines are standing where it rains.</p>
 
             <p>I've seen this enough times that it's basically how I think about building now. Image models jumped; my thumbnails got cleaner. Reasoning models jumped; the <a href="/trading/">trading desk</a> briefs got sharper mid-season on the same crons and the same feeds. Two of those agents just <a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">started their own paper funds</a>. I didn't upgrade them. The thing underneath them upgraded.</p>
 
@@ -293,7 +295,7 @@
 
             <p>That's sunk cost talking. A working legacy system is still depreciating. Rails that barely work yet are appreciating. And the rebuild is cheaper than the last time you priced it, because agents now do most of the heavy lifting &mdash; <a href="/posts/plan-3x-build-once/">plan three times, build once</a> is an actual workflow for me, not a slogan. I've killed working products before and <a href="/games/graveyard/">buried them in public</a>. Killing a working codebase is harder. It's also more often the right call.</p>
 
-            <p>The next Seedance is coming. So is the next GPT, the next Fable, whatever doesn't have a name yet. The only question worth asking is whether anything you own is pointed at the slot when it lands.</p>
+            <p>The next Seedance is coming &mdash; 2.5 landed before this post was three days old. So is the next GPT, the next Fable, whatever doesn't have a name yet. The only question worth asking is whether anything you own is pointed at the slot when it lands.</p>
 
             <p>Get on the rails. This post went out through one.</p>
 
