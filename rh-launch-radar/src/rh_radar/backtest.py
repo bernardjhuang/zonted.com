@@ -67,11 +67,21 @@ def baseline_ranks(rows: list[dict[str, Any]]) -> dict[str, list[str]]:
 
     rnd = rows[:]
     random.Random(7).shuffle(rnd)
+    # Cheap reputation baselines (Phase 0): first-time creators, then volume tiebreak.
+    first_time = sorted(
+        rows,
+        key=lambda r: (
+            0 if (r.get("creator_prior_launches") or 0) == 0 else 1,
+            r.get("creator_prior_launches") or 0,
+            -(r.get("flow_quote_volume_wei") or 0),
+        ),
+    )
     return {
         "B1_volume": ids_by("flow_quote_volume_wei"),
         "B2_liquidity_msg_value": ids_by("msg_value_wei"),
         "B3_unique_traders": ids_by("flow_unique_traders"),
         "B4_random": [r["launch_id"] for r in rnd],
+        "C1_first_time_then_volume": [r["launch_id"] for r in first_time],
         "model_v0": [r["launch_id"] for r in sorted(rows, key=lambda x: x["score"], reverse=True)],
     }
 
@@ -179,7 +189,13 @@ def main() -> None:
     }
 
     val_metrics = report["validation"]
-    baseline_names = ["B1_volume", "B2_liquidity_msg_value", "B3_unique_traders", "B4_random"]
+    # Cheap baselines include reputation (C1). Random is reported but not a promotion hurdle.
+    baseline_names = [
+        "B1_volume",
+        "B2_liquidity_msg_value",
+        "B3_unique_traders",
+        "C1_first_time_then_volume",
+    ]
     best_base = max(baseline_names, key=lambda n: val_metrics[n]["precision@10"])
     model_p10 = val_metrics["model_v0"]["precision@10"]
     base_p10 = val_metrics[best_base]["precision@10"]
@@ -193,8 +209,9 @@ def main() -> None:
         "lift_vs_best_baseline": lift,
         "model_rug_rate@10": model_rug,
         "baseline_rug_rate@10": base_rug,
-        "bar": ">=1.5x Precision@10 over best baseline AND rug-rate@10 <= baseline",
+        "bar": ">=1.5x Precision@10 over best cheap baseline AND rug-rate@10 <= baseline",
         "passed": bool(lift is not None and lift >= 1.5 and model_rug <= base_rug),
+        "diagnostic_only_until_honest_labels": True,
     }
 
     REPORT.parent.mkdir(parents=True, exist_ok=True)

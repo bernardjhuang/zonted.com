@@ -106,13 +106,42 @@ Executable joint label identical to flow proxy on survivors (same lift).
 
 ---
 
-## Next steps (in order)
+## Phase 0 — response to Fable review (2026-08-09)
 
-1. **Horizon executable labels** — depth/sellability at T+1h/6h/24h, not only launch-block veto enrichment.
-2. **V4 InstantLaunch path** — PoolManager / poolId swap + liquidity reads; separate era stratum.
-3. **V2 owner-powers + V4 deployer rug lineage** still unimplemented.
-4. Calibrate scorecard weights on **dev only** (creator prior + depth/sellability); keep val frozen.
-5. Re-evaluate promotion across ≥2 distinct weeks / eras.
+Review reframes the product question as **economic**: buy top-K at T+10m with fixed notional, exit by rule — is EV positive after impact, gas, and rugs? **Adopted** as the north star. Precision@K stays a diagnostic, not the promotion objective. No weight-tuning against the circular proxy from here.
+
+### Take / leave
+
+| Review point | Decision |
+|---|---|
+| EV-after-costs is the real objective | **Take** — promotion later requires positive EV across ≥2 weeks, not 1.5× P@K alone |
+| Funnel > ranker | **Take** — Round C already shows vetoes do the heavy lifting |
+| Creator-prior test before more ML | **Take** — ran immediately (below) |
+| Stop model iteration on `m0-proxy-v1` | **Take** |
+| Honest labels: continuous $250 round-trip + measured rug flag | **Take as next build** — replaces proxy for any promotion call |
+| Lineage-deduped breadth | **Take, deferred** — sample 1–2 hop funding map after honest labels sketch; call budget is the risk |
+| Walk-forward folds + paper portfolio harness | **Take as Phase 2** — after honest labels exist |
+| Pivot architecture to “reputation DB” now | **Conditional** — proxy evidence says yes; freeze pivot until honest labels agree |
+| Discard factory-corpus / InstantLaunch work | **Leave** — keep harvest; InstantLaunch still needs v4 math |
+| Trust current promotion fail/pass on 8–15 val positives | **Leave** — diagnostic only |
+
+### Phase 0 result (`python3 -m rh_radar.phase0`)
+
+On the **800-launch** labeled Pons cohort (still `high_value_proxy` — circular with flow):
+
+- **All 50 / 50 positives are first-time creators** (`creator_prior_launches == 0`). Prior ≥ 1 → **0** proxy winners.
+- Unfiltered validation: `C1_first_time_then_volume` **matches** `model_v0` at P@10 = 1.0 (gate: `creator_prior_matches_model=true`).
+- Veto survivors (91): 86 / 91 already first-time (V5 killed serials). Model P@10 = 1.0 vs C1/B1/B3 = 0.9 — a thin 0.1 edge among survivors, not a product claim.
+
+**Working hypothesis:** under current labels this is closer to a **creator reputation + veto sieve** than an ML flow ranker. Ranker work is a tiebreaker among first-time / veto-survivor launches — and only after honest labels.
+
+### Revised next steps (in order)
+
+1. **Honest labels on existing 800** — continuous $250 entry@T+10m → exit@24h (tape/TWAP or historical quote math); measured rug flag (sell-path fail / −90% / LP gone). No model retune until this lands.
+2. **Re-run Phase 0 gate on honest labels** — if C1 still ≈ model, freeze reputation-first architecture; else keep flow features.
+3. **Sample lineage-dedupe** on first-window traders for a 100-launch slice (Blockscout PRO funder hops); compare raw vs deduped breadth ranks.
+4. **Walk-forward + paper EV harness** (top-K/day, $250, rule exits) — promotion metrics become EV / rug-rate / decay, not P@K lift alone.
+5. V4 InstantLaunch path + remaining vetoes (V2/V4) once the above evaluation spine exists.
 
 ## How to reproduce
 
@@ -121,11 +150,11 @@ set -a; source ~/.config/trading/blockscout.env; set +a
 cd rh-launch-radar
 PYTHONPATH=src python3 -u -m rh_radar.harvest --chunk 50000
 PYTHONPATH=src python3 -u scripts/stamp_missing.py   # or: python3 -m rh_radar.stamp
-PYTHONPATH=src python3 -u -m rh_radar.features --limit 300 --offset 1726 --era-prefix pons --only-offsets 600
-PYTHONPATH=src python3 -u -m rh_radar.labels --limit 300 --offset 1726 --era-prefix pons --only-horizons 86400
-PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 300 --offset 1726 --era-prefix pons --floor-usd 1000
+PYTHONPATH=src python3 -u -m rh_radar.features --limit 800 --offset 1726 --era-prefix pons --only-offsets 600
+PYTHONPATH=src python3 -u -m rh_radar.labels --limit 800 --offset 1726 --era-prefix pons --only-horizons 86400
+PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 800 --offset 1726 --era-prefix pons --floor-usd 1000
+PYTHONPATH=src python3 -u -m rh_radar.phase0
 PYTHONPATH=src python3 -u -m rh_radar.backtest --decision-offset 600 --label-field high_value_proxy
-PYTHONPATH=src python3 -u -m rh_radar.backtest --decision-offset 600 --label-field executable_winner_proxy
 ```
 
 Local artifacts (gitignored): `rh-launch-radar/data/**`.
