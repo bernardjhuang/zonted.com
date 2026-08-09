@@ -35,8 +35,8 @@ HONEST = DATA / "labels" / "honest_outcomes.jsonl"
 THRESHOLDS = DATA / "labels" / "honest_thresholds.json"
 
 # Checkpoints after first liquidity (seconds). Hourly full grid is too expensive;
-# these cover early drain + mid/late rugs while staying point-in-time.
-RUG_CHECKPOINTS_SEC = (3600, 10800, 21600, 43200, 86400)
+# 1h / 6h / 24h covers early drain + late rugs; 24h state is reused as exit.
+RUG_CHECKPOINTS_SEC = (3600, 21600, 86400)
 ENTRY_OFFSET_SEC = 600
 EXIT_OFFSET_SEC = 86400
 NOTIONAL_USD = 250.0
@@ -151,6 +151,8 @@ def label_one(
     out["token_bought_wei"] = int(token_inv)
     out["quote_spent_wei"] = int(spend)
 
+    exit_state = None
+    exit_tvl = 0
     for h in RUG_CHECKPOINTS_SEC:
         block = _estimate_block(first_block, first_ts, first_ts + h, block_time)
         cp: dict[str, Any] = {"horizon_sec": h, "block": block}
@@ -175,20 +177,24 @@ def label_one(
             if reasons:
                 out["rug"] = True
                 out["rug_reasons"].extend([f"h{h}:{r}" for r in reasons])
+            if h == EXIT_OFFSET_SEC:
+                exit_state = state
+                exit_tvl = tvl
         except Exception as exc:
             cp["error"] = type(exc).__name__
             out["rug"] = True
             out["rug_reasons"].append(f"h{h}:state_error:{type(exc).__name__}")
         out["rug_checkpoints"].append(cp)
 
-    try:
-        exit_state = read_v3_pool_state(pool, exit_block)
-        exit_tvl = quote_side_tvl_wei(pool, quote, exit_block)
-    except Exception as exc:
-        out["rug"] = True
-        out["rug_reasons"].append(f"exit_state_error:{type(exc).__name__}")
-        out["rt_log_return_250"] = float("-inf")
-        return out
+    if exit_state is None:
+        try:
+            exit_state = read_v3_pool_state(pool, exit_block)
+            exit_tvl = quote_side_tvl_wei(pool, quote, exit_block)
+        except Exception as exc:
+            out["rug"] = True
+            out["rug_reasons"].append(f"exit_state_error:{type(exc).__name__}")
+            out["rt_log_return_250"] = float("-inf")
+            return out
 
     exit_mark = mark_quote_per_token(exit_state, quote, token)
     out["exit_mark"] = exit_mark
