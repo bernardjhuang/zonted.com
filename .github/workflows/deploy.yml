@@ -34,6 +34,7 @@ jobs:
           python3 scripts/test-trading-ui.py
           python3 scripts/test_trading_desk_sync.py
           python3 scripts/test-paper-fund-i-post.py
+          python3 scripts/test-backtest-contamination-post.py
 
       - name: Strip build-time pipeline buffer from deploy
         run: rm -f trading/pipeline.html
