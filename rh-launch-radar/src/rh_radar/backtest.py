@@ -11,8 +11,10 @@ from rh_radar.config import DATA, ensure_data_dirs
 
 FEATURES = DATA / "features" / "decision_features.jsonl"
 LABELS = DATA / "labels" / "outcomes.jsonl"
+HONEST = DATA / "labels" / "honest_outcomes.jsonl"
 VETOES = DATA / "labels" / "vetoes.jsonl"
 THRESHOLDS = DATA / "labels" / "thresholds.json"
+HONEST_THRESHOLDS = DATA / "labels" / "honest_thresholds.json"
 REPORT = DATA / "scores" / "backtest_report.json"
 
 
@@ -86,15 +88,33 @@ def baseline_ranks(rows: list[dict[str, Any]]) -> dict[str, list[str]]:
     }
 
 
-def evaluate(ranks: dict[str, list[str]], positives: set[str], rugs: set[str], ks=(3, 10)) -> dict[str, Any]:
+def mean_metric_at_k(ranked_ids: list[str], values: dict[str, float], k: int) -> float | None:
+    top = ranked_ids[:k]
+    xs = [values[i] for i in top if i in values and values[i] is not None]
+    if not xs:
+        return None
+    return sum(xs) / len(xs)
+
+
+def evaluate(
+    ranks: dict[str, list[str]],
+    positives: set[str],
+    rugs: set[str],
+    returns: dict[str, float] | None = None,
+    ks=(3, 10),
+) -> dict[str, Any]:
     out: dict[str, Any] = {}
     for name, ordered in ranks.items():
-        out[name] = {
+        row = {
             **{f"precision@{k}": precision_at_k(ordered, positives, k) for k in ks},
             **{f"recall@{k}": recall_at_k(ordered, positives, k) for k in ks},
             **{f"rug_rate@{k}": (sum(1 for x in ordered[:k] if x in rugs) / k if ordered else 0.0) for k in ks},
             "positives_in_top10": sorted(set(ordered[:10]) & positives),
         }
+        if returns is not None:
+            for k in ks:
+                row[f"mean_gross_multiple@{k}"] = mean_metric_at_k(ordered, returns, k)
+        out[name] = row
     return out
 
 
@@ -102,13 +122,24 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Chronological backtest of v0 scorecard vs baselines")
     parser.add_argument("--decision-offset", type=int, default=600, help="Seconds after first liquidity")
     parser.add_argument("--dev-fraction", type=float, default=0.7)
-    parser.add_argument("--require-veto-survivor", action="store_true", default=True)
-    parser.add_argument("--label-field", type=str, default="high_value_proxy")
+    parser.add_argument("--require-veto-survivor", action=argparse.BooleanOptionalAction, default=True)
+    parser.add_argument(
+        "--label-field",
+        type=str,
+        default="high_value_proxy",
+        help="high_value_proxy | executable_winner_proxy | executable_winner_250",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     random.seed(7)
 
-    labels = {json.loads(line)["launch_id"]: json.loads(line) for line in LABELS.read_text().splitlines() if line.strip()}
+    use_honest = args.label_field == "executable_winner_250"
+    if use_honest:
+        if not HONEST.exists():
+            raise SystemExit(f"missing {HONEST}; run rh_radar.honest_labels first")
+        labels = {json.loads(line)["launch_id"]: json.loads(line) for line in HONEST.read_text().splitlines() if line.strip()}
+    else:
+        labels = {json.loads(line)["launch_id"]: json.loads(line) for line in LABELS.read_text().splitlines() if line.strip()}
     vetoes: dict[str, dict[str, Any]] = {}
     if VETOES.exists():
         vetoes = {json.loads(line)["launch_id"]: json.loads(line) for line in VETOES.read_text().splitlines() if line.strip()}
@@ -126,37 +157,45 @@ def main() -> None:
         if args.require_veto_survivor:
             if not veto or veto.get("vetoed"):
                 continue
+        lab = labels[row["launch_id"]]
         if veto:
             details = veto.get("details") or {}
             row["depth_usd"] = details.get("v7_depth_usd")
             row["tvl_usd"] = details.get("v7_tvl_usd")
             row["sell_recovery"] = details.get("v6_recovery")
-            # Rug proxy: failed sell recovery or dust quote-side TVL.
-            row["rug_proxy"] = bool(
-                (isinstance(row["sell_recovery"], (int, float)) and row["sell_recovery"] < 0.5)
-                or (isinstance(row["tvl_usd"], (int, float)) and row["tvl_usd"] < 100)
-            )
+        if use_honest:
+            row["rug_proxy"] = bool(lab.get("rug"))
+            row["gross_multiple"] = lab.get("gross_multiple")
+            row["rt_log_return_250"] = lab.get("rt_log_return_250")
+            row["label"] = bool(lab.get("executable_winner_250"))
         else:
-            row["rug_proxy"] = False
+            if veto:
+                details = veto.get("details") or {}
+                row["rug_proxy"] = bool(
+                    (isinstance(row.get("sell_recovery"), (int, float)) and row["sell_recovery"] < 0.5)
+                    or (isinstance(row.get("tvl_usd"), (int, float)) and row["tvl_usd"] < 100)
+                )
+            else:
+                row["rug_proxy"] = False
+            row["label"] = bool(
+                lab.get("high_value_proxy" if args.label_field == "executable_winner_proxy" else args.label_field)
+            )
+            if veto and not veto.get("vetoed"):
+                details = veto.get("details") or {}
+                row["executable_winner_proxy"] = bool(
+                    row["label"]
+                    and isinstance(details.get("v6_recovery"), (int, float))
+                    and details["v6_recovery"] >= 0.5
+                    and isinstance(details.get("v7_tvl_usd"), (int, float))
+                    and details["v7_tvl_usd"] >= 1000
+                )
+            else:
+                row["executable_winner_proxy"] = False
         score, parts = score_row(row)
         row["score"] = score
         row["score_parts"] = parts
-        row["label"] = bool(labels[row["launch_id"]].get("high_value_proxy" if args.label_field == "executable_winner_proxy" else args.label_field))
-        # Executable joint label: flow proxy winner + sellable + quote TVL floor.
-        if veto and not veto.get("vetoed"):
-            details = veto.get("details") or {}
-            row["executable_winner_proxy"] = bool(
-                row["label"]
-                and isinstance(details.get("v6_recovery"), (int, float))
-                and details["v6_recovery"] >= 0.5
-                and isinstance(details.get("v7_tvl_usd"), (int, float))
-                and details["v7_tvl_usd"] >= 1000
-            )
-        else:
-            row["executable_winner_proxy"] = False
         feats.append(row)
 
-    label_key = "executable_winner_proxy" if args.label_field == "executable_winner_proxy" else "label"
     if args.label_field == "executable_winner_proxy":
         for row in feats:
             row["label"] = row["executable_winner_proxy"]
@@ -171,9 +210,20 @@ def main() -> None:
     positives_val = {r["launch_id"] for r in val if r["label"]}
     rugs_dev = {r["launch_id"] for r in dev if r.get("rug_proxy")}
     rugs_val = {r["launch_id"] for r in val if r.get("rug_proxy")}
+    returns_dev = {
+        r["launch_id"]: float(r["gross_multiple"])
+        for r in dev
+        if isinstance(r.get("gross_multiple"), (int, float))
+    }
+    returns_val = {
+        r["launch_id"]: float(r["gross_multiple"])
+        for r in val
+        if isinstance(r.get("gross_multiple"), (int, float))
+    }
 
     ranks_dev = baseline_ranks(dev)
     ranks_val = baseline_ranks(val)
+    thr_path = HONEST_THRESHOLDS if use_honest else THRESHOLDS
     report = {
         "decision_offset_sec": args.decision_offset,
         "require_veto_survivor": args.require_veto_survivor,
@@ -183,9 +233,11 @@ def main() -> None:
         "n_val": len(val),
         "positives_dev": len(positives_dev),
         "positives_val": len(positives_val),
-        "threshold_version": json.loads(THRESHOLDS.read_text())["threshold_version"] if THRESHOLDS.exists() else None,
-        "dev": evaluate(ranks_dev, positives_dev, rugs_dev),
-        "validation": evaluate(ranks_val, positives_val, rugs_val),
+        "rugs_dev": len(rugs_dev),
+        "rugs_val": len(rugs_val),
+        "threshold_version": json.loads(thr_path.read_text())["threshold_version"] if thr_path.exists() else None,
+        "dev": evaluate(ranks_dev, positives_dev, rugs_dev, returns_dev if use_honest else None),
+        "validation": evaluate(ranks_val, positives_val, rugs_val, returns_val if use_honest else None),
     }
 
     val_metrics = report["validation"]
@@ -211,8 +263,12 @@ def main() -> None:
         "baseline_rug_rate@10": base_rug,
         "bar": ">=1.5x Precision@10 over best cheap baseline AND rug-rate@10 <= baseline",
         "passed": bool(lift is not None and lift >= 1.5 and model_rug <= base_rug),
-        "diagnostic_only_until_honest_labels": True,
+        "diagnostic_only_until_honest_labels": (not use_honest),
+        "honest_labels": use_honest,
     }
+    if use_honest:
+        report["promotion"]["model_mean_gross_multiple@10"] = val_metrics["model_v0"].get("mean_gross_multiple@10")
+        report["promotion"]["baseline_mean_gross_multiple@10"] = val_metrics[best_base].get("mean_gross_multiple@10")
 
     REPORT.parent.mkdir(parents=True, exist_ok=True)
     REPORT.write_text(json.dumps(report, indent=2, sort_keys=True))

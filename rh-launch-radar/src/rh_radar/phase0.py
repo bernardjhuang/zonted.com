@@ -17,6 +17,7 @@ from rh_radar.config import DATA, ensure_data_dirs
 
 FEATURES = DATA / "features" / "decision_features.jsonl"
 LABELS = DATA / "labels" / "outcomes.jsonl"
+HONEST = DATA / "labels" / "honest_outcomes.jsonl"
 VETOES = DATA / "labels" / "vetoes.jsonl"
 REPORT = DATA / "scores" / "phase0_report.json"
 
@@ -147,11 +148,21 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Phase 0 creator-prior / cheap-signal tests")
     parser.add_argument("--decision-offset", type=int, default=600)
     parser.add_argument("--dev-fraction", type=float, default=0.7)
+    parser.add_argument(
+        "--label-field",
+        type=str,
+        default="high_value_proxy",
+        help="high_value_proxy | executable_winner_250",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     random.seed(7)
 
-    labels = {json.loads(line)["launch_id"]: json.loads(line) for line in LABELS.read_text().splitlines() if line.strip()}
+    use_honest = args.label_field == "executable_winner_250"
+    label_path = HONEST if use_honest else LABELS
+    if not label_path.exists():
+        raise SystemExit(f"missing {label_path}")
+    labels = {json.loads(line)["launch_id"]: json.loads(line) for line in label_path.read_text().splitlines() if line.strip()}
     vetoes = {}
     if VETOES.exists():
         vetoes = {json.loads(line)["launch_id"]: json.loads(line) for line in VETOES.read_text().splitlines() if line.strip()}
@@ -167,29 +178,43 @@ def main() -> None:
             continue
         feats.append(row)
 
-    history = build_creator_history(feats, labels)
+    # For creator win-rate, treat honest/proxy winner the same field name downstream.
+    win_key = "executable_winner_250" if use_honest else "high_value_proxy"
+    labels_for_hist = {
+        lid: {**lab, "high_value_proxy": bool(lab.get(win_key))} for lid, lab in labels.items()
+    }
+    history = build_creator_history(feats, labels_for_hist)
     enriched: list[dict[str, Any]] = []
     for row in feats:
         hist = history.get(row["creator"], [])
         row = dict(row)
         row["creator_prior_win_rate"] = prior_winner_rate(hist, row["first_liq_block"])
-        score, parts = score_row(row)
-        row["score"] = score
-        row["score_parts"] = parts
-        row["label"] = bool(labels[row["launch_id"]].get("high_value_proxy"))
+        lab = labels[row["launch_id"]]
         veto = vetoes.get(row["launch_id"])
         if veto:
             details = veto.get("details") or {}
             row["depth_usd"] = details.get("v7_tvl_usd")
             row["sell_recovery"] = details.get("v6_recovery")
-            row["rug_proxy"] = bool(
-                (isinstance(row["sell_recovery"], (int, float)) and row["sell_recovery"] < 0.5)
-                or (isinstance(row["depth_usd"], (int, float)) and row["depth_usd"] < 100)
-            )
             row["vetoed"] = bool(veto.get("vetoed"))
         else:
-            row["rug_proxy"] = False
             row["vetoed"] = False
+        if use_honest:
+            row["label"] = bool(lab.get("executable_winner_250"))
+            row["rug_proxy"] = bool(lab.get("rug"))
+            row["gross_multiple"] = lab.get("gross_multiple")
+        else:
+            row["label"] = bool(lab.get("high_value_proxy"))
+            if veto:
+                details = veto.get("details") or {}
+                row["rug_proxy"] = bool(
+                    (isinstance(row.get("sell_recovery"), (int, float)) and row["sell_recovery"] < 0.5)
+                    or (isinstance(row.get("depth_usd"), (int, float)) and row["depth_usd"] < 100)
+                )
+            else:
+                row["rug_proxy"] = False
+        score, parts = score_row(row)
+        row["score"] = score
+        row["score_parts"] = parts
         enriched.append(row)
 
     # Re-score after attaching depth/sellability so model_v0 matches survivor path.
@@ -203,8 +228,12 @@ def main() -> None:
 
     report = {
         "decision_offset_sec": args.decision_offset,
-        "label_field": "high_value_proxy",
-        "label_caveat": "m0-proxy-v1 is circular with flow features; Phase 0 is diagnostic only",
+        "label_field": args.label_field,
+        "label_caveat": (
+            "honest-v1 executable labels"
+            if use_honest
+            else "m0-proxy-v1 is circular with flow features; Phase 0 is diagnostic only"
+        ),
         "finding_preview": None,
         "all": run_slice("all_labeled", all_rows, args.dev_fraction),
         "survivors": run_slice("veto_survivors", survivors, args.dev_fraction) if len(survivors) >= 25 else None,

@@ -2,7 +2,13 @@ from __future__ import annotations
 
 import unittest
 
-from rh_radar.pool_math import depth_quote_for_pct, simulate_sell_quote_out, token_amount_for_quote_notional
+from rh_radar.pool_math import (
+    depth_quote_for_pct,
+    round_trip_quote,
+    simulate_buy_token_out,
+    simulate_sell_quote_out,
+    token_amount_for_quote_notional,
+)
 
 
 class PoolMathTests(unittest.TestCase):
@@ -29,6 +35,22 @@ class PoolMathTests(unittest.TestCase):
         token_in = token_amount_for_quote_notional(state, state["token0"], state["token1"], 10**16)
         out = simulate_sell_quote_out(state, state["token0"], state["token1"], token_in)
         self.assertGreater(out, 0)
+
+    def test_same_block_round_trip_near_par_on_deep_pool(self):
+        state = {
+            "sqrt_price_x96": 2**96,
+            "tick": 0,
+            "liquidity": 10**22,
+            "token0": "0xaaaa000000000000000000000000000000000001",
+            "token1": "0xbbbb000000000000000000000000000000000002",
+        }
+        quote_in = 10**16
+        bought = simulate_buy_token_out(state, state["token0"], state["token1"], quote_in)
+        self.assertGreater(bought, 0)
+        rt = round_trip_quote(state, state, state["token0"], state["token1"], quote_in)
+        # Deep pool + tiny notional → near-par recovery under single-tick model.
+        self.assertGreater(rt["gross_multiple"], 0.98)
+        self.assertLess(rt["gross_multiple"], 1.02)
 
 
 if __name__ == "__main__":

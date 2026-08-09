@@ -131,3 +131,88 @@ def token_amount_for_quote_notional(state: dict[str, Any], quote: str, token: st
         # quote is token1, token is token0; token0 ≈ quote_wei / price
         return int(quote_wei / price_t1_per_t0) if price_t1_per_t0 else 0
     return 0
+
+
+def mark_quote_per_token(state: dict[str, Any], quote: str, token: str) -> float:
+    """Spot mark: quote wei per 1e18 token wei (human units cancel in ratios)."""
+    sqrtP = state["sqrt_price_x96"] / Q96
+    if sqrtP <= 0:
+        return 0.0
+    price_t1_per_t0 = sqrtP ** 2
+    token_is_token1 = token.lower() == state["token1"].lower()
+    quote_is_t0 = quote_is_token0(quote, state["token0"])
+    if quote_is_t0 and token_is_token1:
+        # quote/token = token0/token1 = 1/price
+        return (1.0 / price_t1_per_t0) if price_t1_per_t0 else 0.0
+    if (not quote_is_t0) and (not token_is_token1):
+        # quote is token1, token is token0 → quote/token = price
+        return float(price_t1_per_t0)
+    return 0.0
+
+
+def simulate_buy_token_out(
+    state: dict[str, Any],
+    quote: str,
+    token: str,
+    quote_in_wei: int,
+) -> int:
+    """
+    Approximate token out for spending `quote_in_wei` against current-tick liquidity.
+    Mirrors simulate_sell_quote_out (conservative, single-tick).
+    """
+    L = state["liquidity"]
+    sqrtP = state["sqrt_price_x96"] / Q96
+    if L <= 0 or sqrtP <= 0 or quote_in_wei <= 0:
+        return 0
+    token_is_token1 = token.lower() == state["token1"].lower()
+    if quote_is_token0(quote, state["token0"]) and token_is_token1:
+        # spend token0 -> receive token1; price increases
+        amount0 = quote_in_wei
+        inv_new = (1 / sqrtP) - (amount0 / L)
+        if inv_new <= 0:
+            return 0
+        sqrtP_new = 1 / inv_new
+        amount1_out = L * (sqrtP_new - sqrtP)
+        return max(0, int(amount1_out))
+    if (not quote_is_token0(quote, state["token0"])) and (not token_is_token1):
+        # spend token1 -> receive token0; price decreases
+        amount1 = quote_in_wei
+        sqrtP_new = sqrtP - (amount1 / L)
+        if sqrtP_new <= 0:
+            return 0
+        amount0_out = L * (1 / sqrtP_new - 1 / sqrtP)
+        return max(0, int(amount0_out))
+    return 0
+
+
+def round_trip_quote(
+    entry_state: dict[str, Any],
+    exit_state: dict[str, Any],
+    quote: str,
+    token: str,
+    quote_in_wei: int,
+    *,
+    entry_quote_tvl_wei: int | None = None,
+    exit_quote_tvl_wei: int | None = None,
+) -> dict[str, Any]:
+    """Buy at entry state, sell full token inventory at exit state.
+
+    Single-tick math can invent liquidity; cap spend/proceeds by quote-side TVL.
+    """
+    spend = int(quote_in_wei)
+    if entry_quote_tvl_wei is not None:
+        # Cannot deploy more quote than the pool holds (conservative).
+        spend = min(spend, max(0, int(entry_quote_tvl_wei)))
+    token_bought = simulate_buy_token_out(entry_state, quote, token, spend) if spend else 0
+    quote_out = simulate_sell_quote_out(exit_state, quote, token, token_bought) if token_bought else 0
+    if exit_quote_tvl_wei is not None:
+        quote_out = min(int(quote_out), max(0, int(exit_quote_tvl_wei)))
+    recovery = (quote_out / quote_in_wei) if quote_in_wei else 0.0
+    return {
+        "quote_in_wei": int(quote_in_wei),
+        "quote_spent_wei": int(spend),
+        "token_bought_wei": int(token_bought),
+        "quote_out_wei": int(quote_out),
+        "gross_multiple": recovery,
+        "exit_recovery_vs_entry_notional": recovery,
+    }
