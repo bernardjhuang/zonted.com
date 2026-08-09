@@ -1,0 +1,82 @@
+{
+  "symbol": "SIEGY",
+  "company": "Siemens AG ADR",
+  "valuation_date": "2026-08-07",
+  "method": "ADR-adjusted cycle-normalized earnings power",
+  "currency": "USD per SIEGY ADR",
+  "adr_terms": {
+    "adr_per_ordinary_share": 2,
+    "source": "Siemens official ADR page"
+  },
+  "market_snapshot": {
+    "quote_usd": 161.95,
+    "market_cap_usd_b": 246.897,
+    "trailing_pe": 28.64,
+    "dividend_yield_pct": 1.4,
+    "source": "Robinhood regular-session data through 2026-08-07"
+  },
+  "reported_inputs": {
+    "q3_revenue_eur_b": 20.794,
+    "q3_orders_eur_b": 27.902,
+    "q3_industrial_business_margin_pct": 17.3,
+    "q3_free_cash_flow_eur_b": 4.148,
+    "q1_q3_revenue_eur_b": 59.688,
+    "q1_q3_free_cash_flow_eur_b": 6.541,
+    "order_backlog_eur_b": 132.0,
+    "fy2026_eps_pre_ppa_guide_low_eur": 11.2,
+    "fy2026_eps_pre_ppa_guide_high_eur": 11.5
+  },
+  "model_assumptions": {
+    "eurusd": 1.16,
+    "fx_note": "Static scenario translation assumption, not an FX forecast",
+    "base_multiple": 22.0
+  },
+  "scenarios": {
+    "bear": {
+      "normalized_eps_eur_per_ordinary_share": 9.0,
+      "earnings_multiple": 18.0,
+      "ordinary_value_eur": 162.0,
+      "fair_value_per_share": 93.96
+    },
+    "base": {
+      "normalized_eps_eur_per_ordinary_share": 12.0,
+      "earnings_multiple": 22.0,
+      "ordinary_value_eur": 264.0,
+      "fair_value_per_share": 153.12
+    },
+    "bull": {
+      "normalized_eps_eur_per_ordinary_share": 15.0,
+      "earnings_multiple": 26.0,
+      "ordinary_value_eur": 390.0,
+      "fair_value_per_share": 226.2
+    }
+  },
+  "market_implied": {
+    "normalized_eps_eur_at_base_multiple": 12.69,
+    "premium_to_fy2026_eps_pre_ppa_midpoint_pct": 0.1182
+  },
+  "sources": [
+    {
+      "label": "Siemens Q3 FY2026 earnings release",
+      "url": "https://assets.new.siemens.com/siemens/assets/api/uuid:a659b574-caac-4ea1-a94f-a9d624fe0b7f/2026-q3-earnings-release-en.pdf",
+      "use": "Q3 orders, revenue, margin, cash flow, backlog and FY2026 outlook"
+    },
+    {
+      "label": "Siemens financial calendar",
+      "url": "https://www.siemens.com/en-us/company/investor-relations/financial-calendar/",
+      "use": "Official November 12, 2026 Q4/FY2026 results date"
+    },
+    {
+      "label": "Siemens ADR terms",
+      "url": "https://www.siemens.com/en-us/company/investor-relations/share-bonds-rating/american-depository-receipt/",
+      "use": "Two SIEGY ADRs represent one Siemens ordinary share"
+    }
+  ],
+  "limitations": [
+    "This is normalized earnings power, not a full sum-of-the-parts valuation.",
+    "EPS pre PPA is a company-defined non-GAAP measure; acquisition accounting and restructuring remain economic costs.",
+    "The static EUR/USD translation can move ADR value even when the underlying euro thesis is unchanged.",
+    "The planned Siemens Healthineers spin-off can change both earnings composition and the appropriate multiple.",
+    "SIEGY trades OTC with materially lower liquidity than the German ordinary shares."
+  ]
+}
