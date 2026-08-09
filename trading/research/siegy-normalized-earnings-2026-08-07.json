@@ -27,7 +27,7 @@
     "fy2026_eps_pre_ppa_guide_high_eur": 11.5
   },
   "model_assumptions": {
-    "eurusd": 1.16,
+    "eurusd": 1.1535,
     "fx_note": "Static scenario translation assumption, not an FX forecast",
     "base_multiple": 22.0
   },
@@ -36,24 +36,24 @@
       "normalized_eps_eur_per_ordinary_share": 9.0,
       "earnings_multiple": 18.0,
       "ordinary_value_eur": 162.0,
-      "fair_value_per_share": 93.96
+      "fair_value_per_share": 93.43
     },
     "base": {
       "normalized_eps_eur_per_ordinary_share": 12.0,
       "earnings_multiple": 22.0,
       "ordinary_value_eur": 264.0,
-      "fair_value_per_share": 153.12
+      "fair_value_per_share": 152.26
     },
     "bull": {
       "normalized_eps_eur_per_ordinary_share": 15.0,
       "earnings_multiple": 26.0,
       "ordinary_value_eur": 390.0,
-      "fair_value_per_share": 226.2
+      "fair_value_per_share": 224.93
     }
   },
   "market_implied": {
-    "normalized_eps_eur_at_base_multiple": 12.69,
-    "premium_to_fy2026_eps_pre_ppa_midpoint_pct": 0.1182
+    "normalized_eps_eur_at_base_multiple": 12.76,
+    "premium_to_fy2026_eps_pre_ppa_midpoint_pct": 0.1245
   },
   "sources": [
     {
@@ -70,6 +70,16 @@
       "label": "Siemens ADR terms",
       "url": "https://www.siemens.com/en-us/company/investor-relations/share-bonds-rating/american-depository-receipt/",
       "use": "Two SIEGY ADRs represent one Siemens ordinary share"
+    },
+    {
+      "label": "Siemens Healthineers spin-off timeline",
+      "url": "https://press.siemens.com/global/en/pressrelease/siemens-clarifies-timeline-spin-siemens-healthineers-shares",
+      "use": "Targeted February 2027 shareholder vote"
+    },
+    {
+      "label": "Frankfurter EUR/USD reference",
+      "url": "https://api.frankfurter.app/latest?from=EUR&to=USD",
+      "use": "August 7 valuation-date FX translation reference"
     }
   ],
   "limitations": [
