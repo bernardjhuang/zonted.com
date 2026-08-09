@@ -182,5 +182,32 @@ class HypothesisSummaryTests(unittest.TestCase):
         self.assertIn("net-dcf-2026-07-29.xlsx", self.page)
         self.assertGreater(workbook_path.stat().st_size, 10_000)
 
+    def test_mu_and_zs_valuation_receipts_match_public_levels(self) -> None:
+        specs = {
+            "MU": ("mu-normalized-earnings-2026-08-07.json", {"bear": 300.0, "base": 700.0, "bull": 1280.0}),
+            "ZS": ("zs-dcf-2026-08-07.json", {"bear": 75.18, "base": 150.96, "bull": 275.22}),
+        }
+        for symbol, (filename, expected) in specs.items():
+            receipt_path = ROOT / "trading" / "research" / filename
+            receipt = json.loads(receipt_path.read_text())
+            levels = self.config["rows"][symbol]["entry_levels"]
+            actual = {
+                case: round(receipt["scenarios"][case]["fair_value_per_share"], 2)
+                for case in ("bear", "base", "bull")
+            }
+            self.assertEqual(receipt["symbol"], symbol)
+            self.assertEqual(receipt["valuation_date"], "2026-08-07")
+            self.assertEqual(levels, expected)
+            self.assertEqual(actual, expected)
+            self.assertIn(filename.replace(".json", ".xlsx"), self.page)
+            self.assertGreater(receipt_path.with_suffix(".xlsx").stat().st_size, 10_000)
+
+        self.assertGreater(self.config["rows"]["MU"]["entry_levels"]["bull"], 1000)
+        self.assertGreater(self.config["rows"]["ZS"]["entry_levels"]["base"], 100)
+        self.assertGreater(
+            json.loads((ROOT / "trading" / "research" / specs["ZS"][0]).read_text())["reverse_dcf_growth"]["constant_revenue_growth_2027_2035"],
+            0.15,
+        )
+
 if __name__ == "__main__":
     unittest.main()

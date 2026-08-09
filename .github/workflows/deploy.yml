@@ -17,6 +17,7 @@ jobs:
       - name: Build and verify trading hypotheses
         run: |
           python3 scripts/build-net-dcf.py --check
+          python3 scripts/build-mu-zs-valuations.py --check
           python3 scripts/build-hypothesis-summary.py --cached
 
           if python3 -c "from pathlib import Path; raise SystemExit(0 if '<span class=\"stamp\">Live ·' in Path('trading/index.html').read_text() else 1)"; then
