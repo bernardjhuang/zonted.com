@@ -127,13 +127,13 @@ def main() -> None:
         "--label-field",
         type=str,
         default="high_value_proxy",
-        help="high_value_proxy | executable_winner_proxy | executable_winner_250",
+        help="high_value_proxy | executable_winner_proxy | executable_winner_250 | executable_winner_250_1h",
     )
     args = parser.parse_args()
     ensure_data_dirs()
     random.seed(7)
 
-    use_honest = args.label_field == "executable_winner_250"
+    use_honest = args.label_field in {"executable_winner_250", "executable_winner_250_1h"}
     if use_honest:
         if not HONEST.exists():
             raise SystemExit(f"missing {HONEST}; run rh_radar.honest_labels first")
@@ -164,10 +164,15 @@ def main() -> None:
             row["tvl_usd"] = details.get("v7_tvl_usd")
             row["sell_recovery"] = details.get("v6_recovery")
         if use_honest:
-            row["rug_proxy"] = bool(lab.get("rug"))
-            row["gross_multiple"] = lab.get("gross_multiple")
-            row["rt_log_return_250"] = lab.get("rt_log_return_250")
-            row["label"] = bool(lab.get("executable_winner_250"))
+            if args.label_field == "executable_winner_250_1h":
+                row["rug_proxy"] = bool(lab.get("rug_1h") if "rug_1h" in lab else lab.get("rug"))
+                row["gross_multiple"] = lab.get("gross_multiple_1h")
+                row["label"] = bool(lab.get("executable_winner_250_1h"))
+            else:
+                row["rug_proxy"] = bool(lab.get("rug"))
+                row["gross_multiple"] = lab.get("gross_multiple")
+                row["rt_log_return_250"] = lab.get("rt_log_return_250")
+                row["label"] = bool(lab.get("executable_winner_250"))
         else:
             if veto:
                 details = veto.get("details") or {}

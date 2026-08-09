@@ -138,7 +138,7 @@ def run_slice(name: str, rows: list[dict[str, Any]], dev_fraction: float) -> dic
         ),
         "note": (
             "If creator_prior_matches_model, prefer reputation-first architecture; "
-            "ranker is a tiebreaker. Labels are still m0-proxy-v1 (circular) — redo after honest labels."
+            "ranker is a tiebreaker. Re-check this gate whenever the label definition changes."
         ),
     }
     return report
@@ -152,13 +152,13 @@ def main() -> None:
         "--label-field",
         type=str,
         default="high_value_proxy",
-        help="high_value_proxy | executable_winner_250",
+        help="high_value_proxy | executable_winner_250 | executable_winner_250_1h",
     )
     args = parser.parse_args()
     ensure_data_dirs()
     random.seed(7)
 
-    use_honest = args.label_field == "executable_winner_250"
+    use_honest = args.label_field in {"executable_winner_250", "executable_winner_250_1h"}
     label_path = HONEST if use_honest else LABELS
     if not label_path.exists():
         raise SystemExit(f"missing {label_path}")
@@ -179,7 +179,7 @@ def main() -> None:
         feats.append(row)
 
     # For creator win-rate, treat honest/proxy winner the same field name downstream.
-    win_key = "executable_winner_250" if use_honest else "high_value_proxy"
+    win_key = args.label_field if use_honest else "high_value_proxy"
     labels_for_hist = {
         lid: {**lab, "high_value_proxy": bool(lab.get(win_key))} for lid, lab in labels.items()
     }
@@ -199,9 +199,13 @@ def main() -> None:
         else:
             row["vetoed"] = False
         if use_honest:
-            row["label"] = bool(lab.get("executable_winner_250"))
-            row["rug_proxy"] = bool(lab.get("rug"))
-            row["gross_multiple"] = lab.get("gross_multiple")
+            row["label"] = bool(lab.get(args.label_field))
+            if args.label_field == "executable_winner_250_1h":
+                row["rug_proxy"] = bool(lab.get("rug_1h") if "rug_1h" in lab else lab.get("rug"))
+                row["gross_multiple"] = lab.get("gross_multiple_1h")
+            else:
+                row["rug_proxy"] = bool(lab.get("rug"))
+                row["gross_multiple"] = lab.get("gross_multiple")
         else:
             row["label"] = bool(lab.get("high_value_proxy"))
             if veto:
