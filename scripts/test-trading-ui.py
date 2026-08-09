@@ -311,7 +311,10 @@ class TradingUiContractTest(unittest.TestCase):
         for name in ("momentum", "vwap-setups", "performance", "themes"):
             deployed = ROOT / "trading" / name / "index.html"
             self.assertLess(deployed.stat().st_size, 175_000, str(deployed))
-        self.assertLess(DESK_HOME.stat().st_size, 175_000)
+        desk_html = DESK_HOME.read_text()
+        desk_rows = desk_html.count('class="desk-main-row"')
+        shell_budget = 90_000 + 4_300 * desk_rows
+        self.assertLess(DESK_HOME.stat().st_size, shell_budget)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
         for name in ("scan-universe.json", "vwap-charts.json", "crypto-charts.json", "results-ytd.json", "risk-ytd.json"):

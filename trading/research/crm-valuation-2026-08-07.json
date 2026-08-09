@@ -1,0 +1,49 @@
+{
+  "symbol": "CRM",
+  "company": "Salesforce, Inc.",
+  "valuation_date": "2026-08-07",
+  "quote_usd": 192.73,
+  "method": "blended normalized EPS scenarios",
+  "market_snapshot": {
+    "market_cap_usd_b": 158.54,
+    "shares_outstanding_m": 822.61,
+    "trailing_pe": 21.52
+  },
+  "filing_inputs": {
+    "q1_fy27_revenue_usd_b": 11.133,
+    "q1_fy27_crpo_usd_b": 33.6,
+    "q1_fy27_gaap_operating_margin_pct": 21.1,
+    "q1_fy27_non_gaap_operating_margin_pct": 34.8,
+    "fy27_revenue_guide_midpoint_usd_b": 46.05,
+    "fy27_gaap_eps_guide_midpoint": 7.96,
+    "fy27_non_gaap_eps_guide_midpoint": 14.09,
+    "fy27_non_gaap_operating_margin_guide_pct": 34.3
+  },
+  "scenarios": {
+    "bear": {
+      "normalized_eps": 7.96,
+      "multiple": 18.0,
+      "fair_value_per_share": 143.28
+    },
+    "base": {
+      "normalized_eps": 11.0,
+      "multiple": 20.0,
+      "fair_value_per_share": 220.0
+    },
+    "bull": {
+      "normalized_eps": 14.09,
+      "multiple": 22.0,
+      "fair_value_per_share": 309.98
+    }
+  },
+  "market_implied_normalized_eps_at_base_multiple": 9.64,
+  "sources": [
+    "https://www.sec.gov/Archives/edgar/data/1108524/000110852426000125/crm-q1fy27xexhibit991.htm",
+    "https://www.sec.gov/Archives/edgar/data/1108524/000110852426000127/crm-20260430.htm"
+  ],
+  "limitations": [
+    "The scenario range intentionally spans GAAP-like to company non-GAAP earnings definitions; stock compensation and acquisition adjustments remain economically material.",
+    "The $25 billion accelerated repurchase was debt-funded, so lower share count must be judged against higher interest expense and leverage.",
+    "This static receipt is not a forecast, price target, or investment recommendation."
+  ]
+}
