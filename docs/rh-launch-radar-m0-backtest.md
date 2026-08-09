@@ -75,13 +75,44 @@ Cell is thin (12 val rows). Treat as directional only.
 
 ---
 
+## Round C — expanded Pons cohort (n=800 → 91 survivors)
+
+| Step | Result |
+|---|---|
+| Features / labels | 800 aged Pons; `high_value_proxy` = **50 / 800 (6.25%)** (thresholds re-frozen on n=800) |
+| Vetoes | **91 survivors (11.4%)** — V5=499, V7=210, V6=10 |
+| Enrichment | Survivors **44 / 91 (48%)** positive vs 6.25% unfiltered; **44 / 50** positives survive gates |
+| Backtest | 70/30 on survivors → 63 / 28; val positives = 15 |
+
+### Survivor validation (decision = T+10m)
+
+| Ranker | Precision@10 | Precision@3 | Recall@10 | rug-rate@10 |
+|---|---:|---:|---:|---:|
+| **model_v0** | **1.00** | **1.00** | 0.67 | 0.0 |
+| B1 first-window volume | 0.90 | 1.00 | 0.60 | 0.0 |
+| B3 unique traders | 0.90 | 1.00 | 0.60 | 0.0 |
+| B2 msg.value | 0.70 | 1.00 | 0.47 | 0.0 |
+| B4 random | 0.70 | 1.00 | 0.47 | 0.0 |
+
+**Lift vs best baseline (B1):** `1.00 / 0.90 = 1.11×` — **promotion failed** (bar ≥1.5×).  
+Executable joint label identical to flow proxy on survivors (same lift).
+
+### Round C read
+
+1. On the larger survivor set the scorecard **beats** B1 (P@10 1.0 vs 0.9) but not by the promotion margin — baselines are already very strong after vetoes.
+2. Veto stage remains the main precision lever (6% → 48% positive rate among survivors).
+3. rug-rate@10 stays 0 by construction on launch-block V6/V7 survivors; need horizon rugs to make that metric informative.
+4. InstantLaunch (18k stamped) still excluded via `--era-prefix pons` until v4 pool math lands.
+
+---
+
 ## Next steps (in order)
 
-1. **Expand Pons cohort to ≥800 aged launches** with `--era-prefix pons` (required now that InstantLaunch is stamped into the same file).
-2. **Horizon executable labels** — depth/sellability at T+1h/6h/24h, not only launch-block veto enrichment.
-3. **V4 InstantLaunch path** — PoolManager / poolId swap + liquidity reads; separate era stratum.
-4. **V2 owner-powers + V4 deployer rug lineage** still unimplemented.
-5. Calibrate scorecard weights on **dev only**; re-evaluate promotion across ≥2 weeks.
+1. **Horizon executable labels** — depth/sellability at T+1h/6h/24h, not only launch-block veto enrichment.
+2. **V4 InstantLaunch path** — PoolManager / poolId swap + liquidity reads; separate era stratum.
+3. **V2 owner-powers + V4 deployer rug lineage** still unimplemented.
+4. Calibrate scorecard weights on **dev only** (creator prior + depth/sellability); keep val frozen.
+5. Re-evaluate promotion across ≥2 distinct weeks / eras.
 
 ## How to reproduce
 
