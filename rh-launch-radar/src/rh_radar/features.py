@@ -81,6 +81,12 @@ def main() -> None:
     parser.add_argument("--min-block", type=int, default=0)
     parser.add_argument("--offset", type=int, default=0, help="Skip this many newest before taking limit")
     parser.add_argument(
+        "--era-prefix",
+        type=str,
+        default="pons",
+        help="Only include mechanism_era starting with this prefix (empty = all). Default pons avoids v4 poolIds.",
+    )
+    parser.add_argument(
         "--only-offsets",
         type=str,
         default="",
@@ -97,6 +103,8 @@ def main() -> None:
 
     rows = [json.loads(line) for line in LAUNCHES.read_text().splitlines() if line.strip()]
     rows = [r for r in rows if r.get("first_liq_ts") and r["first_liq_block"] >= args.min_block]
+    if args.era_prefix:
+        rows = [r for r in rows if str(r.get("mechanism_era") or "").startswith(args.era_prefix)]
     rows.sort(key=lambda r: r["first_liq_block"])
     priors = build_creator_priors(rows)
     if args.limit:

@@ -152,7 +152,7 @@ def main() -> None:
             row["label"] = row["executable_winner_proxy"]
 
     feats.sort(key=lambda r: r["first_liq_block"])
-    if len(feats) < 40:
+    if len(feats) < 25:
         raise SystemExit(f"Need more labeled feature rows after filters; have {len(feats)}")
 
     split = int(len(feats) * args.dev_fraction)

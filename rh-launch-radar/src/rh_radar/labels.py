@@ -56,6 +56,12 @@ def main() -> None:
     parser.add_argument("--limit", type=int, default=400)
     parser.add_argument("--offset", type=int, default=0)
     parser.add_argument(
+        "--era-prefix",
+        type=str,
+        default="pons",
+        help="Only include mechanism_era starting with this prefix (empty = all). Default pons avoids v4 poolIds.",
+    )
+    parser.add_argument(
         "--only-horizons",
         type=str,
         default="",
@@ -74,6 +80,8 @@ def main() -> None:
 
     launches = [json.loads(line) for line in LAUNCHES.read_text().splitlines() if line.strip()]
     launches = [r for r in launches if r.get("first_liq_ts")]
+    if args.era_prefix:
+        launches = [r for r in launches if str(r.get("mechanism_era") or "").startswith(args.era_prefix)]
     launches.sort(key=lambda r: r["first_liq_block"])
     if args.limit:
         end = len(launches) - args.offset if args.offset else len(launches)
@@ -83,9 +91,9 @@ def main() -> None:
         sample = launches
 
     # Need enough post-launch history for 24h label at minimum.
-    now_ts = max(r["first_liq_ts"] for r in launches)
+    now_ts = max(r["first_liq_ts"] for r in launches) if launches else 0
     sample = [r for r in sample if r["first_liq_ts"] + 86400 <= now_ts]
-    print(f"[labels] sample_with_24h_history={len(sample)}")
+    print(f"[labels] era_prefix={args.era_prefix!r} sample_with_24h_history={len(sample)}")
 
     LABELS.parent.mkdir(parents=True, exist_ok=True)
     tmp = LABELS.with_suffix(".tmp")

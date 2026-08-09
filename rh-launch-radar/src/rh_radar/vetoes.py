@@ -205,6 +205,12 @@ def main() -> None:
     parser.add_argument("--floor-usd", type=float, default=1000.0)
     parser.add_argument("--eth-usd", type=float, default=0.0, help="0 = fetch from Blockscout stats")
     parser.add_argument("--skip-heavy", action="store_true", help="Skip V6/V7/V8 eth_call/holders (fast structural only)")
+    parser.add_argument(
+        "--era-prefix",
+        type=str,
+        default="pons",
+        help="Only include mechanism_era starting with this prefix (empty = all). Default pons avoids v4 poolIds.",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     cfg = load_config()
@@ -217,11 +223,16 @@ def main() -> None:
 
     rows = [json.loads(line) for line in LAUNCHES.read_text().splitlines() if line.strip()]
     rows = [r for r in rows if r.get("first_liq_ts")]
+    if args.era_prefix:
+        rows = [r for r in rows if str(r.get("mechanism_era") or "").startswith(args.era_prefix)]
     rows.sort(key=lambda r: r["first_liq_block"])
     end = len(rows) - args.offset if args.offset else len(rows)
     start = max(0, end - args.limit)
     sample = rows[start:end]
-    print(f"[vetoes] stamped={len(rows)} sample={len(sample)} eth_usd={eth_usd} floor_usd={args.floor_usd}")
+    print(
+        f"[vetoes] era_prefix={args.era_prefix!r} stamped={len(rows)} "
+        f"sample={len(sample)} eth_usd={eth_usd} floor_usd={args.floor_usd}"
+    )
     burst_ids = build_clone_burst_ids(rows)
     print(f"[vetoes] clone_burst_flagged={len(burst_ids)}")
 
