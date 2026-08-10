@@ -73,6 +73,8 @@ def label_one(
     *,
     eth_usd: float,
     block_time: float,
+    checkpoints_sec: tuple[int, ...] = RUG_CHECKPOINTS_SEC,
+    exit_offset_sec: int = EXIT_OFFSET_SEC,
 ) -> dict[str, Any]:
     quote = row["quote"]
     token = row["token"]
@@ -82,7 +84,7 @@ def label_one(
     quote_in = _quote_in_wei(quote, cfg, eth_usd, NOTIONAL_USD)
 
     entry_ts = first_ts + ENTRY_OFFSET_SEC
-    exit_ts = first_ts + EXIT_OFFSET_SEC
+    exit_ts = first_ts + exit_offset_sec
     entry_block = _estimate_block(first_block, first_ts, entry_ts, block_time)
     exit_block = _estimate_block(first_block, first_ts, exit_ts, block_time)
 
@@ -96,12 +98,12 @@ def label_one(
         "first_liq_block": first_block,
         "first_liq_ts": first_ts,
         "entry_offset_sec": ENTRY_OFFSET_SEC,
-        "exit_offset_sec": EXIT_OFFSET_SEC,
+        "exit_offset_sec": exit_offset_sec,
         "entry_block": entry_block,
         "exit_block": exit_block,
         "notional_usd": NOTIONAL_USD,
         "eth_usd": eth_usd,
-        "threshold_version": "honest-v1",
+        "threshold_version": "honest-v1" if exit_offset_sec >= EXIT_OFFSET_SEC else "honest-v1-fast1h",
         "quote_in_wei": quote_in,
         "entry_ok": False,
         "exit_ok": False,
@@ -153,7 +155,7 @@ def label_one(
 
     exit_state = None
     exit_tvl = 0
-    for h in RUG_CHECKPOINTS_SEC:
+    for h in checkpoints_sec:
         block = _estimate_block(first_block, first_ts, first_ts + h, block_time)
         cp: dict[str, Any] = {"horizon_sec": h, "block": block}
         try:
@@ -177,7 +179,7 @@ def label_one(
             if reasons:
                 out["rug"] = True
                 out["rug_reasons"].extend([f"h{h}:{r}" for r in reasons])
-            if h == EXIT_OFFSET_SEC:
+            if h == exit_offset_sec:
                 exit_state = state
                 exit_tvl = tvl
         except Exception as exc:
@@ -194,6 +196,7 @@ def label_one(
             out["rug"] = True
             out["rug_reasons"].append(f"exit_state_error:{type(exc).__name__}")
             out["rt_log_return_250"] = float("-inf")
+            attach_short_horizon_exits(out)
             return out
 
     exit_mark = mark_quote_per_token(exit_state, quote, token)
@@ -220,8 +223,10 @@ def label_one(
         out["rt_log_return_250"] = float("-inf")
 
     out["executable_exit"] = bool(final["gross_multiple"] >= EXIT_MIN_RECOVERY)
+    # Hold-to-exit winner only meaningful on the full 24h exit path.
     out["executable_winner_250"] = bool(
-        (not out["rug"])
+        exit_offset_sec >= EXIT_OFFSET_SEC
+        and (not out["rug"])
         and out["entry_ok"]
         and spend >= quote_in
         and out["executable_exit"]
@@ -279,6 +284,11 @@ def main() -> None:
         action="store_true",
         help="Offline: rewrite honest_outcomes with 1h/6h fields from rug_checkpoints",
     )
+    parser.add_argument(
+        "--fast-1h",
+        action="store_true",
+        help="Only label entry + T+1h exit/rug (skip 6h/24h RPC). For EV expansion.",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     if args.derive_short_exits_only:
@@ -310,8 +320,10 @@ def main() -> None:
     end = len(rows) - args.offset if args.offset else len(rows)
     start = max(0, end - args.limit)
     sample = rows[start:end]
+    checkpoints = (3600,) if args.fast_1h else RUG_CHECKPOINTS_SEC
+    exit_offset = 3600 if args.fast_1h else EXIT_OFFSET_SEC
     now_ts = max(r["first_liq_ts"] for r in rows)
-    sample = [r for r in sample if r["first_liq_ts"] + EXIT_OFFSET_SEC <= now_ts]
+    sample = [r for r in sample if r["first_liq_ts"] + exit_offset <= now_ts]
     if args.shard_count < 1 or args.shard_index < 0 or args.shard_index >= args.shard_count:
         raise SystemExit("invalid shard-index/shard-count")
     if args.shard_count > 1:
@@ -320,7 +332,7 @@ def main() -> None:
     print(
         f"[honest] era_prefix={args.era_prefix!r} sample={len(sample)} "
         f"shard={args.shard_index}/{args.shard_count} eth_usd={eth_usd} "
-        f"notional_usd={NOTIONAL_USD} out={out_path}"
+        f"notional_usd={NOTIONAL_USD} fast_1h={args.fast_1h} out={out_path}"
     )
 
     done: set[str] = set()
@@ -344,7 +356,14 @@ def main() -> None:
         for i, row in enumerate(sample):
             if row["launch_id"] in done:
                 continue
-            out = label_one(row, cfg, eth_usd=eth_usd, block_time=block_time)
+            out = label_one(
+                row,
+                cfg,
+                eth_usd=eth_usd,
+                block_time=block_time,
+                checkpoints_sec=checkpoints,
+                exit_offset_sec=exit_offset,
+            )
             # JSON-safe -inf
             if out["rt_log_return_250"] == float("-inf"):
                 out["rt_log_return_250"] = None
