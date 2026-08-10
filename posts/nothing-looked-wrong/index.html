@@ -248,6 +248,15 @@
         <div class="article-body">
 
             <p class="dropcap">This is the plan I would hand another agent.</p>
+            <div style="border:1px solid var(--ox);border-left-width:4px;border-radius:4px;padding:18px 20px;margin:28px 0;background:var(--paper-2);">
+                <p style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ox);font-weight:600;margin:0 0 10px;">Read before you use any of this</p>
+                <p style="margin:0 0 12px;"><strong>Not financial advice. I am not a licensed financial advisor, and nothing here is a recommendation to buy or sell anything.</strong> This is a personal research write-up &mdash; me showing my work, not telling you to run it.</p>
+                <p style="margin:0 0 12px;"><strong>This strategy is not statistically established.</strong> It was selected by searching roughly 820 configurations on 2.5 years of data with <em>no held-out test period</em>. Its measured advantage over doing nothing is about one standard error. In plain terms: <strong>the edge may not exist at all.</strong> A result that survives a search that large is exactly what randomness looks like.</p>
+                <p style="margin:0 0 12px;"><strong>The sample contains one crisis.</strong> April 2025 is the only volatility episode in the window. Any claim about how this behaves in a crash rests on a sample size of one, and I explain later in this post how I fitted to it without meaning to.</p>
+                <p style="margin:0 0 12px;"><strong>You can lose money, including on days the strategy &ldquo;works.&rdquo;</strong> Defined risk means the maximum loss is <em>known</em> before you enter &mdash; not that it is small. The worst modelled day loses the full risk budget, and selling options means many small wins punctuated by occasional large losses. That shape is psychologically harder to hold than the numbers suggest.</p>
+                <p style="margin:0 0 12px;"><strong>A backtest is not live trading.</strong> Mine does not enforce liquidity limits in the headline results, does not model early assignment, and assumes positions are held to expiry &mdash; an assumption your broker may override. Real fills, real slippage, and real outages all subtract.</p>
+                <p style="margin:0;"><strong>Do your own research.</strong> Every number below is stated precisely so you can reproduce it and prove me wrong &mdash; that is the point of publishing it. Do not take any figure here on trust. I got ten things wrong that I know of, two of which I only found because someone else looked. Assume there is an eleventh, and paper-trade long before you risk anything you would miss.</p>
+            </div>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
