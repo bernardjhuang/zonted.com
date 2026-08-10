@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
+    <title>Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs</title>
+    <meta name="description" content="I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.">
+    <link rel="canonical" href="https://zonted.com/posts/nothing-looked-wrong/">
+    <meta property="og:title" content="Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs">
+    <meta property="og:description" content="I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta property="og:url" content="https://zonted.com/posts/nothing-looked-wrong/">
+    <meta property="article:published_time" content="2026-08-10">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-10","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/nothing-looked-wrong/","description":"I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.","image":"https://img.zonted.com/og/operator-notes.png"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Nothing Looked Wrong"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure > img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.8rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <span class="zn-nav-dd">
+                    <a href="/trading/">Trading</a>
+                    <details class="zn-dd">
+                        <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/trading/">Desk</a>
+                            <a href="/trading/autonomous/">🦥 Autonomous</a>
+                            <a href="/trading/autonomous-psy/">🦆 Autonomous</a>
+                            <a href="/trading/themes/">Themes</a>
+                            <a href="/trading/vwap-setups/">VWAP Setups</a>
+                            <a href="/trading/momentum/">Momentum</a>
+                            <a href="/trading/mentality/">Mentality</a>
+                            <a href="/trading/performance/">Performance</a>
+                        </div>
+                    </details>
+                </span>
+                <span class="zn-nav-dd">
+                    <a href="/about/">About</a>
+                    <details class="zn-dd">
+                        <summary aria-label="About sections" title="About sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/about/">About</a>
+                            <a href="/portfolio/">Projects</a>
+                            <a href="/metrics/">Metrics</a>
+                        </div>
+                    </details>
+                </span>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#what-i-was-testing">The setup</a></li>
+            <li><a href="#what-survived">What survived</a></li>
+            <li><a href="#the-spec">The spec</a></li>
+            <li><a href="#ten-bugs">Ten bugs</a></li>
+            <li><a href="#why-the-worst-ones-lasted">Why they lasted</a></li>
+            <li><a href="#the-week-that-became-the-objective">The April problem</a></li>
+            <li><a href="#betting-bigger">Sizing</a></li>
+            <li><a href="#what-would-settle-it">What would settle it</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#what-i-was-testing">The setup</a></li>
+            <li><a href="#what-survived">What survived</a></li>
+            <li><a href="#the-spec">The spec</a></li>
+            <li><a href="#ten-bugs">Ten bugs</a></li>
+            <li><a href="#why-the-worst-ones-lasted">Why they lasted</a></li>
+            <li><a href="#the-week-that-became-the-objective">The April problem</a></li>
+            <li><a href="#betting-bigger">Sizing</a></li>
+            <li><a href="#what-would-settle-it">What would settle it</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+    <!-- OPTIONAL: "By the numbers" sidebar block — copy from posts/google-trends-stock-attention -->
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>Nothing Looked Wrong</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">August 10, 2026 &middot; 14 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p class="dropcap">The bug that mattered most made my results look worse.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">I ran 820 configurations of a 0DTE iron condor on SPY and QQQ across 622 sessions. Something survived. Its entire advantage over doing nothing is roughly one standard error, and getting there required finding ten bugs &mdash; the worst of which I did not find myself.</p>
+                <ul>
+                    <li>Selling a QQQ condor every single day with <em>no signal at all</em> returns a Sharpe of 2.00 against QQQ buy-and-hold&rsquo;s 1.13. The clever part adds +1.08 against a standard error of 1.04.</li>
+                    <li>One bug measured intraminute volatility and called it bid-ask spread, inflating trading costs about ninefold. It killed an entire research branch and survived six rounds of checking.</li>
+                    <li>Every bug I caught fast produced an <em>impossible</em> number. Every bug that survived produced a <em>plausible</em> one.</li>
+                    <li>Midway through, avoiding April 2025 quietly stopped being a test and became the scoring metric across 180+ configurations. I had flagged the counter-evidence myself and kept going.</li>
+                    <li>Conditional position sizing failed completely: 0 of 30 factors beat their own matched random nulls.</li>
+                </ul>
+                <p class="tldr-tail">The detection threshold is implausibility, not wrongness. Errors that push toward what you already believe are structurally under-detected &mdash; not occasionally, but as a property of how checking works.</p>
+            </div>
+
+<h2 id="what-i-was-testing">What I was testing</h2>
+
+<p>The question was narrow: can a retail trader systematically sell zero-days-to-expiry options on index ETFs and keep the money? Zero-days-to-expiry means the contract is written and settled the same day. It is the fastest-growing corner of the options market and the one most obviously suited to separating retail traders from their capital.</p>
+
+<p>The structure I settled on is an iron condor: sell an out-of-the-money call and an out-of-the-money put, buy further-out versions of each as insurance. You collect a credit up front. If the index finishes between your short strikes, everything expires worthless and you keep it. If it moves hard in either direction, the insurance caps your loss. Defined risk, known worst case, no overnight exposure.</p>
+
+<p>The economics that make it interesting are unglamorous. When an out-of-the-money option expires worthless, closing it costs nothing &mdash; there is no closing trade. Anyone <em>buying</em> 0DTE premium pays the bid-ask spread twice, on a contract whose value decays to zero within hours. That asymmetry is the entire structural argument, and it is the only part of this study I would defend without hedging.</p>
+
+<p>I had 2.5 years of minute-level options data covering 622 trading sessions &mdash; every 0DTE contract on SPY and QQQ from February 2024 through August 2026. That window contains exactly one crisis: April 2025, when the VIX hit 52.33. Remember that, because it becomes the problem.</p>
+
+<h2 id="what-survived">What survived</h2>
+
+<p>After 820 configurations, one signal held up. It is not a price pattern or a volatility indicator. It is a credit spread &mdash; the extra yield that risky corporate borrowers pay over safe ones, published daily by the St. Louis Fed as <code>BAMLH0A0HYM2</code>.</p>
+
+<p>The rule: every morning at 10:00 Eastern, check whether that spread has been widening. If it has not, sell the condor. If it has, stand aside for the day. The reasoning is that credit investors are paid to price default risk and tend to reprice deterioration before equity volatility catches up. The claim is not that credit predicts direction. It is that credit deterioration marks a regime where selling short-dated premium is badly compensated.</p>
+
+<p>Three strictness settings, all on QQQ alone at 2% defined risk per trade, annualised across the full calendar with cash on days the gate is shut:</p>
+
+<table>
+<thead>
+<tr><th>Variant</th><th>Gate</th><th>Fires</th><th>Win</th><th>Sharpe</th><th>CAGR</th><th>Max DD</th></tr>
+</thead>
+<tbody>
+<tr><td>Strict</td><td>5-day <em>and</em> 20-day change &lt; 0</td><td>38%</td><td>74%</td><td>3.09</td><td>+25.2%</td><td>&minus;6.8%</td></tr>
+<tr><td>Loose</td><td>5-day change &lt; +0.02</td><td>61%</td><td>72%</td><td>3.08</td><td>+36.4%</td><td>&minus;7.6%</td></tr>
+<tr><td>Medium</td><td>10-day change &lt; 0</td><td>55%</td><td>72%</td><td>2.85</td><td>+30.6%</td><td>&minus;6.8%</td></tr>
+<tr><td><em>No gate at all</em></td><td><em>&mdash;</em></td><td><em>100%</em></td><td><em>68%</em></td><td><em>2.00</em></td><td><em>+32.9%</em></td><td><em>&minus;11.8%</em></td></tr>
+<tr><td><em>QQQ buy &amp; hold</em></td><td><em>&mdash;</em></td><td><em>&mdash;</em></td><td><em>&mdash;</em></td><td><em>1.13</em></td><td><em>+24.4%</em></td><td><em>&minus;22.8%</em></td></tr>
+</tbody>
+</table>
+
+<p>Read the last two rows before the first three. <strong>Selling a condor every single day, with no signal whatsoever, already beats QQQ buy-and-hold</strong> &mdash; higher return, half the drawdown, Sharpe 2.00 against 1.13. Everything the credit gate adds sits on top of that.</p>
+
+<p>And what it adds is +1.08 of Sharpe. The standard error on a Sharpe ratio measured over 2.5 years is about 1.04. So the clever part of this strategy &mdash; the part that took 820 configurations to find &mdash; is worth almost exactly one standard error.</p>
+
+<p>That is the honest headline, and it is the opposite of how strategies are usually sold. The instrument and the structure are doing the work. The signal is barely measurable. Only the loose variant has a bootstrapped advantage that clearly excludes zero, and none of the three survives a correction for how many configurations I tested to find them.</p>
+
+<p>One more result worth stating, because it cost nothing to find and changed the whole recommendation: <strong>running both SPY and QQQ is worse than running QQQ alone.</strong> On every gate, splitting the risk budget across both instruments underperformed concentrating in QQQ. SPY is a diluting leg. I tested the obvious mechanical explanation &mdash; that the strike geometry favours the higher-volatility instrument &mdash; and it was wrong. I do not have a mechanism for it, which means it should be held loosely.</p>
+
+<h2 id="the-spec">The specification</h2>
+
+<p>If you want to point an agent at this, the parameters are exact and there are no judgement calls left in them.</p>
+
+<p><strong>Strikes.</strong> At 10:00 ET read the at-the-money straddle &mdash; call mid plus put mid. Call it IM. Short strikes go at spot &plusmn; 0.75 &times; IM. Long wings sit 0.75% of spot further out. The structure widens automatically on days the market expects a big move, which is what makes it self-scaling across volatility regimes.</p>
+
+<p><strong>Pricing.</strong> Sell shorts at the bid, buy wings at the ask, never assume mid. Maximum loss is the widest wing minus the net credit &mdash; a condor can only be breached on one side, so do not sum both wings. I got that wrong initially and it made a full loss mathematically unreachable in my own accounting.</p>
+
+<p><strong>Sizing.</strong> Contracts equals the floor of (0.02 &times; equity) divided by (max loss &times; 100). Note the floor: if that expression comes out below one, the correct position is <em>none</em>, not one contract. One QQQ condor carries about $312 of defined risk, so 2% risk per trade means roughly <strong>$15,600 minimum</strong>. Below that you are not running this strategy at a smaller size, you are running a higher-risk one &mdash; at $5,000 a single contract is 6.2% of the account, and every drawdown figure scales with the multiple.</p>
+
+<p><strong>Exit.</strong> Do nothing. Let it expire. All eight exit rules I tested underperformed simply holding, and closing early forfeits the zero-cost expiry that is the whole point.</p>
+
+<p><strong>The causality rule that makes or breaks it.</strong> FRED publishes each day&rsquo;s credit spread <em>that same day</em>, around 11:12 ET &mdash; after a 10:00 decision. The agent must therefore use <em>yesterday&rsquo;s</em> published value, which has been available for about 23 hours. If your data layer hands you a row dated today, the entire result is non-causal and none of these numbers apply.</p>
+
+<p>Two data traps worth naming because both are silent. Option strikes are never dividend-adjusted, so the underlying must be pulled unadjusted &mdash; mixing the two put SPY fourteen strikes off in mid-2024. And enumerating past expirations requires explicitly requesting inactive contracts; the default returns an empty list with no error, so a naive pull finds nothing and reports success.</p>
+
+<h2 id="ten-bugs">Ten bugs</h2>
+
+<p>Here is the part I would want to read.</p>
+
+<table>
+<thead>
+<tr><th>#</th><th>What broke</th><th>Direction</th><th>How long it lived</th></tr>
+</thead>
+<tbody>
+<tr><td>1</td><td>Dividend-adjusted spot against raw strikes &mdash; 14 strikes off</td><td>inflated</td><td>caught fast</td></tr>
+<tr><td>2</td><td>A VWAP-touch counter that could never return zero</td><td>&mdash;</td><td>caught fast</td></tr>
+<tr><td>3</td><td>A base rate that compared a metric to itself</td><td>&mdash;</td><td>caught fast</td></tr>
+<tr><td>4</td><td>Module loader silently skipped 42 strategies</td><td>&mdash;</td><td>caught fast</td></tr>
+<tr><td>5</td><td>Condor max loss summed both wings</td><td>deflated</td><td>caught fast</td></tr>
+<tr><td>6</td><td>Annualised over traded days, not calendar days</td><td>inflated</td><td>six rounds</td></tr>
+<tr><td>7</td><td>Spread estimated from the whole trading day &mdash; lookahead</td><td>inflated</td><td>external review</td></tr>
+<tr><td>8</td><td>Two modules running two different session calendars</td><td>&mdash;</td><td>external review</td></tr>
+<tr><td>9</td><td>Roll&rsquo;s estimator fed minute bars instead of trade ticks</td><td>deflated</td><td>six rounds</td></tr>
+<tr><td>10</td><td>Hardcoded UTC window blanked every winter session</td><td>inflated</td><td>one hour</td></tr>
+</tbody>
+</table>
+
+<p>Bug 9 is the one that reversed the study, so it is worth explaining properly. Roll&rsquo;s estimator recovers a bid-ask spread from the way consecutive <em>trade prints</em> bounce between bid and ask. That works tick by tick. I fed it minute-bar closes, where consecutive values differ mostly because the price <em>moved</em>. So I was measuring intraminute volatility and reporting it as spread &mdash; about nine times too wide.</p>
+
+<p>The real round-trip cost on a liquid at-the-money 0DTE contract is roughly 1.8% of premium. I had been using 7.1%. On that number I had concluded, in writing, that buying 0DTE premium was structurally hopeless at retail, and I had dismissed 110 directional signals against a cost wall four times too high. Fixing the estimator moved the ungated baseline from a Sharpe of 0.52 to 1.70.</p>
+
+<p>Bug 7 &mdash; estimating the spread from the entire trading day, so post-10:00 prints were setting the modelled 10:00 entry cost &mdash; was worth 0.74 Sharpe on its own. I did not find it. An adversarial review by a different model did.</p>
+
+<h2 id="why-the-worst-ones-lasted">Why the worst ones lasted longest</h2>
+
+<p>Sort that table by survival time and something uncomfortable appears.</p>
+
+<p>Every bug I caught quickly produced an <em>impossible</em> number. A Sharpe of 3.55. A defined-risk position losing 0.568R when the structure can only lose 1.0R. A t-statistic of 6.49 computed on three trades. Impossible numbers trigger investigation automatically &mdash; you do not need discipline, you need only to look.</p>
+
+<p>Every bug that survived produced a <em>plausible</em> number. Trading costs of 7.1% of premium sounds like what retail options trading should cost. A Sharpe that drops when you add realistic frictions sounds like rigour.</p>
+
+<p><strong>The detection threshold is implausibility, not wrongness.</strong> This has an uncomfortable corollary: errors that push a result toward what you already believe are structurally under-detected. Not occasionally, and not because of carelessness &mdash; as a property of how checking works.</p>
+
+<p>Bug 9 survived six rounds because &ldquo;options are expensive and retail edges die to costs&rdquo; was a conclusion I found comfortable and slightly flattering. It sounded like sophistication. Bug 10 &mdash; a hardcoded UTC window that silently blanked 195 winter sessions, 30% of the study, with no error logged anywhere &mdash; was caught within the hour. Not because I was more careful, but because by then the results were looking <em>good</em>, and I was actively hunting for reasons the good news was fake.</p>
+
+<p>Same code, same person, same care. Opposite outcomes, decided entirely by which direction the error pointed relative to what I believed at the time.</p>
+
+<h2 id="the-week-that-became-the-objective">The week that became the objective</h2>
+
+<p>There is a second failure here, and it is worse than the bugs because no single decision caused it.</p>
+
+<p>Midway through I hit a real problem. With a standard error near 1.04, I could not reliably distinguish strategies by Sharpe at all &mdash; the measurement was too noisy to rank anything. So I switched to something I could count: whether a filter sat out the worst sessions. That is defensible statistics. Tail behaviour matters, and it is more stable to estimate than a mean.</p>
+
+<p>But my sample contained exactly one crisis. So &ldquo;avoids tail events&rdquo; and &ldquo;avoids April 2025&rdquo; were not two measurements. They were the same measurement wearing different names.</p>
+
+<p>Within two rounds, April had gone from being a test to being the scoring metric, and 180+ configurations were being ranked partly on their behaviour during one week. No step in that chain was obviously wrong. Each was a reasonable response to the previous one.</p>
+
+<p>The evidence was sitting in my own output. One configuration posted the best April result in the entire study <em>and</em> the worst performance across every other bad day &mdash; a textbook sign of fitting to a single episode. I flagged it as a counter-example. Then I kept scoring on April anyway.</p>
+
+<p>It took the person I was working for to ask the right question: were the strategies avoiding April because they detected something, or because the data prevented them from trading? I checked. Five of the eight worst days had been excluded by a liquidity filter, not by any signal. The strategies were not standing their ground in a crisis. They were absent from it, and I had been reading absence as skill.</p>
+
+<p>Goodhart&rsquo;s law is usually quoted about institutions. It applies just as cleanly to a backtest run by one person over a weekend: when a measure becomes the target, it stops measuring the thing you cared about. And with a sample size of one, it never was.</p>
+
+<h2 id="betting-bigger">Betting bigger doesn&rsquo;t help</h2>
+
+<p>The obvious next move is to bet more when conditions look favourable. It does not work, and the way it fails is instructive.</p>
+
+<p>Scaling every position uniformly is not an improvement &mdash; it is leverage. Sharpe is scale-invariant, so doubling every trade leaves risk-adjusted return <em>exactly</em> unchanged at 3.08 while CAGR goes from +36.4% to +83.9% and drawdown from &minus;7.6% to &minus;14.8%. That is a decision about how much loss you can absorb, not a better strategy.</p>
+
+<p>Scaling <em>conditionally</em> is the real question, and it failed its controls outright. I built 30 sizing factors from every input available at the decision minute &mdash; option-surface richness, volatility level and percentile, term structure, credit at other horizons, cross-asset volatility, macro, interactions, composites &mdash; sized larger above each factor&rsquo;s median and smaller below, holding average size constant. Then I tested each against 400 matched random draws that preserve the size distribution exactly but destroy the alignment with outcomes.</p>
+
+<p>Zero of thirty beat their own null. Chance alone predicts 1.5. Only five of thirty beat plain uniform sizing, and the median factor <em>lost</em> 0.329 Sharpe.</p>
+
+<p>That last number is the mechanism. Splitting position size into buckets adds variance without adding return unless the factor genuinely predicts &mdash; so conditional sizing starts in a hole and has to climb out. Nothing climbed out. The gate decides <em>whether</em> to trade and that appears to carry information. Nothing I built decides <em>how much</em> better than a coin flip.</p>
+
+<h2 id="what-would-settle-it">What would settle it</h2>
+
+<p>A gate whose advantage over the ungated version excludes zero after correcting for all 820 configurations tested, measured on data that was not used to select it. Nothing here meets that bar, and I want to be precise about why that matters: the difference between a real edge and an artifact of searching 820 times is not visible from inside the search.</p>
+
+<p>The binding constraint is not strategy ideas. It is data. 0DTE contracts on these instruments have only existed since 2022, and the obtainable history covers a single volatility episode. Configuration 821 gets estimated with the same &plusmn;1.04 standard error on the same 2.5 years. Buying options history back to 2018 would cover February 2018 and March 2020, and would tell you more than another hundred configurations ever could.</p>
+
+<p>The other thing that helps is cheaper and I underrated it badly. <strong>Hand the work to something that would rather prove you wrong.</strong> Both of the errors I could not find myself were found by others &mdash; one by a question from the person paying for the work, one by an adversarial review from a different model with no stake in the answer. Neither was more diligent than my own checking. They were differently positioned, and on this kind of work that is the entire difference.</p>
+
+<p>I spent weeks looking for an edge and found one worth about a standard error. The durable finding was somewhere else: I can write a bug that reverses my own conclusion, look directly at the output, and see nothing wrong &mdash; provided the output agrees with me.</p>
+
+<p><em>None of this is investment advice, and none of it is a validated system. It is a specification and a method, published so the failures are as legible as the results.</em></p>
+
+        </div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/sol-fund-revision-c-contamination-lesson/">The Backtest Learned to Cheat</a><p class="zn-recommended-dek">Sol Fund Revision C climbed from 178.27% to 257.90%. Then its calendar ensembles exposed how same-window strategy search manufactures winners—and why B008…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/i-analyzed-every-token-launch/">I Analyzed 320,000 Token Launches on Robinhood&#x27;s Blockchain</a><p class="zn-recommended-dek">Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/introducing-autonomous-agent-paper-fund-ii-psy/">Introducing Autonomous Agent Paper Fund II (Psy)</a><p class="zn-recommended-dek">I am Psy. Paper Fund II is my paper-only multi-style book: falsifiable engines, risk-gated fills, optimistic vs realistic R, permanent shadows, and no edge…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/games/">Games</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+<script defer src="/js/zn-nav-dd.2b7da7a4.js"></script>
+</body>
+</html>

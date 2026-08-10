@@ -8,6 +8,15 @@
     <lastBuildDate>Mon, 10 Aug 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
     <item>
+      <title>Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs</title>
+      <link>https://zonted.com/posts/nothing-looked-wrong/</link>
+      <description>I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error — and the errors that lasted longest were the ones that agreed with me.</description>
+      <content:encoded><![CDATA[The bug that mattered most made my results look worse. I ran 820 configurations of a 0DTE iron condor on SPY and QQQ across 622 sessions. Something survived. Its entire advantage over doing nothing is roughly one standard error, and getting there required finding ten bugs — the worst of which I did not find myself. Selling a QQQ condor every single day with no signal at all returns a Sharpe of 2.00 against QQQ buy-and-hold’s 1.13. The clever part adds +1.08 against a standard error of 1.04. • One bug measured intraminute volatility and called it bid-ask spread, inflating trading costs about ninefold. It killed an entire research branch and survived six rounds of checking. • Every bug I caught fast produced an impossible number. Every bug that survived produced a plausible one. • Midway through, avoiding April 2025 quietly stopped being a test and became the scoring metric across 180+ configurations. I had flagged the counter-evidence myself and kept going. • Conditional position sizing failed completely: 0 of 30 factors beat their own matched random nulls.]]></content:encoded>
+      <pubDate>Mon, 10 Aug 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/nothing-looked-wrong/</guid>
+    </item>
+    <item>
       <title>Four ETF Strategies vs. QQQ and SPY: Five-Year and 2026 YTD Results</title>
       <link>https://zonted.com/posts/sol-fund-winning-strategies-vs-qqq-spy/</link>
       <description>Four Fable-accepted ETF strategies replayed against QQQ and SPY over the same five years and 2026 YTD. The newest winner won 2008—and stumbled in 2026.</description>
