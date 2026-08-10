@@ -223,6 +223,11 @@ def main() -> None:
         default=600,
         help="Seconds after first liquidity for --heavy-at decision",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Keep existing veto rows; skip launch_ids already present",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     cfg = load_config()
@@ -250,11 +255,27 @@ def main() -> None:
     burst_ids = build_clone_burst_ids(rows)
     print(f"[vetoes] clone_burst_flagged={len(burst_ids)}")
 
+    existing: list[dict[str, Any]] = []
+    done: set[str] = set()
+    if args.resume and VETOES.exists():
+        for line in VETOES.read_text().splitlines():
+            if not line.strip():
+                continue
+            row = json.loads(line)
+            existing.append(row)
+            done.add(row["launch_id"])
+        print(f"[vetoes] resume existing={len(existing)}")
+
     VETOES.parent.mkdir(parents=True, exist_ok=True)
     tmp = VETOES.with_suffix(".tmp")
-    survivors = killed = 0
+    survivors = sum(1 for r in existing if not r.get("vetoed"))
+    killed = sum(1 for r in existing if r.get("vetoed"))
     with tmp.open("w") as handle:
+        for row in existing:
+            handle.write(json.dumps(row, separators=(",", ":"), sort_keys=True) + "\n")
         for i, row in enumerate(sample):
+            if row["launch_id"] in done:
+                continue
             reasons: list[str] = []
             details: dict[str, Any] = {"eth_usd": eth_usd, "heavy_at": args.heavy_at}
             for gate in (
@@ -316,10 +337,14 @@ def main() -> None:
             handle.write(json.dumps(out, separators=(",", ":"), sort_keys=True) + "\n")
             survivors += int(not reasons)
             killed += int(bool(reasons))
-            if (i + 1) % 25 == 0:
-                print(f"[vetoes] {i+1}/{len(sample)} survivors={survivors} killed={killed} credits={credits_remaining()}")
+            n_new = survivors + killed - len(existing)
+            if n_new % 25 == 0 or n_new == 1:
+                print(
+                    f"[vetoes] new={n_new}/{len(sample)-len(done)} "
+                    f"survivors={survivors} killed={killed} credits={credits_remaining()}"
+                )
     tmp.replace(VETOES)
-    print(f"[done] sample={len(sample)} survivors={survivors} killed={killed} -> {VETOES}")
+    print(f"[done] sample={len(sample)} kept={len(existing)} survivors={survivors} killed={killed} -> {VETOES}")
 
 
 if __name__ == "__main__":

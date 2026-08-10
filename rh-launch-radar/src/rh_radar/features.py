@@ -92,6 +92,11 @@ def main() -> None:
         default="",
         help="Comma-separated decision offsets in seconds (default: all configured)",
     )
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="Keep existing feature rows; skip launch_id+decision_offset already present",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     cfg = load_config()
@@ -115,13 +120,28 @@ def main() -> None:
         sample = rows
     print(f"[features] sample={len(sample)} total_stamped={len(rows)}")
 
+    existing: list[dict[str, Any]] = []
+    done: set[tuple[str, int]] = set()
+    if args.resume and FEATURES.exists():
+        for line in FEATURES.read_text().splitlines():
+            if not line.strip():
+                continue
+            feat = json.loads(line)
+            existing.append(feat)
+            done.add((feat["launch_id"], int(feat["decision_offset_sec"])))
+        print(f"[features] resume existing={len(existing)}")
+
     FEATURES.parent.mkdir(parents=True, exist_ok=True)
     tmp = FEATURES.with_suffix(".tmp")
     written = 0
     with tmp.open("w") as handle:
+        for feat in existing:
+            handle.write(json.dumps(feat, separators=(",", ":"), sort_keys=True) + "\n")
         for i, row in enumerate(sample):
             creator_prior = prior_launch_count(priors, row["creator"], row["first_liq_block"])
             for offset in decision_offsets:
+                if (row["launch_id"], offset) in done:
+                    continue
                 decision_ts = int(row["first_liq_ts"]) + offset
                 decision_block = _estimate_block(row["first_liq_block"], int(row["first_liq_ts"]), decision_ts, block_time)
                 stats = _swap_window_stats(
@@ -154,9 +174,9 @@ def main() -> None:
                 handle.write(json.dumps(feat, separators=(",", ":"), sort_keys=True) + "\n")
                 written += 1
             if (i + 1) % 25 == 0:
-                print(f"[features] {i+1}/{len(sample)} credits={credits_remaining()}")
+                print(f"[features] {i+1}/{len(sample)} new_rows={written} credits={credits_remaining()}")
     tmp.replace(FEATURES)
-    print(f"[done] wrote {written} feature rows -> {FEATURES} credits={credits_remaining()}")
+    print(f"[done] wrote {written} new feature rows (kept {len(existing)}) -> {FEATURES} credits={credits_remaining()}")
 
 
 if __name__ == "__main__":

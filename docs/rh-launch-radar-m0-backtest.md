@@ -218,6 +218,25 @@ Cohort sits on a single UTC day → **hour folds** (14 hours; folds with ≥5 ca
 2. Paper ledger with decision-V7 survivors, top-K/hour by `model_v0`, exit@1h (and optional TP at 1.5×/3× if mark hits earlier).
 3. Lineage-dedupe sample on the 1h-winner hours only (cheap, targeted).
 
+---
+
+## Round F — paper ledger + multi-day expand (in progress)
+
+### Paper ledger (`rh_radar.paper_ledger`)
+
+Same sieve as Round E (`decision_v7` $1k, `model_v0`, K=3/hour, exit@1h), but emits a trade-by-trade JSONL instead of fold-only aggregates. Unlike `ev_backtest`, folds with &lt;5 candidates are still traded.
+
+| Setting | Trades | mean gross@1h | mean-of-fold-means | folds mean&gt;1 | hit≥3× | rug@1h |
+|---|---:|---:|---:|---:|---:|---:|
+| decision_v7 $1k | 38 | 0.74 | 0.70 | 4 / 14 | 2 / 38 | 76% |
+| + `--dedupe-creator` | 38 | 0.74 | 0.70 | 4 / 14 | 2 / 38 | 76% |
+
+Creator dedupe is a no-op on this slice (no repeated creators inside top-K). Equity still underwater: **−26¢ per $1** notional on raw 1h gross.
+
+### Expand labeled window
+
+Pons harvest already spans **2026-08-06 → 08-09** (~6.5k). The Round D/E 800-row sample sits entirely on **2026-08-08**. Next offline EV needs features + honest labels on **offset 1726 / limit 2400** (Aug 7–8). Features/vetoes gained `--resume`; honest already had it.
+
 ## How to reproduce
 
 ```bash
@@ -230,7 +249,12 @@ PYTHONPATH=src python3 -u -m rh_radar.labels --limit 800 --offset 1726 --era-pre
 PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 800 --offset 1726 --era-prefix pons --floor-usd 1000 --heavy-at decision
 bash scripts/run_honest_shards.sh 4 800 1726
 PYTHONPATH=src python3 -u -m rh_radar.ev_backtest --veto-mode decision_v7 --fold-grain hour --k 3
+PYTHONPATH=src python3 -u -m rh_radar.paper_ledger --veto-mode decision_v7 --k 3 --floor-usd 1000
 PYTHONPATH=src python3 -u -m rh_radar.phase0 --label-field executable_winner_250_1h
+# Expand to Aug 7–8 (keeps existing rows):
+PYTHONPATH=src python3 -u -m rh_radar.features --limit 2400 --offset 1726 --era-prefix pons --only-offsets 600 --resume
+PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 2400 --offset 1726 --era-prefix pons --skip-heavy --resume
+# then honest_labels --limit 2400 --offset 1726 --resume (or sharded equivalent without wiping)
 ```
 
 Local artifacts (gitignored): `rh-launch-radar/data/**`.
