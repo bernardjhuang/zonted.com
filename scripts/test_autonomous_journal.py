@@ -33,7 +33,8 @@ class AutonomousJournalTest(unittest.TestCase):
 
     def test_current_payload_is_dual_reviewed_and_paper_only(self):
         entries = MODULE.validate(copy.deepcopy(self.payload))
-        self.assertEqual(len(entries), 1)
+        self.assertEqual(len(entries), 2)
+        self.assertEqual(entries[0]["id"], "20260810-afternoon-paper-cycle")
         self.assertEqual(entries[0]["mode"], "paper")
         self.assertEqual(entries[0]["review_summary"]["public_entry_status"], "PASS")
         reviews = entries[0]["review_summary"]["public_entry_reviews"]
@@ -70,9 +71,13 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertIn(block, self.page)
         self.assertIn('<h1>🦥 Autonomous</h1>', self.page)
         self.assertIn('aria-current="page">🦥 Autonomous</a>', self.page)
-        self.assertIn('data-entry-count="1"', self.page)
+        self.assertIn('data-entry-count="2"', self.page)
+        self.assertIn('2026-08-10 · TRADE', self.page)
         self.assertIn('2026-08-07 · NO_TRADE', self.page)
+        self.assertIn('XLRE', self.page)
         self.assertIn('PLTR', self.page)
+        self.assertIn('Position return since entry <b>between 0% and +0.1%</b>', self.page)
+        self.assertIn('Contribution to virtual basis <b>less than +0.05%</b>', self.page)
         self.assertIn('Position return since entry <b>+12.10%</b>', self.page)
         self.assertIn('Contribution to virtual basis <b>+1.84%</b>', self.page)
         self.assertIn('Realized', self.page)
@@ -157,9 +162,10 @@ class AutonomousJournalTest(unittest.TestCase):
             'aggressive-unlock threshold',
         ):
             self.assertNotIn(reader_jargon, self.launch_post)
-        self.assertEqual(
-            self.payload["entries"][0]["pnl"]["realized_pct_of_virtual_basis"], -0.23
+        archived = next(
+            row for row in self.payload["entries"] if row["id"] == "20260807-afternoon-paper-cycle"
         )
+        self.assertEqual(archived["pnl"]["realized_pct_of_virtual_basis"], -0.23)
 
     def test_post_deploy_factual_corrections_are_explicit(self):
         for required in (
@@ -201,26 +207,53 @@ class AutonomousJournalTest(unittest.TestCase):
             MODULE.validate(out_of_order)
 
     def test_publisher_is_idempotent_and_rejects_divergent_duplicate(self):
+        incoming = {"schema_version": 1, "entries": [copy.deepcopy(self.payload["entries"][0])]}
         same, changed = PUBLISHER.append_entry(
-            copy.deepcopy(self.payload), copy.deepcopy(self.payload), MODULE
+            copy.deepcopy(self.payload), copy.deepcopy(incoming), MODULE
         )
         self.assertFalse(changed)
         self.assertEqual(same, self.payload)
-        divergent = copy.deepcopy(self.payload)
+        divergent = copy.deepcopy(incoming)
         divergent["entries"][0]["headline"] = "different"
         with self.assertRaises(ValueError):
             PUBLISHER.append_entry(copy.deepcopy(self.payload), divergent, MODULE)
 
     def test_publisher_prepends_one_newer_reviewed_entry(self):
-        incoming = copy.deepcopy(self.payload)
-        incoming["entries"][0]["id"] = "20260808-morning-paper-cycle"
-        incoming["entries"][0]["published_at"] = "2026-08-08T15:00:00Z"
+        row = copy.deepcopy(self.payload["entries"][0])
+        row["id"] = "20260811-morning-paper-cycle"
+        row["published_at"] = "2026-08-11T15:00:00Z"
+        row["review_summary"].pop("reviewed_content_sha256", None)
+        incoming = {"schema_version": 1, "entries": [row]}
         combined, changed = PUBLISHER.append_entry(copy.deepcopy(self.payload), incoming, MODULE)
         self.assertTrue(changed)
         self.assertEqual(
             [row["id"] for row in combined["entries"]],
-            ["20260808-morning-paper-cycle", "20260807-afternoon-paper-cycle"],
+            [
+                "20260811-morning-paper-cycle",
+                "20260810-afternoon-paper-cycle",
+                "20260807-afternoon-paper-cycle",
+            ],
         )
+
+    def test_latest_entry_is_hash_bound_to_both_full_dual_track_receipts(self):
+        latest = copy.deepcopy(self.payload["entries"][0])
+        expected = latest["review_summary"]["reviewed_content_sha256"]
+        self.assertEqual(MODULE.reviewed_content_sha256(latest), expected)
+        reviews = latest["review_summary"]["public_entry_reviews"]
+        self.assertEqual(len(reviews), 2)
+        for review in reviews:
+            self.assertIn("Full dual-track receipt", self.page)
+            receipt = ROOT / review["receipt_path"].lstrip("/")
+            self.assertTrue(receipt.is_file())
+            body = json.loads(receipt.read_text())
+            self.assertEqual(body["exact_public_entry_sha256"], expected)
+            self.assertEqual(body["result"]["verdict"], "PASS")
+            self.assertEqual(body["result"]["publication_safety"]["verdict"], "PASS")
+            self.assertEqual(body["result"]["strategy_critique"]["verdict"], "PASS")
+        tampered = copy.deepcopy(self.payload)
+        tampered["entries"][0]["headline"] += " changed"
+        with self.assertRaisesRegex(ValueError, "changed after dual review"):
+            MODULE.validate(tampered)
 
 
 if __name__ == "__main__":

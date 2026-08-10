@@ -1,0 +1,92 @@
+{
+  "exact_public_entry_sha256": "c2d18d930633f9018eb557d8742736cf15112708894440870b4e1f80d9fdabdb",
+  "model_route": {
+    "auth_type": "device_code OAuth",
+    "model_id": "grok-4.5",
+    "provider": "xai-oauth"
+  },
+  "provider": "grok",
+  "result": {
+    "publication_safety": {
+      "opinion": "Publication-safe paper journal. Bands and labeling fix the earlier exact mark/basis pairing issue; nothing here authorizes live inference or reconstructs sizing.",
+      "privacy_findings": [
+        "No quantities, prices, balances, account/order identifiers, absolute P&L, or NLV.",
+        "Open mark uses coarse bands (0% to +0.1% return; less than +0.05% of virtual basis), which does not pin down position weight.",
+        "Identifiers beyond public symbols and content hashes only; no private ledger contents exposed."
+      ],
+      "statistical_findings": [
+        "Current vs prior basis epoch is separated; prior 1.97% is not pooled into current expectancy.",
+        "Marked vs realized is explicit; closed_trades 0; open mark can reverse.",
+        "Denominators stay honest: 0 of 20 resolved bracket outcomes; shadows/pre-trigger/capability blocks kept out of executable R.",
+        "Limitations correctly bound IEX-only intraday evidence and empty observation ledger."
+      ],
+      "verdict": "PASS"
+    },
+    "required_changes": [],
+    "reviewer": "Grok 4.5 via xAI OAuth",
+    "strategy_critique": {
+      "disagreements_to_preserve": [
+        "This XLRE fill is allowable paper sampling, not a 'good trade' narrative—informationally weak (laggard defensive, late day, narrow stop, macro inside horizon).",
+        "Registry lane count is not diversification; the sampled executable book remains reclaim-only until non-reclaim families produce resolved rows.",
+        "Aggressive posture at 7/10 without 20 eligible aggressive closes at average realized R >= +0.30 is owner preference, not earned sizing science.",
+        "Do not relabel day-two or BWMN-style paths as gap-fill reversion; keep counter-direction post-event gap-fill as a separate family or admit redundancy.",
+        "Multi-week momentum and implied-move work stay shadow/measurement; they do not patch today's reclaim monoculture by renaming."
+      ],
+      "mechanism_overlap": "Executable book is still reclaim monoculture: 'Pooled level and VWAP reclaim', 'Day-two post-gap consolidation', and 'Negative-catalyst oversold reclaim' are one mechanism family with different costumes. Sector-pair RV, quality three-lower-close, and overnight/intraday decomposition are the only genuinely distinct lanes, and none of them drove this fill.",
+      "missed_alternatives": "A non-reclaim executable probe was available in principle (cross-sectional multi-week momentum shadow registry; earnings gap vs ex-ante implied-move feasibility; scheduled-macro stratification on the open reclaim) but none were required to block this paper sample. Stacking another defensive reclaim would not have been diversification. No alternative qualifies as a missed edge claim—only as missed measurement breadth.",
+      "opinion": "TRADE is defensible only as a single prospective pooled reclaim observation under hard gates—not as alpha. XLRE lagged the market and the actual leadership (energy), had no symbol catalyst, and carries a stop that is narrow versus normal movement plus overnight/macro path risk inside the hold. Rejecting XLP/PFE as same-factor duplicates and leaving dead triggers dead is the real process win. With 0 resolved family outcomes, risk_appetite 7 is preference theater until the aggressive R gate is earned.",
+      "recommendations": [
+        {
+          "benchmark": "Planned one-R bracket loss and fill-adjusted R, stratified by frozen stop distance (<0.35 ATR vs >=0.35 ATR) and event-window vs non-event-window tags",
+          "kill_rule": "Conservative mean R <= 0 at 20 fills demotes executable reclaim labels to shadow-only; mean realized loss > 1.5x planned in the narrow-stop bucket at 10 events blocks new narrow-stop registrations prospectively (existing brackets unchanged)",
+          "minimum_sample": "20 filled pooled long outcomes; 10 stopped or gapped-through exits; 15 outcomes per macro-tag stratum before selection use",
+          "name": "Pooled reclaim stop-distance and gap-through audit",
+          "promotion_rule": "Conservative mean R > 0 with the >=0.35 ATR bucket positive; gap-through mean loss within preregistered tolerance of planned one-R",
+          "rationale": "XLRE is exactly the low-information narrow-stop late-day reclaim the book keeps sampling; stratify and audit gap realism instead of narrating mechanism wins.",
+          "scope": "MEASUREMENT_ONLY"
+        },
+        {
+          "benchmark": "Selected primary vs otherwise-valid same-session duplicates (e.g. future XLP/PFE analogues), one clustered cohort, identical horizon and conservative fill model",
+          "kill_rule": "No lift at 10 pairs replaces discretionary tiebreak with a frozen deterministic tiebreak; never authorizes stacking",
+          "minimum_sample": "10 prospective clustered selection pairs (no backfill of this cycle)",
+          "name": "Same-cycle same-family rejected-candidate shadows",
+          "promotion_rule": "Selected primaries beat rejected duplicates by >= +0.10R conservative mean before any discretionary tiebreak story is trusted",
+          "rationale": "Today's XLP/PFE passes were correct non-orders; they still must become scored counterfactuals or selection remains untested folklore.",
+          "scope": "SHADOW"
+        },
+        {
+          "benchmark": "Counter-direction 10:00 ET shadow when |gap| > 1.3x prior-close ATM-straddle implied move vs 0.8–1.2x middle band and raw-gap matches; structured abstentions when |gap| < 0.5x",
+          "kill_rule": "Missing point-in-time option snapshots block scoring; no band difference at minimum sample retires as redundant with gap-fill research",
+          "minimum_sample": "30 exceedance trades, 30 middle-band controls, 30 structured abstentions after point-in-time option snapshot coverage is proven",
+          "name": "Earnings implied-move mispricing feasibility",
+          "promotion_rule": "Exceedance-band conservative mean R beats middle band by >= +0.15R with causal snapshots present",
+          "rationale": "Distinct from VWAP reclaim: expectation-relative catalyst mispricing, not another level-break costume.",
+          "scope": "SHADOW"
+        },
+        {
+          "benchmark": "SPY identical windows and random same-universe long with identical hold; versioned universe, lookback, skip, cadence, overlap, and cost model before observation one",
+          "kill_rule": "Conservative mean R <= 0 or no control lift at 30 retires the hypothesis",
+          "minimum_sample": "30 non-overlapping resolved shadow episodes",
+          "name": "Cross-sectional multi-week momentum",
+          "promotion_rule": "Conservative mean R > +0.10 vs both controls earns paper-executable review only",
+          "rationale": "Only clean way out of short-horizon reclaim monoculture without loosening gates or inventing a twin reversion label.",
+          "scope": "SHADOW"
+        },
+        {
+          "benchmark": "None until trustworthy auction imbalance and auction-fill evidence exist",
+          "kill_rule": "Remain parked while last-30-minute return/volume proxies would collapse into generic reversion",
+          "minimum_sample": "N/A — data contract first",
+          "name": "Closing-auction pressure fade",
+          "promotion_rule": "None",
+          "rationale": "Plausible microstructure story; current evidence surface cannot support honest fills without becoming another reclaim/reversion alias.",
+          "scope": "PARK"
+        }
+      ],
+      "verdict": "PASS"
+    },
+    "summary": "Safe to publish as written: coarse marks, epoch separation, and no sizing reconstruction; XLRE is an honest one-shot reclaim sample with zero resolved family evidence, not edge.",
+    "verdict": "PASS"
+  },
+  "reviewed_at": "2026-08-10T22:21:34.983612+00:00",
+  "schema_version": 1
+}

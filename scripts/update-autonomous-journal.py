@@ -3,6 +3,8 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import hashlib
 import html
 import json
 import pathlib
@@ -70,6 +72,7 @@ POSITION_KEYS = {
     "return_since_entry_pct",
     "unrealized_pnl_pct_of_virtual_basis",
 }
+BAND_PCT = re.compile(r"^(?:between|less than|more than|at least|at most|approximately) .+%$", re.I)
 PILOT_START_DATE = "2026-08-10"
 PILOT_STRATEGIES = {
     "Day-two post-gap consolidation",
@@ -98,6 +101,24 @@ def walk(value: object, path: str = "root") -> None:
             raise ValueError(f"identifier-like text at {path}")
 
 
+def validate_public_pct(value: object, field: str) -> None:
+    if isinstance(value, bool):
+        raise ValueError(f"{field} must be numeric or a coarse percentage band")
+    if isinstance(value, (int, float)):
+        return
+    if isinstance(value, str) and BAND_PCT.fullmatch(value):
+        return
+    raise ValueError(f"{field} must be numeric or a coarse percentage band")
+
+
+def reviewed_content_sha256(entry: dict) -> str:
+    reviewed = copy.deepcopy(entry)
+    reviewed.pop("review_summary", None)
+    payload = {"schema_version": 1, "entries": [reviewed]}
+    raw = json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+
 def validate(payload: dict) -> list[dict]:
     if payload.get("schema_version") != 1:
         raise ValueError("autonomous journal requires schema_version 1")
@@ -124,11 +145,15 @@ def validate(payload: dict) -> list[dict]:
         if set(entry["pnl"]) != PNL_KEYS:
             raise ValueError("public P&L must use the exact percentage-only schema")
         for key in PNL_KEYS - {"note", "closed_trades"}:
-            if isinstance(entry["pnl"][key], bool) or not isinstance(entry["pnl"][key], (int, float)):
-                raise ValueError(f"{key} must be numeric")
+            validate_public_pct(entry["pnl"][key], key)
         for position in entry["positions"]:
             if set(position) != POSITION_KEYS:
                 raise ValueError("position schema must stay quantity- and price-free")
+            validate_public_pct(position["return_since_entry_pct"], "return_since_entry_pct")
+            validate_public_pct(
+                position["unrealized_pnl_pct_of_virtual_basis"],
+                "unrealized_pnl_pct_of_virtual_basis",
+            )
         reviews = entry["review_summary"]
         if reviews.get("public_entry_status") != "PASS":
             raise ValueError("public entry requires dual-review PASS")
@@ -137,12 +162,40 @@ def validate(payload: dict) -> list[dict]:
             raise ValueError("public entry requires Fable PASS")
         if not any("Grok 4.5" in str(model) and verdict == "PASS" for model, verdict in approved):
             raise ValueError("public entry requires Grok 4.5 PASS")
+        expected_content_hash = reviews.get("reviewed_content_sha256")
+        if expected_content_hash:
+            if expected_content_hash != reviewed_content_sha256(entry):
+                raise ValueError("public entry changed after dual review")
+            for review in reviews.get("public_entry_reviews", []):
+                receipt_path = str(review.get("receipt_path", ""))
+                receipt_sha256 = str(review.get("receipt_sha256", ""))
+                if not receipt_path.startswith("/trading/autonomous-reviews/"):
+                    raise ValueError("review receipt path must stay under autonomous-reviews")
+                receipt_file = ROOT / receipt_path.lstrip("/")
+                if not receipt_file.is_file():
+                    raise ValueError(f"missing review receipt: {receipt_path}")
+                raw = receipt_file.read_bytes()
+                if hashlib.sha256(raw).hexdigest() != receipt_sha256:
+                    raise ValueError(f"review receipt hash mismatch: {receipt_path}")
+                receipt = json.loads(raw)
+                if receipt.get("exact_public_entry_sha256") != expected_content_hash:
+                    raise ValueError(f"review receipt is bound to different content: {receipt_path}")
+                if (receipt.get("result") or {}).get("verdict") != "PASS":
+                    raise ValueError(f"review receipt is not PASS: {receipt_path}")
     return entries
 
 
 def pct(value: float) -> str:
     sign = "+" if value > 0 else ""
     return f"{sign}{value:.2f}%"
+
+
+def pct_label(value: object) -> str:
+    if isinstance(value, str):
+        return value
+    if isinstance(value, (int, float)) and not isinstance(value, bool):
+        return pct(float(value))
+    raise ValueError("percentage display value is invalid")
 
 
 def bullets(values: list[str], css: str = "") -> str:
@@ -165,18 +218,18 @@ def public_strategy_status(entry: dict, row: dict) -> tuple[str, bool]:
 def render_entry(entry: dict, latest: bool) -> str:
     pnl = entry["pnl"]
     pnl_cards = "".join(
-        f'<div class="autonomous-metric"><span>{label}</span><strong class="{("up" if value > 0 else "down" if value < 0 else "")}">{pct(value)}</strong></div>'
+        f'<div class="autonomous-metric"><span>{label}</span><strong class="{("up" if isinstance(value, (int, float)) and value > 0 else "down" if isinstance(value, (int, float)) and value < 0 else "")}">{esc(pct_label(value))}</strong></div>'
         for label, value in (
-            ("Realized", float(pnl["realized_pct_of_virtual_basis"])),
-            ("Unrealized", float(pnl["unrealized_pct_of_virtual_basis"])),
-            ("Marked total", float(pnl["marked_total_pct_of_virtual_basis"])),
+            ("Realized", pnl["realized_pct_of_virtual_basis"]),
+            ("Unrealized", pnl["unrealized_pct_of_virtual_basis"]),
+            ("Marked total", pnl["marked_total_pct_of_virtual_basis"]),
         )
     )
     positions = "".join(
         f'''<article class="autonomous-position">
         <header><div><span>{esc(row["direction"])}</span><h3>{esc(row["symbol"])}</h3></div><strong>{esc(row["status"])}</strong></header>
         <p>{esc(row["thesis"])}</p><p class="autonomous-risk"><b>Risk:</b> {esc(row["risk"])}</p>
-        <div class="autonomous-position-pnl"><span>Position return since entry <b>{pct(float(row["return_since_entry_pct"]))}</b></span><span>Contribution to virtual basis <b>{pct(float(row["unrealized_pnl_pct_of_virtual_basis"]))}</b></span></div>
+        <div class="autonomous-position-pnl"><span>Position return since entry <b>{esc(pct_label(row["return_since_entry_pct"]))}</b></span><span>Contribution to virtual basis <b>{esc(pct_label(row["unrealized_pnl_pct_of_virtual_basis"]))}</b></span></div>
         </article>'''
         for row in entry["positions"]
     ) or '<p class="autonomous-empty">No open positions.</p>'
@@ -195,7 +248,9 @@ def render_entry(entry: dict, latest: bool) -> str:
         for row in entry["candidate_review"]
     )
     approvals = "".join(
-        f'<article><span>{esc(row["verdict"])}</span><h3>{esc(row["model"])}</h3><p>{esc(row["result"])}</p></article>'
+        f'<article><span>{esc(row["verdict"])}</span><h3>{esc(row["model"])}</h3><p>{esc(row["result"])}</p>'
+        + (f'<a href="{esc(row["receipt_path"])}">Full dual-track receipt</a>' if row.get("receipt_path") else "")
+        + "</article>"
         for row in entry["review_summary"]["public_entry_reviews"]
     )
     receipts = " · ".join(f"{esc(key)} <code>{esc(value[:12])}…</code>" for key, value in entry["source_receipts"].items())
