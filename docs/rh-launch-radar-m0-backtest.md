@@ -254,6 +254,47 @@ Day folds (K=3, 2 days only): model mean-of-fold-means **2.92** (both days &gt;1
 3. Still not a product: 2 UTC days, gas≈0, single-tick TVL-capped math, no lineage/sim-tip filters, InstantLaunch deferred.
 4. Next: expand to full aged Pons (≥Aug 6–9), paper ledger with creator dedupe + max 1 winner-hour lineage check, then staged TP only if mark path is cheap.
 
+---
+
+## Round G — full aged Pons (Aug 6–9) + ledger filters (2026-08-10)
+
+### Corpus
+
+| Artifact | Count | Notes |
+|---|---:|---|
+| Features (`--only-offsets 600`) | **6,516** | all stamped Pons |
+| Structural vetoes (`--skip-heavy --resume`) | **6,516** | V5 etc.; V7 retimed offline |
+| Honest labels | **6,433** | `fast-1h` for new rows; prior 2,518 keep full 1h/6h/24h |
+| Days | Aug 6–9 | 1823 / 1904 / 1791 / 915 labeled |
+
+Honest 1h ≥3×: **12 / 6433**. Hold-24h still **0** on the full-checkpoint subset.
+
+### Walk-forward EV (decision_v7 $1k, K=3)
+
+| Grain | model foldMeans | folds used | folds mean&gt;1 | C1 / B1 | EV bar |
+|---|---:|---:|---:|---:|---|
+| **hour** (min 5 cand) | **1.27** | 32 | **18** | 0.52 / 0.48 | **pass** |
+| **day** | **2.21** | 4 | **4** | — | **pass** (thin K=3/day) |
+
+Hour means by day: Aug 6 **1.43**, Aug 7 **1.77**, Aug 8 **0.76**, Aug 9 **0.41**.
+
+### Paper ledger
+
+| Filter | Trades | mean gross | foldMeans | folds&gt;1 | pnl/$ |
+|---|---:|---:|---:|---:|---:|
+| base | 212 | 1.18 | **1.25** | 39 / 80 | **+0.18** |
+| + creator cooldown 1h | 211 | 1.19 | 1.25 | 39 | +0.19 |
+| + first-time creator | 205 | 1.18 | 1.25 | 38 | +0.18 |
+
+Creator cooldown / first-time filters are nearly no-ops on survivors (V5 already kills bursts). Edge remains day-dependent — Aug 9 is a red day under this policy.
+
+### Round G takeaways
+
+1. Expanding to four UTC days **strengthens** the provisional pass (hour 1.27, day all four &gt;1).
+2. Edge is concentrated in Aug 6–7; Aug 8–9 drag. Need more history before calling this stable.
+3. Lineage filters don’t move the needle yet; keep them as safety, not alpha.
+4. Next: harvest/stamp beyond Aug 9 if chain advanced; optional InstantLaunch v4 path; only then staged TP.
+
 ## How to reproduce
 
 ```bash
@@ -268,13 +309,13 @@ bash scripts/run_honest_shards.sh 4 800 1726
 PYTHONPATH=src python3 -u -m rh_radar.ev_backtest --veto-mode decision_v7 --fold-grain hour --k 3
 PYTHONPATH=src python3 -u -m rh_radar.paper_ledger --veto-mode decision_v7 --k 3 --floor-usd 1000
 PYTHONPATH=src python3 -u -m rh_radar.phase0 --label-field executable_winner_250_1h
-# Expand to Aug 7–8 (keeps existing rows):
-PYTHONPATH=src python3 -u -m rh_radar.features --limit 2400 --offset 1726 --era-prefix pons --only-offsets 600 --resume
-PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 2400 --offset 1726 --era-prefix pons --skip-heavy --resume
-bash scripts/run_honest_expand.sh 4 2400 1726
-PYTHONPATH=src python3 -u -m rh_radar.honest_labels --derive-short-exits-only
+# Expand to full aged Pons (keeps existing rows; fast-1h for new):
+PYTHONPATH=src python3 -u -m rh_radar.features --limit 6516 --offset 0 --era-prefix pons --only-offsets 600 --resume
+PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 6516 --offset 0 --era-prefix pons --skip-heavy --resume
+bash scripts/run_honest_expand.sh 8 6516 0 1
 PYTHONPATH=src python3 -u -m rh_radar.ev_backtest --veto-mode decision_v7 --fold-grain hour --k 3
 PYTHONPATH=src python3 -u -m rh_radar.paper_ledger --veto-mode decision_v7 --k 3 --floor-usd 1000
+PYTHONPATH=src python3 -u -m rh_radar.paper_ledger --veto-mode decision_v7 --k 3 --floor-usd 1000 --dedupe-creator --creator-cooldown-sec 3600
 ```
 
 Local artifacts (gitignored): `rh-launch-radar/data/**`.
