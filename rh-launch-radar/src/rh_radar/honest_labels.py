@@ -227,7 +227,36 @@ def label_one(
         and out["executable_exit"]
         and final["gross_multiple"] >= WIN_MULTIPLE
     )
+    attach_short_horizon_exits(out)
     return out
+
+
+def attach_short_horizon_exits(row: dict[str, Any]) -> dict[str, Any]:
+    """Derive exit@1h / exit@6h fields from rug_checkpoints (no extra RPC).
+
+    At checkpoint h, sell_recovery_vs_entry is the gross multiple of selling the
+    T+10m token inventory — the short-horizon paper-exit label.
+    """
+    by_h = {
+        int(cp["horizon_sec"]): cp
+        for cp in (row.get("rug_checkpoints") or [])
+        if isinstance(cp, dict) and cp.get("horizon_sec") is not None
+    }
+    for h, suffix in ((3600, "1h"), (21600, "6h")):
+        cp = by_h.get(h)
+        g = None
+        if cp is not None and isinstance(cp.get("sell_recovery_vs_entry"), (int, float)):
+            g = float(cp["sell_recovery_vs_entry"])
+        row[f"gross_multiple_{suffix}"] = g
+        row[f"rug_{suffix}"] = bool(cp and (cp.get("rug_reasons") or []))
+        row[f"executable_exit_{suffix}"] = bool(g is not None and g >= EXIT_MIN_RECOVERY)
+        row[f"executable_winner_250_{suffix}"] = bool(
+            g is not None
+            and g >= WIN_MULTIPLE
+            and not row[f"rug_{suffix}"]
+            and bool(row.get("entry_ok"))
+        )
+    return row
 
 
 def main() -> None:
@@ -245,8 +274,25 @@ def main() -> None:
         default="",
         help="Optional output jsonl path (default: data/labels/honest_outcomes.jsonl)",
     )
+    parser.add_argument(
+        "--derive-short-exits-only",
+        action="store_true",
+        help="Offline: rewrite honest_outcomes with 1h/6h fields from rug_checkpoints",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
+    if args.derive_short_exits_only:
+        out_path = Path(args.out) if args.out else HONEST
+        rows = [json.loads(l) for l in out_path.read_text().splitlines() if l.strip()]
+        tmp = out_path.with_suffix(out_path.suffix + ".tmp")
+        with tmp.open("w") as handle:
+            for row in rows:
+                attach_short_horizon_exits(row)
+                handle.write(json.dumps(row, separators=(",", ":"), sort_keys=True) + "\n")
+        tmp.replace(out_path)
+        n1 = sum(1 for r in rows if r.get("executable_winner_250_1h"))
+        print(f"[done] derived short exits on {len(rows)} rows; winners_1h={n1} -> {out_path}")
+        return
     cfg = load_config()
     block_time = float(cfg["approx_block_time_sec"])
     eth_usd = args.eth_usd

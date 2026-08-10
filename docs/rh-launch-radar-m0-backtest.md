@@ -220,22 +220,39 @@ Cohort sits on a single UTC day → **hour folds** (14 hours; folds with ≥5 ca
 
 ---
 
-## Round F — paper ledger + multi-day expand (in progress)
-
-### Paper ledger (`rh_radar.paper_ledger`)
-
-Same sieve as Round E (`decision_v7` $1k, `model_v0`, K=3/hour, exit@1h), but emits a trade-by-trade JSONL instead of fold-only aggregates. Unlike `ev_backtest`, folds with &lt;5 candidates are still traded.
-
-| Setting | Trades | mean gross@1h | mean-of-fold-means | folds mean&gt;1 | hit≥3× | rug@1h |
-|---|---:|---:|---:|---:|---:|---:|
-| decision_v7 $1k | 38 | 0.74 | 0.70 | 4 / 14 | 2 / 38 | 76% |
-| + `--dedupe-creator` | 38 | 0.74 | 0.70 | 4 / 14 | 2 / 38 | 76% |
-
-Creator dedupe is a no-op on this slice (no repeated creators inside top-K). Equity still underwater: **−26¢ per $1** notional on raw 1h gross.
+## Round F — paper ledger + Aug 7–8 expand (2026-08-10)
 
 ### Expand labeled window
 
-Pons harvest already spans **2026-08-06 → 08-09** (~6.5k). The Round D/E 800-row sample sits entirely on **2026-08-08**. Next offline EV needs features + honest labels on **offset 1726 / limit 2400** (Aug 7–8). Features/vetoes gained `--resume`; honest already had it.
+Pons harvest spans **2026-08-06 → 08-09**. Features + honest + structural vetoes expanded to **offset 1726 / limit 2400** (**1337 Aug 7 + 1063 Aug 8**). Short-horizon exits (`gross_multiple_1h` / `_6h`) are derived from `rug_checkpoints.sell_recovery_vs_entry` (`--derive-short-exits-only`); Aug 7 had been missing those fields, which zeroed its EV contribution.
+
+Honest 1h ≥3× winners: **9 / 2400** (6 on Aug 7, 3 on Aug 8). Hold-24h still **0**.
+
+### Paper ledger (`rh_radar.paper_ledger`, decision_v7 $1k, K=3/hour)
+
+| Slice | Trades | mean gross@1h | mean-of-fold-means | folds mean&gt;1 | hit≥3× | pnl/$ |
+|---|---:|---:|---:|---:|---:|---:|
+| Aug-8 only (pre-expand) | 38 | 0.74 | 0.70 | 4 / 14 | 5% | **−0.26** |
+| **Aug 7–8 (2400)** | **83** | **1.12** | **1.11** | **15 / 30** | **8%** | **+0.12** |
+
+By day (ledger fold means): Aug 7 **1.41** (9/13 hours &gt;1); Aug 8 **0.88** (6/17 hours &gt;1).
+
+### Walk-forward EV (`ev_backtest`, hour folds, min 5 candidates)
+
+| Ranker | mean-of-fold-means | folds used | folds mean&gt;1 | EV bar |
+|---|---:|---:|---:|---|
+| **model_v0** | **1.15** | 13 | **7** | **pass** |
+| C1 first-time→volume | 0.48 | 13 | — | fail |
+| B1 volume | 0.49 | 13 | — | fail |
+
+Day folds (K=3, 2 days only): model mean-of-fold-means **2.92** (both days &gt;1) — directional, thin.
+
+### Round F takeaways
+
+1. Multi-day history mattered: Aug 7 carries the EV; Aug 8 alone still loses.
+2. `model_v0` clears the provisional EV bar on hour folds once 1h labels exist on both days; C1/B1 do not.
+3. Still not a product: 2 UTC days, gas≈0, single-tick TVL-capped math, no lineage/sim-tip filters, InstantLaunch deferred.
+4. Next: expand to full aged Pons (≥Aug 6–9), paper ledger with creator dedupe + max 1 winner-hour lineage check, then staged TP only if mark path is cheap.
 
 ## How to reproduce
 
@@ -254,7 +271,10 @@ PYTHONPATH=src python3 -u -m rh_radar.phase0 --label-field executable_winner_250
 # Expand to Aug 7–8 (keeps existing rows):
 PYTHONPATH=src python3 -u -m rh_radar.features --limit 2400 --offset 1726 --era-prefix pons --only-offsets 600 --resume
 PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 2400 --offset 1726 --era-prefix pons --skip-heavy --resume
-# then honest_labels --limit 2400 --offset 1726 --resume (or sharded equivalent without wiping)
+bash scripts/run_honest_expand.sh 4 2400 1726
+PYTHONPATH=src python3 -u -m rh_radar.honest_labels --derive-short-exits-only
+PYTHONPATH=src python3 -u -m rh_radar.ev_backtest --veto-mode decision_v7 --fold-grain hour --k 3
+PYTHONPATH=src python3 -u -m rh_radar.paper_ledger --veto-mode decision_v7 --k 3 --floor-usd 1000
 ```
 
 Local artifacts (gitignored): `rh-launch-radar/data/**`.
