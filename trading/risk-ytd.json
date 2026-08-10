@@ -1,12 +1,12 @@
 {
-  "as_of": "2026-08-06",
+  "as_of": "2026-08-07",
   "commentary": [
     "Overall regime: Contained (0.0/100). This is a percentile-based conditions score, not a forecast.",
-    "VVIX is 88.72 at its trailing percentile 28; its 5-session direction is improving.",
-    "The constant-maturity 30-to-60-day VIX curve slope is +6.92%; its direction is improving and positive still means contango.",
-    "Credit is 2.75% and mixed; MOVE is 70.88. SKEW remains a low-weight confirm, not a standalone forecast. Stale inputs receive zero weight: MOVE."
+    "VVIX is 90.42 at its trailing percentile 33; its 5-session direction is mixed.",
+    "The constant-maturity 30-to-60-day VIX curve slope is +7.53%; its direction is improving and positive still means contango.",
+    "Credit is 2.71% and mixed; MOVE is 70.88. SKEW remains a low-weight confirm, not a standalone forecast. Stale inputs receive zero weight: MOVE."
   ],
-  "comparison_start": "2024-08-06",
+  "comparison_start": "2024-08-07",
   "conditional_frequencies": {
     "horizons": [
       21,
@@ -18,8 +18,8 @@
           "bands": {
             "Contained": {
               "events": 155,
-              "frequency": 10.65,
-              "observations": 1456
+              "frequency": 10.64,
+              "observations": 1457
             },
             "Elevated": {
               "events": 159,
@@ -33,15 +33,15 @@
             }
           },
           "events": 475,
-          "frequency": 15.85,
-          "observations": 2997
+          "frequency": 15.84,
+          "observations": 2998
         },
         "42": {
           "bands": {
             "Contained": {
               "events": 273,
-              "frequency": 18.98,
-              "observations": 1438
+              "frequency": 18.97,
+              "observations": 1439
             },
             "Elevated": {
               "events": 223,
@@ -55,8 +55,8 @@
             }
           },
           "events": 730,
-          "frequency": 24.53,
-          "observations": 2976
+          "frequency": 24.52,
+          "observations": 2977
         }
       },
       "vix_above_25": {
@@ -64,8 +64,8 @@
           "bands": {
             "Contained": {
               "events": 254,
-              "frequency": 17.45,
-              "observations": 1456
+              "frequency": 17.43,
+              "observations": 1457
             },
             "Elevated": {
               "events": 390,
@@ -79,15 +79,15 @@
             }
           },
           "events": 961,
-          "frequency": 32.07,
-          "observations": 2997
+          "frequency": 32.05,
+          "observations": 2998
         },
         "42": {
           "bands": {
             "Contained": {
               "events": 467,
-              "frequency": 32.48,
-              "observations": 1438
+              "frequency": 32.45,
+              "observations": 1439
             },
             "Elevated": {
               "events": 444,
@@ -101,8 +101,8 @@
             }
           },
           "events": 1343,
-          "frequency": 45.13,
-          "observations": 2976
+          "frequency": 45.11,
+          "observations": 2977
         }
       }
     }
@@ -111,24 +111,24 @@
     "bands": {
       "move": "Calm",
       "skew": "Moderate",
-      "vix": "Moderate",
-      "vvix": "Calm"
+      "vix": "Low",
+      "vvix": "Elevated"
     },
     "context_metrics": {
       "vix": {
         "age_sessions": 0,
-        "change_20d": -0.69,
-        "change_5d": -1.94,
+        "change_20d": -0.13,
+        "change_5d": -1.09,
         "direction": "improving",
-        "observation_date": "2026-08-06",
-        "percentile": 31.42,
-        "risk_percentile": 31.42,
-        "source_date": "2026-08-06",
+        "observation_date": "2026-08-07",
+        "percentile": 28.11,
+        "risk_percentile": 28.11,
+        "source_date": "2026-08-07",
         "stale": false,
-        "value": 15.15
+        "value": 14.9
       },
       "vix9d_vix": {
-        "age_sessions": 14,
+        "age_sessions": 15,
         "change_20d": -0.1126,
         "change_5d": 0.1559,
         "direction": "mixed",
@@ -140,7 +140,7 @@
         "value": 0.8977
       },
       "vix_vix3m": {
-        "age_sessions": 14,
+        "age_sessions": 15,
         "change_20d": 0.0195,
         "change_5d": 0.1044,
         "direction": "deteriorating",
@@ -152,51 +152,51 @@
         "value": 0.9138
       }
     },
-    "curve_as_of": "2026-08-06",
+    "curve_as_of": "2026-08-07",
     "curve_band": "Contango",
-    "curve_cm30": 17.9729,
-    "curve_cm60": 19.2174,
-    "curve_slope_percent": 6.9241,
-    "curve_spread": 1.4457,
-    "curve_spread_percent": 8.457,
+    "curve_cm30": 18.0665,
+    "curve_cm60": 19.4268,
+    "curve_slope_percent": 7.5294,
+    "curve_spread": 1.6726,
+    "curve_spread_percent": 9.844,
     "dates": {
       "move": "2026-07-17",
-      "skew": "2026-08-06",
-      "vix": "2026-08-06",
-      "vvix": "2026-08-06"
+      "skew": "2026-08-07",
+      "vix": "2026-08-07",
+      "vvix": "2026-08-07"
     },
-    "hy_oas": 2.75,
-    "hy_oas_as_of": "2026-08-05",
-    "hy_oas_available_as_of": "2026-08-06",
-    "m1": 17.0952,
-    "m2": 18.5409,
+    "hy_oas": 2.71,
+    "hy_oas_as_of": "2026-08-06",
+    "hy_oas_available_as_of": "2026-08-07",
+    "m1": 16.9913,
+    "m2": 18.6639,
     "metrics": {
       "curve": {
         "age_sessions": 0,
-        "change_20d": 0.6697,
-        "change_5d": 2.2167,
+        "change_20d": 0.2279,
+        "change_5d": 1.6694,
         "direction": "improving",
-        "observation_date": "2026-08-06",
-        "percentile": 75.66,
-        "risk_percentile": 24.34,
-        "source_date": "2026-08-06",
+        "observation_date": "2026-08-07",
+        "percentile": 79.89,
+        "risk_percentile": 20.11,
+        "source_date": "2026-08-07",
         "stale": false,
-        "value": 6.9241
+        "value": 7.5294
       },
       "hy_oas": {
         "age_sessions": 0,
-        "change_20d": 0.05,
-        "change_5d": -0.12,
+        "change_20d": 0.01,
+        "change_5d": -0.13,
         "direction": "mixed",
-        "observation_date": "2026-08-05",
-        "percentile": 15.21,
-        "risk_percentile": 15.21,
-        "source_date": "2026-08-06",
+        "observation_date": "2026-08-06",
+        "percentile": 9.79,
+        "risk_percentile": 9.79,
+        "source_date": "2026-08-07",
         "stale": false,
-        "value": 2.75
+        "value": 2.71
       },
       "move": {
-        "age_sessions": 14,
+        "age_sessions": 15,
         "change_20d": 0.22,
         "change_5d": 1.33,
         "direction": "deteriorating",
@@ -209,69 +209,69 @@
       },
       "skew": {
         "age_sessions": 0,
-        "change_20d": -9.94,
-        "change_5d": -5.17,
+        "change_20d": -11.7,
+        "change_5d": -8.66,
         "direction": "improving",
-        "observation_date": "2026-08-06",
-        "percentile": 9.52,
-        "risk_percentile": 9.52,
-        "source_date": "2026-08-06",
+        "observation_date": "2026-08-07",
+        "percentile": 5.56,
+        "risk_percentile": 5.56,
+        "source_date": "2026-08-07",
         "stale": false,
-        "value": 134.73
+        "value": 132.57
       },
       "vvix": {
         "age_sessions": 0,
-        "change_20d": -0.06,
-        "change_5d": -5.94,
-        "direction": "improving",
-        "observation_date": "2026-08-06",
-        "percentile": 27.91,
-        "risk_percentile": 27.91,
-        "source_date": "2026-08-06",
+        "change_20d": 3.14,
+        "change_5d": -1.22,
+        "direction": "mixed",
+        "observation_date": "2026-08-07",
+        "percentile": 32.94,
+        "risk_percentile": 32.94,
+        "source_date": "2026-08-07",
         "stale": false,
-        "value": 88.72
+        "value": 90.42
       }
     },
     "move": 70.88,
-    "skew": 134.73,
-    "vix": 15.15,
-    "vvix": 88.72
+    "skew": 132.57,
+    "vix": 14.9,
+    "vvix": 90.42
   },
   "curve": [
     {
       "expiration": null,
       "label": "Spot",
-      "value": 15.15
+      "value": 14.9
     },
     {
       "expiration": "2026-08-19",
       "label": "M1",
-      "value": 17.0952
+      "value": 16.9913
     },
     {
       "expiration": "2026-09-16",
       "label": "M2",
-      "value": 18.5409
+      "value": 18.6639
     },
     {
       "expiration": "2026-10-21",
       "label": "M3",
-      "value": 19.7871
+      "value": 19.9989
     },
     {
       "expiration": "2026-11-18",
       "label": "M4",
-      "value": 20.3008
+      "value": 20.4527
     },
     {
       "expiration": "2026-12-16",
       "label": "M5",
-      "value": 20.4991
+      "value": 20.6103
     },
     {
       "expiration": "2027-01-20",
       "label": "M6",
-      "value": 21.4558
+      "value": 21.6044
     }
   ],
   "gate_policy": {
@@ -314,7 +314,7 @@
     "reason": "At least one frozen target separates monotonically and exceeds base rate at both horizons.",
     "watchful_action": "annotate_half_size"
   },
-  "generated_at": "2026-08-06T16:15:00-04:00",
+  "generated_at": "2026-08-07T16:15:00-04:00",
   "history": {
     "score": [
       {
@@ -15360,10 +15360,10 @@
         "score": 0.0
       },
       {
-        "active_maximum": 100,
+        "active_maximum": 75,
         "date": "2024-07-24",
         "regime": "Watchful",
-        "score": 25.0
+        "score": 33.33
       },
       {
         "active_maximum": 100,
@@ -18430,13 +18430,15 @@
         "date": "2026-08-06",
         "regime": "Contained",
         "score": 0.0
+      },
+      {
+        "active_maximum": 85,
+        "date": "2026-08-07",
+        "regime": "Contained",
+        "score": 0.0
       }
     ],
     "spy": [
-      {
-        "date": "2024-08-06",
-        "value": 522.15
-      },
       {
         "date": "2024-08-07",
         "value": 518.66
@@ -20440,6 +20442,10 @@
       {
         "date": "2026-08-06",
         "value": 768.56
+      },
+      {
+        "date": "2026-08-07",
+        "value": 773.26
       }
     ],
     "vix_spikes": [
@@ -20607,167 +20613,167 @@
   },
   "history_start": "2013-01-01",
   "market_regime": {
-    "as_of": "2026-08-06",
+    "as_of": "2026-08-07",
     "bottom_line": "Market plumbing is healthy, but leadership, momentum, or cyclicals are soft enough to keep the overall stance neutral.",
     "counts": {
-      "neutral": 1,
-      "risk_off": 2,
-      "risk_on": 2
+      "neutral": 2,
+      "risk_off": 0,
+      "risk_on": 3
     },
     "label": "Neutral",
-    "lean": "balanced",
+    "lean": "leaning risk-on",
     "method": "Five deterministic pillars: long-term trend, breadth, credit, short-term leadership, and rates/cyclicals. Three or two risk-on pillars can still be Neutral when two pillars actively disagree.",
     "metrics": {
       "dgs10": {
-        "one_month_change_bps": 8.0,
-        "value": 4.63
+        "one_month_change_bps": 13.0,
+        "value": 4.69
       },
       "equities": {
         "hyg": {
-          "close": 79.46,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -2.12,
-          "one_month_percent": -0.25,
-          "three_month_percent": -0.87,
-          "vs_200dma_percent": -0.95,
-          "vs_50dma_percent": -0.32,
-          "ytd_percent": -1.5
+          "close": 79.61,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -1.93,
+          "one_month_percent": -0.18,
+          "three_month_percent": -0.31,
+          "vs_200dma_percent": -0.76,
+          "vs_50dma_percent": -0.11,
+          "ytd_percent": -1.31
         },
         "iwm": {
-          "close": 298.25,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -1.15,
-          "one_month_percent": 1.63,
-          "three_month_percent": 3.99,
-          "vs_200dma_percent": 11.74,
-          "vs_50dma_percent": 1.57,
-          "ytd_percent": 19.89
+          "close": 301.56,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -0.05,
+          "one_month_percent": 1.45,
+          "three_month_percent": 6.84,
+          "vs_200dma_percent": 12.87,
+          "vs_50dma_percent": 2.62,
+          "ytd_percent": 21.22
         },
         "qqq": {
-          "close": 714.65,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -4.22,
-          "one_month_percent": 0.45,
-          "three_month_percent": 2.71,
-          "vs_200dma_percent": 10.41,
-          "vs_50dma_percent": -0.01,
-          "ytd_percent": 16.56
+          "close": 723.03,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -3.1,
+          "one_month_percent": -0.03,
+          "three_month_percent": 4.04,
+          "vs_200dma_percent": 11.6,
+          "vs_50dma_percent": 1.18,
+          "ytd_percent": 17.93
         },
         "rsp": {
-          "close": 218.58,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -0.75,
-          "one_month_percent": 3.01,
-          "three_month_percent": 6.7,
-          "vs_200dma_percent": 9.15,
-          "vs_50dma_percent": 2.89,
-          "ytd_percent": 13.34
+          "close": 220.09,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -0.06,
+          "one_month_percent": 3.09,
+          "three_month_percent": 8.13,
+          "vs_200dma_percent": 9.82,
+          "vs_50dma_percent": 3.47,
+          "ytd_percent": 14.12
         },
         "smh": {
-          "close": 571.48,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -14.57,
-          "one_month_percent": -3.63,
-          "three_month_percent": 3.95,
-          "vs_200dma_percent": 25.59,
-          "vs_50dma_percent": -3.98,
-          "ytd_percent": 53.09
+          "close": 582.7,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -12.89,
+          "one_month_percent": -4.12,
+          "three_month_percent": 7.89,
+          "vs_200dma_percent": 27.73,
+          "vs_50dma_percent": -2.06,
+          "ytd_percent": 56.09
         },
         "spy": {
-          "close": 768.56,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -0.36,
-          "one_month_percent": 3.11,
-          "three_month_percent": 4.73,
-          "vs_200dma_percent": 9.41,
-          "vs_50dma_percent": 2.92,
-          "ytd_percent": 12.5
+          "close": 773.26,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": 0.0,
+          "one_month_percent": 2.87,
+          "three_month_percent": 5.7,
+          "vs_200dma_percent": 10.0,
+          "vs_50dma_percent": 3.49,
+          "ytd_percent": 13.19
         },
         "tlt": {
-          "close": 82.52,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -9.14,
-          "one_month_percent": -2.18,
-          "three_month_percent": -4.14,
-          "vs_200dma_percent": -5.25,
-          "vs_50dma_percent": -2.75,
-          "ytd_percent": -5.18
+          "close": 82.76,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -8.87,
+          "one_month_percent": -2.05,
+          "three_month_percent": -3.37,
+          "vs_200dma_percent": -4.93,
+          "vs_50dma_percent": -2.41,
+          "ytd_percent": -4.91
         },
         "xlp": {
-          "close": 85.11,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -5.44,
-          "one_month_percent": 0.85,
-          "three_month_percent": 1.03,
-          "vs_200dma_percent": 3.19,
+          "close": 85.12,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -5.43,
+          "one_month_percent": 2.31,
+          "three_month_percent": 1.36,
+          "vs_200dma_percent": 3.17,
           "vs_50dma_percent": 0.97,
-          "ytd_percent": 9.55
+          "ytd_percent": 9.56
         },
         "xly": {
-          "close": 118.1,
-          "date": "2026-08-06",
-          "from_ytd_high_percent": -5.16,
-          "one_month_percent": 2.43,
-          "three_month_percent": -1.48,
-          "vs_200dma_percent": 0.84,
-          "vs_50dma_percent": 1.77,
-          "ytd_percent": -0.21
+          "close": 119.86,
+          "date": "2026-08-07",
+          "from_ytd_high_percent": -3.74,
+          "one_month_percent": 2.58,
+          "three_month_percent": -0.02,
+          "vs_200dma_percent": 2.34,
+          "vs_50dma_percent": 3.32,
+          "ytd_percent": 1.28
         }
       },
       "relative_strength": {
-        "hyg_tlt_1m_percent": 1.97,
-        "iwm_spy_3m_percent": -0.69,
-        "rsp_spy_1m_percent": -0.11,
-        "xly_xlp_3m_percent": -2.49
+        "hyg_tlt_1m_percent": 1.91,
+        "iwm_spy_3m_percent": 1.09,
+        "rsp_spy_1m_percent": 0.21,
+        "xly_xlp_3m_percent": -1.36
       }
     },
     "pillars": [
       {
-        "detail": "SPY +9.4%, QQQ +10.4%, and IWM +11.7% versus their 200-day averages.",
+        "detail": "SPY +10.0%, QQQ +11.6%, and IWM +12.9% versus their 200-day averages.",
         "name": "Trend",
         "signal": "risk_on"
       },
       {
-        "detail": "RSP/SPY is -0.1% over one month; IWM/SPY is -0.7% over three months.",
+        "detail": "RSP/SPY is +0.2% over one month; IWM/SPY is +1.1% over three months.",
         "name": "Breadth",
-        "signal": "risk_off"
+        "signal": "risk_on"
       },
       {
-        "detail": "High-yield OAS is 2.75%; HYG/TLT is +2.0% over one month.",
+        "detail": "High-yield OAS is 2.71%; HYG/TLT is +1.9% over one month.",
         "name": "Credit",
         "signal": "risk_on"
       },
       {
-        "detail": "SPY is +2.9% and QQQ -0.0% versus 50-day averages; SMH is -14.6% from its YTD high.",
+        "detail": "SPY is +3.5% and QQQ +1.2% versus 50-day averages; SMH is -12.9% from its YTD high.",
         "name": "Momentum",
-        "signal": "risk_off"
+        "signal": "neutral"
       },
       {
-        "detail": "The 10-year yield is 4.63% (+8 bp over about one month); XLY/XLP is -2.5% over three months.",
+        "detail": "The 10-year yield is 4.69% (+13 bp over about one month); XLY/XLP is -1.4% over three months.",
         "name": "Rates / cyclicals",
         "signal": "neutral"
       }
     ],
-    "rating": 5,
+    "rating": 6,
     "source_dates": {
-      "cboe_curve": "2026-08-06",
-      "dgs10": "2026-08-05",
-      "hy_oas": "2026-08-05",
-      "yahoo": "2026-08-06"
+      "cboe_curve": "2026-08-07",
+      "dgs10": "2026-08-06",
+      "hy_oas": "2026-08-06",
+      "yahoo": "2026-08-07"
     },
     "why": [
-      "SPY +9.4%, QQQ +10.4%, and IWM +11.7% versus their 200-day averages.",
-      "RSP/SPY is -0.1% over one month; IWM/SPY is -0.7% over three months.",
-      "High-yield OAS is 2.75%; HYG/TLT is +2.0% over one month.",
-      "SPY is +2.9% and QQQ -0.0% versus 50-day averages; SMH is -14.6% from its YTD high.",
-      "The 10-year yield is 4.63% (+8 bp over about one month); XLY/XLP is -2.5% over three months."
+      "SPY +10.0%, QQQ +11.6%, and IWM +12.9% versus their 200-day averages.",
+      "RSP/SPY is +0.2% over one month; IWM/SPY is +1.1% over three months.",
+      "High-yield OAS is 2.71%; HYG/TLT is +1.9% over one month.",
+      "SPY is +3.5% and QQQ +1.2% versus 50-day averages; SMH is -12.9% from its YTD high.",
+      "The 10-year yield is 4.69% (+13 bp over about one month); XLY/XLP is -1.4% over three months."
     ]
   },
   "method": "The Conditions Score uses trailing three-year empirical percentiles, a constant-maturity 30-to-60-day VIX futures slope where a positive slope means contango, lagged credit, and zero weight for stale inputs. It is a falsifiable conditions heuristic, not a calibrated probability or trading signal.",
   "model_status": {
     "endpoints_passed": 0,
     "endpoints_total": 4,
-    "evaluation_digest": "a750ea23de2d",
+    "evaluation_digest": "49d513be3f77",
     "evaluation_url": "/trading/risk-evaluation.json",
     "live_probabilities": null,
     "message": "Fitted probabilities are withheld because at least one frozen endpoint failed the persistence gauntlet.",
@@ -20780,9 +20786,9 @@
     "scores": [
       {
         "best_baseline": "vix_percentile",
-        "best_baseline_brier": 0.13515031,
+        "best_baseline_brier": 0.13514597,
         "horizon": 21,
-        "model_brier": 0.13296978,
+        "model_brier": 0.13296291,
         "passed": false,
         "target": "vix_above_25"
       },
@@ -20790,15 +20796,15 @@
         "best_baseline": "vix_percentile",
         "best_baseline_brier": 0.15132911,
         "horizon": 42,
-        "model_brier": 0.15106409,
+        "model_brier": 0.15106412,
         "passed": false,
         "target": "vix_above_25"
       },
       {
         "best_baseline": "unconditional",
-        "best_baseline_brier": 0.1127342,
+        "best_baseline_brier": 0.11273402,
         "horizon": 21,
-        "model_brier": 0.11409029,
+        "model_brier": 0.11409069,
         "passed": false,
         "target": "spy_drawdown_5"
       },
@@ -20806,7 +20812,7 @@
         "best_baseline": "unconditional",
         "best_baseline_brier": 0.12235676,
         "horizon": 42,
-        "model_brier": 0.1236359,
+        "model_brier": 0.12363593,
         "passed": false,
         "target": "spy_drawdown_5"
       }
@@ -20815,7 +20821,7 @@
   },
   "period": "YTD",
   "scanner_policy": {
-    "as_of": "2026-08-06",
+    "as_of": "2026-08-07",
     "elevated_action": "gate",
     "elevated_hard_gate_enabled": true,
     "evidence": [
@@ -20868,7 +20874,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 24.34,
+        "risk_percentile": 20.11,
         "stale": false
       },
       "hy_oas": {
@@ -20877,7 +20883,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 15.21,
+        "risk_percentile": 9.79,
         "stale": false
       },
       "move": {
@@ -20895,7 +20901,7 @@
         "points": 0.0,
         "raw_maximum": 10,
         "raw_points": 0.0,
-        "risk_percentile": 9.52,
+        "risk_percentile": 5.56,
         "stale": false
       },
       "vvix": {
@@ -20904,7 +20910,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 27.91,
+        "risk_percentile": 32.94,
         "stale": false
       }
     },
@@ -20928,7 +20934,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.2916,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 11.036,
+        "slope_percent": 11.0364,
         "spread": 2.1645,
         "spread_percent": 13.422
       },
@@ -20940,7 +20946,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.406,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 9.5749,
+        "slope_percent": 9.5748,
         "spread": 1.9935,
         "spread_percent": 12.146
       },
@@ -20964,7 +20970,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.3472,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 8.4074,
+        "slope_percent": 8.407,
         "spread": 1.6558,
         "spread_percent": 9.92
       },
@@ -20976,7 +20982,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.1492,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 7.8896,
+        "slope_percent": 7.8897,
         "spread": 1.6299,
         "spread_percent": 9.867
       },
@@ -20988,7 +20994,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 17.8657,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 8.0361,
+        "slope_percent": 8.036,
         "spread": 1.7105,
         "spread_percent": 10.588
       },
@@ -21000,7 +21006,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 17.9274,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 7.1879,
+        "slope_percent": 7.1881,
         "spread": 1.805,
         "spread_percent": 11.196
       },
@@ -21012,7 +21018,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.3897,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 5.9829,
+        "slope_percent": 5.983,
         "spread": 1.7905,
         "spread_percent": 10.787
       },
@@ -21024,7 +21030,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.8191,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 4.9618,
+        "slope_percent": 4.9619,
         "spread": 1.5321,
         "spread_percent": 8.863
       },
@@ -21048,7 +21054,7 @@
         "m1_expiration": "2026-01-21",
         "m2": 18.3596,
         "m2_expiration": "2026-02-18",
-        "slope_percent": 5.2603,
+        "slope_percent": 5.2605,
         "spread": 1.7207,
         "spread_percent": 10.341
       },
@@ -21084,7 +21090,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.0033,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 5.7996,
+        "slope_percent": 5.7999,
         "spread": 1.023,
         "spread_percent": 5.69
       },
@@ -21096,7 +21102,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.2365,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.9588,
+        "slope_percent": 4.9591,
         "spread": 0.8905,
         "spread_percent": 4.854
       },
@@ -21108,7 +21114,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.2337,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 5.256,
+        "slope_percent": 5.2558,
         "spread": 0.9584,
         "spread_percent": 5.244
       },
@@ -21120,7 +21126,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.5249,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.786,
+        "slope_percent": 4.7858,
         "spread": 0.9309,
         "spread_percent": 5.006
       },
@@ -21144,7 +21150,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.6838,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.662,
+        "slope_percent": 4.6621,
         "spread": 0.9033,
         "spread_percent": 4.81
       },
@@ -21156,7 +21162,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.8981,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.2331,
+        "slope_percent": 4.2332,
         "spread": 0.8533,
         "spread_percent": 4.48
       },
@@ -21168,7 +21174,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.0652,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 6.0084,
+        "slope_percent": 6.0086,
         "spread": 1.1534,
         "spread_percent": 6.439
       },
@@ -21180,7 +21186,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.6359,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.0731,
+        "slope_percent": 4.0729,
         "spread": 0.7274,
         "spread_percent": 3.847
       },
@@ -21192,7 +21198,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.8792,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 3.6461,
+        "slope_percent": 3.6458,
         "spread": 0.5864,
         "spread_percent": 3.039
       },
@@ -21204,7 +21210,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 20.8342,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 1.3093,
+        "slope_percent": 1.3095,
         "spread": -0.0133,
         "spread_percent": -0.064
       },
@@ -21216,7 +21222,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.7066,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 3.7505,
+        "slope_percent": 3.7507,
         "spread": 0.5701,
         "spread_percent": 2.979
       },
@@ -21228,7 +21234,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.128,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.9463,
+        "slope_percent": 4.9459,
         "spread": 0.8297,
         "spread_percent": 4.534
       },
@@ -21240,7 +21246,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.5156,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.2597,
+        "slope_percent": 4.2601,
         "spread": 0.7092,
         "spread_percent": 3.771
       },
@@ -21252,7 +21258,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 19.4505,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 4.6786,
+        "slope_percent": 4.6788,
         "spread": 0.7834,
         "spread_percent": 4.197
       },
@@ -21276,7 +21282,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 20.8254,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 1.3871,
+        "slope_percent": 1.3872,
         "spread": -0.2036,
         "spread_percent": -0.968
       },
@@ -21288,7 +21294,7 @@
         "m1_expiration": "2026-02-18",
         "m2": 20.2175,
         "m2_expiration": "2026-03-18",
-        "slope_percent": 2.413,
+        "slope_percent": 2.4127,
         "spread": 0.1604,
         "spread_percent": 0.8
       },
@@ -21300,7 +21306,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 20.7646,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 2.9382,
+        "slope_percent": 2.9383,
         "spread": 0.6059,
         "spread_percent": 3.006
       },
@@ -21324,7 +21330,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 20.8381,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 2.7612,
+        "slope_percent": 2.7611,
         "spread": 0.615,
         "spread_percent": 3.041
       },
@@ -21336,7 +21342,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 21.4043,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 1.1847,
+        "slope_percent": 1.1844,
         "spread": 0.3066,
         "spread_percent": 1.453
       },
@@ -21348,7 +21354,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 20.9235,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 2.6726,
+        "slope_percent": 2.6727,
         "spread": 0.6711,
         "spread_percent": 3.314
       },
@@ -21360,7 +21366,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 20.3214,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 3.875,
+        "slope_percent": 3.8754,
         "spread": 0.8722,
         "spread_percent": 4.485
       },
@@ -21372,7 +21378,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 20.5453,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 3.2595,
+        "slope_percent": 3.2593,
         "spread": 0.7892,
         "spread_percent": 3.995
       },
@@ -21384,7 +21390,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 21.1511,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 1.9506,
+        "slope_percent": 1.9507,
         "spread": 0.515,
         "spread_percent": 2.496
       },
@@ -21408,7 +21414,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.0885,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -0.3552,
+        "slope_percent": -0.3553,
         "spread": -0.0171,
         "spread_percent": -0.077
       },
@@ -21420,7 +21426,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 21.3553,
         "m2_expiration": "2026-04-15",
-        "slope_percent": 0.5952,
+        "slope_percent": 0.5951,
         "spread": 0.1536,
         "spread_percent": 0.724
       },
@@ -21432,7 +21438,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.4869,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -1.6678,
+        "slope_percent": -1.6677,
         "spread": -0.4868,
         "spread_percent": -2.119
       },
@@ -21444,7 +21450,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 25.0027,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -5.4142,
+        "slope_percent": -5.4144,
         "spread": -1.963,
         "spread_percent": -7.28
       },
@@ -21456,7 +21462,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.9911,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -1.194,
+        "slope_percent": -1.1939,
         "spread": -0.5762,
         "spread_percent": -2.445
       },
@@ -21468,7 +21474,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 23.9178,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -2.1555,
+        "slope_percent": -2.1556,
         "spread": -1.1775,
         "spread_percent": -4.692
       },
@@ -21480,7 +21486,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.9478,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -0.6654,
+        "slope_percent": -0.6652,
         "spread": -0.6345,
         "spread_percent": -2.691
       },
@@ -21492,7 +21498,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 24.3687,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -2.4601,
+        "slope_percent": -2.4602,
         "spread": -1.4448,
         "spread_percent": -5.597
       },
@@ -21516,7 +21522,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.99,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -0.4053,
+        "slope_percent": -0.4054,
         "spread": -0.3245,
         "spread_percent": -1.392
       },
@@ -21528,7 +21534,7 @@
         "m1_expiration": "2026-03-18",
         "m2": 22.7161,
         "m2_expiration": "2026-04-15",
-        "slope_percent": -0.1969,
+        "slope_percent": -0.1968,
         "spread": 0.4039,
         "spread_percent": 1.81
       },
@@ -21540,7 +21546,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 24.1579,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -1.7801,
+        "slope_percent": -1.7803,
         "spread": -0.4968,
         "spread_percent": -2.015
       },
@@ -21552,7 +21558,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 23.5295,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -1.54,
+        "slope_percent": -1.5399,
         "spread": -0.4173,
         "spread_percent": -1.743
       },
@@ -21564,7 +21570,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 24.7511,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -3.4276,
+        "slope_percent": -3.4277,
         "spread": -0.9956,
         "spread_percent": -3.867
       },
@@ -21588,7 +21594,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 24.1512,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -2.6101,
+        "slope_percent": -2.61,
         "spread": -0.7892,
         "spread_percent": -3.164
       },
@@ -21600,7 +21606,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 23.8017,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -1.6605,
+        "slope_percent": -1.6602,
         "spread": -0.4868,
         "spread_percent": -2.004
       },
@@ -21612,7 +21618,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 25.0986,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -3.5984,
+        "slope_percent": -3.5983,
         "spread": -1.1602,
         "spread_percent": -4.418
       },
@@ -21636,7 +21642,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 26.4497,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -4.7043,
+        "slope_percent": -4.7042,
         "spread": -1.7585,
         "spread_percent": -6.234
       },
@@ -21648,7 +21654,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 24.412,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -1.6068,
+        "slope_percent": -1.6067,
         "spread": -0.6104,
         "spread_percent": -2.439
       },
@@ -21672,7 +21678,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 23.9468,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -1.5633,
+        "slope_percent": -1.5632,
         "spread": -0.5338,
         "spread_percent": -2.181
       },
@@ -21684,7 +21690,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 23.3132,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -0.9567,
+        "slope_percent": -0.9568,
         "spread": -0.5298,
         "spread_percent": -2.222
       },
@@ -21696,7 +21702,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 23.9995,
         "m2_expiration": "2026-05-19",
-        "slope_percent": -2.437,
+        "slope_percent": -2.4372,
         "spread": -0.9757,
         "spread_percent": -3.907
       },
@@ -21720,7 +21726,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 21.2162,
         "m2_expiration": "2026-05-19",
-        "slope_percent": 2.6068,
+        "slope_percent": 2.607,
         "spread": 0.9396,
         "spread_percent": 4.634
       },
@@ -21732,7 +21738,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 21.5654,
         "m2_expiration": "2026-05-19",
-        "slope_percent": 2.4232,
+        "slope_percent": 2.4235,
         "spread": 1.1577,
         "spread_percent": 5.673
       },
@@ -21744,7 +21750,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 20.7147,
         "m2_expiration": "2026-05-19",
-        "slope_percent": 2.9957,
+        "slope_percent": 2.9952,
         "spread": 1.4107,
         "spread_percent": 7.308
       },
@@ -21756,7 +21762,7 @@
         "m1_expiration": "2026-04-15",
         "m2": 20.4795,
         "m2_expiration": "2026-05-19",
-        "slope_percent": 3.1548,
+        "slope_percent": 3.155,
         "spread": 1.8814,
         "spread_percent": 10.116
       },
@@ -21768,7 +21774,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.2929,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 3.4481,
+        "slope_percent": 3.4478,
         "spread": 0.698,
         "spread_percent": 3.389
       },
@@ -21792,7 +21798,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.3167,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 3.2342,
+        "slope_percent": 3.2341,
         "spread": 0.6659,
         "spread_percent": 3.225
       },
@@ -21804,7 +21810,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.3194,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 3.1788,
+        "slope_percent": 3.1787,
         "spread": 0.6599,
         "spread_percent": 3.194
       },
@@ -21828,7 +21834,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.0997,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.8065,
+        "slope_percent": 4.8064,
         "spread": 1.0495,
         "spread_percent": 5.234
       },
@@ -21840,7 +21846,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.7805,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.9936,
+        "slope_percent": 4.9937,
         "spread": 1.0604,
         "spread_percent": 5.377
       },
@@ -21852,7 +21858,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.1753,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.1172,
+        "slope_percent": 4.1171,
         "spread": 0.9238,
         "spread_percent": 4.562
       },
@@ -21864,7 +21870,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.6453,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.2058,
+        "slope_percent": 5.2057,
         "spread": 1.1679,
         "spread_percent": 5.996
       },
@@ -21876,7 +21882,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.7897,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.7525,
+        "slope_percent": 4.7526,
         "spread": 1.0969,
         "spread_percent": 5.57
       },
@@ -21888,7 +21894,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.045,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.38,
+        "slope_percent": 4.3801,
         "spread": 1.0919,
         "spread_percent": 5.472
       },
@@ -21900,7 +21906,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 21.0615,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.0206,
+        "slope_percent": 5.0205,
         "spread": 1.284,
         "spread_percent": 6.492
       },
@@ -21936,7 +21942,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.6846,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.3659,
+        "slope_percent": 5.3657,
         "spread": 1.4687,
         "spread_percent": 7.643
       },
@@ -21948,7 +21954,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.99,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 4.8299,
+        "slope_percent": 4.83,
         "spread": 1.5191,
         "spread_percent": 7.802
       },
@@ -21960,7 +21966,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.5673,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.262,
+        "slope_percent": 5.2617,
         "spread": 1.5604,
         "spread_percent": 8.21
       },
@@ -21972,7 +21978,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.9198,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.2793,
+        "slope_percent": 5.2792,
         "spread": 1.8672,
         "spread_percent": 9.8
       },
@@ -21996,7 +22002,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.6563,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.1846,
+        "slope_percent": 5.1849,
         "spread": 1.5503,
         "spread_percent": 8.114
       },
@@ -22008,7 +22014,7 @@
         "m1_expiration": "2026-05-19",
         "m2": 20.281,
         "m2_expiration": "2026-06-17",
-        "slope_percent": 5.4575,
+        "slope_percent": 5.4573,
         "spread": 2.6582,
         "spread_percent": 15.084
       },
@@ -22020,7 +22026,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 21.7247,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 5.4782,
+        "slope_percent": 5.4779,
         "spread": 1.3073,
         "spread_percent": 6.403
       },
@@ -22032,7 +22038,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 21.491,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 6.3985,
+        "slope_percent": 6.3986,
         "spread": 1.4988,
         "spread_percent": 7.497
       },
@@ -22044,7 +22050,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 21.129,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 7.8112,
+        "slope_percent": 7.8113,
         "spread": 1.7774,
         "spread_percent": 9.185
       },
@@ -22056,7 +22062,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 21.2031,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 7.2592,
+        "slope_percent": 7.2593,
         "spread": 1.6704,
         "spread_percent": 8.552
       },
@@ -22068,7 +22074,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.7092,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 7.7612,
+        "slope_percent": 7.7611,
         "spread": 1.8383,
         "spread_percent": 9.741
       },
@@ -22080,7 +22086,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.4518,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 8.6196,
+        "slope_percent": 8.6199,
         "spread": 2.0523,
         "spread_percent": 11.154
       },
@@ -22092,7 +22098,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.2218,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 9.4144,
+        "slope_percent": 9.4145,
         "spread": 2.2467,
         "spread_percent": 12.499
       },
@@ -22116,7 +22122,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.4065,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 8.7545,
+        "slope_percent": 8.7542,
         "spread": 2.3364,
         "spread_percent": 12.93
       },
@@ -22128,7 +22134,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.2431,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 9.3727,
+        "slope_percent": 9.3725,
         "spread": 2.5447,
         "spread_percent": 14.378
       },
@@ -22140,7 +22146,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.3183,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 9.7559,
+        "slope_percent": 9.7561,
         "spread": 2.7128,
         "spread_percent": 15.409
       },
@@ -22152,7 +22158,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 19.6678,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 10.1595,
+        "slope_percent": 10.1601,
         "spread": 2.6708,
         "spread_percent": 15.713
       },
@@ -22164,7 +22170,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.4832,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 4.8431,
+        "slope_percent": 4.843,
         "spread": 1.3134,
         "spread_percent": 6.851
       },
@@ -22176,7 +22182,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.1442,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 5.2203,
+        "slope_percent": 5.22,
         "spread": 1.4048,
         "spread_percent": 7.497
       },
@@ -22188,7 +22194,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.5199,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 4.7545,
+        "slope_percent": 4.7544,
         "spread": 1.5172,
         "spread_percent": 7.984
       },
@@ -22200,7 +22206,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 21.4626,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 2.4268,
+        "slope_percent": 2.4267,
         "spread": 0.7727,
         "spread_percent": 3.735
       },
@@ -22212,7 +22218,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 20.4894,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 4.3561,
+        "slope_percent": 4.3564,
         "spread": 1.2491,
         "spread_percent": 6.492
       },
@@ -22224,7 +22230,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 19.6632,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 6.3861,
+        "slope_percent": 6.3864,
         "spread": 1.6915,
         "spread_percent": 9.412
       },
@@ -22236,7 +22242,7 @@
         "m1_expiration": "2026-06-17",
         "m2": 18.36,
         "m2_expiration": "2026-07-22",
-        "slope_percent": 8.9145,
+        "slope_percent": 8.915,
         "spread": 2.2483,
         "spread_percent": 13.954
       },
@@ -22260,7 +22266,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 19.6583,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 6.8694,
+        "slope_percent": 6.8696,
         "spread": 1.2075,
         "spread_percent": 6.544
       },
@@ -22284,7 +22290,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 20.1412,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 3.8005,
+        "slope_percent": 3.8003,
         "spread": 0.7121,
         "spread_percent": 3.665
       },
@@ -22296,7 +22302,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 19.8393,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 3.9543,
+        "slope_percent": 3.9541,
         "spread": 0.7327,
         "spread_percent": 3.835
       },
@@ -22308,7 +22314,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 19.8178,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 4.0756,
+        "slope_percent": 4.0755,
         "spread": 0.758,
         "spread_percent": 3.977
       },
@@ -22320,7 +22326,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 19.2634,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 4.7349,
+        "slope_percent": 4.735,
         "spread": 0.8484,
         "spread_percent": 4.607
       },
@@ -22332,7 +22338,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.949,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 5.393,
+        "slope_percent": 5.3932,
         "spread": 0.9983,
         "spread_percent": 5.561
       },
@@ -22344,7 +22350,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 19.0954,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 5.0831,
+        "slope_percent": 5.083,
         "spread": 0.9921,
         "spread_percent": 5.48
       },
@@ -22368,7 +22374,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.6039,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 6.7875,
+        "slope_percent": 6.7872,
         "spread": 1.3522,
         "spread_percent": 7.838
       },
@@ -22392,7 +22398,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.8545,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 4.8983,
+        "slope_percent": 4.8984,
         "spread": 0.9275,
         "spread_percent": 5.174
       },
@@ -22416,7 +22422,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.2982,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 7.3013,
+        "slope_percent": 7.3015,
         "spread": 1.3437,
         "spread_percent": 7.925
       },
@@ -22428,7 +22434,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.7312,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 5.3751,
+        "slope_percent": 5.3753,
         "spread": 0.9644,
         "spread_percent": 5.428
       },
@@ -22440,7 +22446,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.5165,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 6.2669,
+        "slope_percent": 6.2665,
         "spread": 1.2098,
         "spread_percent": 6.99
       },
@@ -22452,7 +22458,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.0542,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 7.4226,
+        "slope_percent": 7.4224,
         "spread": 1.5053,
         "spread_percent": 9.096
       },
@@ -22464,7 +22470,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.508,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 5.7287,
+        "slope_percent": 5.7288,
         "spread": 1.2334,
         "spread_percent": 7.14
       },
@@ -22488,7 +22494,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.9656,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 4.3656,
+        "slope_percent": 4.3658,
         "spread": 0.5149,
         "spread_percent": 2.791
       },
@@ -22500,7 +22506,7 @@
         "m1_expiration": "2026-07-22",
         "m2": 18.4089,
         "m2_expiration": "2026-08-19",
-        "slope_percent": 5.8347,
+        "slope_percent": 5.8349,
         "spread": 1.3692,
         "spread_percent": 8.035
       },
@@ -22512,7 +22518,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.5928,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 5.9606,
+        "slope_percent": 5.9609,
         "spread": 1.0895,
         "spread_percent": 5.888
       },
@@ -22536,7 +22542,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.9851,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 4.0544,
+        "slope_percent": 4.0546,
         "spread": 0.7541,
         "spread_percent": 3.921
       },
@@ -22548,7 +22554,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.8291,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 3.7062,
+        "slope_percent": 3.7065,
         "spread": 0.6893,
         "spread_percent": 3.601
       },
@@ -22560,7 +22566,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.7005,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 3.8026,
+        "slope_percent": 3.8028,
         "spread": 0.7022,
         "spread_percent": 3.696
       },
@@ -22596,7 +22602,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.2499,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 5.8596,
+        "slope_percent": 5.86,
         "spread": 1.1453,
         "spread_percent": 6.326
       },
@@ -22608,7 +22614,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.1787,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 5.8928,
+        "slope_percent": 5.893,
         "spread": 1.2321,
         "spread_percent": 6.865
       },
@@ -22620,7 +22626,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 19.2542,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 5.5963,
+        "slope_percent": 5.5959,
         "spread": 1.2069,
         "spread_percent": 6.687
       },
@@ -22632,7 +22638,7 @@
         "m1_expiration": "2026-08-19",
         "m2": 18.7083,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 6.3706,
+        "slope_percent": 6.371,
         "spread": 1.2781,
         "spread_percent": 7.333
       },
@@ -22644,9 +22650,21 @@
         "m1_expiration": "2026-08-19",
         "m2": 18.5409,
         "m2_expiration": "2026-09-16",
-        "slope_percent": 6.9241,
+        "slope_percent": 6.9243,
         "spread": 1.4457,
         "spread_percent": 8.457
+      },
+      {
+        "cm30": 18.0665,
+        "cm60": 19.4268,
+        "date": "2026-08-07",
+        "m1": 16.9913,
+        "m1_expiration": "2026-08-19",
+        "m2": 18.6639,
+        "m2_expiration": "2026-09-16",
+        "slope_percent": 7.5294,
+        "spread": 1.6726,
+        "spread_percent": 9.844
       }
     ],
     "hy_oas": [
@@ -23277,6 +23295,10 @@
       {
         "date": "2026-08-05",
         "value": 2.75
+      },
+      {
+        "date": "2026-08-06",
+        "value": 2.71
       }
     ],
     "move": [
@@ -24417,6 +24439,10 @@
       {
         "date": "2026-08-06",
         "value": 134.73
+      },
+      {
+        "date": "2026-08-07",
+        "value": 132.57
       }
     ],
     "vix": [
@@ -25019,6 +25045,10 @@
       {
         "date": "2026-08-06",
         "value": 15.15
+      },
+      {
+        "date": "2026-08-07",
+        "value": 14.9
       }
     ],
     "vix9d_vix": [
@@ -26701,6 +26731,10 @@
       {
         "date": "2026-08-06",
         "value": 88.72
+      },
+      {
+        "date": "2026-08-07",
+        "value": 90.42
       }
     ]
   },

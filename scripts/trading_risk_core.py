@@ -116,13 +116,14 @@ def _interpolate(contracts: list[dict[str, float]], target_days: int) -> float:
 
 
 def constant_maturity_curve(contracts: list[dict[str, float]]) -> dict[str, float]:
-    cm30 = _interpolate(contracts, 30)
-    cm60 = _interpolate(contracts, 60)
+    cm30 = round(_interpolate(contracts, 30), 4)
+    cm60 = round(_interpolate(contracts, 60), 4)
     if cm30 <= 0 or cm60 <= 0:
         raise ValueError("constant-maturity values must be positive")
     return {
-        "cm30": round(cm30, 4),
-        "cm60": round(cm60, 4),
+        "cm30": cm30,
+        "cm60": cm60,
+        # Slope from the rounded values so the published triple stays self-consistent.
         "slope_percent": round((cm60 / cm30 - 1) * 100, 4),
     }
 
