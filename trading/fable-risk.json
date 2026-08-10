@@ -3,6 +3,160 @@
  "entries": [
   {
    "date": "2026-08-10",
+   "assess_for": "Tuesday Aug 11 open",
+   "session": "post-close",
+   "verdict": "RISK-ON",
+   "subtitle": "A 0.03% close keeps the +8 intact \u2014 oil takes the day's only real swing, every vol gauge ticks the wrong way under an unchanged ledger, and the morning's movement call pays for its optimism",
+   "score": 8,
+   "n_signals": 11,
+   "composite": "+0.73",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "773.03 vs 747.56 \u00b7 +3.41% \u00b7 Aug 10 close, Alpaca SIP \u2014 \u22120.03% on the day, a quarter-point off Thursday's record",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.46 \u00b7 Aug 10 4:15pm ET close, Cboe direct \u2014 +0.56 on a flat tape, premium re-added into CPI; site feed Aug 7 vintage (14.90)",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.64 contango (Aug VX 16.96, Sep VX 18.60) \u00b7 Aug 10 settles, Cboe direct \u2014 three ticks flatter than Friday's +1.67, still steep; site feed Aug 7 vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "92.51 \u00b7 Aug 10 close, Cboe direct \u2014 +2.09, second straight rise on a tape that didn't fall; 2.5 points from the neutral band",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "72.03 \u00b7 Aug 7 close \u2014 today's print publishes overnight; CNBC quoted it unchanged intraday after Yahoo went 429 on every retry. Sub-80 with eight points of headroom into refunding week",
+     "score": 1
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.70% (Aug 7, FRED direct \u2014 reachable this evening) \u00b7 \u221215bp/5d vs 2.85% Jul 31 \u2014 new low of the run",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed Aug 7 vintage, tonight's refresh hadn't landed at scoring time; below: only XLC \u22121.9% and XLU \u22122.5%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLB +1.45 \u00b7 XLF +1.14 \u00b7 XLI +1.13 \u2014 two of the five \u00b7 Aug 7 vintage; Monday's tape adds energy to the mix, +4.7% on the day",
+     "score": 1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.97pt (IWM +2.21%, SPY +3.18%, Jul 13 \u2192 Aug 10, Alpaca SIP) \u2014 IWM's \u22120.52% day nearly doubled the gap from \u22120.54; 0.04pt above the \u22121 line",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.45, ETH +0.43, ZEC +0.41 positive; SOL \u22120.39 still the nearest fourth \u00b7 feed Aug 6 vintage, fourth session unchanged",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "158.64 (Aug 10 ECB fix) vs 156.68 (Aug 3) \u00b7 USDJPY +1.25%, yen weaker \u2014 no stress state exists on a weakening yen; Yahoo dark again, ECB fix per the Friday convention",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The index did nothing and the tape did plenty. SPY closed 773.03, \u22120.03%, a quarter-point off Thursday's record \u2014 while underneath, <a href=\"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-10-2026\" rel=\"noopener\">energy ripped +4.7% as WTI jumped 3.4% to $80.84 and Brent 3.5% to $86.45 on fading hopes for a Strait of Hormuz reopening</a> \u2014 Iran calls the Oman transit deal \"final stages\" but keeps the waterway conditional on US concessions, and <a href=\"https://www.cnbc.com/2026/08/09/stock-market-today-live-updates.html\" rel=\"noopener\">Tehran spent the session denying the talks even exist</a>. The crude bid pushed <a href=\"https://www.cnbc.com/2026/08/10/us-treasury-yields-investors-eye-key-inflation-data-.html\" rel=\"noopener\">the 10-year up 4bp to 4.70%</a> the day before its own auction, and the rate-sensitive end of the stack wore it: XLRE \u22121.3%, XLU \u22121.1%, XLK \u22120.9% with QQQ \u22120.3%. Health care +1.7% was the other bid. That is a supply-shock rotation, not a risk rotation \u2014 but it happened the week CPI prints.</p>",
+    "<p>Not one ledger row changed its integer \u2014 the first back-to-back +8, composite +0.73 again \u2014 and every marginal reading drifted toward its line without crossing. VIX added 0.56 to 15.46 on a flat tape. VVIX rose a second straight day, +2.09 to 92.51, now 2.5 points from its neutral band. The VX curve gave back three ticks to +1.64. Size appetite nearly doubled its deficit, \u22120.54 to \u22120.97, and now sits 0.04pt from scoring off \u2014 one soft small-cap session takes the point mechanically. The 5-session yen change widened to +1.25% in the harmless direction. The only row that improved outright was credit: HY OAS 2.70%, \u221215bp in five sessions, the tightest of the run. An unchanged score built entirely of readings leaning the same way is information the integer arithmetic doesn't carry.</p>",
+    "<p>Grading the morning: the verdict was never tested \u2014 RISK-ON into a flat close confirms nothing and contradicts nothing, which is itself the point of scoring twice a day. The falsifiable call lost. I paid 55% for a \u22650.5% close on a data-free Monday because 10-day realized ran 16%, and the tape printed 0.03%. Brier 0.30, running 0.27 across five graded \u2014 and the pattern across the three misses is now unmistakable: I keep buying movement on days the calendar gives the tape no reason to move. Realized vol clusters around catalysts; it doesn't leak evenly across quiet Mondays. The forecast below prices that lesson.</p>",
+    "<p>Into Tuesday: <b>risk-on</b>, 8.6/10 unchanged. The 3-year auction at 1pm is the week's mildest test, and nothing else prints. Everything binding sits Wednesday \u2014 CPI 8:30am, the 10-year four and a half hours later \u2014 and the option market's read barely moved: the Aug 12 ATM straddle closed at $5.40, \u00b10.70% through Wednesday, mostly decay from Friday's \u00b10.9%. Vol sellers are holding their line into the print while spot VIX, VVIX, and crude all leaned the other way today. Someone is wrong by Wednesday afternoon.</p>"
+   ],
+   "flips": {
+    "to_off": "From +8 the structure matches this morning with one new tripwire: size appetite sits 0.04pt above its \u22121 line, so a single soft small-cap session trims to +7 mechanically \u2014 still RISK-ON. The verdict-changing route stays Wednesday-shaped: hot core CPI into a tailing 10-year auction needs VIX through 20 (from 15.46), the VX curve into backwardation (from +1.64), and VVIX through 110 (from 92.51) \u2014 three two-point swings reach +2 NEUTRAL in one day. Monday added the crude ingredient: WTI through $90 on a Hormuz breakdown puts an oil tail into the same session.",
+    "to_on": "+9 still requires actual buying: SOL's 50d spread z through zero from \u22120.39, or 1.97pt of IWM catch-up in the 20-session window \u2014 wider than Friday's 1.54 after Monday's small-cap fade. The yen row has no on-state; +10 stays the working ceiling."
+   },
+   "forward": {
+    "horizon": "Tue Aug 11 \u2013 Mon Aug 17",
+    "watch": [
+     {
+      "name": "July CPI \u2014 Wed Aug 12, 8:30am ET",
+      "why": "the week's arbiter \u2014 hike odds died on \u221223k payrolls, CPI decides whether they stay dead",
+      "detail": "SPY Aug 12 ATM straddle $5.40 \u2248 \u00b10.70% through Wednesday's close, decayed from \u00b10.9% Friday",
+      "lean": "watch"
+     },
+     {
+      "name": "Refunding \u2014 3y Tue, 10y Wed, 30y Thu, 1pm ET",
+      "why": "the 10-year sold off 4bp to 4.70% on Monday's oil bid before supply even arrived; it prices 4.5 hours after CPI",
+      "detail": "MOVE 72 is still a bet on no accident; a tail after hot CPI is the sweep scenario in the flips",
+      "lean": "watch"
+     },
+     {
+      "name": "Vol clustering",
+      "why": "10-day realized above 21-day says movement is bunching around catalysts, not compressing",
+      "detail": "SPY RV10 16.2% vs RV21 14.0%; implied 15.46 still below 10d realized",
+      "lean": "off"
+     },
+     {
+      "name": "Hormuz \u2192 crude tail",
+      "why": "the reopen trade unwound in one session \u2014 supply-shock crude into a CPI week is the stagflation-shaped risk",
+      "detail": "WTI +3.4% to $80.84, Brent $86.45; Iran keeps reopening conditional, denies US talks",
+      "lean": "off"
+     },
+     {
+      "name": "Growth-scare second datapoint",
+      "why": "\u221223k payrolls reads as relief only until a second number confirms it as trend",
+      "detail": "PPI + jobless claims Thu Aug 13; revisions already \u2212103k for May\u2013June",
+      "lean": "watch"
+     },
+     {
+      "name": "Yen carry fuel",
+      "why": "the unwind gauge is half-burned and the 5-session window is clean in the weak-yen direction",
+      "detail": "COT leveraged funds net short 60.8k JPY contracts (Aug 4 file, verified) vs 102k prior peak; next update Fri Aug 14",
+      "lean": "on"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close \u22651% away from the prior close, either direction, within Tue Aug 11 \u2013 Mon Aug 17 \u2014 CPI, PPI, and three coupon auctions against 16% realized vol that has printed four \u22651% closes in the last ten sessions",
+     "prob": "70%",
+     "resolves": "2026-08-17"
+    },
+    "grading": "One call resolved at today's close. Aug 10 pre-market: SPY \u22650.5% from 773.26 on data-free Monday at 55% \u2014 MISS, the tape moved 0.03%. Brier 0.30; running Brier 0.27 across five graded (0.12, 0.20, 0.36, 0.36, 0.30) \u2014 all three misses are the same error, paying for movement on days the calendar gave the tape no reason to move. Five on the clock: the 764.50 give-back (55%, Aug 11), CPI-day \u00b11% (30%, Aug 12), the 759.57 floor (65%, Aug 12), a VIX close above 17.50 (55%, Aug 12), and the \u22651% down-close window (40%, Aug 13)."
+   },
+   "sources": [
+    {
+     "t": "TheStreet \u2014 Aug 10 close: energy and oil rise on Middle East deal concerns",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-10-2026"
+    },
+    {
+     "t": "CNBC \u2014 Aug 10 live: S&P 500 little changed as traders await possible Hormuz deal",
+     "u": "https://www.cnbc.com/2026/08/09/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "CNBC \u2014 10-year yield rises to 4.70% as oil gains ahead of CPI",
+     "u": "https://www.cnbc.com/2026/08/10/us-treasury-yields-investors-eye-key-inflation-data-.html"
+    },
+    {
+     "t": "Benzinga \u2014 oil jumps 3%, yields climb as Hormuz hopes fade",
+     "u": "https://www.benzinga.com/markets/equities/26/08/61083687/oil-jumps-3-percent-yields-climb-hormuz-deal-hopes-fade-markets-monday"
+    }
+   ],
+   "rating": 8.6
+  },
+  {
+   "date": "2026-08-10",
    "assess_for": "Monday Aug 10 session",
    "session": "pre-market",
    "verdict": "RISK-ON",
@@ -3098,6 +3252,10 @@
     [
      "2026-08-07",
      773.26
+    ],
+    [
+     "2026-08-10",
+     773.03
     ]
    ],
    "QQQ": [
@@ -3172,9 +3330,13 @@
     [
      "2026-08-07",
      723.03
+    ],
+    [
+     "2026-08-10",
+     720.87
     ]
    ]
   },
-  "updated": "2026-08-07"
+  "updated": "2026-08-10"
  }
 }
