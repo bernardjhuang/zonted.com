@@ -7,8 +7,8 @@ set -a
 source ~/.config/trading/blockscout.env
 set +a
 SHARDS="${1:-4}"
-LIMIT="${2:-2400}"
-OFFSET="${3:-1726}"
+LIMIT="${2:-6516}"
+OFFSET="${3:-0}"
 mkdir -p data/labels data/raw
 KEEP="${TMPDIR:-/tmp}/honest_outcomes.keep.$$.jsonl"
 if [[ -f data/labels/honest_outcomes.jsonl ]]; then

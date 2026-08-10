@@ -83,12 +83,15 @@ def select_trades(
     k: int,
     fold_grain: str,
     dedupe_creator: bool,
+    creator_cooldown_sec: int = 0,
+    first_time_creator_only: bool = False,
 ) -> list[dict[str, Any]]:
     by_fold: dict[str, list[dict[str, Any]]] = defaultdict(list)
     for r in rows:
         by_fold[fold_key(int(r["first_liq_ts"]), fold_grain)].append(r)
 
     trades: list[dict[str, Any]] = []
+    last_pick_ts: dict[str, int] = {}
     for fold in sorted(by_fold):
         ranked = sorted(by_fold[fold], key=lambda x: x["score"], reverse=True)
         seen_creators: set[str] = set()
@@ -97,34 +100,41 @@ def select_trades(
             if rank >= k:
                 break
             creator = (row.get("creator") or "").lower()
+            if first_time_creator_only and (row.get("creator_prior_launches") or 0) > 0:
+                continue
             if dedupe_creator and creator and creator in seen_creators:
                 continue
+            if creator_cooldown_sec > 0 and creator:
+                prev = last_pick_ts.get(creator)
+                if prev is not None and int(row["first_liq_ts"]) - prev < creator_cooldown_sec:
+                    continue
             if creator:
                 seen_creators.add(creator)
             rank += 1
             g = row.get("gross_multiple_1h")
-            trades.append(
-                {
-                    "fold": fold,
-                    "rank_in_fold": rank,
-                    "launch_id": row["launch_id"],
-                    "token": row.get("token"),
-                    "pool": row.get("pool"),
-                    "creator": row.get("creator"),
-                    "first_liq_ts": row["first_liq_ts"],
-                    "first_liq_block": row["first_liq_block"],
-                    "score": row["score"],
-                    "entry_tvl_usd": row.get("entry_tvl_usd"),
-                    "flow_quote_volume_wei": row.get("flow_quote_volume_wei"),
-                    "creator_prior_launches": row.get("creator_prior_launches"),
-                    "gross_multiple_1h": g,
-                    "pnl_per_dollar": (float(g) - 1.0) if isinstance(g, (int, float)) else None,
-                    "rug_1h": row.get("rug_1h"),
-                    "executable_winner_250_1h": row.get("executable_winner_250_1h"),
-                    "exit": "T+1h",
-                    "notional_usd": 250,
-                }
-            )
+            trade = {
+                "fold": fold,
+                "rank_in_fold": rank,
+                "launch_id": row["launch_id"],
+                "token": row.get("token"),
+                "pool": row.get("pool"),
+                "creator": row.get("creator"),
+                "first_liq_ts": row["first_liq_ts"],
+                "first_liq_block": row["first_liq_block"],
+                "score": row["score"],
+                "entry_tvl_usd": row.get("entry_tvl_usd"),
+                "flow_quote_volume_wei": row.get("flow_quote_volume_wei"),
+                "creator_prior_launches": row.get("creator_prior_launches"),
+                "gross_multiple_1h": g,
+                "pnl_per_dollar": (float(g) - 1.0) if isinstance(g, (int, float)) else None,
+                "rug_1h": row.get("rug_1h"),
+                "executable_winner_250_1h": row.get("executable_winner_250_1h"),
+                "exit": "T+1h",
+                "notional_usd": 250,
+            }
+            trades.append(trade)
+            if creator:
+                last_pick_ts[creator] = int(row["first_liq_ts"])
     return trades
 
 
@@ -165,6 +175,17 @@ def main() -> None:
         action="store_true",
         help="At most one trade per creator per fold (cheap lineage-ish dedupe)",
     )
+    parser.add_argument(
+        "--creator-cooldown-sec",
+        type=int,
+        default=0,
+        help="Skip creator if already traded within this many seconds (cross-fold lineage)",
+    )
+    parser.add_argument(
+        "--first-time-creator-only",
+        action="store_true",
+        help="Only trade creators with creator_prior_launches == 0",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
 
@@ -178,6 +199,8 @@ def main() -> None:
         k=args.k,
         fold_grain=args.fold_grain,
         dedupe_creator=args.dedupe_creator,
+        creator_cooldown_sec=args.creator_cooldown_sec,
+        first_time_creator_only=args.first_time_creator_only,
     )
     summary = {
         "decision_offset_sec": args.decision_offset,
@@ -186,6 +209,8 @@ def main() -> None:
         "k_per_fold": args.k,
         "fold_grain": args.fold_grain,
         "dedupe_creator": args.dedupe_creator,
+        "creator_cooldown_sec": args.creator_cooldown_sec,
+        "first_time_creator_only": args.first_time_creator_only,
         "ranker": "model_v0",
         "exit": "T+1h honest gross_multiple_1h",
         **summarize(trades, n_candidates=len(candidates)),

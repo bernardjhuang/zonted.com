@@ -34,6 +34,33 @@ def test_select_trades_top_k_and_creator_dedupe():
     assert trades[0]["pnl_per_dollar"] == 3.0
 
 
+def test_creator_cooldown_across_hours():
+    ts = 1786201200  # hour H
+    rows = [
+        _row("a", "0xc1", 10, 4.0, ts),
+        _row("b", "0xc2", 9, 1.0, ts + 60),
+        _row("c", "0xc1", 10, 0.2, ts + 3600),  # next hour, same creator — cooldown
+        _row("d", "0xc3", 8, 1.2, ts + 3601),
+    ]
+    trades = select_trades(
+        rows, k=2, fold_grain="hour", dedupe_creator=True, creator_cooldown_sec=7200
+    )
+    assert [t["launch_id"] for t in trades] == ["a", "b", "d"]
+
+
+def test_first_time_creator_only():
+    ts = 1786201200
+    rows = [
+        {**_row("a", "0xc1", 10, 4.0, ts), "creator_prior_launches": 0},
+        {**_row("b", "0xc2", 9, 2.0, ts + 1), "creator_prior_launches": 3},
+        {**_row("c", "0xc3", 8, 1.5, ts + 2), "creator_prior_launches": 0},
+    ]
+    trades = select_trades(
+        rows, k=3, fold_grain="hour", dedupe_creator=False, first_time_creator_only=True
+    )
+    assert [t["launch_id"] for t in trades] == ["a", "c"]
+
+
 def test_summarize_fold_means():
     trades = [
         {"fold": "h1", "gross_multiple_1h": 3.0, "rug_1h": False, "executable_winner_250_1h": True, "launch_id": "a"},
