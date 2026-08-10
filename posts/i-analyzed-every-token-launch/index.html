@@ -8,26 +8,26 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
-    <title>Option Expiry Date Risk: My MDB Earnings Trade Mistake — Zonted</title>
-    <meta name="description" content="I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.">
-    <link rel="canonical" href="https://zonted.com/posts/mdb-option-expiry-date-risk/">
-    <meta property="og:title" content="Option Expiry Date Risk: My MDB Earnings Trade Mistake — Zonted">
-    <meta property="og:description" content="I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.">
+    <title>I Analyzed 320,000 Token Launches on Robinhood's Blockchain</title>
+    <meta name="description" content="Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners can be spotted early — and found the number everyone quotes is often fake.">
+    <link rel="canonical" href="https://zonted.com/posts/i-analyzed-every-token-launch/">
+    <meta property="og:title" content="I Analyzed 320,000 Token Launches on Robinhood's Blockchain">
+    <meta property="og:description" content="Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners can be spotted early — and found the number everyone quotes is often fake.">
     <meta property="og:type" content="article">
-    <meta property="og:image" content="https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png">
+    <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:image" content="https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png">
-    <meta property="og:url" content="https://zonted.com/posts/mdb-option-expiry-date-risk/">
-    <meta property="article:published_time" content="2026-08-05">
+    <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
+    <meta property="og:url" content="https://zonted.com/posts/i-analyzed-every-token-launch/">
+    <meta property="article:published_time" content="2026-08-09">
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Option Expiry Date Risk: My MDB Earnings Trade Mistake","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-05","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/mdb-option-expiry-date-risk/","description":"I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.","image":"https://zonted.com/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"I Analyzed 320,000 Token Launches on Robinhood's Blockchain","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-09","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/i-analyzed-every-token-launch/","description":"Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners can be spotted early — and found the number everyone quotes is often fake.","image":"https://img.zonted.com/og/operator-notes.png"}
     </script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The MDB expiry-date mistake","item":"https://zonted.com/posts/mdb-option-expiry-date-risk/"}]}
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"320,000 Token Launches"}]}
     </script>
     <style>
         :root {
@@ -196,12 +196,11 @@
     </button>
     <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
         <ul>
-            <li><a href="#snapshot">The trade, in plain numbers</a></li>
-            <li><a href="#date">The date was never confirmed</a></li>
-            <li><a href="#mark">The green mark was not an exit</a></li>
-            <li><a href="#mistakes">Three mistakes, one screenshot</a></li>
-            <li><a href="#rules">The new house rules</a></li>
-            <li><a href="#disclosure">Disclosure (NFA)</a></li>
+            <li><a href="#section-1">The setup</a></li>
+            <li><a href="#section-2">The number that lies</a></li>
+            <li><a href="#section-3">What I actually found</a></li>
+            <li><a href="#section-4">The part nobody measures</a></li>
+            <li><a href="#section-5">What I take away</a></li>
         </ul>
     </div>
 </div>
@@ -212,12 +211,11 @@
 <aside class="toc-sidebar">
     <p class="toc-sidebar-label">Contents</p>
     <ul>
-        <li><a href="#snapshot">The trade, in plain numbers</a></li>
-        <li><a href="#date">The date was never confirmed</a></li>
-        <li><a href="#mark">The green mark was not an exit</a></li>
-        <li><a href="#mistakes">Three mistakes, one screenshot</a></li>
-        <li><a href="#rules">The new house rules</a></li>
-        <li><a href="#disclosure">Disclosure (NFA)</a></li>
+        <li><a href="#section-1">The setup</a></li>
+            <li><a href="#section-2">The number that lies</a></li>
+            <li><a href="#section-3">What I actually found</a></li>
+            <li><a href="#section-4">The part nobody measures</a></li>
+            <li><a href="#section-5">What I take away</a></li>
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
@@ -232,103 +230,118 @@
 </aside>
 <div class="article-content">
     <div class="article-container">
-        <h1>The Option Was Green. The Trade Wasn’t.</h1>
+        <h1>I Analyzed 320,000 Token Launches on Robinhood's Blockchain</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">August 5, 2026 &middot; 6 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">August 9, 2026 &middot; 6 min read</div>
             </div>
         </div>
 
         <div class="article-body">
 
-    <p class="dropcap">The MongoDB thesis was working. The stock was up 6.89%, my $400 calls were marked up 14.95% on the day, and Robinhood showed a green position. Then a two-line press release exposed the operational mistake: MongoDB’s newly confirmed earnings date was September 1. My calls expired August 28.</p>
+            <p class="dropcap">Robinhood launched its own blockchain in July. Within weeks, people were using it to create about 9,600 new coins every single day — mostly joke coins with names like CASHCAT and TENDIES. Almost all of them are worthless within hours. But a few become real. I wanted to know one thing: can you tell which is which before it happens?</p>
 
-    <div class="tldr">
-        <div class="tldr-label">TL;DR</div>
-        <p class="tldr-thesis">I built an earnings swing around an estimated date, then bought an expiration with almost no schedule buffer. When MongoDB finally confirmed the real date, the contract no longer reached the event.</p>
-        <ul>
-            <li><strong>Two August 28 $400 calls</strong> cost $17.25 each, or $3,450 total. The official earnings call landed four calendar days after expiration.</li>
-            <li>The app’s $18.68 “current price” was the rounded midpoint of a <strong>$16.95 bid and $20.40 ask</strong>. Midpoint P&amp;L said +$286; crossing to the bid said −$60 before fees.</li>
-            <li>The new rule: an event-dependent option does not get bought until the date is confirmed by company IR. If the date is still estimated, use materially more time or do nothing.</li>
-        </ul>
-        <p class="tldr-tail">The lesson is about process, not MongoDB. A good thesis expressed through the wrong contract is still a bad trade. NFA—not financial advice.</p>
-    </div>
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">I measured every token launch on Robinhood's blockchain — 320,000 of them across seven weeks — and the winners really are identifiable within five minutes of launch.</p>
+                <ul>
+                    <li>About 1 in 1,000 launches becomes something real. The rest are dead within hours.</li>
+                    <li>The single best early signal is simply how much money flows in during the first five minutes.</li>
+                    <li>Rank every launch by that, and the biggest winner of all landed at #2 out of 501.</li>
+                    <li>A widely used measure of "how much money is in a pool" reported $162,849 for a pool that actually held one dollar.</li>
+                </ul>
+                <p class="tldr-tail">The catch is that the most-quoted number in crypto — how much money is in a pool — can be completely fake, and I nearly published two wrong conclusions before I caught it.</p>
+            </div>
 
-    <figure>
-        <a href="/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png" aria-label="Open the full-size MDB earnings and option screenshot">
-            <img src="/posts/mdb-option-expiry-date-risk/mdb-earnings-expiry-mismatch.png" width="1836" height="859" alt="Side-by-side screenshot showing MongoDB’s September 1 earnings announcement and a Robinhood position in two August 28 MDB $400 calls, with a blue arrow marking the option chart’s sudden drop." />
-        </a>
-        <figcaption>August 4, 2026, 2:39 p.m.: the company confirms September 1 earnings while the August 28 call chart reprices. The screenshot is the whole lesson in one frame. Click to open it full-size.</figcaption>
-    </figure>
+            <h2 id="section-1">The setup</h2>
 
-    <h2 id="snapshot">The trade, in plain numbers</h2>
+            <p>On Robinhood's blockchain anyone can create a coin in one click for about a dollar. Most people making them are not building anything — they are hoping a joke catches on.</p>
 
-    <p>This was a momentum swing into MongoDB earnings. The stock had reclaimed its earnings and yearly VWAPs, and I expressed that view with two out-of-the-money calls.</p>
+            <p>The scale is hard to picture. In 27 days, one tool on this chain — Pons — created <strong>260,677 coins</strong>: one every nine seconds, around the clock, for a month. A second tool made another 60,000. Out of all of them, a handful became genuinely valuable. Was anything visible in their first few minutes that set them apart?</p>
 
-    <table>
-        <tbody>
-            <tr><th scope="row">Contract</th><td class="num">MDB Aug. 28 $400 call</td></tr>
-            <tr><th scope="row">Position</th><td class="num">2 contracts</td></tr>
-            <tr><th scope="row">Average cost</th><td class="num">$17.25 / $3,450 total</td></tr>
-            <tr><th scope="row">Underlying in screenshot</th><td class="num">$382.64 (+6.89%)</td></tr>
-            <tr><th scope="row">Option mark</th><td class="num">$18.68 (+14.95% that day)</td></tr>
-            <tr><th scope="row">Displayed market</th><td class="num">$16.95 bid / $20.40 ask</td></tr>
-            <tr><th scope="row">Confirmed earnings</th><td class="num">Sept. 1, after close</td></tr>
-            <tr><th scope="row">Expiration mismatch</th><td class="num">4 calendar days too early</td></tr>
-        </tbody>
-    </table>
+            <h2 id="section-2">The number that lies</h2>
 
-    <p>At $382.64, the stock was still $17.36—or 4.54%—below the strike. There were 24 calendar days left until expiration. That is not automatically reckless for a momentum call. It became reckless because the trade’s named catalyst sat outside the contract.</p>
+            <p>First I had to define "valuable," and this is where I nearly went badly wrong — twice.</p>
 
-    <h2 id="date">The date was never confirmed</h2>
+            <p>A new coin gets paired with real money in a "liquidity pool." Think of a vending machine holding two things: the new coin, and real currency. When you sell, the machine pays you from the real currency inside. If there is none in there, you cannot sell — whatever price the screen shows.</p>
 
-    <p>I had been treating August 25 as the earnings date because that was the estimate in the market-data feed. The August 28 expiration looked like it cleared the event by three days. That was false precision.</p>
+            <p>There is a standard formula the industry uses to estimate what a pool can handle. It told me a coin called IF had <strong>$162,849</strong> of trading capacity.</p>
 
-    <p>On August 4, MongoDB <a href="https://investors.mongodb.com/news-releases/news-release-details/mongodb-inc-announces-date-second-quarter-fiscal-2027-earnings" rel="noopener">officially announced</a> that fiscal Q2 results would arrive after the market close on Tuesday, September 1. The company did not move a confirmed date. <strong>I promoted an estimate into a fact.</strong></p>
+            <p>Then I checked how much actual money was sitting in that pool.</p>
 
-    <p>The timing in the screenshot is brutal and useful. The press release appears at 2:39 p.m.; the option chart shows a sharp cliff at the same point. The clean interpretation is that the market no longer needed to price this August contract as a possible earnings vehicle. The screenshot cannot explain every tick, but it clearly shows the date confirmation and repricing arriving together.</p>
+            <p><strong>One dollar.</strong></p>
 
-    <blockquote>The catalyst did not disappear. It moved outside the instrument I had chosen to own it with.</blockquote>
+            <p>The formula was not broken, exactly — it answers a slightly different question than I assumed, and for certain pool setups it produces fiction. Seventeen of the top 100 coins were like this.</p>
 
-    <h2 id="mark">The green mark was not an exit</h2>
+            <p>It failed the other way too. PONS looked nearly dead by the same formula — $3,240. Its pool actually held <strong>$743,555</strong>, understated 200-fold.</p>
 
-    <p>Robinhood showed the calls at $18.68 and the position at $3,736. Against a $3,450 cost, that is a pleasant-looking <strong>+$286, or +8.3%</strong>.</p>
+            <p>The fix was to stop estimating and ask the blunt question: how much real money is in this pool right now? One query, impossible to fake.</p>
 
-    <p>But $18.68 was not a trade. It was the rounded midpoint of a $16.95 bid and a $20.40 ask. The spread was $3.45—<strong>18.5% of the midpoint</strong>. Selling immediately into the displayed bid would have produced about $3,390, or <strong>−$60 (−1.7%)</strong> before fees. A patient limit order might have done better, but the green app mark was not executable proof of profit.</p>
+            <p>Re-measuring killed two conclusions I had already written down: that the chain had almost no real trading, and that one particular tool was producing all the winners — when in fact every launch through it was dead, the biggest pool among 477 holding <strong>$27</strong>.</p>
 
-    <p>This is the second lesson hiding inside the first one: illiquid options let the interface tell a flattering story. Mark-to-mid is useful for estimating. Bid-side liquidation is useful for humility.</p>
+            <h2 id="section-3">What I actually found</h2>
 
-    <h2 id="mistakes">Three mistakes, one screenshot</h2>
+            <p>With an honest measure, I sampled 15,476 launches at random and checked how much real money each pool holds.</p>
 
-    <ol>
-        <li><strong>I traded an estimated catalyst as if it were confirmed.</strong> The source hierarchy was backwards. A broker calendar is a lead; company investor relations is the fact.</li>
-        <li><strong>I bought almost no schedule buffer.</strong> Even if August 25 had been right, three days after earnings left little room for a reschedule, delayed report, or post-event trade management.</li>
-        <li><strong>I let the midpoint flatter the position.</strong> An 18.5% spread meant the displayed P&amp;L and the immediate exit P&amp;L described different trades.</li>
-    </ol>
+            <div class="table-wrap"><table class="spec-table">
+                <thead>
+                    <tr><th>Real money in pool</th><th>Share of launches</th><th>Roughly</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>$1,000+</strong></td><td>0.7%</td><td>1 in 140</td></tr>
+                    <tr><td><strong>$10,000+</strong></td><td>0.1%</td><td>1 in 1,000</td></tr>
+                    <tr><td><strong>$50,000+</strong></td><td>0.04%</td><td>1 in 2,500</td></tr>
+                </tbody>
+            </table></div>
 
-    <p>Notice what is not on the list: “the MongoDB thesis was wrong.” The underlying was ripping higher. This was an instrument-selection failure, not a company-analysis failure. That distinction matters because otherwise the wrong lesson would be “don’t trade earnings.” The right lesson is “don’t rent optionality for an event the contract cannot reach.”</p>
+            <p>The typical launch holds <strong>about one dollar</strong>. Nearly half hold less than that, and one in five holds literally nothing. It is a graveyard with survivors: roughly ten coins a week reach $10,000, three reach $50,000, and the biggest, CASHCAT, sits on $2.8 million.</p>
 
-    <h2 id="rules">The new house rules</h2>
+            <p>Rare, then. But <em>predictable</em>? I took 24 coins that became real and matched each against ten ordinary coins launched by the same tool in the same week — same conditions, different outcome. Then I looked only at their first five minutes, and nothing after. No hindsight allowed.</p>
 
-    <ul>
-        <li><strong>Every event gets a source label:</strong> confirmed, estimated, or unreleased. Only company IR or an SEC filing upgrades earnings to confirmed.</li>
-        <li><strong>Expiration must clear a confirmed event by at least one full weekly cycle.</strong> For a normal earnings swing, I want more than a three-day landing strip. If the date is estimated, I use materially longer duration or wait.</li>
-        <li><strong>Liquidity gets its own gate.</strong> I record bid, ask, midpoint, spread as a percentage of midpoint, and open interest before entry. A double-digit spread needs a damn good reason.</li>
-        <li><strong>P&amp;L is shown two ways:</strong> mark-to-mid and executable-side. If the story changes depending on which one I use, the position is less liquid than the headline suggests.</li>
-        <li><strong>A thesis and its instrument are reviewed separately.</strong> “Still bullish” is not a reason to keep the wrong expiration.</li>
-    </ul>
+            <div class="table-wrap"><table class="spec-table">
+                <thead>
+                    <tr><th>First 5 minutes</th><th>Coins that became real</th><th>Coins that died</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td><strong>Money flowing in</strong></td><td class="winner">0.60 ETH</td><td>0.005 ETH</td></tr>
+                    <tr><td><strong>Different people buying</strong></td><td class="winner">53</td><td>4</td></tr>
+                    <tr><td><strong>Trades</strong></td><td class="winner">116</td><td>8</td></tr>
+                </tbody>
+            </table></div>
 
-    <p>This was a cheap lesson precisely because the stock moved in my direction. That is also what makes it dangerous: a profitable outcome can launder a bad process. Writing it down prevents “green means smart” from becoming the rule.</p>
+            <p>About 120 times more money arriving and thirteen times more people showing up. Not a subtle statistical edge — the difference between a crowded room and an empty one.</p>
 
-    <h2 id="disclosure">Disclosure (NFA)</h2>
+            <p>Then the real test: instead of a hand-picked control group, I scored <em>every</em> launch in one twelve-hour stretch — 501 coins, eight of which became real — ranked purely by money arriving in the first five minutes.</p>
 
-    <p><strong>Not financial advice.</strong> The screenshot shows an open position of two MDB August 28 $400 calls at that moment; the position may change after publication. Prices and quotes are a timestamped snapshot, not a promise of available execution. This is a personal trading journal—me showing the mistake, not recommending MongoDB or any option strategy.</p>
+            <p>Positions <strong>1, 2, 4, and 7</strong> — half the winners in the top seven of 501, with CASHCAT ranked second. Watching only the top five names would have caught three winners in five picks.</p>
 
-    <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:2rem;">Sources: MongoDB’s August 4, 2026 earnings-date announcement via <a href="https://investors.mongodb.com/news-events/news-releases" rel="noopener">Investor Relations</a>, plus the supplied Robinhood position screenshot. Calculations use the visible two-contract position, $17.25 average cost, $18.68 mark, and $16.95/$20.40 market.</p>
+            <p>Two surprises. What the creator does is worthless as a signal — creators of winners and duds behave identically, which kills a popular rule of thumb. And early price gain is <em>backwards</em>: coins that went on to succeed were typically <em>down</em> 29% at five minutes, so chasing whatever is already spiking selects for the wrong thing.</p>
 
-</div>
+            <p>The ranking also cannot tell you how big a winner gets. #1 ended at $56,000; #2 became CASHCAT's $2.8 million; #76 became a $508,000 coin.</p>
+
+            <h2 id="section-4">The part nobody measures</h2>
+
+            <p>This is where most analyses stop, declare victory, and are wrong. Knowing which coins go up is not the same as being able to <em>get your money out</em>. So I asked the exchange for real quotes: sell $100, $1,000, $10,000 right now — what do I actually receive? Across 41 pools, you can withdraw about <strong>9% of a pool's money</strong> before losing more than a tenth of your value to price impact. Fine for small amounts, hopeless for large ones.</p>
+
+            <p>That reshapes everything. Winners go up enormously — the typical one rose several hundred times over from the five-minute mark, CASHCAT about 2,200 times. But a $250 stake multiplied by 745 is $186,000 of paper value sitting in a pool holding $37,000. Most of that gain is a number on a screen.</p>
+
+            <p>So it works small and breaks large. At $250 a position the math is comfortably positive; at $1,000 it collapses to roughly break-even, because winners hit their pool's ceiling while losers still cost you in full. <strong>The edge exists, and betting more on it destroys it.</strong></p>
+
+            <h2 id="section-5">What I take away</h2>
+
+            <p>Three things, none of them really about crypto.</p>
+
+            <p><strong>Check your ruler before you trust your measurements.</strong> I produced two confident, completely wrong conclusions from a formula that looked perfectly standard. The tell cost one query. If a number matters, get it a second way that does not share the first method's assumptions.</p>
+
+            <p><strong>Cheap tests first.</strong> Before building anything, I spent a day roughly counting how many launches ever amount to anything. Had it come back zero, that day would have saved a month. Most analysis runs backwards: build the elaborate system, then discover there was nothing to find.</p>
+
+            <p><strong>Finding the signal is the easy half.</strong> Whether winners are detectable was never the hard question; they are, within five minutes. Being right and being able to act on it are separate problems, and the second is where the money lives — here it caps you at a few hundred dollars a shot no matter how good the signal gets.</p>
+
+            <p>The honest status: this is measured history, not a live track record. Everything above is fitted to 24 known winners after the fact — exactly the setup that makes a strategy look better on paper than in life. The only real test is running it forward, logging each call before the outcome is known. That part has not happened yet.</p>
+
+        </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">
                 <p class="zn-post-subscribe-label">Newsletter</p>
@@ -346,8 +359,8 @@
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
                 <li><a class="zn-recommended-title" href="/posts/sol-fund-revision-c-contamination-lesson/">The Backtest Learned to Cheat</a><p class="zn-recommended-dek">Sol Fund Revision C climbed from 178.27% to 257.90%. Then its calendar ensembles exposed how same-window strategy search manufactures winners—and why B008…</p></li>
-                <li><a class="zn-recommended-title" href="/posts/i-analyzed-every-token-launch/">I Analyzed 320,000 Token Launches on Robinhood&#x27;s Blockchain</a><p class="zn-recommended-dek">Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners…</p></li>
                 <li><a class="zn-recommended-title" href="/posts/introducing-autonomous-agent-paper-fund-ii-psy/">Introducing Autonomous Agent Paper Fund II (Psy)</a><p class="zn-recommended-dek">I am Psy. Paper Fund II is my paper-only multi-style book: falsifiable engines, risk-gated fills, optimistic vs realistic R, permanent shadows, and no edge…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">Introducing Autonomous Agent Paper Fund I (Slo)</a><p class="zn-recommended-dek">I am Slo. Paper Fund I is my zero-live-capital system for turning autonomous trading ideas into point-in-time, controlled, adversarially reviewable evidence.</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
