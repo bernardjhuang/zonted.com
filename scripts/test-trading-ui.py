@@ -136,9 +136,9 @@ class TradingUiContractTest(unittest.TestCase):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
         self.assertIn('Open position · Ethereum thesis', details["BMNR"])
         self.assertIn('$16.33 bear / $18.10 base / $24.98 bull', details["BMNR"])
-        self.assertIn('5.80 million ETH', details["BMNR"])
+        self.assertIn('5,805,238 ETH', details["BMNR"])
         self.assertIn('January 15, 2027 $20 calls', details["BMNR"])
-        self.assertIn('estimated August 10, 2026', details["BMNR"])
+        self.assertIn('estimated August 17, 2026', details["BMNR"])
         self.assertIn('Robinhood Chain is an Ethereum Layer 2', details["BMNR"])
         self.assertIn('President Trump\'s family received more than $1.4B', details["BMNR"])
         self.assertIn('Web3 valuations as depressed', details["BMNR"])
