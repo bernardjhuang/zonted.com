@@ -211,9 +211,22 @@ def main() -> None:
         default="pons",
         help="Only include mechanism_era starting with this prefix (empty = all). Default pons avoids v4 poolIds.",
     )
+    parser.add_argument(
+        "--heavy-at",
+        choices=("launch", "decision"),
+        default="decision",
+        help="Block for V6/V7: launch=first_liq_block; decision=first_liq + decision-offset (default).",
+    )
+    parser.add_argument(
+        "--decision-offset",
+        type=int,
+        default=600,
+        help="Seconds after first liquidity for --heavy-at decision",
+    )
     args = parser.parse_args()
     ensure_data_dirs()
     cfg = load_config()
+    block_time = float(cfg["approx_block_time_sec"])
     eth_usd = args.eth_usd
     if eth_usd <= 0:
         stats = rest_get("/api/v2/stats")
@@ -231,7 +244,8 @@ def main() -> None:
     sample = rows[start:end]
     print(
         f"[vetoes] era_prefix={args.era_prefix!r} stamped={len(rows)} "
-        f"sample={len(sample)} eth_usd={eth_usd} floor_usd={args.floor_usd}"
+        f"sample={len(sample)} eth_usd={eth_usd} floor_usd={args.floor_usd} "
+        f"heavy_at={args.heavy_at}"
     )
     burst_ids = build_clone_burst_ids(rows)
     print(f"[vetoes] clone_burst_flagged={len(burst_ids)}")
@@ -242,7 +256,7 @@ def main() -> None:
     with tmp.open("w") as handle:
         for i, row in enumerate(sample):
             reasons: list[str] = []
-            details: dict[str, Any] = {"eth_usd": eth_usd}
+            details: dict[str, Any] = {"eth_usd": eth_usd, "heavy_at": args.heavy_at}
             for gate in (
                 gate_v1_quote(row, cfg),
                 gate_v3_lp_custody(row, cfg),
@@ -252,7 +266,14 @@ def main() -> None:
                     reasons.append(gate)
             # Heavy gates only if structural gates passed — saves most eth_call budget.
             if not args.skip_heavy and not reasons:
-                block = int(row["first_liq_block"])
+                if args.heavy_at == "decision":
+                    decision_ts = int(row["first_liq_ts"]) + args.decision_offset
+                    block = int(row["first_liq_block"]) + int(
+                        max(0, decision_ts - int(row["first_liq_ts"])) / block_time
+                    )
+                else:
+                    block = int(row["first_liq_block"])
+                details["heavy_block"] = block
                 try:
                     shared_state = read_v3_pool_state(row["pool"], block)
                 except Exception:

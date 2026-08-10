@@ -179,18 +179,58 @@ So: (1) the circular proxy label was counting pumps that are not holdable; (2) a
 - Stop iterating the scorecard against `high_value_proxy` or hold-to-24h 3× — both are the wrong target for this cohort.
 - Next build: freeze an **exit@1h / staged-exit** label, rebuild vetoes with that objective, then re-run Phase 0 + walk-forward EV.
 
+---
+
+## Round E — V7 retimed to decision + hourly EV (2026-08-10)
+
+### Root cause of “vetoes kill all 1h winners”
+
+All three `executable_winner_250_1h` names were vetoed solely by **V7 at launch block**, while honest entry TVL at **T+10m** was already above (or near) the floor:
+
+| launch_id | 1h multiple | V7 launch TVL | entry TVL @T+10m |
+|---|---:|---:|---:|
+| `0x017977…` | 7.22× | $960 | **$6,661** |
+| `0x9b0a58…` | 4.00× | $96 | **$1,070** |
+| `0xb2ab28…` | 3.89× | $115 | **$936** |
+
+Liquidity arrives after first mint. Spec veto window is T+0…T+3m / decision-time — launch-block V7 is the wrong clock. Code default is now `--heavy-at decision` (T+10m).
+
+### Walk-forward EV (`rh_radar.ev_backtest`, K=3/hour, exit=1h gross)
+
+Cohort sits on a single UTC day → **hour folds** (14 hours; folds with ≥5 candidates used).
+
+| Veto mode | Candidates | 3×@1h in set | model mean-of-fold-means | folds with mean>1 | C1 foldMeans | B1 foldMeans | EV bar |
+|---|---:|---:|---:|---:|---:|---:|---|
+| launch_v7 (old) | 91 | 0 | 0.25 | 1 | 0.14 | 0.14 | fail |
+| **decision_v7 ($1k)** | 62 | 2 | **0.75** | **2** | 0.47 | 0.47 | fail (mean<1) |
+| decision_v7 ($250) | 72 | 3 | **0.86** | **3** | 0.45 | 0.45 | fail (mean<1) |
+
+**Takeaways**
+
+1. Retiming V7 is mandatory — it is the difference between capturing 1h 3× names and missing them all.
+2. `model_v0` is the best ranker on 1h EV once the sieve is fixed; C1/B1 lag.
+3. Still **not** a product: mean fold recovery &lt; 1.0 (lose money on average even when a fold spikes). Need more history (≥2 weeks), tighter entry filter, and/or staged exits — not more proxy-label tuning.
+4. Veto CLI default: `python3 -m rh_radar.vetoes --heavy-at decision`.
+
+### Round E next
+
+1. Re-harvest / expand aged Pons window so hour folds span multiple days.
+2. Paper ledger with decision-V7 survivors, top-K/hour by `model_v0`, exit@1h (and optional TP at 1.5×/3× if mark hits earlier).
+3. Lineage-dedupe sample on the 1h-winner hours only (cheap, targeted).
+
 ## How to reproduce
 
 ```bash
 set -a; source ~/.config/trading/blockscout.env; set +a
 cd rh-launch-radar
 PYTHONPATH=src python3 -u -m rh_radar.harvest --chunk 50000
-PYTHONPATH=src python3 -u scripts/stamp_missing.py   # or: python3 -m rh_radar.stamp
+PYTHONPATH=src python3 -u scripts/stamp_missing.py
 PYTHONPATH=src python3 -u -m rh_radar.features --limit 800 --offset 1726 --era-prefix pons --only-offsets 600
 PYTHONPATH=src python3 -u -m rh_radar.labels --limit 800 --offset 1726 --era-prefix pons --only-horizons 86400
-PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 800 --offset 1726 --era-prefix pons --floor-usd 1000
-PYTHONPATH=src python3 -u -m rh_radar.phase0
-PYTHONPATH=src python3 -u -m rh_radar.backtest --decision-offset 600 --label-field high_value_proxy
+PYTHONPATH=src python3 -u -m rh_radar.vetoes --limit 800 --offset 1726 --era-prefix pons --floor-usd 1000 --heavy-at decision
+bash scripts/run_honest_shards.sh 4 800 1726
+PYTHONPATH=src python3 -u -m rh_radar.ev_backtest --veto-mode decision_v7 --fold-grain hour --k 3
+PYTHONPATH=src python3 -u -m rh_radar.phase0 --label-field executable_winner_250_1h
 ```
 
 Local artifacts (gitignored): `rh-launch-radar/data/**`.
