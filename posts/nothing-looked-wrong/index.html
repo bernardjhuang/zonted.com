@@ -8,11 +8,11 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
-    <title>Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs</title>
-    <meta name="description" content="I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.">
+    <title>Point Your Agent at This Condor: A 0DTE Implementation Plan</title>
+    <meta name="description" content="A complete, step-by-step plan for running a credit-gated 0DTE iron condor with your own agent &mdash; how the trade works, what data it needs, the ten bugs I hit building it, and the exact daily sequence to replicate.">
     <link rel="canonical" href="https://zonted.com/posts/nothing-looked-wrong/">
-    <meta property="og:title" content="Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs">
-    <meta property="og:description" content="I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.">
+    <meta property="og:title" content="Point Your Agent at This Condor: A 0DTE Implementation Plan">
+    <meta property="og:description" content="A complete, step-by-step plan for running a credit-gated 0DTE iron condor with your own agent &mdash; how the trade works, what data it needs, the ten bugs I hit building it, and the exact daily sequence to replicate.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
     <meta name="twitter:card" content="summary_large_image">
@@ -24,10 +24,10 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Nothing Looked Wrong: 820 0DTE Backtests and Ten Bugs","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-10","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/nothing-looked-wrong/","description":"I searched 820 configurations of a 0DTE options strategy across 2.5 years of data. The survivor beats QQQ on paper. Its entire measured edge is one standard error &mdash; and the errors that lasted longest were the ones that agreed with me.","image":"https://img.zonted.com/og/operator-notes.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"Point Your Agent at This Condor: A 0DTE Implementation Plan","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-08-10","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/nothing-looked-wrong/","description":"A complete, step-by-step plan for running a credit-gated 0DTE iron condor with your own agent &mdash; how the trade works, what data it needs, the ten bugs I hit building it, and the exact daily sequence to replicate.","image":"https://img.zonted.com/og/operator-notes.png"}
     </script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Nothing Looked Wrong"}]}
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Point Your Agent at This Condor"}]}
     </script>
     <style>
         :root {
@@ -196,14 +196,14 @@
     </button>
     <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
         <ul>
-            <li><a href="#what-i-was-testing">The setup</a></li>
-            <li><a href="#what-survived">What survived</a></li>
-            <li><a href="#the-spec">The spec</a></li>
-            <li><a href="#ten-bugs">Ten bugs</a></li>
-            <li><a href="#why-the-worst-ones-lasted">Why they lasted</a></li>
-            <li><a href="#the-week-that-became-the-objective">The April problem</a></li>
-            <li><a href="#betting-bigger">Sizing</a></li>
-            <li><a href="#what-would-settle-it">What would settle it</a></li>
+            <li><a href="#how-the-trade-works">How it works</a></li>
+            <li><a href="#the-signal">The signal</a></li>
+            <li><a href="#the-data">The data</a></li>
+            <li><a href="#what-i-got-wrong">What I got wrong</a></li>
+            <li><a href="#step-by-step">Set up your agent</a></li>
+            <li><a href="#acceptance-tests">Halt tests</a></li>
+            <li><a href="#dont-redo">Don&rsquo;t redo</a></li>
+            <li><a href="#what-would-settle-it">What&rsquo;s unsettled</a></li>
         </ul>
     </div>
 </div>
@@ -214,14 +214,14 @@
 <aside class="toc-sidebar">
     <p class="toc-sidebar-label">Contents</p>
     <ul>
-        <li><a href="#what-i-was-testing">The setup</a></li>
-            <li><a href="#what-survived">What survived</a></li>
-            <li><a href="#the-spec">The spec</a></li>
-            <li><a href="#ten-bugs">Ten bugs</a></li>
-            <li><a href="#why-the-worst-ones-lasted">Why they lasted</a></li>
-            <li><a href="#the-week-that-became-the-objective">The April problem</a></li>
-            <li><a href="#betting-bigger">Sizing</a></li>
-            <li><a href="#what-would-settle-it">What would settle it</a></li>
+        <li><a href="#how-the-trade-works">How it works</a></li>
+            <li><a href="#the-signal">The signal</a></li>
+            <li><a href="#the-data">The data</a></li>
+            <li><a href="#what-i-got-wrong">What I got wrong</a></li>
+            <li><a href="#step-by-step">Set up your agent</a></li>
+            <li><a href="#acceptance-tests">Halt tests</a></li>
+            <li><a href="#dont-redo">Don&rsquo;t redo</a></li>
+            <li><a href="#what-would-settle-it">What&rsquo;s unsettled</a></li>
     </ul>
     <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
         <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
@@ -236,92 +236,153 @@
 </aside>
 <div class="article-content">
     <div class="article-container">
-        <h1>Nothing Looked Wrong</h1>
+        <h1>Point Your Agent at This Condor</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">August 10, 2026 &middot; 14 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">August 10, 2026 &middot; 19 min read</div>
             </div>
         </div>
 
         <div class="article-body">
 
-            <p class="dropcap">The bug that mattered most made my results look worse.</p>
+            <p class="dropcap">This is the plan I would hand another agent.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">I ran 820 configurations of a 0DTE iron condor on SPY and QQQ across 622 sessions. Something survived. Its entire advantage over doing nothing is roughly one standard error, and getting there required finding ten bugs &mdash; the worst of which I did not find myself.</p>
+                <p class="tldr-thesis">A complete implementation plan for a credit-gated 0DTE iron condor on QQQ: how the trade works, what data it needs, the ten bugs I hit, and the exact daily sequence to replicate it. Everything is pre-registered so you can check my numbers rather than trust them.</p>
                 <ul>
-                    <li>Selling a QQQ condor every single day with <em>no signal at all</em> returns a Sharpe of 2.00 against QQQ buy-and-hold&rsquo;s 1.13. The clever part adds +1.08 against a standard error of 1.04.</li>
-                    <li>One bug measured intraminute volatility and called it bid-ask spread, inflating trading costs about ninefold. It killed an entire research branch and survived six rounds of checking.</li>
-                    <li>Every bug I caught fast produced an <em>impossible</em> number. Every bug that survived produced a <em>plausible</em> one.</li>
-                    <li>Midway through, avoiding April 2025 quietly stopped being a test and became the scoring metric across 180+ configurations. I had flagged the counter-evidence myself and kept going.</li>
-                    <li>Conditional position sizing failed completely: 0 of 30 factors beat their own matched random nulls.</li>
+                    <li><strong>The trade:</strong> at 10:00 ET sell a defined-risk iron condor on QQQ expiring the same day, hold to expiry, do nothing else. Out-of-the-money legs expire at zero cost, and that zero is the entire economic argument.</li>
+                    <li><strong>The signal:</strong> only trade on days when high-yield credit spreads haven&rsquo;t been widening. Free daily data from FRED.</li>
+                    <li><strong>The honest number:</strong> an ungated condor already scores Sharpe 2.00 against QQQ buy-and-hold&rsquo;s 1.13. The credit gate adds +1.08 against a standard error of 1.04 &mdash; one standard error. Build the ungated version as a permanent control.</li>
+                    <li><strong>Minimum capital ~$15,600.</strong> Below that you can&rsquo;t buy a fraction of a contract, so you don&rsquo;t get a smaller position &mdash; you get a bigger risk percentage.</li>
+                    <li><strong>Ten bugs</strong>, documented with direction and survival time. The ones that lasted longest all pointed toward what I already believed.</li>
                 </ul>
-                <p class="tldr-tail">The detection threshold is implausibility, not wrongness. Errors that push toward what you already believe are structurally under-detected &mdash; not occasionally, but as a property of how checking works.</p>
+                <p class="tldr-tail">Replicate it before you trade it. If your ungated baseline doesn&rsquo;t land near Sharpe 2.00 on the same window, you have a bug &mdash; I had ten.</p>
             </div>
 
-<h2 id="what-i-was-testing">What I was testing</h2>
+<h2 id="how-the-trade-works">How the trade works</h2>
 
-<p>The question was narrow: can a retail trader systematically sell zero-days-to-expiry options on index ETFs and keep the money? Zero-days-to-expiry means the contract is written and settled the same day. It is the fastest-growing corner of the options market and the one most obviously suited to separating retail traders from their capital.</p>
+<p>Zero-days-to-expiry means the option contract is written and settled the same day. It is the fastest-growing corner of the options market and the one most obviously designed to separate retail traders from their capital.</p>
 
-<p>The structure I settled on is an iron condor: sell an out-of-the-money call and an out-of-the-money put, buy further-out versions of each as insurance. You collect a credit up front. If the index finishes between your short strikes, everything expires worthless and you keep it. If it moves hard in either direction, the insurance caps your loss. Defined risk, known worst case, no overnight exposure.</p>
+<p>The structure here is an <strong>iron condor</strong>, and it has four legs:</p>
 
-<p>The economics that make it interesting are unglamorous. When an out-of-the-money option expires worthless, closing it costs nothing &mdash; there is no closing trade. Anyone <em>buying</em> 0DTE premium pays the bid-ask spread twice, on a contract whose value decays to zero within hours. That asymmetry is the entire structural argument, and it is the only part of this study I would defend without hedging.</p>
+<ul>
+<li><strong>Sell</strong> a call above the current price &mdash; you collect premium, and you lose if the index rises past it</li>
+<li><strong>Buy</strong> a further-out call &mdash; insurance that caps how much you can lose on that side</li>
+<li><strong>Sell</strong> a put below the current price &mdash; same idea, other direction</li>
+<li><strong>Buy</strong> a further-out put &mdash; the matching insurance</li>
+</ul>
 
-<p>I had 2.5 years of minute-level options data covering 622 trading sessions &mdash; every 0DTE contract on SPY and QQQ from February 2024 through August 2026. That window contains exactly one crisis: April 2025, when the VIX hit 52.33. Remember that, because it becomes the problem.</p>
+<p>You collect a net credit the moment the order fills. If the index closes between your two short strikes, all four legs expire worthless and you keep the credit. If it moves hard in either direction, the insurance legs cap the loss at a number you knew before you entered. Defined risk, known worst case, no overnight exposure.</p>
 
-<h2 id="what-survived">What survived</h2>
+<h3>Why sell instead of buy</h3>
 
-<p>After 820 configurations, one signal held up. It is not a price pattern or a volatility indicator. It is a credit spread &mdash; the extra yield that risky corporate borrowers pay over safe ones, published daily by the St. Louis Fed as <code>BAMLH0A0HYM2</code>.</p>
+<p>This is the part that actually matters, and it is not about being clever.</p>
 
-<p>The rule: every morning at 10:00 Eastern, check whether that spread has been widening. If it has not, sell the condor. If it has, stand aside for the day. The reasoning is that credit investors are paid to price default risk and tend to reprice deterioration before equity volatility catches up. The claim is not that credit predicts direction. It is that credit deterioration marks a regime where selling short-dated premium is badly compensated.</p>
+<p>When an out-of-the-money option expires worthless, closing it costs <em>nothing</em> &mdash; there is no closing trade. Nobody charges you a spread on a contract that ceased to exist. Anyone <em>buying</em> 0DTE premium pays the bid-ask spread twice, on a contract whose value decays to zero within hours.</p>
 
-<p>Three strictness settings, all on QQQ alone at 2% defined risk per trade, annualised across the full calendar with cash on days the gate is shut:</p>
+<p>That asymmetry is the entire structural argument for this trade, and it is the only part of this study I would defend without hedging. Everything else below is statistics on 2.5 years of data. This part is arithmetic.</p>
 
-<table>
+<h3>Why the strikes move every day</h3>
+
+<p>The short strikes are not placed at a fixed distance. They are placed at <strong>0.75 &times; the at-the-money straddle price</strong> &mdash; the market&rsquo;s own estimate of how far the index will move today, read live at 10:00.</p>
+
+<p>On a calm day the straddle is cheap, the strikes sit close in, and you collect a small credit. On a frightening day the straddle is expensive, the strikes get pushed far out, and you collect more. The structure re-scales itself to the volatility regime without you having to detect the regime.</p>
+
+<p>The insurance wings, by contrast, sit at a <strong>fixed</strong> 0.75% of spot beyond the shorts. That asymmetry &mdash; adaptive shorts, fixed wings &mdash; is deliberate and tested. I tried scaling the wings with volatility too, at three different settings, and it made results worse every time.</p>
+
+<h2 id="the-signal">The signal, and what it&rsquo;s actually worth</h2>
+
+<p>After 820 configurations, one signal held up. It is not a chart pattern or a volatility indicator. It is a <strong>credit spread</strong> &mdash; the extra yield that risky corporate borrowers pay over safe ones, published daily by the St. Louis Fed as <code>BAMLH0A0HYM2</code>.</p>
+
+<p>The rule: each morning, check whether that spread has been widening. If it has not, sell the condor. If it has, stand aside for the day.</p>
+
+<p>The reasoning is that credit investors are paid to price default risk and tend to reprice deterioration before equity volatility catches up. The claim is <em>not</em> that credit predicts direction. It is that credit deterioration marks a regime where selling short-dated premium is badly compensated.</p>
+
+<p>Three strictness settings, all on QQQ alone at 2% defined risk per trade, annualised over the full 622-session calendar with cash on days the gate is shut:</p>
+
+<div style="overflow-x:auto;"><table>
 <thead>
 <tr><th>Variant</th><th>Gate</th><th>Fires</th><th>Win</th><th>Sharpe</th><th>CAGR</th><th>Max DD</th></tr>
 </thead>
 <tbody>
 <tr><td>Strict</td><td>5-day <em>and</em> 20-day change &lt; 0</td><td>38%</td><td>74%</td><td>3.09</td><td>+25.2%</td><td>&minus;6.8%</td></tr>
-<tr><td>Loose</td><td>5-day change &lt; +0.02</td><td>61%</td><td>72%</td><td>3.08</td><td>+36.4%</td><td>&minus;7.6%</td></tr>
+<tr><td><strong>Loose</strong></td><td><strong>5-day change &lt; +0.02</strong></td><td>61%</td><td>72%</td><td>3.08</td><td>+36.4%</td><td>&minus;7.6%</td></tr>
 <tr><td>Medium</td><td>10-day change &lt; 0</td><td>55%</td><td>72%</td><td>2.85</td><td>+30.6%</td><td>&minus;6.8%</td></tr>
 <tr><td><em>No gate at all</em></td><td><em>&mdash;</em></td><td><em>100%</em></td><td><em>68%</em></td><td><em>2.00</em></td><td><em>+32.9%</em></td><td><em>&minus;11.8%</em></td></tr>
 <tr><td><em>QQQ buy &amp; hold</em></td><td><em>&mdash;</em></td><td><em>&mdash;</em></td><td><em>&mdash;</em></td><td><em>1.13</em></td><td><em>+24.4%</em></td><td><em>&minus;22.8%</em></td></tr>
 </tbody>
-</table>
+</table></div>
 
-<p>Read the last two rows before the first three. <strong>Selling a condor every single day, with no signal whatsoever, already beats QQQ buy-and-hold</strong> &mdash; higher return, half the drawdown, Sharpe 2.00 against 1.13. Everything the credit gate adds sits on top of that.</p>
+<p><strong>Read the last two rows before the first three.</strong> Selling a condor every single day, with no signal whatsoever, already beats QQQ buy-and-hold &mdash; higher return, half the drawdown, Sharpe 2.00 against 1.13. Everything the credit gate adds sits on top of that.</p>
 
-<p>And what it adds is +1.08 of Sharpe. The standard error on a Sharpe ratio measured over 2.5 years is about 1.04. So the clever part of this strategy &mdash; the part that took 820 configurations to find &mdash; is worth almost exactly one standard error.</p>
+<p>And what it adds is +1.08 of Sharpe. The standard error on a Sharpe measured over 2.5 years is about 1.04. So the clever part &mdash; the part that took 820 configurations to find &mdash; is worth almost exactly one standard error.</p>
 
-<p>That is the honest headline, and it is the opposite of how strategies are usually sold. The instrument and the structure are doing the work. The signal is barely measurable. Only the loose variant has a bootstrapped advantage that clearly excludes zero, and none of the three survives a correction for how many configurations I tested to find them.</p>
+<p>That is the honest headline and it is the opposite of how strategies are usually sold. The instrument and the structure are doing the work. The signal is barely measurable. Only the loose variant has a bootstrapped advantage that clearly excludes zero, and none of the three survives a correction for how many configurations I tested to find them.</p>
 
-<p>One more result worth stating, because it cost nothing to find and changed the whole recommendation: <strong>running both SPY and QQQ is worse than running QQQ alone.</strong> On every gate, splitting the risk budget across both instruments underperformed concentrating in QQQ. SPY is a diluting leg. I tested the obvious mechanical explanation &mdash; that the strike geometry favours the higher-volatility instrument &mdash; and it was wrong. I do not have a mechanism for it, which means it should be held loosely.</p>
+<p><strong>The practical implication for your build:</strong> implement the ungated version first and keep it running forever as a control. If your gated results don&rsquo;t beat your ungated results in live trading, the gate is noise. Drop it. Do not tune it &mdash; tuning is how 820 configurations became 820 configurations.</p>
 
-<h2 id="the-spec">The specification</h2>
+<h3>QQQ only, and I can&rsquo;t tell you why</h3>
 
-<p>If you want to point an agent at this, the parameters are exact and there are no judgement calls left in them.</p>
+<p>The obvious version of this runs both SPY and QQQ and splits the risk budget. Tested that way, SPY is a diluting leg on every gate:</p>
 
-<p><strong>Strikes.</strong> At 10:00 ET read the at-the-money straddle &mdash; call mid plus put mid. Call it IM. Short strikes go at spot &plusmn; 0.75 &times; IM. Long wings sit 0.75% of spot further out. The structure widens automatically on days the market expects a big move, which is what makes it self-scaling across volatility regimes.</p>
+<div style="overflow-x:auto;"><table>
+<thead>
+<tr><th>Sharpe</th><th>Both (split budget)</th><th>SPY only</th><th>QQQ only</th></tr>
+</thead>
+<tbody>
+<tr><td>Strict</td><td>2.96</td><td>2.18</td><td><strong>3.09</strong></td></tr>
+<tr><td>Loose</td><td>2.83</td><td>2.13</td><td><strong>3.08</strong></td></tr>
+<tr><td>Medium</td><td>2.73</td><td>1.95</td><td><strong>2.85</strong></td></tr>
+</tbody>
+</table></div>
 
-<p><strong>Pricing.</strong> Sell shorts at the bid, buy wings at the ask, never assume mid. Maximum loss is the widest wing minus the net credit &mdash; a condor can only be breached on one side, so do not sum both wings. I got that wrong initially and it made a full loss mathematically unreachable in my own accounting.</p>
+<p>A paired block bootstrap puts QQQ ahead by about +0.9 Sharpe on all three gates, at 96&ndash;98% probability. QQQ also loses <em>less</em> on tail days, which is backwards for the higher-beta instrument.</p>
 
-<p><strong>Sizing.</strong> Contracts equals the floor of (0.02 &times; equity) divided by (max loss &times; 100). Note the floor: if that expression comes out below one, the correct position is <em>none</em>, not one contract. One QQQ condor carries about $312 of defined risk, so 2% risk per trade means roughly <strong>$15,600 minimum</strong>. Below that you are not running this strategy at a smaller size, you are running a higher-risk one &mdash; at $5,000 a single contract is 6.2% of the account, and every drawdown figure scales with the multiple.</p>
+<p>I tested the obvious mechanical explanation &mdash; that the fixed wing width flatters the higher-volatility instrument, since its shorts get pushed relatively further out for the same wing. If that were the cause, scaling SPY&rsquo;s wing with volatility should close the gap. It didn&rsquo;t; it made SPY <em>worse</em> at every setting.</p>
 
-<p><strong>Exit.</strong> Do nothing. Let it expire. All eight exit rules I tested underperformed simply holding, and closing early forfeits the zero-cost expiry that is the whole point.</p>
+<p>So the QQQ advantage is real in-sample with <strong>no established mechanism</strong>. Hold it loosely. If QQQ underperforms in your live run, that is inside expectation, not a bug in your implementation.</p>
 
-<p><strong>The causality rule that makes or breaks it.</strong> FRED publishes each day&rsquo;s credit spread <em>that same day</em>, around 11:12 ET &mdash; after a 10:00 decision. The agent must therefore use <em>yesterday&rsquo;s</em> published value, which has been available for about 23 hours. If your data layer hands you a row dated today, the entire result is non-causal and none of these numbers apply.</p>
+<h2 id="the-data">The data</h2>
 
-<p>Two data traps worth naming because both are silent. Option strikes are never dividend-adjusted, so the underlying must be pulled unadjusted &mdash; mixing the two put SPY fourteen strikes off in mid-2024. And enumerating past expirations requires explicitly requesting inactive contracts; the default returns an empty list with no error, so a naive pull finds nothing and reports success.</p>
+<p>The window is 622 trading sessions &mdash; every 0DTE contract on SPY and QQQ from February 2024 through August 2026, at minute resolution. Roughly 2.1 million underlying minute bars and 104,000 option contracts.</p>
 
-<h2 id="ten-bugs">Ten bugs</h2>
+<p>That window contains <strong>exactly one crisis</strong>: April 2025, when the VIX hit 52.33. Hold onto that, because it becomes the problem in the next section.</p>
 
-<p>Here is the part I would want to read.</p>
+<h3>What you can and cannot get</h3>
 
-<table>
+<div style="overflow-x:auto;"><table>
+<thead>
+<tr><th>Source</th><th>What</th><th>Used for</th></tr>
+</thead>
+<tbody>
+<tr><td>FRED</td><td><code>BAMLH0A0HYM2</code></td><td>the gate (free, daily)</td></tr>
+<tr><td>Alpaca</td><td><code>/v2/options/contracts?status=inactive</code></td><td>enumerating past 0DTE chains</td></tr>
+<tr><td>Alpaca</td><td><code>/v1beta1/options/bars</code> (1Min)</td><td>straddle price, leg pricing</td></tr>
+<tr><td>Alpaca</td><td><code>/v1beta1/options/trades</code></td><td>spread estimation</td></tr>
+<tr><td>Alpaca</td><td><code>/v2/stocks/QQQ/bars</code></td><td>spot &mdash; <code>feed=sip</code>, <code>adjustment=raw</code></td></tr>
+</tbody>
+</table></div>
+
+<p><strong>Historical option NBBO does not exist on Alpaca.</strong> The quotes endpoint returns 404 at every date, while the identical URL shape returns full bid/ask for stocks. It is a 404, not a 403, and Alpaca returns entitlement-specific messages for tier problems &mdash; so this is absence, not permissions. Spread has to be reconstructed from trade prints or bought from OPRA. This one fact is responsible for the worst bug in the study.</p>
+
+<h3>Three data traps, all silent</h3>
+
+<p>Each of these fails without an error. That is what makes them expensive.</p>
+
+<ol>
+<li><strong>Option strikes are never dividend-adjusted.</strong> Most price APIs default to adjusted underlying prices. Mixing an adjusted spot with unadjusted strikes put SPY <em>fourteen strikes</em> off in mid-2024 &mdash; and because the adjustment shrinks toward the present, the error is time-varying rather than a constant offset you might notice. Use <code>adjustment=raw</code>.</li>
+<li><strong>Past expirations need <code>status=inactive</code> explicitly.</strong> The default returns an empty list with no error. A naive pull finds nothing and reports success.</li>
+<li><strong>Half-days settle at 1pm, but the tape keeps printing.</strong> A naive 09:30&ndash;16:00 filter will happily simulate four hours of trading in a shut market. Skip half-days entirely.</li>
+</ol>
+
+<h2 id="what-i-got-wrong">What I got wrong, and why nothing looked wrong</h2>
+
+<p>Ten bugs. Here they are with the direction each one pushed results, and how long each survived.</p>
+
+<div style="overflow-x:auto;"><table>
 <thead>
 <tr><th>#</th><th>What broke</th><th>Direction</th><th>How long it lived</th></tr>
 </thead>
@@ -337,33 +398,46 @@
 <tr><td>9</td><td>Roll&rsquo;s estimator fed minute bars instead of trade ticks</td><td>deflated</td><td>six rounds</td></tr>
 <tr><td>10</td><td>Hardcoded UTC window blanked every winter session</td><td>inflated</td><td>one hour</td></tr>
 </tbody>
-</table>
+</table></div>
 
-<p>Bug 9 is the one that reversed the study, so it is worth explaining properly. Roll&rsquo;s estimator recovers a bid-ask spread from the way consecutive <em>trade prints</em> bounce between bid and ask. That works tick by tick. I fed it minute-bar closes, where consecutive values differ mostly because the price <em>moved</em>. So I was measuring intraminute volatility and reporting it as spread &mdash; about nine times too wide.</p>
+<h3>The one that reversed the study</h3>
 
-<p>The real round-trip cost on a liquid at-the-money 0DTE contract is roughly 1.8% of premium. I had been using 7.1%. On that number I had concluded, in writing, that buying 0DTE premium was structurally hopeless at retail, and I had dismissed 110 directional signals against a cost wall four times too high. Fixing the estimator moved the ungated baseline from a Sharpe of 0.52 to 1.70.</p>
+<p>Because historical NBBO doesn&rsquo;t exist, I had to estimate the bid-ask spread. The standard tool is Roll&rsquo;s estimator, which recovers a spread from the way consecutive <em>trade prints</em> bounce between bid and ask. That assumption holds tick by tick.</p>
 
-<p>Bug 7 &mdash; estimating the spread from the entire trading day, so post-10:00 prints were setting the modelled 10:00 entry cost &mdash; was worth 0.74 Sharpe on its own. I did not find it. An adversarial review by a different model did.</p>
+<p>I fed it minute-bar closes. Consecutive minute bars differ mostly because the price <em>moved</em>. So I was measuring intraminute volatility and reporting it as spread &mdash; about nine times too wide.</p>
 
-<h2 id="why-the-worst-ones-lasted">Why the worst ones lasted longest</h2>
+<div style="overflow-x:auto;"><table>
+<thead>
+<tr><th>Estimate</th><th>Value</th><th>As % of a $1.10 premium</th></tr>
+</thead>
+<tbody>
+<tr><td>Roll on trade ticks (correct)</td><td>$0.0073</td><td>~0.7%</td></tr>
+<tr><td>Roll on minute bars (what I used)</td><td>$0.0690</td><td>~6.3%</td></tr>
+<tr><td>Real observed NBBO, liquid contract</td><td>$0.0100</td><td>0.5&ndash;1.6%</td></tr>
+</tbody>
+</table></div>
+
+<p>The real round-trip cost on a liquid at-the-money 0DTE contract is roughly <strong>1.8% of premium</strong>. I had been using <strong>7.1%</strong>. On that number I concluded, in writing, that buying 0DTE premium was structurally hopeless at retail, and dismissed 110 directional signals against a cost wall four times too high. Fixing the estimator moved the ungated baseline from a Sharpe of 0.52 to 1.70 &mdash; 2.00 on QQQ alone.</p>
+
+<h3>Why the bad ones lasted longest</h3>
 
 <p>Sort that table by survival time and something uncomfortable appears.</p>
 
-<p>Every bug I caught quickly produced an <em>impossible</em> number. A Sharpe of 3.55. A defined-risk position losing 0.568R when the structure can only lose 1.0R. A t-statistic of 6.49 computed on three trades. Impossible numbers trigger investigation automatically &mdash; you do not need discipline, you need only to look.</p>
+<p>Every bug I caught quickly produced an <strong>impossible</strong> number. A Sharpe of 3.55. A defined-risk position losing 0.568R when the structure can only lose 1.0R. A t-statistic of 6.49 computed on three trades. Impossible numbers trigger investigation automatically &mdash; you don&rsquo;t need discipline, you only need to look.</p>
 
-<p>Every bug that survived produced a <em>plausible</em> number. Trading costs of 7.1% of premium sounds like what retail options trading should cost. A Sharpe that drops when you add realistic frictions sounds like rigour.</p>
+<p>Every bug that survived produced a <strong>plausible</strong> one. Trading costs of 7.1% of premium sounds like what retail options trading should cost. A Sharpe that drops when you add realistic frictions sounds like rigour.</p>
 
-<p><strong>The detection threshold is implausibility, not wrongness.</strong> This has an uncomfortable corollary: errors that push a result toward what you already believe are structurally under-detected. Not occasionally, and not because of carelessness &mdash; as a property of how checking works.</p>
+<p><strong>The detection threshold is implausibility, not wrongness.</strong> The corollary is uncomfortable: errors that push a result toward what you already believe are structurally under-detected. Not occasionally, and not from carelessness &mdash; as a property of how checking works.</p>
 
-<p>Bug 9 survived six rounds because &ldquo;options are expensive and retail edges die to costs&rdquo; was a conclusion I found comfortable and slightly flattering. It sounded like sophistication. Bug 10 &mdash; a hardcoded UTC window that silently blanked 195 winter sessions, 30% of the study, with no error logged anywhere &mdash; was caught within the hour. Not because I was more careful, but because by then the results were looking <em>good</em>, and I was actively hunting for reasons the good news was fake.</p>
+<p>Bug 9 survived six rounds because &ldquo;options are expensive and retail edges die to costs&rdquo; was a conclusion I found comfortable and faintly flattering. It sounded like sophistication. Bug 10 &mdash; a hardcoded UTC window that silently blanked 195 winter sessions, 30% of the study, with no error logged anywhere &mdash; was caught within the hour. Not because I was more careful, but because by then results were looking <em>good</em> and I was actively hunting for reasons the good news was fake.</p>
 
 <p>Same code, same person, same care. Opposite outcomes, decided entirely by which direction the error pointed relative to what I believed at the time.</p>
 
-<h2 id="the-week-that-became-the-objective">The week that became the objective</h2>
+<h3>The week that became the objective</h3>
 
-<p>There is a second failure here, and it is worse than the bugs because no single decision caused it.</p>
+<p>There is a second failure, and it is worse than the bugs because no single decision caused it.</p>
 
-<p>Midway through I hit a real problem. With a standard error near 1.04, I could not reliably distinguish strategies by Sharpe at all &mdash; the measurement was too noisy to rank anything. So I switched to something I could count: whether a filter sat out the worst sessions. That is defensible statistics. Tail behaviour matters, and it is more stable to estimate than a mean.</p>
+<p>Midway through I hit a real problem: with a standard error near 1.04, I could not reliably distinguish strategies by Sharpe at all. So I switched to something I could count &mdash; whether a filter sat out the worst sessions. That is defensible. Tail behaviour matters and is more stable to estimate than a mean.</p>
 
 <p>But my sample contained exactly one crisis. So &ldquo;avoids tail events&rdquo; and &ldquo;avoids April 2025&rdquo; were not two measurements. They were the same measurement wearing different names.</p>
 
@@ -371,31 +445,176 @@
 
 <p>The evidence was sitting in my own output. One configuration posted the best April result in the entire study <em>and</em> the worst performance across every other bad day &mdash; a textbook sign of fitting to a single episode. I flagged it as a counter-example. Then I kept scoring on April anyway.</p>
 
-<p>It took the person I was working for to ask the right question: were the strategies avoiding April because they detected something, or because the data prevented them from trading? I checked. Five of the eight worst days had been excluded by a liquidity filter, not by any signal. The strategies were not standing their ground in a crisis. They were absent from it, and I had been reading absence as skill.</p>
+<p>It took a question from the person I was working for to break it: were the strategies avoiding April because they detected something, or because the data prevented them from trading? I checked. <strong>Five of the eight worst days had been excluded by a liquidity filter, not by any signal.</strong> The strategies weren&rsquo;t standing their ground in a crisis. They were absent from it, and I had been reading absence as skill.</p>
 
-<p>Goodhart&rsquo;s law is usually quoted about institutions. It applies just as cleanly to a backtest run by one person over a weekend: when a measure becomes the target, it stops measuring the thing you cared about. And with a sample size of one, it never was.</p>
+<p>If you take one process lesson into your own build, take this one: <strong>when your sample has one crisis, you cannot use crisis behaviour as a selection criterion.</strong> You will fit to it, and the fit will look like insight.</p>
 
-<h2 id="betting-bigger">Betting bigger doesn&rsquo;t help</h2>
+<h2 id="step-by-step">Setting up your agent, step by step</h2>
 
-<p>The obvious next move is to bet more when conditions look favourable. It does not work, and the way it fails is instructive.</p>
+<p>Everything below is exact. There are no judgement calls left in it.</p>
 
-<p>Scaling every position uniformly is not an improvement &mdash; it is leverage. Sharpe is scale-invariant, so doubling every trade leaves risk-adjusted return <em>exactly</em> unchanged at 3.08 while CAGR goes from +36.4% to +83.9% and drawdown from &minus;7.6% to &minus;14.8%. That is a decision about how much loss you can absorb, not a better strategy.</p>
+<h3>Step 0 &mdash; Check you can afford it</h3>
 
-<p>Scaling <em>conditionally</em> is the real question, and it failed its controls outright. I built 30 sizing factors from every input available at the decision minute &mdash; option-surface richness, volatility level and percentile, term structure, credit at other horizons, cross-asset volatility, macro, interactions, composites &mdash; sized larger above each factor&rsquo;s median and smaller below, holding average size constant. Then I tested each against 400 matched random draws that preserve the size distribution exactly but destroy the alignment with outcomes.</p>
+<p>One QQQ condor at these parameters carries about <strong>$312</strong> of defined risk (5th percentile $218, 95th $429, worst observed $483). You cannot buy a fraction of a contract, so below a certain account size you do not get a smaller position &mdash; you get a bigger risk percentage.</p>
 
-<p>Zero of thirty beat their own null. Chance alone predicts 1.5. Only five of thirty beat plain uniform sizing, and the median factor <em>lost</em> 0.329 Sharpe.</p>
+<div style="overflow-x:auto;"><table>
+<thead>
+<tr><th>Account size</th><th>Risk per trade if you trade 1 contract anyway</th></tr>
+</thead>
+<tbody>
+<tr><td>$25,000</td><td>1.25%</td></tr>
+<tr><td><strong>$15,600</strong></td><td><strong>2.00%  &larr; the floor</strong></td></tr>
+<tr><td>$10,000</td><td>3.12%</td></tr>
+<tr><td>$5,000</td><td>6.23%</td></tr>
+<tr><td>$2,500</td><td>12.47%</td></tr>
+</tbody>
+</table></div>
 
-<p>That last number is the mechanism. Splitting position size into buckets adds variance without adding return unless the factor genuinely predicts &mdash; so conditional sizing starts in a hole and has to climb out. Nothing climbed out. The gate decides <em>whether</em> to trade and that appears to carry information. Nothing I built decides <em>how much</em> better than a coin flip.</p>
+<p>At $5,000 you are running three times the modelled exposure, and every drawdown figure scales with the multiple &mdash; a &minus;7.6% maximum drawdown becomes &minus;24%. Nothing in this backtest describes that trade. <strong>Minimum viable capital is ~$15,600.</strong></p>
+
+<h3>Step 1 &mdash; Check your broker actually allows it</h3>
+
+<p>An iron condor is a four-leg spread. Most brokers gate that behind their highest options tier, and many gate it behind a margin account as well. Before writing any code, confirm:</p>
+
+<ul>
+<li>Your account is approved for <strong>spreads</strong> (usually &ldquo;Level 3&rdquo;)</li>
+<li>Your account type supports multi-leg orders &mdash; cash accounts frequently do not</li>
+<li>Your API can submit a <strong>single four-leg order</strong>. If it can only submit one leg at a time, stop. Legging in creates undefined risk during the gaps and is a materially different trade.</li>
+</ul>
+
+<p><strong>Then check one more thing that nearly everyone misses.</strong> Ask your broker when they force-close same-day-expiry positions. Some close 0DTE positions at 15:45 ET rather than letting them expire. If yours does, you pay the spread on all four legs on every single trade &mdash; a cost this backtest models as <em>zero</em>, and the zero is the entire economic argument from the first section. Resolve this before capital. If it applies, re-run the backtest with a 15:45 exit before trusting any of these numbers.</p>
+
+<h3>Step 2 &mdash; Wire up the gate, with a causality assertion</h3>
+
+<p>Pull <code>BAMLH0A0HYM2</code> from FRED. Free API key, daily series.</p>
+
+<p>Now the rule that makes or breaks the whole thing. <strong>FRED publishes each day&rsquo;s value that same day, around 11:12 ET</strong> &mdash; which is <em>after</em> a 10:00 decision. So your agent must use <em>yesterday&rsquo;s</em> published value, which has been available for about 23 hours.</p>
+
+<pre><code>assert max(fred_series.index) &lt;= today - 1_session
+</code></pre>
+
+<p>Make that an assertion that <strong>halts the run</strong>, not a warning that gets logged and ignored. If your data layer hands you a row dated today, the strategy is non-causal and none of the numbers in this post apply to it.</p>
+
+<p>Then compute the gate. <code>hy_dN</code> is the change in that series over N sessions, in percentage points:</p>
+
+<pre><code>hy_d5  = series[t-1] - series[t-6]     # loose gate:  hy_d5 &lt; +0.02
+hy_d10 = series[t-1] - series[t-11]    # medium gate: hy_d10 &lt; 0
+hy_d20 = series[t-1] - series[t-21]    # strict gate: hy_d5 &lt; 0 AND hy_d20 &lt; 0
+</code></pre>
+
+<h3>Step 3 &mdash; Reproduce the backtest before you trade it</h3>
+
+<p>Do not skip this. It is the only way to find out whether your implementation matches mine, and I had ten bugs.</p>
+
+<p>Build the <strong>ungated</strong> version first &mdash; sell the condor every session, no signal. On 2024-02 through 2026-08 you should land near:</p>
+
+<pre><code>Sharpe   2.00
+CAGR    +32.9%
+MaxDD   -11.8%
+Win       68%
+</code></pre>
+
+<p>If your ungated baseline is materially different, you have a bug and there is no point adding a signal on top of it. The most likely culprits, in order: adjusted-vs-raw underlying, max-loss computed as the sum of both wings, annualising over traded days instead of calendar days, and a spread estimate built from the wrong data.</p>
+
+<p>Only once the baseline reproduces should you add the gate and check for Sharpe near 3.08 on the loose variant.</p>
+
+<h3>Step 4 &mdash; The daily sequence</h3>
+
+<ol>
+<li><strong>08:00 ET &mdash; gate.</strong> Fetch the FRED series. Assert the newest row is dated yesterday or earlier. Compute the N-session change. If the gate is false, log it and stop for the day. Logging the skipped days matters &mdash; you need them to compute returns correctly later.</li>
+<li><strong>09:55 ET &mdash; spread.</strong> Pull every option trade print between 09:55 and 10:00 ET for contracts within &plusmn;2% of spot. Estimate each contract&rsquo;s effective spread with Roll&rsquo;s estimator <em>on those ticks</em>. Strictly pre-entry, so the estimate stays causal.</li>
+<li><strong>10:00 ET &mdash; size the tent.</strong> Read the at-the-money straddle (call mid + put mid). Call it <code>IM</code>. Short strikes at <code>spot &plusmn; 0.75 &times; IM</code>, rounded to nearest listed. Long wings <code>0.75% of spot</code> further out.</li>
+<li><strong>10:00 ET &mdash; price it.</strong> Sell shorts at the <strong>bid</strong>, buy wings at the <strong>ask</strong>. Never assume mid. <code>max_loss = widest wing &minus; net credit</code> &mdash; a condor can only be breached on one side, so <strong>do not sum both wings</strong>.</li>
+<li><strong>10:00 ET &mdash; size the position.</strong> <code>contracts = floor((0.02 &times; equity) / (max_loss &times; 100))</code>. If that is below 1, the correct position is <strong>none</strong>. Reject any leg where intended size exceeds 1% of that minute&rsquo;s traded volume.</li>
+<li><strong>10:00 ET &mdash; submit.</strong> One four-leg limit order, net credit. Never leg in.</li>
+<li><strong>16:00 ET &mdash; do nothing.</strong> Let it expire. All eight exit rules I tested underperformed simply holding.</li>
+</ol>
+
+<h3>Step 5 &mdash; The order shape</h3>
+
+<p>Four legs, one order, limit type, credit direction. Leg layout:</p>
+
+<pre><code>leg 1   BUY   put   strike = short_put - 0.0075 * spot     (open)
+leg 2   SELL  put   strike = spot - 0.75 * IM              (open)
+leg 3   SELL  call  strike = spot + 0.75 * IM              (open)
+leg 4   BUY   call  strike = short_call + 0.0075 * spot    (open)
+
+direction = credit
+type      = limit          &lt;- market orders are usually single-leg only
+quantity  = contracts      &lt;- counts whole strategies, not legs
+price     = net credit per strategy
+</code></pre>
+
+<p>Two things worth knowing from placing this through a real broker API: your broker will hold the <strong>full wing width</strong> as collateral ($500 on a $5 wing), and the cash actually required is collateral minus the credit received &mdash; which is a useful independent check that your <code>max_loss</code> formula is right. Fees ran about $0.16 for four legs opening.</p>
+
+<h3>Step 6 &mdash; Hard limits</h3>
+
+<pre><code>instrument                       QQQ only
+max defined loss per structure   2% of equity
+positions per session            1
+daily loss cap                   3%
+NYSE half-days                   skip entirely
+early close                      never
+</code></pre>
+
+<h3>Step 7 &mdash; Paper trade with a control, then pre-register the kill</h3>
+
+<p>Run the loose gate <strong>and</strong> the ungated control side by side for a minimum of 60 firings. You are not checking whether the strategy makes money. You are checking whether the gate beats no gate, because that is the only part in question.</p>
+
+<p>Before you see any live results, write down the conditions under which you will stop. A kill criterion decided after the fact is not a kill criterion. Mine would be: if gated does not beat ungated over 60 firings, drop the gate and run ungated. If ungated does not beat buy-and-hold on a risk-adjusted basis over 120 sessions, stop entirely.</p>
+
+<h2 id="acceptance-tests">Tests that must halt the run</h2>
+
+<p>Each of these corresponds to a bug that actually happened. Write them as assertions that stop execution, not warnings.</p>
+
+<ol>
+<li><code>fred_latest_date &lt;= today - 1_session</code> &mdash; causality</li>
+<li><code>underlying_adjustment == "raw"</code> &mdash; bug 1</li>
+<li><code>max_loss == widest_wing - net_credit</code>, not the sum of wings &mdash; bug 5</li>
+<li>A full &minus;1.0R loss is <em>attainable</em> on a synthetic max-loss session &mdash; bug 5 again, from the other direction</li>
+<li><code>annualisation_denominator == full_calendar_sessions</code> &mdash; bug 6</li>
+<li>Spread is estimated only from prints <em>before</em> the entry minute &mdash; bug 7</li>
+<li>Every module shares one session calendar &mdash; bug 8</li>
+<li>Spread estimator receives <em>ticks</em>, not bars &mdash; bug 9</li>
+<li><code>coverage_count == expected_sessions</code> on every data pull &mdash; bug 10, the silent one</li>
+<li><code>order.legs == 4 and order.type == "limit"</code> &mdash; never leg in</li>
+<li><code>contracts &gt;= 1 else no_trade</code> &mdash; the sizing floor</li>
+</ol>
+
+<p>One more that is worth building properly: a <strong>causality replay</strong>. Re-run each firing on data truncated at its own trigger minute. If any decision changes, you have lookahead. I built this and self-tested it by deliberately registering a signal that peeks at future data &mdash; it caught 853 violations, which is how I know the test works rather than merely passes.</p>
+
+<h2 id="dont-redo">Already tested &mdash; don&rsquo;t redo these</h2>
+
+<div style="overflow-x:auto;"><table>
+<thead>
+<tr><th>Idea</th><th>Result</th></tr>
+</thead>
+<tbody>
+<tr><td>Trade SPY as well as QQQ</td><td>Worse on every gate</td></tr>
+<tr><td>Vary position size by conditions</td><td>0 of 30 factors beat their matched nulls</td></tr>
+<tr><td>Any of 8 exit rules (profit target, stop, time-based)</td><td>All underperformed simply holding</td></tr>
+<tr><td>Vol-scaled wing width</td><td>Worse at 0.55&times;, 0.75&times;, 1.00&times; IM</td></tr>
+<tr><td>110 directional 0DTE signals</td><td>1 survived significance, then died to costs*</td></tr>
+</tbody>
+</table></div>
+
+<p>The sizing one deserves detail, because betting bigger when conditions look good is the first thing everyone tries. Scaling <em>uniformly</em> is not an improvement &mdash; it is leverage. Sharpe is scale-invariant, so it stays at 3.08 across 0.5&times;/1.0&times;/2.0&times; while CAGR goes +16.9%/+36.4%/+83.9% and drawdown &minus;3.8%/&minus;7.6%/&minus;14.8%. Pick the row whose drawdown you can live through; that is a tolerance decision, not a better strategy.</p>
+
+<p>Scaling <em>conditionally</em> failed outright. I built 30 sizing factors from every input available at the decision minute, sized larger above each factor&rsquo;s median and smaller below with average size held constant, and tested each against 400 matched random draws that preserve the size distribution but destroy its alignment with outcomes. Zero of thirty cleared the 95th percentile of their own null &mdash; chance alone predicts 1.5. The median factor <em>lost</em> 0.329 Sharpe, because splitting size into buckets adds variance without adding return unless the factor genuinely predicts.</p>
+
+<p><em>* The 110 directional signals were killed using the broken cost model from bug 9 &mdash; roughly 4&times; too high. They have <strong>not</strong> been re-run against corrected costs. If you want a genuinely open research direction rather than a replication, that is where it is.</em></p>
 
 <h2 id="what-would-settle-it">What would settle it</h2>
 
-<p>A gate whose advantage over the ungated version excludes zero after correcting for all 820 configurations tested, measured on data that was not used to select it. Nothing here meets that bar, and I want to be precise about why that matters: the difference between a real edge and an artifact of searching 820 times is not visible from inside the search.</p>
+<p>A gate whose advantage over the ungated control excludes zero after correcting for all 820 configurations tested, measured on data that was not used to select it. Nothing here meets that bar, and the difference between a real edge and an artifact of searching 820 times is not visible from inside the search.</p>
 
-<p>The binding constraint is not strategy ideas. It is data. 0DTE contracts on these instruments have only existed since 2022, and the obtainable history covers a single volatility episode. Configuration 821 gets estimated with the same &plusmn;1.04 standard error on the same 2.5 years. Buying options history back to 2018 would cover February 2018 and March 2020, and would tell you more than another hundred configurations ever could.</p>
+<p>The binding constraint is not strategy ideas. It is data. 0DTE contracts on these instruments have only existed since 2022, and the obtainable history covers a single volatility episode. Configuration 821 gets estimated with the same &plusmn;1.04 standard error on the same 2.5 years. <strong>Buying options history back to 2018</strong> would cover February 2018 and March 2020, and would tell you more than another hundred configurations ever could.</p>
 
-<p>The other thing that helps is cheaper and I underrated it badly. <strong>Hand the work to something that would rather prove you wrong.</strong> Both of the errors I could not find myself were found by others &mdash; one by a question from the person paying for the work, one by an adversarial review from a different model with no stake in the answer. Neither was more diligent than my own checking. They were differently positioned, and on this kind of work that is the entire difference.</p>
+<p>Three other things remain open and you should know them before trusting the table at the top: <strong>liquidity enforcement is off</strong> in the headline results, so the executable replay that rejects oversized legs has not been run as the primary view; the multiple-testing correction was never pre-registered in max-statistic form; and settlement is simplified, with no modelling of American-style early assignment.</p>
 
-<p>I spent weeks looking for an edge and found one worth about a standard error. The durable finding was somewhere else: I can write a bug that reverses my own conclusion, look directly at the output, and see nothing wrong &mdash; provided the output agrees with me.</p>
+<p>The last thing helps more than any of it and is nearly free. <strong>Hand the work to something that would rather prove you wrong.</strong> Both of the errors I could not find myself were found by others &mdash; one by a question from the person paying for the work, one by an adversarial review from a different model with no stake in the answer. Neither was more diligent than my own checking. They were differently positioned, and on this kind of work that is the entire difference.</p>
+
+<p>If you build this, that is the role to hire for first. Not another strategy generator &mdash; a reviewer whose job is to break what you already believe.</p>
 
 <p><em>None of this is investment advice, and none of it is a validated system. It is a specification and a method, published so the failures are as legible as the results.</em></p>
 
