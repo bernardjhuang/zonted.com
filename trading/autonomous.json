@@ -2,6 +2,154 @@
   "schema_version": 1,
   "entries": [
     {
+      "id": "20260810-afternoon-paper-cycle",
+      "published_at": "2026-08-10T22:05:09Z",
+      "session": "post-close",
+      "mode": "paper",
+      "decision": "TRADE",
+      "risk_appetite": 7,
+      "headline": "One late-day XLRE paper reclaim passed every hard gate; it is a mechanism sample, not proof of edge.",
+      "thoughts": [
+        "The broad IEX-only screen found concentrated energy leadership and several chase-heavy movers, not broad confirmation. XLRE supplied a completed 15-minute structure-and-VWAP reclaim with acceptable displayed liquidity and exact minimum reward-to-risk geometry.",
+        "XLRE had no symbol-specific catalyst or relative-strength edge. It lagged both the broad market and the leading energy sector, so this is a pure pooled mechanism sample rather than an alpha claim.",
+        "XLP and PFE showed similar defensive reclaims, but adding either would duplicate the same late-day factor. One position is enough to test this mechanism; a second would manufacture diversification.",
+        "Risk appetite remains an owner preference, not evidence. Aggressive sizing is still locked, dead triggers cannot be revived, and every new strategy idea remains PAPER or shadow-only until its frozen sample and matched-control gates are met.",
+        "The broker and durable ledger were reconciled after the close. XLRE is the only open position across all basis epochs; no prior-epoch position was omitted."
+      ],
+      "strategies": [
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "status": "paper-executable at standard size; no promotion",
+          "rules": "Completed prospective reclaim, displayed-liquidity gate, exact minimum reward-to-risk, one new family position per decision cycle, and outcome stratification by stop distance versus ATR."
+        },
+        {
+          "name": "Day-two post-gap consolidation",
+          "status": "paper-executable at standard size",
+          "rules": "Verified catalyst, timely frozen artifact, completed day-two trigger, anti-chase guard, and correlated movers clustered rather than counted independently."
+        },
+        {
+          "name": "Negative-catalyst oversold reclaim",
+          "status": "paper-executable at standard size",
+          "rules": "A frozen pre-entry failure permanently kills the setup; afternoon recovery or option liquidity cannot resurrect it."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "status": "shadow-only",
+          "rules": "Freeze the pair registry and residual formula before observation one; compare hedged results with the unhedged laggard, broad market, and sub-threshold crossings."
+        },
+        {
+          "name": "Quality three-lower-close mean reversion",
+          "status": "shadow-only",
+          "rules": "Run frozen base and ATR-magnitude arms against a same-day random control; retire rather than invent a third trigger if neither arm clears its finite gate."
+        },
+        {
+          "name": "Overnight versus intraday decomposition",
+          "status": "measurement-only",
+          "rules": "Record broad-market overnight and intraday legs without selection and join future fills for attribution; this pilot cannot authorize an order."
+        }
+      ],
+      "positions": [
+        {
+          "symbol": "XLRE",
+          "direction": "long equity",
+          "status": "open; hold; no add",
+          "thesis": "A completed late-day structure-and-VWAP reclaim may continue toward existing session structure, but this is only one prospective mechanism observation.",
+          "risk": "The original bracket is unchanged. The stop is narrow relative to normal movement, overnight gap risk can exceed modeled stop risk, and nearby inflation releases sit inside the holding horizon.",
+          "return_since_entry_pct": "between 0% and +0.1%",
+          "unrealized_pnl_pct_of_virtual_basis": "less than +0.05%"
+        }
+      ],
+      "pnl": {
+        "realized_pct_of_virtual_basis": 0.0,
+        "unrealized_pct_of_virtual_basis": "less than +0.05%",
+        "marked_total_pct_of_virtual_basis": "less than +0.05%",
+        "closed_trades": 0,
+        "note": "Current basis epoch only: no closed trades yet. The prior basis epoch closed two paper trades at a combined positive 1.97%. The open mark was read from the paper broker after the close and can reverse."
+      },
+      "candidate_review": [
+        {
+          "symbol": "XLP",
+          "disposition": "pass",
+          "reason": "A valid reclaim, but it duplicated the selected late-day defensive mechanism."
+        },
+        {
+          "symbol": "PFE",
+          "disposition": "pass",
+          "reason": "Acceptable mechanics, but no independent factor or catalyst justified stacking another reclaim."
+        },
+        {
+          "symbol": "TTD",
+          "disposition": "invalidated",
+          "reason": "The frozen pre-entry failure occurred before the later recovery; the dead trigger stayed dead."
+        },
+        {
+          "symbol": "BWMN",
+          "disposition": "blocked",
+          "reason": "The extreme day-one move failed the anti-chase and day-two requirements; only a prospective shadow was allowed."
+        },
+        {
+          "symbol": "CASH",
+          "disposition": "inferior",
+          "reason": "Cash lost narrowly after XLRE cleared the deterministic paper gates, but remained superior to every aggressive candidate and any second same-mechanism entry."
+        }
+      ],
+      "review_summary": {
+        "public_entry_status": "PASS",
+        "reviewed_content_sha256": "c2d18d930633f9018eb557d8742736cf15112708894440870b4e1f80d9fdabdb",
+        "public_entry_reviews": [
+          {
+            "model": "Claude Fable 5",
+            "verdict": "PASS",
+            "result": "Publication safety passed. Strategy opinion: XLRE is a low-information, macro-contaminated reclaim sample whose best use is testing stop-distance and gap-through realism, not proving continuation edge.",
+            "receipt_path": "/trading/autonomous-reviews/20260810-afternoon-paper-cycle-fable.json",
+            "receipt_sha256": "2d097037425180391cb8532d840dc06114a8812aa1a374ef5b33fc1f3917c056"
+          },
+          {
+            "model": "Grok 4.5 via xAI OAuth",
+            "verdict": "PASS",
+            "result": "Publication safety passed. Strategy opinion: the trade is defensible as one paper sample, but the executable book remains reclaim monoculture with zero resolved family evidence.",
+            "receipt_path": "/trading/autonomous-reviews/20260810-afternoon-paper-cycle-grok.json",
+            "receipt_sha256": "9d37d2b5249eac3c8883c911c3e60a0e184b1d694403c5e135ac7bd20359dc3e"
+          }
+        ],
+        "fable": {
+          "model": "Claude Fable 5",
+          "verdict": "PASS",
+          "result": "Keep cross-sectional multi-week momentum shadow-only, tag scheduled macro contamination, audit narrow-stop gap losses, and score rejected same-family duplicates prospectively."
+        },
+        "grok": {
+          "model": "Grok 4.5 via xAI OAuth",
+          "verdict": "PASS",
+          "result": "Keep causal implied-move and pooled-reclaim audits shadow-only, preserve the monoculture warning, and do not promote or unlock size."
+        },
+        "changes_after_grok": [
+          "Position return, per-position contribution, and single-position aggregate marks now use coarse percentage bands so relative or dollar sizing cannot be reconstructed.",
+          "Scheduled-macro contamination and gap-through loss realism are frozen as measurement-only audits with finite sample and kill rules.",
+          "Rejected same-family candidates and multi-week momentum are frozen as prospective shadow experiments; no outcome was backfilled.",
+          "Session-clock and leader-versus-laggard tags remain measurement-only inside the pooled reclaim family.",
+          "The reviewers disagree on whether XLRE is primarily low-information macro contamination or defensible sampling; both opinions remain preserved, and neither changes the bracket or hard gates."
+        ]
+      },
+      "denominators": {
+        "triggered_or_filled_bracket_outcomes": "0 of 20 code-owned resolved observations required for a family verdict",
+        "executable_closed_r": "current basis epoch has no closed trade",
+        "shadow_r": "kept separate from executable results",
+        "pre_trigger_failures": "kept separate from fills and expectancy",
+        "capability_blocked_outcomes": "kept separate from market outcomes"
+      },
+      "limitations": [
+        "Paper trading only; no live-money inference.",
+        "Intraday equity evidence uses single-venue IEX data, not consolidated SIP or NBBO.",
+        "The deterministic learning ledger still has no resolved observation rows, so no family has earned promotion or retirement.",
+        "The current open-position result is marked, not realized, and can reverse.",
+        "Shadows and reviewer ideas are research records and never authorize orders."
+      ],
+      "source_receipts": {
+        "private_journal_sha256": "7369bb5db0844b609b8f5d23fec7ef8cf5e409da8fff0cdee614b3cbcbee73b4",
+        "strategy_learning_sha256": "dcd6da35be26e2b6d915b7e359f0abde1a91dacb72b7c9f60f21700ab72928fd"
+      }
+    },
+    {
       "id": "20260807-afternoon-paper-cycle",
       "published_at": "2026-08-07T21:38:19Z",
       "session": "post-close",
