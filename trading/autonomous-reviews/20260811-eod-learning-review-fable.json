@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "exact_public_entry_sha256": "70fda9ae31b1f0172fb9168c67ccb03a85555e34906267130dfff7d78fe72034",
+  "reviewed_full_candidate_sha256": "76da1a50a0f27fbcb439bf670b99c153201e79ae0b8c61d4d6896ba8c8fca810",
+  "reviewed_at": "2026-08-11T22:07:57.918319+00:00",
+  "model_route": {
+    "model_id": "claude-fable-5",
+    "provider": "claude.ai OAuth",
+    "cli_version": "2.1.226 (Claude Code)",
+    "subscription_type": "max"
+  },
+  "result": {
+    "model_identity": "Claude Fable 5",
+    "provider": "Anthropic",
+    "reviewed_entry_sha256": "76da1a50a0f27fbcb439bf670b99c153201e79ae0b8c61d4d6896ba8c8fca810",
+    "verdict": "PASS",
+    "publication_safety": {
+      "verdict": "PASS",
+      "privacy_opinion": "The candidate publishes no share quantities, no prices, no order or account identifiers, no absolute dollar P&L, no NLV, and no fee figures. P&L appears only as aggregate percentages of an undisclosed private virtual basis, and because the book is flat there is no open-position return paired with a basis-contribution figure — the pairing that defeated the bands in the 2026-08-10 review is absent. The two closed trades are pooled into one aggregate percentage, so per-trade sizing cannot be separated even if the basis were guessed. Tickers plus qualitative dispositions (failed-before-trigger, not-triggered, invalidated, fill-model-dependent) do not reconstruct levels: no frozen entry, stop, target, or boundary price is published. The source_receipts hashes are one-way commitments over high-entropy private documents and do not leak content. I verified each public claim against the private journal without finding a leaked quantity.",
+      "statistical_opinion": "The entry is statistically honest to an unusual degree. It states plainly that both epoch closes lost, labels the DIS exit execution-contaminated rather than strategy evidence, discloses that the authoritative observation ledger has zero qualified rows, keeps basis epochs unpooled, keeps causal and optimistic fill models separate, reports pre-trigger failures as confirmation-cost controls rather than avoided wins, excludes capability-blocked observations from expectancy, and reports the TTD result as fill-model-dependent rather than a +2R anecdote. No tiny, correlated, contaminated, shadow, or cross-epoch sample is presented as alpha; the headline claims an integrity failure, not an edge. The self-declared PASS cards in review_summary were ignored as instructed and do not affect this verdict.",
+      "issues": [
+        "Advisory, not blocking: the aggregate epoch percentage is published to five significant digits. Because the denominator is private and unpaired this does not enable reconstruction, but future entries should consider coarser rounding of basis-relative percentages as defense in depth if per-trade percentages ever return alongside them."
+      ],
+      "required_changes": []
+    },
+    "strategy_critique": {
+      "verdict": "PASS",
+      "opinion": "My honest view: this system has still not produced one clean unit of strategy evidence, and this entry correctly says so. The only mechanism with fills is the pooled level/VWAP reclaim family, and its epoch-2 sample is two correlated-process losses, one of which is execution-contaminated and one of which exposed a structurally broken stop geometry — a noise-scale stop carried across an overnight gap makes the nominal 2:1 bracket fictional, so the family's recorded R distribution understates true tail risk. The correct response is exactly what the entry does: halt new aggressive entries, fix telemetry and the evidence round-trip before judging any strategy, and treat the empty deterministic ledger as the binding constraint. Sector-pair relative-value is the right top research priority because it is the only registered family whose return driver (cross-sectional flow dislocation between related ETFs) is not a directional intraday-reversion bet on a single name. The put-continuation lane is honestly held at zero observations. The gate-counterfactual and round-trip work is infrastructure, not alpha, and the entry never confuses the two.",
+      "mechanism_overlap": "The sampled book remains a reclaim monoculture: DIS, RPD, ACHR, the XLV pair, BWMN, and the historical TTD-long all reduce to completed level/VWAP reclaim variants, so every filled and failed-before-trigger row this epoch is one mechanism family sampled on overlapping sessions — Grok's characterization of the actual evidence is correct even though Fable's characterization of the registry is also true. Registry diversity (sector RV, quality mean reversion, gap-fill, puts) is not evidence diversity while those families sit at zero rows. Same-session clusters mean the effective sample is closer to two market-date observations than seven registrations, and the entry's denominators section correctly refuses to count them as independent trials.",
+      "missed_alternatives": [
+        "Cross-sectional multi-week momentum is frozen in the playbook (item 10) but absent from this entry's strategy list; it is the most genuinely distinct registered hypothesis (longer horizon, cross-sectional ranking, continuation rather than reversion) and deserves a scan receipt per cycle like the other non-reclaim families.",
+        "The defensive/low-beta comparison lane and same-horizon SPY/QQQ benchmark receipts are acknowledged missing in the private journal; without them 'cash won by comparison' is unmeasurable, and this is a measurement gap no current family covers.",
+        "A volatility/regime state tag (e.g., realized-vol or index-trend bucket frozen at registration) would test whether reclaim losses cluster in identifiable regimes — measurement-only, distinct from the session-clock tag already frozen.",
+        "All intraday-reversion variants proposed by reviewers (failed-ORB fade, auction fade, earnings post-drift fade) are correctly parked as mechanism-overlapping or data-blocked; I do not propose reviving them."
+      ],
+      "current_strategy_grades": [
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "grade": "iterate",
+          "reason": "The mechanism is unproven, not disproven: the epoch sample is two correlated losses, one contaminated. Iterate under the halt with causal fills, quote-integrity receipts, matched controls, and ATR-stop-bucket stratification; the sub-noise overnight stop geometry must be addressed by prospective documentation arms, never by widening a live bracket. Grok's stricter shadow-primary posture is defensible and should be preserved as dissent, but demotion of a configured lane on zero qualified ledger rows would itself be evidence-free tuning."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "grade": "shadow",
+          "reason": "Correctly the highest-priority shadow family: only registered hypothesis with a mechanically different return driver and explicit index-correlation and concentration kill conditions. Zero observations, so priority may change while frozen parameters, sample size, and kill rules must not — which is exactly what the entry states."
+        },
+        {
+          "name": "Observation round-trip and gate counterfactuals",
+          "grade": "keep",
+          "reason": "This is measurement infrastructure, not a strategy, and it is the binding constraint: with zero qualified ledger rows, nothing can be promoted, demoted, or unlocked. The freeze-all-scoring rule on an empty-when-registrations-exist snapshot is the single most important control in the entry. Gate counterfactuals correctly escalate to owner review only and never auto-remove a hard gate."
+        },
+        {
+          "name": "Index or sector put continuation",
+          "grade": "shadow",
+          "reason": "Zero qualifying observations honestly reported; single-name bearish evidence correctly excluded. Note that single-venue equity data is a weak foundation for option microstructure conclusions, so the capability audit should record its quote provenance before any of its ten observations are treated as chain-eligibility evidence."
+        }
+      ],
+      "bounded_recommendations": [
+        {
+          "name": "Quote-integrity guard replay validation",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "Before the aggressive-entry halt can lift, freeze a labeled replay corpus of archived quote windows (including the contaminated exit window as a known-bad case and ordinary windows as known-good), plus deterministic rejection rules for one-sided, crossed, trade-dislocated, and stale quotes with a maximum quote-age receipt. Freeze the corpus and rules before scoring.",
+          "benchmark_or_control": "Ground-truth labels on the archived windows; the guard's decisions are scored against them like a classifier, with known-good windows serving as the false-positive control.",
+          "minimum_sample": "20 labeled windows including at least 5 known-bad cases before the guard is declared implemented-and-tested.",
+          "promotion_rule": "Zero missed known-bad windows and a pre-registered acceptable false-rejection rate on known-good windows permits marking this specific halt precondition satisfied; it does not by itself lift the halt, which also requires the telemetry, artifact, and owner/config migration gates.",
+          "kill_rule": "Any missed known-bad window returns the guard to development; no live or paper stop path may depend on unvalidated guard logic in the interim."
+        },
+        {
+          "name": "Per-cycle benchmark and defensive-lane receipt restoration",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "Every decision cycle must persist a same-horizon index benchmark return receipt and one concrete defensive/low-beta candidate evaluation under identical accounting, frozen at decision time and never backfilled.",
+          "benchmark_or_control": "The benchmark receipt is itself the control against which cash and any selected trade are compared; missing receipts are recorded as process failures, never silently passed.",
+          "minimum_sample": "10 consecutive cycles with complete receipts before any claim about sourcing quality or cash-versus-market performance is made.",
+          "promotion_rule": "None — this is permanent accounting hygiene; completeness at 10 cycles simply makes the sourcing-comparison experiment in the playbook scoreable.",
+          "kill_rule": "Two consecutive cycles with missing receipts is a reportable process defect that blocks any sourcing-quality claim until coverage is restored."
+        },
+        {
+          "name": "Reclaim stop-geometry documentation arm",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "For each future reclaim registration, additionally record a documentation-only wider-geometry arm at a pre-registered ATR-fraction floor for the stop, with the machine-checkable ATR block (timeframe, period, value, source bars, next-bar convention) already required by exit-overlay version 2. No live bracket changes; existing registrations are never rewritten.",
+          "benchmark_or_control": "The actual frozen-bracket outcome of the same registration is the control; compare fill-adjusted R, MFE/MAE capture, and overnight-gap exposure per arm.",
+          "minimum_sample": "15 resolved paired arms.",
+          "promotion_rule": "The wider-geometry arm may inform future registration geometry only if it shows at least +0.10R conservative mean improvement without materially worse tail loss, and only prospectively.",
+          "kill_rule": "No improvement at 15 pairs retires the arm; under no circumstance does this arm widen, move, or replace a stop on an existing or open position."
+        }
+      ],
+      "disagreements_to_preserve": [
+        "Fable keeps reclaim as cheap shadow-and-standard research while prioritizing sector-relative value; Grok wants reclaim shadow-primary until causal fills and quote integrity are proven. Both must remain on record; the halt satisfies Grok's core concern without granting reviewer prose authority over the executable allowlist.",
+        "The unlock-contract mismatch between the scheduled owner directive (three eligible aggressive closes) and the config/playbook contract (20 closes at >= +0.30R) must remain an unresolved migration gate, with the stricter contract binding in practice until an explicit versioned owner-approved migration reconciles config, governor, docs, journals, and tests.",
+        "Grok's rejection of the original small-sample unlock and the general principle that a valid rejection or avoided loss never counts as unlock evidence."
+      ]
+    },
+    "explicit_confirmation": {
+      "exact_entry_reviewed": true,
+      "hard_gates_unchanged": true,
+      "no_order_authority": true
+    },
+    "summary": "PASS on both tracks. The public candidate publishes only unpaired aggregate percentages of a private basis on a flat book, with no quantities, prices, dollars, or identifiers, and its statistical framing is honest to the point of self-incrimination: both closes lost, the exit telemetry failed its own standard, the deterministic ledger has zero qualified rows, and nothing is presented as alpha. The strategy content correctly halts new aggressive entries, keeps the reclaim monoculture in evidence-gated iteration, elevates sector-relative value as the only mechanically distinct registered family, holds all unproven work shadow- or measurement-only, and preserves reviewer dissent and the owner/config unlock mismatch without loosening any hard gate. My recommendations are bounded measurement and shadow work — quote-guard replay validation, benchmark-receipt restoration, and a prospective stop-geometry documentation arm — and none of them authorizes an order, changes a bracket, or touches a risk limit."
+  }
+}
