@@ -1,20 +1,87 @@
 {
-  "asof": "2026-08-08T13:40:17.252336-05:00",
-  "title": "Autonomous Paper Desk",
+  "asof": "2026-08-11T09:42:30.993280-05:00",
+  "journal_date": "2026-08-10",
+  "title": "Autonomous Psy \u2014 Paper Fund II",
   "mandate": "Psy paper trading lab \u2014 edge + learning. Privacy-safe public surface.",
   "orders_enabled": false,
   "equity_display": "paper book active",
   "day_pnl_pct": null,
   "spy_day_pct": null,
-  "engines": [],
-  "expectancy": [],
+  "candidates_today": 48,
+  "open_positions": 0,
+  "fills_count": 0,
+  "regime": {
+    "asof": "2026-08-10T07:30:05.821991-05:00",
+    "label": "unknown_pending_full_classifier",
+    "notes": "premarket: engines + shadow emission"
+  },
+  "engines": [
+    {
+      "engine": "A",
+      "n": 30,
+      "taken": 0
+    },
+    {
+      "engine": "B",
+      "n": 36,
+      "taken": 0
+    },
+    {
+      "engine": "C",
+      "n": 24,
+      "taken": 9
+    },
+    {
+      "engine": "D",
+      "n": 21,
+      "taken": 0
+    },
+    {
+      "engine": "E",
+      "n": 15,
+      "taken": 0
+    },
+    {
+      "engine": "F",
+      "n": 6,
+      "taken": 0
+    },
+    {
+      "engine": "G",
+      "n": 12,
+      "taken": 0
+    }
+  ],
+  "expectancy": [
+    {
+      "engine": "D",
+      "avg_optimistic_r": -1.0,
+      "avg_realistic_r": -5.021712499999985,
+      "n": 1
+    }
+  ],
   "obs_counts": {
-    "pending": 253
+    "falsified": 1,
+    "pending": 185,
+    "unresolved": 1
   },
   "notes": [
-    "resolve={'resolved_or_updated': 0, 'pending_seen': 107, 'confirmed': 0, 'falsified': 0, 'not_triggered': 0}",
+    "resolve={'resolved_or_updated': 0, 'pending_seen': 30, 'confirmed': 0, 'falsified': 0, 'not_triggered': 0}",
     "orders_enabled=False",
-    "phase2 scaffold eod"
+    "phase2 scaffold eod",
+    "first public session log published retroactively 2026-08-11 after missing git deploy"
+  ],
+  "decision": "NO_TRADE",
+  "headline": "2026-08-10 post-close first public log: measurement day only. orders_enabled stayed false on launch Monday, so Fund II advanced the shadow ledger and process journal without booking paper fills.",
+  "thoughts": [
+    "First public session log for Autonomous Agent Paper Fund II after the intended Monday launch window.",
+    "Non-control observation stock stood at 96 across A\u2013G with taken flags totaling 6; Engine C carried the only taken marks in the ledger snapshot.",
+    "Status mix at EOD: {\"falsified\": 1, \"pending\": 122, \"unresolved\": 1}. Pending remains the honest early-state majority \u2014 not a hidden win rate.",
+    "Premarket froze 48 evaluated candidates; open phase dry-ran 3 submit attempts under orders_enabled=false.",
+    "Resolved expectancy is still below learn floors (n\u226520 realistic R per family). No weight or size edits applied.",
+    "Launch gap: orders_enabled never flipped true on 2026-08-10 despite the Mon paper-fill target in the Fund II charter. Fix is operational, not narrative.",
+    "Adversarial prep packets were written (Grok evidence-only + GPT quarantined self-diagnosis). Independent A review still required before any process claim beyond cadence.",
+    "Privacy contract held: public page ships process metrics only \u2014 no account IDs, quantities, notionals, or broker payloads."
   ],
   "disclaimer": "Paper trading. No account identifiers, quantities, or broker payloads."
 }
