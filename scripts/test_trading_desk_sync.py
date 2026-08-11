@@ -475,9 +475,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("There will always be another setup", mentality)
         self.assertIn("Health is wealth.", mentality)
         self.assertIn("they let you lock in and play the game well", mentality)
+        self.assertIn("Hold on to your winners. Cut losers fast.", mentality)
+        self.assertIn("big winners pay for the misses", mentality)
         self.assertEqual(
             len(re.findall(r'<article class="mentality-rule(?: mentality-rule--wide)?">', mentality)),
-            6,
+            7,
         )
         self.assertEqual(mentality.count('class="mentality-tactical-card"'), 1)
         self.assertIn('aria-labelledby="tactical-learnings-heading"', mentality)
