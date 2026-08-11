@@ -2,6 +2,127 @@
   "schema_version": 1,
   "entries": [
     {
+      "id": "20260811-eod-learning-review",
+      "published_at": "2026-08-11T22:02:29Z",
+      "session": "post-close",
+      "mode": "paper",
+      "decision": "REVIEW",
+      "risk_appetite": 7,
+      "headline": "The paper book finished flat, but execution telemetry failed its own integrity standard, so new aggressive entries are halted and sizing remains locked.",
+      "thoughts": [
+        "Two standard paper positions closed during the active measurement epoch and both lost. The book is now flat, so realized and marked performance are identical for this epoch; historical basis epochs remain separate.",
+        "The DIS exit was contaminated by a dislocated single-venue displayed bid while authenticated trades remained above the frozen stop. XLRE lacked a timestamped exit-spread receipt and exposed the fragility of carrying a noise-scale stop overnight. These are execution-integrity defects, not evidence of strategy edge.",
+        "The deterministic observation ledger still has zero qualified rows. Manual journal evidence can diagnose process failures, but it cannot promote, demote, retire, tune, or unlock a strategy.",
+        "Fable's strategy opinion is that evidence round-trip and matched-control coverage must work before any strategy judgment; it prioritizes sector-relative value as the least index-correlated research family. Grok's strategy opinion is harsher: reclaim research is a mechanism monoculture with contaminated exits and should be shadow-primary until causal fills and quote integrity are proven.",
+        "Compatible reviewer feedback is frozen as paper or shadow research only. No hard risk gate, existing bracket, executable allowlist, or sizing threshold changes because a model suggested it."
+      ],
+      "strategies": [
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "status": "iterate; new aggressive entries halted",
+          "rules": "Keep completed-bar triggers and unchanged standard controls, but count only causal fills with quote-integrity receipts, matched controls, ATR stop buckets, and clustered same-session evidence."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "status": "highest-priority shadow experiment",
+          "rules": "Freeze the pair registry and residual formula before observation one; require 40 non-overlapping episodes across at least four pairs, positive conservative control lift, low index correlation, and bounded concentration."
+        },
+        {
+          "name": "Observation round-trip and gate counterfactuals",
+          "status": "measurement-only",
+          "rules": "Create treatment and controls at the same timestamp, resolve through one causal accounting path, require at least 95% control coverage, and freeze all scoring if registrations exist but the expectancy snapshot is empty."
+        },
+        {
+          "name": "Index or sector put continuation",
+          "status": "shadow-only; zero qualifying observations",
+          "rules": "Collect complete option microstructure only on matched bearish index or sector signals; no paper order is authorized by this research lane."
+        }
+      ],
+      "positions": [],
+      "pnl": {
+        "realized_pct_of_virtual_basis": -0.06933,
+        "unrealized_pct_of_virtual_basis": 0.0,
+        "marked_total_pct_of_virtual_basis": -0.06933,
+        "closed_trades": 2,
+        "note": "Active basis epoch only. The book is flat, so no open position return exists and current open-position contribution to the private virtual basis is zero. Earlier basis epochs are not pooled."
+      },
+      "candidate_review": [
+        {
+          "symbol": "RPD",
+          "disposition": "failed before trigger",
+          "reason": "Price crossed the frozen failure boundary before a completed reclaim; the avoided entry is a control observation, not a fill or win."
+        },
+        {
+          "symbol": "ACHR",
+          "disposition": "failed before trigger",
+          "reason": "No completed bar cleared the frozen breakout level before failure, so no trade or return was manufactured."
+        },
+        {
+          "symbol": "BWMN",
+          "disposition": "thesis invalidated",
+          "reason": "The frozen target exceeded the issuer-disclosed cash consideration; the setup was retired from expectancy rather than relabeled."
+        },
+        {
+          "symbol": "XLV",
+          "disposition": "not triggered",
+          "reason": "Neither the reclaim nor support control produced an eligible trigger during the frozen window."
+        },
+        {
+          "symbol": "TTD",
+          "disposition": "fill-model dependent",
+          "reason": "An optimistic exact-level result collapsed near zero under a causal next-bar fill and became negative after the pre-registered paper-fill haircut."
+        }
+      ],
+      "review_summary": {
+        "public_entry_status": "PASS",
+        "reviewed_content_sha256": "70fda9ae31b1f0172fb9168c67ccb03a85555e34906267130dfff7d78fe72034",
+        "public_entry_reviews": [
+          {
+            "model": "Claude Fable 5",
+            "verdict": "PASS",
+            "result": "Exact-entry review passed both tracks: privacy and statistical framing are publication-safe, while strategy learning remains evidence-gated, control-matched, and shadow-only where unproven.",
+            "receipt_path": "/trading/autonomous-reviews/20260811-eod-learning-review-fable.json",
+            "receipt_sha256": "08f868d5ddc48c431e65b983db442f4e1e2c7d6eee958657f4a4fa949b2243a7"
+          },
+          {
+            "model": "Grok 4.5 via xAI OAuth",
+            "verdict": "PASS",
+            "result": "Exact-entry review passed both tracks: the halt, causal-fill critique, mechanism-overlap warning, and bounded non-reclaim experiments are represented without loosening execution controls.",
+            "receipt_path": "/trading/autonomous-reviews/20260811-eod-learning-review-grok.json",
+            "receipt_sha256": "84be841194b94679659de76fd6820c7c4dea3e1876eef50702d4987559d24549"
+          }
+        ],
+        "changes_after_grok": [
+          "New aggressive entries remain halted until quote integrity, close telemetry, immutable artifacts, and the owner/config unlock contract are reconciled.",
+          "The observation round-trip and same-timestamp matched-control gate is frozen as measurement infrastructure with a two-session plumbing check and a 40-control fill-validity sample.",
+          "Sector-pair relative-value reversion is prioritized without changing its frozen parameters, sample, benchmark, promotion rule, or kill rule.",
+          "Gate counterfactuals are shadow-only and can trigger owner review, never automatic removal of a hard gate.",
+          "Fable and Grok disagreements are preserved: Fable keeps reclaim as cheap shadow research; Grok prefers a stricter shadow-primary posture."
+        ]
+      },
+      "denominators": {
+        "triggered_or_filled_bracket_outcomes": "2 broker-filled standard outcomes in the active epoch; neither is aggressive-unlock evidence",
+        "executable_closed_r": "reported separately by basis epoch and fill-realism cohort",
+        "shadow_r": "causal and optimistic fill models remain separate",
+        "pre_trigger_failures": "reported as confirmation-cost controls, never fills",
+        "capability_blocked_outcomes": "descriptive only and excluded from expectancy"
+      },
+      "limitations": [
+        "Paper trading only; no live-money inference and no order was submitted by this publisher.",
+        "Equity microstructure evidence uses single-venue IEX data rather than consolidated SIP or NBBO.",
+        "The authoritative observation ledger has zero qualified rows, so no strategy has earned promotion, demotion, retirement, or larger sizing.",
+        "The DIS exit is execution-contaminated and XLRE has incomplete exit-spread telemetry.",
+        "The book is flat; position return since entry is not applicable and open-position virtual-basis contribution is zero.",
+        "Shadow and measurement experiments never authorize orders."
+      ],
+      "source_receipts": {
+        "private_journal_sha256": "89148f4c7b81cfb56062e420afc4092fa8d58179e1de7c153f195d36fd32965c",
+        "private_fable_receipt_sha256": "d6dc64626e1df590cef16497bb464bc18a787a3c41e1253787975d43ac923535",
+        "strategy_fable_receipt_sha256": "2713f029b9ac42c1574b6807396c8ce49273fd76b693470095e27cee8b5c0fa5",
+        "strategy_grok_receipt_sha256": "f765429dc4e58f4b08c930fb738fbbddc9dbeb512c22d016ab7652081ad251b8"
+      }
+    },
+    {
       "id": "20260810-afternoon-paper-cycle",
       "published_at": "2026-08-10T22:05:09Z",
       "session": "post-close",
