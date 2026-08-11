@@ -2,6 +2,160 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-11",
+   "session": "pre-market",
+   "assess_for": "Tuesday Aug 11 session",
+   "verdict": "RISK-ON",
+   "subtitle": "Nothing in the red column again \u2014 a leadership rotation and a stale MOVE feed trim +8 to +6 while Brent's fourth up day, 4.70% tens, and Wednesday's CPI crowd the runway",
+   "score": 6,
+   "n_signals": 11,
+   "composite": "+0.55",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "773.03 vs 747.56 \u00b7 +3.41% \u00b7 Aug 10 close, Alpaca SIP \u2014 Monday moved 0.03%; the cushion didn't",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "14.90 \u00b7 site feed, Aug 7 vintage \u2014 Monday's Cboe close 15.46; sub-16 on either vintage with CPI premium building",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.67 (M2 18.66, M1 16.99) \u00b7 feed Aug 7 vintage; Monday's settles +1.64 \u2014 steep contango either way",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "90.42 \u00b7 feed Aug 7 vintage; Monday's close 92.51 \u2014 drifting up, still sub-95",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "feed row flagged stale (last obs Jul 17, 70.88) \u2192 0 by rule; last direct print 72.03 at Friday's close is sub-80 \u2014 the flag, not the level, costs the point",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.71% (Aug 6 obs via Aug 7 feed) \u00b7 \u221213bp/5d vs 2.84% Jul 30 \u2014 the tights of the run",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed refreshed to Aug 10 close \u2014 below: only XLC \u22121.4% and XLU \u22123.5%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLB +1.68 \u00b7 XLV +1.23 \u00b7 XLY +1.18 \u2014 one of the five \u00b7 Monday's refresh promoted health care and discretionary over XLF (+1.12) and XLI (+1.04)",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.97pt (IWM +2.21%, SPY +3.18%, Jul 13 \u2192 Aug 10, Alpaca SIP) \u2014 three-hundredths above the \u22121 line",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "3 of 7 \u00b7 BNB +0.57, ETH +0.35, ZEC +0.34 \u00b7 SOL \u22120.02 one tick from a fourth \u00b7 feed refreshed to Aug 9",
+     "score": 0
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "159.20 (Aug 11 ECB fix) vs 157.41 (Aug 4) \u00b7 USDJPY +1.14%, yen weaker \u2014 no stress state on a weakening yen; Yahoo 429 on both hosts, ECB fix per convention",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>Six of eleven signals positive and \u2014 as at Monday's close \u2014 nothing in the negative column. The stress gauges stay quiet: VIX is sub-16 on both vintages I can see (14.90 in Friday's site feed, 15.46 at Monday's Cboe close), the futures curve holds a steep +1.6 contango, VVIX sits in the low 90s, and high-yield spreads at 2.71% are the tights of this run after coming in 13bp over five sessions. SPY is 3.4% above its 50-day and 11 of 13 US groups trade above their year-to-date cost basis. The rubric reads that as RISK-ON, 7.7 of 10.</p>",
+    "<p>The score slipped from Monday's +8, and only half of the slip is the market. The real change: Monday's data refresh rotated the sector leaderboard \u2014 health care and consumer discretionary leapfrogged financials and industrials, leaving XLB \u00b7 XLV \u00b7 XLY on top with one cyclical instead of two, and the leadership row drops to 0. The other point is bookkeeping: the MOVE row in the risk feed is flagged stale (its last observation is Jul 17), and the rubric scores a stale row 0 regardless of level \u2014 the last direct print, 72.03 on Friday, is comfortably calm. A stricter ledger, not a worse tape; I write down what the rules say, not what I'd argue.</p>",
+    "<p>The overhang is singular and Wednesday-shaped. Brent is holding near <a href=\"https://www.tickmill.com/blog/daily-market-outlook-august-11-2026\" rel=\"noopener\">$88 after a fourth straight up day</a>, roughly 12% off last week's low, as the US\u2013Iran standoff <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-11-dow-sp-500-nasdaq-102827503.html\" rel=\"noopener\">hardens rather than resolves</a> \u2014 Washington's new compensation demand pushed any Hormuz reopening further out. The oil bid has done what oil bids do: the <a href=\"https://tradingeconomics.com/united-states/government-bond-yield\" rel=\"noopener\">10-year touched 4.70%</a>, its high for the month, and September hike odds sit near a coin flip (~46%, down from 64% before Friday's soft payrolls). July CPI lands Wednesday 8:30am with PPI and claims Thursday, against 3-year, 10-year, and 30-year supply Tuesday through Thursday.</p>",
+    "<p>Today itself is the quiet slot \u2014 the 3-year at 1pm is the only scheduled test before the print. The book's cheapest moves sit at its edges: SOL's spread z at \u22120.02 is one tick from turning the crypto row positive, and IWM is three-hundredths of a point from turning size negative. Equities are carrying record-adjacent prices, tight spreads, and sub-16 vol straight into Wednesday; the ledger says that posture is still right, and it has been paying, but the margin for a hot number is the thinnest it's been this month.</p>"
+   ],
+   "flips": {
+    "to_off": "The verdict needs the signal sum down at +2, and the one-day route is Wednesday-shaped: a hot core CPI into the 10-year auction that sends VIX through 20 (from 15.46) and the VX curve into backwardation (from +1.64) \u2014 those two rows alone take +6 to +2, NEUTRAL; VVIX through 95 adds margin. Brent through $90 before the print makes the same math worse. The free tripwire needs no stress at all: IWM sits 0.03pt above the size line, so one soft small-cap session trims to +5 mechanically.",
+    "to_on": "+7 sits one tick away: SOL's 50-day spread z is \u22120.02 \u2014 the first session it stops lagging bitcoin makes crypto 4 of 7. +8 needs the risk feed to publish a fresh sub-80 MOVE (the stale flag, not the level, costs the point) or a cyclical to retake the leaderboard's third slot \u2014 XLF at +1.12 is 0.11 z behind XLV. A cool CPI Wednesday plausibly does all three by Thursday."
+   },
+   "forward": {
+    "horizon": "Tue Aug 11 \u2013 Mon Aug 17",
+    "watch": [
+     {
+      "name": "July CPI \u2014 Wed Aug 12, 8:30am ET",
+      "why": "the week's arbiter \u2014 hike odds fell to a coin flip on soft payrolls, and the oil rally is re-arming the inflation side of the argument",
+      "detail": "Sept hike odds ~46% from 64% a week ago; core print decides whether they keep dying or come back",
+      "lean": "watch"
+     },
+     {
+      "name": "Refunding \u2014 3y Tue, 10y Wed, 30y Thu, 1pm ET",
+      "why": "the 10-year hit 4.70%, its high for the month, on Monday's oil bid before supply even arrived; the 10-year prices 4.5 hours after CPI",
+      "detail": "MOVE's last direct print 72 is still a bet on no accident; a tail after a hot CPI is the sweep scenario in the flips",
+      "lean": "watch"
+     },
+     {
+      "name": "Vol clustering",
+      "why": "10-day realized above 21-day says movement is bunching around catalysts, not compressing",
+      "detail": "SPY RV10 15.4% vs RV21 13.7% (my calc, Aug 10 close); four \u22651% closes in the last ten sessions; implied 15.46 still below 10d realized",
+      "lean": "off"
+     },
+     {
+      "name": "Hormuz \u2192 crude tail",
+      "why": "supply-shock crude into a CPI week is the stagflation-shaped risk, and the stalemate hardened again overnight",
+      "detail": "Brent ~$87.75 after four straight up days, +12% off last week's low; US compensation demand pushed reopening odds further out",
+      "lean": "off"
+     },
+     {
+      "name": "Growth-scare second datapoint",
+      "why": "\u221223k payrolls reads as relief only until a second number confirms it as trend",
+      "detail": "PPI + jobless claims Thu Aug 13; May\u2013June revisions already \u2212103k",
+      "lean": "watch"
+     },
+     {
+      "name": "Yen carry fuel",
+      "why": "the unwind gauge is half-burned and the 5-session window is clean in the weak-yen direction",
+      "detail": "USDJPY 159.20 at the ECB fix, +1.14% over five sessions; COT leveraged-fund shorts update Fri Aug 14",
+      "lean": "on"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes within \u00b10.6% of Monday's 773.03 today, Tue Aug 11 \u2014 pre-CPI holding pattern with only the 3-year auction on the calendar, and every graded miss so far came from paying for movement on days like this",
+     "prob": "60%",
+     "resolves": "2026-08-11"
+    },
+    "grading": "Nothing resolved since Monday's close; running Brier holds 0.27 across five graded. Six calls on the clock: the 764.50 give-back (55%, Aug 11), CPI-day \u00b11% (30%, Aug 12), the 759.57 floor (65%, Aug 12), a VIX close above 17.50 (55%, Aug 12), the \u22651% down-close window (40%, Aug 13), and the weekly \u22651%-close window (70%, Aug 17)."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 futures waver as US\u2013Iran stances harden",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-11-dow-sp-500-nasdaq-102827503.html"
+    },
+    {
+     "t": "Tickmill daily outlook \u2014 Brent $87.75 into CPI",
+     "u": "https://www.tickmill.com/blog/daily-market-outlook-august-11-2026"
+    },
+    {
+     "t": "TradingEconomics \u2014 10-year at 4.70%, hike odds ~46%",
+     "u": "https://tradingeconomics.com/united-states/government-bond-yield"
+    },
+    {
+     "t": "CNBC \u2014 markets live",
+     "u": "https://www.cnbc.com/2026/08/10/stock-market-today-live-updates.html"
+    }
+   ],
+   "rating": 7.7
+  },
+  {
    "date": "2026-08-10",
    "assess_for": "Tuesday Aug 11 open",
    "session": "post-close",
