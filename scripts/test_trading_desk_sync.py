@@ -471,9 +471,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("How much is your thinking already priced in?", mentality)
         self.assertIn("You will not buy the bottom or sell the top.", mentality)
         self.assertIn("momentum does not reward patience", mentality)
+        self.assertIn("Don’t chase.", mentality)
+        self.assertIn("There will always be another setup", mentality)
+        self.assertIn("Health is wealth.", mentality)
+        self.assertIn("they let you lock in and play the game well", mentality)
         self.assertEqual(
             len(re.findall(r'<article class="mentality-rule(?: mentality-rule--wide)?">', mentality)),
-            4,
+            6,
         )
         self.assertEqual(mentality.count('class="mentality-tactical-card"'), 1)
         self.assertIn('aria-labelledby="tactical-learnings-heading"', mentality)
