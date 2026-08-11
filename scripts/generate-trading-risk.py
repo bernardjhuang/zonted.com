@@ -711,7 +711,7 @@ def build(end: date | None = None) -> dict[str, Any]:
             "move": ytd(indices["move"]),
             "skew": ytd(indices["skew"]),
             "curve_spread": ytd(futures),
-            "hy_oas": ytd(credit_observations),
+            "hy_oas": ytd([row for row in credit_observations if row["date"] <= current["hy_oas_as_of"]]),
             "vix9d_vix": ytd(vix9d_ratio),
             "vix_vix3m": ytd(vix3m_ratio),
         },
