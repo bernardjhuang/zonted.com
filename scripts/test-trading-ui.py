@@ -232,7 +232,7 @@ class TradingUiContractTest(unittest.TestCase):
         for side, asset_type, symbol, action_date, item in action_items:
             self.assertIn(f'<b>{symbol}</b> · {side.title()} · {asset_type.title()}', item)
             self.assertIn(f'<time datetime="{action_date}">', item)
-            self.assertRegex(item, r'<strong class="(?:positive|negative)">[+−][\d.]+%</strong>')
+            self.assertRegex(item, r'<strong class="(?:positive|negative)">[+−][\d.]+%</strong>|<strong class="">—</strong>')
         self.assertRegex(block, r'class="performance-action performance-action--win" data-performance-side="sell"[\s\S]*?<strong class="positive">')
         self.assertRegex(block, r'class="performance-action performance-action--loss" data-performance-side="sell"[\s\S]*?<strong class="negative">')
         self.assertIn(".performance-action-list{display:grid;grid-template-columns:1fr", (ROOT / "trading" / "desk.css").read_text())
@@ -366,8 +366,10 @@ class TradingUiContractTest(unittest.TestCase):
 
     def test_performance_trade_log_only_shows_pnl_for_sells(self):
         script = (ROOT / "js" / "trading-performance.js").read_text()
-        self.assertIn("a.side === 'sell' ? pct(a.pct) : '—'", script)
-        self.assertIn("P&amp;L is shown only for sells", script)
+        self.assertIn("a.side === 'sell' && a.pct !== null ? pct(a.pct) : '—'", script)
+        self.assertIn("pending sells and buys stay listed as unavailable", script)
+        self.assertIn(".filter(a => a.date && a.symbol)", script)
+        self.assertIn("a.side === 'sell' && a.pct !== null", script)
         self.assertNotIn("a buy row's number keeps moving", script)
 
     def test_performance_places_recent_win_rates_below_ytd_hero(self):
