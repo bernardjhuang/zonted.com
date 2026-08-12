@@ -150,6 +150,13 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(result["positions"][0]["flair"], "thesis")
         self.assertEqual(result["positions"][0]["sector_etf"], "XLK")
 
+    def test_brbr_is_authored_for_the_legacy_live_holding(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        self.assertEqual(profiles["BRBR"]["flair"], "thesis")
+        self.assertEqual(profiles["BRBR"]["sector"], "Consumer Staples")
+        self.assertEqual(profiles["BRBR"]["sector_etf"], "XLP")
+        self.assertIn("Legacy Robinhood", profiles["BRBR"]["thesis"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
