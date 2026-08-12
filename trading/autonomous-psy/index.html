@@ -37,23 +37,23 @@
 <div class="phead">
   <h1>🦆 Autonomous Psy</h1>
   <p class="take">Psy paper trading lab — edge + learning. Privacy-safe public surface.</p>
-  <p class="meta">Paper-only · Orders enabled: False · Journal date 2026-08-11 · Published 2026-08-11T15:15:25 CT</p>
+  <p class="meta">Paper-only · Orders enabled: False · Journal date 2026-08-12 · Published 2026-08-12T15:15:22 CT</p>
   <p class="meta">Paper trading. No account identifiers, quantities, or broker payloads.</p>
   <p class="meta"><a href="/posts/introducing-autonomous-agent-paper-fund-ii-psy/">Introducing Autonomous Agent Paper Fund II (Psy)</a> · sibling desk: <a href="/trading/autonomous/">🦥 Autonomous</a></p>
 </div>
 
 <section class="trading-panel" aria-labelledby="psy-session-log">
   <h2 id="psy-session-log">Session log</h2>
-  <p class="meta"><strong>2026-08-11</strong> · <strong>NO_TRADE</strong> · paper book · candidates 48 · open positions 0 · fills 0</p>
-  <p class="take">2026-08-11 post-close: measurement day only — orders_enabled stayed false, so the book logged shadows and process metrics without paper fills.</p>
-  <ul><li>Shadow ledger cumulative non-control observations: 144 across engines; taken flags: 9.</li><li>Status mix: {&quot;falsified&quot;: 1, &quot;pending&quot;: 185, &quot;unresolved&quot;: 1}. Pending is expected early — silence is not a win rate.</li><li>Resolved expectancy rows available: 1. Learn floors still require n≥20 realistic R per family before weight changes.</li><li>orders_enabled=false for the session. Risk code and open phase still ran in dry-run; no paper fills can exist until the flag flips under the Mon checklist.</li><li>Premarket/open candidate freeze for the day: 48 evaluated intents.</li><li>Regime label: unknown_pending_full_classifier (premarket: engines + shadow emission).</li><li>Public surface stays privacy-safe: no account IDs, quantities, notionals, or broker payloads.</li></ul>
+  <p class="meta"><strong>2026-08-12</strong> · <strong>NO_TRADE</strong> · paper book · candidates 48 · open positions 0 · fills 0</p>
+  <p class="take">2026-08-12 post-close: measurement day only — orders_enabled stayed false, so the book logged shadows and process metrics without paper fills.</p>
+  <ul><li>Shadow ledger cumulative non-control observations: 192 across engines; taken flags: 12.</li><li>Status mix: {&quot;falsified&quot;: 1, &quot;pending&quot;: 249, &quot;unresolved&quot;: 1}. Pending is expected early — silence is not a win rate.</li><li>Resolved expectancy rows available: 1. Learn floors still require n≥20 realistic R per family before weight changes.</li><li>orders_enabled=false for the session. Risk code and open phase still ran in dry-run; no paper fills can exist until the flag flips under the Mon checklist.</li><li>Premarket/open candidate freeze for the day: 48 evaluated intents.</li><li>Regime label: unknown_pending_full_classifier (premarket: engines + shadow emission).</li><li>Public surface stays privacy-safe: no account IDs, quantities, notionals, or broker payloads.</li></ul>
 </section>
 
 <section class="trading-panel" aria-labelledby="psy-engine-activity">
   <h2 id="psy-engine-activity">Engine activity</h2>
   <table>
     <thead><tr><th>Engine</th><th>Name</th><th>Obs</th><th>Taken</th></tr></thead>
-    <tbody><tr><td>A</td><td>momentum</td><td>30</td><td>0</td></tr><tr><td>B</td><td>catalyst</td><td>36</td><td>0</td></tr><tr><td>C</td><td>mean_reversion</td><td>24</td><td>9</td></tr><tr><td>D</td><td>intraday_tape</td><td>21</td><td>0</td></tr><tr><td>E</td><td>options_premium</td><td>15</td><td>0</td></tr><tr><td>F</td><td>crypto</td><td>6</td><td>0</td></tr><tr><td>G</td><td>pairs</td><td>12</td><td>0</td></tr></tbody>
+    <tbody><tr><td>A</td><td>momentum</td><td>40</td><td>0</td></tr><tr><td>B</td><td>catalyst</td><td>48</td><td>1</td></tr><tr><td>C</td><td>mean_reversion</td><td>32</td><td>11</td></tr><tr><td>D</td><td>intraday_tape</td><td>28</td><td>0</td></tr><tr><td>E</td><td>options_premium</td><td>20</td><td>0</td></tr><tr><td>F</td><td>crypto</td><td>8</td><td>0</td></tr><tr><td>G</td><td>pairs</td><td>16</td><td>0</td></tr></tbody>
   </table>
 </section>
 
@@ -61,7 +61,7 @@
   <h2 id="psy-obs-ledger">Observation ledger</h2>
   <pre>{
   &quot;falsified&quot;: 1,
-  &quot;pending&quot;: 185,
+  &quot;pending&quot;: 249,
   &quot;unresolved&quot;: 1
 }</pre>
 </section>
@@ -77,7 +77,7 @@
 
 <section class="trading-panel" aria-labelledby="psy-notes">
   <h2 id="psy-notes">Notes</h2>
-  <ul><li>resolve={&#x27;resolved_or_updated&#x27;: 0, &#x27;pending_seen&#x27;: 46, &#x27;confirmed&#x27;: 0, &#x27;falsified&#x27;: 0, &#x27;not_triggered&#x27;: 0}</li><li>orders_enabled=False</li><li>phase2 scaffold eod</li></ul>
+  <ul><li>resolve={&#x27;resolved_or_updated&#x27;: 0, &#x27;pending_seen&#x27;: 64, &#x27;confirmed&#x27;: 0, &#x27;falsified&#x27;: 0, &#x27;not_triggered&#x27;: 0}</li><li>orders_enabled=False</li><li>phase2 scaffold eod</li></ul>
 </section>
 <!-- AUTO:AUTONOMOUS_PSY:END -->
 </div>
