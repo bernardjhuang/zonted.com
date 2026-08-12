@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "exact_public_entry_sha256": "b3192a8f51a301552a2b0953539bfb349c03e2725ef51530a219ff5f02957cc9",
+  "reviewed_at": "2026-08-12T22:10:18.490817+00:00",
+  "public_redaction": "This receipt preserves the reviewer verdict, opinions, grades, recommendations, and disagreements while removing private execution and account details from the public copy.",
+  "private_source_receipt_sha256": "f03d5f0468b2ca0daf23cb74aaf9c41f897a30ae93f1575b964c119e77bd15d7",
+  "model_route": {
+    "model_id": "claude-fable-5",
+    "provider": "claude.ai OAuth",
+    "cli_version": "2.1.226 (Claude Code)",
+    "subscription_type": "max"
+  },
+  "result": {
+    "model_identity": "Claude Fable 5",
+    "provider": "Anthropic",
+    "reviewed_entry_sha256": "b3192a8f51a301552a2b0953539bfb349c03e2725ef51530a219ff5f02957cc9",
+    "verdict": "PASS",
+    "publication_safety": {
+      "verdict": "PASS",
+      "privacy_opinion": "The candidate publishes only percentages of an undisclosed private virtual basis, an empty positions array, and symbol-level dispositions. It withholds quantities, prices, absolute performance amounts, balances, identifiers, and reconstructable position-return/contribution pairings. With a flat book, position return is not applicable and open contribution is safely reported as zero. Hash receipts do not reveal their source content.",
+      "statistical_opinion": "The entry is unusually honest for a public journal: it states there is no measured edge, labels the 4-of-5 trigger rate as heterogeneous and explicitly clusters the two sector-pair legs as one correlated decision-date cohort, calls the QQQ late registration a low-information diagnostic, refuses to pool basis epochs, keeps unresolved marks out of expectancy, separates pre-trigger failures and capability-blocked rows from fills, and discloses that the authoritative observation ledger has zero rows so nothing can be promoted or sized up. The favorable WMT mark is framed as opportunity-cost telemetry rather than alpha. The option-lane zero-result is correctly described as tool-blocked (pagination/join mismatch) rather than evidence of absent capability. No tiny, correlated, or contaminated sample is framed as alpha. This matches the private evidence, including the withdrawal of the incorrect afternoon prose claim that the WMT passive control had triggered.",
+      "issues": [
+        "Non-blocking: fine-grained basis-relative percentages remain safe only while the private virtual-basis amount stays private."
+      ],
+      "required_changes": []
+    },
+    "strategy_critique": {
+      "verdict": "PASS",
+      "opinion": "My independent view: this system's real product so far is integrity infrastructure, not trading edge, and the entry correctly refuses to pretend otherwise. The binding defect is exactly what the entry says it is — the deterministic observation ledger has zero rows because the backfill writer is never invoked by orchestration, and a validator that should have rejected the incomplete WMT v2 exit block did not fire. Until registration-to-ledger-to-report parity is proven in the sandbox pre-flight and one prospective registration resolves end-to-end, every open shadow mark (including the flattering +0.84R WMT mark) is unpriced anecdote. Keeping CASH selected and the aggressive halt binding is the correct decision, and metering the halt with a session-5 owner escalation properly bounds it without weakening it. The single biggest epistemic risk in the current book is that four of five shadows triggered and three are marked positive on a one-day window — a future reviewer or the operator may be tempted to read this as validation. It is survivorship-free but horizon-open, correlated, and n≈4; it must decay to nothing unless the deterministic ledger scores it.",
+      "mechanism_overlap": "The two executable aggressive lane names (day-two post-gap consolidation, negative-catalyst oversold reclaim) are one pooled level-plus-VWAP mechanism family, as the entry states. Beyond that, quality three-lower-close, gap-fill reversion, and sector-pair reversion form a broader short-horizon long-mean-reversion cluster whose outcomes will correlate on any market-wide reversal day; same-date cohort clustering must extend across families, not just within the sector-pair cohort. Sector-pair reversion is the most genuinely distinct because beta-neutral accounting removes the shared market leg. The QQQ breakdown shadow and index/sector put lane are directionally short but still level-break mechanisms; they diversify sign, not mechanism. Overnight/intraday decomposition and the option-capability audit are measurement, not strategies, and are correctly labeled as such.",
+      "missed_alternatives": [
+        "Cross-asset trend/allocation shadow (e.g., treasury and gold ETFs on a frozen multi-week lookback): the only proposal that leaves the equity mean-reversion/continuation cluster entirely; orthogonal by asset class rather than by trigger label.",
+        "Volatility-regime conditioning tag computed from a frozen 20-session SPY realized-volatility formula on the already-trusted IEX bar feed: every reversion family in the registry is implicitly a short-vol bet, and no current tag measures that shared exposure.",
+        "Index-rebalance/dividend calendar flow tags are partially covered by the accepted turn-of-month/OpEx tags; the genuinely missed piece is conditioning on realized-vol state, not more calendar strata."
+      ],
+      "current_strategy_grades": [
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "grade": "iterate",
+          "reason": "Cheap shadow research is worth continuing under the halt, but it has zero deterministic outcomes, one contaminated execution sample (DIS quote defect), and no promotion path until the ledger works. I side with Fable's iterate over Grok's shadow-primary, but only because the halt already makes the distinction non-executable."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "grade": "shadow",
+          "reason": "Correctly the highest-priority distinct family: beta-neutral construction is the only mechanism in the book that hedges the shared market leg. The frozen 40-episode, four-pair, correlation-gated contract is sound; the first cohort is one correlated decision date and must stay clustered."
+        },
+        {
+          "name": "Quality three-lower-close mean reversion",
+          "grade": "shadow",
+          "reason": "Correctly blocked before observation one pending an immutable universe and field registry; the two-arm-plus-random-control design is a real falsification test rather than a renamed reclaim."
+        },
+        {
+          "name": "Observation persistence and exit-schema enforcement",
+          "grade": "keep",
+          "reason": "This is the first gate and the correct top priority. The root-cause receipt (writer never invoked, validator never fired) is specific and testable; the sandbox pre-flight with idempotency and journal-ID parity is the right next action."
+        },
+        {
+          "name": "Index or sector put continuation",
+          "grade": "shadow",
+          "reason": "Tool-blocked, not disproved: the pagination/join mismatch means the 0/10 capability count is missing data. Correct to neither retire nor advance the lane; fix the join before counting anything."
+        }
+      ],
+      "bounded_recommendations": [
+        {
+          "name": "Realized-volatility regime tag on all new shadow registrations",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "After the observation round-trip passes, freeze a versioned formula: 20-session close-to-close SPY realized volatility from completed IEX bars, bucketed into three fixed annualized bands frozen before observation one. Mechanically attach the bucket to every new shadow registration at registration time; never edit after outcome, never alter selection, sizing, or gates.",
+          "benchmark_or_control": "Identical-geometry outcomes across vol buckets within each mechanism family, plus the existing cash and same-horizon SPY controls.",
+          "minimum_sample": "20 resolved shadow outcomes per bucket within a family before any conditional claim.",
+          "promotion_rule": "At least +0.10R stable conditional lift in conservative mean R at the finite gate earns only a separately reviewed prospective selection experiment; it never changes live gates or sizing.",
+          "kill_rule": "No separation at 20 per bucket drops the tag; bucket boundaries may not be tuned post hoc to rescue it. Any post-outcome tag edit invalidates the series."
+        },
+        {
+          "name": "Cross-asset trend shadow (treasury/gold ETFs)",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "Only after the observation pre-flight passes and the current freeze on new shadow-family definitions lifts: freeze a registry with a fixed liquid list (e.g., TLT, IEF, GLD), one lookback (e.g., 40-session total return sign), monthly evaluation cadence, next-session-open shadow entry, fixed one-month holding, and the standard 0.15R conservative haircut. Broker-disabled; no order authority.",
+          "benchmark_or_control": "SPY buy-and-hold over identical windows and a random same-list position with identical holding period.",
+          "minimum_sample": "30 non-overlapping resolved shadow episodes.",
+          "promotion_rule": "Conservative mean R > +0.10 versus both controls earns only a paper-executable review by the owner/governor; nothing promotes automatically.",
+          "kill_rule": "Conservative mean R <= 0 or no control lift at 30 episodes retires the hypothesis; it may not return under a new label."
+        },
+        {
+          "name": "Cross-family same-date cohort clustering",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "Extend the existing cluster-ID mechanism so every registration created on the same decision date across the reversion-cluster families (reclaim, sector-pair, quality, gap-fill) carries one frozen cross-family cohort ID in addition to its family cohort. Assigned at registration only.",
+          "benchmark_or_control": "Effective-sample-size reporting with and without cross-family clustering on the same resolved rows.",
+          "minimum_sample": "Applies to all registrations for 10 sessions; evaluate once 20 cross-family-clustered rows resolve.",
+          "promotion_rule": "None; this only hardens denominators. Success is that no expectancy claim is ever reported using the unclustered count when clustered counts differ.",
+          "kill_rule": "If cohort IDs cannot be assigned deterministically at registration for >10% of rows, halt the amendment and fix assignment before scoring resumes."
+        }
+      ],
+      "disagreements_to_preserve": [
+        "Fable grades pooled reclaim iterate (cheap research under the halt); Grok grades it shadow-primary until causal fills, quote integrity, and matched controls exist. The configured allowlist is unchanged and the halt makes neither opinion executable.",
+        "Fable's 40-episode sector-pair minimum stands over Grok's 30-episode proposal; the stricter threshold governs.",
+        "The owner directive (three eligible aggressive closes, positive average R) conflicts with config/governor (20 closes at >= +0.30R); the system correctly fails closed to the stricter implemented contract pending an explicit owner-approved migration, and no reviewer may pick the easier threshold."
+      ]
+    },
+    "explicit_confirmation": {
+      "exact_entry_reviewed": true,
+      "hard_gates_unchanged": true,
+      "no_order_authority": true
+    },
+    "summary": "PASS on both tracks for this exact candidate. Publication safety: no prices, quantities, balances, identifiers, or absolute dollars leak; aggregate P&L appears only as a coarse -0.05% to -0.1% band that cannot be paired with position data (the book is flat, zero closed trades) to reconstruct sizing, and all private levels (WMT, QQQ, SMCI, pair geometry, broker equity) are absent from the public text. Statistical framing is honest: unresolved, correlated, and tool-blocked samples are labeled as such and never presented as alpha. Advisory only: the band is near the coarseness floor and band-transition differencing must be handled once trades close. Strategy critique: the entry's self-diagnosis is correct — the binding defect is the uninvoked observation writer and the validator that failed to reject the incomplete WMT v2 exit block, so the halt and CASH selection are right; the two aggressive lane names are one pooled level/VWAP family and the broader book is a correlated mean-reversion cluster with sector-pair reversion the only structurally distinct member. I grade persistence/exit-schema enforcement keep, reclaim iterate, sector-pair/quality/put lanes shadow, and recommend three bounded additions (realized-vol regime tag, cross-asset trend shadow, cross-family cohort clustering), each with frozen setup, controls, minimum samples, promotion, and kill rules, none of which authorizes an order, loosens a gate, or changes sizing. The Fable-versus-Grok reclaim disagreement and the fail-closed unlock-contract conflict are preserved verbatim."
+  }
+}
