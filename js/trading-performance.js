@@ -31,14 +31,15 @@
   const actions = [...list.querySelectorAll('.performance-action')].map(row => {
     const raw = row.querySelector('strong');
     const text = raw ? raw.textContent.trim() : '';
+    const parsed = Number(text.replace('−', '-').replace('%', '').replace('+', ''));
     return {
       date: row.dataset.performanceDate,
       side: row.dataset.performanceSide,
       type: row.dataset.performanceType,
       symbol: row.dataset.performanceSymbol,
-      pct: Number(text.replace('−', '-').replace('%', '').replace('+', '')),
+      pct: Number.isFinite(parsed) ? parsed : null,
     };
-  }).filter(a => a.date && a.symbol && Number.isFinite(a.pct));
+  }).filter(a => a.date && a.symbol);
   if (!actions.length) return;
 
   const dates = [...new Set(actions.map(a => a.date))].sort();
@@ -46,7 +47,7 @@
   const inWindow = actions.filter(a => sessionDates.includes(a.date));
 
   const daily = sessionDates.map(date => {
-    const closed = inWindow.filter(a => a.date === date && a.side === 'sell');
+    const closed = inWindow.filter(a => a.date === date && a.side === 'sell' && a.pct !== null);
     const all = inWindow.filter(a => a.date === date);
     return {
       date,
@@ -55,7 +56,7 @@
       actions: all.length,
     };
   });
-  const tape = inWindow.filter(a => a.side === 'sell')
+  const tape = inWindow.filter(a => a.side === 'sell' && a.pct !== null)
     .sort((a, b) => (a.date < b.date ? -1 : a.date > b.date ? 1 : 0));
 
   const hv = (t, s, v, x, pos) =>
@@ -103,12 +104,12 @@
         <td class="pf-sym">${esc(a.symbol)}</td>
         <td><span class="pf-pill pf-${esc(a.side)}">${a.side === 'sell' ? 'Sell' : 'Buy'}</span></td>
         <td><span class="pf-pill pf-${esc(a.type)}">${a.type === 'option' ? 'Option' : 'Stock'}</span></td>
-        <td class="pf-basis">${a.side === 'sell' ? 'realized' : 'marked'}</td>
-        <td class="pf-r pf-pnl ${a.side === 'sell' ? (a.pct >= 0 ? 'up' : 'down') : ''}">${a.side === 'sell' ? pct(a.pct) : '—'}</td></tr>`).join('');
+        <td class="pf-basis">${a.side === 'sell' ? (a.pct === null ? 'pending' : 'realized') : 'marked'}</td>
+        <td class="pf-r pf-pnl ${a.side === 'sell' && a.pct !== null ? (a.pct >= 0 ? 'up' : 'down') : ''}">${a.side === 'sell' && a.pct !== null ? pct(a.pct) : '—'}</td></tr>`).join('');
     }).join('');
     return `<section class="pf-card">
       <h2 class="pf-h">Trade log — last ${daily.length} trading sessions</h2>
-      <p class="pf-sub">Every action, newest session first. P&amp;L is shown only for sells because those are realized results; buys stay listed without a moving mark.</p>
+      <p class="pf-sub">Every action, newest session first. P&amp;L is shown only for sells with a posted or safely reconstructed realized result; pending sells and buys stay listed as unavailable.</p>
       <div class="pf-logwrap"><table class="pf-log">
         <thead><tr><th>Ticker</th><th>Side</th><th>Type</th><th>Basis</th><th class="pf-r">P&amp;L %</th></tr></thead>
         <tbody>${rows}</tbody></table></div>
