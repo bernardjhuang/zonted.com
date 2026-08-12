@@ -2,6 +2,148 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-12",
+   "session": "pre-market",
+   "assess_for": "Wednesday Aug 12 session",
+   "verdict": "RISK-ON",
+   "subtitle": "The binary passed \u2014 headline +0.1% and 3.4%, core +0.2%, in line on every reading \u2014 and the sum holds +6 a third straight read while two rows swap under it: SOL's tick makes crypto's fourth alt, XLY's slip makes zero cyclicals, and the day's remaining test is 1:00 duration with the print known",
+   "score": 6,
+   "n_signals": 11,
+   "composite": "+0.55",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "770.56 vs 747.84 \u00b7 +3.04% \u00b7 Aug 11 SIP close \u2014 historical SIP cleared this morning (recent-SIP still 403s), 4 cents above Monday night's IEX read",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.46 \u00b7 site feed, Aug 10 vintage after no overnight refresh \u2014 Cboe's late-Tuesday mark 14.98, sub-16 on either vintage, and the print it was pricing came in-line",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.64 (M2 18.60, M1 16.96) \u00b7 feed Aug 10 vintage \u2014 steep contango carried into the print, and the print passed",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "92.51 \u00b7 feed Aug 10 vintage; Cboe's Tuesday close 90.9, down 1.6 on the day \u2014 easing, sub-95 either way",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "feed row still frozen at Jul 17's 70.88 \u2192 0 by rule \u2014 the flag, not the level, costs the point again",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.70% (Aug 7 obs via Aug 10 feed) \u00b7 \u221215bp over 5 obs vs 2.85% Jul 31 \u2014 holding the tights of the run",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed refreshed to Aug 11 overnight \u2014 below: only XLC \u22121.9% and XLU \u22122.4%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLB +1.73 \u00b7 XLV +1.26 \u00b7 XLE +1.26 \u00b7 Aug 11 refresh \u2014 zero of the five as XLY (+1.12) slipped to fourth behind Energy; Monday's one-cyclical row is now none",
+     "score": -1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.29pt (IWM +2.20%, SPY +2.49%, Jul 14 \u2192 Aug 11, SIP) \u2014 middle band, the gap neither closing nor breaking",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "4 of 7 \u00b7 BNB +0.67, ZEC +0.34, ETH +0.32, SOL +0.16 \u00b7 feed refreshed to Aug 10 \u2014 SOL crossed from \u22120.02, the exact tick Monday's flip condition named",
+     "score": 1
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "159.20 vs 157.41 \u00b7 +1.14% over 5 ECB fixes (Aug 4 \u2192 Aug 11), yen weaker \u2014 no stress state; Yahoo 429 again, ECB fix per convention",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The number the whole book queued behind came and went at 8:30: headline CPI +0.1% on the month and 3.4% on the year (from 3.5%), core +0.2% and 2.5% (from 2.6%) \u2014 in line with consensus on every reading. Shelter did roughly two-thirds of the monthly work, energy fell 1.5% on the month while still carrying +14.7% on the year from the spring oil shock, and the first market move was the friendly one: futures up about a third of a percent, the 10-year easing back from 4.68%, and September hike pricing \u2014 51% at Tuesday's close, up from 44% Monday \u2014 taking its first step lower. The binary passed.</p>",
+    "<p>The ledger's sum didn't move \u2014 +6 of 11, a third straight +0.55 read, 7.7 of 10 \u2014 but two rows traded places underneath it. Crypto joined: the feed's Aug 10 refresh has SOL's 50-day spread z at +0.16, across zero from Monday's \u22120.02, making 4 of 7 alts ahead of BTC \u2014 the exact tick Monday's flip condition named. Leadership left: the vwap feed's fresh Aug 11 read puts Materials, Health Care, and Energy in the top three z-slots with XLY slipped to fourth, zero of the five cyclicals in the top-3 \u2014 that row goes from 0 to \u22121. Same sum, different shape.</p>",
+    "<p>Everything stress-shaped stays quiet: VIX 15.46 on the Aug 10 site feed and 14.98 at Cboe's late-Tuesday mark, the futures curve at +1.64 of contango, VVIX at 90.9, high-yield spreads at 2.70% \u2014 15bp tighter over five observations and the tights of the run \u2014 and 11 of 13 US groups above their year-to-date cost basis. The asterisks are the familiar ones: the MOVE row is frozen at July 17 and scores 0 by rule again, three feeds sit a session or two behind, and 10-day realized at 17.0% annualized still runs above both the 21-day's 13.6% and the VIX itself \u2014 options price tomorrow cheaper than the tape's own recent motion.</p>",
+    "<p>The verdict is <b>risk-on</b> because the rubric says +0.55 is risk-on, and the shape of the morning supports rather than fights it: the event premium is coming out without an event. What's left of the week's test moves to the bond market \u2014 the 10-year auction at 1:00 with the print known (Tuesday's 3-year stopped through, but it priced blind), then the 30-year Thursday alongside PPI and claims. A defensive top-3 and a frozen rates-vol gauge are worth carrying as open questions into both.</p>"
+   ],
+   "flips": {
+    "to_off": "The sum needs \u22123 for RISK-OFF and a drop to +2 for NEUTRAL, and with the print passed the one-day route runs through duration: a 1:00 10-year tail ugly enough to put tens back through 4.70%, send VIX (14.98 late Tuesday) through 20 and the +1.64 contango toward backwardation \u2014 those two rows alone are \u22124 on the sum and land the verdict at +2, NEUTRAL. Adding an HY re-widen past 25bp off 2.70% or SPY giving back its 3.0% cushion over the 50-day at 747.84 starts the walk toward RISK-OFF. That is a genuine vol event, not a wobble.",
+    "to_on": "+7 (composite +0.64) is one row away on any of three paths: the MOVE feed un-freezing anywhere under 80 restores a point the level already earns; XLY (+1.12) re-taking the third z-slot from XLE (+1.26) ends the zero-cyclical count and lifts leadership back to 0; or IWM finding +0.71pt of relative ground over SPY in the 20-day window flips size. Every +8 path runs through at least two of those."
+   },
+   "forward": {
+    "horizon": "Wed Aug 12 \u2013 Tue Aug 18",
+    "watch": [
+     {
+      "name": "10-year auction, 1:00 today",
+      "why": "first duration test priced with the CPI known",
+      "detail": "tens eased from 4.68% after the print; Tuesday's 3-year stopped through at 4.291% (2.71 b/c) but priced blind \u2014 today's demand is the cleaner read, with the 30-year Thursday",
+      "lean": "watch"
+     },
+     {
+      "name": "PPI + claims, Thursday 8:30",
+      "why": "second leg of the week's inflation gauntlet",
+      "detail": "July PPI feeds the PCE nowcast that decides whether September hike pricing \u2014 51% pre-print \u2014 was ever real; claims read the labor side of the same question",
+      "lean": "watch"
+     },
+     {
+      "name": "Vol regime",
+      "why": "realized still runs above implied",
+      "detail": "RV10 17.0% vs RV21 13.6% (annualized, SPY closes through Tuesday) and VIX 14.98 \u2014 the tape's own motion prices above the index; post-event crush today would widen that gap, not close it",
+      "lean": "off"
+     },
+     {
+      "name": "September hike pricing",
+      "why": "the macro row the whole week is arguing about",
+      "detail": "51% at Tuesday's close, up from 44% Monday; the in-line core is the case against, PPI/PCE get the rebuttal \u2014 where Friday leaves it is the week's verdict on the rates overhang",
+      "lean": "watch"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes above Tuesday's 770.56 today, Wed Aug 12 \u2014 the in-line print takes the event premium out as support, with only the 1:00 10-year auction between here and the close",
+     "prob": "65%",
+     "resolves": "2026-08-12"
+    },
+    "grading": "Nothing resolves at a morning read. Tonight's close grades three at once: CPI-day \u00b11% (30%), the no-close-below-759.57 floor (65%), and the VIX-close-above-17.50 call (55%) \u2014 with VIX marked 14.98 late Tuesday and the print in-line, the floor looks safe and the VIX call looks bought-and-missed. The \u22651%-down-close window (40%) has through Thursday. Running Brier 0.26 across seven graded."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 July CPI: +0.1% m/m, 3.4% y/y",
+     "u": "https://finance.yahoo.com/economy/articles/u-cpi-rose-0-1-123747298.html"
+    },
+    {
+     "t": "Bloomberg \u2014 July CPI live blog",
+     "u": "https://www.bloomberg.com/news/live-blog/2026-08-12/us-cpi-report-for-july-live-updates"
+    },
+    {
+     "t": "Benzinga \u2014 September hike odds ~51% into the print",
+     "u": "https://www.benzinga.com/trading-ideas/movers/26/08/61118609/sp500-eyes-record-highs-september-fed-hike-odds-cpi-preview"
+    },
+    {
+     "t": "CNBC \u2014 Treasury yields into CPI",
+     "u": "https://www.cnbc.com/2026/08/12/treasury-yields-inflation-cpi-data.html"
+    }
+   ],
+   "rating": 7.7
+  },
+  {
    "date": "2026-08-11",
    "session": "post-close",
    "assess_for": "Wednesday Aug 12 open",
