@@ -156,6 +156,11 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(profiles["BRBR"]["sector"], "Consumer Staples")
         self.assertEqual(profiles["BRBR"]["sector_etf"], "XLP")
         self.assertIn("Legacy Robinhood", profiles["BRBR"]["thesis"])
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        self.assertIn('id="hypothesis-brbr-setup"', source)
+        self.assertIn('data-desk-catalyst-name="Est. fiscal Q4 earnings"', source)
+        self.assertEqual(valuations["BRBR"]["entry_levels"], {"bear": 7.9, "base": 10.85, "bull": 42.68})
 
     def test_mos_is_authored_for_the_live_fertilizer_position(self):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
@@ -163,6 +168,11 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(profiles["MOS"]["sector"], "Materials")
         self.assertEqual(profiles["MOS"]["sector_etf"], "XLB")
         self.assertIn("sulfur-cost pressure", profiles["MOS"]["thesis"])
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        self.assertIn('id="hypothesis-mos-setup"', source)
+        self.assertIn('data-desk-catalyst-name="Est. Q3 earnings"', source)
+        self.assertEqual(valuations["MOS"]["entry_levels"], {"bear": 19.82, "base": 22.6, "bull": 31.04})
 
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
