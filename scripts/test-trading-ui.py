@@ -320,7 +320,10 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertLess(deployed.stat().st_size, 175_000, str(deployed))
         desk_html = DESK_HOME.read_text()
         desk_rows = desk_html.count('class="desk-main-row"')
-        shell_budget = 90_000 + 4_300 * desk_rows
+        position_rows = desk_html.count('data-desk-kind="position"')
+        # Position rows carry risk, instrument, level, and one-year-chart data that
+        # tracked-hypothesis rows do not. Keep both row classes linearly bounded.
+        shell_budget = 90_000 + 4_300 * desk_rows + 1_400 * position_rows
         self.assertLess(DESK_HOME.stat().st_size, shell_budget)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
