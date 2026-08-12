@@ -6,6 +6,75 @@
       "schema_version": 1,
       "prompt_version": "zonted-independent-risk-v1",
       "decision_status": "publishable",
+      "as_of_date": "2026-08-12",
+      "session": "post-close",
+      "author": "Grok 4.5",
+      "model_id": "grok-4.5",
+      "stance": "Risk-on",
+      "risk_appetite": 6,
+      "score_interpretation": "Mild risk-on — volatility unwinding and tech leading, but gold bid and flat Dow cap enthusiasm",
+      "confidence": "moderate",
+      "headline": "Risk recovery: SPY +0.26% to 772.54 and QQQ +0.73% to 723.66 as VIX flushes (UVXY -4.15%), small caps bounce (IWM +0.57%), and oil cools (USO -0.24%); gold rallies +0.99% as cross-current.",
+      "methodology": {
+        "name": "Independent multi-signal synthesis",
+        "explanation": "Cross-asset tape reading combining equity price action, volatility proxies, small-cap breadth, safe-haven flows, commodity signals, and rates to derive a composite risk regime.",
+        "selected_signals": [
+          "Tech leadership: QQQ +0.73% to 723.66 outpaces SPY +0.26% to 772.54 and DIA -0.04% to 537.09 — growth risk appetite returning after yesterday's digestion day",
+          "Volatility flush: UVXY -4.15% to 20.31 from 21.19 — fear premium being aggressively unwound, biggest single-day VIX-proxy drop this week",
+          "Small-cap bounce: IWM +0.57% to 302.71 from 300.99 — risk appetite broadening beyond mega-cap, Russell 2000 participation confirms the bid isn't narrow",
+          "Oil cooling: USO -0.24% to 127.30 from 127.61 — geopolitical energy premium fading after yesterday's +1.33% grind; shock absorption continuing",
+          "Gold cross-current: GLD +0.99% to 404.91 from 400.96 — safe-haven bid persisting alongside risk rally, likely dollar weakness or central-bank buying rather than risk-off signal",
+          "Rates stable: TLT -0.10% to 82.11 from 82.19 — bonds quietly sold, no flight-to-quality; yields slightly higher but unremarkable"
+        ]
+      },
+      "journal": [
+        "The tape flipped risk-on today after yesterday's digestion pause. QQQ led with +0.73% to 723.66 while SPY added +0.26% to 772.54, driven by a sharp volatility flush — UVXY dropped 4.15% to 20.31, the largest single-day decline this week. Small caps confirmed the move with IWM +0.57% to 302.71, broadening the bid beyond mega-cap tech.",
+        "Cross-asset signals are mostly constructive. Oil cooled with USO -0.24% to 127.30, extending the deceleration pattern from yesterday's +1.33% (down from Tuesday's +6.74% explosion). The energy shock is being absorbed rather than compounding. TLT was roughly flat at -0.10% to 82.11 — no bond market stress, no flight-to-quality bid.",
+        "The one notable cross-current is gold: GLD +0.99% to 404.91, a meaningful safe-haven bid persisting alongside the equity rally. This divergence suggests either dollar weakness, central-bank accumulation, or underlying geopolitical anxiety that hasn't fully resolved. It tempers the risk-on read from a clean 7 or 8 down to a 6.",
+        "Net: the regime has shifted from yesterday's Neutral-5 to a mild Risk-on-6. The VIX flush and breadth improvement are genuine tailwind signals, but the gold bid and flat Dow (DIA -0.04%) indicate the market isn't fully aligned on direction. A follow-through day tomorrow with declining gold and rising Dow would confirm the breakout."
+      ],
+      "what_supports_risk": [
+        "QQQ +0.73% outperforming — tech growth leadership is the classic risk-on signature",
+        "UVXY -4.15% — aggressive volatility unwinding indicates positioning for calm",
+        "IWM +0.57% — small-cap participation confirms broad-based demand, not just mega-cap support",
+        "USO -0.24% — oil stabilizing removes the key geopolitical overhang from earlier this week",
+        "TLT flat — bond market unremarkable, no stress signals"
+      ],
+      "what_holds_it_back": [
+        "GLD +0.99% — persistent gold bid alongside risk rally is a divergence; suggests unresolved safe-haven demand or dollar weakness",
+        "DIA -0.04% — Dow flat while tech rallies means industrial/value lagging, breadth isn't universal",
+        "Moderate confidence — single-day recovery needs follow-through to confirm regime shift from Neutral to Risk-on"
+      ],
+      "what_changes_my_mind": [
+        "If gold drops tomorrow while equities continue higher → upgrades to Risk-on 7-8 (safe-haven bid confirmed broken)",
+        "If QQQ gives back today's gains and VIX re-bid above 16 → revert to Neutral, today was a head-fake",
+        "If oil (USO) re-accelerates above 128 with geopolitical headlines → risk-off override regardless of equity tape"
+      ],
+      "sources": [
+        {
+          "title": "Robinhood real-time quotes — SPY, QQQ, DIA, IWM, TLT, GLD, USO, UVXY",
+          "url": "https://robinhood.com/stocks/SPY",
+          "as_of": "2026-08-12T20:00:00Z",
+          "claim": "Post-close pricing: SPY 772.54 (+0.26%), QQQ 723.66 (+0.73%), DIA 537.09 (-0.04%), IWM 302.71 (+0.57%), TLT 82.11 (-0.10%), GLD 404.91 (+0.99%), USO 127.30 (-0.24%), UVXY 20.31 (-4.15%)"
+        },
+        {
+          "title": "Prior session Grok Risk entry — 2026-08-11",
+          "url": "https://zonted.com/trading/grok-risk/",
+          "as_of": "2026-08-11",
+          "claim": "Yesterday's regime was Neutral-5: digestion day with SPY -0.33%, oil deceleration, VIX cooling to 15.33"
+        }
+      ],
+      "limitations": [
+        "VIX spot level not directly available; inferred from UVXY proxy move (-4.15%)",
+        "No real-time breadth data (advancers/decliners, new highs/lows) accessed — breadth inference is proxy-based from ETF performance",
+        "Macro calendar (CPI, FOMC speakers, economic releases) not directly fetched; assessment based on price action only",
+        "Single-day snapshot — regime calls require multi-day confirmation for higher confidence"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "prompt_version": "zonted-independent-risk-v1",
+      "decision_status": "publishable",
       "as_of_date": "2026-08-11",
       "session": "post-close",
       "author": "Grok 4.5",
