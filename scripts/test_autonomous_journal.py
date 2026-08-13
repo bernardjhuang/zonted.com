@@ -33,8 +33,8 @@ class AutonomousJournalTest(unittest.TestCase):
 
     def test_current_payload_is_dual_reviewed_and_paper_only(self):
         entries = MODULE.validate(copy.deepcopy(self.payload))
-        self.assertEqual(len(entries), 4)
-        self.assertEqual(entries[0]["id"], "20260812-eod-learning-review")
+        self.assertEqual(len(entries), 5)
+        self.assertEqual(entries[0]["id"], "20260813-eod-learning-review")
         self.assertEqual(entries[0]["mode"], "paper")
         self.assertEqual(entries[0]["review_summary"]["public_entry_status"], "PASS")
         reviews = entries[0]["review_summary"]["public_entry_reviews"]
@@ -72,7 +72,8 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertIn(block, self.page)
         self.assertIn('<h1>🦥 Autonomous</h1>', self.page)
         self.assertIn('aria-current="page">🦥 Autonomous</a>', self.page)
-        self.assertIn('data-entry-count="4"', self.page)
+        self.assertIn('data-entry-count="5"', self.page)
+        self.assertIn('2026-08-13 · REVIEW', self.page)
         self.assertIn('2026-08-12 · REVIEW', self.page)
         self.assertIn('2026-08-11 · REVIEW', self.page)
         self.assertIn('2026-08-10 · TRADE', self.page)
@@ -223,8 +224,8 @@ class AutonomousJournalTest(unittest.TestCase):
 
     def test_publisher_prepends_one_newer_reviewed_entry(self):
         row = copy.deepcopy(self.payload["entries"][0])
-        row["id"] = "20260813-morning-paper-cycle"
-        row["published_at"] = "2026-08-13T15:00:00Z"
+        row["id"] = "20260814-morning-paper-cycle"
+        row["published_at"] = "2026-08-14T15:00:00Z"
         row["review_summary"].pop("reviewed_content_sha256", None)
         incoming = {"schema_version": 1, "entries": [row]}
         combined, changed = PUBLISHER.append_entry(copy.deepcopy(self.payload), incoming, MODULE)
@@ -232,7 +233,8 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertEqual(
             [row["id"] for row in combined["entries"]],
             [
-                "20260813-morning-paper-cycle",
+                "20260814-morning-paper-cycle",
+                "20260813-eod-learning-review",
                 "20260812-eod-learning-review",
                 "20260811-eod-learning-review",
                 "20260810-afternoon-paper-cycle",

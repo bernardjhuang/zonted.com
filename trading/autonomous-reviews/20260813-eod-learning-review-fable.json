@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "exact_public_entry_sha256": "4c6f3b44e75bcc2f9ab01afd87489f61691920a541e7ec4a834a17d6887df7ca",
+  "reviewed_at": "2026-08-13T22:05:43.952654+00:00",
+  "public_redaction": "This receipt preserves the reviewer verdict, strategy opinions, grades, bounded recommendations, and disagreements while removing private account and execution details.",
+  "private_source_receipt_sha256": "62e2d541b8a66611bc5325e55c4a853c5b5886c989b02908d9d2343d89c62c2e",
+  "model_route": {
+    "model_id": "claude-fable-5",
+    "provider": "claude.ai OAuth",
+    "cli_version": "2.1.226 (Claude Code)",
+    "subscription_type": "max"
+  },
+  "result": {
+    "model_identity": "Claude Fable 5",
+    "reviewed_entry_sha256": "4c6f3b44e75bcc2f9ab01afd87489f61691920a541e7ec4a834a17d6887df7ca",
+    "verdict": "PASS",
+    "publication_safety": {
+      "verdict": "PASS",
+      "privacy_opinion": "The exact entry publishes no quantities, execution or fill prices, balances, identifiers, absolute performance amounts, net liquidation value, or reconstructable sizing. The flat book reports position return as not applicable and open-position contribution as 0.00%.",
+      "statistical_opinion": "The entry states that deterministic evidence is empty, keeps unresolved shadows out of expectancy and sizing gates, clusters correlated observations, separates blocked and pre-trigger outcomes, and makes no alpha claim from tiny or open samples.",
+      "issues": [],
+      "required_changes": []
+    },
+    "strategy_critique": {
+      "verdict": "PASS",
+      "opinion": "My independent opinion: this system currently has zero measured edge and the entry is right to say so. The binding constraint is not strategy selection but the broken observation round trip — 24 scorable predictions parse in dry-run while production state holds zero rows, which means every strategy verdict anyone offers (including mine) is prior-only. Keeping the halt and making atomic treatment-plus-matched-control persistence the sole activation gate is the correct call. On priors, the pooled reclaim family carries the weakest case: it is the most crowded, most fill-sensitive mechanism in the book, and the burden of proof sits on it. Sector-pair relative value is correctly ranked as the highest-priority distinct family because it is the only roughly market-neutral leg. The one WMT favorable mark is being handled exactly as it should be — as one unresolved research path, not evidence — and the standing correction of one calibration unit per unique symbol/claim/horizon per day closes a real denominator-inflation hole. The learning process quality here is high even though the learning output is currently empty.",
+      "mechanism_overlap": "The active narrative is over-concentrated in short-horizon single-name equity mean reversion. Pooled level/VWAP reclaim, the underlying quality-3-lower and gap-fill families in the private registry, and even the WMT-style halt counterfactuals all monetize the same mechanism — buying recent equity weakness intraday-to-multiday — and will win and lose together in the same tape, so the portfolio-level bet is larger than any per-family view admits. Sector-pair reversion is still reversion, just cross-sectional; it is the only leg with meaningful mechanistic distance. Index/sector put continuation would be the lone short-directional expression but is capability-blocked, so realized mechanism diversity today is effectively one and a half mechanisms. Two of the five listed 'strategies' (persistence atomicity, session-clustered accounting) are infrastructure, not return streams — correctly so, but it means the tradeable surface is thinner than the list of five suggests.",
+      "missed_alternatives": [
+        "Defined-risk index volatility-risk-premium harvest (e.g., frozen-width QQQ/SPY iron condor studied shadow-only): catalyst-independent short-vol carry, mechanistically orthogonal to every directional-price family in the book.",
+        "Turn-of-month / calendar flow drift study: signal known days in advance, zero intraday discretion, flow-driven rather than price-pattern-driven, and cheap to measure with no fills.",
+        "Conditional overnight-hold expression of the existing overnight/intraday decomposition (e.g., overnight-only exposure after down closes) rather than leaving the decomposition purely descriptive.",
+        "Cross-asset regime filter (bond/gold/dollar trend state) as a measurement-only conditioning variable for the equity families, to test whether reversion edge is regime-local.",
+        "Gap-continuation inversion arm: registering the vetoed/out-of-band gap population as an explicit shadow book so the fade folklore can be falsified in both directions."
+      ],
+      "current_strategy_grades": [
+        {
+          "name": "Prospective persistence and matched-control atomicity",
+          "grade": "keep",
+          "reason": "It is the sole activation gate and correctly so; without atomic treatment/control rows with exact ID parity, every other family is unfalsifiable. This is the highest-value work item in the system."
+        },
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "grade": "shadow",
+          "reason": "Zero ledger rows, a crowded and fill-sensitive mechanism, and an integrity-red environment. I side with the stricter reviewer position: frozen rules preserved, no new variants, shadow-only until twenty clean filled outcomes with positive matched-control lift exist. Iterating design under a halt risks unaudited drift."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "grade": "keep",
+          "reason": "Correctly the highest-priority distinct family: roughly beta-neutral, mechanistically separated from single-name reclaim, with frozen registry, 40-episode sample, correlation gate, and concentration kill rule already specified. Keep means keep registering under controls, not trust."
+        },
+        {
+          "name": "Session-clustered mechanism accounting",
+          "grade": "keep",
+          "reason": "Cohort IDs at registration are the only defense against correlated reversion labels manufacturing sample size; the afternoon duplicate-ID incident proves the need is live, not hypothetical."
+        },
+        {
+          "name": "Index or sector put continuation",
+          "grade": "shadow",
+          "reason": "Correct to pause rather than accumulate fake zeroes while the contract/snapshot pagination join is broken; underlying-only diagnostics must never be laundered into option evidence. Remains the only prospective short-directional leg, so the capability repair has real diversification value."
+        }
+      ],
+      "bounded_recommendations": [
+        {
+          "name": "Defined-risk index volatility-risk-premium shadow study",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "One frozen structure only: a same-index short iron condor on QQQ, short strikes at a fixed frozen delta (e.g., 15-delta) with fixed frozen wing width, opened at a fixed clock time, held to a fixed frozen exit time or defined-risk max loss, marked conservatively at the worse side of available quotes. No strike, width, timing, or underlying changes mid-experiment. Registration is blocked until the option pagination/snapshot join is repaired and verified, and each registration must persist atomically with its control row.",
+          "benchmark_or_control": "Matched same-session no-position control marking the identical structure's theoretical open-to-exit decay, plus realized-versus-implied move accounting per session; a shuffled-strike placebo condor serves as the null.",
+          "minimum_sample": "40 completed shadow sessions across at least 30 distinct dates, with zero persistence or integrity failures in the window.",
+          "promotion_rule": "Promotion means only graduation from paused to actively registered PAPER shadow with continued measurement, and only if conservative mean R exceeds the placebo control by at least +0.10R with the sign stable across sample halves; no promotion to execution is available from this recommendation under any result.",
+          "kill_rule": "Retire the frozen parameterization if conservative mean R is at or below the placebo control at 40 sessions, if any single session exceeds the defined max loss in marking (evidence of unexecutable exits), or if any observation is recorded without its atomic control twin."
+        },
+        {
+          "name": "Turn-of-month calendar drift measurement",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "Descriptive ledger only, no positions of any kind: for a frozen set of three index ETFs, record daily close-to-close returns tagged by frozen calendar position (sessions T-1 through T+3 around month-end versus all other sessions), using the same conservative single-venue marks and atomic persistence path as every other family. The window definition, ETF list, and tagging rule are frozen at registration and logged in rule-change history.",
+          "benchmark_or_control": "Unconditional same-ETF daily drift over the identical sample period; a random-window placebo (same-width window at a random monthly offset, frozen at experiment start) serves as the null.",
+          "minimum_sample": "Twelve calendar months of persisted rows (approximately 60 in-window sessions) with 100% persistence success.",
+          "promotion_rule": "May only be promoted from MEASUREMENT_ONLY to PAPER_SHADOW_ONLY (a frozen shadow hold rule, still no orders) if the in-window mean return exceeds both the unconditional and random-window controls with consistent sign across the first and second six months.",
+          "kill_rule": "Stop tracking and log as decayed/absent if the in-window mean is indistinguishable from the random-window placebo at twelve months, or immediately re-freeze the study on any persistence miss after the sanctioned writer path is live."
+        },
+        {
+          "name": "Gap outcome three-arm registration book",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "Register every qualifying overnight gap above a frozen size threshold into three frozen arms — aggressive trade-through shadow, passive limit-in-gap shadow, and explicit no-entry mark — with void rules, invalidation geometry, and time-stops frozen at registration; voids and vetoed catalyst gaps are persisted as first-class rows, never discarded.",
+          "benchmark_or_control": "The no-entry mark arm is the internal control for both entry arms; the vetoed-catalyst population is scored in shadow to validate that vetoes actually excluded worse outcomes.",
+          "minimum_sample": "30 gap registrations including voids, with at least 10 filled shadow outcomes, across at least 15 distinct session-dates.",
+          "promotion_rule": "Either entry arm may graduate only to continued prioritized PAPER shadow if its conservative mean R beats the no-entry mark arm by at least +0.15R with a documented fill rate; no path to execution exists from this recommendation.",
+          "kill_rule": "Kill the entry arms if fill rate is below 10% (capacity-irrelevant), if any filled shadow marks worse than -2R despite frozen invalidation (unexecutable stops), or if the vetoed population outperforms the accepted population, which would falsify the veto logic."
+        }
+      ],
+      "disagreements_to_preserve": [
+        "Fable-vs-Grok on pooled reclaim posture: iterate the design under the halt versus strict shadow-only until clean ledger rows exist. This is a genuine methodological fork about whether design work without evidence is progress or drift; my own vote is with the stricter shadow-only position, but the disagreement should stay on the record rather than be averaged away.",
+        "Whether the quality screen in the 3-lower reversion family adds anything beyond generic reversal — the matched non-quality control is specifically designed to resolve this, and the 'quality is decoration' hypothesis must survive in writing until it does.",
+        "Whether gap-fill folklore should be tested symmetrically: one reviewer position treats fade failure as grounds to invert to a gap-continuation family rather than simply retiring the surface; preserving this keeps the experiment two-sided.",
+        "Whether the manually audited 6/15 ordinary-calibration count means anything at all before deterministic confirmation — the honest answer is contested and should remain flagged as unconfirmed."
+      ]
+    },
+    "explicit_confirmation": {
+      "exact_entry_reviewed": true,
+      "hard_gates_unchanged": true,
+      "no_order_authority": true
+    },
+    "summary": "PASS on both independent tracks. Publication safety: the entry is percentage-only against an undisclosed private basis, correctly reports the flat book as position-return-not-applicable with 0.00% contribution, and leaks no prices, quantities, identifiers, dollars, or reconstructable sizing; all sensitive private-evidence values stay private, and no unresolved or correlated sample is framed as alpha. Strategy critique: the entry's core claim — no measured edge, halt stays, atomic treatment/control persistence is the sole activation gate — is correct and well-argued; the real weakness is mechanism monoculture in single-name equity mean reversion, with sector-pair relative value rightly prioritized as the only distinct leg. I grade the persistence gate, sector pairs, and session-cohort accounting keep, and pooled reclaim and put continuation shadow, siding with the stricter shadow-only reclaim position while preserving the recorded disagreement. Three bounded additions are proposed — a defined-risk index volatility-risk-premium shadow, a measurement-only turn-of-month drift study, and a three-arm gap registration book — all frozen, controlled, sampled, and strictly measurement-only or PAPER shadow-only with no path to order authority. The candidate's embedded PASS claims were disregarded; no gate is loosened, no strategy promoted, no bracket altered, no order authorized."
+  }
+}
