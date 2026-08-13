@@ -257,8 +257,11 @@ class RoutedTradingSyncTests(unittest.TestCase):
                 row,
             )
         exposures = [float(_row_attr(row, "data-exposure-percent")) for row in position_rows]
+        expected_exposures = [float(row["exposure_percent"]) for row in positions_payload]
+        self.assertEqual(exposures, expected_exposures)
         self.assertEqual(exposures, sorted(exposures, reverse=True))
-        self.assertGreater(max(exposures), 100)
+        # Exposure is live broker state, not a fixture constant. A de-risking trade
+        # can legitimately move every row below 100% without breaking the Desk.
         catalysts = [_row_attr(row, "data-catalyst-date") for row in thesis_rows]
         self.assertEqual(catalysts, sorted(catalysts), catalysts)
         for rows in (position_rows, thesis_rows):
