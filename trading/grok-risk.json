@@ -6,6 +6,73 @@
       "schema_version": 1,
       "prompt_version": "zonted-independent-risk-v1",
       "decision_status": "publishable",
+      "as_of_date": "2026-08-13",
+      "session": "post-close",
+      "author": "Grok 4.5",
+      "model_id": "grok-4.5",
+      "stance": "Risk-on",
+      "risk_appetite": 7,
+      "score_interpretation": "Risk-on with conviction. Equities advanced broadly with tech leadership, bonds rallied (yields fell), and safe-haven gold sold off — a textbook disinflationary risk-on tape. Oil weakness is the one caution flag, potentially signaling demand softness, but on balance the cross-asset price action screams risk appetite.",
+      "confidence": "moderate",
+      "headline": "SPY +0.68% to 777.77, QQQ +1.16% to 732.06 — risk-on as tech leads, yields fall, and gold sells off",
+      "methodology": {
+        "name": "Independent multi-signal synthesis",
+        "explanation": "Cross-asset price action across equities, bonds, commodities, and style factors, evaluated for cohesion and direction of risk appetite.",
+        "selected_signals": [
+          "Broad equity ETF price action (SPY, QQQ, DIA, IWM)",
+          "Cross-asset moves: bonds (TLT), gold (GLD), oil (USO)",
+          "Style leadership: tech (QQQ) vs. broad market (SPY, DIA), small caps (IWM)",
+          "Safe-haven flows: gold sell-off as risk indicator"
+        ]
+      },
+      "journal": [
+        "US equities closed higher across the board on Thursday, August 13, with tech leading the tape. SPY gained +0.68% to 777.77 and QQQ surged +1.16% to 732.06, while DIA (+0.14%) and IWM (+0.26%) lagged — a growth/tech leadership pattern consistent with risk-on positioning.",
+        "Bonds rallied alongside equities, with TLT +0.57% to 82.58. Falling yields supportive of duration assets and equity multiples alike. The bond bid reinforces the disinflationary narrative driving risk appetite.",
+        "Gold sold off sharply, GLD -1.47% to 398.96, and oil dropped, USO -1.77% to 125.05. The combination of equity strength with safe-haven and commodity weakness is a classic signal that capital is rotating toward risk assets and away from defensiveness.",
+        "The main counter-signal is oil's decline — if driven by demand destruction rather than supply glut, it could be an early growth warning. But paired with falling yields and rising equities, the market is reading it as disinflationary rather than recessionary.",
+        "Net assessment: risk regime remains firmly on. The breadth of risk appetite across equities, the bond bid, and the exodus from gold all point to sustained risk-taking. I move the score from 6 to 7, reflecting tighter cohesion among signals."
+      ],
+      "what_supports_risk": [
+        "SPY +0.68%, QQQ +1.16% — broad equity gains with tech leadership",
+        "TLT +0.57% — bond rally pushing yields lower, supportive of risk assets",
+        "GLD -1.47% — safe-haven gold selling off indicates declining demand for defensiveness",
+        "IWM +0.26% — small caps positive, suggesting risk appetite extending beyond mega-cap tech"
+      ],
+      "what_holds_it_back": [
+        "USO -1.77% — oil's sharp drop could signal demand weakness rather than benign supply dynamics",
+        "DIA +0.14% — Dow barely green, indicating not all sectors are participating equally",
+        "Limited external news context available at time of assessment; interpretation relies on price action"
+      ],
+      "what_changes_my_mind": [
+        "If oil continues to crater alongside weakening economic data, the disinflationary narrative flips to recessionary and equities would follow oil lower",
+        "If yields reverse sharply higher on hot inflation data, the bond bid supporting equity multiples would unwind",
+        "If small caps (IWM) break below recent support while tech rallies, narrowing breadth would signal fragile risk-on rather than durable"
+      ],
+      "sources": [
+        {
+          "title": "Robinhood real-time quotes (SPY, QQQ, DIA, IWM, TLT, GLD, USO)",
+          "url": "https://robinhood.com",
+          "as_of": "2026-08-13T20:00:00Z",
+          "claim": "Post-close ETF prices and daily changes used for cross-asset risk assessment"
+        },
+        {
+          "title": "Yahoo Finance — Stock Market Live",
+          "url": "https://finance.yahoo.com/",
+          "as_of": "2026-08-13T20:15:00Z",
+          "claim": "Market overview and headline context for the trading session"
+        }
+      ],
+      "limitations": [
+        "No access to real-time breadth data (advance/decline ratios, new highs/lows) in this session",
+        "VIX and options-based sentiment metrics not directly available",
+        "External news sources (CNBC, Reuters) were inaccessible, so macro narrative is inferred from price action only",
+        "Single-session assessment; does not capture multi-day trend persistence"
+      ]
+    },
+    {
+      "schema_version": 1,
+      "prompt_version": "zonted-independent-risk-v1",
+      "decision_status": "publishable",
       "as_of_date": "2026-08-12",
       "session": "post-close",
       "author": "Grok 4.5",
