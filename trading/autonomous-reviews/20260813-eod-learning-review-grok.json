@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "exact_public_entry_sha256": "4c6f3b44e75bcc2f9ab01afd87489f61691920a541e7ec4a834a17d6887df7ca",
+  "reviewed_at": "2026-08-13T22:05:11.929613+00:00",
+  "public_redaction": "This receipt preserves the reviewer verdict, strategy opinions, grades, bounded recommendations, and disagreements while removing private account and execution details.",
+  "private_source_receipt_sha256": "5b6af7cdab9e7ee48c83a23381937ff2266d3a7482d580fb6fc88f9e77ad7204",
+  "model_route": {
+    "model_id": "grok-4.5",
+    "provider": "xai-oauth",
+    "auth_type": "device_code OAuth"
+  },
+  "result": {
+    "model_identity": "Grok 4.5 via xAI OAuth",
+    "reviewed_entry_sha256": "4c6f3b44e75bcc2f9ab01afd87489f61691920a541e7ec4a834a17d6887df7ca",
+    "verdict": "PASS",
+    "publication_safety": {
+      "verdict": "PASS",
+      "privacy_opinion": "The exact entry publishes no quantities, execution or fill prices, balances, identifiers, absolute performance amounts, net liquidation value, or reconstructable sizing. The flat book reports position return as not applicable and open-position contribution as 0.00%.",
+      "statistical_opinion": "The entry states that deterministic evidence is empty, keeps unresolved shadows out of expectancy and sizing gates, clusters correlated observations, separates blocked and pre-trigger outcomes, and makes no alpha claim from tiny or open samples.",
+      "issues": [],
+      "required_changes": []
+    },
+    "strategy_critique": {
+      "verdict": "PASS",
+      "opinion": "There is still no measured strategy edge—only infrastructure failure plus a few expectancy-ineligible open shadows. Keep new aggressive entries halted until prospective treatment and matched control persist atomically into a non-empty ledger. Do not invent alpha from dry-run-scorable predictions, manual marks, or favorable WMT path. Once writes work, sample distinct mechanisms under frozen controls rather than renaming reclaim variants.",
+      "mechanism_overlap": "Pooled level/VWAP reclaim dominates the aggressive narrative and overlaps short-horizon equity mean-reversion/momentum surfaces (gap fade, quality multi-day pullback, post-shock inventory repair). Sector-pair residual reversion is the clearest distinct non-single-name leg. Index/sector puts are capability-blocked, not diversified live evidence. Without session-cluster denominators, correlated same-tape labels would manufacture false diversification.",
+      "missed_alternatives": [
+        "Defined-risk index vol-risk-premium / short-vol carry as catalyst-independent PAPER_SHADOW_ONLY measurement",
+        "Turn-of-month / calendar flow drift study with signals known days ahead and zero intraday discretion",
+        "Breadth/dispersion or cross-sectional residual momentum as a non-reclaim control substrate",
+        "Explicit three-arm gap experiment (trade-through vs limit-in-gap vs no-entry mark) before more day-two consolidations"
+      ],
+      "current_strategy_grades": [
+        {
+          "name": "Prospective persistence and matched-control atomicity",
+          "grade": "keep",
+          "reason": "Sole activation gate. Without same-transaction treatment/control and exact ID parity, every other family is unfalsifiable prior theater."
+        },
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "grade": "shadow",
+          "reason": "Zero clean filled ledger outcomes; SMCI failed before trigger; WMT is one open counterfactual. Over-concentrated narrative—no new variants, promotion, or sizing while integrity is red."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "grade": "iterate",
+          "reason": "Best distinct shadow family on priors (market-neutral residual), but open marks are not closed cohort R. Keep frozen pair registry, beta-neutral accounting, 40-episode and concentration gates; score cohorts not legs."
+        },
+        {
+          "name": "Session-clustered mechanism accounting",
+          "grade": "keep",
+          "reason": "Denominator hardening is mandatory so raw registrations and same-session duplicates cannot inflate sample size or diversification claims."
+        },
+        {
+          "name": "Index or sector put continuation",
+          "grade": "shadow",
+          "reason": "Capability collection blocked on pagination/join. Underlying diagnostics must never become option evidence or order authority; remain shadow-only until joins verify."
+        }
+      ],
+      "bounded_recommendations": [
+        {
+          "name": "atomic_treatment_control_writer_gate",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "After isolated idempotency and exact-ID checks, persist one prospective treatment and its family-specific matched control in the same transaction; reject orphan controls, stale reports, duplicate IDs, incomplete exit blocks, and any registration lacking artifact/DB/report ID parity. Emit family and cross-family session cohort IDs at registration.",
+          "benchmark_or_control": "Writer health baseline: paired row rate, reject rate, and zero unpaired active-family rows per session versus pre-fix empty-ledger state.",
+          "minimum_sample": "10 consecutive sessions with 100% paired treatment-control writes for every new registration and learning-report families non-empty when registrations occurred.",
+          "promotion_rule": "Only lift the integrity halt on measurement scoring after the minimum_sample; does not promote any trade strategy, sizing, or bracket changes.",
+          "kill_rule": "Any session after the sanctioned writer path with missing controls, unpaired active rows, or empty report despite registrations re-halts family scoring immediately."
+        },
+        {
+          "name": "sector_pair_cohort_shadow_closeout",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "Frozen pair registry only; enter on completed-session close beyond pre-specified residual/z threshold; fixed multi-session horizon; beta-neutral residual accounting; one cluster ID per pair-cohort; causal next-available marks; no mid-experiment pair substitution; concentration kill unchanged.",
+          "benchmark_or_control": "Shuffled-pair control with same entry rule plus SPY same-horizon residual; random long/short leg assignment control.",
+          "minimum_sample": "40 independent pair-cohort closes across ≥5 pairs and ≥20 session-dates (not leg-counts).",
+          "promotion_rule": "Conservative mean residual R beats both shuffled-pair and SPY controls by ≥0.10R after haircut with no pair >40% of total R; still PAPER_SHADOW_ONLY—no live/order authority.",
+          "kill_rule": "Mean residual R ≤0 at 40 cohorts, leg PnL correlation >0.8 with no residual edge, or stop/MAE process breach rate showing breaks not stretches—retire frozen parameterization."
+        },
+        {
+          "name": "pooled_reclaim_no_new_variants_shadow",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "Existing pooled day-two and negative-catalyst reclaim rules only; immutable pre-trigger artifact (ATR bars, consolidation ref, entry, stop geometry, gap trade-through); same-symbol time-matched non-entry control; no new reclaim variants while integrity red.",
+          "benchmark_or_control": "Same-symbol/session no-entry mark path; secondary random same-sector name without reclaim trigger.",
+          "minimum_sample": "20 triggered clean ledger observations or 40 registered attempts including fails-before-trigger after writer health passes, whichever first.",
+          "promotion_rule": "Conservative mean R ≥ +0.15 vs matched control with lift ≥ +0.10R, trigger rate in [15%, 60%], zero integrity failures—still no sizing unlock or executable promotion from this review lane.",
+          "kill_rule": "Conservative mean R ≤0 at n≥20 triggered, control lift ≤0, or >50% registrations fail artifact/parity checks after writer fix—demote/hold shadow with no narrative refill."
+        }
+      ],
+      "disagreements_to_preserve": [
+        "Fable: pooled reclaim may remain iterative research under the halt once measurement is honest.",
+        "Grok: pooled reclaim should stay shadow-only until clean deterministic ledger rows and atomic controls exist—no iterative reclaim expansion while integrity is red.",
+        "Both agree: no measured edge yet; matched treatment-control persistence is the first gate; halt wins over allowlist expansion."
+      ]
+    },
+    "explicit_confirmation": {
+      "exact_entry_reviewed": true,
+      "hard_gates_unchanged": true,
+      "no_order_authority": true
+    },
+    "summary": "PASS both tracks. Public entry is privacy/percentage-safe and statistically honest about zero deterministic rows. Strategy view: keep the halt, fix atomic persistence first, hold reclaim in shadow, iterate sector-pair as the distinct cohort, and preserve the Fable-vs-Grok reclaim disagreement without loosening gates or authorizing orders."
+  }
+}
