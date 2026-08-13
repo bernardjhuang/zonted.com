@@ -174,6 +174,24 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertIn('data-desk-catalyst-name="Est. Q3 earnings"', source)
         self.assertEqual(valuations["MOS"]["entry_levels"], {"bear": 19.82, "base": 22.6, "bull": 31.04})
 
+    def test_cf_way_and_weat_live_holdings_have_exact_canonical_owners(self):
+        symbols = {"CF": ("Materials", "XLB", "Materials"), "WAY": ("Health Care", "XLV", "Health Care"), "WEAT": ("Consumer Staples", "XLP", "Staples")}
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        for symbol, (sector, sector_etf, scan_sector) in symbols.items():
+            self.assertEqual(profiles[symbol]["flair"], "thesis")
+            self.assertEqual(profiles[symbol]["sector"], sector)
+            self.assertEqual(profiles[symbol]["sector_etf"], sector_etf)
+            self.assertIn(f'id="hypothesis-{symbol.lower()}-setup"', source)
+            self.assertEqual(set(valuations[symbol]["entry_levels"]), {"bear", "base", "bull"})
+            self.assertEqual(universe[symbol]["sector"], scan_sector)
+            self.assertEqual(charts[symbol]["sector_etf"], sector_etf)
+            self.assertEqual(charts[symbol]["series"]["dates"][-1], "2026-08-13")
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
