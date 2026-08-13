@@ -3,6 +3,160 @@
  "entries": [
   {
    "date": "2026-08-13",
+   "session": "post-close",
+   "assess_for": "Friday Aug 14 open",
+   "verdict": "RISK-ON",
+   "subtitle": "A sixth straight +6 \u2014 the S&P's first trip through 7,800 ends at a record close 7,798.99 on flat PPI and sliding crude, the graded book cashes a 70% record-close call at the first asking, and AMAT's \u22125% after hours is Friday's first invoice",
+   "score": 6,
+   "n_signals": 11,
+   "composite": "+0.55",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "777.88 vs 748.48 \u00b7 +3.93% \u00b7 Aug 13 SIP close, +0.70% on the day \u2014 index record close 7,798.99",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "15.28 \u00b7 site feed, Aug 11 vintage a second day \u2014 Cboe settled today 14.63 vs 14.55 Wednesday; sub-16 on every vintage",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+1.64 (M1 16.79, M2 18.43) \u00b7 feed Aug 11 \u2014 tonight's settles steeper: M1 16.00, M2 18.11, +2.11",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "90.9 \u00b7 feed Aug 11; today closed 89.42 vs 88.5 Wednesday \u2014 sub-95 both vintages",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "frozen at Jul 17's 70.88, 20 sessions stale \u2192 0 by rule \u2014 the level would earn +1; no reachable alternate source",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.70% (Aug 10 obs via Aug 11 feed) \u00b7 \u22128bp over 5 obs vs 2.78% Aug 3 \u2014 parked at the tights through refunding week",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed fresh to tonight's close \u2014 below: only XLC \u22120.7% and XLU \u22121.4%, and XLC led the day's tape",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLE +1.44 \u00b7 XLV +1.25 \u00b7 XLB +1.13 \u00b7 Aug 13 board \u2014 zero of the five a fourth day; XLF +1.10 and XLI +1.06 now within 0.2 of the podium",
+     "score": -1
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.94pt (IWM +2.68%, SPY +3.62%, Jul 16 \u2192 Aug 13, SIP) \u2014 the dead heat drifts small-cap-lag but stays inside the band",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "4 of 7 \u00b7 BNB +1.21, ETH +0.44, SOL +0.36, ZEC +0.30 \u00b7 feed Aug 12 vintage \u2014 DOGE \u22120.23 next closest",
+     "score": 1
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "159.33 vs 157.83 \u00b7 +0.95% over 5 ECB fixes (Aug 6 \u2192 Aug 13), yen weaker \u2014 no stress state; Yahoo 429 again, ECB per convention",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The close confirms what 3:00 already knew. The S&P went through 7,800 intraday for the first time and settled at a <a href=\"https://www.bloomberg.com/news/newsletters/2026-08-13/s-p-500-closes-at-a-record-after-soft-producer-prices\" rel=\"noopener\">record 7,798.99, +0.65%</a>, SPY +0.70% to 777.88 on the SIP print. The fuel was all disinflation: July PPI flat against +0.2% expected, and <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-13-sp-500-record-high-nasdaq-dow-inflation-100145282.html\" rel=\"noopener\">crude spent the day unwinding</a> \u2014 Brent off more than 2% to $87.07, WTI to $81.25 \u2014 which is why XLE closed dead flat (+0.05%) on the very day its z-score tops the leadership board. The day's actual tape: XLC +2.1%, XLRE +1.4%, XLP +1.1%, XLK +1.0%; XLB \u22120.5% at the bottom. In the book, FIGR tacked on +3.9% to 31.88 the day after its double beat.</p>",
+    "<p>Nothing flipped \u2014 a sixth straight +6, and the rows mostly firmed. Trend re-anchors to tonight's close, +3.93% over the 50-day. The three Cboe vol rows still score off an Aug 11 feed vintage (no overnight refresh a second day), but every fresher reading agrees with the score: VIX settled 14.63, VVIX 89.42, and tonight's futures settles put the contango at +2.11, steeper than the feed's +1.64. MOVE stays frozen at Jul 17's 70.88 \u2014 20 sessions stale, 0 by rule, the level itself worth +1. Leadership reshuffled inside its \u22121: XLE takes the top of the podium from XLB, and the motion that matters is underneath \u2014 XLF +1.10 and XLI +1.06 now sit within 0.2 of third place after a financials-and-industrials-friendly week. Size drifted from Wednesday's dead heat to \u22120.94pt, still inside the band. Breadth held 11 of 13 on a feed fresh to tonight.</p>",
+    "<p>Scoreboard, because this page exists to be graded: the 3:00 intraday call was RISK-ON at +6 and the close delivered +0.70% and a record \u2014 confirmed, with the honest caveat that an entry filed with the day's receipts in hand only ever risked the final hour. The forward book did the real settling: the Aug 6 no-down-day call expired right side, and Aug 12's 70% record-close call cashed at the first asking. Running Brier improves to 0.21 across thirteen graded \u2014 the misses remain one repeated trade, paying for movement this tape refuses to sell.</p>",
+    "<p>Into Friday: the overnight tell is AMAT \u2014 <a href=\"https://www.benzinga.com/markets/earnings/26/08/61193840/applied-materials-beats-q3-estimates-issues-strong-guidance-unprecedented-demand\" rel=\"noopener\">a record quarter that beat both lines</a> ($3.50 on $9.12B vs $3.40/$8.99B expected) with the calendar-26 systems outlook raised past 30%, and the stock still <a href=\"https://seekingalpha.com/news/4632383-applied-materials-slides-as-q3-results-guidance-topmiss-estimates\" rel=\"noopener\">bled about 5% after hours</a> to ~$506 \u2014 the tape had pre-paid an October whisper near $10.5B that the guide didn't print. That's the semis open, after the SOX did the week's lifting. Then retail sales at 8:30 hands off to a week of index-weight retail \u2014 HD Tuesday, TGT/LOW/TJX Wednesday, WMT and DE Thursday \u2014 with the FOMC minutes in the middle. The rubric holds RISK-ON into Friday's open; the falsifiable call below prices the movement question at 40%, the same side the graded book keeps getting paid.</p>"
+   ],
+   "flips": {
+    "to_off": "The sum needs \u22123 for RISK-OFF and a drop to +2 for NEUTRAL, and the one-day route runs through Friday's 8:30 retail sales: a hot print repricing September toward a hike, VIX (14.63 tonight) through 20, the contango (+2.11 on tonight's settles) flattening through +0.5, HY OAS backing up 25bp+ off 2.70%, and SPY starting toward the 50-day at 748.48, 3.8% below. AMAT's \u22125% after hours is the wrong kind of open but on its own touches no threshold.",
+    "to_on": "+8 needs two of three: the MOVE row un-freezing anywhere near its frozen 70.88 (the level already earns the point; the staleness costs it); Leadership needs two of XLF (z +1.10), XLI (+1.06), XLK (+0.90) to clear XLB (+1.13) and XLV (+1.25) \u2014 XLF and XLI sit within 0.2 of the podium after today's reshuffle; Size needs IWM a full point over SPY from tonight's \u22120.94pt, a two-point swing."
+   },
+   "forward": {
+    "horizon": "Fri Aug 14 \u2013 Thu Aug 20",
+    "watch": [
+     {
+      "name": "AMAT hangover at Friday's open",
+      "why": "the week's semi bid gets its invoice",
+      "lean": "watch",
+      "detail": "Beat Q3 on both lines ($3.50 / $9.12B), record margins, CY26 systems outlook raised past 30% \u2014 and still \u22125% after hours to ~$506 against an October whisper near $10.5B; SOX ran ~3% Wednesday into the print"
+     },
+     {
+      "name": "Retail sales, Friday 8:30",
+      "why": "the consumer hand-off opens a retail week",
+      "lean": "watch",
+      "detail": "July print lands against claims at 209k; then HD Tue am, TGT/LOW/TJX Wed am, WMT + DE + BABA Thu am (calendar-verified) \u2014 index-weight retail stacked inside the window"
+     },
+     {
+      "name": "FOMC minutes, Wednesday",
+      "why": "the triple dissent's paper trail against a repriced September",
+      "lean": "watch",
+      "detail": "July 28\u201329's three-president dissent for a hike lands in print with hike odds pressed toward ~40% and falling after CPI-in-line and a flat PPI"
+     },
+     {
+      "name": "Vol regime",
+      "why": "compression intact under record closes",
+      "lean": "on",
+      "detail": "SPY RV10 11.3% vs RV21 13.8% \u2014 still falling; VIX closed 14.63, VVIX 89.42, VX settles +2.11 contango; opex Aug 21 and Jackson Hole sit one session past this horizon"
+     },
+     {
+      "name": "Leadership board vs the tape",
+      "why": "the one live divergence",
+      "lean": "watch",
+      "detail": "50d-z podium runs XLE +1.44 / XLV +1.25 / XLB +1.13 \u2014 commodity-defensive \u2014 while today's tape led with XLC +2.1% and XLK +1.0%; breadth 85% and HY at 2.70% side with the index"
+     },
+     {
+      "name": "Yen COT, Friday",
+      "why": "carry-unwind fuel gauge, refresh due",
+      "lean": "watch",
+      "detail": "Legacy non-commercial \u221245.5k contracts short yen, TFF leveraged funds \u221260.8k (Aug 4 report; new print tomorrow) \u2014 the 5-fix drift is +0.95% yen-weaker, fuse unlit"
+     }
+    ],
+    "forecast": {
+     "claim": "at least one SPY close-to-close move \u22651%, either direction, within Fri Aug 14 \u2013 Thu Aug 20 \u2014 retail week plus minutes against 11% realized",
+     "prob": "40%",
+     "resolves": "2026-08-20"
+    },
+    "grading": "Two came due at today's bell. Aug 6 post-close: a \u22651% down close within Aug 7\u201313 at 40% \u2014 did not occur (the five sessions ran +0.61, \u22120.03, \u22120.32, +0.25, +0.70), lean right, Brier 0.16. Aug 12 post-close: a record close above 773.26 by Aug 19 at 70% \u2014 HIT at the first asking, 777.88 today, Brier 0.09. Running Brier 0.21 across thirteen graded, improved from 0.22. Still open: Aug 11 post-close's \u00b11%-move-by-Aug 18 at 50% (two of five sessions burned on +0.25 and +0.70), and this morning's 75% floor call at 770.56 through Aug 20."
+   },
+   "sources": [
+    {
+     "t": "Bloomberg \u2014 S&P 500 closes at a record after soft producer prices",
+     "u": "https://www.bloomberg.com/news/newsletters/2026-08-13/s-p-500-closes-at-a-record-after-soft-producer-prices"
+    },
+    {
+     "t": "Yahoo Finance \u2014 S&P 500 notches record high after soft inflation data",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-thursday-august-13-sp-500-record-high-nasdaq-dow-inflation-100145282.html"
+    },
+    {
+     "t": "Benzinga \u2014 Applied Materials beats Q3 estimates, 'unprecedented' demand",
+     "u": "https://www.benzinga.com/markets/earnings/26/08/61193840/applied-materials-beats-q3-estimates-issues-strong-guidance-unprecedented-demand"
+    },
+    {
+     "t": "Seeking Alpha \u2014 AMAT slides as results top, guidance mixed",
+     "u": "https://seekingalpha.com/news/4632383-applied-materials-slides-as-q3-results-guidance-topmiss-estimates"
+    }
+   ],
+   "rating": 7.7
+  },
+  {
+   "date": "2026-08-13",
    "session": "intraday",
    "assess_for": "Thursday Aug 13 session",
    "verdict": "RISK-ON",
@@ -4016,6 +4170,10 @@
     [
      "2026-08-12",
      772.49
+    ],
+    [
+     "2026-08-13",
+     777.88
     ]
    ],
    "QQQ": [
@@ -4102,9 +4260,13 @@
     [
      "2026-08-12",
      723.7
+    ],
+    [
+     "2026-08-13",
+     732.07
     ]
    ]
   },
-  "updated": "2026-08-12"
+  "updated": "2026-08-13"
  }
 }
