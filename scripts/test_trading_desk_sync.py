@@ -209,6 +209,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
         position_rows = _desk_rows(page, "position")
         thesis_rows = _desk_rows(page, "hypothesis")
+        if not thesis_rows:
+            self.assertIn("0 thesis-only names", page)
+            self.assertIn("New hunt starts empty. Add only researched setups worth tracking.", page)
         positions_artifact = json.loads((ROOT / "trading" / "desk-positions.json").read_text())
         self.assertEqual(positions_artifact["schema_version"], 3)
         positions_payload = positions_artifact["positions"]
@@ -272,10 +275,8 @@ class RoutedTradingSyncTests(unittest.TestCase):
                 self.assertIn(f'data-label="Beta">{source_charts[symbol]["beta_2y_weekly_vs_spy"]:.2f}<', row)
 
         self.assertFalse(total_symbols & RETIRED_HYPOTHESES)
-        net_row = next(row for row in thesis_rows if _row_symbol(row) == "NET")
-        self.assertNotIn('data-feed-state="no-feed"', net_row)
-        byddy_row = next(row for row in (*position_rows, *thesis_rows) if _row_symbol(row) == "BYDDY")
-        self.assertIn('data-feed-state="live" data-feed-source="robinhood"', byddy_row)
+        for row in (*position_rows, *thesis_rows):
+            self.assertNotIn('data-feed-state="no-feed"', row)
         morning_quotes = os.environ.get("ZONTED_DESK_MORNING_QUOTES")
         if morning_quotes:
             fallback = json.loads(pathlib.Path(morning_quotes).read_text())
@@ -284,8 +285,6 @@ class RoutedTradingSyncTests(unittest.TestCase):
         chart_date = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["as_of"]
         fallback_stamp = dt.datetime.fromisoformat(fallback["generated_at"].replace("Z", "+00:00"))
         self.assertEqual(fallback_stamp.astimezone(ZoneInfo("America/Chicago")).date().isoformat(), chart_date)
-        self.assertIn("BYDDY", fallback["quotes"])
-        self.assertIn(f'>${float(fallback["quotes"]["BYDDY"]["price"]):,.2f}<', byddy_row)
 
         toggles = re.findall(r'<button[^>]+class="desk-row-toggle"[^>]+aria-expanded="false"[^>]+aria-controls="(desk-detail-[^"]+)"', page)
         self.assertEqual(len(toggles), len(total_symbols))
@@ -303,7 +302,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertEqual(page.count('class="desk-thesis-cell-button"'), len(total_symbols))
         self.assertEqual(page.count('<th>Chart</th>'), 2)
         self.assertEqual(page.count('class="desk-chart-cell-button"'), len(total_symbols))
-        self.assertEqual(page.count('<td colspan="10">'), len(total_symbols))
+        self.assertEqual(
+            page.count('<td colspan="10">'),
+            len(total_symbols) + (1 if not thesis_rows else 0),
+        )
         for symbol in total_symbols:
             launcher = re.search(
                 rf'<tr class="desk-main-row"[^>]+data-desk-symbol="{symbol}".*?<button[^>]+class="desk-chart-cell-button"[^>]+data-hypothesis-chart-open="{symbol}"[^>]*>',
@@ -350,13 +352,6 @@ class RoutedTradingSyncTests(unittest.TestCase):
         )
         self.assertNotIn("Up to 2 years", page)
         self.assertNotIn('<th>P&amp;L</th>', page)
-        for label, date in (
-            ("Est. August deliveries", "Sep 2"),
-            ("Est. Q3 earnings", "Oct 29"),
-            ("Est. Q3 earnings", "Nov 3"),
-            ("Est. Q3 earnings", "Nov 4"),
-        ):
-            self.assertIn(f'<b>{label}</b><small>{date}</small>', page)
         for position in positions_payload:
             symbol = position["symbol"]
             row = next(row for row in position_rows if _row_symbol(row) == symbol)
@@ -383,23 +378,19 @@ class RoutedTradingSyncTests(unittest.TestCase):
 
     def test_trading_reference_levels_are_not_presented_as_intrinsic_scenarios(self) -> None:
         page = DESK_HOME.read_text()
-        expected = {
-            "lth": ("52W low", "Cost basis", "52W high", "cost basis"),
-        }
-        self.assertNotIn('id="desk-detail-pg"', page)
-        for symbol, display in expected.items():
-            labels, comparison = display[:3], display[3]
-            match = re.search(rf'<tr class="desk-detail-row" id="desk-detail-{symbol}".*?</tr>', page, re.S)
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        for symbol, row in valuations.items():
+            match = re.search(rf'<tr class="desk-detail-row" id="desk-detail-{symbol.lower()}".*?</tr>', page, re.S)
             self.assertIsNotNone(match, symbol)
             detail = match.group(0) if match else ""
-            self.assertIn("Trading reference levels", detail)
-            self.assertNotIn("Intrinsic entry levels", detail)
-            for label in labels:
-                self.assertIn(f'<span>{label}</span>', detail)
-            self.assertIn(f"versus {comparison}", detail)
-        intrinsic = re.search(r'<tr class="desk-detail-row" id="desk-detail-hood".*?</tr>', page, re.S)
-        self.assertIsNotNone(intrinsic)
-        self.assertIn("Intrinsic entry levels", intrinsic.group(0) if intrinsic else "")
+            display = row.get("entry_level_display")
+            if display:
+                self.assertNotIn("Intrinsic entry levels", detail)
+                self.assertIn(display["heading"], detail)
+                for label in display["labels"].values():
+                    self.assertIn(f'<span>{label}</span>', detail)
+            else:
+                self.assertIn("Intrinsic entry levels", detail)
 
     def test_trading_desk_v3_reuses_chart_modal_and_fetches_full_thesis(self) -> None:
         page = DESK_HOME.read_text()
@@ -439,22 +430,13 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertRegex(styles, r'\.hyp-chart-dialog[^{}]*\{[^}]*color:var\(--bl-ink\)')
         self.assertIn(".hypothesis-simple-thesis", styles)
         source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
-        simple_theses = {
-            "XYL": ["AI data-center buildouts", "water systems", "small starter"],
-            "JCI": ["AI data-center cooling demand", "orders and backlog", "momentum starter"],
-            "BMNR": ["Robinhood Chain validates ETH", "Cheap Web3 valuations", "compound ETH per share"],
-            "FIGR": ["previously founded SoFi", "Real-world assets", "$25 is the working floor"],
-            "MDB": ["AI tailwinds support Atlas", "earnings and yearly VWAPs", "Strong hiring numbers"],
-            "FRMI": ["Energy demand from SpaceX", "deep industry knowledge remains bullish"],
-        }
-        for symbol, expected_lines in simple_theses.items():
+        active_symbols = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        for symbol in active_symbols:
             match = re.search(rf'<article class="hypothesis-detail" id="hypothesis-{symbol.lower()}-setup".*?</article>', source, re.S)
             self.assertIsNotNone(match, f"Missing {symbol} thesis")
             article = match.group(0) if match else ""
             self.assertIn('class="hypothesis-bottom-line hypothesis-simple-thesis"', article)
             self.assertNotRegex(article, r'<details[^>]*\sopen(?:\s|=|>)')
-            for expected in expected_lines:
-                self.assertIn(expected, article)
         self.assertNotIn('height="auto"', page + script)
         self.assertIn('.desk{display:grid;grid-template-columns:minmax(0,1fr)', styles.replace(" ", ""))
 

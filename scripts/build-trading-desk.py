@@ -654,6 +654,8 @@ def render(mode: str, quote_path: Path | None) -> str:
             metadata[symbol]["stance"] = "constructive"
     pos_body = position_rows(positions, metadata, markets, valuation, as_of)
     hyp_body = hypothesis_rows(tracked, metadata, markets, valuation, as_of)
+    if not tracked:
+        hyp_body = '<tr class="desk-empty-row"><td colspan="10">New hunt starts empty. Add only researched setups worth tracking.</td></tr>'
     main = f'''<section class="desk-main" data-desk-source-articles="{len(metadata)}">
 {START_POS}
 {table('Positions', f'{len(positions)} open · sorted by Δ$ exposure', pos_body, risk_summary=risk_summary, sleeves=sleeves)}
