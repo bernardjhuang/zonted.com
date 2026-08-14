@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "exact_public_entry_sha256": "64bcf43c45d14aa7bf5888eb9053938cb687a4330b847450ec71017d38c29b55",
+  "reviewed_at": "2026-08-14T22:08:06.649224+00:00",
+  "public_redaction": "This receipt preserves the reviewer verdict, strategy opinions, grades, bounded recommendations, and disagreements while removing private account and execution details.",
+  "private_source_receipt_sha256": "a49f41fe336d0a64470992a2d503e7f51a8f9107c13614c07131848c03f72d0a",
+  "model_route": {
+    "model_id": "grok-4.5",
+    "provider": "xai-oauth",
+    "auth_type": "device_code OAuth"
+  },
+  "result": {
+    "model_identity": "Grok 4.5 via xAI OAuth",
+    "reviewed_entry_sha256": "64bcf43c45d14aa7bf5888eb9053938cb687a4330b847450ec71017d38c29b55",
+    "verdict": "PASS",
+    "publication_safety": {
+      "verdict": "PASS",
+      "privacy_opinion": "The entry discloses no quantities, prices, balances, account identifiers, or reconstructable sizing. Its bounded percentage language is explicitly tied to a private virtual basis and does not expose dollar performance.",
+      "statistical_opinion": "The entry is unusually disciplined: it separates counterfactuals, same-session correlated observations, missing infrastructure, and flat-book facts from fills, expectancy, alpha, and promotion evidence. Zero authoritative observations is stated plainly rather than spun into a near-win.",
+      "issues": [],
+      "required_changes": []
+    },
+    "strategy_critique": {
+      "verdict": "PASS",
+      "opinion": "The system is correctly refusing to confuse research plumbing with trading edge. The strongest current decision is staying flat while deterministic prospective observations remain at zero. The weakness is not caution; it is that too much of the stack still depends on closely related short-horizon equity dislocation/reclaim logic, so more variants would create sample theater rather than diversification.",
+      "mechanism_overlap": "Pooled level/VWAP reclaim, qualifying-gap coverage, and much of the candidate process are all exposed to the same catalyst-driven short-horizon equity continuation-versus-reversion regime, liquidity quality, and market-beta shock. Guaranteed-fire index decomposition is primarily measurement infrastructure rather than an independent alpha family. Sector-pair relative-value reversion is the only clearly distinct candidate mechanism, though it still needs proof that residual behavior is not merely sector beta and earnings/news clustering in disguise.",
+      "missed_alternatives": [
+        "Cross-sectional post-event drift with frozen catalyst taxonomy, delayed entry windows, and sector-neutral controls; this tests information diffusion rather than intraday reclaim geometry.",
+        "Volatility-regime-conditioned index trend or mean-reversion using liquid index proxies and predetermined horizons; this diversifies away from single-name catalyst, spread, and halt risk.",
+        "Earnings-implied-move versus realized-move decomposition with official event timestamps and matched non-event controls; this tests expectation-error dispersion rather than price-level reclaim."
+      ],
+      "current_strategy_grades": [
+        {
+          "name": "Prospective persistence and matched-control atomicity",
+          "grade": "keep",
+          "reason": "This is a non-negotiable measurement gate. Without atomic treatment-control persistence, every downstream result is vulnerable to selection and reporting bias."
+        },
+        {
+          "name": "Guaranteed-fire overnight and intraday decomposition",
+          "grade": "iterate",
+          "reason": "It is the highest-leverage throughput lane, but it must demonstrate clean prospective pair continuity before being treated as useful research infrastructure."
+        },
+        {
+          "name": "Pooled level and VWAP reclaim",
+          "grade": "shadow",
+          "reason": "The mechanism remains plausible but is heavily overlapped with existing catalyst-driven short-horizon equity logic and has no deterministic evidence base."
+        },
+        {
+          "name": "Sector-pair relative-value reversion",
+          "grade": "shadow",
+          "reason": "This is the most genuinely differentiated hypothesis, provided residualization, concentration limits, and independent-episode controls remain frozen."
+        },
+        {
+          "name": "Matched-control balance and qualifying-gap coverage",
+          "grade": "keep",
+          "reason": "It is measurement infrastructure, not alpha, but it is necessary to prevent selective treatment logging and false comparative conclusions."
+        }
+      ],
+      "bounded_recommendations": [
+        {
+          "name": "Frozen sector-pair residual independence audit",
+          "mode": "PAPER_SHADOW_ONLY",
+          "frozen_setup": "Use the existing frozen pair registry, beta-neutral residual formula, fixed holding horizon, index-correlation gate, concentration kill rule, and no parameter changes for the full run.",
+          "benchmark_or_control": "Compare each eligible pair episode against its pre-registered matched control and against a same-sector equal-weight residual baseline over the identical horizon.",
+          "minimum_sample": "At least 40 completed independent episodes across at least 10 distinct calendar weeks, with no single sector contributing more than 25% of episodes.",
+          "promotion_rule": "Remain shadow-only unless treatment-control residual advantage is positive after costs under conservative marks, persists across at least three sectors, and no integrity or concentration gate is breached.",
+          "kill_rule": "Kill the experiment if 40 eligible episodes fail to produce positive conservative treatment-control advantage, if results are driven by one sector or week, or if any residual/accounting integrity check fails."
+        },
+        {
+          "name": "Catalyst post-event drift measurement cohort",
+          "mode": "MEASUREMENT_ONLY",
+          "frozen_setup": "Pre-register only liquid single-name events with official timestamped catalyst classification, fixed entry-delay buckets, fixed one-session horizon, conservative mark convention, and immutable artifacts; no broker interaction or discretionary exclusions.",
+          "benchmark_or_control": "For each treatment, use a pre-registered matched non-event control with frozen pre-event volatility, liquidity, sector, and gap covariates; compare delayed-entry drift against the control horizon.",
+          "minimum_sample": "At least 60 completed treatment-control pairs spanning at least three catalyst classes and 12 separate trading weeks.",
+          "promotion_rule": "Remain measurement-only unless all pairs are complete, covariate balance is documented, conservative treatment-control advantage is positive in at least two catalyst classes, and no class relies on a single event cluster.",
+          "kill_rule": "Kill the cohort if missing receipts or unmatched controls exceed 5%, if conservative advantage is non-positive after 60 pairs, or if one catalyst class supplies more than half of apparent edge."
+        }
+      ],
+      "disagreements_to_preserve": [
+        "A favorable WMT counterfactual may be worth preserving as a hypothesis-generation artifact, but it must remain excluded from expectancy and cannot be treated as evidence that the integrity halt was costly.",
+        "Sector-pair reversion deserves priority as a differentiated family, but prioritization is not validation; its apparent diversification could collapse once catalyst clustering and index exposure are measured."
+      ]
+    },
+    "explicit_confirmation": {
+      "exact_entry_reviewed": true,
+      "hard_gates_unchanged": true,
+      "no_order_authority": true
+    },
+    "summary": "PASS on both tracks. The public entry is privacy-safe and statistically honest, and its strategy discussion correctly keeps every lane below executable authority while prioritizing deterministic evidence over seductive counterfactuals."
+  }
+}
