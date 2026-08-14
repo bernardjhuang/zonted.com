@@ -1,12 +1,12 @@
 {
-  "as_of": "2026-08-11",
+  "as_of": "2026-08-13",
   "commentary": [
     "Overall regime: Contained (0.0/100). This is a percentile-based conditions score, not a forecast.",
-    "VVIX is 90.90 at its trailing percentile 35; its 5-session direction is mixed.",
-    "The constant-maturity 30-to-60-day VIX curve slope is +7.15%; its direction is improving and positive still means contango.",
-    "Credit is 2.70% and mixed; MOVE is 70.88. SKEW remains a low-weight confirm, not a standalone forecast. Stale inputs receive zero weight: MOVE."
+    "VVIX is 89.42 at its trailing percentile 30; its 5-session direction is mixed.",
+    "The constant-maturity 30-to-60-day VIX curve slope is +7.88%; its direction is improving and positive still means contango.",
+    "Credit is 2.71% and mixed; MOVE is 70.88. SKEW remains a low-weight confirm, not a standalone forecast. Stale inputs receive zero weight: MOVE."
   ],
-  "comparison_start": "2024-08-11",
+  "comparison_start": "2024-08-13",
   "conditional_frequencies": {
     "horizons": [
       21,
@@ -18,8 +18,8 @@
           "bands": {
             "Contained": {
               "events": 155,
-              "frequency": 10.65,
-              "observations": 1456
+              "frequency": 10.61,
+              "observations": 1461
             },
             "Elevated": {
               "events": 159,
@@ -33,15 +33,15 @@
             }
           },
           "events": 475,
-          "frequency": 15.85,
-          "observations": 2997
+          "frequency": 15.82,
+          "observations": 3002
         },
         "42": {
           "bands": {
             "Contained": {
               "events": 273,
-              "frequency": 18.98,
-              "observations": 1438
+              "frequency": 18.95,
+              "observations": 1441
             },
             "Elevated": {
               "events": 223,
@@ -50,13 +50,13 @@
             },
             "Watchful": {
               "events": 234,
-              "frequency": 27.59,
-              "observations": 848
+              "frequency": 27.53,
+              "observations": 850
             }
           },
           "events": 730,
-          "frequency": 24.53,
-          "observations": 2976
+          "frequency": 24.49,
+          "observations": 2981
         }
       },
       "vix_above_25": {
@@ -64,8 +64,8 @@
           "bands": {
             "Contained": {
               "events": 254,
-              "frequency": 17.45,
-              "observations": 1456
+              "frequency": 17.39,
+              "observations": 1461
             },
             "Elevated": {
               "events": 390,
@@ -79,15 +79,15 @@
             }
           },
           "events": 961,
-          "frequency": 32.07,
-          "observations": 2997
+          "frequency": 32.01,
+          "observations": 3002
         },
         "42": {
           "bands": {
             "Contained": {
               "events": 467,
-              "frequency": 32.48,
-              "observations": 1438
+              "frequency": 32.41,
+              "observations": 1441
             },
             "Elevated": {
               "events": 444,
@@ -96,13 +96,13 @@
             },
             "Watchful": {
               "events": 432,
-              "frequency": 50.94,
-              "observations": 848
+              "frequency": 50.82,
+              "observations": 850
             }
           },
           "events": 1343,
-          "frequency": 45.13,
-          "observations": 2976
+          "frequency": 45.05,
+          "observations": 2981
         }
       }
     }
@@ -111,24 +111,24 @@
     "bands": {
       "move": "Calm",
       "skew": "Moderate",
-      "vix": "Moderate",
-      "vvix": "Elevated"
+      "vix": "Low",
+      "vvix": "Calm"
     },
     "context_metrics": {
       "vix": {
         "age_sessions": 0,
-        "change_20d": -0.56,
-        "change_5d": -1.22,
+        "change_20d": -2.1,
+        "change_5d": -0.52,
         "direction": "improving",
-        "observation_date": "2026-08-11",
-        "percentile": 32.67,
-        "risk_percentile": 32.67,
-        "source_date": "2026-08-11",
+        "observation_date": "2026-08-13",
+        "percentile": 24.87,
+        "risk_percentile": 24.87,
+        "source_date": "2026-08-13",
         "stale": false,
-        "value": 15.28
+        "value": 14.63
       },
       "vix9d_vix": {
-        "age_sessions": 14,
+        "age_sessions": 19,
         "change_20d": -0.1126,
         "change_5d": 0.1559,
         "direction": "mixed",
@@ -140,63 +140,63 @@
         "value": 0.8977
       },
       "vix_vix3m": {
-        "age_sessions": 0,
-        "change_20d": null,
-        "change_5d": null,
-        "direction": "stable",
-        "observation_date": "2026-08-11",
-        "percentile": null,
-        "risk_percentile": null,
-        "source_date": "2026-08-11",
-        "stale": false,
-        "value": 0.808
+        "age_sessions": 19,
+        "change_20d": 0.0195,
+        "change_5d": 0.1044,
+        "direction": "deteriorating",
+        "observation_date": "2026-07-17",
+        "percentile": 67.72,
+        "risk_percentile": 67.72,
+        "source_date": "2026-07-17",
+        "stale": true,
+        "value": 0.9138
       }
     },
-    "curve_as_of": "2026-08-11",
+    "curve_as_of": "2026-08-13",
     "curve_band": "Contango",
-    "curve_cm30": 18.0776,
-    "curve_cm60": 19.3695,
-    "curve_slope_percent": 7.1464,
-    "curve_spread": 1.6412,
-    "curve_spread_percent": 9.776,
+    "curve_cm30": 17.8126,
+    "curve_cm60": 19.2168,
+    "curve_slope_percent": 7.8832,
+    "curve_spread": 2.1135,
+    "curve_spread_percent": 13.209,
     "dates": {
       "move": "2026-07-17",
-      "skew": "2026-08-11",
-      "vix": "2026-08-11",
-      "vvix": "2026-08-11"
+      "skew": "2026-08-13",
+      "vix": "2026-08-13",
+      "vvix": "2026-08-13"
     },
-    "hy_oas": 2.7,
-    "hy_oas_as_of": "2026-08-10",
-    "hy_oas_available_as_of": "2026-08-11",
-    "m1": 16.7881,
-    "m2": 18.4293,
+    "hy_oas": 2.71,
+    "hy_oas_as_of": "2026-08-12",
+    "hy_oas_available_as_of": "2026-08-13",
+    "m1": 16.001,
+    "m2": 18.1145,
     "metrics": {
       "curve": {
         "age_sessions": 0,
-        "change_20d": 0.8799,
-        "change_5d": 1.5505,
+        "change_20d": 2.1544,
+        "change_5d": 0.9589,
         "direction": "improving",
-        "observation_date": "2026-08-11",
-        "percentile": 77.65,
-        "risk_percentile": 22.35,
-        "source_date": "2026-08-11",
+        "observation_date": "2026-08-13",
+        "percentile": 84.13,
+        "risk_percentile": 15.87,
+        "source_date": "2026-08-13",
         "stale": false,
-        "value": 7.1464
+        "value": 7.8832
       },
       "hy_oas": {
         "age_sessions": 0,
-        "change_20d": 0.01,
-        "change_5d": -0.08,
+        "change_20d": 0.0,
+        "change_5d": -0.04,
         "direction": "mixed",
-        "observation_date": "2026-08-10",
-        "percentile": 8.86,
-        "risk_percentile": 8.86,
-        "source_date": "2026-08-11",
+        "observation_date": "2026-08-12",
+        "percentile": 10.12,
+        "risk_percentile": 10.12,
+        "source_date": "2026-08-13",
         "stale": false,
-        "value": 2.7
+        "value": 2.71
       },
       "move": {
-        "age_sessions": 14,
+        "age_sessions": 19,
         "change_20d": 0.22,
         "change_5d": 1.33,
         "direction": "deteriorating",
@@ -209,69 +209,69 @@
       },
       "skew": {
         "age_sessions": 0,
-        "change_20d": -9.54,
-        "change_5d": 9.18,
-        "direction": "mixed",
-        "observation_date": "2026-08-11",
-        "percentile": 11.44,
-        "risk_percentile": 11.44,
-        "source_date": "2026-08-11",
+        "change_20d": -11.32,
+        "change_5d": -0.36,
+        "direction": "improving",
+        "observation_date": "2026-08-13",
+        "percentile": 9.26,
+        "risk_percentile": 9.26,
+        "source_date": "2026-08-13",
         "stale": false,
-        "value": 135.59
+        "value": 134.37
       },
       "vvix": {
         "age_sessions": 0,
-        "change_20d": 2.12,
-        "change_5d": -1.67,
+        "change_20d": -7.89,
+        "change_5d": 0.7,
         "direction": "mixed",
-        "observation_date": "2026-08-11",
-        "percentile": 35.32,
-        "risk_percentile": 35.32,
-        "source_date": "2026-08-11",
+        "observation_date": "2026-08-13",
+        "percentile": 29.89,
+        "risk_percentile": 29.89,
+        "source_date": "2026-08-13",
         "stale": false,
-        "value": 90.9
+        "value": 89.42
       }
     },
     "move": 70.88,
-    "skew": 135.59,
-    "vix": 15.28,
-    "vvix": 90.9
+    "skew": 134.37,
+    "vix": 14.63,
+    "vvix": 89.42
   },
   "curve": [
     {
       "expiration": null,
       "label": "Spot",
-      "value": 15.28
+      "value": 14.63
     },
     {
       "expiration": "2026-08-19",
       "label": "M1",
-      "value": 16.7881
+      "value": 16.001
     },
     {
       "expiration": "2026-09-16",
       "label": "M2",
-      "value": 18.4293
+      "value": 18.1145
     },
     {
       "expiration": "2026-10-21",
       "label": "M3",
-      "value": 19.8004
+      "value": 19.5984
     },
     {
       "expiration": "2026-11-18",
       "label": "M4",
-      "value": 20.375
+      "value": 20.1982
     },
     {
       "expiration": "2026-12-16",
       "label": "M5",
-      "value": 20.525
+      "value": 20.3567
     },
     {
       "expiration": "2027-01-20",
       "label": "M6",
-      "value": 21.5909
+      "value": 21.4923
     }
   ],
   "gate_policy": {
@@ -314,7 +314,7 @@
     "reason": "At least one frozen target separates monotonically and exceeds base rate at both horizons.",
     "watchful_action": "annotate_half_size"
   },
-  "generated_at": "2026-08-11T16:15:00-04:00",
+  "generated_at": "2026-08-13T16:15:00-04:00",
   "history": {
     "score": [
       {
@@ -15390,7 +15390,7 @@
         "score": 16.67
       },
       {
-        "active_maximum": 100,
+        "active_maximum": 75,
         "date": "2024-07-31",
         "regime": "Contained",
         "score": 0.0
@@ -18355,9 +18355,21 @@
       },
       {
         "active_maximum": 100,
+        "date": "2026-07-21",
+        "regime": "Contained",
+        "score": 0.0
+      },
+      {
+        "active_maximum": 85,
+        "date": "2026-07-22",
+        "regime": "Contained",
+        "score": 0.0
+      },
+      {
+        "active_maximum": 85,
         "date": "2026-07-23",
         "regime": "Watchful",
-        "score": 25.0
+        "score": 29.41
       },
       {
         "active_maximum": 85,
@@ -18386,6 +18398,12 @@
       {
         "active_maximum": 85,
         "date": "2026-07-30",
+        "regime": "Contained",
+        "score": 0.0
+      },
+      {
+        "active_maximum": 85,
+        "date": "2026-07-31",
         "regime": "Contained",
         "score": 0.0
       },
@@ -18430,13 +18448,21 @@
         "date": "2026-08-11",
         "regime": "Contained",
         "score": 0.0
+      },
+      {
+        "active_maximum": 85,
+        "date": "2026-08-12",
+        "regime": "Contained",
+        "score": 0.0
+      },
+      {
+        "active_maximum": 85,
+        "date": "2026-08-13",
+        "regime": "Contained",
+        "score": 0.0
       }
     ],
     "spy": [
-      {
-        "date": "2024-08-12",
-        "value": 533.27
-      },
       {
         "date": "2024-08-13",
         "value": 542.04
@@ -20436,6 +20462,14 @@
       {
         "date": "2026-08-11",
         "value": 770.56
+      },
+      {
+        "date": "2026-08-12",
+        "value": 772.49
+      },
+      {
+        "date": "2026-08-13",
+        "value": 777.88
       }
     ],
     "vix_spikes": [
@@ -20603,7 +20637,7 @@
   },
   "history_start": "2013-01-01",
   "market_regime": {
-    "as_of": "2026-08-11",
+    "as_of": "2026-08-13",
     "bottom_line": "Market plumbing is healthy, but leadership, momentum, or cyclicals are soft enough to keep the overall stance neutral.",
     "counts": {
       "neutral": 2,
@@ -20615,155 +20649,155 @@
     "method": "Five deterministic pillars: long-term trend, breadth, credit, short-term leadership, and rates/cyclicals. Three or two risk-on pillars can still be Neutral when two pillars actively disagree.",
     "metrics": {
       "dgs10": {
-        "one_month_change_bps": 16.0,
-        "value": 4.72
+        "one_month_change_bps": 10.0,
+        "value": 4.68
       },
       "equities": {
         "hyg": {
-          "close": 79.51,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -2.06,
-          "one_month_percent": -0.01,
-          "three_month_percent": -0.59,
-          "vs_200dma_percent": -0.87,
-          "vs_50dma_percent": -0.2,
-          "ytd_percent": -1.44
+          "close": 79.79,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -1.71,
+          "one_month_percent": 0.34,
+          "three_month_percent": -0.24,
+          "vs_200dma_percent": -0.52,
+          "vs_50dma_percent": 0.15,
+          "ytd_percent": -1.09
         },
         "iwm": {
-          "close": 300.99,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -0.24,
-          "one_month_percent": 2.56,
-          "three_month_percent": 5.49,
-          "vs_200dma_percent": 12.42,
-          "vs_50dma_percent": 2.29,
-          "ytd_percent": 20.99
+          "close": 303.5,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": 0.0,
+          "one_month_percent": 2.61,
+          "three_month_percent": 7.37,
+          "vs_200dma_percent": 13.13,
+          "vs_50dma_percent": 2.97,
+          "ytd_percent": 22.0
         },
         "qqq": {
-          "close": 718.45,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -3.71,
-          "one_month_percent": 0.94,
-          "three_month_percent": 0.72,
-          "vs_200dma_percent": 10.71,
-          "vs_50dma_percent": 0.64,
-          "ytd_percent": 17.18
+          "close": 732.07,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -1.89,
+          "one_month_percent": 2.0,
+          "three_month_percent": 2.43,
+          "vs_200dma_percent": 12.61,
+          "vs_50dma_percent": 2.64,
+          "ytd_percent": 19.4
         },
         "rsp": {
-          "close": 220.69,
-          "date": "2026-08-11",
+          "close": 222.73,
+          "date": "2026-08-13",
           "from_ytd_high_percent": 0.0,
-          "one_month_percent": 3.37,
-          "three_month_percent": 8.43,
-          "vs_200dma_percent": 10.08,
-          "vs_50dma_percent": 3.63,
-          "ytd_percent": 14.43
+          "one_month_percent": 3.97,
+          "three_month_percent": 9.19,
+          "vs_200dma_percent": 10.92,
+          "vs_50dma_percent": 4.32,
+          "ytd_percent": 15.49
         },
         "smh": {
-          "close": 572.93,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -14.35,
-          "one_month_percent": -2.17,
-          "three_month_percent": -0.59,
-          "vs_200dma_percent": 24.96,
-          "vs_50dma_percent": -3.52,
-          "ytd_percent": 53.48
+          "close": 589.12,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -11.93,
+          "one_month_percent": -0.28,
+          "three_month_percent": 2.91,
+          "vs_200dma_percent": 27.82,
+          "vs_50dma_percent": -0.57,
+          "ytd_percent": 57.81
         },
         "spy": {
-          "close": 770.56,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -0.35,
-          "one_month_percent": 2.86,
-          "three_month_percent": 4.23,
-          "vs_200dma_percent": 9.46,
-          "vs_50dma_percent": 3.04,
-          "ytd_percent": 12.79
+          "close": 777.88,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": 0.0,
+          "one_month_percent": 3.06,
+          "three_month_percent": 4.79,
+          "vs_200dma_percent": 10.34,
+          "vs_50dma_percent": 3.93,
+          "ytd_percent": 13.86
         },
         "tlt": {
-          "close": 82.19,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -9.5,
-          "one_month_percent": -2.12,
-          "three_month_percent": -3.94,
-          "vs_200dma_percent": -5.47,
-          "vs_50dma_percent": -2.91,
-          "ytd_percent": -5.56
+          "close": 82.59,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -9.06,
+          "one_month_percent": -1.96,
+          "three_month_percent": -2.61,
+          "vs_200dma_percent": -4.91,
+          "vs_50dma_percent": -2.29,
+          "ytd_percent": -5.1
         },
         "xlp": {
-          "close": 84.69,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -5.91,
-          "one_month_percent": 0.12,
-          "three_month_percent": 1.58,
-          "vs_200dma_percent": 2.58,
-          "vs_50dma_percent": 0.4,
-          "ytd_percent": 9.01
+          "close": 86.0,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -4.46,
+          "one_month_percent": 3.03,
+          "three_month_percent": 1.51,
+          "vs_200dma_percent": 4.09,
+          "vs_50dma_percent": 1.78,
+          "ytd_percent": 10.7
         },
         "xly": {
-          "close": 119.24,
-          "date": "2026-08-11",
-          "from_ytd_high_percent": -4.24,
-          "one_month_percent": 2.76,
-          "three_month_percent": -0.11,
-          "vs_200dma_percent": 1.81,
-          "vs_50dma_percent": 2.85,
-          "ytd_percent": 0.75
+          "close": 118.45,
+          "date": "2026-08-13",
+          "from_ytd_high_percent": -4.87,
+          "one_month_percent": 1.24,
+          "three_month_percent": -0.23,
+          "vs_200dma_percent": 1.14,
+          "vs_50dma_percent": 2.16,
+          "ytd_percent": 0.08
         }
       },
       "relative_strength": {
-        "hyg_tlt_1m_percent": 2.15,
-        "iwm_spy_3m_percent": 1.22,
-        "rsp_spy_1m_percent": 0.85,
-        "xly_xlp_3m_percent": -1.66
+        "hyg_tlt_1m_percent": 2.02,
+        "iwm_spy_3m_percent": 2.47,
+        "rsp_spy_1m_percent": 0.1,
+        "xly_xlp_3m_percent": -1.71
       }
     },
     "pillars": [
       {
-        "detail": "SPY +9.5%, QQQ +10.7%, and IWM +12.4% versus their 200-day averages.",
+        "detail": "SPY +10.3%, QQQ +12.6%, and IWM +13.1% versus their 200-day averages.",
         "name": "Trend",
         "signal": "risk_on"
       },
       {
-        "detail": "RSP/SPY is +0.8% over one month; IWM/SPY is +1.2% over three months.",
+        "detail": "RSP/SPY is +0.1% over one month; IWM/SPY is +2.5% over three months.",
         "name": "Breadth",
         "signal": "risk_on"
       },
       {
-        "detail": "High-yield OAS is 2.70%; HYG/TLT is +2.1% over one month.",
+        "detail": "High-yield OAS is 2.71%; HYG/TLT is +2.0% over one month.",
         "name": "Credit",
         "signal": "risk_on"
       },
       {
-        "detail": "SPY is +3.0% and QQQ +0.6% versus 50-day averages; SMH is -14.3% from its YTD high.",
+        "detail": "SPY is +3.9% and QQQ +2.6% versus 50-day averages; SMH is -11.9% from its YTD high.",
         "name": "Momentum",
         "signal": "neutral"
       },
       {
-        "detail": "The 10-year yield is 4.72% (+16 bp over about one month); XLY/XLP is -1.7% over three months.",
+        "detail": "The 10-year yield is 4.68% (+10 bp over about one month); XLY/XLP is -1.7% over three months.",
         "name": "Rates / cyclicals",
         "signal": "neutral"
       }
     ],
     "rating": 6,
     "source_dates": {
-      "cboe_curve": "2026-08-11",
-      "dgs10": "2026-08-10",
-      "hy_oas": "2026-08-10",
-      "yahoo": "2026-08-11"
+      "cboe_curve": "2026-08-13",
+      "dgs10": "2026-08-12",
+      "hy_oas": "2026-08-12",
+      "yahoo": "2026-08-13"
     },
     "why": [
-      "SPY +9.5%, QQQ +10.7%, and IWM +12.4% versus their 200-day averages.",
-      "RSP/SPY is +0.8% over one month; IWM/SPY is +1.2% over three months.",
-      "High-yield OAS is 2.70%; HYG/TLT is +2.1% over one month.",
-      "SPY is +3.0% and QQQ +0.6% versus 50-day averages; SMH is -14.3% from its YTD high.",
-      "The 10-year yield is 4.72% (+16 bp over about one month); XLY/XLP is -1.7% over three months."
+      "SPY +10.3%, QQQ +12.6%, and IWM +13.1% versus their 200-day averages.",
+      "RSP/SPY is +0.1% over one month; IWM/SPY is +2.5% over three months.",
+      "High-yield OAS is 2.71%; HYG/TLT is +2.0% over one month.",
+      "SPY is +3.9% and QQQ +2.6% versus 50-day averages; SMH is -11.9% from its YTD high.",
+      "The 10-year yield is 4.68% (+10 bp over about one month); XLY/XLP is -1.7% over three months."
     ]
   },
   "method": "The Conditions Score uses trailing three-year empirical percentiles, a constant-maturity 30-to-60-day VIX futures slope where a positive slope means contango, lagged credit, and zero weight for stale inputs. It is a falsifiable conditions heuristic, not a calibrated probability or trading signal.",
   "model_status": {
     "endpoints_passed": 0,
     "endpoints_total": 4,
-    "evaluation_digest": "0fc6aad9ee4f",
+    "evaluation_digest": "4216b136bc6a",
     "evaluation_url": "/trading/risk-evaluation.json",
     "live_probabilities": null,
     "message": "Fitted probabilities are withheld because at least one frozen endpoint failed the persistence gauntlet.",
@@ -20776,9 +20810,9 @@
     "scores": [
       {
         "best_baseline": "vix_percentile",
-        "best_baseline_brier": 0.13515031,
+        "best_baseline_brier": 0.13514167,
         "horizon": 21,
-        "model_brier": 0.13296978,
+        "model_brier": 0.13295645,
         "passed": false,
         "target": "vix_above_25"
       },
@@ -20792,9 +20826,9 @@
       },
       {
         "best_baseline": "unconditional",
-        "best_baseline_brier": 0.1127342,
+        "best_baseline_brier": 0.11273358,
         "horizon": 21,
-        "model_brier": 0.11409029,
+        "model_brier": 0.11409243,
         "passed": false,
         "target": "spy_drawdown_5"
       },
@@ -20811,7 +20845,7 @@
   },
   "period": "YTD",
   "scanner_policy": {
-    "as_of": "2026-08-11",
+    "as_of": "2026-08-13",
     "elevated_action": "gate",
     "elevated_hard_gate_enabled": true,
     "evidence": [
@@ -20864,7 +20898,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 22.35,
+        "risk_percentile": 15.87,
         "stale": false
       },
       "hy_oas": {
@@ -20873,7 +20907,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 8.86,
+        "risk_percentile": 10.12,
         "stale": false
       },
       "move": {
@@ -20891,7 +20925,7 @@
         "points": 0.0,
         "raw_maximum": 10,
         "raw_points": 0.0,
-        "risk_percentile": 11.44,
+        "risk_percentile": 9.26,
         "stale": false
       },
       "vvix": {
@@ -20900,7 +20934,7 @@
         "points": 0.0,
         "raw_maximum": 25,
         "raw_points": 0.0,
-        "risk_percentile": 35.32,
+        "risk_percentile": 29.89,
         "stale": false
       }
     },
@@ -22679,6 +22713,30 @@
         "slope_percent": 7.1464,
         "spread": 1.6412,
         "spread_percent": 9.776
+      },
+      {
+        "cm30": 17.6211,
+        "cm60": 19.0617,
+        "date": "2026-08-12",
+        "m1": 16.0226,
+        "m1_expiration": "2026-08-19",
+        "m2": 17.9686,
+        "m2_expiration": "2026-09-16",
+        "slope_percent": 8.1754,
+        "spread": 1.946,
+        "spread_percent": 12.145
+      },
+      {
+        "cm30": 17.8126,
+        "cm60": 19.2168,
+        "date": "2026-08-13",
+        "m1": 16.001,
+        "m1_expiration": "2026-08-19",
+        "m2": 18.1145,
+        "m2_expiration": "2026-09-16",
+        "slope_percent": 7.8832,
+        "spread": 2.1135,
+        "spread_percent": 13.209
       }
     ],
     "hy_oas": [
@@ -23321,6 +23379,14 @@
       {
         "date": "2026-08-10",
         "value": 2.7
+      },
+      {
+        "date": "2026-08-11",
+        "value": 2.72
+      },
+      {
+        "date": "2026-08-12",
+        "value": 2.71
       }
     ],
     "move": [
@@ -24411,14 +24477,6 @@
         "value": 146.05
       },
       {
-        "date": "2026-07-21",
-        "value": 151.66
-      },
-      {
-        "date": "2026-07-22",
-        "value": 150.19
-      },
-      {
         "date": "2026-07-23",
         "value": 145.95
       },
@@ -24441,10 +24499,6 @@
       {
         "date": "2026-07-30",
         "value": 139.9
-      },
-      {
-        "date": "2026-07-31",
-        "value": 141.23
       },
       {
         "date": "2026-08-03",
@@ -24473,6 +24527,14 @@
       {
         "date": "2026-08-11",
         "value": 135.59
+      },
+      {
+        "date": "2026-08-12",
+        "value": 136.54
+      },
+      {
+        "date": "2026-08-13",
+        "value": 134.37
       }
     ],
     "vix": [
@@ -25025,6 +25087,14 @@
         "value": 18.65
       },
       {
+        "date": "2026-07-21",
+        "value": 17.05
+      },
+      {
+        "date": "2026-07-22",
+        "value": 16.64
+      },
+      {
         "date": "2026-07-23",
         "value": 18.7
       },
@@ -25047,6 +25117,10 @@
       {
         "date": "2026-07-30",
         "value": 17.09
+      },
+      {
+        "date": "2026-07-31",
+        "value": 15.99
       },
       {
         "date": "2026-08-03",
@@ -25075,6 +25149,14 @@
       {
         "date": "2026-08-11",
         "value": 15.28
+      },
+      {
+        "date": "2026-08-12",
+        "value": 14.55
+      },
+      {
+        "date": "2026-08-13",
+        "value": 14.63
       }
     ],
     "vix9d_vix": [
@@ -25621,8 +25703,544 @@
     ],
     "vix_vix3m": [
       {
-        "date": "2026-08-11",
-        "value": 0.808
+        "date": "2026-01-02",
+        "value": 0.8052
+      },
+      {
+        "date": "2026-01-05",
+        "value": 0.8133
+      },
+      {
+        "date": "2026-01-06",
+        "value": 0.8127
+      },
+      {
+        "date": "2026-01-07",
+        "value": 0.8273
+      },
+      {
+        "date": "2026-01-08",
+        "value": 0.8401
+      },
+      {
+        "date": "2026-01-09",
+        "value": 0.8104
+      },
+      {
+        "date": "2026-01-12",
+        "value": 0.8294
+      },
+      {
+        "date": "2026-01-13",
+        "value": 0.8477
+      },
+      {
+        "date": "2026-01-14",
+        "value": 0.8647
+      },
+      {
+        "date": "2026-01-15",
+        "value": 0.8381
+      },
+      {
+        "date": "2026-01-16",
+        "value": 0.8352
+      },
+      {
+        "date": "2026-01-20",
+        "value": 0.9441
+      },
+      {
+        "date": "2026-01-21",
+        "value": 0.8729
+      },
+      {
+        "date": "2026-01-22",
+        "value": 0.8341
+      },
+      {
+        "date": "2026-01-23",
+        "value": 0.8402
+      },
+      {
+        "date": "2026-01-26",
+        "value": 0.8469
+      },
+      {
+        "date": "2026-01-27",
+        "value": 0.8507
+      },
+      {
+        "date": "2026-01-28",
+        "value": 0.8472
+      },
+      {
+        "date": "2026-01-29",
+        "value": 0.8582
+      },
+      {
+        "date": "2026-01-30",
+        "value": 0.869
+      },
+      {
+        "date": "2026-02-02",
+        "value": 0.8436
+      },
+      {
+        "date": "2026-02-03",
+        "value": 0.8845
+      },
+      {
+        "date": "2026-02-04",
+        "value": 0.904
+      },
+      {
+        "date": "2026-02-05",
+        "value": 0.9697
+      },
+      {
+        "date": "2026-02-06",
+        "value": 1.0
+      },
+      {
+        "date": "2026-02-09",
+        "value": 0.8641
+      },
+      {
+        "date": "2026-02-10",
+        "value": 0.8708
+      },
+      {
+        "date": "2026-02-11",
+        "value": 0.8665
+      },
+      {
+        "date": "2026-02-12",
+        "value": 0.9391
+      },
+      {
+        "date": "2026-02-13",
+        "value": 0.9292
+      },
+      {
+        "date": "2026-02-17",
+        "value": 0.9394
+      },
+      {
+        "date": "2026-02-18",
+        "value": 0.9173
+      },
+      {
+        "date": "2026-02-19",
+        "value": 0.9246
+      },
+      {
+        "date": "2026-02-20",
+        "value": 0.9052
+      },
+      {
+        "date": "2026-02-23",
+        "value": 0.949
+      },
+      {
+        "date": "2026-02-24",
+        "value": 0.9161
+      },
+      {
+        "date": "2026-02-25",
+        "value": 0.8806
+      },
+      {
+        "date": "2026-02-26",
+        "value": 0.8952
+      },
+      {
+        "date": "2026-02-27",
+        "value": 0.9212
+      },
+      {
+        "date": "2026-03-02",
+        "value": 0.9554
+      },
+      {
+        "date": "2026-03-03",
+        "value": 1.0013
+      },
+      {
+        "date": "2026-03-04",
+        "value": 0.9489
+      },
+      {
+        "date": "2026-03-05",
+        "value": 0.9954
+      },
+      {
+        "date": "2026-03-06",
+        "value": 1.07
+      },
+      {
+        "date": "2026-03-09",
+        "value": 1.0063
+      },
+      {
+        "date": "2026-03-10",
+        "value": 0.9773
+      },
+      {
+        "date": "2026-03-11",
+        "value": 0.9704
+      },
+      {
+        "date": "2026-03-12",
+        "value": 1.0126
+      },
+      {
+        "date": "2026-03-13",
+        "value": 0.9967
+      },
+      {
+        "date": "2026-03-16",
+        "value": 0.9434
+      },
+      {
+        "date": "2026-03-17",
+        "value": 0.9194
+      },
+      {
+        "date": "2026-03-18",
+        "value": 0.9447
+      },
+      {
+        "date": "2026-03-19",
+        "value": 0.9421
+      },
+      {
+        "date": "2026-03-20",
+        "value": 0.9763
+      },
+      {
+        "date": "2026-03-23",
+        "value": 1.0019
+      },
+      {
+        "date": "2026-03-24",
+        "value": 1.0147
+      },
+      {
+        "date": "2026-03-25",
+        "value": 0.9883
+      },
+      {
+        "date": "2026-03-26",
+        "value": 1.0103
+      },
+      {
+        "date": "2026-03-27",
+        "value": 1.0608
+      },
+      {
+        "date": "2026-03-30",
+        "value": 1.0508
+      },
+      {
+        "date": "2026-03-31",
+        "value": 0.9883
+      },
+      {
+        "date": "2026-04-01",
+        "value": 0.9871
+      },
+      {
+        "date": "2026-04-02",
+        "value": 0.9656
+      },
+      {
+        "date": "2026-04-06",
+        "value": 0.9758
+      },
+      {
+        "date": "2026-04-07",
+        "value": 1.0082
+      },
+      {
+        "date": "2026-04-08",
+        "value": 0.9277
+      },
+      {
+        "date": "2026-04-09",
+        "value": 0.8936
+      },
+      {
+        "date": "2026-04-10",
+        "value": 0.8797
+      },
+      {
+        "date": "2026-04-13",
+        "value": 0.896
+      },
+      {
+        "date": "2026-04-14",
+        "value": 0.8818
+      },
+      {
+        "date": "2026-04-15",
+        "value": 0.8744
+      },
+      {
+        "date": "2026-04-16",
+        "value": 0.8637
+      },
+      {
+        "date": "2026-04-17",
+        "value": 0.8523
+      },
+      {
+        "date": "2026-04-20",
+        "value": 0.8884
+      },
+      {
+        "date": "2026-04-21",
+        "value": 0.9066
+      },
+      {
+        "date": "2026-04-22",
+        "value": 0.8908
+      },
+      {
+        "date": "2026-04-23",
+        "value": 0.899
+      },
+      {
+        "date": "2026-04-24",
+        "value": 0.8784
+      },
+      {
+        "date": "2026-04-27",
+        "value": 0.8676
+      },
+      {
+        "date": "2026-04-28",
+        "value": 0.8702
+      },
+      {
+        "date": "2026-04-29",
+        "value": 0.8877
+      },
+      {
+        "date": "2026-04-30",
+        "value": 0.8411
+      },
+      {
+        "date": "2026-05-01",
+        "value": 0.8341
+      },
+      {
+        "date": "2026-05-04",
+        "value": 0.8689
+      },
+      {
+        "date": "2026-05-05",
+        "value": 0.8348
+      },
+      {
+        "date": "2026-05-06",
+        "value": 0.8454
+      },
+      {
+        "date": "2026-05-07",
+        "value": 0.8393
+      },
+      {
+        "date": "2026-05-08",
+        "value": 0.8385
+      },
+      {
+        "date": "2026-05-11",
+        "value": 0.8653
+      },
+      {
+        "date": "2026-05-12",
+        "value": 0.855
+      },
+      {
+        "date": "2026-05-13",
+        "value": 0.8437
+      },
+      {
+        "date": "2026-05-14",
+        "value": 0.8278
+      },
+      {
+        "date": "2026-05-15",
+        "value": 0.8628
+      },
+      {
+        "date": "2026-05-18",
+        "value": 0.8518
+      },
+      {
+        "date": "2026-05-19",
+        "value": 0.8551
+      },
+      {
+        "date": "2026-05-20",
+        "value": 0.8401
+      },
+      {
+        "date": "2026-05-21",
+        "value": 0.838
+      },
+      {
+        "date": "2026-05-22",
+        "value": 0.8337
+      },
+      {
+        "date": "2026-05-26",
+        "value": 0.8552
+      },
+      {
+        "date": "2026-05-27",
+        "value": 0.8375
+      },
+      {
+        "date": "2026-05-28",
+        "value": 0.8237
+      },
+      {
+        "date": "2026-05-29",
+        "value": 0.821
+      },
+      {
+        "date": "2026-06-01",
+        "value": 0.826
+      },
+      {
+        "date": "2026-06-02",
+        "value": 0.8091
+      },
+      {
+        "date": "2026-06-03",
+        "value": 0.8128
+      },
+      {
+        "date": "2026-06-04",
+        "value": 0.8008
+      },
+      {
+        "date": "2026-06-05",
+        "value": 0.9858
+      },
+      {
+        "date": "2026-06-08",
+        "value": 0.9101
+      },
+      {
+        "date": "2026-06-09",
+        "value": 0.9324
+      },
+      {
+        "date": "2026-06-10",
+        "value": 0.9707
+      },
+      {
+        "date": "2026-06-11",
+        "value": 0.9076
+      },
+      {
+        "date": "2026-06-12",
+        "value": 0.862
+      },
+      {
+        "date": "2026-06-15",
+        "value": 0.8368
+      },
+      {
+        "date": "2026-06-16",
+        "value": 0.8402
+      },
+      {
+        "date": "2026-06-17",
+        "value": 0.8943
+      },
+      {
+        "date": "2026-06-18",
+        "value": 0.838
+      },
+      {
+        "date": "2026-06-22",
+        "value": 0.8745
+      },
+      {
+        "date": "2026-06-23",
+        "value": 0.9255
+      },
+      {
+        "date": "2026-06-24",
+        "value": 0.9146
+      },
+      {
+        "date": "2026-06-25",
+        "value": 0.9292
+      },
+      {
+        "date": "2026-06-26",
+        "value": 0.9146
+      },
+      {
+        "date": "2026-06-29",
+        "value": 0.9037
+      },
+      {
+        "date": "2026-06-30",
+        "value": 0.8658
+      },
+      {
+        "date": "2026-07-01",
+        "value": 0.8659
+      },
+      {
+        "date": "2026-07-02",
+        "value": 0.8482
+      },
+      {
+        "date": "2026-07-06",
+        "value": 0.8291
+      },
+      {
+        "date": "2026-07-07",
+        "value": 0.8485
+      },
+      {
+        "date": "2026-07-08",
+        "value": 0.8684
+      },
+      {
+        "date": "2026-07-09",
+        "value": 0.8341
+      },
+      {
+        "date": "2026-07-10",
+        "value": 0.8094
+      },
+      {
+        "date": "2026-07-13",
+        "value": 0.8737
+      },
+      {
+        "date": "2026-07-14",
+        "value": 0.8549
+      },
+      {
+        "date": "2026-07-15",
+        "value": 0.8287
+      },
+      {
+        "date": "2026-07-16",
+        "value": 0.8579
+      },
+      {
+        "date": "2026-07-17",
+        "value": 0.9138
       }
     ],
     "vvix": [
@@ -26171,6 +26789,14 @@
         "value": 102.82
       },
       {
+        "date": "2026-07-21",
+        "value": 96.34
+      },
+      {
+        "date": "2026-07-22",
+        "value": 95.55
+      },
+      {
         "date": "2026-07-23",
         "value": 102.17
       },
@@ -26193,6 +26819,10 @@
       {
         "date": "2026-07-30",
         "value": 94.66
+      },
+      {
+        "date": "2026-07-31",
+        "value": 91.64
       },
       {
         "date": "2026-08-03",
@@ -26221,6 +26851,14 @@
       {
         "date": "2026-08-11",
         "value": 90.9
+      },
+      {
+        "date": "2026-08-12",
+        "value": 88.5
+      },
+      {
+        "date": "2026-08-13",
+        "value": 89.42
       }
     ]
   },
