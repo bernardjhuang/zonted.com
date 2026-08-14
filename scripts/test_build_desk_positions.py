@@ -192,6 +192,24 @@ class DeskPositionBuilderTests(unittest.TestCase):
             self.assertEqual(charts[symbol]["sector_etf"], sector_etf)
             self.assertEqual(charts[symbol]["series"]["dates"][-1], "2026-08-13")
 
+    def test_aaon_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        self.assertEqual(profiles["AAON"]["flair"], "thesis")
+        self.assertEqual(profiles["AAON"]["sector"], "Industrials")
+        self.assertEqual(profiles["AAON"]["sector_etf"], "XLI")
+        self.assertIn('id="hypothesis-aaon-setup"', source)
+        self.assertIn('data-desk-catalyst="2026-11-05" data-desk-catalyst-name="Est. Q3 earnings"', source)
+        self.assertIn("AAON has not confirmed the 2026 date", source)
+        self.assertEqual(valuations["AAON"]["entry_levels"], {"bear": 71.77, "base": 87.67, "bull": 148.15})
+        self.assertEqual(universe["AAON"]["sector"], "Industrials")
+        self.assertEqual(charts["AAON"]["sector_etf"], "XLI")
+        self.assertEqual(charts["AAON"]["series"]["dates"][-1], "2026-08-13")
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
