@@ -1,18 +1,18 @@
 {
   "schema_version": 3,
   "risk_summary": {
-    "gross_delta_leverage": 0.42,
-    "net_delta_exposure_percent": 42.5,
-    "premium_at_risk_percent": 4.9,
-    "theta_percent_per_day": -0.01,
-    "cash_percent": 64.0,
+    "gross_delta_leverage": 0.24,
+    "net_delta_exposure_percent": 24.4,
+    "premium_at_risk_percent": 4.6,
+    "theta_percent_per_day": -0.0,
+    "cash_percent": 78.7,
     "quantity_basis": "gross held positions; pending orders not netted"
   },
   "sleeves": {
     "thesis": {
-      "capital_percent": 36.0,
-      "exposure_percent": 42.6,
-      "premium_at_risk_percent": 4.8
+      "capital_percent": 21.3,
+      "exposure_percent": 24.3,
+      "premium_at_risk_percent": 4.6
     },
     "momentum": {
       "capital_percent": 0.0,
@@ -22,48 +22,14 @@
   },
   "positions": [
     {
-      "symbol": "WAY",
-      "instrument": "Equity · Jan 2027 $25 call",
-      "exposure_percent": 12.7,
-      "capital_percent": 11.7,
-      "premium_at_risk_percent": 0.3,
-      "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 55.1,
-      "delta_used": 0.5794,
-      "min_dte": 154,
-      "unstable_delta": false,
-      "kill": null,
-      "flair": "thesis",
-      "sector": "Health Care",
-      "sector_etf": "XLV",
-      "thesis": "Waystar is a healthcare-payment software compounder: subscription growth, 108% retention, and 43% adjusted EBITDA margin must keep converting provider complexity into recurring cash flow without acquisition or leverage drag."
-    },
-    {
-      "symbol": "BRBR",
-      "instrument": "Equity · Jan 2028 $12.5 call",
-      "exposure_percent": 11.9,
-      "capital_percent": 10.9,
-      "premium_at_risk_percent": 1.0,
-      "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 81.0,
-      "delta_used": 0.6547,
-      "min_dte": 525,
-      "unstable_delta": false,
-      "kill": null,
-      "flair": "thesis",
-      "sector": "Consumer Staples",
-      "sector_etf": "XLP",
-      "thesis": "Legacy Robinhood protein holding. The GLP-1 muscle-preservation theme does not currently provide a clean BRBR-specific public-equity expression; retain it transparently while brand-level volume, pricing, and margin evidence either creates a direct thesis or invalidates it."
-    },
-    {
       "symbol": "FRMI",
       "instrument": "Equity · Dec 2028 $10 call",
-      "exposure_percent": 10.0,
-      "capital_percent": 8.7,
-      "premium_at_risk_percent": 2.8,
+      "exposure_percent": 7.4,
+      "capital_percent": 6.3,
+      "premium_at_risk_percent": 3.3,
       "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 102.4,
-      "delta_used": 0.7111,
+      "implied_volatility_percent": 115.4,
+      "delta_used": 0.7535,
       "min_dte": 854,
       "unstable_delta": false,
       "kill": null,
@@ -73,10 +39,44 @@
       "thesis": "A development-stage bet on Project Matador becoming a scarce, gigawatt-scale powered AI campus. Commercial agreements and funded delivery—not headline capacity—must validate it."
     },
     {
+      "symbol": "BRBR",
+      "instrument": "Equity · Jan 2028 $12.5 call",
+      "exposure_percent": 6.9,
+      "capital_percent": 6.0,
+      "premium_at_risk_percent": 1.0,
+      "theta_percent_per_day": -0.0,
+      "implied_volatility_percent": 79.1,
+      "delta_used": 0.6464,
+      "min_dte": 525,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "thesis",
+      "sector": "Consumer Staples",
+      "sector_etf": "XLP",
+      "thesis": "Legacy Robinhood protein holding. The GLP-1 muscle-preservation theme does not currently provide a clean BRBR-specific public-equity expression; retain it transparently while brand-level volume, pricing, and margin evidence either creates a direct thesis or invalidates it."
+    },
+    {
+      "symbol": "WAY",
+      "instrument": "Equity · Jan 2027 $25 call",
+      "exposure_percent": 5.9,
+      "capital_percent": 4.9,
+      "premium_at_risk_percent": 0.3,
+      "theta_percent_per_day": -0.0,
+      "implied_volatility_percent": 53.4,
+      "delta_used": 0.5779,
+      "min_dte": 154,
+      "unstable_delta": false,
+      "kill": null,
+      "flair": "thesis",
+      "sector": "Health Care",
+      "sector_etf": "XLV",
+      "thesis": "Waystar is a healthcare-payment software compounder: subscription growth, 108% retention, and 43% adjusted EBITDA margin must keep converting provider complexity into recurring cash flow without acquisition or leverage drag."
+    },
+    {
       "symbol": "AAON",
       "instrument": "Equity",
-      "exposure_percent": 4.0,
-      "capital_percent": 4.0,
+      "exposure_percent": 4.1,
+      "capital_percent": 4.1,
       "premium_at_risk_percent": 0.0,
       "theta_percent_per_day": 0.0,
       "implied_volatility_percent": null,
@@ -88,23 +88,6 @@
       "sector": "Industrials",
       "sector_etf": "XLI",
       "thesis": "AAON is a data-center cooling and custom HVAC capacity-ramp position. Record BASX demand and a $2.0 billion backlog must convert into revenue, improving gross margin, and cash generation faster than Memphis overhead, outsourcing, and working-capital needs consume the upside."
-    },
-    {
-      "symbol": "MOS",
-      "instrument": "Equity · Jan 2027 $25 call",
-      "exposure_percent": 4.0,
-      "capital_percent": 0.7,
-      "premium_at_risk_percent": 0.7,
-      "theta_percent_per_day": -0.0,
-      "implied_volatility_percent": 43.9,
-      "delta_used": 0.3956,
-      "min_dte": 154,
-      "unstable_delta": false,
-      "kill": null,
-      "flair": "thesis",
-      "sector": "Materials",
-      "sector_etf": "XLB",
-      "thesis": "Mosaic is a fertilizer-cycle recovery position, not a clean momentum trade. Q2 still showed a $273 million net loss and sulfur-cost pressure despite $407 million of adjusted EBITDA; reduced phosphate output, lower costs, and $1.2 billion capex guidance must translate into better cash generation before conviction rises."
     }
   ]
 }
