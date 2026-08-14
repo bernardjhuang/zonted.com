@@ -1,6 +1,6 @@
 {
-  "asof": "2026-08-13T15:15:41.279230-05:00",
-  "journal_date": "2026-08-13",
+  "asof": "2026-08-14T15:15:45.138409-05:00",
+  "journal_date": "2026-08-14",
   "title": "Autonomous Psy \u2014 Paper Fund II",
   "mandate": "Psy paper trading lab \u2014 edge + learning. Privacy-safe public surface.",
   "orders_enabled": false,
@@ -11,48 +11,54 @@
   "open_positions": 0,
   "fills_count": 0,
   "regime": {
-    "asof": "2026-08-13T07:30:05.888896-05:00",
+    "asof": "2026-08-14T07:44:38.273305-05:00",
     "label": "unknown_pending_full_classifier",
     "notes": "premarket: engines + shadow emission"
   },
   "engines": [
     {
       "engine": "A",
-      "n": 50,
+      "n": 60,
       "taken": 0
     },
     {
       "engine": "B",
-      "n": 60,
+      "n": 72,
       "taken": 1
     },
     {
       "engine": "C",
-      "n": 40,
-      "taken": 13
+      "n": 48,
+      "taken": 15
     },
     {
       "engine": "D",
-      "n": 35,
+      "n": 42,
       "taken": 0
     },
     {
       "engine": "E",
-      "n": 25,
+      "n": 30,
       "taken": 0
     },
     {
       "engine": "F",
-      "n": 10,
+      "n": 12,
       "taken": 0
     },
     {
       "engine": "G",
-      "n": 21,
+      "n": 26,
       "taken": 0
     }
   ],
   "expectancy": [
+    {
+      "engine": "A",
+      "avg_optimistic_r": -1.0,
+      "avg_realistic_r": -1.7841632240642378,
+      "n": 1
+    },
     {
       "engine": "D",
       "avg_optimistic_r": -1.0,
@@ -61,22 +67,22 @@
     }
   ],
   "obs_counts": {
-    "falsified": 1,
-    "not_triggered": 2,
-    "pending": 307,
+    "falsified": 2,
+    "not_triggered": 3,
+    "pending": 371,
     "unresolved": 8
   },
   "notes": [
-    "resolve={'resolved_or_updated': 0, 'pending_seen': 75, 'confirmed': 0, 'falsified': 0, 'not_triggered': 0}",
+    "resolve={'resolved_or_updated': 0, 'pending_seen': 91, 'confirmed': 0, 'falsified': 0, 'not_triggered': 0}",
     "orders_enabled=False",
     "phase2 scaffold eod"
   ],
   "decision": "NO_TRADE",
-  "headline": "2026-08-13 post-close: measurement day only \u2014 orders_enabled stayed false, so the book logged shadows and process metrics without paper fills.",
+  "headline": "2026-08-14 post-close: measurement day only \u2014 orders_enabled stayed false, so the book logged shadows and process metrics without paper fills.",
   "thoughts": [
-    "Shadow ledger cumulative non-control observations: 241 across engines; taken flags: 14.",
-    "Status mix: {\"falsified\": 1, \"not_triggered\": 2, \"pending\": 307, \"unresolved\": 8}. Pending is expected early \u2014 silence is not a win rate.",
-    "Resolved expectancy rows available: 1. Learn floors still require n\u226520 realistic R per family before weight changes.",
+    "Shadow ledger cumulative non-control observations: 290 across engines; taken flags: 16.",
+    "Status mix: {\"falsified\": 2, \"not_triggered\": 3, \"pending\": 371, \"unresolved\": 8}. Pending is expected early \u2014 silence is not a win rate.",
+    "Resolved expectancy rows available: 2. Learn floors still require n\u226520 realistic R per family before weight changes.",
     "orders_enabled=false for the session. Risk code and open phase still ran in dry-run; no paper fills can exist until the flag flips under the Mon checklist.",
     "Premarket/open candidate freeze for the day: 49 evaluated intents.",
     "Regime label: unknown_pending_full_classifier (premarket: engines + shadow emission).",
