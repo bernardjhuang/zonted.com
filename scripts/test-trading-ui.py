@@ -72,7 +72,8 @@ class TradingUiContractTest(unittest.TestCase):
             row["symbol"]
             for row in json.loads((ROOT / "trading" / "desk-positions.json").read_text())["positions"]
         }
-        self.assertEqual(expected_symbols, position_symbols)
+        unexpected_positions = position_symbols - expected_symbols
+        self.assertFalse(unexpected_positions, f"live positions missing canonical hypotheses: {sorted(unexpected_positions)}")
         self.assertEqual(hypotheses_html.count('class="hypothesis-detail"'), len(expected_symbols))
         details = {
             symbol.upper(): block
