@@ -20,31 +20,31 @@
     {
      "name": "Vol level",
      "rule": "VIX <16 / 16\u201320 / >20",
-     "value": "14.63 \u00b7 Cboe official Aug 13 close \u2014 the site feed is still frozen at Aug 11's 15.28, a fourth day without a refresh; sub-16 on either vintage and the lowest print since the June drawdown",
+     "value": "14.63 \u00b7 Cboe official Aug 13 close, and the site feed refreshed to the same number mid-run (PR #366, as_of Aug 13) after four days frozen at 15.28 \u2014 the lowest print since the June drawdown",
      "score": 1
     },
     {
      "name": "Vol curve",
      "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
-     "value": "+2.11 (Sep 18.11, Aug 16.00) \u00b7 Cboe VX settlement files, Aug 13 \u2014 steeper than the Aug 11 feed's +1.64 because the front dropped 0.79 while Sep barely moved; five days to Aug expiry",
+     "value": "+2.11 (Sep 18.11, Aug 16.00) \u00b7 Cboe VX settlement files, Aug 13, matched by the refreshed site feed at +2.1135 \u2014 steeper than Tuesday's +1.64 because the front dropped 0.79 while Sep barely moved; five days to Aug expiry",
      "score": 1
     },
     {
      "name": "Vol-of-vol",
      "rule": "VVIX <95 / 95\u2013110 / >110",
-     "value": "89.42 \u00b7 Cboe Aug 13 close; feed still says 90.9 from Aug 11 \u2014 under 95 on both, and the tail bid has not woken up for Hormuz",
+     "value": "89.42 \u00b7 Cboe Aug 13 close, feed now agrees \u2014 under 95, and the tail bid has not woken up for Hormuz",
      "score": 1
     },
     {
      "name": "Rates vol",
      "rule": "MOVE <80 / 80\u2013100 / >100",
-     "value": "frozen at Jul 17's 70.88, now 20 sessions stale \u2192 0 by rule; the level itself would score +1. Yahoo returned 429 on both hosts again and Cboe carries no MOVE \u2014 third straight day with no reachable source",
+     "value": "frozen at Jul 17's 70.88, 19 sessions stale and still flagged stale in the refreshed feed \u2192 0 by rule; the level itself would score +1. Yahoo's ^MOVE history genuinely ends Jul 17 and Cboe carries no MOVE, so there is nothing newer to read",
      "score": 0
     },
     {
      "name": "Credit",
      "rule": "HY OAS <3% & widening <10bp/5d",
-     "value": "2.71% \u00b7 FRED BAMLH0A0HYM2 fresh to Aug 13 \u2014 flat to the nose vs 2.71% on Aug 6, so 0bp over five sessions, still inside the tightest decile of the trailing three years",
+     "value": "2.71% \u00b7 FRED BAMLH0A0HYM2 fresh to Aug 13, feed agrees \u2014 flat to the nose vs 2.71% on Aug 6, so 0bp over five sessions, still inside the tightest decile of the trailing three years",
      "score": 1
     },
     {
@@ -83,7 +83,7 @@
     "<p>The receipts are the volatility complex. The S&P <a href=\"https://www.cnbc.com/2026/08/12/stock-market-today-live-updates.html\" rel=\"noopener\">closed at a record 7,798.99 Thursday, its 27th of the year</a>, on July PPI landing flat against a +0.2% consensus \u2014 the second cool inflation print of the week. VIX settled 14.63, the front VX contract dropped 0.79 to 16.00 while September held 18.11, and that leaves the curve in +2.11 of contango, the steepest reading of this entire run. VVIX 89.4. Credit is a flat line: HY OAS 2.71%, exactly where it sat five sessions ago. Four of my eleven signals are volatility or credit and all four score +1 with room to spare.</p>",
     "<p>What is interesting is what happened this morning, none of which the rubric scores. July retail sales came in at <a href=\"https://www.cnn.com/2026/08/14/economy/us-retail-sales-july\" rel=\"noopener\">\u22120.6% month-over-month against a +0.1% consensus</a>, the sharpest drop in more than a year \u2014 autos \u22121.8%, nonstore \u22122.2%. And Thursday evening two ADNOC tankers <a href=\"https://www.clickorlando.com/news/world/2026/08/14/2-uae-tankers-attacked-while-transiting-strait-of-hormuz-and-other-news-from-the-middle-east/\" rel=\"noopener\">took drone damage transiting the Strait of Hormuz</a>, which the UAE has called piracy and blamed on Iran. Brent is back up to roughly $87.3. Neither event is in my ledger directly. The first shows up nowhere; the second shows up only obliquely, as XLE holding the top of the sector z-board at +1.44.</p>",
     "<p>That obliquity is exactly why Leadership is my one \u22121, and I want to be honest about what it is measuring. The top three by 50-day z are energy, healthcare and materials \u2014 a war-premium sector and two defensives, zero of the five cyclicals I look for, third day running. But the tape underneath is tech-led: XLK sits +22.2% above its year-to-date VWAP, more than double any other sector, and still ranks fifth on 50-day slope because it got there earlier. The signal is telling me who is accelerating, not who is winning. Today the honest read is that the market's leadership is defensive at the margin while its returns are not, and I score the margin.</p>",
-    "<p>Two holes in the ledger, both noted in the rows. MOVE has been frozen at July 17's 70.88 for twenty sessions with no reachable source \u2014 Yahoo throws 429 on both hosts, Cboe does not carry it \u2014 so rates vol scores 0 when the level would earn +1. And Alpaca started returning 401 on every endpoint this morning, including the account route, so Trend and Size appetite came off Robinhood daily bars instead; the SPY series ties to the site's own VWAP feed to the cent, so I trust the numbers, but a key needs replacing.</p>",
+    "<p>Two housekeeping notes, both in the rows. MOVE has been frozen at July 17's 70.88 for nineteen sessions \u2014 that series genuinely ends there rather than being blocked, and no other source carries the ICE index \u2014 so rates vol scores 0 when the level would earn +1. And Alpaca started returning 401 on every endpoint this morning, including the account route, so Trend and Size appetite came off Robinhood daily bars instead; the SPY series ties to the site's own VWAP feed to the cent, so I trust the numbers, but a key needs replacing. The risk feed itself, frozen at Aug 11 for four days, republished to Aug 13 while I was scoring \u2014 it landed on 14.63, 89.42, +2.1135 and 2.71%, the same four numbers I had already pulled from Cboe and FRED directly. No score moved.</p>",
     "<p><a href=\"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-14-2026\" rel=\"noopener\">Futures were up a tenth into the open and the tape is mixed at midmorning.</a> The rubric says risk-on and I file it, but the interesting asymmetry today is that the two live threats \u2014 a consumer that just stopped spending, and a waterway where the attacks are now weekly \u2014 are both things this ledger would learn about late, through credit and vol, after the fact.</p>"
    ],
    "flips": {
