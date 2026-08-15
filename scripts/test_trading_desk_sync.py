@@ -454,6 +454,9 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("Know the difference between a momentum play, a narrative play, and gambling.", mentality)
         self.assertIn("Always do your own research.", mentality)
         self.assertIn("How much is your thinking already priced in?", mentality)
+        self.assertIn("A thesis must earn its chips.", mentality)
+        self.assertIn("Before putting capital behind a story, do FIGR-level work", mentality)
+        self.assertIn('href="/posts/ai-desk-figr-earnings/"', mentality)
         self.assertIn("You will not buy the bottom or sell the top.", mentality)
         self.assertIn("momentum does not reward patience", mentality)
         self.assertIn("Don’t chase.", mentality)
@@ -464,7 +467,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
         self.assertIn("big winners pay for the misses", mentality)
         self.assertEqual(
             len(re.findall(r'<article class="mentality-rule(?: mentality-rule--wide)?">', mentality)),
-            7,
+            8,
         )
         self.assertEqual(mentality.count('class="mentality-tactical-card"'), 1)
         self.assertIn('aria-labelledby="tactical-learnings-heading"', mentality)
