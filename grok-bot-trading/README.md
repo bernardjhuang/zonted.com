@@ -12,4 +12,6 @@ Marks stay in the browser: `localStorage` key `catalyst-desk-marks`.
 
 No orders. Public snapshot strips account ids, quantities, avg cost, and balances. Held book omitted.
 
+Hover or keyboard-focus a header, tab, mark, or packet label for a short field explanation (`data-tip`). Missing numbers still render as —.
+
 Footer: MVP · no orders · UNPROVEN.

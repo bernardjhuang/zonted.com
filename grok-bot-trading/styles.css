@@ -39,6 +39,8 @@
   gap: 12px;
 }
 
+.cd-brand .cd-tip { display: block; }
+
 .cd-mark {
   width: 28px;
   height: 28px;
@@ -117,6 +119,8 @@
   margin-bottom: 14px;
 }
 
+.cd-tabs .cd-tip { display: inline-flex; }
+
 .cd-tab {
   appearance: none;
   background: none;
@@ -155,6 +159,8 @@
   color: #6f6b64;
   min-width: 0;
 }
+
+.cd-toolbar .cd-tip { display: inline-flex; min-width: 0; }
 
 .cd-filter {
   appearance: none;
@@ -225,6 +231,7 @@
 .cd-no { color: #6f6b64; }
 
 .cd-marks { display: flex; gap: 6px; }
+.cd-marks .cd-tip { display: inline-flex; }
 .cd-marks button {
   appearance: none;
   background: #141414;
@@ -422,6 +429,37 @@
   .cd-desk { padding: 20px 16px 40px; }
   .cd-drawer { width: 100%; }
 }
+
+.cd-tip {
+  cursor: help;
+}
+
+.cd-tip:focus { outline: none; }
+.cd-tip:focus-visible {
+  outline: 1px solid #c9a227;
+  outline-offset: 2px;
+}
+
+.cd-tipbox {
+  position: fixed;
+  z-index: 40;
+  max-width: min(320px, calc(100vw - 16px));
+  padding: 8px 10px;
+  background: #141414;
+  color: #e6e4de;
+  border: 1px solid #c9a227;
+  font-family: "IBM Plex Mono", ui-monospace, "SF Mono", Consolas, monospace;
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.01em;
+  line-height: 1.5;
+  text-transform: none;
+  white-space: pre-wrap;
+  pointer-events: none;
+  box-shadow: 0 8px 24px #000a;
+}
+
+.cd-tipbox[hidden] { display: none; }
 
 @media (prefers-reduced-motion: reduce) {
   .cd-drawer { box-shadow: none; }
