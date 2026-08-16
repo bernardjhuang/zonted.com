@@ -1,0 +1,4320 @@
+{
+  "meta": {
+    "product": "Catalyst Desk",
+    "version": "MVP",
+    "fetched_at": "2026-08-16T03:45:25Z",
+    "as_of_date": "2026-08-15",
+    "as_of_note": "Weekend. Quotes/IV last regular session 2026-08-14. User zone America/Chicago.",
+    "regime_strip": "regime strip not live in MVP",
+    "no_orders": true,
+    "unproven": true,
+    "accounts": [],
+    "account_note": "Account identifiers omitted from the public snapshot.",
+    "calendar_window": {
+      "start": "2026-08-16",
+      "end": "2026-09-15"
+    },
+    "live": [
+      "Robinhood earnings calendar (full tape except Aug 28 unfiltered overflow → high_mcap supplement)",
+      "Equity + option positions (both accounts)",
+      "Hunt A sample hist_move from dated T-1/T+1 closes (split-adjusted)",
+      "20d ATR via get_equity_technical_indicators for subset",
+      "ATM straddle implied for A survivors + ZM",
+      "Quotes as of last RTH 2026-08-14",
+      "TAKE/PASS/WATCH localStorage + optional server marks.json"
+    ],
+    "placeholder": [
+      "regime strip",
+      "Hunt C FDA/legal calendar (honest empty)",
+      "IV_HV_STRETCH (no 20d realized HV)",
+      "v2 fat-pitch screen (sibling, not this UI)",
+      "company names for calendar-only tickers"
+    ],
+    "gaps": [
+      "Aug 28 unfiltered calendar overflowed MCP; that day is high_market_cap + inline only",
+      "SIP official close used where quotes provided; hist bars are split-adjusted RH bars not SIP",
+      "Implied only pulled for WMT/TGT/CRWD/MDB/ZM — others NO_CHAIN",
+      "Hunt A hist bars only for 9 of 25 sample names; rest UNKNOWN (need ≥4 prints)",
+      "No scanner IV/HV; create_scan skipped (would write to account)",
+      "Weekend: last trade Friday 2026-08-14"
+    ],
+    "held_public": "Held symbols and sizes omitted from the public snapshot."
+  },
+  "counts": {
+    "calendar_events": 414,
+    "calendar_verified": 244,
+    "hunt_a_sample": 25,
+    "hunt_a_survivors": 4,
+    "hunt_a_near_miss": 21,
+    "held_positions": 0,
+    "held_in_window": 0
+  },
+  "hunt_a": [
+    {
+      "symbol": "HD",
+      "name": "The Home Depot, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "HD",
+        "report_date": "2026-08-18",
+        "timing": "am",
+        "verified": true,
+        "year": 2026,
+        "quarter": 2,
+        "eps_estimate": "4.730000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 3,
+      "spot": 338.79,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-02-25",
+            "timing": "am",
+            "t_minus": 382.42,
+            "t_plus": 390.48,
+            "move": 0.021076303540609853,
+            "abs_move": 0.021076303540609853
+          },
+          {
+            "date": "2025-05-20",
+            "timing": "am",
+            "t_minus": 379.38,
+            "t_plus": 370.84,
+            "move": -0.0225104117243925,
+            "abs_move": 0.0225104117243925
+          },
+          {
+            "date": "2025-08-19",
+            "timing": "am",
+            "t_minus": 394.7,
+            "t_plus": 401.74,
+            "move": 0.01783633139092977,
+            "abs_move": 0.01783633139092977
+          },
+          {
+            "date": "2025-11-18",
+            "timing": "am",
+            "t_minus": 358.03,
+            "t_plus": 334.5,
+            "move": -0.0657207496578498,
+            "abs_move": 0.0657207496578498
+          },
+          {
+            "date": "2026-02-24",
+            "timing": "am",
+            "t_minus": 376.99,
+            "t_plus": 375.57,
+            "move": -0.003766678161224446,
+            "abs_move": 0.003766678161224446
+          },
+          {
+            "date": "2026-05-19",
+            "timing": "am",
+            "t_minus": 299.81,
+            "t_plus": 310.58,
+            "move": 0.035922751075681214,
+            "abs_move": 0.035922751075681214
+          }
+        ],
+        "median_abs": 0.021793357632501176,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 8.577182150591439,
+      "atr_pct": 0.025317105435790424,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": false,
+      "material_why": "median |T-1→T+1|=2.18% vs 4% fail; vs 1.5×ATR%=3.80% fail",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 3.0,
+          "act": 3.13,
+          "date": "2025-02-25",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 3.59,
+          "act": 3.56,
+          "date": "2025-05-20",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 4.7,
+          "act": 4.68,
+          "date": "2025-08-19",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 3.83,
+          "act": 3.74,
+          "date": "2025-11-18",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 2.52,
+          "act": 2.72,
+          "date": "2026-02-24",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 3.41,
+          "act": 3.43,
+          "date": "2026-05-19",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 4.73,
+          "act": null,
+          "date": "2026-08-18",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "TGT",
+      "name": "Target Corp.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "TGT",
+        "report_date": "2026-08-19",
+        "timing": "am",
+        "verified": true,
+        "year": 2026,
+        "quarter": 2,
+        "eps_estimate": "2.240000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 4,
+      "spot": 154.515,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-03-04",
+            "timing": "am",
+            "t_minus": 120.76,
+            "t_plus": 116.56,
+            "move": -0.034779728386883146,
+            "abs_move": 0.034779728386883146
+          },
+          {
+            "date": "2025-05-21",
+            "timing": "am",
+            "t_minus": 98.12,
+            "t_plus": 95.06,
+            "move": -0.031186302486750916,
+            "abs_move": 0.031186302486750916
+          },
+          {
+            "date": "2025-08-20",
+            "timing": "am",
+            "t_minus": 105.36,
+            "t_plus": 97.06,
+            "move": -0.07877752467729682,
+            "abs_move": 0.07877752467729682
+          },
+          {
+            "date": "2025-11-19",
+            "timing": "am",
+            "t_minus": 88.53,
+            "t_plus": 83.68,
+            "move": -0.0547836891449226,
+            "abs_move": 0.0547836891449226
+          },
+          {
+            "date": "2026-03-03",
+            "timing": "am",
+            "t_minus": 113.17,
+            "t_plus": 120.08,
+            "move": 0.061058584430502716,
+            "abs_move": 0.061058584430502716
+          },
+          {
+            "date": "2026-05-20",
+            "timing": "am",
+            "t_minus": 127.24,
+            "t_plus": 126.15,
+            "move": -0.008566488525620808,
+            "abs_move": 0.008566488525620808
+          }
+        ],
+        "median_abs": 0.04478170876590287,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 3.9583193421902996,
+      "atr_pct": 0.02561770276148141,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": true,
+      "material_why": "median |T-1→T+1|=4.48% vs 4% PASS; vs 1.5×ATR%=3.84% PASS",
+      "implied": {
+        "move": 0.06908714364301202,
+        "iv": 0.6935,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": {
+          "source": "atm_straddle",
+          "exp": "2026-08-21",
+          "strike": 155.0,
+          "call": {
+            "id": "848bcf63-c019-42bb-a5a1-206827a6f342",
+            "bid": 5.05,
+            "ask": 5.25,
+            "mark": 5.15,
+            "iv": 0.694469,
+            "oi": 1659,
+            "vol": 238
+          },
+          "put": {
+            "id": "cc0259fd-6078-4656-816c-758caeba4300",
+            "bid": 5.4,
+            "ask": 5.65,
+            "mark": 5.525,
+            "iv": 0.692531,
+            "oi": 208,
+            "vol": 213
+          },
+          "spot": 154.515,
+          "asof": "2026-08-14T19:59:59Z"
+        },
+        "why": "ATM 155 2026-08-21 (call+put mid)/spot; last RTH 2026-08-14T19:59:59Z"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "two-sided marks; call OI 1659 put OI 208; weekend book as of 2026-08-14T19:59:59Z",
+      "tags": [
+        "RICH_VOL"
+      ],
+      "cleared_a": true,
+      "fail_reasons": [],
+      "earnings_history": [
+        {
+          "year": 2024,
+          "q": 4,
+          "est": 2.26,
+          "act": 2.41,
+          "date": "2025-03-04",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 1.65,
+          "act": 1.3,
+          "date": "2025-05-21",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 2.05,
+          "act": 2.05,
+          "date": "2025-08-20",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 1.73,
+          "act": 1.78,
+          "date": "2025-11-19",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 2.16,
+          "act": 2.44,
+          "date": "2026-03-03",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 1.35,
+          "act": 1.71,
+          "date": "2026-05-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 2.24,
+          "act": null,
+          "date": "2026-08-19",
+          "timing": "am"
+        }
+      ],
+      "on_a": true,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "LOW",
+      "name": "Lowe's Companies, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "LOW",
+        "report_date": "2026-08-19",
+        "timing": "am",
+        "verified": true,
+        "year": 2026,
+        "quarter": 2,
+        "eps_estimate": "4.380000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 4,
+      "spot": 218.49,
+      "spot_asof": "2026-08-14T19:59:58Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-02-26",
+            "timing": "am",
+            "t_minus": 242.39,
+            "t_plus": 245.5,
+            "move": 0.012830562316927363,
+            "abs_move": 0.012830562316927363
+          },
+          {
+            "date": "2025-05-21",
+            "timing": "am",
+            "t_minus": 231.25,
+            "t_plus": 223.75,
+            "move": -0.032432432432432434,
+            "abs_move": 0.032432432432432434
+          },
+          {
+            "date": "2025-08-20",
+            "timing": "am",
+            "t_minus": 256.36,
+            "t_plus": 255.65,
+            "move": -0.0027695428303947667,
+            "abs_move": 0.0027695428303947667
+          },
+          {
+            "date": "2025-11-19",
+            "timing": "am",
+            "t_minus": 219.57,
+            "t_plus": 228.43,
+            "move": 0.0403515963018628,
+            "abs_move": 0.0403515963018628
+          },
+          {
+            "date": "2026-02-25",
+            "timing": "am",
+            "t_minus": 278.59,
+            "t_plus": 264.39,
+            "move": -0.05097096091029829,
+            "abs_move": 0.05097096091029829
+          },
+          {
+            "date": "2026-05-20",
+            "timing": "am",
+            "t_minus": 218.37,
+            "t_plus": 217.41,
+            "move": -0.004396208270366797,
+            "abs_move": 0.004396208270366797
+          }
+        ],
+        "median_abs": 0.0226314973746799,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 5.593267026608187,
+      "atr_pct": 0.025599647702907166,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": false,
+      "material_why": "median |T-1→T+1|=2.26% vs 4% fail; vs 1.5×ATR%=3.84% fail",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material"
+      ],
+      "earnings_history": [
+        {
+          "year": 2024,
+          "q": 4,
+          "est": 1.84,
+          "act": 1.93,
+          "date": "2025-02-26",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 2.88,
+          "act": 2.92,
+          "date": "2025-05-21",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 4.24,
+          "act": 4.33,
+          "date": "2025-08-20",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 2.96,
+          "act": 3.06,
+          "date": "2025-11-19",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.95,
+          "act": 1.98,
+          "date": "2026-02-25",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 2.96,
+          "act": 3.03,
+          "date": "2026-05-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 4.38,
+          "act": null,
+          "date": "2026-08-19",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "WMT",
+      "name": "Walmart, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "WMT",
+        "report_date": "2026-08-20",
+        "timing": "am",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "0.740000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 5,
+      "spot": 115.27,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-02-20",
+            "timing": "am",
+            "t_minus": 104.0,
+            "t_plus": 94.78,
+            "move": -0.0886538461538462,
+            "abs_move": 0.0886538461538462
+          },
+          {
+            "date": "2025-05-15",
+            "timing": "am",
+            "t_minus": 96.83,
+            "t_plus": 98.24,
+            "move": 0.014561602809046725,
+            "abs_move": 0.014561602809046725
+          },
+          {
+            "date": "2025-08-21",
+            "timing": "am",
+            "t_minus": 102.57,
+            "t_plus": 96.83,
+            "move": -0.05596178219752357,
+            "abs_move": 0.05596178219752357
+          },
+          {
+            "date": "2025-11-20",
+            "timing": "am",
+            "t_minus": 100.61,
+            "t_plus": 105.32,
+            "move": 0.04681443196501345,
+            "abs_move": 0.04681443196501345
+          },
+          {
+            "date": "2026-02-19",
+            "timing": "am",
+            "t_minus": 126.62,
+            "t_plus": 122.99,
+            "move": -0.02866845679987373,
+            "abs_move": 0.02866845679987373
+          },
+          {
+            "date": "2026-05-21",
+            "timing": "am",
+            "t_minus": 130.85,
+            "t_plus": 120.27,
+            "move": -0.08085594191822698,
+            "abs_move": 0.08085594191822698
+          }
+        ],
+        "median_abs": 0.05138810708126851,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 2.583299981686826,
+      "atr_pct": 0.022410861296840688,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": true,
+      "material_why": "median |T-1→T+1|=5.14% vs 4% PASS; vs 1.5×ATR%=3.36% PASS",
+      "implied": {
+        "move": 0.04914548451461786,
+        "iv": 0.49442050000000004,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": {
+          "source": "atm_straddle",
+          "exp": "2026-08-21",
+          "strike": 115.0,
+          "call": {
+            "id": "fde004f4-a5b3-4784-9d97-9005279ee32f",
+            "bid": 2.91,
+            "ask": 2.99,
+            "mark": 2.95,
+            "iv": 0.485107,
+            "oi": 10508,
+            "vol": 1145
+          },
+          "put": {
+            "id": "b8d79187-6946-4bab-bb62-9314774b0e4f",
+            "bid": 2.65,
+            "ask": 2.78,
+            "mark": 2.715,
+            "iv": 0.503734,
+            "oi": 12896,
+            "vol": 1355
+          },
+          "spot": 115.27,
+          "asof": "2026-08-14T19:59:59Z",
+          "adjustment": null
+        },
+        "why": "ATM 115 2026-08-21 (call+put mid)/spot; last RTH 2026-08-14T19:59:59Z"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "two-sided marks; call OI 10508 put OI 12896; weekend book as of 2026-08-14T19:59:59Z",
+      "tags": [],
+      "cleared_a": true,
+      "fail_reasons": [],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.64,
+          "act": 0.66,
+          "date": "2025-02-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.58,
+          "act": 0.61,
+          "date": "2025-05-15",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.74,
+          "act": 0.68,
+          "date": "2025-08-21",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 0.6,
+          "act": 0.62,
+          "date": "2025-11-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 0.73,
+          "act": 0.74,
+          "date": "2026-02-19",
+          "timing": "am"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 0.66,
+          "act": 0.66,
+          "date": "2026-05-21",
+          "timing": "am"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 0.74,
+          "act": null,
+          "date": "2026-08-20",
+          "timing": "am"
+        }
+      ],
+      "on_a": true,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "TJX",
+      "name": "The TJX Cos., Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "TJX",
+        "report_date": "2026-08-19",
+        "timing": "am",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "1.190000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 4,
+      "spot": 152.1,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-02-26",
+            "timing": "am",
+            "t_minus": 122.7,
+            "t_plus": 123.49,
+            "move": 0.006438467807660997,
+            "abs_move": 0.006438467807660997
+          },
+          {
+            "date": "2025-05-21",
+            "timing": "am",
+            "t_minus": 134.93,
+            "t_plus": 129.58,
+            "move": -0.039650188986881996,
+            "abs_move": 0.039650188986881996
+          },
+          {
+            "date": "2025-08-20",
+            "timing": "am",
+            "t_minus": 134.62,
+            "t_plus": 137.51,
+            "move": 0.021467835388500944,
+            "abs_move": 0.021467835388500944
+          },
+          {
+            "date": "2025-11-19",
+            "timing": "am",
+            "t_minus": 145.58,
+            "t_plus": 148.07,
+            "move": 0.017103997801895643,
+            "abs_move": 0.017103997801895643
+          },
+          {
+            "date": "2026-02-25",
+            "timing": "am",
+            "t_minus": 157.66,
+            "t_plus": 158.69,
+            "move": 0.006533045794748116,
+            "abs_move": 0.006533045794748116
+          },
+          {
+            "date": "2026-05-20",
+            "timing": "am",
+            "t_minus": 150.68,
+            "t_plus": 157.46,
+            "move": 0.044996018051499886,
+            "abs_move": 0.044996018051499886
+          }
+        ],
+        "median_abs": 0.019285916595198294,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 3.35821306351812,
+      "atr_pct": 0.022078981351203945,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": false,
+      "material_why": "median |T-1→T+1|=1.93% vs 4% fail; vs 1.5×ATR%=3.31% fail",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.16,
+          "act": 1.23,
+          "date": "2025-02-26",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.91,
+          "act": 0.92,
+          "date": "2025-05-21",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 1.01,
+          "act": 1.1,
+          "date": "2025-08-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 1.22,
+          "act": 1.28,
+          "date": "2025-11-19",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 1.38,
+          "act": 1.43,
+          "date": "2026-02-25",
+          "timing": "am"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 1.0,
+          "act": 1.19,
+          "date": "2026-05-20",
+          "timing": "am"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 1.19,
+          "act": null,
+          "date": "2026-08-19",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "BABA",
+      "name": "Alibaba Group Holding Ltd.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "BABA",
+        "report_date": "2026-08-20",
+        "timing": "am",
+        "verified": true,
+        "year": 2027,
+        "quarter": 1,
+        "eps_estimate": "1.850000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 5,
+      "spot": 123.75,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 2.66,
+          "act": 2.93,
+          "date": "2025-02-20",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.48,
+          "act": 1.73,
+          "date": "2025-05-15",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 1.95,
+          "act": 2.06,
+          "date": "2025-08-29",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.49,
+          "act": 0.61,
+          "date": "2025-11-25",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 1.73,
+          "act": 1.01,
+          "date": "2026-03-19",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 1.12,
+          "act": 0.09,
+          "date": "2026-05-13",
+          "timing": "am"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 1.85,
+          "act": null,
+          "date": "2026-08-20",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "ADI",
+      "name": "Analog Devices, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "ADI",
+        "report_date": "2026-08-19",
+        "timing": "am",
+        "verified": true,
+        "year": 2026,
+        "quarter": 3,
+        "eps_estimate": "3.330000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 4,
+      "spot": 389.39,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 1.54,
+          "act": 1.63,
+          "date": "2025-02-19",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 1.7,
+          "act": 1.85,
+          "date": "2025-05-22",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 1.94,
+          "act": 2.05,
+          "date": "2025-08-20",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 2.23,
+          "act": 2.26,
+          "date": "2025-11-25",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 2.31,
+          "act": 2.46,
+          "date": "2026-02-18",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 2.9,
+          "act": 3.09,
+          "date": "2026-05-20",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 3.33,
+          "act": null,
+          "date": "2026-08-19",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "DE",
+      "name": "Deere & Co.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "DE",
+        "report_date": "2026-08-20",
+        "timing": "am",
+        "verified": true,
+        "year": 2026,
+        "quarter": 3,
+        "eps_estimate": "4.730000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 5,
+      "spot": 608.745,
+      "spot_asof": "2026-08-14T19:59:58Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 3.11,
+          "act": 3.19,
+          "date": "2025-02-13",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 5.64,
+          "act": 6.64,
+          "date": "2025-05-15",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 4.6,
+          "act": 4.75,
+          "date": "2025-08-14",
+          "timing": "am"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 3.88,
+          "act": 3.93,
+          "date": "2025-11-26",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 2.03,
+          "act": 2.42,
+          "date": "2026-02-19",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 5.76,
+          "act": 6.55,
+          "date": "2026-05-21",
+          "timing": "am"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 4.73,
+          "act": null,
+          "date": "2026-08-20",
+          "timing": "am"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "NVDA",
+      "name": "NVIDIA Corp.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "NVDA",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "2.070000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 225.17,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-02-26",
+            "timing": "pm",
+            "t_minus": 126.63,
+            "t_plus": 120.15,
+            "move": -0.05117270788912576,
+            "abs_move": 0.05117270788912576
+          },
+          {
+            "date": "2025-05-28",
+            "timing": "pm",
+            "t_minus": 135.5,
+            "t_plus": 139.19,
+            "move": 0.027232472324723256,
+            "abs_move": 0.027232472324723256
+          },
+          {
+            "date": "2025-08-27",
+            "timing": "pm",
+            "t_minus": 181.77,
+            "t_plus": 180.17,
+            "move": -0.008802332618143893,
+            "abs_move": 0.008802332618143893
+          },
+          {
+            "date": "2025-11-19",
+            "timing": "pm",
+            "t_minus": 181.36,
+            "t_plus": 180.64,
+            "move": -0.003970004411116168,
+            "abs_move": 0.003970004411116168
+          },
+          {
+            "date": "2026-02-25",
+            "timing": "pm",
+            "t_minus": 192.85,
+            "t_plus": 184.89,
+            "move": -0.04127560280010378,
+            "abs_move": 0.04127560280010378
+          },
+          {
+            "date": "2026-05-20",
+            "timing": "pm",
+            "t_minus": 220.61,
+            "t_plus": 219.51,
+            "move": -0.0049861746974299015,
+            "abs_move": 0.0049861746974299015
+          }
+        ],
+        "median_abs": 0.018017402471433575,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 7.127749224111888,
+      "atr_pct": 0.031654968353297015,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": false,
+      "material_why": "median |T-1→T+1|=1.80% vs 4% fail; vs 1.5×ATR%=4.75% fail",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.84,
+          "act": 0.89,
+          "date": "2025-02-26",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.75,
+          "act": 0.96,
+          "date": "2025-05-28",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.98,
+          "act": 1.04,
+          "date": "2025-08-27",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 1.22,
+          "act": 1.3,
+          "date": "2025-11-19",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 1.5,
+          "act": 1.62,
+          "date": "2026-02-25",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 1.76,
+          "act": 1.87,
+          "date": "2026-05-20",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 2.07,
+          "act": null,
+          "date": "2026-08-26",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "CRM",
+      "name": "Salesforce, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "CRM",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "3.090000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 196.19,
+      "spot_asof": "2026-08-14T19:59:58Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 2.61,
+          "act": 2.78,
+          "date": "2025-02-26",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 2.55,
+          "act": 2.58,
+          "date": "2025-05-28",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 2.52,
+          "act": 2.91,
+          "date": "2025-09-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 2.58,
+          "act": 3.25,
+          "date": "2025-12-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 2.69,
+          "act": 3.81,
+          "date": "2026-02-25",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 2.96,
+          "act": 3.88,
+          "date": "2026-05-27",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 3.09,
+          "act": null,
+          "date": "2026-08-26",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "CRWD",
+      "name": "CrowdStrike Holdings, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "CRWD",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "0.240000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 216.92,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-03-04",
+            "timing": "pm",
+            "t_minus": 95.6825,
+            "t_plus": 91.36,
+            "move": -0.045175450056175404,
+            "abs_move": 0.045175450056175404
+          },
+          {
+            "date": "2025-06-03",
+            "timing": "pm",
+            "t_minus": 119.7925,
+            "t_plus": 115.14,
+            "move": -0.0388379906922387,
+            "abs_move": 0.0388379906922387
+          },
+          {
+            "date": "2025-08-27",
+            "timing": "pm",
+            "t_minus": 104.4,
+            "t_plus": 110.5,
+            "move": 0.0584291187739463,
+            "abs_move": 0.0584291187739463
+          },
+          {
+            "date": "2025-12-02",
+            "timing": "pm",
+            "t_minus": 126.0325,
+            "t_plus": 131.0425,
+            "move": 0.039751651359768214,
+            "abs_move": 0.039751651359768214
+          },
+          {
+            "date": "2026-03-03",
+            "timing": "pm",
+            "t_minus": 96.215,
+            "t_plus": 101.92,
+            "move": 0.0592942888323027,
+            "abs_move": 0.0592942888323027
+          },
+          {
+            "date": "2026-06-03",
+            "timing": "pm",
+            "t_minus": 192.2375,
+            "t_plus": 179.7725,
+            "move": -0.06484166720853113,
+            "abs_move": 0.06484166720853113
+          }
+        ],
+        "median_abs": 0.05180228441506085,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 9.286351991069639,
+      "atr_pct": 0.04281003130679347,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": true,
+      "material_why": "median |T-1→T+1|=5.18% vs 4% PASS; vs 1.5×ATR%=6.42% fail",
+      "implied": {
+        "move": 0.10418587497695005,
+        "iv": 0.702441,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": {
+          "source": "atm_straddle",
+          "exp": "2026-08-28",
+          "strike": 215.0,
+          "call": {
+            "id": "fc1e72d2-7875-4045-9060-a6f262fd90ac",
+            "bid": 11.4,
+            "ask": 13.1,
+            "mark": 12.25,
+            "iv": 0.693128,
+            "oi": 217,
+            "vol": 81
+          },
+          "put": {
+            "id": "716de695-67f2-49ea-b1e8-63975869bfeb",
+            "bid": 9.75,
+            "ask": 10.95,
+            "mark": 10.35,
+            "iv": 0.711754,
+            "oi": 255,
+            "vol": 22
+          },
+          "spot": 216.92,
+          "asof": "2026-08-14T19:59:59Z"
+        },
+        "why": "ATM 215 2026-08-28 (call+put mid)/spot; last RTH 2026-08-14T19:59:59Z"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "two-sided marks; call OI 217 put OI 255; weekend book as of 2026-08-14T19:59:59Z",
+      "tags": [
+        "RICH_VOL"
+      ],
+      "cleared_a": true,
+      "fail_reasons": [],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.86,
+          "act": 1.03,
+          "date": "2025-03-04",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.66,
+          "act": 0.73,
+          "date": "2025-06-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.42,
+          "act": 0.93,
+          "date": "2025-08-27",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 0.59,
+          "act": 0.96,
+          "date": "2025-12-02",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 0.74,
+          "act": 1.12,
+          "date": "2026-03-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 0.88,
+          "act": 1.1,
+          "date": "2026-06-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 0.24,
+          "act": null,
+          "date": "2026-08-26",
+          "timing": "pm"
+        }
+      ],
+      "on_a": true,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "INTU",
+      "name": "Intuit, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "INTU",
+        "report_date": "2026-08-25",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 4,
+        "eps_estimate": "3.300000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 10,
+      "spot": 345.75,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 2.58,
+          "act": 3.32,
+          "date": "2025-02-25",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 10.91,
+          "act": 11.65,
+          "date": "2025-05-22",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 2.12,
+          "act": 2.75,
+          "date": "2025-08-21",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 2.51,
+          "act": 3.34,
+          "date": "2025-11-20",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 3.1,
+          "act": 4.15,
+          "date": "2026-02-26",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 12.28,
+          "act": 12.8,
+          "date": "2026-05-20",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 3.3,
+          "act": null,
+          "date": "2026-08-25",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "VEEV",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "VEEV",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "2.100000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 243.75,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "OKTA",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "OKTA",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "0.860000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 147.42,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "SNPS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "SNPS",
+        "report_date": "2026-08-26",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 3,
+        "eps_estimate": "3.470000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 11,
+      "spot": 421.46,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "PANW",
+      "name": "Palo Alto Networks, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "PANW",
+        "report_date": "2026-09-01",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 4,
+        "eps_estimate": "0.880000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 17,
+      "spot": 384.33,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 0.78,
+          "act": 0.81,
+          "date": "2025-02-13",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 0.77,
+          "act": 0.8,
+          "date": "2025-05-20",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.73,
+          "act": 0.95,
+          "date": "2025-08-18",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.73,
+          "act": 0.93,
+          "date": "2025-11-19",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.76,
+          "act": 1.03,
+          "date": "2026-02-17",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 0.72,
+          "act": 0.85,
+          "date": "2026-06-02",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 0.88,
+          "act": null,
+          "date": "2026-09-01",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "SNOW",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "SNOW",
+        "report_date": "2026-09-02",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "0.260000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 18,
+      "spot": 329.04,
+      "spot_asof": "2026-08-14T19:59:58Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "AVGO",
+      "name": "Broadcom Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "AVGO",
+        "report_date": "2026-09-02",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 3,
+        "eps_estimate": "3.160000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 18,
+      "spot": 393.08,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 1.49,
+          "act": 1.6,
+          "date": "2025-03-06",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 1.57,
+          "act": 1.58,
+          "date": "2025-06-05",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 1.54,
+          "act": 1.69,
+          "date": "2025-09-04",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.72,
+          "act": 1.95,
+          "date": "2025-12-11",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 1.88,
+          "act": 2.05,
+          "date": "2026-03-04",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 2.32,
+          "act": 2.44,
+          "date": "2026-06-03",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 3.16,
+          "act": null,
+          "date": "2026-09-02",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "DELL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "DELL",
+        "report_date": "2026-09-03",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "4.840000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 19,
+      "spot": 490.97,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "ORCL",
+      "name": "Oracle Corp.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "ORCL",
+        "report_date": "2026-09-10",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 1,
+        "eps_estimate": "1.670000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 26,
+      "spot": 150.33,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 1.49,
+          "act": 1.47,
+          "date": "2025-03-10",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.64,
+          "act": 1.7,
+          "date": "2025-06-11",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 1.35,
+          "act": 1.47,
+          "date": "2025-09-09",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 1.5,
+          "act": 2.26,
+          "date": "2025-12-10",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 1.55,
+          "act": 1.79,
+          "date": "2026-03-10",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 1.89,
+          "act": 2.11,
+          "date": "2026-06-10",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 1.67,
+          "act": null,
+          "date": "2026-09-10",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "ADBE",
+      "name": "Adobe, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "ADBE",
+        "report_date": "2026-09-10",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 3,
+        "eps_estimate": "5.540000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 26,
+      "spot": 264.04,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 1,
+          "est": 4.97,
+          "act": 5.08,
+          "date": "2025-03-12",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 4.97,
+          "act": 5.06,
+          "date": "2025-06-12",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 4.79,
+          "act": 5.31,
+          "date": "2025-09-11",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 4.99,
+          "act": 5.5,
+          "date": "2025-12-10",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 5.46,
+          "act": 6.06,
+          "date": "2026-03-12",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 5.6,
+          "act": 5.96,
+          "date": "2026-06-11",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 5.54,
+          "act": null,
+          "date": "2026-09-10",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "BILL",
+      "name": "Bill Holdings, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "BILL",
+        "report_date": "2026-08-19",
+        "timing": "pm",
+        "verified": true,
+        "year": 2026,
+        "quarter": 4,
+        "eps_estimate": "0.620000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 4,
+      "spot": 49.8,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": 2.1937209297192326,
+      "atr_pct": 0.044050621078699455,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 2,
+          "est": 0.47,
+          "act": 0.56,
+          "date": "2025-02-06",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 3,
+          "est": 0.38,
+          "act": 0.5,
+          "date": "2025-05-08",
+          "timing": "pm"
+        },
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.23,
+          "act": 0.53,
+          "date": "2025-08-27",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.32,
+          "act": 0.61,
+          "date": "2025-11-06",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.38,
+          "act": 0.64,
+          "date": "2026-02-05",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 0.46,
+          "act": 0.68,
+          "date": "2026-05-07",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 0.62,
+          "act": null,
+          "date": "2026-08-19",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "ZM",
+      "name": "Zoom Communications, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "ZM",
+        "report_date": "2026-08-25",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "1.380000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 10,
+      "spot": 106.0,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 5,
+        "prints": [
+          {
+            "date": "2025-05-21",
+            "timing": "pm",
+            "t_minus": 83.1,
+            "t_plus": 82.07,
+            "move": -0.012394705174488596,
+            "abs_move": 0.012394705174488596
+          },
+          {
+            "date": "2025-08-21",
+            "timing": "pm",
+            "t_minus": 72.16,
+            "t_plus": 82.47,
+            "move": 0.14287694013303764,
+            "abs_move": 0.14287694013303764
+          },
+          {
+            "date": "2025-11-24",
+            "timing": "pm",
+            "t_minus": 78.63,
+            "t_plus": 86.34,
+            "move": 0.09805417779473502,
+            "abs_move": 0.09805417779473502
+          },
+          {
+            "date": "2026-02-25",
+            "timing": "pm",
+            "t_minus": 87.51,
+            "t_plus": 75.54,
+            "move": -0.13678436750085698,
+            "abs_move": 0.13678436750085698
+          },
+          {
+            "date": "2026-05-21",
+            "timing": "pm",
+            "t_minus": 99.42,
+            "t_plus": 105.64,
+            "move": 0.06256286461476557,
+            "abs_move": 0.06256286461476557
+          }
+        ],
+        "median_abs": 0.09805417779473502,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": true,
+      "material_why": "median |T-1→T+1|=9.81% vs 4% PASS; 20d ATR% — (not fetched)",
+      "implied": {
+        "move": 0.09929245283018868,
+        "iv": 0.669435,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": {
+          "source": "atm_straddle",
+          "exp": "2026-08-28",
+          "strike": 105.0,
+          "call": {
+            "id": "de3d11cf-ac0c-49fc-8b24-57798dc8ed34",
+            "bid": 4.75,
+            "ask": 6.75,
+            "mark": 5.75,
+            "iv": 0.658706,
+            "oi": 166,
+            "vol": 40
+          },
+          "put": {
+            "id": "d90701c5-5b9a-4fa8-a571-6974abb36c1d",
+            "bid": 4.5,
+            "ask": 5.05,
+            "mark": 4.775,
+            "iv": 0.680164,
+            "oi": 17,
+            "vol": 24
+          },
+          "spot": 106.0,
+          "asof": "2026-08-14T19:59:59Z"
+        },
+        "why": "ATM 105 2026-08-28 (call+put mid)/spot; last RTH 2026-08-14T19:59:59Z"
+      },
+      "liquidity_ok": false,
+      "liquidity_why": "WIDE_BOOK + thin OI (call spread 35%, put OI 17)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "liquidity"
+      ],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 1.3,
+          "act": 1.41,
+          "date": "2025-02-24",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 1.31,
+          "act": 1.43,
+          "date": "2025-05-21",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 1.13,
+          "act": 1.53,
+          "date": "2025-08-21",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 1.21,
+          "act": 1.52,
+          "date": "2025-11-24",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 1.27,
+          "act": 1.44,
+          "date": "2026-02-25",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 1.32,
+          "act": 1.55,
+          "date": "2026-05-21",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 1.38,
+          "act": null,
+          "date": "2026-08-25",
+          "timing": "pm"
+        }
+      ],
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "MDB",
+      "name": "MongoDB, Inc.",
+      "name_missing_reason": null,
+      "event": {
+        "symbol": "MDB",
+        "report_date": "2026-09-01",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "1.300000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 17,
+      "spot": 460.33,
+      "spot_asof": "2026-08-14T19:59:58Z",
+      "hist": {
+        "n": 6,
+        "prints": [
+          {
+            "date": "2025-03-05",
+            "timing": "pm",
+            "t_minus": 254.38,
+            "t_plus": 192.98,
+            "move": -0.2413711769793223,
+            "abs_move": 0.2413711769793223
+          },
+          {
+            "date": "2025-06-04",
+            "timing": "pm",
+            "t_minus": 193.75,
+            "t_plus": 225.38,
+            "move": 0.16325161290322576,
+            "abs_move": 0.16325161290322576
+          },
+          {
+            "date": "2025-08-26",
+            "timing": "pm",
+            "t_minus": 218.44,
+            "t_plus": 295.7,
+            "move": 0.3536898004028566,
+            "abs_move": 0.3536898004028566
+          },
+          {
+            "date": "2025-12-01",
+            "timing": "pm",
+            "t_minus": 332.37,
+            "t_plus": 401.99,
+            "move": 0.20946535487559048,
+            "abs_move": 0.20946535487559048
+          },
+          {
+            "date": "2026-03-02",
+            "timing": "pm",
+            "t_minus": 328.47,
+            "t_plus": 252.73,
+            "move": -0.23058422382561583,
+            "abs_move": 0.23058422382561583
+          },
+          {
+            "date": "2026-05-28",
+            "timing": "pm",
+            "t_minus": 294.46,
+            "t_plus": 335.55,
+            "move": 0.13954357128302664,
+            "abs_move": 0.13954357128302664
+          }
+        ],
+        "median_abs": 0.22002478935060316,
+        "status": "ok",
+        "why": null,
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": "split"
+      },
+      "atr_20d": 21.028201280299374,
+      "atr_pct": 0.045680710099926955,
+      "atr_asof": "2026-08-14",
+      "atr_missing_reason": null,
+      "material": true,
+      "material_why": "median |T-1→T+1|=22.00% vs 4% PASS; vs 1.5×ATR%=6.85% PASS",
+      "implied": {
+        "move": 0.171616014598223,
+        "iv": 0.9290875000000001,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": {
+          "source": "atm_straddle",
+          "exp": "2026-09-04",
+          "strike": 460.0,
+          "call": {
+            "id": "bf874b9b-6516-4c6c-afcb-48112262d915",
+            "bid": 36.95,
+            "ask": 42.25,
+            "mark": 39.6,
+            "iv": 0.916645,
+            "oi": 69,
+            "vol": 13
+          },
+          "put": {
+            "id": "696bb873-b439-4524-848b-ff758d0f4f09",
+            "bid": 36.65,
+            "ask": 42.15,
+            "mark": 39.4,
+            "iv": 0.94153,
+            "oi": 36,
+            "vol": 92
+          },
+          "spot": 460.33,
+          "asof": "2026-08-14T19:59:59Z"
+        },
+        "why": "ATM 460 2026-09-04 (call+put mid)/spot; last RTH 2026-08-14T19:59:59Z"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "two-sided marks; call OI 69 put OI 36; weekend book as of 2026-08-14T19:59:59Z",
+      "tags": [],
+      "cleared_a": true,
+      "fail_reasons": [],
+      "earnings_history": [
+        {
+          "year": 2025,
+          "q": 4,
+          "est": 0.67,
+          "act": 1.28,
+          "date": "2025-03-05",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 1,
+          "est": 0.66,
+          "act": 1.0,
+          "date": "2025-06-04",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 2,
+          "est": 0.14,
+          "act": 1.0,
+          "date": "2025-08-26",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 3,
+          "est": 0.26,
+          "act": 1.32,
+          "date": "2025-12-01",
+          "timing": "pm"
+        },
+        {
+          "year": 2026,
+          "q": 4,
+          "est": 0.92,
+          "act": 1.65,
+          "date": "2026-03-02",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 1,
+          "est": 0.89,
+          "act": 1.32,
+          "date": "2026-05-28",
+          "timing": "pm"
+        },
+        {
+          "year": 2027,
+          "q": 2,
+          "est": 1.3,
+          "act": null,
+          "date": "2026-09-01",
+          "timing": "pm"
+        }
+      ],
+      "on_a": true,
+      "on_b": true,
+      "on_c": false
+    },
+    {
+      "symbol": "MRVL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched",
+      "event": {
+        "symbol": "MRVL",
+        "report_date": "2026-08-27",
+        "timing": "pm",
+        "verified": true,
+        "year": 2027,
+        "quarter": 2,
+        "eps_estimate": "0.870000",
+        "eps_actual": null,
+        "source": "calendar"
+      },
+      "days": 12,
+      "spot": 221.96,
+      "spot_asof": "2026-08-14T19:59:59Z",
+      "hist": {
+        "n": 0,
+        "prints": [],
+        "median_abs": null,
+        "status": "UNKNOWN",
+        "why": "print-window bars not fetched for this name (Hunt A sample subset)",
+        "formula": "median |close[T+1]/close[T-1]-1|",
+        "adjustment_type": null
+      },
+      "atr_20d": null,
+      "atr_pct": null,
+      "atr_asof": null,
+      "atr_missing_reason": "ATR not fetched for this name",
+      "material": false,
+      "material_why": "print-window bars not fetched for this name (Hunt A sample subset)",
+      "implied": {
+        "move": null,
+        "iv": null,
+        "hv": null,
+        "hv_why": "20d realized vol not computed; have 20d ATR% only — IV_HV_STRETCH not tagged",
+        "detail": null,
+        "why": "NO_CHAIN — ATM straddle not pulled (not a Hunt A survivor candidate, or not in implied sample)"
+      },
+      "liquidity_ok": true,
+      "liquidity_why": "not evaluated (no chain pulled)",
+      "tags": [],
+      "cleared_a": false,
+      "fail_reasons": [
+        "material",
+        "UNKNOWN_HIST"
+      ],
+      "earnings_history": null,
+      "on_a": false,
+      "on_b": true,
+      "on_c": false
+    }
+  ],
+  "board_b": [
+    {
+      "symbol": "TCGLF",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-16",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 1,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "RPGL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-16",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 1,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "AMCI",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-16",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 1,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "NXTS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-16",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 1,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "DCOY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-16",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 1,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "NSPR",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.2,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "GPUS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2025,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "HCWB",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -1.98,
+      "eps_actual": -11.58,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "KUST",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": -5.49,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "DUOT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.52,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FUFU",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.01,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "ZEPP",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2025,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "YALA",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "XP",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.51,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "DCGO",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.13,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "BHP",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": null,
+      "verified": true,
+      "year": 2021,
+      "quarter": 3,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CRGO",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.06,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "HTHT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.7,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "RGNT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 1,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "SMJF",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FLXS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 1.15,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "AZIO",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FTRK",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FRGT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "LRHC",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CHOW",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FN",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 3.79,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "GP",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-17",
+      "timing": "am",
+      "verified": false,
+      "year": 2027,
+      "quarter": 1,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 2,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "ENRD",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CAAP",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.48,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "JKHY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 1.44,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "IRIX",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.01,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "PONY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.17,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "TOL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 3,
+      "eps_estimate": 2.92,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "MRCY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 0.35,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "ELWT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.24,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "SQM",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": null,
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 2.02,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "THCH",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "AXIL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 0.16,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "IQST",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.23,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "LU",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "RNW",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2027,
+      "quarter": 1,
+      "eps_estimate": 0.12,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "MHGVY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": null,
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "HKD",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2023,
+      "quarter": 1,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "ELTK",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "UCL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.05,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "HD",
+      "name": "The Home Depot, Inc.",
+      "name_missing_reason": null,
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 4.73,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "PRE",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.45,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "EVGN",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.27,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "GRNQ",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "VNET",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.06,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "SEGG",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "BIDU",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 1.35,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "IQ",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.04,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "HSAI",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "JUNS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.05,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "VIVK",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "KLAR",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.06,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FTFT",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "JMG",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "DQJCY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": null,
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "FCHL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "PINC",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 0.3,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "WGRX",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "APUS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "KEYS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 3,
+      "eps_estimate": 2.42,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "SOL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.02,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "LZB",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2027,
+      "quarter": 1,
+      "eps_estimate": 0.49,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "AUNA",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.26,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "AS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.11,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CLPBY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 3,
+      "eps_estimate": 0.1,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "ZTO",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "NCL",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CETY",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "am",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "TNFA",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-18",
+      "timing": "pm",
+      "verified": false,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 3,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "IOND",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-19",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": null,
+      "eps_actual": null,
+      "days": 4,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "CLIR",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-19",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": -0.25,
+      "eps_actual": null,
+      "days": 4,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "OPRA",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-19",
+      "timing": "am",
+      "verified": true,
+      "year": 2026,
+      "quarter": 2,
+      "eps_estimate": 0.32,
+      "eps_actual": null,
+      "days": 4,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "JBSS",
+      "name": null,
+      "name_missing_reason": "fundamentals not fetched (calendar-only)",
+      "report_date": "2026-08-19",
+      "timing": "pm",
+      "verified": true,
+      "year": 2026,
+      "quarter": 4,
+      "eps_estimate": 1.2,
+      "eps_actual": null,
+      "days": 4,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    },
+    {
+      "symbol": "TJX",
+      "name": "The TJX Cos., Inc.",
+      "name_missing_reason": null,
+      "report_date": "2026-08-19",
+      "timing": "am",
+      "verified": true,
+      "year": 2027,
+      "quarter": 2,
+      "eps_estimate": 1.19,
+      "eps_actual": null,
+      "days": 4,
+      "on_a": false,
+      "on_c": false,
+      "source": "calendar"
+    }
+  ],
+  "hunt_c": {
+    "events": [],
+    "empty": "We do not have an FDA/legal binary estimate yet. Hunt C gates require a sourced event, both outcomes, and a skew. No fake events.",
+    "gates": [
+      "sourced event",
+      "both outcomes listed",
+      "skew present"
+    ]
+  },
+  "held": []
+}
