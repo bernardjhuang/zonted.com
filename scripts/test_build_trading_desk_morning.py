@@ -5,10 +5,12 @@ import datetime as dt
 import importlib.util
 import json
 from pathlib import Path
+import sys
 import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "scripts"))
 SPEC = importlib.util.spec_from_file_location("build_trading_desk", ROOT / "scripts" / "build-trading-desk.py")
 assert SPEC and SPEC.loader
 builder = importlib.util.module_from_spec(SPEC)

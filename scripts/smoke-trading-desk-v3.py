@@ -13,8 +13,8 @@ LINKED_ROUTES = (
     ("momentum/", "Momentum"),
     ("mentality/", "Mentality"),
     ("performance/", "Performance"),
-    ("autonomous/", "Autonomous"),
-    ("autonomous-psy/", "Autonomous Psy"),
+    ("autonomous/", "🦥 Autonomous"),
+    ("autonomous-psy/", "🦆 Autonomous Psy"),
     ("gpt-risk/", "GPT Risk"),
     ("grok-risk/", "Grok Risk"),
     ("fable-risk/", "Fable Risk"),
@@ -129,7 +129,7 @@ def exercise_linked_routes(page, origin: str) -> None:
         check(page.locator("h1").inner_text() == heading, f"{route} heading is wrong")
         check(page.locator('.subnav a[aria-current="page"]').count() <= 1, f"{route} has ambiguous navigation state")
         if route == "mentality/":
-            check(page.locator(".mentality-rule").count() == 4, "Mentality needs all four core lessons")
+            check(page.locator(".mentality-rule").count() == 8, "Mentality needs all eight current lessons")
             check(page.locator(".mentality-tactical-card").count() == 1, "Mentality needs one tactical learning")
             check(page.locator('.mentality-tactical-card[href="/posts/mdb-option-expiry-date-risk/"]').count() == 1, "Tactical learning must link to the MDB trade post")
         if route == "autonomous/":

@@ -226,6 +226,35 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["NKE"]["sector_etf"], "XLY")
         self.assertEqual(charts["NKE"]["series"]["dates"][-1], scan["last_bar"])
 
+    def test_august_17_live_additions_have_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        expected = {
+            "BOT": ("Technology", "XLK", "2026-08-30", "Est. July NAV update"),
+            "CYPH": ("Financials", "XLF", "2026-11-11", "Est. Q3 results"),
+            "GRND": ("Communication Services", "XLC", "2026-11-05", "Est. Q3 results"),
+            "OSCR": ("Health Care", "XLV", "2026-11-05", "Est. Q3 results"),
+        }
+        for symbol, (sector, etf, catalyst, catalyst_name) in expected.items():
+            with self.subTest(symbol=symbol):
+                slug = symbol.lower()
+                self.assertEqual(profiles[symbol]["flair"], "thesis")
+                self.assertEqual(profiles[symbol]["sector"], sector)
+                self.assertEqual(profiles[symbol]["sector_etf"], etf)
+                self.assertIn(f'id="hypothesis-{slug}-setup"', source)
+                self.assertIn(
+                    f'data-desk-catalyst="{catalyst}" data-desk-catalyst-name="{catalyst_name}"',
+                    source,
+                )
+                self.assertEqual(set(valuations[symbol]["entry_levels"]), {"bear", "base", "bull"})
+                self.assertEqual(universe[symbol]["sector"], charts[symbol]["sector"])
+                self.assertEqual(charts[symbol]["sector_etf"], etf)
+                self.assertEqual(charts[symbol]["series"]["dates"][-1], "2026-08-17")
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
