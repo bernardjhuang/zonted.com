@@ -28,7 +28,9 @@ VWAP_CHARTS = ROOT / "trading" / "vwap-charts.json"
 CSS_HREF = "/trading/hypothesis-summary.6e6f3b19.css"
 MODAL_SCRIPT_HREF = "/js/hypothesis-chart-modal.b42a9700.js"
 MIN_CHART_POINTS = 26
-MIN_BETA_OBSERVATIONS = 26
+# Newly listed holdings still get their full available history. Twelve aligned
+# weekly returns is the minimum honest beta sample; the UI reports the count.
+MIN_BETA_OBSERVATIONS = 12
 START = "<!-- AUTO:HYPOTHESIS_SUMMARY:START -->"
 END = "<!-- AUTO:HYPOTHESIS_SUMMARY:END -->"
 
@@ -134,8 +136,8 @@ def fetch_chart(symbol: str) -> dict:
             continue
         date = dt.datetime.fromtimestamp(timestamp, tz=dt.timezone.utc).date().isoformat()
         points.append((date, round(value, 2)))
-    if len(points) < 80:
-        raise ValueError(f"{symbol} returned only {len(points)} valid two-year points")
+    if len(points) < MIN_CHART_POINTS:
+        raise ValueError(f"{symbol} returned only {len(points)} valid history points")
 
     # One close per ISO week keeps the checked-in payload and inline SVG compact.
     weekly: dict[tuple[int, int], tuple[str, float]] = {}
@@ -143,7 +145,9 @@ def fetch_chart(symbol: str) -> dict:
         parsed = dt.date.fromisoformat(date)
         iso = parsed.isocalendar()
         weekly[(iso.year, iso.week)] = (date, close)
-    sampled = list(weekly.values())
+    # Preserve every completed session for a recent listing; weekly sampling
+    # would make an honest full-history chart fail the 26-point UI contract.
+    sampled = points if len(points) < 80 else list(weekly.values())
     if sampled[0] != points[0]:
         sampled.insert(0, points[0])
     if sampled[-1] != points[-1]:
