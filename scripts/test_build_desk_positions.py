@@ -208,6 +208,24 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["AAON"]["sector_etf"], "XLI")
         self.assertEqual(charts["AAON"]["series"]["dates"][-1], scan["last_bar"])
 
+    def test_nke_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        self.assertEqual(profiles["NKE"]["flair"], "thesis")
+        self.assertEqual(profiles["NKE"]["sector"], "Consumer Discretionary")
+        self.assertEqual(profiles["NKE"]["sector_etf"], "XLY")
+        self.assertIn('id="hypothesis-nke-setup"', source)
+        self.assertIn('data-desk-catalyst="2026-09-08" data-desk-catalyst-name="Confirmed annual meeting"', source)
+        self.assertIn("NIKE has not announced its fiscal Q1 2027 earnings date", source)
+        self.assertEqual(valuations["NKE"]["entry_levels"], {"bear": 40.51, "base": 40.73, "bull": 77.06})
+        self.assertEqual(universe["NKE"]["sector"], "Consumer Disc")
+        self.assertEqual(charts["NKE"]["sector_etf"], "XLY")
+        self.assertEqual(charts["NKE"]["series"]["dates"][-1], scan["last_bar"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
