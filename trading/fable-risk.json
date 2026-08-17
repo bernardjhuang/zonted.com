@@ -2,6 +2,116 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-17",
+   "assess_for": "Monday Aug 17 session",
+   "session": "intraday",
+   "verdict": "RISK-ON",
+   "subtitle": "Tenth straight risk-on print and the score ticks up to +7 \u2014 leadership finally climbed off the floor (XLI back in the top-3), while the vol complex sits exactly where it closed the record week: VIX 14.63, front contango +2.11, credit in its tightest decile",
+   "score": 7,
+   "n_signals": 11,
+   "composite": "+0.64",
+   "signals": [
+    {
+     "name": "Trend",
+     "value": "776.34 vs 748.93 \u00b7 +3.66% \u00b7 Aug 14 close \u2014 Alpaca SIP is back after Friday's 401s, and Friday's small dip off Thursday's record barely dented the gap",
+     "rule": "SPY vs 50-session SMA \u00b7 \u00b10.25% band",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "value": "14.63 \u00b7 feed as_of Aug 13 \u2014 Friday's close is not yet in the site feed, but the lowest print since the June drawdown stands",
+     "rule": "VIX < 16 on \u00b7 16\u201320 neutral \u00b7 > 20 off",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "value": "+2.11 (M2 18.11, M1 16.00) \u00b7 feed Aug 13 \u2014 steep contango into Wednesday's Aug VX expiry",
+     "rule": "M2 \u2212 M1 > +0.5 on \u00b7 0 to +0.5 neutral \u00b7 < 0 off",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "value": "89.42 \u00b7 Aug 13 close \u2014 the tail bid still asleep despite Hormuz",
+     "rule": "VVIX < 95 on \u00b7 95\u2013110 neutral \u00b7 > 110 off",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "value": "70.88 \u00b7 still frozen at Jul 17, 19+ sessions and flagged stale in the feed \u2192 0 by rule; the level itself would score +1",
+     "rule": "MOVE < 80 on \u00b7 80\u2013100 neutral \u00b7 > 100 off \u00b7 stale \u2192 0",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "value": "2.71% \u00b7 \u22124bp over 5 sessions (2.75% Aug 5 \u2192 2.71% Aug 12, FRED vintage) \u2014 tightening, not widening, in the tightest decile of the trailing years",
+     "rule": "HY OAS < 3% and widening < 10bp on \u00b7 10\u201325bp neutral \u00b7 > 25bp or > 4% off",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "value": "11 of 13 \u00b7 85% \u00b7 feed fresh to Aug 14 \u2014 the same two holdouts, XLC \u22120.4% and XLU \u22120.8%, and XLC keeps closing the gap",
+     "rule": "US rows above YTD VWAP \u2265 70% on \u00b7 40\u201370% neutral \u00b7 < 40% off",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "value": "top-3: XLE +1.57 \u00b7 XLV +1.14 \u00b7 XLI +1.10 \u2014 XLI reclaims third from XLB, so one of the five cyclicals is back after three days at zero; XLF +1.08 sits 2bp behind",
+     "rule": "{XLK,XLY,XLC,XLI,XLF} in top-3 by 50d z: \u22652 on \u00b7 1 neutral \u00b7 0 off",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "value": "\u22120.69pt (IWM +3.76%, SPY +4.45%, Jul 17 \u2192 Aug 14, Alpaca) \u2014 small caps narrowed the gap from Friday's \u22120.94 but still trail",
+     "rule": "IWM \u2212 SPY 20-session return > +1pt on \u00b7 \u00b11pt neutral \u00b7 < \u22121pt off",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "value": "4 of 7 \u00b7 BNB +1.23, ETH +0.47, SOL +0.44, ZEC +0.32 leading BTC \u00b7 feed Aug 13 \u2014 XRP \u22120.70 the worst laggard",
+     "rule": "alts beating BTC on 50d spread z: \u22654 of 7 on \u00b7 2\u20133 neutral \u00b7 \u22641 off",
+     "score": 1
+    },
+    {
+     "name": "FX stress",
+     "value": "159.26 vs 157.89 \u00b7 +0.87% over 5 sessions (Yahoo, Aug 17 print) \u2014 yen weaker, no stress state",
+     "rule": "yen appreciation > 1% in 5 sessions \u2192 \u22121 \u00b7 else 0",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>Tenth consecutive risk-on session since the Aug 4 flip, and the ledger actually improved over the weekend: +7 of 11, the best print since the +8 high-water on Aug 10. The one moving part is <i>leadership</i> \u2014 after three straight days of a zero-cyclical top-3 (the XLE \u00b7 XLV \u00b7 XLB board that cost a full point), industrials edged back into third on the Aug 14 board at z +1.10. One cyclical of five is still only worth a 0, but XLF sits 2bp behind third place, so the board is one quiet financials day from turning this signal positive for the first time in weeks.</p>",
+    "<p>Everything else is the same picture that carried the record week. The vol complex is as quiet as it has been all summer: VIX 14.63 \u2014 the lowest close since the June drawdown \u2014 front-month contango at +2.11 with Wednesday's VX expiry approaching, VVIX under 90. Credit refuses to confirm any stress story: HY OAS at 2.71% actually <i>tightened</i> 4bp over the five sessions through Aug 12. Breadth holds at 11 of 13 above YTD VWAP with only comm services and utilities below the line. <a href=\"https://www.cnbc.com/2026/08/12/stock-market-today-live-updates.html\" rel=\"noopener\">The S&amp;P closed Thursday above 7,800 for the first time</a> \u2014 its 27th record this year \u2014 on cooler inflation and falling oil, and SPY enters Monday 3.7% above its 50-day.</p>",
+    "<p>What the rubric does not score is where the risk lives this week, and it is a heavier calendar than the data-light label suggests. <a href=\"https://www.capitalstreetfx.com/market-analysis/week-ahead-1721-august-2026-fomc-minutes/\" rel=\"noopener\">Wednesday's FOMC minutes</a> arrive with three hike dissenters on the record and September hike odds priced near 30% \u2014 a hawkish read into Warsh's first Jackson Hole keynote is the cleanest catalyst for the vol complex to wake up. The retail-earnings wave (Home Depot, Target, Lowe's, TJX, Walmart) lands days after <a href=\"https://www.cnbc.com/2026/08/14/stock-market-next-week-outlook-for-aug-17-21-2026.html\" rel=\"noopener\">July retail sales posted their steepest monthly drop in over a year</a> and consumer sentiment slumped to 51. And <a href=\"https://www.bbh.com/us/en/insights/blog/mind-on-the-markets/Drivers-for-the-Week-of-August-17-2026.html\" rel=\"noopener\">Hormuz still has WTI pinned near $82</a> even after Brent's slide to $87 \u2014 off the July highs, still a tax on everything downstream. None of that has touched a single gauge yet. Until it does, I score what is on the board: 8.2/10 risk appetite, risk-on.</p>"
+   ],
+   "flips": {
+    "to_off": "The gauges, not the headlines: VIX back through 16 with front-month contango collapsing under +0.5, or HY OAS widening 10bp+ off 2.71%. Hawkish minutes Wednesday or a Walmart/Target guide-down are the visible triggers \u2014 but SPY has 3.7% of air above its 50-day (749) before trend even wobbles, so a one-day headline dent likely lands NEUTRAL, not risk-off.",
+    "to_on": "Already there \u2014 the path to retesting Aug 10's +8 runs through leadership (XLF +1.08 needs 2bp to put two cyclicals in the top-3), IWM closing its \u22120.7pt 20-day gap to SPY, or the MOVE feed coming back alive under 80."
+   },
+   "sources": [
+    {
+     "t": "CNBC Aug 13 \u2014 S&P 500 first close above 7,800, cooler CPI, oil slides",
+     "u": "https://www.cnbc.com/2026/08/12/stock-market-today-live-updates.html"
+    },
+    {
+     "t": "CNBC \u2014 week ahead Aug 17\u201321: retail earnings, FOMC minutes",
+     "u": "https://www.cnbc.com/2026/08/14/stock-market-next-week-outlook-for-aug-17-21-2026.html"
+    },
+    {
+     "t": "Capital Street FX \u2014 FOMC minutes, Warsh's Jackson Hole test",
+     "u": "https://www.capitalstreetfx.com/market-analysis/week-ahead-1721-august-2026-fomc-minutes/"
+    },
+    {
+     "t": "BBH \u2014 drivers for the week of Aug 17: Hormuz, WTI near $82",
+     "u": "https://www.bbh.com/us/en/insights/blog/mind-on-the-markets/Drivers-for-the-Week-of-August-17-2026.html"
+    },
+    {
+     "t": "Zonted risk feed (Cboe/FRED vintages, as_of Aug 13)",
+     "u": "https://zonted.com/trading/risk-ytd.json"
+    }
+   ],
+   "rating": 8.2
+  },
+  {
    "date": "2026-08-14",
    "session": "intraday",
    "assess_for": "Friday Aug 14 session",
@@ -4291,6 +4401,10 @@
     [
      "2026-08-13",
      777.88
+    ],
+    [
+     "2026-08-14",
+     776.34
     ]
    ],
    "QQQ": [
@@ -4381,9 +4495,13 @@
     [
      "2026-08-13",
      732.07
+    ],
+    [
+     "2026-08-14",
+     731.07
     ]
    ]
   },
-  "updated": "2026-08-13"
+  "updated": "2026-08-14"
  }
 }
