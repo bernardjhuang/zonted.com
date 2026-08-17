@@ -3,6 +3,160 @@
  "entries": [
   {
    "date": "2026-08-17",
+   "assess_for": "Tuesday Aug 18 open",
+   "session": "post-close",
+   "verdict": "RISK-ON",
+   "subtitle": "Eleventh straight risk-on print and the score holds +7 \u2014 the session paid the first Hormuz-reignition invoice (SPY \u22120.47%, XLE alone green, the 30-year at a 19-year-high 5.31%) without touching a rubric line, while the graded book eats its worst mark yet: 0.49 on the 70% weekly-move call the tape never delivered",
+   "score": 7,
+   "n_signals": 11,
+   "composite": "+0.64",
+   "signals": [
+    {
+     "name": "Trend",
+     "value": "772.67 vs 749.24 \u00b7 +3.13% \u00b7 today's SIP close \u2014 Monday's \u22120.47% trimmed half a point of cushion off Friday's mark, still twelve times the band",
+     "rule": "SPY vs 50-session SMA \u00b7 \u00b10.25% band",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "value": "14.25 \u00b7 feed as_of Aug 14 after the mandated wait-and-refetch \u2014 Monday's actual close 15.19 (+6.6%) is not in the feed yet; both marks sit under 16",
+     "rule": "VIX < 16 on \u00b7 16\u201320 neutral \u00b7 > 20 off",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "value": "+2.36 (M2 17.92, M1 15.56) \u00b7 feed Aug 14 \u2014 steep contango into Wednesday's Aug VX expiry",
+     "rule": "M2 \u2212 M1 > +0.5 on \u00b7 0 to +0.5 neutral \u00b7 < 0 off",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "value": "87.48 \u00b7 feed Aug 14 \u2014 the tail bid slept through Friday; Monday's repricing not yet marked",
+     "rule": "VVIX < 95 on \u00b7 95\u2013110 neutral \u00b7 > 110 off",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "value": "70.88 \u00b7 frozen at Jul 17, 20+ sessions, stale-flagged in the feed \u2192 0 by rule; the level itself would score +1 \u2014 and tonight it is the row most worth having live, with the 30-year at 5.31%",
+     "rule": "MOVE < 80 on \u00b7 80\u2013100 neutral \u00b7 > 100 off \u00b7 stale \u2192 0",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "value": "2.71% \u00b7 0bp over 5 sessions (2.71% Aug 6 \u2192 2.71% Aug 13, FRED vintage) \u2014 pinned in the tightest decile while the long bond makes 19-year highs",
+     "rule": "HY OAS < 3% and widening < 10bp on \u00b7 10\u201325bp neutral \u00b7 > 25bp or > 4% off",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "value": "11 of 13 \u00b7 85% \u00b7 feed Aug 14 \u2014 XLC \u22120.4% and XLU \u22120.8% the two below the line; Monday's tape not yet in the feed",
+     "rule": "US rows above YTD VWAP \u2265 70% on \u00b7 40\u201370% neutral \u00b7 < 40% off",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "value": "top-3: XLE +1.57 \u00b7 XLV +1.14 \u00b7 XLI +1.10 \u00b7 feed Aug 14 \u2014 one cyclical of five on the podium, XLF +1.08 still 2bp off third; Monday's XLE-only tape will not help the cyclical count",
+     "rule": "{XLK,XLY,XLC,XLI,XLF} in top-3 by 50d z: \u22652 on \u00b7 1 neutral \u00b7 0 off",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "value": "\u22120.10pt (IWM +4.02%, SPY +4.12%, Jul 20 \u2192 Aug 17, Alpaca) \u2014 the gap all but closed from Friday's \u22120.69pt; small caps outperformed Monday's red tape",
+     "rule": "IWM \u2212 SPY 20-session return > +1pt on \u00b7 \u00b11pt neutral \u00b7 < \u22121pt off",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "value": "4 of 7 \u00b7 BNB +1.23, ETH +0.47, SOL +0.44, ZEC +0.32 over BTC \u00b7 feed Aug 13 \u2014 unchanged; XRP \u22120.70 still the laggard",
+     "rule": "alts beating BTC on 50d spread z: \u22654 of 7 on \u00b7 2\u20133 neutral \u00b7 \u22641 off",
+     "score": 1
+    },
+    {
+     "name": "FX stress",
+     "value": "159.23 vs 158.64 \u00b7 +0.37% over 5 fixes (ECB, Aug 10 \u2192 Aug 17) \u2014 Yahoo 429'd both reads, ECB fix is the fallback; yen weaker, no stress state",
+     "rule": "yen appreciation > 1% in 5 sessions \u2192 \u22121 \u00b7 else 0",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The streak reaches eleven and the score holds +7, but tonight's is the first risk-on print that paid a bill on the way in. <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-monday-august-17-dow-sp-500-nasdaq-094421171.html\" rel=\"noopener\">The US\u2013Iran memorandum expired Monday</a>, the President said he doesn't see the war ending anytime soon and threatened Oman over Strait interference, and the tape repriced it: Brent out near $89 (+2%), WTI $82, and the real damage in duration \u2014 the 30-year through 5.31%, a 19-year high, the 10-year at 4.72%. SPY gave back \u22120.47% to 772.67, its second straight red session; the S&amp;P closed 7,745.06. The sector board says what the day was: XLE +1.08% alone in the green, XLK +0.16% flat, and the bottom stacked with the consumer \u2014 XLC \u22121.89%, XLP \u22121.64%, XLY \u22121.23%, XLF \u22121.00% \u2014 <a href=\"https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-17-2026\" rel=\"noopener\">pre-selling a retail-earnings week</a> that opens Tuesday with Home Depot. VIX added 6.6% to 15.19. The pocket that refused the story: semis \u2014 Micron through $1,000 for the first time since July, +5%, and the Nasdaq's \u22120.32% was the mildest of the three.</p>",
+    "<p>Against the morning read: no signal moved by score \u2014 +7 at the open, +7 at the bell \u2014 but both rows that re-measure on live data re-measured. Trend re-marked on today's close: 772.67 against a 50-day at 749.24, +3.13%, half a point of cushion gone since Friday. Size appetite went the other way: IWM outperformed the red tape (\u22120.34% against SPY's \u22120.47%) and the 20-session spread narrowed from \u22120.69pt to \u22120.10pt \u2014 the closest small caps have been to even since July. The rest of the movement was plumbing, not markets: Yahoo rate-limited the FX read twice so the yen row scored on ECB fixes (+0.37% weaker over five, same 0), and the site risk feed still carried Friday's marks after the mandated wait-and-refetch \u2014 VIX 14.25, contango +2.36, VVIX 87.48, breadth 85%, and the XLE\u00b7XLV\u00b7XLI podium are all Aug 14 vintages tonight, flagged per row. Monday's actual VIX close of 15.19 sits on the same side of every threshold the Friday mark does.</p>",
+    "<p>Did the day confirm the morning call? Split it honestly: direction no, regime yes. A +7 into a \u22120.47% close is a wrong-way session, the second in a row, and every fresh print that arrived during it \u2014 oil, the 30-year, VIX +6.6% \u2014 moved risk-off without reaching a single rubric line: vol under 16, curve in contango, credit at 2.71% didn't blink, breadth held 85%. The sharper verdict landed in the graded book. The Aug 10 post-close call \u2014 a \u22651% close-to-close move somewhere in Aug 11\u201317, at 70% \u2014 resolved at today's bell against a week that ran \u22120.32, +0.25, +0.70, \u22120.20, \u22120.47. MISS, Brier 0.49, the worst grade in fourteen, and the fifth from the same pocket: paying for movement this tape keeps declining to deliver. Running Brier 0.23, up from 0.21.</p>",
+    "<p>Into Tuesday: Home Depot before the open ($4.73 consensus) and July housing starts, then the week stacks \u2014 <a href=\"https://www.tradingkey.com/analysis/stocks/us-stocks/262110009-weekly-preview-fed-walmart-target-home-depot-earnings-us-consumer-tradingkey\" rel=\"noopener\">FOMC minutes Wednesday at 2:00</a> with July's triple hike dissent on paper and September odds near 30%, Target, Lowe's, TJX and ADI Wednesday morning, Walmart, Deere and BABA Thursday, and Friday putting August opex and Warsh's first Jackson Hole keynote on the same session with the long bond already at 19-year highs. Posture stays where the rubric puts it \u2014 risk-on, eleventh consecutive \u2014 but the open book is exposed: the 50% \u00b11%-move call resolves at Tuesday's close with four of five sessions burned, and the 75% floor call at 770.56 has 0.27% of air under tonight's close in a tape that just remembered Hormuz exists. Tonight's forecast marks that floor view down rather than defending it.</p>"
+   ],
+   "flips": {
+    "to_off": "The sum needs a five-point drop to +2 for NEUTRAL and \u22123 for RISK-OFF; the one-night route is a Hormuz escalation gap: VIX (15.19 Monday, 14.25 on the Friday-marked feed) through 16 and then 20, contango (+2.36) flattening through +0.5, VVIX (87) through 95, HY OAS backing up 10bp+ off 2.71%, and SPY toward the 50-day at 749.24, 3.0% below tonight's close. Monday crossed none of those lines \u2014 it just walked toward all of them at once.",
+    "to_on": "+8 needs one of three: the MOVE row un-freezing anywhere under 80 (the frozen 70.88 already earns the level; staleness costs the point); a second cyclical on the podium \u2014 XLF at z +1.08 sits 2bp behind XLI's +1.10 on the Friday board; or Size closing its last 1.1pt \u2014 IWM\u2212SPY at \u22120.10pt is the nearest to the +1pt line it has been since July."
+   },
+   "forward": {
+    "horizon": "Tue Aug 18 \u2013 Mon Aug 24",
+    "watch": [
+     {
+      "name": "Retail earnings gauntlet",
+      "why": "the consumer reports days after cracking",
+      "lean": "watch",
+      "detail": "HD Tue am ($4.73 est), TGT/LOW/TJX/ADI Wed am, WMT ($0.74 est)/DE/BABA Thu am \u2014 calendar-verified \u2014 against July retail sales' steepest monthly drop in over a year and sentiment at 51; Monday pre-sold it, XLY \u22121.23% and XLP \u22121.64%"
+     },
+     {
+      "name": "FOMC minutes + Warsh's Jackson Hole debut",
+      "why": "the hawkish paper trail meets a 19-year-high long bond",
+      "lean": "off",
+      "detail": "Minutes Wed 2:00 carry July's three-dissent hike vote with September priced near 30%; Warsh keynotes Friday \u2014 the same session as August opex \u2014 with the 30-year at 5.31% and the 10-year 4.72%"
+     },
+     {
+      "name": "Hormuz, reopened",
+      "why": "Monday's invoice was the first, not the last",
+      "lean": "off",
+      "detail": "US\u2013Iran MOU expired, Oman threatened over the Strait, Brent ~$89 +2%, WTI ~$82 \u2014 overnight-gap risk is the one thing a 770.56 floor call cannot hedge"
+     },
+     {
+      "name": "Vol regime",
+      "why": "compression intact, one warning shot fired",
+      "lean": "on",
+      "detail": "SPY RV10 10.8% vs RV21 13.2% \u2014 still falling, 10d under 21d; VIX 15.19 Monday (+6.6%) against Friday-marked contango +2.36 and VVIX 87; Aug VX expiry Wednesday, opex Friday"
+     },
+     {
+      "name": "Credit vs the long bond",
+      "why": "the live divergence",
+      "lean": "watch",
+      "detail": "30-year making 19-year highs at 5.31% while HY OAS sits 2.71%, 0bp over five sessions, tightest decile \u2014 one of them is wrong about the cost of money; equity trades with credit until it can't"
+     },
+     {
+      "name": "Yen COT",
+      "why": "carry-unwind fuel half-drained",
+      "lean": "watch",
+      "detail": "TFF Aug 11: leveraged funds \u221253.1k contracts short yen (covered 8.5k w/w), asset managers \u221226.3k (covered 16.7k) \u2014 the spec short is roughly half its late-July \u00a51.8trn peak; 5-fix drift +0.37% yen-weaker"
+     }
+    ],
+    "forecast": {
+     "claim": "SPY closes below 770.56 \u2014 the pre-CPI Aug 11 close, 0.27% under tonight \u2014 at least once within Tue Aug 18 \u2013 Mon Aug 24",
+     "prob": "45%",
+     "resolves": "2026-08-24"
+    },
+    "grading": "One came due at today's bell. Aug 10 post-close: a \u22651% close-to-close move, either direction, within Aug 11\u201317 at 70% \u2014 did not occur: the five sessions ran \u22120.32, +0.25, +0.70, \u22120.20, \u22120.47, and the week's largest move was Thursday's +0.70. MISS, Brier 0.49 \u2014 the worst grade in the book, and the fifth miss from the same pocket: paying for movement the tape refuses to deliver. Running Brier 0.23 across fourteen graded, up from 0.21. Open: Aug 11 post-close's \u00b11%-by-Aug-18 at 50% (four of five burned; needs Tuesday), the Aug 13 75% floor at 770.56 through Aug 20 (0.27% under tonight's close), and Aug 13 post-close's \u00b11%-by-Aug-20 at 40% (three sessions left, minutes among them)."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Stocks fall as oil rises amid US\u2013Iran tensions, 30-year yield highest in decades",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-monday-august-17-dow-sp-500-nasdaq-094421171.html"
+    },
+    {
+     "t": "TheStreet \u2014 Dow, S&P 500 fall as retail earnings reports loom",
+     "u": "https://www.thestreet.com/stock-market-today/stock-market-today-dow-jones-sp-500-nasdaq-updates-aug-17-2026"
+    },
+    {
+     "t": "TradingKey \u2014 Fed minutes, Walmart, Target and Home Depot to test US consumer resilience",
+     "u": "https://www.tradingkey.com/analysis/stocks/us-stocks/262110009-weekly-preview-fed-walmart-target-home-depot-earnings-us-consumer-tradingkey"
+    },
+    {
+     "t": "CFTC \u2014 Traders in Financial Futures, week of Aug 11",
+     "u": "https://www.cftc.gov/dea/newcot/FinFutWk.txt"
+    }
+   ],
+   "rating": 8.2
+  },
+  {
+   "date": "2026-08-17",
    "assess_for": "Monday Aug 17 session",
    "session": "intraday",
    "verdict": "RISK-ON",
@@ -4405,6 +4559,10 @@
     [
      "2026-08-14",
      776.34
+    ],
+    [
+     "2026-08-17",
+     772.67
     ]
    ],
    "QQQ": [
@@ -4499,9 +4657,13 @@
     [
      "2026-08-14",
      731.07
+    ],
+    [
+     "2026-08-17",
+     729.87
     ]
    ]
   },
-  "updated": "2026-08-14"
+  "updated": "2026-08-17"
  }
 }
