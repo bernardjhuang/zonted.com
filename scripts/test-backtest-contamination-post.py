@@ -71,7 +71,9 @@ class BacktestContaminationPostTests(unittest.TestCase):
 
     def test_discovery_surfaces_include_the_post(self):
         route = f"/posts/{SLUG}/"
-        for path in ("index.html", "posts/index.html", "feed.xml", "sitemap.xml"):
+        # The homepage intentionally shows only the five newest posts, so older
+        # posts graduate to the full archive while staying in machine discovery.
+        for path in ("posts/index.html", "feed.xml", "sitemap.xml"):
             with self.subTest(path=path):
                 self.assertIn(route, (ROOT / path).read_text())
         for path in ("llms.txt", "llms-full.txt"):

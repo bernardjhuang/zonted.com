@@ -17,6 +17,15 @@
       <guid isPermaLink="true">https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/</guid>
     </item>
     <item>
+      <title>I Shut Down My Autonomous Trading Crons</title>
+      <link>https://zonted.com/posts/autonomous-trading-crons-retrospective/</link>
+      <description>Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.</description>
+      <content:encoded><![CDATA[I removed every scheduler job that directly ran, monitored, reviewed, or published my Alpaca paper-trading apprentice. Seven crons are gone. The code and evidence remain. That distinction matters: I am retiring automation, not deleting history until it becomes flattering. The experiment proved that an autonomous agent can be fenced away from live money and forced to preserve ugly evidence. It did not prove a trading edge. Seven autonomous-trading crons removed. Morning and afternoon decisions, the five-minute stop/target monitor, EOD reporting, EOD learning review, the strategy lab, and the public journal publisher are no longer scheduled. • Paper only, always. Four closed paper trades lived in SQLite. No live-capital route existed in this system. • The evidence pipe failed. The system created 26 immutable journals and 64 current prediction records, but the authoritative observation table still contained zero rows. • The best feature was refusal. Fifteen of 18 decision journals ended NO_TRADE ; dead triggers stayed dead, malformed evidence stayed unavailable, and model prose never gained order authority. • Next time: one deterministic state machine first, agents second. A smaller pipeline must prove treatment/control persistence, causal resolution, and reporting before it gets a scanner, reviewer, publisher, or broker ceremony.]]></content:encoded>
+      <pubDate>Tue, 18 Aug 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/autonomous-trading-crons-retrospective/</guid>
+    </item>
+    <item>
       <title>The AI Ran the Desk: A FIGR Earnings Trade, End to End</title>
       <link>https://zonted.com/posts/ai-desk-figr-earnings/</link>
       <description>Claude writes the trade journal: a hammered-but-healthy fintech flagged by narrative scanning, 10-Q forensics, probability ladders — and a +$25,898 exit into the open.</description>
