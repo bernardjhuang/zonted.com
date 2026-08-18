@@ -39,7 +39,7 @@ class TradingUiContractTest(unittest.TestCase):
         }
         self.assertEqual(
             public_routes,
-            {"themes", "vwap-setups", "momentum", "mentality", "performance", "gpt-risk", "grok-risk", "fable-risk"},
+            {"themes", "vwap-setups", "momentum", "mentality", "performance"},
         )
         for retired in ("autonomous", "autonomous-psy"):
             self.assertFalse((ROOT / "trading" / retired).exists())
@@ -87,6 +87,33 @@ class TradingUiContractTest(unittest.TestCase):
             source = path.read_text()
             self.assertNotIn('href="/trading/autonomous/"', source, str(path))
             self.assertNotIn('href="/trading/autonomous-psy/"', source, str(path))
+
+    def test_model_risk_journals_are_fully_retired(self):
+        for path in (
+            ROOT / "trading" / "gpt-risk",
+            ROOT / "trading" / "grok-risk",
+            ROOT / "trading" / "fable-risk",
+            ROOT / "trading" / "risk-journal.json",
+            ROOT / "trading" / "grok-risk.json",
+            ROOT / "trading" / "fable-risk.json",
+            ROOT / "scripts" / "independent_risk_journal.py",
+            ROOT / "scripts" / "publish-independent-risk-journal.py",
+            ROOT / "scripts" / "publish-gpt-risk-journal.py",
+            ROOT / "scripts" / "update-grok-risk.py",
+            ROOT / "scripts" / "update-fable-risk.py",
+        ):
+            self.assertFalse(path.exists(), str(path))
+
+        redirects = (ROOT / "_redirects").read_text()
+        for retired_url in (
+            "/trading/gpt-risk",
+            "/trading/grok-risk",
+            "/trading/fable-risk",
+            "/trading/risk-journal.json",
+            "/trading/grok-risk.json",
+            "/trading/fable-risk.json",
+        ):
+            self.assertIn(f"{retired_url} /trading/ 301", redirects)
 
     def test_trading_home_has_no_needs_attention_block(self):
         home = (ROOT / "trading" / "index.html").read_text()
@@ -414,7 +441,7 @@ class TradingUiContractTest(unittest.TestCase):
         import glob
         pages = [p for p in glob.glob(str(ROOT / "trading" / "*" / "index.html"))
                  if "classic" not in p and "charts" not in p and '<nav class="subnav"' in pathlib.Path(p).read_text()] + [str(ROOT / "trading" / "index.html")]
-        nav_sets, stamps, chips = set(), set(), set()
+        nav_sets, stamps = set(), set()
         styles = (ROOT / "trading" / "desk.css").read_text()
         css_hash = hashlib.sha256((ROOT / "trading" / "desk.css").read_bytes()).hexdigest()[:12]
         js_hash = hashlib.sha256((ROOT / "trading" / "desk.js").read_bytes()).hexdigest()[:12]
@@ -427,15 +454,9 @@ class TradingUiContractTest(unittest.TestCase):
             nav = s[s.find("subnav"):s.find("</nav>")]
             nav_sets.add(tuple(re.findall(r'<a href="([^"]+)"[^>]*>([^<]+)</a>', nav)))
             m = re.search(r'class="stamp">([^<]+)<', s)
-            chip = re.search(r'<span class="chipset">.*?</span>', s)
-            chip_markup = chip.group(0) if chip else "missing"
-            chips.add(chip_markup)
-            self.assertNotEqual(chip_markup, "missing", p)
-            self.assertNotIn('<span class="dot">', chip_markup, p)
-            for state, score in re.findall(r'class="chip chip-[^ ]+ chip-(on|off|neutral)"[^>]*>[^<]*?([\d.]+)</a>', chip_markup):
-                value = float(score)
-                expected = "on" if value > 5 else "off" if value < 5 else "neutral"
-                self.assertEqual(state, expected, f"risk pill color mismatch at {value}: {p}")
+            self.assertNotIn('<span class="chipset">', s, p)
+            for risk_route in ("grok-risk", "gpt-risk", "fable-risk"):
+                self.assertNotIn(f'/trading/{risk_route}/', s, p)
             stamps.add(re.sub(r"[A-Z][a-z]+ \d{1,2}, \d{4}", "<date>", m.group(1)) if m else "missing")
             self.assertIn(f'/trading/desk.{css_hash}.css', s, p)
             self.assertIn(f'/trading/desk.{js_hash}.js', s, p)
@@ -447,31 +468,28 @@ class TradingUiContractTest(unittest.TestCase):
             self.assertEqual(stamps, live_stamps, f"all nav dates must refresh in morning mode: {stamps}")
         else:
             self.assertEqual(len(stamps), 1, f"stamp formats diverge: {stamps}")
-        self.assertNotIn("missing", chips)
+
         hrefs = [h for h, _ in next(iter(nav_sets))]
         self.assertEqual(len(hrefs), len(set(hrefs)), "duplicate nav hrefs")
         self.assertNotIn("/trading/hypotheses/", hrefs)
         for risk_route in ("grok-risk", "gpt-risk", "fable-risk"):
             self.assertNotIn(f"/trading/{risk_route}/", hrefs)
-        for model in ("gpt", "grok", "fable"):
-            self.assertIn(f".chip-{model}::before", styles)
-            self.assertIn(f"/trading/model-icons/{model}.svg", styles)
-            self.assertTrue((ROOT / "trading" / "model-icons" / f"{model}.svg").exists())
-        # Retired from the desk risk-chip system only. The SVGs themselves stay:
-        # the theme ledger masks them for source provenance (.mi-gemini/.mi-meta),
-        # and themes sourced by Gemini or Meta AI are still live.
+
+        # Risk chips are retired. The SVGs stay because the theme ledger masks
+        # them for source provenance and model-sourced themes remain live.
         themes_page = (ROOT / "trading" / "themes" / "index.html").read_text()
-        for retired in ("gemini", "meta"):
-            self.assertNotIn(f".chip-{retired}::before", styles)
-            self.assertIn(f"/trading/model-icons/{retired}.svg", themes_page)
         for model in ("fable", "gpt", "grok", "gemini", "meta"):
+            self.assertNotIn(f".chip-{model}::before", styles)
             self.assertIn(f"/trading/model-icons/{model}.svg", themes_page)
             self.assertTrue(
                 (ROOT / "trading" / "model-icons" / f"{model}.svg").exists(),
                 f"theme provenance icon {model}.svg is referenced but missing",
             )
-        self.assertNotIn(".chip .dot", styles)
-        self.assertIn("value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral'", (ROOT / "trading" / "desk.js").read_text())
+        desk_script = (ROOT / "trading" / "desk.js").read_text()
+        self.assertNotIn("setChip", desk_script)
+        self.assertNotIn("/trading/risk-journal.json", desk_script)
+        self.assertNotIn("/trading/fable-risk.json", desk_script)
+        self.assertNotIn("/trading/grok-risk.json", desk_script)
         self.assertTrue(HYPOTHESES_SOURCE.exists(), "canonical hypothesis source artifact must remain available")
         self.assertFalse((ROOT / "trading" / "hypotheses").exists(), "retired hypotheses route directory remains")
         redirects = (ROOT / "_redirects").read_text()

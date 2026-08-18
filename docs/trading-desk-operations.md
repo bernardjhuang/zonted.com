@@ -12,9 +12,6 @@ Only these checked-in page routes may exist under `trading/*/index.html`:
 - `/trading/momentum/`
 - `/trading/mentality/`
 - `/trading/performance/`
-- `/trading/gpt-risk/`
-- `/trading/grok-risk/`
-- `/trading/fable-risk/`
 
 `trading/hypothesis-source.txt` is a noindex data asset used by the Desk Full thesis dialog. It is not a standalone interface route.
 
@@ -63,21 +60,6 @@ Expected chain:
 - 16:10 CT weekdays: Robinhood `thesis` watchlist synchronization
 
 The retired hourly scan quote publisher and watchdog have no owner and must remain absent.
-
-## Independent risk-rating updates
-
-Risk journals are intentionally not scheduled. Run them only after an explicit user request and keep each model blind to the others.
-
-```bash
-python3 scripts/independent_risk_journal.py prepare \
-  --as-of YYYY-MM-DD --session post-close --run-dir /private/tmp/zonted-risk-YYYY-MM-DD
-python3 scripts/independent_risk_journal.py run-fable \
-  --run-dir /private/tmp/zonted-risk-YYYY-MM-DD
-```
-
-The Fable command is the only supported Anthropic path for this workflow. It invokes `claude -p --model claude-fable-5`, requires `claude auth status` to report `claude.ai` OAuth, removes Anthropic API-key and Bedrock/Vertex/Foundry routing variables, and stages validated JSON without publishing it. Do not replace it with the Anthropic SDK or Hermes' native Anthropic provider.
-
-Generate GPT and Grok responses independently in their own runtimes, then run `validate` and `bundle`. Publication remains a separate reviewed step through `publish-independent-risk-journal.py`.
 
 ## Required checks
 
