@@ -2,6 +2,109 @@
  "schema_version": 1,
  "entries": [
   {
+   "date": "2026-08-18",
+   "assess_for": "Tuesday Aug 18 session",
+   "session": "pre-market",
+   "verdict": "RISK-ON",
+   "subtitle": "Twelfth straight risk-on print and the sum holds +7 while every vol line gets closer \u2014 VIX 15.79 pre-market against the 16 threshold, VVIX 93.9 Monday against 95, the 30-year at a second straight 19-year high 5.32% \u2014 and the retail gauntlet opens with Home Depot clearing its bar, comps +1.7% against ~1% expected",
+   "score": 7,
+   "n_signals": 11,
+   "composite": "+0.64",
+   "signals": [
+    {
+     "name": "Trend",
+     "rule": "SPY vs 50-day avg, \u00b10.25% band",
+     "value": "772.67 vs 749.24 \u00b7 +3.13% \u00b7 Aug 17 SIP close \u2014 Monday gave back 0.47% and still sits 3.1% above the line",
+     "score": 1
+    },
+    {
+     "name": "Vol level",
+     "rule": "VIX <16 / 16\u201320 / >20",
+     "value": "14.25 \u00b7 site feed, Aug 14 vintage after no overnight refresh \u2014 Cboe's Monday close 15.19, pre-market print 15.79: sub-16 on every vintage, but the live read is 21 cents from the line",
+     "score": 1
+    },
+    {
+     "name": "Vol curve",
+     "rule": "M2\u2212M1 contango >+0.5 / 0\u20130.5 / backwardation",
+     "value": "+2.36 (M2 17.92, M1 15.56) \u00b7 feed Aug 14 vintage \u2014 steep contango, four-plus points of cushion above the +0.5 line",
+     "score": 1
+    },
+    {
+     "name": "Vol-of-vol",
+     "rule": "VVIX <95 / 95\u2013110 / >110",
+     "value": "87.48 \u00b7 feed Aug 14 vintage; Cboe's Monday close 93.92, +6.4 on the day \u2014 sub-95 either way, but the fresh mark is 1.1 from the band",
+     "score": 1
+    },
+    {
+     "name": "Rates vol",
+     "rule": "MOVE <80 / 80\u2013100 / >100",
+     "value": "feed row still frozen at Jul 17's 70.88 \u2192 0 by rule \u2014 the flag, not the level, costs the point, with the 30-year at 5.32% behind the frozen mark",
+     "score": 0
+    },
+    {
+     "name": "Credit",
+     "rule": "HY OAS <3% & widening <10bp/5d",
+     "value": "2.71% (Aug 13 obs via Aug 14 feed) \u00b7 0bp over 5 obs (2.71 Aug 6 \u2192 2.71 Aug 13) \u2014 dead flat at the tights while the long bond backs up",
+     "score": 1
+    },
+    {
+     "name": "Breadth",
+     "rule": "US markets above YTD VWAP \u226570% / 40\u201370 / <40",
+     "value": "11 of 13 \u00b7 85% \u00b7 vwap feed refreshed to Aug 17 \u2014 Monday's selloff didn't cost a row; below: only XLC \u22122.2% and XLU \u22121.1%",
+     "score": 1
+    },
+    {
+     "name": "Leadership",
+     "rule": "cyclicals in top-3 sector z: \u22652 / 1 / 0",
+     "value": "top-3: XLE +1.69 \u00b7 XLI +1.07 \u00b7 XLV +1.05 \u00b7 Aug 17 board \u2014 one cyclical; Friday's near-flip receded, XLF slipping to +0.93 from +1.08 as Energy stretched its lead",
+     "score": 0
+    },
+    {
+     "name": "Size appetite",
+     "rule": "IWM\u2212SPY 20d: >+1pt / \u00b11 / <\u22121pt",
+     "value": "\u22120.10pt (IWM +4.02%, SPY +4.12%, Jul 20 \u2192 Aug 17, SIP) \u2014 parked at the middle of the band, nearest the +1pt line since July",
+     "score": 0
+    },
+    {
+     "name": "Crypto appetite",
+     "rule": "alts beating BTC: \u22654/7 / 2\u20133 / \u22641",
+     "value": "5 of 7 \u00b7 BNB +1.12, ETH +0.57, ZEC +0.42, SOL +0.34, HYPE +0.22 \u00b7 feed Aug 16 vintage \u2014 HYPE crossed from negative, the fifth alt above water",
+     "score": 1
+    },
+    {
+     "name": "FX stress",
+     "rule": "yen +1% in 5d scores off; else neutral",
+     "value": "159.23 vs 158.64 \u00b7 +0.37% over 5 ECB fixes (Aug 10 \u2192 Aug 17), yen weaker \u2014 no stress state; Yahoo 429 again, ECB fix per convention",
+     "score": 0
+    }
+   ],
+   "narrative": [
+    "<p>The sum holds +7 for a twelfth straight risk-on print, and the honest read this morning is that the number is steadier than the ground under it. Every vol row still earns its point, but every one of them spent Monday walking toward its line and kept walking overnight: the feed marks VIX at Friday's 14.25 (the overnight refresh failed again), Cboe's Monday close was 15.19, and the pre-market print is 15.79 \u2014 21 cents from the 16 threshold that turns the row neutral. VVIX closed Monday at 93.92, up 6.4 points on the day, 1.1 from its own band. Contango at +2.36 is the only vol reading with real cushion left.</p>",
+    "<p>What hasn't moved is why the verdict hasn't: SPY sits 3.1% above its 50-day even after giving back 0.47% Monday, high-yield spreads are dead flat at 2.71% \u2014 zero basis points of widening over five observations while the 30-year Treasury sets 19-year highs \u2014 and Monday's selloff didn't cost breadth a single row, 11 of 13 US groups still above their year-to-date cost basis on a board refreshed through last night. Crypto added a fifth alt above water. Stress is visible in the headlines and the long bond; it is not yet visible in credit, breadth, or trend, and those are the rows that carry this rubric.</p>",
+    "<p>The macro bill is real, though. Brent touched <a href=\"https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-18-dow-sp-500-nasdaq-080822735.html\" rel=\"noopener\">$91 with WTI near $84.4</a> as the US\u2013Iran standoff over the Strait of Hormuz escalated and the Strategic Petroleum Reserve sits at its lowest level since 1982; <a href=\"https://www.cnbc.com/2026/08/18/treasury-yields-.html\" rel=\"noopener\">the 30-year backed up to 5.32%</a> \u2014 a second straight multi-decade high \u2014 with the 10-year at 4.74%, and equity futures opened Tuesday red, Nasdaq futures \u22121.3%. Against that, the week's first consumer witness testified for the bulls: Home Depot beat at $4.79 against $4.73, revenue $47.9B, comps +1.7% versus roughly 1% expected, and the stock traded up 1% pre-market. Target, Lowe's, and TJX report Wednesday, Walmart Thursday, Fed minutes Wednesday afternoon, and Warsh debuts at Jackson Hole Friday.</p>",
+    "<p>So the call is risk-on because the ledger says risk-on \u2014 8.2/10 on the composite \u2014 but the margin is thinner than the score. A +7 built on four vol rows within about two points of their thresholds is a different +7 than one built on cushion. The rubric doesn't price proximity, only crossings; today, nothing has crossed.</p>"
+   ],
+   "flips": {
+    "to_off": "The sum needs a five-point drop to +2 for NEUTRAL and \u22123 for RISK-OFF, and for the first time in the streak the vol cluster could plausibly deliver most of it in one session: a VIX close through 16 (pre-market 15.79) and VVIX through 95 (Monday 93.92) take the sum to +5 on their own; add contango flattening through +0.5 from +2.36, HY OAS backing up 10bp off 2.71%, and SPY breaking toward the 50-day at 749.24 \u2014 3.0% below Monday's close \u2014 and the verdict is gone. A Hormuz escalation gap is the one-night route through all five.",
+    "to_on": "+8 needs one of three: the MOVE row un-freezing anywhere under 80 (the frozen 70.88 already earns the level; the staleness flag costs the point); a second cyclical on the sector podium \u2014 though XLF just slipped to z +0.93, 12bp behind XLV, farther than Friday; or IWM\u2212SPY closing its last 1.1pt to the +1pt line from \u22120.10pt, its closest approach since July."
+   },
+   "sources": [
+    {
+     "t": "Yahoo Finance \u2014 Futures extend losses amid US\u2013Iran tensions as yields creep higher (Aug 18)",
+     "u": "https://finance.yahoo.com/markets/live/stock-market-today-tuesday-august-18-dow-sp-500-nasdaq-080822735.html"
+    },
+    {
+     "t": "CNBC \u2014 Treasury yields rise as oil gains and US\u2013Iran tensions fuel inflation fears",
+     "u": "https://www.cnbc.com/2026/08/18/treasury-yields-.html"
+    },
+    {
+     "t": "Schwab \u2014 Stocks flat, yields up awaiting retailer results",
+     "u": "https://www.schwab.com/learn/story/stock-market-update-open"
+    }
+   ],
+   "rating": 8.2
+  },
+  {
    "date": "2026-08-17",
    "assess_for": "Tuesday Aug 18 open",
    "session": "post-close",
