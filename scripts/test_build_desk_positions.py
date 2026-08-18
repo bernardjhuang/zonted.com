@@ -321,6 +321,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["DJT"]["sector_etf"], "XLC")
         self.assertEqual(charts["DJT"]["series"]["dates"][-1], scan["last_bar"])
 
+    def test_xle_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["XLE"]["flair"], "thesis")
+        self.assertEqual(profiles["XLE"]["sector"], "Energy")
+        self.assertEqual(profiles["XLE"]["sector_etf"], "XLE")
+        self.assertIn('id="hypothesis-xle-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-09-09" data-desk-catalyst-name="Confirmed EIA STEO"',
+            source,
+        )
+        self.assertIn("next STEO release for September 9, 2026", source)
+        self.assertEqual(valuations["XLE"]["entry_levels"], {"bear": 41.24, "base": 63.68, "bull": 63.68})
+        self.assertEqual(universe["XLE"]["sector"], "Energy")
+        self.assertEqual(charts["XLE"]["sector_etf"], "XLE")
+        self.assertEqual(charts["XLE"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["XLE"]["dates"][-1], long_history["as_of"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
