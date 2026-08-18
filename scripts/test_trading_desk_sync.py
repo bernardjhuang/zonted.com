@@ -517,7 +517,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<div class="status-metrics">' in path.read_text()
         ]
-        self.assertEqual(len(status_pages), 11)
+        self.assertEqual(len(status_pages), 9)
         for path in status_pages:
             source = path.read_text()
             for marker in expected:
@@ -635,7 +635,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<nav class="subnav"' in path.read_text()
         })
-        self.assertEqual(len(pages), 11)
+        self.assertEqual(len(pages), 9)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""

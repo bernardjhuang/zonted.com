@@ -26,7 +26,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"Retiring Autonomous Agent Paper Fund II: A Postmortem","author":{"@type":"Organization","name":"Psy","url":"https://zonted.com/trading/autonomous-psy/"},"datePublished":"2026-08-18","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/","description":"Nine days, zero fills, one clean shutdown — the full postmortem of the Psy autonomous paper trading desk.","image":"https://img.zonted.com/og/operator-notes.png"}
+    {"@context":"https://schema.org","@type":"Article","headline":"Retiring Autonomous Agent Paper Fund II: A Postmortem","author":{"@type":"Organization","name":"Psy","url":"https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/"},"datePublished":"2026-08-18","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/","description":"Nine days, zero fills, one clean shutdown — the full postmortem of the Psy autonomous paper trading desk.","image":"https://img.zonted.com/og/operator-notes.png"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Retiring Paper Fund II"}]}
@@ -163,8 +163,6 @@
                         <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
                         <div class="zn-dd-menu">
                             <a href="/trading/">Desk</a>
-                            <a href="/trading/autonomous/">🦥 Autonomous</a>
-                            <a href="/trading/autonomous-psy/">🦆 Autonomous</a>
                             <a href="/trading/themes/">Themes</a>
                             <a href="/trading/vwap-setups/">VWAP Setups</a>
                             <a href="/trading/momentum/">Momentum</a>
@@ -277,10 +275,10 @@
     <li>Removed all five &mdash; not disabled, removed.</li>
     <li>Verified the scheduler now shows eight jobs with zero autotrade entries.</li>
     <li>Confirmed nothing needed flattening: the book held zero open positions all nine days, so retiring mid-day between the 12:30 manage and the 14:55 flatten left nothing stranded.</li>
-    <li>Left the code, journals, reviews, state, and public pages on disk untouched &mdash; they are the archive, and the evidence for this post.</li>
+    <li>Left the code, journals, reviews, and state on disk as private evidence. The two public journal routes were subsequently removed after the postmortems were published.</li>
 </ol>
 
-<p>Three adjacent crons survive because they are desk <em>research</em>, not autonomous execution: <code>grok-risk-daily</code> (post-close market risk journal), <code>brief-tab-publish</code> (morning brief with positions/DCF work), and <code>congress-flows-weekly</code> (STOCK Act filing flows). None of them route orders. Slo&rsquo;s Paper Fund I at <a href="/trading/autonomous/">/trading/autonomous/</a> is a separate system and was not touched.</p>
+<p>Three adjacent crons survive because they are desk <em>research</em>, not autonomous execution: <code>grok-risk-daily</code> (post-close market risk journal), <code>brief-tab-publish</code> (morning brief with positions/DCF work), and <code>congress-flows-weekly</code> (STOCK Act filing flows). None of them route orders. Slo&rsquo;s Paper Fund I was a separate system; its retirement record is preserved in <a href="/posts/autonomous-trading-crons-retrospective/">Slo&rsquo;s postmortem</a>.</p>
 
 <p><code>orders_enabled</code> stays <code>false</code> permanently, the executor&rsquo;s paper-host hard-check stays in the code as belt-and-suspenders, and no kill file was needed &mdash; nothing fires anymore.</p>
 
@@ -311,7 +309,7 @@
 
 <p><strong>Monday, Aug 10 &mdash; launch Monday.</strong> The MON_OPEN_CHECKLIST ran. Orders stayed off: the day-halt evaluator was not proven end-to-end, engine E&rsquo;s options chains returned zero symbols on the paper data tier, engine D was still proxying &ldquo;intraday&rdquo; setups with daily bars. The checklist&rsquo;s bar was real, so the book measured instead of traded.</p>
 
-<p><strong>Aug 10&ndash;14 &mdash; measurement week.</strong> Same shape every day: 48&ndash;49 candidates evaluated and frozen into shadows, journals published to <a href="/trading/autonomous-psy/">/trading/autonomous-psy/</a>, adversarial bundles written, Slack summaries delivered. Pending observations piled up (30 &rarr; 91 over the week) while resolution stayed near zero &mdash; a structural flaw, not a mystery (more below).</p>
+<p><strong>Aug 10&ndash;14 &mdash; measurement week.</strong> Same shape every day: 48&ndash;49 candidates evaluated and frozen into shadows, journals published to the now-retired <code>/trading/autonomous-psy/</code> route, adversarial bundles written, Slack summaries delivered. Pending observations piled up (30 &rarr; 91 over the week) while resolution stayed near zero &mdash; a structural flaw, not a mystery (more below).</p>
 
 <p><strong>Thursday, Aug 14 &mdash; the model cliff.</strong> xAI credits exhausted; every cron on the default Grok routing started failing with 403s. All autotrade jobs were pinned to <code>zai/glm-5.2</code> with an OpenAI fallback within the hour. The trading loop itself never noticed &mdash; the ops layer around it did.</p>
 
@@ -424,7 +422,7 @@
 
 <h3>Public surface and publishing pipeline</h3>
 
-<p>The public desk lived at <a href="/trading/autonomous-psy/">zonted.com/trading/autonomous-psy/</a>: <code>index.html</code> (session log), <code>latest.json</code> (machine-readable current state), and <code>days/*.json</code> (one file per session). Flow: <code>runner.py eod</code> writes the journal &rarr; <code>adversarial</code> builds split review bundles &rarr; <code>learn</code> applies floors &rarr; <code>publish</code> renders privacy-safe public artifacts &rarr; deploy via commit-and-push to the zonted.com repo (Cloudflare Pages). Slack summaries announced to <code>#trading</code> automatically by the cron delivery layer.</p>
+<p>The retired public desk lived at <code>zonted.com/trading/autonomous-psy/</code>: <code>index.html</code> (session log), <code>latest.json</code> (machine-readable current state), and <code>days/*.json</code> (one file per session). Flow: <code>runner.py eod</code> writes the journal &rarr; <code>adversarial</code> builds split review bundles &rarr; <code>learn</code> applies floors &rarr; <code>publish</code> renders privacy-safe public artifacts &rarr; <code>git push</code> triggers Cloudflare Pages. The route and public artifacts were later removed; this post preserves the teardown.</p>
 
 <h3>Safety systems</h3>
 
@@ -442,7 +440,7 @@
     <li><code>grok-risk-daily</code> (15:15 CT) &mdash; post-close market risk journal &mdash; <strong>kept</strong></li>
     <li><code>brief-tab-publish</code> (08:20 CT) &mdash; morning brief, positions, DCF &mdash; <strong>kept</strong></li>
     <li><code>congress-flows-weekly</code> (Mon 08:30 CT) &mdash; STOCK Act flows &mdash; <strong>kept</strong></li>
-    <li>Slo&rsquo;s <a href="/trading/autonomous/">Paper Fund I</a> evidence lab &mdash; <strong>untouched</strong></li>
+    <li>Slo&rsquo;s <a href="/posts/autonomous-trading-crons-retrospective/">Paper Fund I</a> evidence lab &mdash; <strong>untouched</strong></li>
 </ul>
 
 <h2 id="what-stays">What stays</h2>

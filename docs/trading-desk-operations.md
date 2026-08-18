@@ -15,11 +15,15 @@ Only these checked-in page routes may exist under `trading/*/index.html`:
 - `/trading/gpt-risk/`
 - `/trading/grok-risk/`
 - `/trading/fable-risk/`
-- `/trading/autonomous-psy/`
 
 `trading/hypothesis-source.txt` is a noindex data asset used by the Desk Full thesis dialog. It is not a standalone interface route.
 
 Legacy URLs are handled by `_redirects`. Do not recreate their directories.
+
+Retired autonomous journals redirect to their preserved postmortems:
+
+- `/trading/autonomous/` → `/posts/autonomous-trading-crons-retrospective/`
+- `/trading/autonomous-psy/` → `/posts/retiring-autonomous-agent-paper-fund-ii/`
 
 ## Build graph
 
