@@ -253,7 +253,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
                 self.assertEqual(set(valuations[symbol]["entry_levels"]), {"bear", "base", "bull"})
                 self.assertEqual(universe[symbol]["sector"], charts[symbol]["sector"])
                 self.assertEqual(charts[symbol]["sector_etf"], etf)
-                self.assertEqual(charts[symbol]["series"]["dates"][-1], "2026-08-17")
+                self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
 
     def test_august_18_live_additions_have_exact_canonical_owners(self):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
@@ -289,7 +289,15 @@ class DeskPositionBuilderTests(unittest.TestCase):
                 self.assertEqual(set(valuations[symbol]["entry_levels"]), {"bear", "base", "bull"})
                 self.assertEqual(universe[symbol]["sector"], charts[symbol]["sector"])
                 self.assertEqual(charts[symbol]["sector_etf"], etf)
-                self.assertEqual(charts[symbol]["series"]["dates"][-1], "2026-08-17")
+                self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
+
+    def test_live_owner_chart_assertions_follow_the_refreshable_scan_date(self):
+        tests = Path(__file__).read_text()
+        brittle = re.findall(
+            r'charts\[[^\n]+\]\["series"\]\["dates"\]\[-1\], "\d{4}-\d{2}-\d{2}"',
+            tests,
+        )
+        self.assertEqual(brittle, [], "chart-end assertions must compare with scan['last_bar']")
 
     def test_djt_live_holding_has_exact_canonical_owners(self):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
@@ -311,7 +319,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(valuations["DJT"]["entry_levels"], {"bear": 7.06, "base": 8.06, "bull": 18.5})
         self.assertEqual(universe["DJT"]["sector"], charts["DJT"]["sector"])
         self.assertEqual(charts["DJT"]["sector_etf"], "XLC")
-        self.assertEqual(charts["DJT"]["series"]["dates"][-1], "2026-08-17")
+        self.assertEqual(charts["DJT"]["series"]["dates"][-1], scan["last_bar"])
 
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
