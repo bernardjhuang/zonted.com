@@ -165,11 +165,11 @@ def render_status_metrics(page: str, positions: int, status: dict[str, float]) -
         f'\n    <span class="metric" data-status-vix="{vix:.2f}"><span class="k">VIX</span>{vix:.2f}</span>'
         f'\n    <span class="metric" data-status-open="{positions}"><span class="k">Open</span>{positions}</span>\n  '
     )
-    pattern = r'(<div class="status-metrics">\s*<span class="chipset">.*?</span>).*?(</div>)'
+    pattern = r'(<div class="status-metrics">)\s*(?:<span class="chipset">.*?</span>)?.*?(</div>)'
     sector_chips = render_sector_status_pills()
     rendered, count = re.subn(
         pattern,
-        lambda match: match.group(1) + sector_chips + metrics + match.group(2),
+        lambda match: match.group(1) + "\n    " + sector_chips + metrics + match.group(2),
         page,
         count=1,
         flags=re.S,
@@ -538,29 +538,10 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
     css_ref = content_asset_ref(DESK_CSS)
     js_ref = content_asset_ref(DESK_JS)
     modal_ref = f'/js/hypothesis-chart-modal.b42a9700.js?v={digest(CHART_MODAL_JS)}'
-    gpt = load(ROOT / "trading" / "risk-journal.json")["entries"][0]
-    grok = load(ROOT / "trading" / "grok-risk.json")["entries"][0]
-    fable_payload = load(ROOT / "trading" / "fable-risk.json")
-    fable_rank = {"pre-market": 0, "intraday": 1, "post-close": 2}
-    fable = max(fable_payload["entries"] + fable_payload.get("model_entries", []),
-                key=lambda e: ((e.get("date") or e["as_of_date"]), fable_rank.get(e.get("session", "pre-market"), 1)))
-    models = {
-        "gpt": ("GPT", "gpt-risk", float(gpt["risk_appetite"]), gpt["stance"]),
-        "grok": ("Grok", "grok-risk", float(grok["risk_appetite"]), grok["stance"]),
-        "fable": ("Fable", "fable-risk", float(fable.get("risk_appetite", fable.get("rating"))), fable.get("stance", fable.get("verdict"))),
-    }
-    model_chips = {}
-    for key, (label, route, value, stance) in models.items():
-        state = "on" if value > 5 else "off" if value < 5 else "neutral"
-        score = f"{value:g}"
-        model_chips[key] = (
-            f'<a class="chip chip-{key} chip-{state}" href="/trading/{route}/" '
-            f'title="{html.escape(label)} risk appetite — {html.escape(str(stance))} · {score}/10">{html.escape(label)} {score}</a>'
-        )
     if status_metrics:
-        for retired in ("gemini", "meta"):
+        for retired in ("gpt", "grok", "fable", "gemini", "meta"):
             status_metrics = re.sub(
-                rf'<a class="chip chip-{retired} [^"]+" href="/trading/{retired}-risk/".*?</a>',
+                rf'<a class="chip chip-{retired} [^"]+" href="/trading/(?:gpt|grok|fable|gemini|meta)-risk/".*?</a>',
                 "",
                 status_metrics,
                 count=1,
@@ -572,9 +553,9 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
         source = re.sub(r'/trading/desk(?:\.[a-f0-9]{12})?\.js(?:\?v=[a-f0-9]+)?', js_ref, source)
         source = re.sub(r'<a href="/trading/hypotheses/"(?: aria-current="page")?>Hypotheses</a>', '', source)
         source = re.sub(r'<a href="/trading/watchlist/"(?: aria-current="page")?>Watchlist</a>', '', source)
-        for retired in ("gemini", "meta"):
+        for retired in ("gpt", "grok", "fable", "gemini", "meta"):
             source = re.sub(
-                rf'<a class="chip chip-{retired} [^"]+" href="/trading/{retired}-risk/".*?</a>',
+                rf'<a class="chip chip-{retired} [^"]+" href="/trading/(?:gpt|grok|fable|gemini|meta)-risk/".*?</a>',
                 "",
                 source,
                 count=1,
@@ -587,13 +568,6 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
             source = normalize_trading_subnav(source, path)
         if '<div class="status-metrics">' in source:
             source = replace_sector_status_pills(source)
-        for key, chip in model_chips.items():
-            source = re.sub(
-                rf'<a class="chip chip-{key} [^"]+" href="/trading/(?:gpt|grok|gemini|meta|fable)-risk/".*?</a>',
-                chip,
-                source,
-                count=1,
-            )
         source = re.sub(r'<span class="dot"></span>(?=[A-Za-z]+ [\d.]+</a>)', '', source)
         if stamp:
             source = re.sub(r'(<span class="stamp">).*?(</span>)', rf'\1{stamp}\2', source, count=1)
@@ -602,15 +576,6 @@ def sync_shell_assets(stamp: str | None = None, status_metrics: str | None = Non
             source, count = re.subn(r'<div class="status-metrics">.*?</div>', status_metrics, source, count=1, flags=re.S)
             if count != 1:
                 raise ValueError(f"Status metrics region could not be replaced in {path.relative_to(ROOT)}")
-        # The shared status block comes from the Desk page and may still carry its
-        # pre-build fallback chips, so normalize model scores after inserting it.
-        for key, chip in model_chips.items():
-            source = re.sub(
-                rf'<a class="chip chip-{key} [^"]+" href="/trading/(?:gpt|grok|gemini|meta|fable)-risk/".*?</a>',
-                chip,
-                source,
-                count=1,
-            )
         path.write_text(source)
 
 

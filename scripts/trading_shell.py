@@ -87,10 +87,10 @@ def replace_sector_status_pills(source: str, scores: dict[str, float] | None = N
         )
     else:
         rendered, count = re.subn(
-            r'(<span class="chipset">.*?</span>)', rf'\1{markup}', source, count=1, flags=re.S
+            r'(<div class="status-metrics">)', rf'\1\n    {markup}', source, count=1, flags=re.S
         )
     if count != 1:
-        raise ValueError("Trading status bar model chipset not found")
+        raise ValueError("Trading status bar not found")
     return rendered
 
 

@@ -13,9 +13,6 @@ LINKED_ROUTES = (
     ("momentum/", "Momentum"),
     ("mentality/", "Mentality"),
     ("performance/", "Performance"),
-    ("gpt-risk/", "GPT Risk"),
-    ("grok-risk/", "Grok Risk"),
-    ("fable-risk/", "Fable Risk"),
 )
 
 

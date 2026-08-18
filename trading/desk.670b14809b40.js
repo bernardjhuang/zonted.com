@@ -15,39 +15,6 @@
     subnav.scrollLeft = Math.max(0, activeNav.offsetLeft - (subnav.clientWidth - activeNav.offsetWidth) / 2);
   }
 
-  const riskJournalData = fetch('/trading/risk-journal.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null);
-
-  /* ── status chips: three independent risk-appetite reads, all 0–10.
-     Each updates on its own; a failed fetch leaves that chip's static
-     fallback text in place. Scores above 5 are green, below 5 are red,
-     and exactly 5 keeps the neutral treatment. ── */
-  const setChip = (key, name, value, stanceText) => {
-    const chip = $('.chip-' + key);
-    if (!chip || !Number.isFinite(value)) return;
-    chip.classList.remove('chip-on', 'chip-off', 'chip-neutral');
-    chip.classList.add(value > 5 ? 'chip-on' : value < 5 ? 'chip-off' : 'chip-neutral');
-    chip.textContent = name + ' ' + Math.round(value * 10) / 10;
-    if (stanceText) chip.title = name + ' risk appetite — ' + stanceText + ' · ' + Math.round(value * 10) / 10 + '/10';
-  };
-  riskJournalData.then(d => {
-    const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('gpt', 'GPT', Number(latest.risk_appetite), latest.stance);
-  });
-  fetch('/trading/fable-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const sessionRank = { 'pre-market': 0, intraday: 1, 'post-close': 2 };
-    const rows = d ? [...(d.entries || []), ...(d.model_entries || [])] : [];
-    const latest = rows.sort((a, b) => {
-      const dateOrder = String(b.date || b.as_of_date).localeCompare(String(a.date || a.as_of_date));
-      return dateOrder || (sessionRank[b.session] ?? 1) - (sessionRank[a.session] ?? 1);
-    })[0];
-    if (latest) setChip('fable', 'Fable', Number(latest.risk_appetite ?? latest.rating), latest.stance || latest.verdict);
-  });
-
-  fetch('/trading/grok-risk.json', { cache: 'no-cache' }).then(r => r.ok ? r.json() : null).catch(() => null).then(d => {
-    const latest = d && d.entries && d.entries[0];
-    if (latest) setChip('grok', 'Grok', Number(latest.risk_appetite), latest.stance);
-  });
-
   /* ── position risk charts: levels + interactive metrics ─────────── */
   document.querySelectorAll('.position-risk-chart').forEach(chart => {
     const source = $('.spark-data[data-dates]', chart.closest('.pos'));
@@ -154,34 +121,6 @@
     });
     svg.addEventListener('blur', hideMetrics);
   });
-
-  /* ── risk page: subjective post-close journal ────────────────────── */
-  const riskRoot = $('#risk-live');
-  if (riskRoot) {
-    const bullets = rows => '<ul>' + (rows || []).map(row => '<li>' + esc(row) + '</li>').join('') + '</ul>';
-    riskJournalData.then(data => {
-      const entries = data && Array.isArray(data.entries) ? data.entries : [];
-      if (!entries.length) {
-        riskRoot.innerHTML = '<p class="footnote">The risk journal is unavailable.</p>';
-        return;
-      }
-      riskRoot.innerHTML = entries.map((entry, index) => {
-        const stanceClass = entry.stance.toLowerCase().replace(/[^a-z]+/g, '-');
-        return '<article class="card risk-journal-entry' + (index === 0 ? ' is-latest' : '') + '">' +
-          '<header class="risk-journal-head"><div><time datetime="' + esc(entry.date) + '">' + esc(entry.date) + '</time>' +
-          '<span class="risk-journal-author">By ' + esc(entry.author || data.author || 'GPT-5.6') + '</span>' +
-          '<span class="risk-journal-stamp risk-journal-' + esc(stanceClass) + '">' + esc(entry.stance) + '</span>' +
-          (entry.lean ? '<span class="risk-journal-lean">' + esc(entry.lean) + '</span>' : '') + '</div>' +
-          '<strong>' + esc(entry.risk_appetite) + '/10 <small>risk appetite</small></strong></header>' +
-          '<div class="risk-journal-body"><h2>' + esc(entry.headline) + '</h2>' +
-          '<div class="risk-journal-prose">' + (entry.journal || []).map(row => '<p>' + esc(row) + '</p>').join('') + '</div>' +
-          '<div class="risk-journal-columns"><section><h3>What supports risk</h3>' + bullets(entry.what_supports_risk) + '</section>' +
-          '<section><h3>What holds it back</h3>' + bullets(entry.what_holds_it_back) + '</section>' +
-          '<section><h3>What changes my mind</h3>' + bullets(entry.what_changes_my_mind) + '</section></div>' +
-          '<p class="risk-journal-source">' + esc(entry.source_note) + '</p></div></article>';
-      }).join('');
-    });
-  }
 
   /* ── performance page: keep the headline current from the live feed ─ */
   const perfStamp = $('#perf-live');

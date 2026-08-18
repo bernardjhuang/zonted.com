@@ -129,29 +129,6 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.fail("missing results-panel")
         self.assertNotIn(" hidden", panel.group(0))
 
-    def test_risk_route_is_a_subjective_running_journal_without_metric_dashboard(self) -> None:
-        page = (ROOT / "trading" / "gpt-risk" / "index.html").read_text()
-        script = (ROOT / "trading" / "desk.js").read_text()
-        styles = (ROOT / "trading" / "desk.css").read_text()
-        journal = json.loads((ROOT / "trading" / "risk-journal.json").read_text())
-        self.assertIn('id="risk-live"', page)
-        self.assertIn("<title>GPT Risk", page)
-        self.assertIn("<h1>GPT Risk</h1>", page)
-        self.assertIn("risk-journal.json", script)
-        self.assertIn("risk-journal-entry", script)
-        self.assertIn("risk-journal-author", script)
-        self.assertIn(".risk-journal-entry", styles)
-        self.assertEqual(journal["author"], "GPT-5.6")
-        self.assertGreaterEqual(len(journal["entries"]), 1)
-        self.assertIn(journal["entries"][0]["stance"], {"Risk-on", "Neutral", "Risk-off"})
-        self.assertLessEqual(
-            journal["entries"][0]["date"],
-            json.loads((ROOT / "trading" / "market-ytd.json").read_text())["as_of"],
-        )
-        self.assertTrue(all(entry["author"] == "GPT-5.6" for entry in journal["entries"]))
-        for junk in ("Metrics over time", "VVIX", "SKEW", "HY OAS", "VIX futures curve", "risk-evaluation.json"):
-            self.assertNotIn(junk, page)
-            self.assertNotIn(junk, script)
 
     def test_retired_meta_and_gemini_risk_surfaces_stay_removed(self) -> None:
         script = (ROOT / "trading" / "desk.js").read_text()
@@ -163,9 +140,6 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertNotIn(f"/trading/{model}-risk", script)
             self.assertIn(f"/trading/{model}-risk/* /trading/ 301", redirects)
             self.assertIn(f"/trading/{model}-risk.json /trading/ 301", redirects)
-        self.assertIn("const sessionRank = { 'pre-market': 0, intraday: 1, 'post-close': 2 }", script)
-        self.assertIn("[...(d.entries || []), ...(d.model_entries || [])]", script)
-        self.assertNotIn("((d.model_entries && d.model_entries[0]) ||", script)
 
     def test_trading_desk_v3_generator_is_network_free_and_idempotent(self) -> None:
         script = ROOT / "scripts" / "build-trading-desk.py"
@@ -517,7 +491,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<div class="status-metrics">' in path.read_text()
         ]
-        self.assertEqual(len(status_pages), 9)
+        self.assertEqual(len(status_pages), 6)
         for path in status_pages:
             source = path.read_text()
             for marker in expected:
@@ -635,18 +609,10 @@ class RoutedTradingSyncTests(unittest.TestCase):
             if path != ROOT / "trading" / "hypothesis-source" / "index.html"
             and '<nav class="subnav"' in path.read_text()
         })
-        self.assertEqual(len(pages), 9)
+        self.assertEqual(len(pages), 6)
         stamp_match = re.search(r'<span class="stamp">(.*?)</span>', DESK_HOME.read_text())
         self.assertIsNotNone(stamp_match)
         desk_stamp = stamp_match.group(1) if stamp_match else ""
-        model_chips = {}
-        for model, label in (("gpt", "GPT"), ("grok", "Grok"), ("fable", "Fable")):
-            match = re.search(
-                rf'<a class="chip chip-{model} [^"]+" href="/trading/{model}-risk/"[^>]*>{label} [\d.]+</a>',
-                DESK_HOME.read_text(),
-            )
-            self.assertIsNotNone(match)
-            model_chips[model] = match.group(0) if match else ""
         for path in pages:
             page = path.read_text()
             self.assertEqual(page.count('class="trade-z-logo" href="/"'), 1, path.as_posix())
@@ -657,8 +623,7 @@ class RoutedTradingSyncTests(unittest.TestCase):
             self.assertRegex(page, r'href="/trading/momentum/"[^>]*>Momentum</a>')
             self.assertRegex(page, r'href="/trading/mentality/"[^>]*>Mentality</a>')
             self.assertLess(page.index('href="/trading/mentality/"'), page.index('href="/trading/performance/"'))
-            for chip in model_chips.values():
-                self.assertIn(chip, page, path.as_posix())
+            self.assertNotIn('class="chip chip-', page, path.as_posix())
             self.assertNotIn('class="chip chip-gemini ', page, path.as_posix())
             self.assertNotIn('class="chip chip-meta ', page, path.as_posix())
             self.assertIn(f'<span class="stamp">{desk_stamp}</span>', page, path.as_posix())
