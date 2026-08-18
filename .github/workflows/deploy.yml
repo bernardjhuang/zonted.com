@@ -29,6 +29,7 @@ jobs:
             python3 scripts/build-trading-desk.py --mode close --check
           fi
           python3 scripts/test-hypothesis-summary.py
+          python3 scripts/test_build_desk_positions.py
           python3 scripts/test-trading-ui.py
           python3 scripts/test_trading_desk_sync.py
           python3 scripts/test-paper-fund-i-post.py
