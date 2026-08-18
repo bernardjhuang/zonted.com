@@ -100,7 +100,9 @@ class AutonomousJournalTest(unittest.TestCase):
         self.assertLess(self.page.index('id="learning-board"'), self.page.index('class="autonomous-journal"'))
         for required in (
             'id="learning-board"',
-            'First code-owned verdict pending',
+            'Automation retired; code-owned verdict still pending',
+            'all seven autonomous Alpaca scheduler jobs were removed',
+            '/posts/autonomous-trading-crons-retrospective/',
             '<strong>150</strong><span>frozen equities</span>',
             '<strong>≤1:1</strong><span>matched controls</span>',
             '<strong>4</strong><span>exit arms</span>',
@@ -175,7 +177,7 @@ class AutonomousJournalTest(unittest.TestCase):
 
     def test_post_deploy_factual_corrections_are_explicit(self):
         for required in (
-            'Core research modules are partially built and unit-tested',
+            'The system ended with four closed paper trades and zero authoritative observation rows',
             'Executable-style Tier 1 signals attempt one same-sector matched control when an eligible peer exists',
             'measurement-only and emits no matched-control row',
             'four executable-style Tier 1 scanners plus one measurement-only overnight decomposition scanner',
