@@ -45,8 +45,8 @@ class AutonomousTradingRetrospectiveTests(unittest.TestCase):
             "3 TRADE · 15 NO_TRADE",
             "four closed paper trades",
             "zero authoritative learning rows",
-            "+1.96825%",
-            "-0.06933%",
+            "+1% to +2% band",
+            "between 0% and -0.1%",
             "should not be pooled",
             "The experiment proved that an autonomous agent",
             "not</em> prove a trading edge",
@@ -57,6 +57,10 @@ class AutonomousTradingRetrospectiveTests(unittest.TestCase):
         ):
             with self.subTest(phrase=phrase):
                 self.assertIn(phrase.lower(), self.html.lower())
+
+        for reconstructible in ("$100,000", "+1.96825%", "-0.06933%"):
+            with self.subTest(reconstructible=reconstructible):
+                self.assertNotIn(reconstructible, self.html)
 
     def test_all_retired_processes_are_named(self):
         for phrase in (

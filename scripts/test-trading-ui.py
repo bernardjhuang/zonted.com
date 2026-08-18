@@ -39,8 +39,12 @@ class TradingUiContractTest(unittest.TestCase):
         }
         self.assertEqual(
             public_routes,
-            {"themes", "vwap-setups", "momentum", "mentality", "performance", "autonomous", "autonomous-psy", "gpt-risk", "grok-risk", "fable-risk"},
+            {"themes", "vwap-setups", "momentum", "mentality", "performance", "gpt-risk", "grok-risk", "fable-risk"},
         )
+        for retired in ("autonomous", "autonomous-psy"):
+            self.assertFalse((ROOT / "trading" / retired).exists())
+        for retired_asset in ("autonomous.json", "autonomous.css", "autonomous-reviews"):
+            self.assertFalse((ROOT / "trading" / retired_asset).exists())
 
     def test_deploy_checks_the_active_desk_cadence(self):
         workflow = (ROOT / ".github" / "workflows" / "deploy.yml").read_text()
@@ -56,6 +60,33 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertFalse((ROOT / "trading" / "gpt-brief.json").exists())
         self.assertFalse((ROOT / "trading" / "gpt-brief-charts.json").exists())
         self.assertFalse((ROOT / "js" / "trading-gpt-brief.js").exists())
+
+    def test_autonomous_public_journals_are_fully_retired(self):
+        for path in (
+            ROOT / "trading" / "autonomous",
+            ROOT / "trading" / "autonomous-psy",
+            ROOT / "trading" / "autonomous.json",
+            ROOT / "trading" / "autonomous.css",
+            ROOT / "trading" / "autonomous-reviews",
+            ROOT / "scripts" / "update-autonomous-journal.py",
+            ROOT / "scripts" / "publish-autonomous-entry.py",
+            ROOT / "scripts" / "test_autonomous_journal.py",
+        ):
+            self.assertFalse(path.exists(), str(path))
+
+        redirects = (ROOT / "_redirects").read_text()
+        self.assertIn(
+            "/trading/autonomous/* /posts/autonomous-trading-crons-retrospective/ 301",
+            redirects,
+        )
+        self.assertIn(
+            "/trading/autonomous-psy/* /posts/retiring-autonomous-agent-paper-fund-ii/ 301",
+            redirects,
+        )
+        for path in ROOT.rglob("*.html"):
+            source = path.read_text()
+            self.assertNotIn('href="/trading/autonomous/"', source, str(path))
+            self.assertNotIn('href="/trading/autonomous-psy/"', source, str(path))
 
     def test_trading_home_has_no_needs_attention_block(self):
         home = (ROOT / "trading" / "index.html").read_text()
