@@ -345,6 +345,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["XLE"]["series"]["dates"][-1], scan["last_bar"])
         self.assertEqual(long_history["charts"]["XLE"]["dates"][-1], long_history["as_of"])
 
+    def test_payx_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["PAYX"]["flair"], "thesis")
+        self.assertEqual(profiles["PAYX"]["sector"], "Industrials")
+        self.assertEqual(profiles["PAYX"]["sector_etf"], "XLI")
+        self.assertIn('id="hypothesis-payx-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-09-30" data-desk-catalyst-name="Est. fiscal Q1 earnings"',
+            source,
+        )
+        self.assertIn("Paychex has not confirmed the fiscal 2027 date", source)
+        self.assertEqual(valuations["PAYX"]["entry_levels"], {"bear": 83.61, "base": 119.93, "bull": 134.87})
+        self.assertEqual(universe["PAYX"]["sector"], "Industrials")
+        self.assertEqual(charts["PAYX"]["sector_etf"], "XLI")
+        self.assertEqual(charts["PAYX"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["PAYX"]["dates"][-1], long_history["as_of"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
