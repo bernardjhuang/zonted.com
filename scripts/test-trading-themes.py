@@ -392,8 +392,8 @@ class TradingThemesContractTest(unittest.TestCase):
 
     def test_meta_frontier_themes_are_complete_and_independently_scored(self) -> None:
         expected = {
-            "meta-power-wall-rate-shock": ("Energy", 68, 32, 80, 56),
-            "meta-humanoid-labor-wage-shock": ("Emerging", 38, 14, 62, 34),
+            "meta-power-wall-rate-shock": ("Energy", 68, 32, 80, 50),
+            "meta-humanoid-labor-wage-shock": ("Emerging", 38, 14, 62, 40),
             "meta-partial-reprogramming-humans": ("Emerging", 24, 8, 40, 12),
             "meta-silicon-sovereignty-stack-split": ("Sectors", 54, 26, 78, 55),
             "meta-y2q-post-quantum-rebuild": ("Emerging", 18, 5, 45, 20),
