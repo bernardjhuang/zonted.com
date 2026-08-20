@@ -33,12 +33,18 @@
     "date_end": "2026-08-18",
     "n_yes": 230,
     "n_no": 1150,
-    "n_with_trade_max_yes": 1380,
-    "n_missing_no_volume_tapes": 0,
+    "n_with_max_yes": 1380,
+    "n_with_candle_price_high": 1380,
+    "n_with_trade_fallback": 0,
+    "n_missing_no_volume_max_yes": 0,
     "missing_no_volume_tickers": [],
-    "n_yes_still_missing_tape": 0,
-    "yes_missing_tape": [],
-    "note": "Missing NO-with-volume tapes bias die% DOWN (spike-then-fade 90s not seen). Last-price fallback is YES>=0.96 lives only."
+    "n_yes_still_missing": 0,
+    "yes_missing": [],
+    "max_yes_field": "candle price.high / price.high_dollars (trade high). Never yes_ask.high.",
+    "n_candle_trade_agree": 1380,
+    "n_90_flips": 0,
+    "n_false_ask_90": 1092,
+    "note": "Missing NO-with-volume max_yes bias die% DOWN (spike-then-fade 90s not seen). Last-price fallback is YES>=0.96 lives only. Do not score last-price-only 0% die as the strategy."
   },
   "ladder": {
     "70": {
@@ -49,9 +55,11 @@
       "fee_cents": 1.47,
       "ev_after_fee_cents": 9.0985,
       "sources": {
-        "max_yes": 387
+        "candle_price_high": 387
       },
       "n_max_yes": 387,
+      "n_candle": 387,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     },
     "75": {
@@ -62,9 +70,11 @@
       "fee_cents": 1.3125,
       "ev_after_fee_cents": 7.4051,
       "sources": {
-        "max_yes": 347
+        "candle_price_high": 347
       },
       "n_max_yes": 347,
+      "n_candle": 347,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     },
     "80": {
@@ -75,9 +85,11 @@
       "fee_cents": 1.12,
       "ev_after_fee_cents": 8.5436,
       "sources": {
-        "max_yes": 327
+        "candle_price_high": 327
       },
       "n_max_yes": 327,
+      "n_candle": 327,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     },
     "85": {
@@ -88,9 +100,11 @@
       "fee_cents": 0.8925,
       "ev_after_fee_cents": 9.1889,
       "sources": {
-        "max_yes": 307
+        "candle_price_high": 307
       },
       "n_max_yes": 307,
+      "n_candle": 307,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     },
     "90": {
@@ -101,9 +115,11 @@
       "fee_cents": 0.63,
       "ev_after_fee_cents": 8.0979,
       "sources": {
-        "max_yes": 283
+        "candle_price_high": 283
       },
       "n_max_yes": 283,
+      "n_candle": 283,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     },
     "95": {
@@ -114,9 +130,11 @@
       "fee_cents": 0.3325,
       "ev_after_fee_cents": 6.2505,
       "sources": {
-        "max_yes": 259
+        "candle_price_high": 259
       },
       "n_max_yes": 259,
+      "n_candle": 259,
+      "n_trade_fallback": 0,
       "n_last_yes96": 0
     }
   },
@@ -135,5 +153,6 @@
   },
   "verdict": "+EV",
   "pass_90no_plus_ev_after_fee": true,
-  "fee_note": "taker 0.07*p*(1-p); at 10c No fee=0.63c; breakeven die after fee=10.63%"
+  "fee_note": "taker 0.07*p*(1-p); at 10c No fee=0.63c; breakeven die after fee=10.63%",
+  "max_yes_source": "candle price.high (daily 1440); trade tape only if candle fails"
 }

@@ -18,21 +18,22 @@ As-of **2026-08-19**. Settled event-days `KXHIGHCHI-26JAN01` through `KXHIGHCHI-
 
 ## Coverage
 
-- Tickers with real trade `max_yes`: **1380** / 1380
-- Missing NO-with-volume tapes: **0** (these bias die% **down**)
-- YES still missing tape (last≥0.70 or volume): **0**
-- Last-price fallback used only for YES with last≥0.96 (lives). Die% is **not** scored from last_price-only. This run used trade `max_yes` for every 2026 ticker (fallback n=0).
+- Tickers with `max_yes`: **1380** / 1380 (candle `price.high` 1380; trade fallback 0)
+- Missing NO-with-volume max_yes: **0** (these bias die% **down**)
+- YES still missing (last≥0.85 or volume): **0**
+- `max_yes` is candle **price.high** (trade high), never yes_ask.high. Last-price fallback only for YES last≥0.96. Die% is **not** last-price-only.
+- Candle `price.high` vs full trade tape: 1380 tickers agree (90-print flips = 0). `yes_ask.high`≥0.90 with `price.high`<0.90 on 1092 NOs — those are book, not trades.
 
 ## 2026 YTD ladder (Buy No at 100−X¢ on first X Yes print)
 
-| X¢ Yes | n | die | die% | EV¢ | fee¢ | EV after fee¢ | max_yes n | YES≥96 fallback n |
-|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| 70 | 387 | 157 | 40.57 | +10.57 | 1.47 | +9.10 | 387 | 0 |
-| 75 | 347 | 117 | 33.72 | +8.72 | 1.31 | +7.41 | 347 | 0 |
-| 80 | 327 | 97 | 29.66 | +9.66 | 1.12 | +8.54 | 327 | 0 |
-| 85 | 307 | 77 | 25.08 | +10.08 | 0.89 | +9.19 | 307 | 0 |
-| 90 | 283 | 53 | 18.73 | +8.73 | 0.63 | +8.10 | 283 | 0 |
-| 95 | 259 | 30 | 11.58 | +6.58 | 0.33 | +6.25 | 259 | 0 |
+| X¢ Yes | n | die | die% | EV¢ | fee¢ | EV after fee¢ | candle n | trade-fb n | YES≥96 n |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 70 | 387 | 157 | 40.57 | +10.57 | 1.47 | +9.10 | 387 | 0 | 0 |
+| 75 | 347 | 117 | 33.72 | +8.72 | 1.31 | +7.41 | 347 | 0 | 0 |
+| 80 | 327 | 97 | 29.66 | +9.66 | 1.12 | +8.54 | 327 | 0 | 0 |
+| 85 | 307 | 77 | 25.08 | +10.08 | 0.89 | +9.19 | 307 | 0 | 0 |
+| 90 | 283 | 53 | 18.73 | +8.73 | 0.63 | +8.10 | 283 | 0 | 0 |
+| 95 | 259 | 30 | 11.58 | +6.58 | 0.33 | +6.25 | 259 | 0 | 0 |
 
 ## 90¢ line vs NYC
 
@@ -46,7 +47,7 @@ Pass only if 90-No is +EV after fee on 2026 YTD. Seasonal splits not claimed unl
 
 ## Caveats
 
-1. **Fill** — assumes a 10¢ No fill at the first 90¢ Yes print (trade max_yes ≥ 0.90, or YES last≥0.96 fallback).
+1. **Fill** — assumes a 10¢ No fill at the first 90¢ Yes print (candle `price.high` ≥ 0.90, or YES last≥0.96 fallback).
 2. **Judge** — Midway (KMDW / CLIMDW), not O'Hare. Source agency changed NWS→TWC on 2026-08-14; station unchanged.
-3. **Coverage** — last_price fallback on YES≥96 undercounts spike-then-fade if NO tapes are missing. Missing NO-with-volume tapes bias die% down.
+3. **Coverage** — `max_yes` from candle trade high (`price.high`), not `yes_ask.high` (book can sit at 0.99 with no trade). Last-price-only would miss spike-then-fade dies (Austin trap). Missing NO candles bias die% down.
 
