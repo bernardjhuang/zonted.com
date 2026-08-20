@@ -51,17 +51,13 @@ def load_trades() -> dict[str, dict]:
 
 def classify_rules(text: str) -> dict[str, bool]:
     t = (text or "").lower()
-    midway = any(
-        s in t
-        for s in (
-            "midway",
-            "climdw",
-            "issuedby=mdw",
-            "kmdw",
-            "chicago (climdw)",
-        )
+    midway = bool(
+        re.search(r"midway|\bclimdw\b|\bkmdw\b|issuedby=mdw|chicago \(climdw\)", t)
     )
-    ohare = any(s in t for s in ("o'hare", "ohare", "o’hare", "kord", "cliord", "ord"))
+    # do not match bare "ord" — it hits "recorded"
+    ohare = bool(
+        re.search(r"o['’]hare|\bohare\b|\bkord\b|\bcliord\b|issuedby=ord", t)
+    )
     return {"midway": midway, "ohare": ohare}
 
 
@@ -89,6 +85,7 @@ def score() -> dict:
     y2026 = [m for m in markets if (m.get("event_ticker") or "").startswith("KXHIGHCHI-26")]
 
     n_midway = n_ohare = n_rules = 0
+    n_word_midway = n_climdw = n_nws = n_twc = 0
     for m in y2026:
         rules = m.get("rules_primary") or ""
         if rules:
@@ -98,6 +95,14 @@ def score() -> dict:
                 n_midway += 1
             if flags["ohare"]:
                 n_ohare += 1
+            if "Midway" in rules:
+                n_word_midway += 1
+            if "CLIMDW" in rules:
+                n_climdw += 1
+            if "National Weather Service" in rules:
+                n_nws += 1
+            if "Weather Company" in rules:
+                n_twc += 1
 
     series = json.loads((ROOT / "series.json").read_text())
     highchi_src = (
@@ -208,6 +213,10 @@ def score() -> dict:
             "confirmed": n_ohare == 0 and n_midway > 0,
             "n_rules": n_rules,
             "n_rules_midway_climdw": n_midway,
+            "n_rules_word_midway": n_word_midway,
+            "n_rules_climdw": n_climdw,
+            "n_rules_nws": n_nws,
+            "n_rules_twc": n_twc,
             "n_rules_ohare": n_ohare,
             "kxhighchi_settlement_sources": kx_src,
             "highchi_settlement_sources": highchi_src,
@@ -256,7 +265,8 @@ def render_md(s: dict) -> str:
         "## Judge / station",
         "",
         f"- Station: **{j['station']}** (not O'Hare).",
-        f"- Confirmed from event `rules_primary`: {j['n_rules_midway_climdw']} / {j['n_rules']} mention Midway/CLIMDW; {j['n_rules_ohare']} mention O'Hare.",
+        f"- Confirmed from event `rules_primary`: {j['n_rules_midway_climdw']} / {j['n_rules']} mention Midway/CLIMDW ({j['n_rules_word_midway']} say Midway, {j['n_rules_climdw']} say CLIMDW); {j['n_rules_ohare']} mention O'Hare.",
+        f"- Source agency in rules: NWS {j['n_rules_nws']}, TWC {j['n_rules_twc']} (TWC = Aug 14–18 after the 2026-08-14 switch).",
         f"- HIGHCHI series `settlement_sources`: NWS CLI `issuedby=MDW` (CLIMDW).",
         f"- KXHIGHCHI series settlement source is The Weather Company after **2026-08-14** (NWS→TWC, same station).",
         "",
@@ -271,7 +281,7 @@ def render_md(s: dict) -> str:
         f"- Tickers with real trade `max_yes`: **{c['n_with_trade_max_yes']}** / {c['n_settled_markets']}",
         f"- Missing NO-with-volume tapes: **{c['n_missing_no_volume_tapes']}** (these bias die% **down**)",
         f"- YES still missing tape (last≥0.70 or volume): **{c['n_yes_still_missing_tape']}**",
-        f"- Last-price fallback used only for YES with last≥0.96 (lives). Die% is **not** scored from last_price-only.",
+        f"- Last-price fallback used only for YES with last≥0.96 (lives). Die% is **not** scored from last_price-only. This run used trade `max_yes` for every 2026 ticker (fallback n=0).",
         "",
         "## 2026 YTD ladder (Buy No at 100−X¢ on first X Yes print)",
         "",
@@ -292,9 +302,9 @@ def render_md(s: dict) -> str:
         "",
         "## 90¢ line vs NYC",
         "",
-        f"- CHI 2026 YTD: n={nyc['chi_n']}, die%={nyc['chi_die_pct']}, EV after fee={nyc['chi_ev_after_fee_cents']}¢",
+        f"- CHI 2026 YTD: n={nyc['chi_n']}, die%={nyc['chi_die_pct']:.2f}, EV after fee={nyc['chi_ev_after_fee_cents']:+.2f}¢",
         f"- NYC 2026 YTD (given, not refetched): n={nyc['nyc_n']}, die%={nyc['nyc_die_pct']}, EV after fee={nyc['nyc_ev_after_fee_cents']:+.1f}¢",
-        f"- Fee at 10¢ No = 0.63¢; breakeven die after fee = 10.63%. Observed 90-No die% = {r90['die_pct']}.",
+        f"- Fee at 10¢ No = 0.63¢; breakeven die after fee = 10.63%. Observed 90-No die% = {r90['die_pct']:.2f}.",
         "",
         f"## Verdict: **{s['verdict']}**",
         "",
