@@ -398,6 +398,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
             self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
             self.assertEqual(long_history["charts"][symbol]["dates"][-1], long_history["as_of"])
 
+    def test_intu_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["INTU"]["flair"], "thesis")
+        self.assertEqual(profiles["INTU"]["sector"], "Technology")
+        self.assertEqual(profiles["INTU"]["sector_etf"], "XLK")
+        self.assertIn('id="hypothesis-intu-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-08-25" data-desk-catalyst-name="Confirmed fiscal Q4 earnings"',
+            source,
+        )
+        self.assertIn("Intuit confirmed fiscal Q4 and full-year results for August 25", source)
+        self.assertEqual(valuations["INTU"]["entry_levels"], {"bear": 253.95, "base": 361.87, "bull": 709.24})
+        self.assertEqual(universe["INTU"]["sector"], "Technology")
+        self.assertEqual(charts["INTU"]["sector_etf"], "XLK")
+        self.assertEqual(charts["INTU"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["INTU"]["dates"][-1], long_history["as_of"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
