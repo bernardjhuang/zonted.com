@@ -412,10 +412,12 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(profiles["INTU"]["sector_etf"], "XLK")
         self.assertIn('id="hypothesis-intu-setup"', source)
         self.assertIn(
-            'data-desk-catalyst="2026-08-25" data-desk-catalyst-name="Confirmed fiscal Q4 earnings"',
+            'data-desk-catalyst="2026-09-17" data-desk-catalyst-name="Confirmed Investor Day"',
             source,
         )
-        self.assertIn("Intuit confirmed fiscal Q4 and full-year results for August 25", source)
+        self.assertIn("Intuit reported fiscal Q4 on August 25", source)
+        self.assertIn("Fiscal Q4 revenue rose <strong>14% to $4.4B</strong>", source)
+        self.assertIn("<strong>9%–10%</strong> total revenue growth", source)
         self.assertEqual(valuations["INTU"]["entry_levels"], {"bear": 253.95, "base": 361.87, "bull": 709.24})
         self.assertEqual(universe["INTU"]["sector"], "Technology")
         self.assertEqual(charts["INTU"]["sector_etf"], "XLK")
