@@ -422,6 +422,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["INTU"]["series"]["dates"][-1], scan["last_bar"])
         self.assertEqual(long_history["charts"]["INTU"]["dates"][-1], long_history["as_of"])
 
+    def test_app_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["APP"]["flair"], "thesis")
+        self.assertEqual(profiles["APP"]["sector"], "Technology")
+        self.assertEqual(profiles["APP"]["sector_etf"], "XLK")
+        self.assertIn('id="hypothesis-app-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-11-04" data-desk-catalyst-name="Est. Q3 earnings"',
+            source,
+        )
+        self.assertIn("AppLovin has not confirmed the date", source)
+        self.assertEqual(valuations["APP"]["entry_levels"], {"bear": 298.59, "base": 298.59, "bull": 733.6})
+        self.assertEqual(universe["APP"]["sector"], "Technology")
+        self.assertEqual(charts["APP"]["sector_etf"], "XLK")
+        self.assertEqual(charts["APP"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["APP"]["dates"][-1], long_history["as_of"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
