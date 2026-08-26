@@ -448,6 +448,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["APP"]["series"]["dates"][-1], scan["last_bar"])
         self.assertEqual(long_history["charts"]["APP"]["dates"][-1], long_history["as_of"])
 
+    def test_rtx_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["RTX"]["flair"], "thesis")
+        self.assertEqual(profiles["RTX"]["sector"], "Industrials")
+        self.assertEqual(profiles["RTX"]["sector_etf"], "XLI")
+        self.assertIn('id="hypothesis-rtx-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-10-20" data-desk-catalyst-name="Est. Q3 earnings"',
+            source,
+        )
+        self.assertIn("RTX has not confirmed the 2026 date", source)
+        self.assertEqual(valuations["RTX"]["entry_levels"], {"bear": 149.53, "base": 210.28, "bull": 225.49})
+        self.assertEqual(universe["RTX"]["sector"], "Industrials")
+        self.assertEqual(charts["RTX"]["sector_etf"], "XLI")
+        self.assertEqual(charts["RTX"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["RTX"]["dates"][-1], scan["last_bar"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
