@@ -454,7 +454,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
         scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
         charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
-        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
         universe = {row["symbol"]: row for row in scan["rows"]}
 
         self.assertEqual(profiles["RTX"]["flair"], "thesis")
@@ -470,7 +470,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(universe["RTX"]["sector"], "Industrials")
         self.assertEqual(charts["RTX"]["sector_etf"], "XLI")
         self.assertEqual(charts["RTX"]["series"]["dates"][-1], scan["last_bar"])
-        self.assertEqual(long_history["RTX"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["RTX"]["dates"][-1], long_history["as_of"])
 
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
