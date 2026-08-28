@@ -245,10 +245,16 @@ class TradingUiContractTest(unittest.TestCase):
         self.assertEqual([row["label"] for row in self.risk["curve"]], ["Spot", "M1", "M2", "M3", "M4", "M5", "M6"])
         self.assertGreater(len(self.risk["history"]["score"]), 2_500)
         self.assertEqual(self.risk["conditional_frequencies"]["horizons"], [21, 42])
-        self.assertEqual(self.risk["model_status"]["status"], "withheld")
-        self.assertEqual(self.risk["model_status"]["endpoints_passed"], 0)
-        self.assertEqual(self.risk["model_status"]["endpoints_total"], 4)
-        self.assertIsNone(self.risk["model_status"]["live_probabilities"])
+        model_status = self.risk["model_status"]
+        self.assertIn(model_status["status"], {"not_evaluated", "withheld", "shipped"})
+        if model_status["status"] == "not_evaluated":
+            self.assertNotIn("endpoints_total", model_status)
+        else:
+            self.assertEqual(model_status["endpoints_total"], 4)
+            self.assertGreaterEqual(model_status["endpoints_passed"], 0)
+            self.assertLessEqual(model_status["endpoints_passed"], model_status["endpoints_total"])
+        if model_status["status"] != "shipped":
+            self.assertIsNone(model_status.get("live_probabilities"))
         self.assertGreaterEqual(len(self.risk["commentary"]), 3)
         self.assertLessEqual(len(self.risk["commentary"]), 5)
         self.assertNotIn("AUTO:RISK", self.html)

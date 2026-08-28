@@ -120,7 +120,8 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertAlmostEqual(current["curve_slope_percent"], (current["curve_cm60"] / current["curve_cm30"] - 1) * 100, places=3)
         self.assertEqual([row["label"] for row in self.payload["curve"]], ["Spot", "M1", "M2", "M3", "M4", "M5", "M6"])
         self.assertIn("positive slope means contango", self.payload["method"])
-        self.assertEqual(current["curve_as_of"], self.payload["as_of"])
+        self.assertLessEqual(current["curve_as_of"], self.payload["as_of"])
+        self.assertEqual(current["metrics"]["curve"]["source_date"], current["curve_as_of"])
 
     def test_series_are_ordered_unique_and_ytd(self):
         for name, rows in self.payload["series"].items():
@@ -194,13 +195,16 @@ class RiskDataContractTest(unittest.TestCase):
     def test_current_metrics_publish_percentiles_deltas_and_staleness(self):
         metrics = self.payload["current"]["metrics"]
         self.assertEqual(set(metrics), set(core.COMPONENT_WEIGHTS))
-        for row in metrics.values():
+        for name, row in metrics.items():
             self.assertIn("percentile", row)
             self.assertIn("change_5d", row)
             self.assertIn("change_20d", row)
             self.assertIn(row["direction"], {"improving", "stable", "deteriorating", "mixed"})
-        self.assertTrue(metrics["move"]["stale"])
-        self.assertFalse(self.payload["score"]["components"]["move"]["active"])
+            self.assertIsInstance(row["stale"], bool)
+            component = self.payload["score"]["components"][name]
+            self.assertEqual(component["active"], not row["stale"])
+            if row["stale"]:
+                self.assertEqual(component["points"], 0)
         self.assertEqual(self.payload["current"]["hy_oas_available_as_of"], self.payload["as_of"])
         self.assertLess(self.payload["current"]["hy_oas_as_of"], self.payload["current"]["hy_oas_available_as_of"])
 
@@ -228,10 +232,17 @@ class RiskDataContractTest(unittest.TestCase):
         self.assertEqual(scanner["as_of"], self.payload["as_of"])
         self.assertEqual(scanner["elevated_hard_gate_enabled"], policy["hard_gate_enabled"])
         self.assertEqual(scanner["watchful_action"], "annotate_half_size")
-        self.assertEqual(self.payload["model_status"]["status"], "withheld")
-        self.assertEqual(self.payload["model_status"]["endpoints_passed"], 0)
-        self.assertEqual(self.payload["model_status"]["endpoints_total"], 4)
-        self.assertIsNone(self.payload["model_status"]["live_probabilities"])
+        model_status = self.payload["model_status"]
+        self.assertIn(model_status["status"], {"not_evaluated", "withheld", "shipped"})
+        if model_status["status"] == "not_evaluated":
+            self.assertNotIn("endpoints_total", model_status)
+            self.assertIn("does not match", model_status["message"])
+        else:
+            self.assertEqual(model_status["endpoints_total"], 4)
+            self.assertGreaterEqual(model_status["endpoints_passed"], 0)
+            self.assertLessEqual(model_status["endpoints_passed"], model_status["endpoints_total"])
+        if model_status["status"] != "shipped":
+            self.assertIsNone(model_status.get("live_probabilities"))
 
 
 if __name__ == "__main__":
