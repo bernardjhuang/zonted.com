@@ -472,6 +472,30 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["RTX"]["series"]["dates"][-1], scan["last_bar"])
         self.assertEqual(long_history["charts"]["RTX"]["dates"][-1], long_history["as_of"])
 
+    def test_hood_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+
+        self.assertEqual(profiles["HOOD"]["flair"], "thesis")
+        self.assertEqual(profiles["HOOD"]["sector"], "Financials")
+        self.assertEqual(profiles["HOOD"]["sector_etf"], "XLF")
+        self.assertIn('id="hypothesis-hood-setup"', source)
+        self.assertIn(
+            'data-desk-catalyst="2026-11-04" data-desk-catalyst-name="Est. Q3 earnings"',
+            source,
+        )
+        self.assertIn("Robinhood has not confirmed the 2026 date", source)
+        self.assertEqual(valuations["HOOD"]["entry_levels"], {"bear": 65.16, "base": 104.26, "bull": 152.46})
+        self.assertEqual(universe["HOOD"]["sector"], "Financials")
+        self.assertEqual(charts["HOOD"]["sector_etf"], "XLF")
+        self.assertEqual(charts["HOOD"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["charts"]["HOOD"]["dates"][-1], long_history["as_of"])
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
