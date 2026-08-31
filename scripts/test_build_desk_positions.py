@@ -234,7 +234,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
         universe = {row["symbol"]: row for row in scan["rows"]}
         expected = {
-            "BOT": ("Technology", "XLK", "2026-08-30", "Est. July NAV update"),
+            "BOT": ("Technology", "XLK", "2026-09-30", "Est. August NAV update"),
             "CYPH": ("Financials", "XLF", "2026-11-11", "Est. Q3 results"),
             "GRND": ("Communication Services", "XLC", "2026-11-05", "Est. Q3 results"),
             "OSCR": ("Health Care", "XLV", "2026-11-05", "Est. Q3 results"),
@@ -251,6 +251,16 @@ class DeskPositionBuilderTests(unittest.TestCase):
                     source,
                 )
                 self.assertEqual(set(valuations[symbol]["entry_levels"]), {"bear", "base", "bull"})
+                if symbol == "BOT":
+                    self.assertEqual(
+                        valuations[symbol]["valuation_metrics"],
+                        [
+                            {"label": "July 31 NAV/share", "value": "$11.32"},
+                            {"label": "July 31 net assets", "value": "$274.6M"},
+                            {"label": "Aug 20 NAV premium", "value": "151.0%"},
+                        ],
+                    )
+                    self.assertIn("September 30 is therefore an estimated deadline", source)
                 self.assertEqual(universe[symbol]["sector"], charts[symbol]["sector"])
                 self.assertEqual(charts[symbol]["sector_etf"], etf)
                 self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
