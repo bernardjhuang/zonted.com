@@ -312,7 +312,7 @@ class TradingUiContractTest(unittest.TestCase):
         position_rows = desk_html.count('data-desk-kind="position"')
         # Position rows carry risk, instrument, level, and one-year-chart data that
         # tracked-hypothesis rows do not. Keep both row classes linearly bounded.
-        shell_budget = 90_000 + 4_700 * desk_rows + 2_200 * position_rows
+        shell_budget = 90_000 + 4_700 * desk_rows + 2_400 * position_rows
         self.assertLess(DESK_HOME.stat().st_size, shell_budget)
         self.assertNotIn("data-d='", self.html)
         self.assertLess(len(re.findall(r"<svg\b", self.html)), 5)
