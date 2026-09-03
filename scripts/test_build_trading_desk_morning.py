@@ -37,6 +37,13 @@ class MorningDeskChartTests(unittest.TestCase):
         self.assertEqual(market["dates"], ["2026-07-27", "2026-07-28"])
         self.assertEqual(market["closes"], [10.0, 11.0])
 
+    def test_new_listing_without_spread_z_keeps_price_feed(self):
+        scan = self.scan()
+        scan["stats"]["spread_z"] = None
+        market = builder.row_market("AAA", self.chart(), scan, None)
+        self.assertTrue(market["feed"])
+        self.assertIn("No feed", builder.spread_cell(market))
+
     def test_robinhood_quote_activates_otc_market_row(self):
         market = builder.row_market(
             "BYDDY",
