@@ -201,7 +201,8 @@ def row_market(
             closes.append(daily[-1])
         last = daily[-1]
         day = (daily[-1] / daily[-2] - 1) * 100
-        spread = float(scan_chart["stats"]["spread_z"])
+        spread_z = scan_chart["stats"].get("spread_z")
+        spread = float(spread_z) if isinstance(spread_z, (int, float)) else math.nan
     else:
         last = closes[-1]
         day = (closes[-1] / closes[-2] - 1) * 100

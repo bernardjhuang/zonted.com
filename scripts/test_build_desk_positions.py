@@ -235,8 +235,8 @@ class DeskPositionBuilderTests(unittest.TestCase):
         long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
         universe = {row["symbol"]: row for row in scan["rows"]}
         expected = {
-            "BABA": ("Consumer Discretionary", "Consumer Disc", "XLY", "2026-11-19", "Est. September-quarter earnings", "Alibaba has not confirmed", {"bear": 94.81, "base": 112.85, "bull": 187.62}),
-            "KOPN": ("Technology", "Technology", "XLK", "2026-11-10", "Est. Q3 earnings", "Kopin has not confirmed", {"bear": 1.82, "base": 4.21, "bull": 6.39}),
+            "BABA": ("Consumer Discretionary", "Consumer Disc", "XLY", "2026-11-19", "Est. September-quarter earnings", "Alibaba has not confirmed", {"bear": 94.81, "base": 111.81, "bull": 187.62}),
+            "KOPN": ("Technology", "Technology", "XLK", "2026-11-10", "Est. Q3 earnings", "Kopin has not confirmed", {"bear": 1.82, "base": 4.29, "bull": 6.39}),
         }
         for symbol, (sector, scan_sector, sector_etf, catalyst, catalyst_name, unconfirmed, levels) in expected.items():
             with self.subTest(symbol=symbol):
@@ -249,6 +249,38 @@ class DeskPositionBuilderTests(unittest.TestCase):
                     source,
                 )
                 self.assertIn(unconfirmed, source)
+                self.assertEqual(valuations[symbol]["entry_levels"], levels)
+                self.assertEqual(universe[symbol]["sector"], scan_sector)
+                self.assertEqual(charts[symbol]["sector_etf"], sector_etf)
+                self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
+                self.assertEqual(long_history["charts"][symbol]["dates"][-1], scan["last_bar"])
+
+    def test_post_reset_live_holdings_have_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        expected = {
+            "BOT": ("Technology", "Technology", "XLK", "2026-09-30", "Est. August NAV update", "estimated deadline", {"bear": 21.01, "base": 26.24, "bull": 41.74}),
+            "FIGR": ("Financials", "Financials", "XLF", "2026-11-12", "Est. Q3 earnings", "Figure has not confirmed", {"bear": 24.91, "base": 33.19, "bull": 73.91}),
+            "PL": ("Technology", "Technology", "XLK", "2026-09-08", "Est. fiscal Q2 earnings", "Planet has not confirmed", {"bear": 6.44, "base": 19.99, "bull": 51.40}),
+            "NVDA": ("Technology", "Technology", "XLK", "2026-11-18", "Est. fiscal Q3 earnings", "NVIDIA has not confirmed", {"bear": 164.98, "base": 224.41, "bull": 235.47}),
+            "SPCX": ("Industrials", "Industrials", "XLI", "2026-11-03", "Est. Q3 earnings", "SpaceX has not confirmed", {"bear": 108.27, "base": 140.71, "bull": 211.39}),
+        }
+        for symbol, (sector, scan_sector, sector_etf, catalyst, catalyst_name, status_copy, levels) in expected.items():
+            with self.subTest(symbol=symbol):
+                self.assertEqual(profiles[symbol]["flair"], "thesis")
+                self.assertEqual(profiles[symbol]["sector"], sector)
+                self.assertEqual(profiles[symbol]["sector_etf"], sector_etf)
+                self.assertIn(f'id="hypothesis-{symbol.lower()}-setup"', source)
+                self.assertIn(
+                    f'data-desk-catalyst="{catalyst}" data-desk-catalyst-name="{catalyst_name}"',
+                    source,
+                )
+                self.assertIn(status_copy, source)
                 self.assertEqual(valuations[symbol]["entry_levels"], levels)
                 self.assertEqual(universe[symbol]["sector"], scan_sector)
                 self.assertEqual(charts[symbol]["sector_etf"], sector_etf)

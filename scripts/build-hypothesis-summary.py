@@ -147,7 +147,7 @@ def fetch_chart(symbol: str) -> dict:
         weekly[(iso.year, iso.week)] = (date, close)
     # Preserve every completed session for a recent listing; weekly sampling
     # would make an honest full-history chart fail the 26-point UI contract.
-    sampled = points if len(points) < 80 else list(weekly.values())
+    sampled = points if len(weekly) < MIN_CHART_POINTS else list(weekly.values())
     if sampled[0] != points[0]:
         sampled.insert(0, points[0])
     if sampled[-1] != points[-1]:
