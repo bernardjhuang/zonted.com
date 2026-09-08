@@ -266,7 +266,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         expected = {
             "BOT": ("Technology", "Technology", "XLK", "2026-09-30", "Est. August NAV update", "estimated deadline", {"bear": 21.01, "base": 26.24, "bull": 41.74}),
             "FIGR": ("Financials", "Financials", "XLF", "2026-11-12", "Est. Q3 earnings", "Figure has not confirmed", {"bear": 24.91, "base": 33.19, "bull": 73.91}),
-            "PL": ("Technology", "Technology", "XLK", "2026-09-08", "Est. fiscal Q2 earnings", "Planet has not confirmed", {"bear": 6.44, "base": 19.99, "bull": 51.40}),
+            "PL": ("Technology", "Technology", "XLK", "2026-12-03", "Est. fiscal Q3 earnings", "Planet has not confirmed the fiscal Q3 earnings date", {"bear": 6.44, "base": 19.99, "bull": 51.40}),
             "NVDA": ("Technology", "Technology", "XLK", "2026-11-18", "Est. fiscal Q3 earnings", "NVIDIA has not confirmed", {"bear": 164.98, "base": 224.41, "bull": 235.47}),
             "SPCX": ("Industrials", "Industrials", "XLI", "2026-11-03", "Est. Q3 earnings", "SpaceX has not confirmed", {"bear": 108.27, "base": 140.71, "bull": 211.39}),
         }
@@ -286,6 +286,32 @@ class DeskPositionBuilderTests(unittest.TestCase):
                 self.assertEqual(charts[symbol]["sector_etf"], sector_etf)
                 self.assertEqual(charts[symbol]["series"]["dates"][-1], scan["last_bar"])
                 self.assertEqual(long_history["charts"][symbol]["dates"][-1], scan["last_bar"])
+
+    def test_pl_fiscal_q2_refresh_uses_current_results_and_estimated_q3(self):
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        start = source.index('<article class="hypothesis-detail" id="hypothesis-pl-setup"')
+        article = source[start:source.index("</article>", start)]
+        self.assertIn('data-desk-catalyst="2026-12-03" data-desk-catalyst-name="Est. fiscal Q3 earnings"', article)
+        for text in (
+            "September 3, 2026", "Est. December 3, 2026", "June 4 and September 3",
+            "58% to $116.1M", "$13.9M", "$753.1M", "$814.9M", "$865.4M",
+            "$120M raised through stock sales", "$101M–$105M revenue", "loss of $1M–$6M",
+            "Recurring ACV excludes satellite services", "17%, 11%, and 10%",
+            "000119312526381874/pl-ex99_1.htm", "000119312526382016/pl-20260731.htm",
+            "December 3 is estimated, not issuer-confirmed.",
+        ):
+            self.assertIn(text, article)
+        for stale in ("Fiscal Q1 revenue", "$94.2M", "$816M", "$730.8M", 'data-desk-catalyst="2026-09-08"'):
+            self.assertNotIn(stale, article)
+        self.assertEqual(article.count('<section class="hypothesis-block'), 7)
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        self.assertIsNone(profiles["PL"]["kill"])
+        valuation = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]["PL"]
+        self.assertEqual(valuation["valuation_metrics"], [
+            {"label": "Fiscal Q2 revenue", "value": "$116.1M"},
+            {"label": "Remaining performance obligations", "value": "$753.1M"},
+            {"label": "Cash + short-term investments", "value": "$865.4M"},
+        ])
 
     def test_hims_live_holding_has_exact_canonical_owners(self):
         profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
