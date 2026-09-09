@@ -65,7 +65,7 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(profiles["JCI"]["sector_etf"], "XLI")
         self.assertEqual(profiles["JCI"]["flair"], "thesis")
 
-    def test_reset_keeps_only_live_positions_in_the_canonical_thesis_registry(self):
+    def test_canonical_registry_covers_live_positions_and_preserves_researched_exits(self):
         source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
         hypotheses = {
             symbol.upper()
@@ -79,11 +79,14 @@ class DeskPositionBuilderTests(unittest.TestCase):
         }
         desk = (ROOT / "trading" / "index.html").read_text()
 
-        self.assertEqual(hypotheses, positions)
-        self.assertEqual(valuations, positions)
-        self.assertEqual(charts, positions)
-        self.assertNotIn('data-desk-kind="hypothesis"', desk)
-        self.assertIn("New hunt starts empty. Add only researched setups worth tracking.", desk)
+        self.assertLessEqual(positions, hypotheses)
+        self.assertEqual(valuations, hypotheses)
+        self.assertEqual(charts, hypotheses)
+        # Exiting a position must not delete its authored research or chart owners.
+        tracked = set(re.findall(r'data-desk-kind="hypothesis" data-desk-symbol="([A-Z0-9.-]+)"', desk))
+        self.assertEqual(tracked, hypotheses - positions)
+        if not tracked:
+            self.assertIn("New hunt starts empty. Add only researched setups worth tracking.", desk)
 
     def profiles(self):
         return {
@@ -336,6 +339,36 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(charts["HIMS"]["sector_etf"], "XLV")
         self.assertEqual(charts["HIMS"]["series"]["dates"][-1], scan["last_bar"])
         self.assertEqual(long_history["charts"]["HIMS"]["dates"][-1], scan["last_bar"])
+
+    def test_avav_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        match = re.search(r'<article class="hypothesis-detail" id="hypothesis-avav-setup".*?</article>', source, re.S)
+        self.assertIsNotNone(match)
+        assert match is not None
+        article = match.group(0)
+
+        self.assertIsNone(profiles["AVAV"]["kill"])
+        self.assertEqual(profiles["AVAV"]["flair"], "thesis")
+        self.assertEqual(profiles["AVAV"]["sector"], "Industrials")
+        self.assertEqual(profiles["AVAV"]["sector_etf"], "XLI")
+        self.assertIn('data-desk-catalyst="2026-09-09" data-desk-catalyst-name="Confirmed fiscal Q1 earnings"', article)
+        self.assertIn("Results were not yet available", article)
+        self.assertIn("avav-20260629xex99d1.htm", article)
+        self.assertIn("avav-20260430x10k.htm", article)
+        self.assertIn("/2026/08/26/aerovironment-inc-to-announce-first-quarter", article)
+        self.assertEqual(valuations["AVAV"]["entry_levels"], {"bear": 136.68, "base": 147.21, "bull": 409.83})
+        self.assertIn("not intrinsic value", valuations["AVAV"]["method"])
+        self.assertEqual(universe["AVAV"]["sector"], "Industrials")
+        self.assertEqual(charts["AVAV"]["sector_etf"], "XLI")
+        self.assertEqual(charts["AVAV"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["AVAV"]["dates"][-1], scan["last_bar"])
+        self.assertGreaterEqual(long_history["AVAV"]["beta_observations"], 100)
 
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
