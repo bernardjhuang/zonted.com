@@ -417,6 +417,41 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(long_history["BMNR"]["dates"][-1], scan["last_bar"])
         self.assertGreaterEqual(long_history["BMNR"]["beta_observations"], 60)
 
+    def test_hpe_live_holding_has_exact_canonical_owners(self):
+        profiles = json.loads((ROOT / "trading" / "desk-position-profiles.json").read_text())["profiles"]
+        source = (ROOT / "trading" / "hypothesis-source.txt").read_text()
+        valuations = json.loads((ROOT / "trading" / "hypothesis-valuations.json").read_text())["rows"]
+        scan = json.loads((ROOT / "trading" / "scan-universe.json").read_text())
+        charts = json.loads((ROOT / "trading" / "scan-charts.json").read_text())["charts"]
+        long_history = json.loads((ROOT / "trading" / "hypothesis-charts.json").read_text())["charts"]
+        universe = {row["symbol"]: row for row in scan["rows"]}
+        match = re.search(r'<article class="hypothesis-detail" id="hypothesis-hpe-setup".*?</article>', source, re.S)
+        self.assertIsNotNone(match)
+        assert match is not None
+        article = match.group(0)
+        self.assertIsNone(profiles["HPE"]["kill"])
+        self.assertEqual(profiles["HPE"]["flair"], "thesis")
+        self.assertEqual(profiles["HPE"]["sector"], "Technology")
+        self.assertEqual(profiles["HPE"]["sector_etf"], "XLK")
+        for text in (
+            'data-desk-catalyst="2026-09-30" data-desk-catalyst-name="Confirmed Networking Investor Day"',
+            "September 30, 2026 at 8:30AM PT", "not a scheduled earnings release",
+            "34% to $12.2B", "16.2%", "11.4%", "$382M, up 112.2%",
+            "Juniper closed July 2, 2025", "not an organic growth rate",
+            "at least $3.75B", "$600M", "$800M", "$20.244B", "$444M",
+            "000164559026000078/ex-991x922026x8k.htm",
+            "000164559026000080/hpe-20260731.htm", "investors.hpe.com/news-and-events",
+        ):
+            self.assertIn(text, article)
+        self.assertEqual(article.count('<section class="hypothesis-block'), 7)
+        self.assertEqual(valuations["HPE"]["entry_levels"], {"bear": 19.72, "base": 62.09, "bull": 62.09})
+        self.assertIn("not intrinsic value", valuations["HPE"]["method"])
+        self.assertEqual(universe["HPE"]["sector"], "Technology")
+        self.assertEqual(charts["HPE"]["sector_etf"], "XLK")
+        self.assertEqual(charts["HPE"]["series"]["dates"][-1], scan["last_bar"])
+        self.assertEqual(long_history["HPE"]["dates"][-1], scan["last_bar"])
+        self.assertGreaterEqual(long_history["HPE"]["beta_observations"], 100)
+
     def test_missing_risk_summary_fails_closed(self):
         with self.assertRaisesRegex(ValueError, "risk_summary"):
             builder.render({"desk_instruments": {"AAA": {"equity_entry": 10.0, **risk(7.8), "options": []}}}, self.profiles())
