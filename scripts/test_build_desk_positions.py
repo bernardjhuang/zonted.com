@@ -400,15 +400,25 @@ class DeskPositionBuilderTests(unittest.TestCase):
         self.assertEqual(profiles["BMNR"]["sector"], "Financials")
         self.assertEqual(profiles["BMNR"]["sector_etf"], "XLF")
         for text in (
-            'data-desk-catalyst="2026-09-14" data-desk-catalyst-name="Est. weekly ETH holdings update"',
-            "Bitmine has not confirmed September 14", "5,929,198", "5,067,309",
-            "$593M", "28,086 ETH", "1.50% of staking rewards", "not recognized annual revenue",
-            "000149315226041713/ex99-1.htm", "000149315226041713/form8-k.htm",
+            'data-desk-catalyst="2026-09-30" data-desk-catalyst-name="Confirmed Tom Lee Korea Blockchain Week keynote"',
+            "September 30, 2026 at 11:20 a.m. in Seoul", "5,956,378", "5,067,309",
+            "$549M", "27,180 ETH", "1.50% of staking rewards", "not recognized annual revenue",
+            "302877149.html", "000149315226041713/form8-k.htm",
+            "September 13 at 5:30 p.m. ET", "212 BTC", "$15.8B", "$334M", "2.62%",
+            "do not infer new staking growth", "not a scheduled earnings or holdings release",
+            "next weekly release date is not confirmed",
             "000162828026048157/bmnr-20260531.htm", "shorter than two years",
         ):
             self.assertIn(text, article)
         self.assertEqual(article.count('<section class="hypothesis-block'), 7)
         self.assertNotIn("January 15, 2027 $20 calls", article)
+        for stale in ("5,929,198", "$593M", "28,086 ETH", "$330M", 'data-desk-catalyst="2026-09-14"'):
+            self.assertNotIn(stale, article)
+        self.assertEqual(valuations["BMNR"]["valuation_metrics"], [
+            {"label": "ETH held (Sep 13)", "value": "5,956,378"},
+            {"label": "Staked ETH (Sep 7)", "value": "5,067,309"},
+            {"label": "Cash + securities (Sep 13)", "value": "$549M"},
+        ])
         self.assertEqual(valuations["BMNR"]["entry_levels"], {"bear": 13.31, "base": 26.45, "bull": 63.20})
         self.assertIn("not intrinsic value", valuations["BMNR"]["method"])
         self.assertEqual(universe["BMNR"]["sector"], "Financials")
