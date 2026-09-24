@@ -17,7 +17,6 @@ dotenv.config({ path: path.join(GA4_SKILL_DIR, '..', '.env') });
 
 const PROPERTIES = [
   { key: 'tabiji', name: 'Tabiji', domain: 'tabiji.ai', id: '524076952', color: '#2a7a2a' },
-  { key: 'veracityapi', name: 'VeracityAPI', domain: 'veracityapi.com', id: '537020430', color: '#336699' },
   { key: 'zonted', name: 'Zonted', domain: 'zonted.com', id: '532496138', color: '#6f4aa8' },
   { key: 'agenttune', name: 'AgentTune', domain: 'agent-tune.com', id: '538913680', color: '#6366f1' },
   { key: 'pixelforge', name: 'PixelForge', domain: 'pixel-forge.net', id: '540392196', color: '#10b981' },

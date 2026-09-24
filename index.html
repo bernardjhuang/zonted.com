@@ -99,6 +99,16 @@
                 <ul class="zn-rows">
                 <li class="zn-row">
                     <div class="zn-row-left">
+                        <span class="zn-row-date">Sep 24, 2026</span>
+                        <a href="/posts/veracity-postmortem/" class="zn-row-thumb" tabindex="-1"><img src="https://img.zonted.com/resources/portfolio/veracity.png" alt="" loading="lazy"></a>
+                    </div>
+                    <div class="zn-row-content">
+                        <a href="/posts/veracity-postmortem/" class="zn-row-title">VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered</a>
+                        <p class="zn-row-dek">VeracityAPI took an afternoon to build and made $0 in four months. The receipts, the six-cell scorecard, and why I killed it before the market could answer.</p>
+                    </div>
+                </li>
+                <li class="zn-row">
+                    <div class="zn-row-left">
                         <span class="zn-row-date">Aug 18, 2026</span>
                     </div>
                     <div class="zn-row-content">
@@ -134,16 +144,6 @@
                         <p class="zn-row-dek">A complete, step-by-step plan for running a credit-gated 0DTE iron condor with your own agent — how the trade works, what data it needs, the ten bugs I hit building it, and the exact daily sequence to replicate.</p>
                     </div>
                 </li>
-                <li class="zn-row">
-                    <div class="zn-row-left">
-                        <span class="zn-row-date">Aug 9, 2026</span>
-                        <a href="/posts/sol-fund-winning-strategies-vs-qqq-spy/" class="zn-row-thumb" tabindex="-1"><img src="https://zonted.com/posts/sol-fund-winning-strategies-vs-qqq-spy/sol-fund-four-strategies-receipt.png" alt="" loading="lazy"></a>
-                    </div>
-                    <div class="zn-row-content">
-                        <a href="/posts/sol-fund-winning-strategies-vs-qqq-spy/" class="zn-row-title">Four ETF Strategies vs. QQQ and SPY: Five-Year and 2026 YTD Results</a>
-                        <p class="zn-row-dek">Four Fable-accepted ETF strategies replayed against QQQ and SPY over the same five years and 2026 YTD. The newest winner won 2008—and stumbled in 2026.</p>
-                    </div>
-                </li>
                 </ul>
                 <!-- ENTRY_LIST_END -->
                 <div style="text-align:center;margin:2rem 0 0.5rem;">
@@ -174,8 +174,8 @@
 <script>
 // Lab operational — live cron pulse in the hero. 3-line rotating activity
 // feed. Each event has a baked HH:MM timestamp spread 1-3 per hour across
-// a 24-hour cycle, drawn from real ops across Tabiji, Veracity, the
-// trading book, and Zonted. When the array reaches the end, it loops. Respects
+// a 24-hour cycle, drawn from real ops across Tabiji, the trading book,
+// PixelForge, AgentTune, and Zonted. When the array reaches the end, it loops. Respects
 // prefers-reduced-motion.
 (function () {
   var feed = document.getElementById('zn-cron-feed');
@@ -194,17 +194,17 @@
     ['06:14', 'openclaw',    'shipped reel · Bangkok grab scam · 1.2M views'],
     ['06:48', 'hermes',      'Tabiji · IG carousel · Portugal · 5 slides'],
     ['07:22', 'claude code', 'planned 4-post week · saved to D1'],
-    ['07:55', 'codex',       'Veracity · 142 audit queue cleared · 0 holds'],
+    ['07:55', 'codex',       'trading · overnight fills reconciled · 0 drift'],
     ['08:31', 'openclaw',    'queued TikTok · Mexico City fake taxi'],
     ['09:04', 'hermes',      'audited zonted post · ZNT-031 · 1 fix'],
     ['09:38', 'codex',       'patched /api/verdict latency · p99 280ms'],
     ['10:11', 'openclaw',    'rendered 18 thumbnails · Wavespeed · all ship'],
-    ['10:43', 'claude code', 'Veracity MCP server · 3 new tools registered'],
+    ['10:43', 'claude code', 'AgentTune · IndexNow ping · 43 library URLs'],
     ['11:09', 'hermes',      'trading book · 09:35 rotation ran · hold · 0 trades'],
     ['11:34', 'openclaw',    'shipped reel · Bali scooter rental gotcha · 880K'],
     ['12:07', 'claude code', 'curated 22 of 51 Pinterest pins · ship'],
     ['12:28', 'hermes',      'audited Tabiji post · bangkok-scam-aware · 2 fixes'],
-    ['12:52', 'codex',       'Veracity · slop signature added · 11k samples'],
+    ['12:52', 'codex',       'PixelForge · sprite pack rendered · 4-direction walk cycle'],
     ['13:14', 'openclaw',    'published YT Short · Cusco altitude scam'],
     ['13:41', 'hermes',      'Tabiji · IG carousel · Marrakech · 7 slides'],
     ['14:03', 'claude code', 'killed underperforming format · 3 reels off'],
@@ -214,19 +214,19 @@
     ['15:42', 'codex',       'patched 502 · Wavespeed retry · auto-recover'],
     ['16:09', 'openclaw',    'shipped reel · Istanbul taxi meter scam · 2.1M'],
     ['16:31', 'claude code', 'planned 3-reel series · Greek Islands'],
-    ['16:58', 'hermes',      'audited Veracity onboarding · 4 fixes'],
+    ['16:58', 'hermes',      'audited PixelForge landing page · 3 fixes'],
     ['17:22', 'codex',       'Tabiji · cron stable · 19 posts shipped today'],
     ['17:44', 'openclaw',    'rendered 31 carousel slides · 24 ship'],
     ['18:13', 'hermes',      'Tabiji · pinned to Adelaide scams board'],
     ['18:39', 'claude code', 'curated 14 of 47 Pinterest pins · ship'],
-    ['19:02', 'codex',       'Veracity · verdict cache hit-rate 71%'],
+    ['19:02', 'codex',       'trading · book dashboard refreshed · 62 pages'],
     ['19:24', 'openclaw',    'shipped YT Short · Lisbon cobblestones'],
     ['19:51', 'hermes',      'trading · EOD report · 5 sleeves healthy · GFV count 0'],
     ['20:16', 'codex',       'patched /api/scams 500 · deployed'],
     ['20:42', 'openclaw',    'queued TikTok · Cairo mistake reel'],
     ['21:08', 'claude code', 'pinned to Pinterest board · Buenos Aires'],
     ['21:32', 'hermes',      'compiled /api/pins endpoint · 0 errors'],
-    ['21:54', 'codex',       'Veracity · 18 PRs scanned · 16 ship · 2 hold'],
+    ['21:54', 'codex',       'trading · end-of-day settlement · ledger closed'],
     ['22:11', 'openclaw',    'shipped reel · Tulum tire scam · 3.8M views'],
     ['22:38', 'hermes',      'updated Portugal carousel · slide 4 swap'],
     ['22:59', 'claude code', 'planned 3-reel series · Vietnam street food'],

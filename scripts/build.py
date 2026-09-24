@@ -553,7 +553,7 @@ The live AI-run desk, updated twice each trading day. Quantity-free by design �
 
 ## Author
 
-Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he ran for a decade before stepping away fully in 2026. Background in SEO/content/affiliate going back ~15 years, and in online poker before that. Currently building Tabiji, VeracityAPI, AgentTune, PixelForge, and other agentic businesses, and trading public equities + web3 with AI analysts (Claude Fable 5, GPT 5.6 Sol). Writes at zonted.com daily-ish.
+Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he ran for a decade before stepping away fully in 2026. Background in SEO/content/affiliate going back ~15 years, and in online poker before that. Currently building Tabiji, AgentTune, PixelForge, and other agentic businesses, and trading public equities + web3 with AI analysts (Claude Fable 5, GPT 5.6 Sol). Writes at zonted.com daily-ish.
 """
 
 H2_NOISE = {'Get the next post by email.'}
@@ -868,12 +868,13 @@ CURATED_RELATED = {
     "posts/ai-reels-what-actually-works": ["posts/best-ai-video-models", "posts/veo3-vs-hailuo-minimax", "posts/ai-music-generation-comparison"],
     "posts/ai-resilience-planning": ["posts/openclaw-claude-ban-ai-model-replacement", "posts/local-models-free-tokens", "posts/what-is-ai-self-healing"],
     "posts/best-ai-video-models": ["posts/veo3-vs-hailuo-minimax", "posts/ai-reels-what-actually-works", "posts/wavespeed"],
-    "posts/build-for-agents-price-per-call": ["posts/future-of-software-is-headless", "posts/the-economics-of-the-internet-are-broken", "posts/the-great-api-shutdown"],
+    "posts/build-for-agents-price-per-call": ["posts/veracity-postmortem", "posts/future-of-software-is-headless", "posts/the-economics-of-the-internet-are-broken"],
     "posts/future-of-content-agentic-data-enrichment": ["posts/training-data-is-the-moat", "posts/aeo-answer-engine-optimization", "posts/the-future-is-synthetic"],
     "posts/future-of-software-is-headless": ["posts/build-for-agents-price-per-call", "posts/the-great-api-shutdown", "posts/the-economics-of-the-internet-are-broken"],
     "posts/google-zero-patience-ai-slop": ["posts/scaling-ai-is-lazy", "posts/what-is-ai-drift-how-to-fix", "posts/aeo-answer-engine-optimization"],
-    "posts/kapiko-postmortem": ["posts/palmaura-postmortem", "posts/ai-music-generation-comparison", "posts/true-cost-of-ai-content-production"],
-    "posts/palmaura-postmortem": ["posts/kapiko-postmortem", "posts/plan-3x-build-once", "posts/future-of-software-is-headless"],
+    "posts/kapiko-postmortem": ["posts/palmaura-postmortem", "posts/veracity-postmortem", "posts/ai-music-generation-comparison"],
+    "posts/palmaura-postmortem": ["posts/kapiko-postmortem", "posts/veracity-postmortem", "posts/plan-3x-build-once"],
+    "posts/veracity-postmortem": ["posts/build-for-agents-price-per-call", "posts/kapiko-postmortem", "posts/palmaura-postmortem"],
     "posts/tabiji-18m-views": ["posts/how-my-agent-made-a-viral-video", "posts/true-cost-of-ai-content-production", "posts/kapiko-postmortem"],
     "posts/how-my-agent-made-a-viral-video": ["posts/tabiji-18m-views", "posts/true-cost-of-ai-content-production", "posts/kapiko-postmortem"],
     "posts/may-2026-recap": ["posts/back-to-the-tables", "posts/plan-3x-build-once", "posts/tabiji-18m-views"],
