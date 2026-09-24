@@ -219,9 +219,11 @@
 
         <div class="article-body">
 
+            <p style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.9rem;line-height:1.55;color:var(--text-muted);background:var(--bg-surface);border-left:3px solid var(--text);border-radius:0 6px 6px 0;padding:0.75rem 1rem;margin:0 0 1.5rem;"><strong style="color:var(--text);">Update, September 24, 2026:</strong> VeracityAPI, the product this post launched, is retired. <a href="/posts/veracity-postmortem/">Read the post-mortem &rarr;</a></p>
+
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Hermes + Codex 5.5 matched Opus-era smoothness. We used it &mdash; with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 &mdash; to one-shot a new product (<a href="https://veracityapi.com" target="_blank" rel="noopener">veracityapi.com</a>) in an afternoon. But the tooling unlock isn&rsquo;t the moat.</p>
+                <p class="tldr-thesis">Hermes + Codex 5.5 matched Opus-era smoothness. We used it &mdash; with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 &mdash; to one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&rsquo;t the moat.</p>
                 <ul>
                     <li>Anyone with the same stack can build the same product tomorrow</li>
                     <li>What decides survival is whether your product is structurally durable as agents become the dominant consumer of every API on the internet</li>
@@ -248,7 +250,7 @@
 
             <p>One Cloudflare Worker. One D1 database. One LLM call. A POST endpoint that takes text and returns a structured risk score with evidence and a recommended action (allow / revise / human-review / reject). Everything else &mdash; spaCy, batch processing, MCP server, feedback loops &mdash; deferred to <em>only if pieces become useful</em>.</p>
 
-            <p>We shipped it. <a href="https://veracityapi.com" target="_blank" rel="noopener">veracityapi.com</a> is live. Pay-per-request: $0.01 for ≤4K chars up to $0.12 for ≤100K. No subscription tier. <code>llms.txt</code> and <code>agents.json</code> published for machine discovery. Structured JSON responses. Build took an afternoon.</p>
+            <p>We shipped it. veracityapi.com is live. Pay-per-request: $0.01 for ≤4K chars up to $0.12 for ≤100K. No subscription tier. <code>llms.txt</code> and <code>agents.json</code> published for machine discovery. Structured JSON responses. Build took an afternoon.</p>
 
             <h2 id="not-the-moat">But tooling isn&rsquo;t the moat</h2>
 
@@ -322,9 +324,9 @@
             <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/veracity-postmortem/">VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered</a><p class="zn-recommended-dek">VeracityAPI took an afternoon to build and made $0 in four months. The receipts, the six-cell scorecard, and why I killed it before the market could answer.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/future-of-software-is-headless/">The Future of Software is Headless</a><p class="zn-recommended-dek">Salesforce is going headless. Agents, not humans, are now the primary consumer of software.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/the-economics-of-the-internet-are-broken/">The Economics of the Internet Are Broken</a><p class="zn-recommended-dek">AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.</p></li>
-                <li><a class="zn-recommended-title" href="/posts/the-great-api-shutdown/">The Great API Shutdown</a><p class="zn-recommended-dek">The open API era that fueled a decade of internet innovation is ending. Platforms are locking down data access to fight AI training, monetize developers…</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->

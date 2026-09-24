@@ -5,8 +5,17 @@
     <link>https://zonted.com/</link>
     <description>I test AI tools so you don't have to. Honest reviews, real data, and opinions from someone who actually builds with this stuff.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 18 Aug 2026 00:00:00 +0000</lastBuildDate>
+    <lastBuildDate>Thu, 24 Sep 2026 00:00:00 +0000</lastBuildDate>
     <atom:link href="https://zonted.com/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered</title>
+      <link>https://zonted.com/posts/veracity-postmortem/</link>
+      <description>VeracityAPI took an afternoon to build and made $0 in four months. The receipts, the six-cell scorecard, and why I killed it before the market could answer.</description>
+      <content:encoded><![CDATA[VeracityAPI took one afternoon to build. The next few weeks went to everything around it: an MCP server, SDKs on npm and PyPI, a Chrome extension, a text linter, and a shelf of free SEO tools. Four months after launch, the tally is seven accounts (me, two smoke tests, and four outside signups), zero paying customers, and $0 in revenue. Today I shut it down. Nothing killed it but me. I built a tool for the agent economy, marketed it with free tools, and walked away before anyone told me whether it was worth paying for. Veracity didn’t fail the market test. I never finished running it. The build was the easy part. One Cloudflare Worker, one D1 database, one LLM call. From $0.01 a call, with $1.50 of free credit and no card. • The marketing was more engineering. Free detector and AI-visibility tools earned 4,025 Google impressions and 18 clicks in 90 days, at an average position of 32. • The sales motion never got going. I warmed up an inbox for cold B2B outbound, then moved on to other projects. • Cause of death: opportunity cost. Vibe trading was working, and a live API is a pile of moving parts that needs tending whether anyone calls it or not. • Total bill: about $50–100 in hard costs, plus $200–400 in LLM tokens to build it.]]></content:encoded>
+      <pubDate>Thu, 24 Sep 2026 00:00:00 +0000</pubDate>
+      <author>bernard@zonted.com (Bernard Huang)</author>
+      <guid isPermaLink="true">https://zonted.com/posts/veracity-postmortem/</guid>
+    </item>
     <item>
       <title>Retiring Autonomous Agent Paper Fund II: A Postmortem</title>
       <link>https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/</link>
@@ -344,7 +353,7 @@
       <title>Build for Agents, Price Per Call.</title>
       <link>https://zonted.com/posts/build-for-agents-price-per-call/</link>
       <description>Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</description>
-      <content:encoded><![CDATA[After Anthropic banned Opus from our setup , we’d switched our main OpenClaw rotation to Z.AI’s GLM 5.1 as the best replacement we could find. Codex 5.4 had been rough — missed instructions, slow, expensive at the same throughput. Last week we wired up a parallel agent on Hermes + Codex 5.5, mostly out of curiosity to see if the latest OpenAI iteration had closed the gap. Hermes + Codex 5.5 matched Opus-era smoothness. We used it — with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 — to one-shot a new product ( veracityapi.com ) in an afternoon. But the tooling unlock isn’t the moat. Anyone with the same stack can build the same product tomorrow • What decides survival is whether your product is structurally durable as agents become the dominant consumer of every API on the internet • Veracity is built against four tests: durable-as-agents-take-over, durable-as-agents-improve, agent-first surface, metered with free tier]]></content:encoded>
+      <content:encoded><![CDATA[After Anthropic banned Opus from our setup , we’d switched our main OpenClaw rotation to Z.AI’s GLM 5.1 as the best replacement we could find. Codex 5.4 had been rough — missed instructions, slow, expensive at the same throughput. Last week we wired up a parallel agent on Hermes + Codex 5.5, mostly out of curiosity to see if the latest OpenAI iteration had closed the gap. Hermes + Codex 5.5 matched Opus-era smoothness. We used it — with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 — to one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn’t the moat. Anyone with the same stack can build the same product tomorrow • What decides survival is whether your product is structurally durable as agents become the dominant consumer of every API on the internet • Veracity is built against four tests: durable-as-agents-take-over, durable-as-agents-improve, agent-first surface, metered with free tier]]></content:encoded>
       <pubDate>Sun, 10 May 2026 00:00:00 +0000</pubDate>
       <author>bernard@zonted.com (Bernard Huang)</author>
       <guid isPermaLink="true">https://zonted.com/posts/build-for-agents-price-per-call/</guid>

@@ -234,6 +234,8 @@
 
         <div class="article-body">
 
+            <p style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.9rem;line-height:1.55;color:var(--text-muted);background:var(--bg-surface);border-left:3px solid var(--text);border-radius:0 6px 6px 0;padding:0.75rem 1rem;margin:0 0 1.5rem;"><strong style="color:var(--text);">Update, September 24, 2026:</strong> VeracityAPI, the product behind this post&rsquo;s receipt, is retired. The loop outlived it. <a href="/posts/veracity-postmortem/">Read the post-mortem &rarr;</a></p>
+
             <p>I asked Opus 4.7 and GPT-5.5 to independently plan the same new feature. Then I handed both plans to Gemini 3.1 Pro and asked it to pick the winning combination. Here is the sentence that earned the work:</p>
 
             <blockquote>Opus designed a consumer SaaS application (beautiful, real-time, client-side, targeting writers). GPT-5.5 designed a B2B API marketing tool (pragmatic, server-tied, conversion-focused, targeting engineers/QA). Because your goal is to sell API keys for VeracityAPI, GPT-5.5 has the winning product strategy, but Opus has the winning technical architecture.</blockquote>
@@ -267,7 +269,7 @@
 
             <h2 id="the-receipt">The receipt: VeracityAPI Text Linter</h2>
 
-            <p>I'm shipping a new feature on <a href="https://veracityapi.com">VeracityAPI</a> &mdash; an AI text linter at <code>/tools/style-editor</code>. The decision tree was loaded:</p>
+            <p>I'm shipping a new feature on VeracityAPI &mdash; an AI text linter at <code>/tools/style-editor</code>. The decision tree was loaded:</p>
 
             <ul>
                 <li><strong>UX</strong>: Hemingway-style editor? Static form? Agent skill suite published to GitHub?</li>

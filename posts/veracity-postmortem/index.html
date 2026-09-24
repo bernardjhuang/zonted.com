@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
+    <title>VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered</title>
+    <meta name="description" content="VeracityAPI took an afternoon to build and made $0 in four months. The receipts, the six-cell scorecard, and why I killed it before the market could answer.">
+    <link rel="canonical" href="https://zonted.com/posts/veracity-postmortem/">
+    <meta property="og:title" content="VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered">
+    <meta property="og:description" content="An AI-slop checker built for agents. One afternoon to build, four outside signups, $0 in revenue. Killed by opportunity cost, not by the market.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://img.zonted.com/resources/portfolio/veracity.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://img.zonted.com/resources/portfolio/veracity.png">
+    <meta property="og:url" content="https://zonted.com/posts/veracity-postmortem/">
+    <meta property="article:published_time" content="2026-09-24">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "Article", "headline": "VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/"}, "datePublished": "2026-09-24", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/veracity-postmortem/", "description": "VeracityAPI, an AI-slop risk-scoring API built for agents, took an afternoon to build and earned $0 in four months. What shipped, what the numbers said, how it scored on the six-cell rubric, and why opportunity cost killed it before the market could answer.", "image": "https://img.zonted.com/resources/portfolio/veracity.png"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"VeracityAPI: a one-afternoon, four-signup, zero-dollar post-mortem"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+        /* Veracity post-mortem: receipts table, chart, scorecard */
+        .article-body .vp-table { width: 100%; border-collapse: collapse; margin: 1.25rem 0 1.5rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; line-height: 1.45; }
+        .article-body .vp-table th, .article-body .vp-table td { text-align: left; vertical-align: top; padding: 0.55rem 0.75rem 0.55rem 0; border-bottom: 1px solid var(--border-light); }
+        .article-body .vp-table th { width: 38%; font-weight: 600; color: var(--text-muted); }
+        .article-body .vp-table td { color: var(--text); }
+        .vp-chart { display: block; width: 100%; height: auto; }
+        .vp-chart text { font-family: 'Inter', -apple-system, system-ui, sans-serif; }
+        .vp-chart .vp-ct { font-size: 13px; font-weight: 600; fill: var(--text); }
+        .vp-chart .vp-tick { font-size: 11px; fill: var(--text-dim); font-variant-numeric: tabular-nums; }
+        .vp-chart .vp-val { font-size: 11px; font-weight: 600; fill: var(--text-muted); }
+        .vp-chart .vp-note { font-size: 11px; fill: var(--text-muted); }
+        .vp-chart .vp-grid { stroke: var(--border-light); stroke-width: 1; }
+        .vp-chart .vp-base { stroke: var(--border); stroke-width: 1; }
+        .vp-chart .vp-note-line { stroke: var(--text-dim); stroke-width: 1; }
+        .vp-chart .vp-bar { fill: #2a78d6; }
+        .vp-chart .vp-hit { fill: transparent; }
+        .vp-chart .vp-hit:hover { fill: rgba(26, 26, 26, 0.04); }
+        .article-body .vp-data { margin: 0 0 1.75rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; color: var(--text-muted); }
+        .article-body .vp-data summary { cursor: pointer; }
+        .article-body .vp-data table { border-collapse: collapse; margin-top: 0.5rem; font-variant-numeric: tabular-nums; }
+        .article-body .vp-data th, .article-body .vp-data td { padding: 0.25rem 1.25rem 0.25rem 0; text-align: right; border-bottom: 1px solid var(--border-light); }
+        .article-body .vp-data th:first-child, .article-body .vp-data td:first-child { text-align: left; }
+        .article-body .vp-data .vp-total td { font-weight: 600; color: var(--text); }
+        .vp-card { border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1.5rem 0 2rem; background: var(--bg-surface); }
+        .vp-card-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.5rem; }
+        .vp-row { display: flex; flex-direction: column; gap: 0.35rem; padding-bottom: 0.9rem; border-bottom: 1px solid var(--border); }
+        .vp-row:last-child, .vp-row:nth-last-child(2) { border-bottom: none; padding-bottom: 0; }
+        .vp-head { display: flex; align-items: center; gap: 0.6rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.04em; color: var(--text-dim); }
+        .vp-label { font-weight: 600; color: var(--text); }
+        .vp-chip { font-size: 0.7rem; font-weight: 700; padding: 0.18rem 0.55rem; border-radius: 999px; letter-spacing: 0.06em; }
+        .vp-chip-good { background: #d6f3d8; color: #1b5e20; }
+        .vp-chip-bad  { background: #fbd9d9; color: #8a1f1f; }
+        .vp-chip-mid  { background: #fdecc8; color: #7a4a00; }
+        .vp-note-text { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.95rem; color: var(--text); line-height: 1.45; }
+        @media (max-width: 640px) {
+            .vp-card-grid { grid-template-columns: 1fr; }
+            .vp-row:nth-last-child(2) { border-bottom: 1px solid var(--border); padding-bottom: 0.9rem; }
+            .article-body .vp-table th { width: 42%; }
+        }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <span class="zn-nav-dd">
+                    <a href="/trading/">Trading</a>
+                    <details class="zn-dd">
+                        <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/trading/">Desk</a>
+                            <a href="/trading/themes/">Themes</a>
+                            <a href="/trading/vwap-setups/">VWAP Setups</a>
+                            <a href="/trading/momentum/">Momentum</a>
+                            <a href="/trading/mentality/">Mentality</a>
+                            <a href="/trading/performance/">Performance</a>
+                        </div>
+                    </details>
+                </span>
+                <span class="zn-nav-dd">
+                    <a href="/about/">About</a>
+                    <details class="zn-dd">
+                        <summary aria-label="About sections" title="About sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/about/">About</a>
+                            <a href="/portfolio/">Projects</a>
+                            <a href="/metrics/">Metrics</a>
+                        </div>
+                    </details>
+                </span>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#the-bet">The bet: tools for agents</a></li>
+            <li><a href="#what-i-shipped">What I shipped</a></li>
+            <li><a href="#receipts">The receipts</a></li>
+            <li><a href="#distribution">Free tools and a warm inbox</a></li>
+            <li><a href="#scorecard">How it scored</a></li>
+            <li><a href="#cause-of-death">Cause of death</a></li>
+            <li><a href="#what-comes-with-me">What comes with me</a></li>
+            <li><a href="#graveyard">To the graveyard</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#the-bet">The bet: tools for agents</a></li>
+        <li><a href="#what-i-shipped">What I shipped</a></li>
+        <li><a href="#receipts">The receipts</a></li>
+        <li><a href="#distribution">Free tools and a warm inbox</a></li>
+        <li><a href="#scorecard">How it scored</a></li>
+        <li><a href="#cause-of-death">Cause of death</a></li>
+        <li><a href="#what-comes-with-me">What comes with me</a></li>
+        <li><a href="#graveyard">To the graveyard</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>VeracityAPI: a one-afternoon, four-signup, zero-dollar post-mortem</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">September 24, 2026 &middot; 5 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p class="dropcap">VeracityAPI took one afternoon to build. The next few weeks went to everything around it: an MCP server, SDKs on npm and PyPI, a Chrome extension, a text linter, and a shelf of free SEO tools. Four months after launch, the tally is seven accounts (me, two smoke tests, and four outside signups), zero paying customers, and $0 in revenue. Today I shut it down. Nothing killed it but me.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">I built a tool for the agent economy, marketed it with free tools, and walked away before anyone told me whether it was worth paying for. Veracity didn&rsquo;t fail the market test. I never finished running it.</p>
+                <ul>
+                    <li><strong>The build was the easy part.</strong> One Cloudflare Worker, one D1 database, one LLM call. From $0.01 a call, with $1.50 of free credit and no card.</li>
+                    <li><strong>The marketing was more engineering.</strong> Free detector and AI-visibility tools earned 4,025 Google impressions and 18 clicks in 90 days, at an average position of 32.</li>
+                    <li><strong>The sales motion never got going.</strong> I warmed up an inbox for cold B2B outbound, then moved on to other projects.</li>
+                    <li><strong>Cause of death: opportunity cost.</strong> Vibe trading was working, and a live API is a pile of moving parts that needs tending whether anyone calls it or not.</li>
+                    <li><strong>Total bill:</strong> about $50&ndash;100 in hard costs, plus $200&ndash;400 in LLM tokens to build it.</li>
+                </ul>
+                <p class="tldr-tail">Veracity joins <a href="/posts/kapiko-postmortem/">Kapiko</a> and <a href="/posts/palmaura-postmortem/">PalmAura</a> in the <a href="/games/graveyard/">graveyard</a>.</p>
+            </div>
+
+            <h2 id="the-bet">The bet: tools for agents</h2>
+
+            <p>I still believe the premise. The future of commerce, and of the internet, is an agent economy: software calling software, with people setting goals instead of clicking buttons. If that&rsquo;s where things are going, the durable businesses are the ones that sell to agents. That means tools an agent can discover, call, and pay for without a human in the loop.</p>
+
+            <p>The second half of the premise was slop. The more publishing agents take over, the more AI slop enters the ecosystem: generic text, synthetic images, cloned voices, the confident paragraph that says nothing. An agent that publishes on your behalf needs a way to check its own work before it goes out. So Veracity would check for slop and warn you before you published.</p>
+
+            <p>In May I wrote the launch post, <a href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call</a>, and held the idea up against four tests. Does it stay valuable as agents take over? As agents get smarter? Is the surface agent-first? Is it metered, with a free tier? On paper, Veracity passed all four.</p>
+
+            <p>The product changed on the very first planning message. Slo, the agent in my Hermes setup, talked me out of the original idea, an AI-content <em>detection</em> API. Detectors are probabilistic, adversarial, and easy to overclaim. So we reframed it as risk scoring with evidence. One call in, one action out (allow, revise, human_review, or reject) plus the evidence behind it. The homepage put it best: <em>&ldquo;We don&rsquo;t care who wrote it. We care whether it&rsquo;s shippable.&rdquo;</em></p>
+
+            <h2 id="what-i-shipped">What I shipped</h2>
+
+            <figure style="margin:1.5rem 0;">
+              <img src="https://img.zonted.com/resources/portfolio/veracity.png" width="1440" height="900" alt="The VeracityAPI homepage: the headline &lsquo;Detect AI slop before it ships,&rsquo; an eyebrow reading &lsquo;For developers shipping AI features, $1.50 free credit, no card,&rsquo; and badges for OpenAPI 3.1, MCP-ready, llms.txt and agents.json." loading="lazy" style="border:1px solid var(--border);border-radius:6px;" />
+              <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">veracityapi.com. Read the line above the headline: <em>for developers shipping AI features</em>. The API was built for agents. The pitch was aimed at people.</figcaption>
+            </figure>
+
+            <p>The core really did take an afternoon: one Cloudflare Worker, one D1 database, one LLM call. Pricing ran from $0.01 a call for up to 4,000 characters to $0.12 for 100,000, with $1.50 of free credit and no card required. No subscriptions, no seats, no &ldquo;talk to sales.&rdquo; An agent could go from discovery to its first call without asking anyone.</p>
+
+            <p>Then I kept building, because building was the fun part:</p>
+
+            <ul>
+                <li>a REST API with an OpenAPI 3.1 spec, plus <code>llms.txt</code> and <code>agents.json</code> so machines could find it</li>
+                <li>an MCP server, and SDKs on npm and PyPI</li>
+                <li>a Chrome extension, which came out in one shot</li>
+                <li>a text linter, planned by three models with the <a href="/posts/plan-3x-build-once/">plan-3&times; loop</a></li>
+                <li>evals, a benchmark repo, and a stack of free tools: AI-text detectors, a fake-review checker, integration guides</li>
+            </ul>
+
+            <p>I even ran my <a href="/posts/stakes-priming/">stakes-priming audit</a> on it. It caught six ship-blocking bugs, including duplicate JSON keys on the homepage. By early June, Veracity was the most complete product I had never sold.</p>
+
+            <h2 id="receipts">The receipts</h2>
+
+            <table class="vp-table">
+                <tbody>
+                    <tr><th scope="row">Built</th><td>One afternoon in May 2026</td></tr>
+                    <tr><th scope="row">Surfaces</th><td>API, MCP server, npm and PyPI SDKs, Chrome extension, text linter, free tools</td></tr>
+                    <tr><th scope="row">Accounts</th><td>7: me, 2 smoke tests, 4 outside signups (all on free credit)</td></tr>
+                    <tr><th scope="row">Paying customers</th><td>0</td></tr>
+                    <tr><th scope="row">Revenue</th><td>$0</td></tr>
+                    <tr><th scope="row">Last API call</th><td>June 10, the day PixelForge launched</td></tr>
+                    <tr><th scope="row">Google Search, 90 days</th><td>4,025 impressions, 18 clicks, average position 32</td></tr>
+                    <tr><th scope="row">Tracked visits, 90 days</th><td>24, and 22 of them came from zonted.com</td></tr>
+                    <tr><th scope="row">Cost</th><td>About $50&ndash;100 in hard costs, $200&ndash;400 in LLM tokens</td></tr>
+                </tbody>
+            </table>
+
+            <p>The visits number undercounts, because Google Analytics only ran for visitors who clicked Accept on the cookie banner. Still, 22 of the 24 visits it did record came through links on this site. Almost nobody found Veracity from anywhere I hadn&rsquo;t personally put a link.</p>
+
+            <figure style="margin:1.75rem 0 1rem;">
+<svg class="vp-chart" viewBox="0 0 660 318" role="img" aria-labelledby="vp-chart-title vp-chart-desc" xmlns="http://www.w3.org/2000/svg">
+<title id="vp-chart-title">VeracityAPI in Google Search, per week, May 25 to August 22, 2026</title>
+<desc id="vp-chart-desc">Weekly impressions rose from 102 in the week of May 25 to 566 in the week of August 10. Weekly clicks stayed between 0 and 4 the whole time: 4,025 impressions and 18 clicks in total.</desc>
+<text class="vp-ct" x="46" y="18">Impressions per week</text>
+<text class="vp-ct" x="46" y="200">Clicks per week</text>
+<line class="vp-base" x1="46" x2="652" y1="168.0" y2="168.0"/>
+<text class="vp-tick" x="38" y="172.0" text-anchor="end">0</text>
+<line class="vp-grid" x1="46" x2="652" y1="123.3" y2="123.3"/>
+<text class="vp-tick" x="38" y="127.3" text-anchor="end">200</text>
+<line class="vp-grid" x1="46" x2="652" y1="78.7" y2="78.7"/>
+<text class="vp-tick" x="38" y="82.7" text-anchor="end">400</text>
+<line class="vp-grid" x1="46" x2="652" y1="34.0" y2="34.0"/>
+<text class="vp-tick" x="38" y="38.0" text-anchor="end">600</text>
+<line class="vp-base" x1="46" x2="652" y1="276.0" y2="276.0"/>
+<text class="vp-tick" x="38" y="280.0" text-anchor="end">0</text>
+<line class="vp-grid" x1="46" x2="652" y1="246.0" y2="246.0"/>
+<text class="vp-tick" x="38" y="250.0" text-anchor="end">2</text>
+<line class="vp-grid" x1="46" x2="652" y1="216.0" y2="216.0"/>
+<text class="vp-tick" x="38" y="220.0" text-anchor="end">4</text>
+<line class="vp-note-line" x1="155.9" x2="155.9" y1="28" y2="276"/>
+<text class="vp-note" x="161.9" y="38">Last API call, Jun 10</text>
+<path class="vp-bar" d="M57.3,168.0 V149.2 Q57.3,145.2 61.3,145.2 H77.3 Q81.3,145.2 81.3,149.2 V168.0 Z"/>
+<path class="vp-bar" d="M57.3,276.0 V265.0 Q57.3,261.0 61.3,261.0 H77.3 Q81.3,261.0 81.3,265.0 V276.0 Z"/>
+<path class="vp-bar" d="M103.9,168.0 V149.0 Q103.9,145.0 107.9,145.0 H123.9 Q127.9,145.0 127.9,149.0 V168.0 Z"/>
+<path class="vp-bar" d="M103.9,276.0 V250.0 Q103.9,246.0 107.9,246.0 H123.9 Q127.9,246.0 127.9,250.0 V276.0 Z"/>
+<path class="vp-bar" d="M150.5,168.0 V113.9 Q150.5,109.9 154.5,109.9 H170.5 Q174.5,109.9 174.5,113.9 V168.0 Z"/>
+<path class="vp-bar" d="M197.2,168.0 V101.9 Q197.2,97.9 201.2,97.9 H217.2 Q221.2,97.9 221.2,101.9 V168.0 Z"/>
+<path class="vp-bar" d="M197.2,276.0 V265.0 Q197.2,261.0 201.2,261.0 H217.2 Q221.2,261.0 221.2,265.0 V276.0 Z"/>
+<path class="vp-bar" d="M243.8,168.0 V80.7 Q243.8,76.7 247.8,76.7 H263.8 Q267.8,76.7 267.8,80.7 V168.0 Z"/>
+<path class="vp-bar" d="M290.4,168.0 V126.7 Q290.4,122.7 294.4,122.7 H310.4 Q314.4,122.7 314.4,126.7 V168.0 Z"/>
+<path class="vp-bar" d="M290.4,276.0 V235.0 Q290.4,231.0 294.4,231.0 H310.4 Q314.4,231.0 314.4,235.0 V276.0 Z"/>
+<path class="vp-bar" d="M337.0,168.0 V117.3 Q337.0,113.3 341.0,113.3 H357.0 Q361.0,113.3 361.0,117.3 V168.0 Z"/>
+<path class="vp-bar" d="M383.6,168.0 V117.1 Q383.6,113.1 387.6,113.1 H403.6 Q407.6,113.1 407.6,117.1 V168.0 Z"/>
+<path class="vp-bar" d="M383.6,276.0 V235.0 Q383.6,231.0 387.6,231.0 H403.6 Q407.6,231.0 407.6,235.0 V276.0 Z"/>
+<path class="vp-bar" d="M430.2,168.0 V117.1 Q430.2,113.1 434.2,113.1 H450.2 Q454.2,113.1 454.2,117.1 V168.0 Z"/>
+<path class="vp-bar" d="M430.2,276.0 V265.0 Q430.2,261.0 434.2,261.0 H450.2 Q454.2,261.0 454.2,265.0 V276.0 Z"/>
+<path class="vp-bar" d="M476.8,168.0 V54.1 Q476.8,50.1 480.8,50.1 H496.8 Q500.8,50.1 500.8,54.1 V168.0 Z"/>
+<path class="vp-bar" d="M476.8,276.0 V220.0 Q476.8,216.0 480.8,216.0 H496.8 Q500.8,216.0 500.8,220.0 V276.0 Z"/>
+<path class="vp-bar" d="M523.5,168.0 V97.9 Q523.5,93.9 527.5,93.9 H543.5 Q547.5,93.9 547.5,97.9 V168.0 Z"/>
+<path class="vp-bar" d="M523.5,276.0 V250.0 Q523.5,246.0 527.5,246.0 H543.5 Q547.5,246.0 547.5,250.0 V276.0 Z"/>
+<path class="vp-bar" d="M570.1,168.0 V45.6 Q570.1,41.6 574.1,41.6 H590.1 Q594.1,41.6 594.1,45.6 V168.0 Z"/>
+<path class="vp-bar" d="M616.7,168.0 V66.8 Q616.7,62.8 620.7,62.8 H636.7 Q640.7,62.8 640.7,66.8 V168.0 Z"/>
+<path class="vp-bar" d="M616.7,276.0 V265.0 Q616.7,261.0 620.7,261.0 H636.7 Q640.7,261.0 640.7,265.0 V276.0 Z"/>
+<text class="vp-val" x="69.3" y="139.2" text-anchor="middle">102</text>
+<text class="vp-val" x="582.1" y="35.6" text-anchor="middle">566</text>
+<text class="vp-val" x="488.8" y="210.0" text-anchor="middle">4</text>
+<text class="vp-tick" x="69.3" y="296" text-anchor="middle">May 25</text>
+<text class="vp-tick" x="162.5" y="296" text-anchor="middle">Jun 8</text>
+<text class="vp-tick" x="255.8" y="296" text-anchor="middle">Jun 22</text>
+<text class="vp-tick" x="349.0" y="296" text-anchor="middle">Jul 6</text>
+<text class="vp-tick" x="442.2" y="296" text-anchor="middle">Jul 20</text>
+<text class="vp-tick" x="535.5" y="296" text-anchor="middle">Aug 3</text>
+<text class="vp-tick" x="628.7" y="296" text-anchor="middle">Aug 17</text>
+<rect class="vp-hit" x="46.0" y="28" width="46.6" height="248"><title>Week of May 25: 102 impressions, 1 click</title></rect>
+<rect class="vp-hit" x="92.6" y="28" width="46.6" height="248"><title>Week of Jun 1: 103 impressions, 2 clicks</title></rect>
+<rect class="vp-hit" x="139.2" y="28" width="46.6" height="248"><title>Week of Jun 8: 260 impressions, 0 clicks</title></rect>
+<rect class="vp-hit" x="185.8" y="28" width="46.6" height="248"><title>Week of Jun 15: 314 impressions, 1 click</title></rect>
+<rect class="vp-hit" x="232.5" y="28" width="46.6" height="248"><title>Week of Jun 22: 409 impressions, 0 clicks</title></rect>
+<rect class="vp-hit" x="279.1" y="28" width="46.6" height="248"><title>Week of Jun 29: 203 impressions, 3 clicks</title></rect>
+<rect class="vp-hit" x="325.7" y="28" width="46.6" height="248"><title>Week of Jul 6: 245 impressions, 0 clicks</title></rect>
+<rect class="vp-hit" x="372.3" y="28" width="46.6" height="248"><title>Week of Jul 13: 246 impressions, 3 clicks</title></rect>
+<rect class="vp-hit" x="418.9" y="28" width="46.6" height="248"><title>Week of Jul 20: 246 impressions, 1 click</title></rect>
+<rect class="vp-hit" x="465.5" y="28" width="46.6" height="248"><title>Week of Jul 27: 528 impressions, 4 clicks</title></rect>
+<rect class="vp-hit" x="512.2" y="28" width="46.6" height="248"><title>Week of Aug 3: 332 impressions, 2 clicks</title></rect>
+<rect class="vp-hit" x="558.8" y="28" width="46.6" height="248"><title>Week of Aug 10: 566 impressions, 0 clicks</title></rect>
+<rect class="vp-hit" x="605.4" y="28" width="46.6" height="248"><title>Week of Aug 17 (6 days): 471 impressions, 1 click</title></rect>
+</svg>
+              <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">VeracityAPI in Google Search Console, per week, May 25 to August 22, 2026. The last bar covers six days.</figcaption>
+            </figure>
+            <details class="vp-data"><summary>Weekly numbers</summary>
+<table><thead><tr><th scope="col">Week of</th><th scope="col">Impressions</th><th scope="col">Clicks</th></tr></thead>
+<tbody>
+<tr><td>May 25</td><td>102</td><td>1</td></tr>
+<tr><td>Jun 1</td><td>103</td><td>2</td></tr>
+<tr><td>Jun 8</td><td>260</td><td>0</td></tr>
+<tr><td>Jun 15</td><td>314</td><td>1</td></tr>
+<tr><td>Jun 22</td><td>409</td><td>0</td></tr>
+<tr><td>Jun 29</td><td>203</td><td>3</td></tr>
+<tr><td>Jul 6</td><td>245</td><td>0</td></tr>
+<tr><td>Jul 13</td><td>246</td><td>3</td></tr>
+<tr><td>Jul 20</td><td>246</td><td>1</td></tr>
+<tr><td>Jul 27</td><td>528</td><td>4</td></tr>
+<tr><td>Aug 3</td><td>332</td><td>2</td></tr>
+<tr><td>Aug 10</td><td>566</td><td>0</td></tr>
+<tr><td>Aug 17 (6 days)</td><td>471</td><td>1</td></tr>
+<tr class="vp-total"><td>Total</td><td>4,025</td><td>18</td></tr>
+</tbody></table>
+</details>
+
+            <p>The chart is the part I keep staring at. Google impressions climbed all summer, from about 100 a week in late May to more than 500 a week in August, while the product sat untouched. Clicks never followed. An average position of 32 is page four, and nobody reads page four.</p>
+
+            <p>Look at which pages drew the clicks. Of the top five, two were AI-detector pages and a third was a fake-review checker. The searches that found Veracity were looking for detection, the exact product Slo had talked me out of on day one. Nobody was searching for what I actually built: a risk score with evidence, sold to agents.</p>
+
+            <h2 id="distribution">Free tools and a warm inbox</h2>
+
+            <p>I&rsquo;ve done SEO for fifteen years, so I marketed Veracity the way I know how: engineering as marketing. Build free tools that people search for (detectors, checkers, AI-visibility utilities), get them ranked, and let the product sell itself to whoever shows up.</p>
+
+            <p>It half worked. Google indexed the tools and kept showing them. But free tools attract people who want a free tool. Someone pasting a paragraph into an AI-text detector wants a verdict on that paragraph, not an API key for a pipeline they don&rsquo;t have. The tool answered their question and they left. Engineering as marketing got me impressions. It never got me intent.</p>
+
+            <p>The channel that could have answered the real question was the oldest one: talk to buyers. A developer tool gets sold one conversation at a time, to the engineering lead who is tired of shipping slop. I got as far as warming up an inbox for cold B2B outbound with Lemwarm, which trades friendly emails with other inboxes for a few weeks so a new domain doesn&rsquo;t land in spam. Then I decided to work on other projects before the outbound itself got going.</p>
+
+            <h2 id="scorecard">How it scored</h2>
+
+            <p>Every project gets the same six-cell rubric I used on <a href="/posts/kapiko-postmortem/">Kapiko</a>. Here&rsquo;s Veracity, scored with hindsight.</p>
+
+<div class="vp-card">
+    <div class="vp-card-grid">
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">Barrier to entry</span><span class="vp-chip vp-chip-bad">LOW</span></div>
+            <div class="vp-note-text">I said it in the launch post: anyone with the same stack can build the same product tomorrow. I built it in an afternoon. So can anyone, and Copyleaks and GPTZero already sell detection APIs.</div>
+        </div>
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">Channel durability</span><span class="vp-chip vp-chip-mid">MEDIUM</span></div>
+            <div class="vp-note-text">An API is exactly where the agent economy points. But the channel I actually used to find customers, free-tool SEO, is the first thing AI answers eat.</div>
+        </div>
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">Market size</span><span class="vp-chip vp-chip-good">HIGH</span></div>
+            <div class="vp-note-text">Slop grows with every agent deployed, so the problem gets bigger every quarter. Whether anyone pays to check before they publish is a separate question.</div>
+        </div>
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">Product durability</span><span class="vp-chip vp-chip-mid">MEDIUM</span></div>
+            <div class="vp-note-text">Detection is probabilistic and adversarial, which is why Slo talked me out of it. Risk scoring with evidence ages better, but every model release moves the target.</div>
+        </div>
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">GTM / marketing</span><span class="vp-chip vp-chip-bad">HIGH</span></div>
+            <div class="vp-note-text">Developer tools are sold one conversation at a time. Building agent-first let me skip the human sales motion, and humans still hold the credit cards.</div>
+        </div>
+        <div class="vp-row">
+            <div class="vp-head"><span class="vp-label">Business model</span><span class="vp-chip vp-chip-mid">MEDIUM</span></div>
+            <div class="vp-note-text">Metered pricing suits agents. But at a cent a call, a team running 1,000 checks a month is a $10 customer. You need thousands of pipelines before it pays rent.</div>
+        </div>
+    </div>
+</div>
+
+            <p>One green, three amber, two red. The two reds are the same two Kapiko had: a low barrier to entry and a hard go-to-market. Anyone can build it, so getting found is the whole job. I&rsquo;ve now learned that lesson twice, which is once more than a lesson should take.</p>
+
+            <h2 id="cause-of-death">Cause of death</h2>
+
+            <p>Kapiko was killed by a Suno wrapper that broke every 36 hours. PalmAura was killed by Apple. Veracity is the first grave with no outside cause of death. Nothing broke. Nobody rejected it. I stopped working on it.</p>
+
+            <p>Two things pulled me away. The first was opportunity cost. Over the summer, <a href="/posts/vibe-trading/">vibe trading</a> (equities and prediction markets, run with AI analysts) started working, and an hour there paid off faster than an hour spent hunting for Veracity&rsquo;s first customer.</p>
+
+            <p>The second was upkeep. A content site can sit untouched for months. An API can&rsquo;t. Veracity meant Workers, API calls, keys, a database, billing, and an email domain: moving parts that need tending whether or not anyone is calling them. When something else is working, that overhead is the first thing you stop paying.</p>
+
+            <p>Underneath both was a doubt: I wasn&rsquo;t sure anyone would use it. That&rsquo;s the honest answer and the uncomfortable one, because I never found out. The launch post said the agent economy &ldquo;doesn&rsquo;t have credit cards.&rdquo; I read that as a reason to build for agents. I should have read it as a warning. If the agent can&rsquo;t pay, a person has to, and I never sat down with that person. The homepage said <em>developers shipping AI features</em> the whole time. I built everything except the conversation with one of them.</p>
+
+            <h2 id="what-comes-with-me">What comes with me</h2>
+
+            <p>A few hundred dollars was cheap tuition. Four things outlive the product:</p>
+
+            <ul>
+                <li><strong>The plan-3&times; loop.</strong> Three models plan, one builds. It was born planning a Veracity feature, and it went on to ship the <a href="/posts/palmaura-postmortem/">PalmAura</a> backend and <a href="/posts/pixelforge-launch/">PixelForge</a>.</li>
+                <li><strong>Stakes priming.</strong> The audit prompt I first tested on Veracity outlived it.</li>
+                <li><strong>A fifth test for the agent economy.</strong> My four tests asked whether a product survives the future. None asked whether anyone pays for it today. The fifth: can you name the person who holds the credit card, and have you talked to them?</li>
+                <li><strong>A teardown checklist.</strong> The build took an afternoon. The shutdown list ran past a dozen items: a Worker, a database, two GitHub repos, three packages, MCP listings, Stripe, Resend, analytics, an ads account, a Chrome app, and a domain. Every surface you ship is a surface you&rsquo;ll have to bury.</li>
+            </ul>
+
+            <h2 id="graveyard">To the graveyard</h2>
+
+            <p>I don&rsquo;t know if Veracity was a bad idea. I know I never ran the one test that would have told me. For a few hundred dollars and a few weeks of building, I can live with &ldquo;don&rsquo;t know&rdquo; and spend my time on what&rsquo;s working.</p>
+
+            <p>The thesis outlives the product. Agents will become the biggest consumers of software, and the slop will keep coming. The next time I build for agents, I&rsquo;ll find the person with the credit card first and build second.</p>
+
+            <p>So Veracity goes to <a href="/games/graveyard/">the graveyard</a>, playable like the rest, next to Kapiko and PalmAura. Three graves now, and the bench is still long.</p>
+
+        </div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call.</a><p class="zn-recommended-dek">Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/kapiko-postmortem/">Kapiko: a 10-day, $150 post-mortem</a><p class="zn-recommended-dek">Kapiko, an AI ambient-music YouTube channel, shipped in 10 days for ~$150. The pipeline worked; the Suno API does not exist. The autopsy, and what&#x27;s…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/palmaura-postmortem/">PalmAura Post-Mortem: Apple Rejected My Vibe-Coded App Twice Under Guideline 4.3(b)</a><p class="zn-recommended-dek">Five builds, two App Store rejections, same guideline both times. What Apple&#x27;s spam wall means for vibe-coded apps, and the lesson I never got to take.</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/games/">Games</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+<script defer src="/js/zn-nav-dd.2b7da7a4.js"></script>
+</body>
+</html>

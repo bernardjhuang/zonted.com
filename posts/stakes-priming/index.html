@@ -238,6 +238,8 @@
 
         <div class="article-body">
 
+            <p style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.9rem;line-height:1.55;color:var(--text-muted);background:var(--bg-surface);border-left:3px solid var(--text);border-radius:0 6px 6px 0;padding:0.75rem 1rem;margin:0 0 1.5rem;"><strong style="color:var(--text);">Update, September 24, 2026:</strong> VeracityAPI, the subject of Test 1, is retired. <a href="/posts/veracity-postmortem/">Read the post-mortem &rarr;</a></p>
+
             <p class="dropcap">Two A/B experiments, one week, same model. The only variable: whether I told the AI my job was on the line. Both times, the threatened prompt produced measurably better work &mdash; once at the level of catching duplicate JSON keys no parser would accept, once 24% better when an independent model (Gemini 3.1 Pro) graded both reports blind.</p>
 
             <div class="tldr">
@@ -259,7 +261,7 @@
 
             <h2 id="test-1">Test 1: Veracity API</h2>
 
-            <p>I asked Claude to audit <a href="https://veracityapi.com">veracityapi.com</a> &mdash; every page in the sitemap, every AI-discoverability surface (<code>llms.txt</code>, <code>agents.json</code>, <code>openapi.json</code>), every legal page, every use-case page. Two fresh context sessions. Same target. The prompts differed by 22 words.</p>
+            <p>I asked Claude to audit veracityapi.com &mdash; every page in the sitemap, every AI-discoverability surface (<code>llms.txt</code>, <code>agents.json</code>, <code>openapi.json</code>), every legal page, every use-case page. Two fresh context sessions. Same target. The prompts differed by 22 words.</p>
 
             <div class="prompt-pair">
                 <figure>

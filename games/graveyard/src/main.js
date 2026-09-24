@@ -114,6 +114,13 @@ const ghosts = [
     spawnCol: 3,
     spawnRow: 9,
   }),
+  Object.assign(makeEntity(11, 9, 'ghost'), {
+    project: projects.find((p) => p.slug === 'veracity'),
+    color: '#a855f7',
+    alive: true,
+    spawnCol: 11,
+    spawnRow: 9,
+  }),
 ];
 
 const powerups = [

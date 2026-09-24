@@ -16,9 +16,8 @@ import subprocess
 import sys
 import time
 from collections import defaultdict
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from pathlib import Path
-from urllib import parse, request
 
 ROOT = Path(__file__).resolve().parents[1]
 METRICS_HTML = ROOT / "metrics" / "index.html"
@@ -29,11 +28,7 @@ CHANNEL = "C0APKM06YTC"
 THRESHOLD = 0.25
 YOUTUBE_SHORTS_URL = "https://www.youtube.com/@tabijiai/shorts"
 TABIJI_PUBLISH_LOG = Path("/Users/psy/.openclaw/workspace/tabiji/functions/publish-log.json")
-STRIPE_KEYCHAIN_SERVICE = "stripe-live-secret-key"
-STRIPE_API_VERSION = "2025-10-29.clover"
 REVENUE_PERIOD_LABEL = "June 2026"
-REVENUE_PERIOD_START = datetime(2026, 6, 1, tzinfo=timezone.utc)
-REVENUE_PERIOD_END = datetime(2026, 7, 1, tzinfo=timezone.utc)
 MANUAL_REVENUE_CARDS = [
     {
         "key": "tabiji",
@@ -362,130 +357,10 @@ def fetch_youtube_metrics() -> dict:
     }
 
 
-def keychain_secret(service: str) -> str:
-    proc = run(["security", "find-generic-password", "-s", service, "-w"], check=False, capture=True)
-    if proc.returncode == 0 and proc.stdout.strip():
-        return proc.stdout.strip()
-    if proc.stderr.strip():
-        print(f"⚠️ Keychain lookup failed for {service}: {proc.stderr.strip()}", file=sys.stderr)
-    elif proc.returncode:
-        print(f"⚠️ Keychain lookup failed for {service}: security exited {proc.returncode}", file=sys.stderr)
-    return ""
-
-
-def stripe_get(path: str, params: dict[str, object] | None = None) -> dict:
-    key = os.environ.get("STRIPE_VERACITYAPI_READONLY_KEY") or keychain_secret(STRIPE_KEYCHAIN_SERVICE)
-    if not key:
-        raise RuntimeError(f"Missing Stripe key: set STRIPE_VERACITYAPI_READONLY_KEY or keychain service {STRIPE_KEYCHAIN_SERVICE}")
-    query = parse.urlencode(params or {}, doseq=True)
-    url = f"https://api.stripe.com/v1/{path.lstrip('/')}"
-    if query:
-        url += f"?{query}"
-    req = request.Request(
-        url,
-        headers={
-            "Authorization": f"Bearer {key}",
-            "Stripe-Version": STRIPE_API_VERSION,
-        },
-    )
-    with request.urlopen(req, timeout=30) as resp:
-        return json.loads(resp.read().decode("utf-8"))
-
-
-def stripe_list(path: str, params: dict[str, object] | None = None) -> list[dict]:
-    rows: list[dict] = []
-    cursor: str | None = None
-    while True:
-        request_params = {**(params or {}), "limit": 100}
-        if cursor:
-            request_params["starting_after"] = cursor
-        payload = stripe_get(path, request_params)
-        batch = payload.get("data") or []
-        rows.extend(batch)
-        if not payload.get("has_more") or not batch:
-            return rows
-        cursor = batch[-1].get("id")
-
-
-def fetch_stripe_usage_revenue() -> dict:
-    """Fetch one-time / usage payments for VeracityAPI.
-
-    VeracityAPI currently charges metered request top-ups rather than Stripe
-    subscriptions, so revenue comes from successful charges/payment intents.
-    """
-    period_start_ts = int(REVENUE_PERIOD_START.timestamp())
-    period_end_ts = int(REVENUE_PERIOD_END.timestamp())
-    charges = stripe_list("charges")
-    balance_transactions = stripe_list("balance_transactions")
-
-    successful = [
-        charge
-        for charge in charges
-        if charge.get("status") == "succeeded" and charge.get("paid") and not charge.get("refunded")
-    ]
-    period_charges = [
-        charge
-        for charge in successful
-        if period_start_ts <= int(charge.get("created") or 0) < period_end_ts
-    ]
-    currency_totals: dict[str, float] = defaultdict(float)
-    lifetime_currency_totals: dict[str, float] = defaultdict(float)
-    for charge in successful:
-        currency = (charge.get("currency") or "usd").lower()
-        amount = float((charge.get("amount_captured") or charge.get("amount") or 0) - (charge.get("amount_refunded") or 0))
-        lifetime_currency_totals[currency] += amount
-        if period_start_ts <= int(charge.get("created") or 0) < period_end_ts:
-            currency_totals[currency] += amount
-
-    primary_currency = max(lifetime_currency_totals or {"usd": 0}, key=(lifetime_currency_totals or {"usd": 0}).get)
-    recent_gross = currency_totals.get(primary_currency, 0)
-    lifetime_gross = lifetime_currency_totals.get(primary_currency, 0)
-
-    recent_balance = [
-        txn
-        for txn in balance_transactions
-        if txn.get("reporting_category") == "charge"
-        and (txn.get("currency") or "usd").lower() == primary_currency
-        and period_start_ts <= int(txn.get("created") or 0) < period_end_ts
-    ]
-    recent_net = sum(float(txn.get("net") or 0) for txn in recent_balance)
-    recent_fees = sum(float(txn.get("fee") or 0) for txn in recent_balance)
-
-    return {
-        "key": "veracityapi",
-        "name": "VeracityAPI",
-        "domain": "veracityapi.com",
-        "color": "#336699",
-        "source": "Stripe",
-        "currency": primary_currency,
-        "grossCentsPeriod": round(recent_gross, 2),
-        "netCentsPeriod": round(recent_net, 2),
-        "feesCentsPeriod": round(recent_fees, 2),
-        "lifetimeGrossCents": round(lifetime_gross, 2),
-        "successfulPaymentsPeriod": len(period_charges),
-        "successfulPaymentsLifetime": len(successful),
-        "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-    }
-
-
-def revenue_cards(stripe_revenue: dict) -> dict:
-    veracity = {
-        "key": stripe_revenue["key"],
-        "name": stripe_revenue["name"],
-        "domain": stripe_revenue["domain"],
-        "color": stripe_revenue.get("color", "#336699"),
-        "total": money(stripe_revenue.get("grossCentsPeriod") or 0, stripe_revenue.get("currency") or "usd"),
-        "label": f"{REVENUE_PERIOD_LABEL} gross collected",
-        "source": "Stripe",
-        "rows": [
-            {"label": "Successful payments", "value": fmt(stripe_revenue.get("successfulPaymentsPeriod") or 0)},
-            {"label": "Net after fees", "value": money(stripe_revenue.get("netCentsPeriod") or 0, stripe_revenue.get("currency") or "usd")},
-            {"label": "Lifetime gross", "value": money(stripe_revenue.get("lifetimeGrossCents") or 0, stripe_revenue.get("currency") or "usd")},
-        ],
-    }
+def revenue_cards() -> dict:
     return {
         "updatedIso": datetime.utcnow().isoformat(timespec="seconds") + "Z",
-        "cards": revenue_ranked_cards([*MANUAL_REVENUE_CARDS, veracity]),
+        "cards": revenue_ranked_cards(MANUAL_REVENUE_CARDS),
     }
 
 
@@ -761,7 +636,7 @@ def update_html(data: dict) -> None:
         revenue = f'''        <!-- Revenue Snapshot -->
         <section class="portfolio-section revenue-section" aria-labelledby="revenue-heading">
             <h2 id="revenue-heading"><span class="icon">💸</span> {esc(REVENUE_PERIOD_LABEL)} Revenue Snapshot</h2>
-            <p class="section-desc">Revenue snapshot for active projects. VeracityAPI usage revenue is pulled from Stripe successful charges for {esc(REVENUE_PERIOD_LABEL)}.</p>
+            <p class="section-desc">Revenue snapshot for active projects.</p>
             <div class="property-grid revenue-grid">
 {revenue_cards}
             </div>
@@ -942,16 +817,7 @@ def main() -> int:
             raise RuntimeError("Cannot skip revenue refresh because no existing revenue snapshot was found")
         data["revenueSnapshot"] = fallback_revenue
     else:
-        try:
-            data["revenueSnapshot"] = revenue_cards(fetch_stripe_usage_revenue())
-        except Exception as exc:
-            fallback_revenue = load_existing_revenue_snapshot()
-            if not fallback_revenue:
-                raise
-            data["revenueSnapshot"] = fallback_revenue
-            warning = f"⚠️ VeracityAPI revenue unchanged: {exc}"
-            warnings.append(warning)
-            print(warning, file=sys.stderr)
+        data["revenueSnapshot"] = revenue_cards()
 
     apply_revenue_property_order(data)
     previous = load_previous_state()

@@ -25,4 +25,17 @@ export const projects = [
     ],
     link: { label: 'Read the full post-mortem →', href: '/posts/palmaura-postmortem/' },
   },
+  {
+    slug: 'veracity',
+    name: 'VERACITY',
+    type: 'API',
+    born: '2026',
+    died: '2026',
+    pages: [
+      'Detect AI slop before it ships — a pre-publish check that agents call before they publish, train on, or moderate content.',
+      'The build was one afternoon: a Cloudflare Worker, a D1 database, one LLM call. Then an MCP server, SDKs, a Chrome extension, and a shelf of free SEO tools.',
+      'Killed by its maker — opportunity cost. Trading was working, the API needed upkeep, and it never found a buyer. Four outside signups, $0 in revenue.',
+    ],
+    link: { label: 'Read the full post-mortem →', href: '/posts/veracity-postmortem/' },
+  },
 ];
