@@ -1,0 +1,158 @@
+{
+  "asof": "2026-08-19",
+  "series": "KXHIGHCHI",
+  "judge": {
+    "station": "KMDW Midway / CLIMDW",
+    "confirmed": true,
+    "n_rules": 1380,
+    "n_rules_midway_climdw": 1380,
+    "n_rules_word_midway": 1350,
+    "n_rules_climdw": 30,
+    "n_rules_nws": 1350,
+    "n_rules_twc": 30,
+    "n_rules_ohare": 0,
+    "kxhighchi_settlement_sources": [
+      {
+        "name": "The Weather Company",
+        "url": "https://weather.com/kalshi"
+      }
+    ],
+    "highchi_settlement_sources": [
+      {
+        "name": "National Weather Service ",
+        "url": "https://forecast.weather.gov/product.php?site=LOT&product=CLI&issuedby=MDW"
+      }
+    ],
+    "kxhighchi_important_info": "**Important information:** \n\nEffective Friday, August 14th, daily temperature markets will transition their settlement source from the National Weather Service (NWS) to The Weather Company. The Weather Company utilizes NWS as its primary underlying source, and official settlement data will be accessible at https://weather.com/kalshi.",
+    "note": "HIGHCHI series source is NWS CLI issuedby=MDW. KXHIGHCHI event rules_primary name CLIMDW / Chicago Midway. NWS\u2192TWC 2026-08-14 same station."
+  },
+  "coverage": {
+    "n_settled_markets": 1380,
+    "n_2026_events": 230,
+    "date_start": "2026-01-01",
+    "date_end": "2026-08-18",
+    "n_yes": 230,
+    "n_no": 1150,
+    "n_with_max_yes": 1380,
+    "n_with_candle_price_high": 1380,
+    "n_with_trade_fallback": 0,
+    "n_missing_no_volume_max_yes": 0,
+    "missing_no_volume_tickers": [],
+    "n_yes_still_missing": 0,
+    "yes_missing": [],
+    "max_yes_field": "candle price.high / price.high_dollars (trade high). Never yes_ask.high.",
+    "n_candle_trade_agree": 1380,
+    "n_90_flips": 0,
+    "n_false_ask_90": 1092,
+    "note": "Missing NO-with-volume max_yes bias die% DOWN (spike-then-fade 90s not seen). Last-price fallback is YES>=0.96 lives only. Do not score last-price-only 0% die as the strategy."
+  },
+  "ladder": {
+    "70": {
+      "n": 387,
+      "n_die": 157,
+      "die_pct": 40.5685,
+      "ev_cents": 10.5685,
+      "fee_cents": 1.47,
+      "ev_after_fee_cents": 9.0985,
+      "sources": {
+        "candle_price_high": 387
+      },
+      "n_max_yes": 387,
+      "n_candle": 387,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    },
+    "75": {
+      "n": 347,
+      "n_die": 117,
+      "die_pct": 33.7176,
+      "ev_cents": 8.7176,
+      "fee_cents": 1.3125,
+      "ev_after_fee_cents": 7.4051,
+      "sources": {
+        "candle_price_high": 347
+      },
+      "n_max_yes": 347,
+      "n_candle": 347,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    },
+    "80": {
+      "n": 327,
+      "n_die": 97,
+      "die_pct": 29.6636,
+      "ev_cents": 9.6636,
+      "fee_cents": 1.12,
+      "ev_after_fee_cents": 8.5436,
+      "sources": {
+        "candle_price_high": 327
+      },
+      "n_max_yes": 327,
+      "n_candle": 327,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    },
+    "85": {
+      "n": 307,
+      "n_die": 77,
+      "die_pct": 25.0814,
+      "ev_cents": 10.0814,
+      "fee_cents": 0.8925,
+      "ev_after_fee_cents": 9.1889,
+      "sources": {
+        "candle_price_high": 307
+      },
+      "n_max_yes": 307,
+      "n_candle": 307,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    },
+    "90": {
+      "n": 283,
+      "n_die": 53,
+      "die_pct": 18.7279,
+      "ev_cents": 8.7279,
+      "fee_cents": 0.63,
+      "ev_after_fee_cents": 8.0979,
+      "sources": {
+        "candle_price_high": 283
+      },
+      "n_max_yes": 283,
+      "n_candle": 283,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    },
+    "95": {
+      "n": 259,
+      "n_die": 30,
+      "die_pct": 11.583,
+      "ev_cents": 6.583,
+      "fee_cents": 0.3325,
+      "ev_after_fee_cents": 6.2505,
+      "sources": {
+        "candle_price_high": 259
+      },
+      "n_max_yes": 259,
+      "n_candle": 259,
+      "n_trade_fallback": 0,
+      "n_last_yes96": 0
+    }
+  },
+  "nyc_2026_ytd_given": {
+    "n": 281,
+    "die_pct": 18.1,
+    "ev_after_fee": 7.5
+  },
+  "vs_nyc_90": {
+    "chi_n": 283,
+    "chi_die_pct": 18.7279,
+    "chi_ev_after_fee_cents": 8.0979,
+    "nyc_n": 281,
+    "nyc_die_pct": 18.1,
+    "nyc_ev_after_fee_cents": 7.5
+  },
+  "verdict": "+EV",
+  "pass_90no_plus_ev_after_fee": true,
+  "fee_note": "taker 0.07*p*(1-p); at 10c No fee=0.63c; breakeven die after fee=10.63%",
+  "max_yes_source": "candle price.high (daily 1440); trade tape only if candle fails"
+}
