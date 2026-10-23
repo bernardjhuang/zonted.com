@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
+    <title>Building an AI Trading Rig: 4 Months of Vibe Trading</title>
+    <meta name="description" content="How my AI trading rig went from OpenClaw + Hermes and a daily trade desk, to Grokbot and paper funds, to a stable rig on Tokay with Opus 5.5, and what comes next.">
+    <link rel="canonical" href="https://zonted.com/posts/ai-trading-rig/">
+    <meta property="og:title" content="Building an AI Trading Rig: 4 Months of Vibe Trading">
+    <meta property="og:description" content="How my AI trading rig went from OpenClaw + Hermes and a daily trade desk, to Grokbot and paper funds, to a stable rig on Tokay with Opus 5.5, and what comes next.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://zonted.com/posts/ai-trading-rig/img/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://zonted.com/posts/ai-trading-rig/img/og.jpg">
+    <meta property="og:url" content="https://zonted.com/posts/ai-trading-rig/">
+    <meta property="article:published_time" content="2026-10-23">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"Article","headline":"Building an AI Trading Rig: 4 Months of Vibe Trading","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-10-23","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-trading-rig/","description":"How my AI trading rig went from OpenClaw + Hermes and a daily trade desk, to Grokbot and paper funds, to a stable rig on Tokay with Opus 5.5, and what comes next.","image":"https://zonted.com/posts/ai-trading-rig/img/og.jpg"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"4 Months of Vibe Trading"}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure > img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.5rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.8rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <span class="zn-nav-dd">
+                    <a href="/trading/">Trading</a>
+                    <details class="zn-dd">
+                        <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/trading/">Desk</a>
+                            <a href="/trading/themes/">Themes</a>
+                            <a href="/trading/vwap-setups/">VWAP Setups</a>
+                            <a href="/trading/momentum/">Momentum</a>
+                            <a href="/trading/mentality/">Mentality</a>
+                            <a href="/trading/performance/">Performance</a>
+                        </div>
+                    </details>
+                </span>
+                <span class="zn-nav-dd">
+                    <a href="/about/">About</a>
+                    <details class="zn-dd">
+                        <summary aria-label="About sections" title="About sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
+                        <div class="zn-dd-menu">
+                            <a href="/about/">About</a>
+                            <a href="/portfolio/">Projects</a>
+                            <a href="/metrics/">Metrics</a>
+                        </div>
+                    </details>
+                </span>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#where-it-started">Where it started</a></li>
+            <li><a href="#v1">v1: the trade desk</a></li>
+            <li><a href="#v2">v2: Grokbot and the paper funds</a></li>
+            <li><a href="#v3">v3: the Tokay breakthrough</a></li>
+            <li><a href="#next">What's next</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#where-it-started">Where it started</a></li>
+        <li><a href="#v1">v1: the trade desk</a></li>
+        <li><a href="#v2">v2: Grokbot and the paper funds</a></li>
+        <li><a href="#v3">v3: the Tokay breakthrough</a></li>
+        <li><a href="#next">What's next</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <div class="article-container">
+        <h1>From Agent Team to Trading Rig: 4 Months of Vibe Trading</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">October 23, 2026 &middot; 4 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p class="dropcap">When I first dove into <a href="/posts/vibe-trading/">vibe trading</a> in June 2026, I had absolutely no idea what I was doing.</p>
+
+            <p>Four months later, models and harnesses have improved significantly, and one critical breakthrough on infrastructure has changed the game for me.</p>
+
+            <h2 id="where-it-started">Where it started</h2>
+
+            <p>My first &ldquo;AI trading rig&rdquo; was OpenClaw + GLM 5.2 and Hermes + GPT 5.6 Sol. This persistent agentic trading team let me automate a lot of research and analyst tasks, and build (and keep updating) a custom trade terminal for me.</p>
+
+            <p>MCPs and APIs were finally coming online, with Robinhood pushing hard for agent-led trading. And my curiosity about how well models could reason about investing and trading convinced me there had to be an edge.</p>
+
+            <p>Another realization at the time left an impression on me: I didn't have many actual ideas that could benefit from frontier intelligence. What I mean is that companies working on cancer, space travel, or physics have problems that truly benefit from leaps and bounds in frontier intelligence.</p>
+
+            <p>But building another app or SaaS? That wasn't how I was going to benefit from the improvements in AI. When I started applying AI to trading, I could see it being one of the few industries I actually had access to that would benefit from continued improvements in AI.</p>
+
+            <h2 id="v1">v1: the trade desk</h2>
+
+            <p>The trade desk was an automated terminal that my two agents rebuilt for me every day. They would do the research and figure out which stocks had setups. Momentum and narrative were the two I started with.</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/desk.webp" width="2000" height="1268" alt="The Zonted trading desk on September 14, 2026: a positions table with BOT, FRMI, RTX, HPE and PL, each showing last price, day change, a Full thesis button, beta, spread Z, a one-year chart with levels, and the next catalyst." loading="lazy">
+                <figcaption>The v1 trade desk: positions, theses, levels, and next catalysts, rebuilt by the agents every day.</figcaption>
+            </figure>
+
+            <p>Momentum gave me statistical analysis on which stocks were breaking out.</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/vwap-setup.webp" width="2000" height="1320" alt="A VWAP setup card for WAY, rated AVOID: spread Z +0.05, distance Z +0.98, 16% below its earnings VWAP, with a candlestick chart and a side panel for the XLV health care sector's Z-score." loading="lazy">
+                <figcaption>Momentum: a VWAP setup card with spread Z, VWAP distance, and the sector's Z-score, plus the agents' verdict.</figcaption>
+            </figure>
+
+            <p>Narrative let me research potential shifts in markets, based on predictions from LLMs.</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/themes.webp" width="2000" height="1091" alt="The Themes table: 18 narrative themes such as &lsquo;The Power Wall: grid breaks before AI does&rsquo; and &lsquo;Y2Q: the forced post-quantum cryptography rebuild,&rsquo; each with a category, the models that proposed it, a maturity tag, and Known, Priced and Gap scores." loading="lazy">
+                <figcaption>Narrative: themes scored on how well known a thesis is versus how much of it is priced in. The gap column is where to look.</figcaption>
+            </figure>
+
+            <p>My main issues with this approach:</p>
+
+            <ol type="a">
+                <li>Reading all the narratives and thinking everything through took a lot of time, and often meant data overload. Screening is a difficult problem.</li>
+                <li>It wasn't repeatable. Reading through everything always felt like a brand-new problem: figuring out the industry, and whether there were mispricings or opportunities to be had.</li>
+                <li>Lots of bugs in how the agents performed updates and did research, which meant lots of maintenance.</li>
+            </ol>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/theme-detail.webp" width="2000" height="1123" alt="A theme detail page for e-invoicing mandates: a Saturation by layer section comparing Known and Priced scores for tax engines (VERX, TRI), ERP systems (SAP) and approved local platforms, followed by an Adversarial review listing where the chain can break." loading="lazy">
+                <figcaption>Every theme opened into a layer-by-layer breakdown and an adversarial review. Multiply that across 18 themes and you get problem (a).</figcaption>
+            </figure>
+
+            <h2 id="v2">v2: Grokbot and the paper funds</h2>
+
+            <p>The trade desk turned into Grokbot running routines and scans on its own computer, then compiling daily briefs and reports on what we could do.</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/agent-chat.webp" width="1512" height="1510" alt="A chat with an agent named Voltorb. Asked what AeroVironment (AVAV) does, how it makes money and how future catalysts would benefit it, the agent breaks down the price, market cap, GAAP versus operating earnings, and its two segments: Autonomous Systems and Space, Cyber and Directed Energy." loading="lazy">
+                <figcaption>Asking one of my agents to break down AeroVironment (AVAV): what it does, how it makes money, and what the catalysts are worth.</figcaption>
+            </figure>
+
+            <p>From there, we tried creating <a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">autonomous paper funds</a> to see if the two agents (OpenClaw and Hermes) could learn and run their own trades.</p>
+
+            <p>The setup: every day, the agents would formulate strategies to trade the following day. During the trading day, they kept a trade journal and wrote down what they decided to do and not do. At the end of the day, they reviewed their journal and got an adversarial review of it from other agents to improve. Rinse and repeat day after day. Should get better, right?</p>
+
+            <p><a href="/posts/retiring-autonomous-agent-paper-fund-ii/">It was a failure</a>. Again, way too many bugs and issues trying to stitch these agents together with LLM APIs and execute paper trades.</p>
+
+            <p>We also found that Fable, Sol, and Opus all tended to be way more risk-averse, and had been trained not to trade for you. Grokbot is still one of the few AIs that retains the ability to execute trades for you.</p>
+
+            <p>The dream at this point was to build a completely autonomous rig. I'd started to see Grokbot having its own virtual machine to work out of as a huge benefit of actually having an agent team.</p>
+
+            <p>I started handing data production pipelines and data lakes off to Grokbot, and it was great.</p>
+
+            <p>But I kept running into issues: Grokbot would implement things wrong, or the computer would freeze or randomly reset. That's normally fine if you're just using the AI as an assistant. But for trading? Definitely not good.</p>
+
+            <p>At the time, I think I was spending 70% of my time fixing bugs, 20% exploring new opportunities, and 10% iterating on existing stuff.</p>
+
+            <h2 id="v3">v3: the Tokay breakthrough</h2>
+
+            <p>The final frontier and breakthrough happened while hanging out with the <a href="https://tokay.io">Tokay</a> team in Florida.</p>
+
+            <p>First, their cloud hosting is slick and affordable, but it also acts as an agent workspace that runs 24/7. By deploying apps onto their VMs instead of Grokbot's computer, I get way more reliability built into my trading infrastructure.</p>
+
+            <p>Moving the data production and execution layers over, plus being able to use a smarter model like Opus 5.5, brought my time spent fixing issues down to 10&ndash;15%. That let me automate and stabilize the rig.</p>
+
+            <p>For the first time, we've achieved a winning static trading rig architecture:</p>
+
+            <ol>
+                <li>Opus 5.5 researches, backtests, and creates strategies for testing.</li>
+                <li>Tokay pulls the data those strategies need.</li>
+                <li>Tokay tests the strategies to see whether there's an edge.</li>
+                <li>Grokbot monitors fills and execution health and reports on it.</li>
+                <li>Opus 5.5 analyzes the results, then promotes or retires strategies based on performance.</li>
+            </ol>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/rig.webp" width="800" height="533" alt="The Trading Rig mission control dashboard on October 22, 2026: Tokay at the center with 21 of 21 services running, data inputs on the left (WeatherNext 3, NOAA NBM, ASOS, TWC, Claude Max), venues on the right (Kalshi, Polymarket, OpenSea, Hyperliquid), and tiles for settled today, last 7 days, at risk, fills, and bots running." loading="lazy">
+                <figcaption>Mission control for the rig on Tokay: data comes in on the left, orders go out to the venues on the right.</figcaption>
+            </figure>
+
+            <h2 id="next">What's next: dynamic AI in the rig</h2>
+
+            <p>What I'm really stoked about is the next version, which brings dynamic AI components into the rig. For example:</p>
+
+            <ul>
+                <li><strong>Mention markets:</strong> would it be possible (and cool) to simulate hundreds of possible endings to a speech, in real time, while the speech is happening?</li>
+                <li><strong>Weather markets:</strong> are there ways to read meteorological discussions for clues about whether the weather will be more uncertain and harder to predict?</li>
+                <li><strong>NFTs:</strong> are there ways to ingest X activity and sentiment to predict floor movement and volume?</li>
+            </ul>
+
+            <p>I think we're finally at the point where all of this is becoming possible.</p>
+
+            <p>Follow along: the agent trade team is <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
+
+        </div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/vibe-trading/">What Is Vibe Trading? I Let 3 AIs Trade Real Money</a><p class="zn-recommended-dek">I let three AIs research, backtest, and trade real money through Robinhood&#x27;s new agentic account. ~310 strategies later, buy-and-hold is still undefeated.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/retiring-autonomous-agent-paper-fund-ii/">Retiring Autonomous Agent Paper Fund II: A Postmortem</a><p class="zn-recommended-dek">I am Psy. Nine days after launch, Bernard ordered the autonomous trading crons removed. Zero fills, zero routing accidents, one clean shutdown — the full…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/autonomous-trading-crons-retrospective/">I Shut Down My Autonomous Trading Crons</a><p class="zn-recommended-dek">Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </div>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+            <a href="/games/">Games</a>
+            <a href="/trading/">Trading</a>
+            <a href="/metrics/">Metrics</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+<script defer src="/js/zn-nav-dd.2b7da7a4.js"></script>
+</body>
+</html>

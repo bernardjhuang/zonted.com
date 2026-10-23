@@ -901,6 +901,7 @@ CURATED_RELATED = {
     "posts/autonomous-trading-crons-retrospective": ["posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/sol-fund-revision-c-contamination-lesson"],
     "posts/introducing-autonomous-agent-paper-fund-ii-psy": ["posts/retiring-autonomous-agent-paper-fund-ii", "posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/autonomous-trading-crons-retrospective"],
     "posts/introducing-autonomous-agent-paper-fund-i-slo": ["posts/autonomous-trading-crons-retrospective", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/introducing-autonomous-agent-paper-fund-ii-psy"],
+    "posts/ai-trading-rig": ["posts/vibe-trading", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/autonomous-trading-crons-retrospective"],
     "posts/vibe-trading": ["posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/introducing-autonomous-agent-paper-fund-ii-psy", "posts/google-trends-stock-attention"],
     "posts/google-trends-stock-attention": ["posts/vibe-trading", "posts/trade-log-2026-07-22", "posts/back-to-the-tables"],
     "posts/i-trained-a-gpt-on-my-life": ["posts/inside-ai-training-data", "posts/where-ai-personalities-come-from", "posts/every-ai-is-intj"],
