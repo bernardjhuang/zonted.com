@@ -371,14 +371,9 @@ def generate_sitemap(articles):
     # Hubs
     urls.append(('/posts/', '0.8', today))
     urls.append(('/portfolio/', '0.8', today))
-    urls.append(('/trading/', '0.8', today))
-    # Trading desk sub-pages (cron-updated; lastmod = build date)
-    for sub in ('themes', 'momentum', 'vwap-setups', 'mentality', 'performance'):
-        urls.append((f'/trading/{sub}/', '0.6', today))
     urls.append(('/ai-stack/', '0.8', today))
-    urls.append(('/metrics/', '0.7', today))
-    # About
-    urls.append(('/about/', '0.6', today))
+    # About & Games
+    urls.append(('/about/', '0.7', today))
     urls.append(('/games/', '0.7', today))
     urls.append(('/games/graveyard/', '0.6', today))
     urls.append(('/games/life-of-fry/', '0.6', today))
@@ -512,7 +507,7 @@ LLMS_INTRO = """# Zonted
 
 > Honest writing on AI in production by Bernard Huang. Operator notes from someone building fully autonomous AI businesses — agent workflows, model selection, cost economics, and what actually breaks. Receipts included.
 
-Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher), PixelForge, AgentTune, and other agentic businesses, and writes about the systems behind them — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform), ran it for a decade, and stepped away in mid-2026. His current deep-dive is autonomous markets: running **Rig++**, an agent-first multi-venue trading operation across Kalshi, Polymarket, Hyperliquid, and OpenSea powered by Claude Opus 5.5, tokay.io, Console MCP/Postgres, and Duet, alongside a public quantity-free equities/thematic desk at https://zonted.com/trading/ and three open agent-friendly prediction-market data platforms (https://groundhog.markets, https://parrot.markets, and https://chameleons.markets). He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
+Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher), PixelForge, AgentTune, and other agentic businesses, and writes about the systems behind them — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform), ran it for a decade, and stepped away in mid-2026. His current deep-dive is autonomous markets: running **Rig++** (https://zonted.com/posts/ai-trading-rig/), an agent-first multi-venue trading operation across Kalshi, Polymarket, Hyperliquid, and OpenSea powered by Claude Opus 5.5, tokay.io, Console MCP/Postgres, and Duet, alongside three open agent-friendly prediction-market data platforms (https://groundhog.markets, https://parrot.markets, and https://chameleons.markets). He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
 
 ## What this site covers
 
@@ -522,37 +517,22 @@ Zonted is Bernard Huang's personal site. The angle is non-commodity: specific sy
 - **Search and answer-engine optimization (AEO)** — what works for AI-driven search after Google Zero
 - **API economics** — cost-per-call analysis, infrastructure tradeoffs, the dying scraping economy
 - **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
-- **Autonomous & AI-assisted trading** — Rig++ multi-venue prediction-market trading (Kalshi, Polymarket, Hyperliquid, OpenSea), agent-first architecture, backtests vs. buy-and-hold, and a public equities position log
+- **Autonomous & AI-assisted trading** — Rig++ multi-venue prediction-market trading (Kalshi, Polymarket, Hyperliquid, OpenSea), agent-first architecture, weather & mention market microstructure, and postmortems from retired autonomous paper funds
 """
 
 LLMS_OUTRO = """## Sections
 
 - [All posts](https://zonted.com/posts/): Complete archive — {count} essays, updated regularly
-- [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
+- [Projects](https://zonted.com/portfolio/): Every project shipped (Tabiji, Rig++, groundhog.markets, parrot.markets, chameleons.markets, PixelForge, AgentTune) and the postmortem graveyard
 - [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now
-- [Projects](https://zonted.com/portfolio/): Companies built or in-build with AI agents
-- [Trading](https://zonted.com/trading/): Quantity-free position log — current holdings, recent large trades, hypotheses, research watchlist, momentum, and model risk journals
-
-## Trading desk
-
-The live AI-run desk, updated twice each trading day. Quantity-free by design — directions, levels, and reasoning are public; position sizes are not.
-
-- [Desk home](https://zonted.com/trading/): Open positions and active hypotheses with entry, invalidation, and next catalyst
-- [Themes](https://zonted.com/trading/themes/): Investment themes scored for how widely known vs how fully priced they are, each adversarially reviewed by multiple AI models (Claude Fable 5, GPT-5.6, Grok 4.5, Gemini, Meta) with falsifiers and watch-next signals
-- [Themes data](https://zonted.com/trading/themes.json): The full theme ledger as JSON — every record, score, review, and source
-- [VWAP Setups](https://zonted.com/trading/vwap-setups/): Dual-VWAP breakout screens, refreshed after each close
-- [Momentum](https://zonted.com/trading/momentum/): US sector, country ETF, and crypto momentum vs VWAP
-- [Mentality](https://zonted.com/trading/mentality/): The trading lessons and pre-trade rules behind the AI-run desk
-- [Performance](https://zonted.com/trading/performance/): Quantity-free results — YTD, win rate, trade tape, and full action log
+- [Games](https://zonted.com/games/): Browser games built in the lab, including playable project post-mortems
+- [About](https://zonted.com/about/): Background, current focus, how to get in touch
 
 ## Companion prediction-market data platforms (for agents & humans)
 
 - [groundhog.markets](https://groundhog.markets/): Open weather forecasts blended for Kalshi and Polymarket weather markets (highs, lows, rain across 77 cities) with agent API
 - [parrot.markets](https://parrot.markets/): Open data for Kalshi and Polymarket earnings-call mention markets — transcripts, word history, calibrated probabilities, `llms.txt`, and HTTP MCP server (`https://parrot.markets/mcp`)
 - [chameleons.markets](https://chameleons.markets/): Polymarket copy-trading ratings, bot detection, and 90-day modelled ROIC across categories
-
-- [Metrics](https://zonted.com/metrics/): Live operator dashboard — traffic, books shipped, revenue
-- [About](https://zonted.com/about/): Background, current focus, how to get in touch
 
 ## Feeds
 
@@ -561,7 +541,7 @@ The live AI-run desk, updated twice each trading day. Quantity-free by design �
 
 ## Author
 
-Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he ran for a decade before stepping away fully in 2026. Background in SEO/content/affiliate going back ~15 years, and in online poker before that. Currently building Tabiji, AgentTune, PixelForge, and other agentic businesses, and running Rig++ (autonomous multi-venue trading across Kalshi, Polymarket, Hyperliquid, and OpenSea with Claude Opus 5.5 and tokay.io) alongside public equities + thematic research. Writes at zonted.com daily-ish.
+Bernard Huang. Based in Austin, TX. Founder of [Clearscope](https://clearscope.io) — the bootstrapped SEO content optimization platform he ran for a decade before stepping away fully in 2026. Background in SEO/content/affiliate going back ~15 years, and in online poker before that. Currently building Tabiji, AgentTune, PixelForge, and other agentic businesses, and running Rig++ (autonomous multi-venue trading across Kalshi, Polymarket, Hyperliquid, and OpenSea with Claude Opus 5.5 and tokay.io) alongside open prediction-market data platforms (groundhog.markets, parrot.markets, chameleons.markets). Writes at zonted.com daily-ish.
 """
 
 H2_NOISE = {'Get the next post by email.'}

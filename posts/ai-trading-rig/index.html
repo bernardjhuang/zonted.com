@@ -30,6 +30,9 @@
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"From Vibe Trading to an Agent-First Rig"}]}
     </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is Rig++?","acceptedAnswer":{"@type":"Answer","text":"Rig++ is an autonomous, agent-first multi-venue trading system built by Bernard Huang that trades live capital across Kalshi, Polymarket, Hyperliquid, and OpenSea. It runs on Claude Opus 5.5 inside a persistent tokay.io virtual machine, backed by Console MCP with a PostgreSQL database and Duet for notifications."}},{"@type":"Question","name":"Why did the earlier autonomous AI paper funds (Slo and Psy) fail?","acceptedAnswer":{"@type":"Answer","text":"The earlier Grok and GPT paper funds failed for three reasons: open-ended equity selection suffered from backtest contamination, model safety training made frontier models overly risk-averse in committee setups, and stateless cron jobs writing markdown journals produced zero persisted code or parameter improvements."}},{"@type":"Question","name":"How does Rig++ trade weather prediction markets on Kalshi and Polymarket?","acceptedAnswer":{"@type":"Answer","text":"Rig++ maps each weather market to its official NWS Daily Climate Report (CLI) and ASOS airport settlement station, blends multi-model weather ensembles (NWS, HRRR, GFS, ECMWF), and posts resting maker liquidity rather than crossing wide taker spreads."}},{"@type":"Question","name":"What are groundhog.markets, parrot.markets, and chameleons.markets?","acceptedAnswer":{"@type":"Answer","text":"They are three open, agent-friendly prediction-market data platforms spun out of Rig++: groundhog.markets blends free weather forecasts across 77 cities for Kalshi and Polymarket weather markets; parrot.markets provides earnings-call transcript word base rates and an HTTP MCP server for mention markets; and chameleons.markets rates Polymarket wallets on 90-day modelled ROIC while filtering out wash and latency bots."}}]}
+    </script>
     <style>
         :root {
             --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
@@ -157,31 +160,8 @@
             <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
             <div class="zn-nav-links">
                 <a href="/posts/">Posts</a>
-                <span class="zn-nav-dd">
-                    <a href="/trading/">Trading</a>
-                    <details class="zn-dd">
-                        <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-                        <div class="zn-dd-menu">
-                            <a href="/trading/">Desk</a>
-                            <a href="/trading/themes/">Themes</a>
-                            <a href="/trading/vwap-setups/">VWAP Setups</a>
-                            <a href="/trading/momentum/">Momentum</a>
-                            <a href="/trading/mentality/">Mentality</a>
-                            <a href="/trading/performance/">Performance</a>
-                        </div>
-                    </details>
-                </span>
-                <span class="zn-nav-dd">
-                    <a href="/about/">About</a>
-                    <details class="zn-dd">
-                        <summary aria-label="About sections" title="About sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-                        <div class="zn-dd-menu">
-                            <a href="/about/">About</a>
-                            <a href="/portfolio/">Projects</a>
-                            <a href="/metrics/">Metrics</a>
-                        </div>
-                    </details>
-                </span>
+                <a href="/portfolio/">Projects</a>
+                <a href="/about/">About</a>
                 <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
             </div>
         </div>
@@ -255,7 +235,7 @@
                 <p class="tldr-thesis">How five months of trial and error took us from human-in-the-loop stock screens to an autonomous agent-first trading rig.</p>
                 <ul>
                     <li><strong>The catalyst:</strong> Forgetting my laptop on a Europe workcation while a power outage killed my Mac Mini at home made me realize that building consumer/B2B SaaS apps was a weak way to leverage frontier AI &mdash; and pushed me toward trading.</li>
-                    <li><strong>What worked and what died:</strong> An automated <a href="/trading/">trade desk</a> helped me nail discretionary swings like <a href="/posts/ai-desk-figr-earnings/">FIGR earnings</a>, while two <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">autonomous paper funds</a> collapsed under fragile cron jobs and risk-averse models.</li>
+                    <li><strong>What worked and what died:</strong> An automated trade desk helped me nail discretionary swings like <a href="/posts/ai-desk-figr-earnings/">FIGR earnings</a>, while two <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">autonomous paper funds</a> collapsed under fragile cron jobs and risk-averse models.</li>
                     <li><strong>60 days in the weather trenches:</strong> Going deep into prediction markets and graduating our stack to <strong>Opus 5.5 + <a href="https://tokay.io">tokay.io</a> + Console MCP / Postgres + Duet</strong> unlocked real, repeatable edges &mdash; cycling <strong>$191,453.85</strong> in cumulative capital across <strong>3,055 legs</strong> (led by <code>Weather &middot; rain</code> at a <strong>12.06 Sharpe</strong> and <strong>+$2,948.68</strong> all-time).</li>
                     <li><strong>Companion sites for other agent swarms:</strong> We spun out <a href="https://groundhog.markets/">groundhog.markets</a>, <a href="https://parrot.markets/">parrot.markets</a>, and <a href="https://chameleons.markets/">chameleons.markets</a> as open, agent-friendly data layers.</li>
                     <li><strong>The management shift:</strong> Treating agents as first-class citizens with one North Star (<strong>30-day return</strong>) and a simple rule: <em>ask for forgiveness, not permission.</em></li>
@@ -283,21 +263,21 @@
 
             <h2 id="v1">2. v1: the automated trade desk (OpenClaw + Hermes)</h2>
 
-            <p>When I got back home, I started with what I knew: building an automated <a href="/trading/">trade desk</a> powered by <strong>OpenClaw</strong> (GLM 5.2) and <strong>Hermes</strong> (GPT 5.6 Sol). Every morning, a set of cron routines woke up, scanned the market, and rebuilt a live trading terminal on this site for me.</p>
+            <p>When I got back home, I started with what I knew: building an automated trade desk (formerly at <code>/trading/</code>) powered by <strong>OpenClaw</strong> (GLM 5.2) and <strong>Hermes</strong> (GPT 5.6 Sol). Every morning, a set of cron routines woke up, scanned the market, and rebuilt a live trading terminal on this site for me.</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/desk.webp" width="2000" height="1268" alt="The Zonted trading desk on September 14, 2026: a positions table with BOT, FRMI, RTX, HPE and PL, each showing last price, day change, a Full thesis button, beta, spread Z, a one-year chart with levels, and the next catalyst." loading="lazy">
                 <figcaption>The v1 trade desk: positions, theses, levels, and next catalysts, rebuilt by the agents every day.</figcaption>
             </figure>
 
-            <p>On the technical side, the routines scoped out <a href="/trading/momentum/">momentum</a> and <a href="/trading/vwap-setups/">VWAP setups</a> every day &mdash; flagging statistical breakouts and how far a stock was trading from its post-earnings VWAP:</p>
+            <p>On the technical side, the routines scoped out momentum and VWAP setups every day &mdash; flagging statistical breakouts and how far a stock was trading from its post-earnings VWAP:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/vwap-setup.webp" width="2000" height="1320" alt="A VWAP setup card for WAY, rated AVOID: spread Z +0.05, distance Z +0.98, 16% below its earnings VWAP, with a candlestick chart and a side panel for the XLV health care sector's Z-score." loading="lazy">
                 <figcaption>Momentum: a daily VWAP setup card with spread Z, VWAP distance, sector Z-score, and the agents' verdict.</figcaption>
             </figure>
 
-            <p>On the fundamental side, I had multiple models read the news, argue with each other, and maintain a board of <a href="/trading/themes/">narrative themes</a>. Each theme got scored on how widely <strong>Known</strong> the story was versus how much of it was already <strong>Priced</strong> in, so I could hunt in the <strong>Gap</strong> column:</p>
+            <p>On the fundamental side, I had multiple models read the news, argue with each other, and maintain a board of narrative themes. Each theme got scored on how widely <strong>Known</strong> the story was versus how much of it was already <strong>Priced</strong> in, so I could hunt in the <strong>Gap</strong> column:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/themes.webp" width="2000" height="1091" alt="The Themes table on Zonted Trading: 18 narrative themes such as The Power Wall: grid breaks before AI does and Y2Q: the forced post-quantum cryptography rebuild, scored by Known, Priced, and Gap." loading="lazy">
@@ -550,9 +530,8 @@
         <span class="zn-footer-links">
             <a href="/posts/">Posts</a>
             <a href="/portfolio/">Projects</a>
+            <a href="/ai-stack/">AI Stack</a>
             <a href="/games/">Games</a>
-            <a href="/trading/">Trading</a>
-            <a href="/metrics/">Metrics</a>
             <a href="/about/">About</a>
             <a href="/feed.xml">RSS</a>
             <a href="https://x.com/bernardjhuang">X</a>
