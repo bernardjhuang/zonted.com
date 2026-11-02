@@ -237,7 +237,7 @@
                 <ul>
                     <li><strong>The catalyst:</strong> Forgetting my laptop on a Europe workcation while a power outage killed my Mac Mini at home made me realize that building consumer/B2B SaaS apps was a weak way to leverage frontier AI &mdash; and pushed me toward trading.</li>
                     <li><strong>What worked and what died:</strong> An automated trade desk helped me nail discretionary swings like <a href="/posts/ai-desk-figr-earnings/">FIGR earnings</a>, while two <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">autonomous paper funds</a> collapsed under fragile cron jobs and risk-averse models.</li>
-                    <li><strong>60 days in the weather trenches:</strong> Going deep into prediction markets and graduating our stack to <strong>Opus 5.5 + <a href="https://tokay.io">tokay.io</a> + Console MCP / Postgres + Duet</strong> unlocked real, repeatable edges &mdash; cycling <strong>$191,453.85</strong> in cumulative capital across <strong>3,055 legs</strong> (led by <code>Weather &middot; rain</code> at a <strong>12.06 Sharpe</strong> and <strong>+$2,948.68</strong> all-time).</li>
+                    <li><strong>60 days in the weather trenches:</strong> Going deep into prediction markets and graduating our stack to <strong>Opus 5.5 + <a href="https://tokay.io">tokay.io</a> + Console MCP / Postgres + Duet</strong> unlocked real, repeatable edges &mdash; cycling <strong>$191,453.85</strong> in cumulative capital across <strong>3,055 legs</strong> (led by <code>Weather &middot; rain</code> at a <strong>12.06 Sharpe</strong> and <strong>+$2,948.68</strong> all-time). You can follow the live settled receipts at <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a>.</li>
                     <li><strong>Companion sites for other agent swarms:</strong> We spun out <a href="https://groundhog.markets/">groundhog.markets</a>, <a href="https://parrot.markets/">parrot.markets</a>, and <a href="https://chameleons.markets/">chameleons.markets</a> as open, agent-friendly data layers.</li>
                     <li><strong>The management shift:</strong> Treating agents as first-class citizens with one North Star (<strong>30-day return</strong>) and a simple rule: <em>ask for forgiveness, not permission.</em></li>
                 </ul>
@@ -394,7 +394,7 @@
                 <figcaption>The live Rig++ console today: 4 venues, 22 categories, 78 strategy books, and 3,055 settled legs across $191.4k in cumulative deployed capital (strategy names blurred).</figcaption>
             </figure>
 
-            <p>A few fun numbers from that dashboard (you can track our <a href="https://psyduckler.com/pnl/">live P&amp;L and metrics on psyduckler.com/pnl</a>):</p>
+            <p>A few fun numbers from that dashboard:</p>
 
             <ul>
                 <li><strong>Weather &middot; rain</strong> has been an absolute monster: <strong>+$2,948.68</strong> all-time across 435 legs, an <strong>83% win rate</strong>, and a <strong>12.06 Sharpe</strong>. Meanwhile, when <strong>Weather &middot; highs</strong> took a 30-day drawdown, the rig's automated scorecards stepped in to shrink and fence the losing slices without me having to panic-intervene.</li>
@@ -402,9 +402,16 @@
                 <li>All told, across <strong>78 books</strong> and <strong>3,055 settled legs</strong>, the rig has cycled <strong>$191,453.85</strong> of cumulative capital for <strong>+$7,828.20</strong> in gross book net (<strong>+4.09% ROIC</strong>) and <strong>+$2,792.36</strong> in net account profit.</li>
             </ul>
 
+            <p>Because we blur the live strategy names on our internal console so our books don't get crowded, we also wanted a clean way for people to follow along with the real receipts in public. So we handed <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a> over to <code>Psy</code> on Grokbot. The entire site is 100% agent-handled: it pulls every settled bet, trade, and flip across Kalshi, Polymarket, Hyperliquid, and OpenSea and publishes our net-after-fees P&amp;L &mdash; red days included &mdash; without exposing live positions or strategy parameters:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/psyduckler-pnl.webp" width="702" height="743" alt="Screenshot of psyduckler.com/pnl/ showing combined 90-day equity receipts across Kalshi, Polymarket, Hyperliquid, and OpenSea: +$2,994.69 total net after fees, +$1,473.70 best day, 1.65 Sharpe ratio, +$41.02 avg day, and 63% winrate, with a daily cumulative bar chart from August 20 to November 1, 2026." loading="lazy">
+                <figcaption>Follow along at <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a>: an all-agent-handled site on Grokbot where Psy publishes our settled net-after-fees P&amp;L across Kalshi, Polymarket, Hyperliquid, and OpenSea.</figcaption>
+            </figure>
+
             <h2 id="sister-sites">6. Launching sister <code>.markets</code> sites for other agent swarms</h2>
 
-            <p>While building our own data pipelines, we realized how miserable the modern web is for AI agents trying to research prediction markets. Everything is locked behind heavy JavaScript SPAs, undocumented endpoints, or noisy leaderboards.</p>
+            <p>Building our own pipelines (and watching Psy run <a href="https://psyduckler.com/pnl/">psyduckler.com</a>) made us realize how miserable the modern web still is for AI agents trying to research prediction markets. Everything is locked behind heavy JavaScript SPAs, undocumented endpoints, or noisy leaderboards.</p>
 
             <p>So we decided to package up three of our favorite internal data layers and launch them as sister companion websites &mdash; built from day one with clean <code>/llms.txt</code> guides, one-line <code>/mcp</code> servers, and compact responses in case other agent swarms (or humans) want access to the data:</p>
 
@@ -503,11 +510,18 @@
                 </tbody>
             </table>
 
-            <p>The best part? Every time an agent makes an autonomous call, it has to log a <code>check_on</code> date and a <code>wrong_if</code> condition in Postgres &mdash; then grade its own decision a week or two later on real out-of-sample fills. And every hour, <strong>Duet</strong> pings me with a clean digest of what the team changed and why.</p>
+            <p>Every time an agent makes one of those <code>Auto</code> calls, it has to log a <code>check_on</code> date and a <code>wrong_if</code> condition in Postgres &mdash; then grade its own decision a week or two later on real out-of-sample fills. Instead of me babysitting terminals or waking up to broken Slack scripts, <strong>Claude Duet</strong> drops an hourly digest into my inbox with our venue balances, every fill from the past 60 minutes, and what the agents changed on their own:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/claude-duet-hourly.webp" width="1024" height="643" alt="Claude Duet hourly trading digest at 11:57am showing $27,548 across Kalshi, Polymarket, Hyperliquid, and OpenSea (+$143 settled today), 59 Kalshi fills, 7 Polymarket fills, 1 OpenSea fill, followed by Changes (3: 0 by you, 3 auto) where agents automatically raised a Kalshi YouTube book cash cap from $3,500 to $5,000, cleared old October films from a Rotten Tomatoes book, and updated college basketball overtime books, ending with Needs you: nothing and Issues: none." loading="lazy">
+                <figcaption>An hourly check-in from Claude Duet: venue balances, recent fills, and <strong>Changes (3: 0 by you, 3 auto)</strong> &mdash; ending with <em>Needs you: nothing</em>.</figcaption>
+            </figure>
+
+            <p>Look at that <strong><code>Changes (3: 0 by you, 3 auto)</code></strong> block near the bottom. In a single 16-minute window &mdash; without me touching a keyboard &mdash; the Kalshi manager automatically stepped up the cash cap on a winning YouTube weekly views book (<code>yt_week_m06</code>) from $3,500 to $5,000, cleared stale October releases out of our Rotten Tomatoes book (<code>rt_sell_hype</code>), and patched our college basketball overtime books (<code>cbb_ot_wide</code>, <code>cbb_ot_close</code>) to keep retrying missing lines until tip-off. And right underneath that is my favorite line in the entire stack: <strong><code>Needs you: nothing</code></strong>.</p>
 
             <p>My job today feels way more like coaching a quant team than trading: give the agents a clear North Star, get human bureaucracy out of their way, and help them think through new market puzzles.</p>
 
-            <p>Follow along as we keep pushing this further: the agent trade team is <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
+            <p>Follow along as we keep pushing this further: live settled receipts are at <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a>, the agent trade team is <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
 
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
