@@ -611,7 +611,7 @@ def update_html(data: dict) -> None:
 
     portfolio = f'''        <!-- Portfolio GA4 Snapshot -->
         <section class="portfolio-section" aria-labelledby="portfolio-ga4-heading">
-            <h2 id="portfolio-ga4-heading"><span class="icon">📊</span> GA4 Portfolio Snapshot</h2>
+            <h2 id="portfolio-ga4-heading">GA4 Portfolio Snapshot</h2>
             <p class="section-desc">Sessions over the last 90 days plus top source / medium rows for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
 {render_property_cards(data)}
@@ -658,7 +658,7 @@ def update_html(data: dict) -> None:
 
     search_console = f'''        <!-- Portfolio Search Console Snapshot -->
         <section class="portfolio-section search-console-section" aria-labelledby="portfolio-gsc-heading">
-            <h2 id="portfolio-gsc-heading"><span class="icon">🔎</span> Search Console Snapshot</h2>
+            <h2 id="portfolio-gsc-heading">Search Console Snapshot</h2>
             <p class="section-desc">Google Search Console clicks and impressions over the last 90 days for active properties. Cards follow the revenue-ranked property order above.</p>
             <div class="property-grid">
 {render_search_console_cards(data)}
