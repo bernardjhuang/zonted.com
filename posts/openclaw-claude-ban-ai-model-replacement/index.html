@@ -139,7 +139,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -210,17 +248,23 @@
             </div>
         </div>
         <div class="article-body">
-<p class="dropcap">Saturday morning started like any other. Our cron jobs were running. <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> were publishing. The travel content machine was humming along on <strong>Claude Opus 4.6</strong> — our daily driver for six months. Then, without warning: <em>connection refused</em>.</p>
+<p class="dropcap">Saturday morning started like any other. Our cron jobs were firing, <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> were publishing, and our travel content pipeline was humming along on <strong>Claude Opus 4.6</strong> — our daily driver for the past six months. Then, without warning, every job started throwing <em>connection refused</em>.</p>
 
-<p>OpenClaw had banned Claude and the entire Anthropic API ecosystem. The community Discord exploded. Forums filled with panic. People who had built entire agent workflows around Claude were suddenly staring at broken pipelines and zero explanation.</p>
+<p>Anthropic had cut off OpenClaw subscription routing across its API ecosystem. Within minutes, the community Discord was in freefall as builders who had wired their entire agent fleets around Claude stared at dead pipelines. That kicked off a 48-hour sprint to benchmark every viable replacement model on the market — and led us to a hybrid stack that runs faster and cheaper than what we had before.</p>
 
-<p>We were one of them.</p>
-
-<p>What happened next was a 48-hour sprint through every mainstream model on the market. Here's exactly what we tested, what we found, and why our final setup is — honestly — better than what we had before.</p>
+<div class="tldr">
+  <div class="tldr-label">TL;DR</div>
+  <p class="tldr-thesis">When Anthropic blocked OpenClaw routing, we benchmarked five replacement models across our production crons and landed on a split architecture — GLM 5.1 inside OpenClaw plus Claude Code in the terminal — that cut costs and improved reliability.</p>
+  <ul>
+    <li><strong>GLM 5.1 won the OpenClaw benchmark</strong> — matched Claude's quality on scheduled research and content crons at ~1/10th the token cost of GPT-5.4, beating MiniMax M2.7, MIMO, and Qwen 3.6.</li>
+    <li><strong>Claude Code CLI replaces chat-loop coding</strong> — running <code>claude --dangerously-skip-permissions</code> in an isolated terminal audited 1,444 pages in 50 seconds (24.0k tokens, 18 tool calls) with zero modal popups.</li>
+    <li><strong>Decouple orchestration from model lock-in</strong> — separating your scheduler (OpenClaw), workhorse model (GLM 5.1), and repo tool (Claude Code) eliminates single-vendor kill switches.</li>
+  </ul>
+</div>
 
 <h2 id="the-models-we-tested">The Models We Tested</h2>
 
-<p>No cherry-picking. We ran identical tasks across all models: Reddit research synthesis, itinerary generation, Instagram caption writing, cron job scheduling logic, and video script production. We evaluated on three axes: <strong>output quality</strong>, <strong>token efficiency</strong>, and <strong>reliability</strong>.</p>
+<p>We ran identical production workloads across five candidate models: Reddit thread synthesis, travel itinerary generation, Instagram caption drafting, cron scheduling logic, and video script production. Every model was graded on <strong>output quality</strong>, <strong>latency</strong>, and <strong>token cost</strong>.</p>
 
 <table class="comparison-table">
     <thead>
@@ -238,84 +282,74 @@
             <td>Excellent</td>
             <td>Fast</td>
             <td>High</td>
-            <td>Capable but expensive at scale. No meaningful quality edge over alternatives.</td>
+            <td>Capable, but expensive at cron volume with no decisive quality edge.</td>
         </tr>
         <tr>
             <td><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax Highspeed M2.7</a></td>
             <td>Good</td>
             <td>Very Fast</td>
             <td>Very Low</td>
-            <td>Strong for structured tasks. Struggled with nuanced reasoning in research synthesis.</td>
+            <td>Strong on structured JSON tasks; flatter on nuanced research synthesis.</td>
         </tr>
         <tr>
             <td>MiniMax MIMO</td>
             <td>Decent</td>
             <td>Fast</td>
             <td>Low</td>
-            <td>Fine for simple, repetitive tasks. Not a full Claude replacement.</td>
+            <td>Fine for mechanical transformations, not a full Opus replacement.</td>
         </tr>
         <tr>
             <td>Qwen 3.6</td>
             <td>Good</td>
             <td>Moderate</td>
             <td>Low</td>
-            <td>Surprisingly capable at reasoning. Occasionally verbose. Inconsistent on creative tasks.</td>
+            <td>Solid reasoning, but verbose and prone to creative drift.</td>
         </tr>
         <tr>
             <td><strong><a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">GLM 5.1</a> (Zhipu AI)</strong></td>
             <td><strong>Excellent</strong></td>
             <td><strong>Fast</strong></td>
             <td><strong>Very Low</strong></td>
-            <td><strong>Best all-around replacement. Nuanced, fast, affordable. Our new default.</strong></td>
+            <td><strong>Best all-around replacement. Sharp, fast, cheap — our new OpenClaw default.</strong></td>
         </tr>
     </tbody>
 </table>
 
 <div class="verdict">
     <h4>Bottom Line</h4>
-    <p><strong>GLM 5.1 won on every axis that matters</strong> — quality comparable to Claude, cost a fraction of GPT-5.4, and it didn't hallucinates the way Qwen occasionally does on creative tasks.</p>
+    <p><strong>GLM 5.1 won on every axis that matters</strong> — delivering Claude-tier instruction following at a fraction of GPT-5.4's token price, without the creative hallucinations we saw from Qwen 3.6.</p>
 </div>
 
 <h2 id="but-then-we-tried-claude-code">But Then We Tried Claude Code</h2>
 
-<p>While benchmarking replacement models, we started experimenting with something else: <strong>Claude Code</strong> — Anthropic's CLI tool for autonomous coding and task execution.</p>
-
-<p>The trigger was frustration with the ban itself. If OpenClaw could unilaterally cut off an entire provider, we needed a way to run Claude independently for the tasks where it genuinely excels — coding and content writing — without being subject to a single platform's policy decisions.</p>
-
-<p>What we found surprised us.</p>
+<p>While benchmarking OpenClaw replacements, we still wanted Claude Opus for the two workloads where it genuinely leads: repository-scale coding and long-form editorial drafting. Instead of routing those tasks through a third-party harness, we moved them directly into <strong>Claude Code</strong>, Anthropic's native terminal CLI.</p>
 
 <h3>Claude Code Feels Like a Tool, Not an Agent</h3>
 
-<p>There's a philosophical shift that happens when you use Claude Code in the terminal versus Claude in a chat interface. The chat interface tries to be helpful in the way a smart colleague would — anticipating, suggesting, narrating. Claude Code just <em>does the thing you asked</em>.</p>
-
-<p>It reads your codebase. It writes the fix. It runs the tests. It commits. It doesn't announce what it's doing unless you ask it to. For the kind of work we do — automating content pipelines, writing scripts, orchestrating video generation — this is exactly the right mental model.</p>
-
-<p>Agents are exciting in demos. <strong>Tools win in production.</strong></p>
+<p>Running Claude in a chat window feels like talking to an eager colleague who narrates every thought. Running Claude Code in the terminal feels like invoking a Unix utility: it reads the repo, writes the patch, runs the test suite, and commits without theatrical commentary. Demos reward chatty agents; production pipelines reward quiet tools.</p>
 
 <h3>The Terminal Flag That Actually Matters</h3>
 
-<p>There's one thing that made the difference between Claude Code being genuinely useful and it being a permission dialog nightmare: <code>--dangerously-skip-permissions</code>.</p>
+<p>Out of the box, one friction point ruins automated runs: permission modals. That's where <code>--dangerously-skip-permissions</code> comes in.</p>
 
 <div class="highlight-box">
     <h4>The Desktop App Problem</h4>
-    <p>The Claude desktop app keeps interrupting even with permission bypass enabled. Every file write, every terminal command, every directory read — all of them trigger a popup that requires human acknowledgment. After about ten minutes of use, you realize you've spent more time clicking "Allow" than actually getting work done. It's unusable for automated workflows.</p>
+    <p>The Claude desktop app interrupts constantly even with permission bypass toggled on. Every file write, shell command, and directory read triggers a confirmation prompt. Ten minutes in, you've spent more time clicking "Allow" than shipping code — making it a non-starter for unattended runs.</p>
 </div>
 
-<p>The solution is running Claude Code from the terminal with <code>--dangerously-skip-permissions</code>:</p>
+<p>Invoking Claude Code from the CLI with <code>--dangerously-skip-permissions</code> removes the human bottleneck entirely:</p>
 
 <pre><code>claude --dangerously-skip-permissions \
   --prompt "Fix the bug in fulfill-order.js where the email template path is wrong"</code></pre>
 
-<p>No popups. No interruptions. It just works — the way a proper CLI tool should.</p>
-
 <div class="highlight-box">
     <h4>⚠️ Security Note</h4>
-    <p><code>--dangerously-skip-permissions</code> allows Claude Code to execute arbitrary shell commands, write files, and run scripts without confirmation. Only use this in contained environments (CI/CD, isolated containers, or local dev machines where you understand the blast radius). Never run this on shared systems or production servers without proper safeguards.</p>
+    <p><code>--dangerously-skip-permissions</code> lets Claude Code execute arbitrary shell commands and modify files without confirmation. Only run it inside isolated containers, CI runners, or dedicated local workspaces where you control the blast radius.</p>
 </div>
 
 <h2 id="the-hybrid-stack-we-landed-on">The Hybrid Stack We Landed On</h2>
 
-<p>After a week of testing, our stack isn't a pure replacement — it's a deliberate split based on what each tool does best:</p>
+<p>Instead of forcing one provider to do everything, we split our workloads by execution environment:</p>
 
 <div class="article-image">
     <img  src="https://img.zonted.com/resources/cleanshot-claude-ban.png" width="3410" height="2214" alt="Claude Code terminal running with --dangerously-skip-permissions, showing a popular picks page audit" loading="lazy">
@@ -323,31 +357,26 @@
 </div>
 
 <ul>
-    <li><strong>OpenClaw + <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">GLM 5.1</a></strong> — All cron jobs, Instagram Reel generation, Pinterest scheduling, social media management, video creation pipelines, <a href="/posts/true-cost-of-ai-content-production/">data enrichment</a> tasks. GLM 5.1 handles these with exceptional reliability at 1/10th the cost of GPT-5.4.</li>
-    <li><strong>Claude Code (terminal, --dangerously-skip-permissions)</strong> — Code reviews, script writing, content drafting, bug fixes, complex multi-step tasks that benefit from deep reasoning. It's our specialized tool for anything that touches the codebase or requires genuinely creative writing.</li>
+    <li><strong>OpenClaw + <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">GLM 5.1</a></strong> — All 24/7 cron jobs, Instagram Reel generation, Pinterest scheduling, social publishing, and <a href="/posts/true-cost-of-ai-content-production/">data enrichment</a> pipelines at ~1/10th the cost of GPT-5.4.</li>
+    <li><strong>Claude Code CLI (<code>--dangerously-skip-permissions</code>)</strong> — Codebase refactors, script authoring, repo-wide audits (like the 1,444-page tabiji scan above), and deep editorial drafting.</li>
 </ul>
 
 <div class="takeaway">
     <h4>The Unexpected Result</h4>
-    <p>The hybrid approach is better than what we had before. GLM 5.1 is faster and cheaper than Claude for our scheduled work. And Claude Code, used as a focused CLI tool rather than a general agent, is more reliable and predictable than running Claude through OpenClaw's agent loop for coding tasks.</p>
-    <p>We didn't just recover from the ban. We improved our cost structure and reliability in the process.</p>
+    <p>The forced migration improved both our unit economics and our uptime. GLM 5.1 runs our scheduled OpenClaw loops faster and cheaper than Claude did, while native Claude Code in the terminal is more deterministic for repo work than routing Claude through a third-party agent harness.</p>
 </div>
 
 <h2 id="what-the-openclaw-ban-taught-us">What the OpenClaw Ban Taught Us</h2>
 
-<p>The real lesson isn't about Claude or Anthropic. It's about <strong>vendor lock-in in the AI agent layer</strong>.</p>
-
-<p>When you build your entire operation on a single model's agent framework, you're one policy change away from a Saturday morning emergency. The answer isn't to find the most stable provider — there is no such thing. The answer is to build a stack where:</p>
+<p>When your orchestration layer, your coding workflow, and your cron jobs all depend on a single model provider's terms of service, you are one policy update away from a Saturday morning outage. Resilient agent architecture separates three concerns:</p>
 
 <ul>
-    <li>Your <strong>scheduling and orchestration layer</strong> (OpenClaw) is model-agnostic</li>
-    <li>Your <strong>default model</strong> is excellent and affordable — not necessarily the most prestigious</li>
-    <li>Specialized tasks that need a specific model's strengths can call that model directly, outside the main agent loop</li>
+    <li><strong>A model-agnostic scheduler</strong> (OpenClaw) that can swap upstream LLM endpoints in one config file.</li>
+    <li><strong>A high-throughput, low-cost default model</strong> (<a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">GLM 5.1</a>) for 90% of recurring background tasks.</li>
+    <li><strong>A direct, first-party CLI</strong> (Claude Code) for heavy repository and reasoning work outside the cron loop.</li>
 </ul>
 
-<p><a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">GLM 5.1</a> is our default now. Claude Code is our coding tool. OpenClaw is our scheduler. Three separate concerns, three independent failure modes, zero single points of failure.</p>
-
-<p>If you got hit by the OpenClaw ban, the scramble is real. But the silver lining is real too: most of the "replacement" models we tested were good enough, and a few were genuinely better for specific tasks. The constraint forced an <a href="/posts/ai-resilience-planning/">architecture review</a> that most teams put off until they have no choice.</p>
+<p>Getting cut off on a Saturday morning was painful, but it forced an <a href="/posts/ai-resilience-planning/">architecture review</a> we had been putting off for months — and left us with three independent failure modes instead of one single point of failure.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

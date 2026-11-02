@@ -211,19 +211,18 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Position wasn&rsquo;t the lever. Title-match was. And the topic itself mattered more than either.</p>
+                <p class="tldr-thesis">Across 1,200 <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a> pages, ranking position wasn&rsquo;t the CTR bottleneck &mdash; query-matched titles and topic specificity drove a 14&times; click spread.</p>
                 <ul>
-                    <li>1,200 tabiji pages tested across 3 templates &mdash; V3 title variant lifted CTR <strong>+1.93pp</strong></li>
-                    <li><strong>14&times; CTR spread</strong> between niche topics (bookshops 1.83%) and head terms (coffee-shops 0.13%)</li>
-                    <li>Niche-vs-niche compare pages convert clicks <strong>3&times; better</strong> than big-vs-big at the same ranking position</li>
-                    <li>Test on losers, hold out winners &mdash; the single methodology choice that mattered most</li>
+                    <li><strong>Question-matched titles (+1.93pp CTR)</strong> &mdash; Rewriting listicle titles into the exact question searchers type lifted CTR across 100% of tested scam pages.</li>
+                    <li><strong>14&times; topic spread</strong> &mdash; Niche topics (bookshops at 1.83% CTR) crushed generic head terms (coffee shops at 0.13% CTR) on the exact same template.</li>
+                    <li><strong>3&times; pair advantage</strong> &mdash; Niche-vs-niche comparison pages convert 3&times; better than big-vs-big destination pairs at the same SERP rank.</li>
+                    <li><strong>Test on losers, hold out winners</strong> &mdash; Isolating underperforming cohorts prevents aggregate averages from masking regressions on your best pages.</li>
                 </ul>
-                <p class="tldr-tail">Head terms are now AI Overview territory. Niches are where the click still pencils out &mdash; and where the per-page production cost on AI-generated content actually earns back.</p>
             </div>
 
             <h2 id="setup">The setup</h2>
 
-            <p class="dropcap">We started with a Google Search Console export from <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a>. Sitewide CTR was <strong>0.83%</strong> &mdash; but that average hid a six-fold spread:</p>
+            <p class="dropcap">We pulled a Google Search Console export for <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a>. Sitewide CTR sat at <strong>0.83%</strong>, masking a six-fold spread across page templates:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -244,17 +243,17 @@
                 </table>
             </div>
 
-            <p>Compare and popular-picks were ranking at similar positions to scams (most pages 4&ndash;10) but converting at one-fifth to one-sixth the rate. <strong>Position wasn&rsquo;t the problem.</strong> Searchers were seeing the pages in the SERP and choosing something else.</p>
+            <p>Our <code>/compare/</code> and <code>/popular-picks/</code> pages ranked in roughly the same band as <code>/scams/</code> (positions 4&ndash;10) but converted at one-fifth the rate. <strong>Ranking wasn&rsquo;t the problem.</strong> Searchers saw our listings on page one and clicked someone else.</p>
 
-            <p>So we shipped three structured CTR experiments &mdash; 20 pages on <code>/scams/</code>, 364 on <code>/compare/</code>, 300 on <code>/popular-picks/</code> &mdash; with one intervention each (title only, everything else held constant) and decision rules locked in advance.</p>
+            <p>We launched three controlled title tests &mdash; 20 pages on <code>/scams/</code>, 364 on <code>/compare/</code>, and 300 on <code>/popular-picks/</code> &mdash; changing only the <code>&lt;title&gt;</code> tag and locking our evaluation window in advance.</p>
 
             <h2 id="v3">What V3 won by</h2>
 
-            <p>The <code>/scams/</code> round-1 cohort was 20 pages across 4 title variants. Three reframings against the existing baseline. The winner was <strong>V3</strong>:</p>
+            <p>Round 1 on <code>/scams/</code> pitted three title reframings against the control across 20 pages. Variant <strong>V3</strong> won decisively:</p>
 
             <blockquote>Old: <code>6 Tourist Scams in Sofia (2026) &mdash; Real Stories &amp; How to Avoid Them | tabiji.ai</code><br>V3: <code>Is Sofia Safe for Tourists? 6 Scams to Avoid (2026) | tabiji.ai</code></blockquote>
 
-            <p>V3 delivered <strong>+1.93pp CTR lift</strong> in aggregate, with every measured page improving:</p>
+            <p>V3 delivered a <strong>+1.93pp CTR lift</strong> in aggregate, improving every page in its cohort:</p>
 
             <ul>
                 <li><strong>Kathmandu:</strong> 3.85% &rarr; 7.61% (+3.76pp on 184 impressions)</li>
@@ -262,19 +261,15 @@
                 <li><strong>Bucharest:</strong> 0.46% &rarr; 1.09% (+0.63pp on 367 impressions)</li>
             </ul>
 
-            <p>The hypothesis turned out load-bearing: those zero-CTR pages were already pulling impressions for queries like <em>&ldquo;is Sofia safe for tourists&rdquo;</em> and <em>&ldquo;is Bucharest safe to visit&rdquo;</em>. The original title &mdash; a generic listicle frame &mdash; didn&rsquo;t match the question form at all. Once the title <em>answered the actual question</em>, the impressions converted.</p>
+            <p>Why it worked: those zero-CTR pages were already earning impressions for queries like <em>&ldquo;is Sofia safe for tourists&rdquo;</em> and <em>&ldquo;is Bucharest safe to visit.&rdquo;</em> Our original title used a standard listicle frame that ignored the searcher&rsquo;s question. Putting the question directly in the title unlocked the clicks.</p>
 
-            <p>The losing variant &mdash; <em>&ldquo;Don&rsquo;t Fall for These 6 Tourist Scams in Sofia&rdquo;</em> &mdash; used loss aversion plus an imperative verb. It&rsquo;s the kind of framing marketing writers reach for. It lost.</p>
+            <p>Meanwhile, our fear-hook variant &mdash; <em>&ldquo;Don&rsquo;t Fall for These 6 Tourist Scams in Sofia&rdquo;</em> &mdash; leaned on loss aversion and an imperative verb. Classic copywriter instinct. It lost.</p>
 
-            <p>Portable lesson:</p>
-
-            <blockquote>Titles that match the natural query phrasing beat titles that describe content. Searchers are typing questions; pages that answer those questions in the title get clicked.</blockquote>
-
-            <p>This sounds obvious. It&rsquo;s not what most listicle generators produce &mdash; they optimize for content description, not query match.</p>
+            <blockquote>Titles that mirror the searcher&rsquo;s natural query beat titles that describe the page&rsquo;s contents. Most programmatic SEO pipelines generate content descriptions; searchers click query matches.</blockquote>
 
             <h2 id="topic-gap">The 14&times; topic gap</h2>
 
-            <p>After V3, we segmented the popular-picks section by topic. The CTR spread was vertiginous:</p>
+            <p>Next, we segmented <code>/popular-picks/</code> by venue category. The CTR spread was stark:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -293,13 +288,13 @@
                 </table>
             </div>
 
-            <p><strong>14&times; spread, top to bottom.</strong> Same site, same ranking algorithm, same template. The four worst topics were also among the highest by impression volume &mdash; massive impression haul, almost no clicks. Pages ranking for <em>&ldquo;best coffee shops in {city}&rdquo;</em> were getting beaten in the click by every authority listicle competitor: Eater, TimeOut, the city guide blogs.</p>
+            <p><strong>A 14&times; spread from top to bottom</strong> (bookshops at 1.83% vs. coffee shops at 0.13%) on the exact same template and domain authority. The four lowest-CTR topics generated huge impression volume and almost zero clicks. When we rank #5 for <em>&ldquo;best coffee shops in Tokyo,&rdquo;</em> we sit beneath Eater, TimeOut, and entrenched local blogs.</p>
 
-            <p>Bookshops in Almaty? We&rsquo;re often the only quality content on the SERP, and CTR shows it. Coffee shops in Tokyo? Five louder competitors, all of them with more domain authority.</p>
+            <p>When we rank for <em>&ldquo;best bookshops in Almaty,&rdquo;</em> we are often the only dedicated guide on the SERP &mdash; and we capture the click.</p>
 
             <h2 id="niche-vs-head">Niche-vs-niche beats big-vs-big at the same rank</h2>
 
-            <p>The <code>/compare/</code> section repeated the same structural pattern. Before designing variants, we segmented by destination fame:</p>
+            <p>Segmenting <code>/compare/</code> by destination popularity showed the exact same curve:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -319,38 +314,36 @@
                 </table>
             </div>
 
-            <p><strong>Big-vs-big pairs lose 3&times; harder than niche-vs-niche pairs at the same ranking position.</strong> Famous-destination queries are owned by TripAdvisor, Reddit, Lonely Planet, Travel + Leisure. Tabiji ranks but loses the click. Niche pairs win because we&rsquo;re often the only quality content the searcher can find.</p>
+            <p><strong>At the same ranking position, niche-vs-niche pairs convert 3&times; better than big-vs-big pairs.</strong> Head-to-head matchups between famous destinations are crowded with TripAdvisor threads, Reddit megathreads, Lonely Planet, and Travel + Leisure. On niche pairs like Naoshima vs. Teshima, we own the intent.</p>
 
             <h2 id="ai-era">Why this matters in the AI-search era</h2>
 
-            <p>If you&rsquo;re shipping content in 2026, the head-term game is structurally lost. AI Overviews ate the click for <em>&ldquo;what is X&rdquo;</em> and <em>&ldquo;best X in Y&rdquo;</em>. When ChatGPT or Gemini gives a one-paragraph answer with three citations, the head-term page that ranks #4 doesn&rsquo;t get clicked &mdash; it gets summarized. Authority sites win those scraps; everyone else gets nothing. The <a href="/posts/aeo-answer-engine-optimization/">AEO playbook</a> we wrote earlier covers this surface in more depth.</p>
+            <p>In 2026, head-term SEO is a losing trade. AI Overviews swallow the click on broad queries like <em>&ldquo;what is X&rdquo;</em> and <em>&ldquo;best X in Y.&rdquo;</em> When Gemini or ChatGPT synthesizes a one-paragraph answer at the top of the SERP, ranking #4 on a head term gets you scraped as a silent citation, not clicked (see our <a href="/posts/aeo-answer-engine-optimization/">AEO playbook</a>).</p>
 
-            <p>What&rsquo;s left is niches. The longer-tail the search, the less likely an AI Overview has a confident answer to summarize, and the more likely the user clicks through to read the actual page.</p>
+            <p>Long-tail niches are where the click survives. The more specific the tradeoff or local inventory, the less confident a generic AI summary looks, and the more likely the searcher clicks through to verify details.</p>
 
-            <p>The production-cost side makes this worse for head terms and better for niches. AI content costs tokens. Tabiji&rsquo;s data-enriched pages cost real money to generate &mdash; Gemini for synthesis, Nano Banana Pro for art, MiniMax for music, plus the cleanup overhead documented in <a href="/posts/scaling-ai-is-lazy/">Scaling with AI is Hard because AI is Lazy</a>. If you spend ~$25 per page and ship it onto a head term where AI Overviews own the click, you&rsquo;ve bought a permanent loser. Spend the same $25 on <em>&ldquo;best bookshops in Almaty&rdquo;</em> and the page actually converts.</p>
-
-            <p>The leverage equation has flipped:</p>
+            <p>Unit economics make the split even sharper. Enriched programmatic pages cost real money to build &mdash; Gemini API calls for synthesis, Nano Banana Pro for custom illustrations, MiniMax for audio, plus the verification passes detailed in <a href="/posts/scaling-ai-is-lazy/">Scaling with AI is Hard because AI is Lazy</a>. Spending ~$25 to generate a head-term page that sits under an AI Overview at 0.13% CTR is a guaranteed loss. Spending that same $25 on <em>&ldquo;best bookshops in Almaty&rdquo;</em> at 1.83% CTR pays back.</p>
 
             <ul>
-                <li><strong>Head terms:</strong> big impressions, AI-owned click, low CTR. Negative ROI on AI-generated content.</li>
-                <li><strong>Niches:</strong> smaller impressions, less AI-Overview competition, high CTR. Positive ROI &mdash; sometimes 5&ndash;10&times; better.</li>
+                <li><strong>Head terms:</strong> High impressions, AI-Overview cannibalization, ~0.2% CTR. Negative ROI.</li>
+                <li><strong>Niches:</strong> Moderate impressions, weak SERP competition, ~1.5%+ CTR. 5&ndash;10&times; better unit economics.</li>
             </ul>
 
-            <p>This is the same structural argument as <a href="/posts/training-data-is-the-moat/">Training Data is the Moat</a>: as AI eats the consumption surface, the differentiated long-tail is the only place that still earns a click &mdash; and the only place a brand can plant a flag the AI layer can&rsquo;t immediately commoditize.</p>
+            <p>It&rsquo;s the SERP equivalent of <a href="/posts/training-data-is-the-moat/">Training Data Is the Moat</a>: as AI commoditizes the broad middle, only specific, long-tail ground still yields margin.</p>
 
             <h2 id="methodology">Test on losers, hold out winners</h2>
 
-            <p>The single most important methodology choice we made: scope tests to underperforming subsets where titles are clearly failing. Don&rsquo;t test variants across the whole section.</p>
+            <p>One experimental rule saved us from muddying the data: <strong>run title experiments only on underperforming cohorts, and hold out your winners.</strong></p>
 
-            <p>Put bookshops (1.83% CTR) and coffee-shops (0.13% CTR) in the same cohort and you&rsquo;ll measure an aggregate. The aggregate hides everything. A &ldquo;winning&rdquo; variant might help coffee-shops while hurting bookshops &mdash; and on net, you&rsquo;ve made the section worse.</p>
+            <p>If you dump bookshops (1.83% CTR) and coffee shops (0.13% CTR) into a single sitewide A/B test, the aggregate average hides the signal. A title formula that lifts coffee shops to 0.4% while dragging bookshops down to 1.2% looks flat on paper while quietly damaging your best pages.</p>
 
-            <p>Test where you&rsquo;re losing. Let the winners keep winning. Decide separately whether to extend any variant to the winners.</p>
+            <p>Isolate the losers, find the variant that fixes them, and leave the winners alone until you test them in their own cohort.</p>
 
             <h2 id="in-flight">What&rsquo;s still in flight</h2>
 
-            <p>Two larger experiments are live and review at the end of May: 525 scam pages across 7 arms (scaling V3 plus five fresh variants), and 364 compare pages across 11 arms (testing seven different framing families). I&rsquo;ll publish the deltas once they&rsquo;re in.</p>
+            <p>We have two larger rounds reading out at the end of May: 525 scam pages across 7 arms (scaling V3 against five new challengers) and 364 compare pages across 11 arms. I&rsquo;ll publish the full readout once the window closes.</p>
 
-            <p>But the V3 result, the 14&times; topic-level spread, and the niche-vs-head pair structure are already enough to ship the conclusion: <strong>in 2026, niche is the only surface where AI-generated content still pencils out.</strong> Stop writing for head terms. Write for the long tail nobody else is good at.</p>
+            <p>Until then, the 14&times; topic spread and 3&times; pair gap point to one rule: <strong>stop paying inference costs to fight for head terms.</strong> Build for the specific long tail where searchers still need to click.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

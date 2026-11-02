@@ -232,9 +232,7 @@
 
             <h2 id="section-1">The setup</h2>
 
-            <p>On Robinhood's blockchain anyone can create a coin in one click for about a dollar. Most people making them are not building anything — they are hoping a joke catches on.</p>
-
-            <p>The scale is hard to picture. In 27 days, one tool on this chain — Pons — created <strong>260,677 coins</strong>: one every nine seconds, around the clock, for a month. A second tool made another 60,000. Out of all of them, a handful became genuinely valuable. Was anything visible in their first few minutes that set them apart?</p>
+            <p>On Robinhood's blockchain anyone can mint a coin in one click for about a dollar. Most creators aren't building anything — they're hoping a joke catches on. In 27 days, one launcher on the chain (Pons) minted <strong>260,677 coins</strong>: one every nine seconds, around the clock, for a month. A second tool minted another 60,000.</p>
 
             <h2 id="section-2">The number that lies</h2>
 
@@ -242,17 +240,9 @@
 
             <p>A new coin gets paired with real money in a "liquidity pool." Think of a vending machine holding two things: the new coin, and real currency. When you sell, the machine pays you from the real currency inside. If there is none in there, you cannot sell — whatever price the screen shows.</p>
 
-            <p>There is a standard formula the industry uses to estimate what a pool can handle. It told me a coin called IF had <strong>$162,849</strong> of trading capacity.</p>
+            <p>A standard liquidity formula told me a coin called IF had <strong>$162,849</strong> of trading capacity. Then I checked how much actual money was sitting in that pool: <strong>one dollar.</strong></p>
 
-            <p>Then I checked how much actual money was sitting in that pool.</p>
-
-            <p><strong>One dollar.</strong></p>
-
-            <p>The formula was not broken, exactly — it answers a slightly different question than I assumed, and for certain pool setups it produces fiction. Seventeen of the top 100 coins were like this.</p>
-
-            <p>It failed the other way too. PONS looked nearly dead by the same formula — $3,240. Its pool actually held <strong>$743,555</strong>, understated 200-fold.</p>
-
-            <p>The fix was to stop estimating and ask the blunt question: how much real money is in this pool right now? One query, impossible to fake.</p>
+            <p>Seventeen of the top 100 coins had the same phantom depth. The formula failed in the opposite direction too: PONS looked nearly dead at $3,240 while its pool actually held <strong>$743,555</strong> — understated 200-fold. The fix was to stop estimating and query the actual base-asset balance in the pool.</p>
 
             <p>Re-measuring killed two conclusions I had already written down: that the chain had almost no real trading, and that one particular tool was producing all the winners — when in fact every launch through it was dead, the biggest pool among 477 holding <strong>$27</strong>.</p>
 
@@ -273,7 +263,7 @@
 
             <p>The typical launch holds <strong>about one dollar</strong>. Nearly half hold less than that, and one in five holds literally nothing. It is a graveyard with survivors: roughly ten coins a week reach $10,000, three reach $50,000, and the biggest, CASHCAT, sits on $2.8 million.</p>
 
-            <p>Rare, then. But <em>predictable</em>? I took 24 coins that became real and matched each against ten ordinary coins launched by the same tool in the same week — same conditions, different outcome. Then I looked only at their first five minutes, and nothing after. No hindsight allowed.</p>
+            <p>To test whether the survivors were predictable, I matched 24 coins that became real against ten ordinary coins launched by the same tool in the same week and inspected only their first five minutes — no hindsight allowed.</p>
 
             <div class="table-wrap"><table class="spec-table">
                 <thead>
@@ -298,15 +288,13 @@
 
             <h2 id="section-4">The part nobody measures</h2>
 
-            <p>This is where most analyses stop, declare victory, and are wrong. Knowing which coins go up is not the same as being able to <em>get your money out</em>. So I asked the exchange for real quotes: sell $100, $1,000, $10,000 right now — what do I actually receive? Across 41 pools, you can withdraw about <strong>9% of a pool's money</strong> before losing more than a tenth of your value to price impact. Fine for small amounts, hopeless for large ones.</p>
+            <p>Knowing which coins go up is not the same as getting your money out. I pulled live quotes across 41 pools for $100, $1,000, and $10,000 sells: you can withdraw only about <strong>9% of a pool's money</strong> before losing more than 10% to price impact.</p>
 
             <p>That reshapes everything. Winners go up enormously — the typical one rose several hundred times over from the five-minute mark, CASHCAT about 2,200 times. But a $250 stake multiplied by 745 is $186,000 of paper value sitting in a pool holding $37,000. Most of that gain is a number on a screen.</p>
 
             <p>So it works small and breaks large. At $250 a position the math is comfortably positive; at $1,000 it collapses to roughly break-even, because winners hit their pool's ceiling while losers still cost you in full. <strong>The edge exists, and betting more on it destroys it.</strong></p>
 
             <h2 id="section-5">What I take away</h2>
-
-            <p>Three things, none of them really about crypto.</p>
 
             <p><strong>Check your ruler before you trust your measurements.</strong> I produced two confident, completely wrong conclusions from a formula that looked perfectly standard. The tell cost one query. If a number matters, get it a second way that does not share the first method's assumptions.</p>
 

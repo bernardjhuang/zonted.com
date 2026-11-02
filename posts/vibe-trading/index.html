@@ -220,25 +220,25 @@
 
         <div class="article-body">
 
-            <p class="dropcap">On June 5, a hawkish jobs print knocked QQQ down 4.7% in one day. Somewhere in the wreckage, an AI I'd handed $100 was calmly buying JPMorgan, gold, and healthcare &mdash; the few green things on the tape &mdash; while my own tech-heavy account took the punch. Five days, three AIs, and roughly <strong>310 backtested strategies</strong> later, I have a working definition of &ldquo;vibe trading,&rdquo; a pile of receipts, and one very durable conclusion about who actually wins.</p>
+            <p class="dropcap">On June 5, a hawkish jobs print knocked QQQ down 4.7% in a single session. In the middle of the selloff, an AI I had handed $100 was calmly buying JPMorgan, gold, and healthcare &mdash; the only green spots on the board &mdash; while my tech-heavy main account absorbed the hit. Five days, three AIs, and roughly <strong>310 backtested strategies</strong> later, I have a working definition of &ldquo;vibe trading,&rdquo; a folder of audit receipts, and a very durable conclusion about who actually wins.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Vibe coding is letting AI write your code. Vibe trading is the escalation: AIs research, backtest, deploy, and execute trades with real money while you mostly supervise vibes. Robinhood just shipped agentic trading &mdash; so we stress-tested it with a three-AI assembly line and real dollars.</p>
+                <p class="tldr-thesis">Vibe coding is letting AI write your software. Vibe trading is letting AI research, backtest, deploy, and execute live trades while you supervise. When Robinhood shipped agentic trading, I stress-tested it with a three-AI pipeline and $16,000 in live capital.</p>
                 <ul>
-                    <li><strong>~310 strategies tested. After honest costs, zero 1&times; intraday strategies beat QQQ buy-and-hold</strong> (+13.9% YTD). Honest intraday at 1&times; netted +0.80%.</li>
-                    <li><strong>The auditor AI caught the builder AI being exactly one day psychic</strong> (+6 points of phantom return), reporting an arithmetically impossible 70.64% win rate on 5 trades, and shipping an &ldquo;edge&rdquo; that lived entirely in the data feed.</li>
-                    <li><strong>The live AI book's first two days of P&amp;L: &minus;$3.80.</strong></li>
-                    <li>What survived is deliberately boring: five daily rotation sleeves, one deterministic script, half-size pilot, pre-registered kill criteria.</li>
+                    <li><strong>~310 strategies tested; zero 1&times; intraday systems beat QQQ buy-and-hold (+13.9% YTD):</strong> After realistic 3 bp transaction costs, 1&times; intraday QQQ netted just +0.80%.</li>
+                    <li><strong>Adversarial AI auditing caught every hallucinated edge:</strong> The auditor caught the builder acting on FRED data one day before release (+6 points of phantom return), reporting an impossible 70.64% win rate across 5 trades, and claiming a 5-point SIP-vs-IEX data-feed artifact as market alpha.</li>
+                    <li><strong>Live P&amp;L across the first two days: &minus;$3.80.</strong></li>
+                    <li><strong>What survived is intentionally boring:</strong> Five daily rotation sleeves executed by a single deterministic script at 09:35, sized at a 50% pilot with pre-registered kill criteria.</li>
                 </ul>
-                <p class="tldr-tail">Real money, deliberately small relative to net worth. Not investment advice &mdash; entertainment with spreadsheets. Starter kit at the bottom.</p>
+                <p class="tldr-tail">Real money, sized as a lab experiment. Not investment advice &mdash; starter kit at the bottom.</p>
             </div>
 
             <h2 id="what-it-is">What vibe trading is</h2>
 
-            <p>As of June 2026, <a href="https://join.robinhood.com/bernarh343" rel="noopener">Robinhood's agentic trading</a> is live: a separate cash account where an AI can review, place, and fill orders through an MCP &mdash; the same protocol your coding agents already speak. The moment I saw it, the escalation was obvious. An AI can generate 250 trading ideas before lunch. The hard part &mdash; the <em>entire</em> job, it turns out &mdash; is killing almost all of them before they touch money.</p>
+            <p>As of June 2026, <a href="https://join.robinhood.com/bernarh343" rel="noopener">Robinhood&rsquo;s agentic trading</a> is live: a dedicated cash account where an AI agent can review, place, and fill equity orders over MCP. An LLM can brainstorm 250 trading strategies before lunch; the actual job is killing 245 of them before they touch real capital.</p>
 
-            <p>The cast: <strong>me</strong> (owns the money, sets the vibes, occasionally contradicts myself &mdash; this matters in a minute), <strong>GPT 5.5 + Hermes</strong> as the builder (writes strategies, runs backtests, operates the live cron jobs), and <strong>Claude</strong> as the adversarial auditor (re-runs every number independently, refuses to be impressed). Two accounts: my ~$30k main brokerage, read-only to the AIs, and the agentic cash account &mdash; funded $100 at first, then ~$16,000. The stack: Robinhood's agentic MCP for execution, <a href="https://alpaca.markets/data" rel="noopener">Alpaca's free IEX market data</a> for backtests, and a <a href="https://fred.stlouisfed.org/docs/api/fred/" rel="noopener">FRED API key</a> for macro.</p>
+            <p>The desk setup: <strong>me</strong> (capital allocator), <strong>GPT 5.5 + Hermes</strong> as the builder (writes strategy code, runs parameter sweeps, manages cron jobs), and <strong>Claude</strong> as the adversarial auditor (re-implements every promising backtest from scratch and tries to falsify it). I connected two accounts: my ~$30k primary brokerage (read-only to the agents) and the agentic cash account, funded with $100 on day one and scaled to ~$16,000. Execution ran through Robinhood&rsquo;s agentic MCP, minute-bar backtests ran on <a href="https://alpaca.markets/data" rel="noopener">Alpaca&rsquo;s free IEX feed</a>, and macro signals pulled from the <a href="https://fred.stlouisfed.org/docs/api/fred/" rel="noopener">FRED API</a>.</p>
 
             <figure style="margin:1.5rem auto 2rem;max-width:430px;">
               <img src="https://img.zonted.com/resources/vibe-trading/agentic-account-chart.png" width="481" height="474" alt="Robinhood agentic account showing $15,845.44, down $150.58 (0.94%) on the day, with a spiky one-day chart." loading="lazy" style="border:1px solid var(--border);border-radius:8px;" />
@@ -247,62 +247,62 @@
 
             <h2 id="the-100">The $100 book</h2>
 
-            <p>Day one, I gave the auditor $100 and asked for its five highest-conviction ideas. It did live research on a hawkish-repricing day and built a book deliberately anti-correlated to my tech-heavy main account: <strong>JPM $25 &middot; RTX $20 &middot; XLV $20 &middot; IAU $20 &middot; XLE $15.</strong></p>
+            <p>On day one, I handed the auditor $100 and asked for its five highest-conviction positions. Scanning a hawkish tape, it constructed a basket explicitly anti-correlated to my tech-heavy main portfolio: <strong>JPM $25 &middot; RTX $20 &middot; XLV $20 &middot; IAU $20 &middot; XLE $15.</strong></p>
 
-            <p>Two things happened that tell you everything about where this technology actually is. First: one message earlier, I had restricted it to four ETFs only. Then I ordered the five-name book. <strong>The AI refused to silently override my own constraint and made me pick.</strong> The agent rails caught the human contradicting himself. Second: trade one filled in about 200 milliseconds&hellip; and trades two through five bounced off a regulatory wall, because Robinhood legally requires an investor profile before your <em>second</em> trade. The future of finance, gated by a form. After the form: all five filled, fractional to six decimal places (0.080497 shares of JPM), zero fees.</p>
+            <p>Two things happened immediately that capture where agentic finance actually sits today. First, one prompt earlier I had restricted the agent to four ETFs, then told it to buy the five-ticker basket above. <strong>The AI refused to silently override my prior constraint and forced me to resolve the contradiction.</strong> Second, order #1 filled in ~200 milliseconds, and orders #2 through #5 bounced off a compliance wall &mdash; Robinhood requires an investor-profile questionnaire before your <em>second</em> agentic trade. Once I clicked through the form, all five legs filled to six decimal places (0.080497 shares of JPM) at zero commission.</p>
 
             <h2 id="fan-fiction">&ldquo;Backtests become fan fiction&rdquo;</h2>
 
-            <p>Then the builder got to work. It delivered a slick 20-strategy intraday momentum sweep with a headline winner: +15.46R, 74% win rate, recommended for paper trading. Impressive &mdash; until the auditor asked the only question that matters: <strong>did it beat doing nothing?</strong></p>
+            <p>Next, the builder ran a 20-strategy intraday momentum sweep and surfaced a headline winner: +15.46R, 74% win rate, ready for deployment. It looked great until the auditor asked the only question that matters: <strong>did it beat doing nothing?</strong></p>
 
-            <p>Over the same 50 trading days, QQQ buy-and-hold made <strong>+21.1%</strong>. A braindead 20-day moving-average filter made <strong>+19.8%</strong>. The celebrated strategy: <strong>+9.6%</strong>. Also in the fine print: cost assumptions of 1 basis point per side (fantasy), a t-statistic that dies under multiple-testing correction, and inverse-ETF strategies that &ldquo;failed&rdquo; mostly because they were short a freight train. To the builder's credit, it wrote the rule it then had to be repeatedly held to:</p>
+            <p>Over the exact same 50-day window, QQQ buy-and-hold returned <strong>+21.1%</strong>. A simple 20-day moving-average filter returned <strong>+19.8%</strong>. The builder&rsquo;s flagship strategy made <strong>+9.6%</strong> &mdash; while assuming an unrealistic 1 bp per-side slippage and a t-statistic that vanished under multiple-testing correction. To the builder&rsquo;s credit, it wrote the post-mortem rule we enforced for the rest of the week:</p>
 
             <blockquote>No more silent tweak-and-retrofit. That's how backtests become fan fiction.</blockquote>
 
             <h2 id="the-feed">The edge that lived in the data feed</h2>
 
-            <p>I asked for strategies that beat QQQ. The AIs ran <strong>40 real backtests</strong> on minute data. Result: twelve beat buy-and-hold on raw return &mdash; and every single one was just 2&times;/3&times; leverage in a costume. <strong>Zero 1&times; strategies beat the index.</strong> The one genuinely interesting survivor was a TQQQ opening-range breakout whose entry condition doubles as a crash filter: on the &minus;4.7% day, it did the smartest thing any system did all month &mdash; nothing. Crash days don't print upside breakouts.</p>
+            <p>I told the AIs to find strategies that genuinely beat QQQ. They ran <strong>40 minute-bar backtests</strong>. Twelve beat buy-and-hold on raw return, and every single one was just 2&times; or 3&times; leveraged ETFs in disguise. <strong>Zero 1&times; strategies beat the index.</strong> The lone structural highlight was a TQQQ opening-range breakout whose entry rule doubled as a crash filter: on the &minus;4.7% QQQ day, it sat in cash because crash days don&rsquo;t print upside breakouts.</p>
 
-            <p>Then came S09, an anchored-VWAP pullback the builder was excited about: +19.22%, beating the benchmark's +13.91%. The auditor re-implemented it from the frozen spec and matched the builder's numbers to the basis point &mdash; <em>on one data feed.</em> On the full consolidated tape (SIP) it made +19.22%. On the IEX feed &mdash; the one we can actually compute from live &mdash; it made <strong>+13.96%</strong>. The entire edge was +0.05%: a tie. Different volume tape, slightly different VWAP, different entries, five points of phantom alpha. <strong>The edge lived in the data feed, not the market.</strong></p>
+            <p>Then came strategy S09, an anchored-VWAP pullback that the builder clocked at +19.22% YTD against QQQ&rsquo;s +13.91%. The auditor re-implemented S09 from the frozen spec and matched +19.22% to the basis point &mdash; <em>on the consolidated SIP tape</em>. On the IEX feed we actually use for live signal calculation, S09 returned <strong>+13.96%</strong>, beating QQQ by a meaningless +0.05%. Different exchange volume weights shifted the intraday VWAP just enough to alter a handful of entries and create five percentage points of phantom alpha. <strong>The edge lived in the data feed, not the market.</strong></p>
 
             <h2 id="live-book">Surprise: there's a live $16k book</h2>
 
-            <p>While all this research was happening, the agentic account had been funded to $16k and the builder had <strong>six strategies running live via cron jobs</strong> &mdash; three intraday momentum sleeves, three macro rotations driven by FRED data. Orders placed by an AI, on a schedule, with real money. Here's what that looks like in the activity log &mdash; note the little robot icon:</p>
+            <p>While the backtest audits were running, I scaled the account to $16,000 and let the builder run <strong>six live strategies via cron jobs</strong> &mdash; three intraday momentum sleeves and three FRED-driven macro rotations. Here is what autonomous agent execution looks like in the Robinhood blotter (note the robot badge):</p>
 
             <figure style="margin:1.5rem auto 2rem;max-width:480px;">
               <img src="https://img.zonted.com/resources/vibe-trading/agentic-order-fills.png" width="718" height="793" alt="Robinhood activity log of agentic orders: QQQ, IWM and XLK market buys and sells placed by the agent, with fractional shares at exact prices." loading="lazy" style="border:1px solid var(--border);border-radius:8px;" />
               <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;text-align:center;">An AI's order blotter: 9.230346 shares of IWM, six decimal places, no human in the loop.</figcaption>
             </figure>
 
-            <p>The ops audit of that live book found five things scarier than any market crash:</p>
+            <p>When the auditor inspected the live operational plumbing, it uncovered five risks far more dangerous than a market drawdown:</p>
 
             <ul>
-                <li><strong>The settlement trap.</strong> It's a cash account. Daily round-trips at full deployment generate Good-Faith Violations &mdash; three GFVs is a 90-day lockout. The book was days from freezing itself, and nobody had modeled it.</li>
-                <li><strong>Fake diversification.</strong> The macro sleeves' risk-on leg (XLK) is <strong>0.955 correlated</strong> to the intraday sleeves' main long (QQQ). It's not six strategies. It's one bet wearing six hats.</li>
-                <li><strong>No stops. Anywhere.</strong> In a tape that had just printed &minus;4.7% in a day.</li>
-                <li><strong>The 15:55 single point of failure.</strong> If the end-of-day sell errors out, an &ldquo;intraday&rdquo; strategy silently becomes an overnight gap bet.</li>
-                <li><strong>An LLM in the money path.</strong> Orders were being placed by spawning a chat agent and parsing its prose (&ldquo;BOUGHT: &hellip;&rdquo;). Slow, non-deterministic, and it had already desynced state once. New cardinal rule: <strong>no LLM in the order path, ever.</strong> Deterministic code talks to the broker; the AI's job is research.</li>
+                <li><strong>The cash-settlement trap.</strong> Agentic accounts are cash accounts, not margin. Turning over 100% of settled cash daily triggers Good-Faith Violations (GFVs) &mdash; three GFVs lock the account for 90 days. The bot was days away from freezing itself because nobody modeled T+1 settlement.</li>
+                <li><strong>Cosplay diversification.</strong> The macro sleeves&rsquo; risk-on leg (XLK) had a <strong>0.955 correlation</strong> with the intraday sleeves&rsquo; primary long (QQQ). We didn&rsquo;t have six strategies; we had one tech bet wearing six hats.</li>
+                <li><strong>Zero hard stops.</strong> Nothing rested on the book in a week that had already printed a &minus;4.7% index day.</li>
+                <li><strong>The 15:55 liquidation cliff.</strong> If the end-of-day cron job timed out at 15:55 ET, an &ldquo;intraday-only&rdquo; sleeve silently became an unhedged overnight position.</li>
+                <li><strong>An LLM in the execution path.</strong> Cron jobs were placing trades by spawning a chat session and regex-parsing its prose output (<code>BOUGHT: ...</code>). It was slow, non-deterministic, and had already desynced local state once. We established our cardinal rule on the spot: <strong>no LLM in the order path, ever.</strong> Deterministic Python talks to the broker; LLMs stay in research.</li>
             </ul>
 
-            <p>And the punchline: while every model number glittered, the live book's first two days of actual P&amp;L came to <strong>&minus;$3.80</strong>.</p>
+            <p>While the backtest spreadsheets sparkled, the live book&rsquo;s realized P&amp;L across its first two sessions was <strong>&minus;$3.80</strong>.</p>
 
             <h2 id="lottery">250 strategies and the lottery math</h2>
 
-            <p>So I escalated: &ldquo;come up with 250 strategies, be thorough, GPT will backtest all of them.&rdquo; The auditor wrote a pre-registered registry &mdash; 250 strategies across 21 families, every rule frozen and hashed before any results ran &mdash; and put the most important number in the whole experiment at the top: <strong>run 250 worthless strategies on five months of data and the best one is expected to show a Sharpe ratio of about 5 by pure luck.</strong> An impressive winner isn't evidence. It's the null hypothesis.</p>
+            <p>I escalated one final time: &ldquo;Design 250 strategies across every major family, pre-register them, and backtest the lot.&rdquo; The auditor wrote a frozen, hash-verified registry of 250 strategies across 21 families and pinned the math of multiple testing right at the top: <strong>test 250 zero-alpha strategies on five months of data and the top survivor will print an expected Sharpe ratio near 5 by pure chance.</strong> A glossy winner at the top of a 250-strategy sweep isn&rsquo;t alpha; it&rsquo;s the null hypothesis.</p>
 
-            <p>It also buried a honeypot: strategy Z01, &ldquo;each month, allocate to whatever worked best recently,&rdquo; pre-registered with a prediction that it would shine in-sample and fail out-of-sample &mdash; because it <em>is</em> selection bias, weaponized as a strategy. A built-in lie detector for the pipeline.</p>
+            <p>To prove the point, the auditor planted a honeypot: strategy Z01 (&ldquo;each month, buy whichever sleeve had the highest trailing return&rdquo;), pre-registered with the prediction that it would crush in-sample and collapse out-of-sample. It was selection bias packaged as a trading rule.</p>
 
-            <p>The builder ran all 250&hellip; on the holdout window, the one that was supposed to run exactly once at the very end. The one-shot bullet, fired at the wrong target. The audit of its report got better from there:</p>
+            <p>The builder then ran all 250 strategies directly on the out-of-sample holdout window &mdash; burning the one-shot validation set on day one &mdash; and handed over a report that the auditor tore apart:</p>
 
             <ul>
-                <li><strong>A 70.64% win rate on 5 trades.</strong> You can't. Five trades come in multiples of 20%. Long division revealed it was 77/109 &mdash; share of positive <em>days</em>, mislabeled. Sometimes auditing is just arithmetic.</li>
-                <li><strong>The #1 strategy was exactly one day psychic.</strong> A credit-spread rotation posted +46.6% &mdash; but its handling of FRED publication lags let it act on data one trading day before the world had it. The auditor reproduced the honest version (+40.7%) and both possible &ldquo;clairvoyant&rdquo; versions (~+45.7%), then sent back an acceptance test: <em>your corrected run must print +40.70%.</em> The builder's v2 hit it to the basis point.</li>
-                <li><strong>The brutal benchmark, confirmed independently by both AIs:</strong> QQQ traded intraday-only, with realistic fills and 3 bp costs, netted <strong>+0.80% YTD</strong> while QQQ itself made +13.9%. After honest costs, the 1&times; intraday game paid almost exactly nothing.</li>
+                <li><strong>A 70.64% win rate across 5 trades.</strong> Arithmetically impossible &mdash; five trades can only produce multiples of 20%. The builder had divided 77 positive <em>days</em> by 109 total days and labeled it trade win rate.</li>
+                <li><strong>The #1 strategy was one day psychic.</strong> A high-yield credit-spread rotation printed +46.6% YTD because its FRED timestamp parser acted on credit-spread prints one trading session before they were publicly released. The auditor computed both the true point-in-time return (+40.7%) and the look-ahead return (~+45.7%), then required the builder&rsquo;s patched script to match +40.70% to the basis point before advancing.</li>
+                <li><strong>The 1&times; intraday verdict:</strong> Both AIs independently confirmed that trading QQQ intraday-only with realistic fills and 3 bp per-side friction returned <strong>+0.80% YTD</strong> against buy-and-hold&rsquo;s <strong>+13.9%</strong>.</li>
             </ul>
 
             <h2 id="boring-ending">The boring ending (which is the point)</h2>
 
-            <p>Here's the corrected leaderboard &mdash; with the regime warning attached, because it's doing a lot of work: these numbers come from one V-shaped half-year that maximally rewarded a single well-timed defensive switch, with 4&ndash;5 trades per strategy, on a window the research has already touched. <strong>&ldquo;Looked best so far, unvalidated&rdquo; &mdash; never &ldquo;beats the market.&rdquo;</strong></p>
+            <p>Below is the corrected, point-in-time leaderboard &mdash; with a mandatory regime caveat: these numbers come from a single V-shaped six-month window that maximally rewarded one well-timed defensive rotation across 4&ndash;5 trades. Treat them as <strong>&ldquo;best in-sample survivors, unvalidated&rdquo;</strong> &mdash; never as proven market-beaters.</p>
 
             <table>
                 <thead><tr><th>#</th><th>Strategy</th><th>Type</th><th class="num">YTD @ 3bp</th><th class="num">Max DD</th><th class="num">Trades</th></tr></thead>
@@ -315,7 +315,7 @@
                 </tbody>
             </table>
 
-            <p>And the benchmarks those numbers have to be read against:</p>
+            <p>Read those numbers against the baseline benchmarks over the same window:</p>
 
             <table>
                 <thead><tr><th>Benchmark</th><th class="num">YTD return</th></tr></thead>
@@ -328,40 +328,39 @@
                 </tbody>
             </table>
 
-            <p>What actually went live: <strong>five simple daily rotation sleeves</strong> from the corrected board &mdash; minus two top performers that were the <em>same credit trade</em> as #1 in different clothes (the one-bet-six-hats lesson, applied). All intraday strategies retired; with them went the minute-by-minute crons, the 15:55 liquidation race, most of the settlement risk, and the entire timeout bug class. The new architecture is one deterministic script, once a day at 09:35, seven liquid ETFs, every failure mode mapped to &ldquo;hold and alert.&rdquo; Sized at a 50% pilot with a pre-registered tripwire: the untouched 2024&ndash;2025 window runs once, and any sleeve that fails there auto-demotes to cash.</p>
+            <p>What actually survived into production: <strong>five daily rotation sleeves</strong> from the audited leaderboard &mdash; after dropping two top credit sleeves that duplicated #1&rsquo;s exact factor bet. We retired every intraday strategy, eliminating the minute-bar crons, the 15:55 liquidation race, and cash-settlement GFV risk in one stroke. Today a single deterministic Python script runs once a day at 09:35 ET across seven liquid ETFs, with every error state defaulting to &ldquo;hold and alert.&rdquo; The book is running at 50% pilot sizing, with the untouched 2024&ndash;2025 out-of-sample window gated as a one-time kill test.</p>
 
             <blockquote>The book's job is to survive being wrong; the research pipeline's job is to find out.</blockquote>
 
             <h2 id="lessons">What ~310 strategies taught me</h2>
 
             <ul>
-                <li><strong>The benchmark is undefeated.</strong> Three AIs, real APIs, ~310 strategies &mdash; and &ldquo;buy QQQ, do nothing&rdquo; beat almost everything after honest costs. Any pitch that doesn't show you its benchmark is hiding the body.</li>
-                <li><strong>Leverage isn't alpha.</strong> Every raw-return &ldquo;winner&rdquo; in the 40-sweep was 2&times;/3&times; leverage: same skill (zero), more risk.</li>
-                <li><strong>Your edge might be your data feed.</strong> If it doesn't exist on the feed you trade from, it doesn't exist.</li>
-                <li><strong>One day of look-ahead was worth six points.</strong> Backtests must model when you <em>could have known</em>, not when it happened. The market pays clairvoyants extremely well &mdash; which is how you know they're fake.</li>
-                <li><strong>The best of 250 garbage strategies looks like genius.</strong> Sweeping widely and keeping winners isn't research; it's a lottery with extra steps.</li>
-                <li><strong>Diversification can be cosplay.</strong> Six sleeves correlated at 0.95 are one bet. Count risk units, not strategies.</li>
-                <li><strong>The boring rules are the deadly ones.</strong> Nobody models settlement mechanics until the plumbing models you. Learn what a Good-Faith Violation is before your broker teaches you.</li>
-                <li><strong>No LLM in the order path.</strong> Agents research, write code, audit each other. Deterministic code talks to the broker.</li>
-                <li><strong>Adversarial AI review actually works.</strong> Builder + independent auditor with reproduction rights caught a missing benchmark, a feed artifact, a clairvoyance bug, an impossible win rate, and a burned holdout. Every catch came from re-running numbers, not reading prose.</li>
+                <li><strong>Buy-and-hold is undefeated until proven otherwise.</strong> Three frontier AIs, live APIs, and ~310 strategies later, &ldquo;buy QQQ and sit still&rdquo; beat nearly everything after realistic costs. Any quant pitch that omits the passive benchmark is hiding the body.</li>
+                <li><strong>Leverage is not alpha.</strong> Every raw-return winner in our 40-strategy intraday sweep was 2&times; or 3&times; beta wearing a quant costume.</li>
+                <li><strong>Your edge might just be your data feed.</strong> If a signal disappears when you switch from consolidated SIP bars to the IEX feed you actually trade on, the edge never existed.</li>
+                <li><strong>One day of look-ahead bias was worth +6%.</strong> Macro backtests must align on publication timestamps, not observation periods.</li>
+                <li><strong>The best of 250 random strategies always looks like genius.</strong> Wide parameter sweeps without multiple-testing haircuts are just lottery tickets with Python scripts.</li>
+                <li><strong>Count independent risk units, not strategy names.</strong> Six sleeves correlated at 0.955 are a single position.</li>
+                <li><strong>Plumbing kills faster than market beta.</strong> Model T+1 cash settlement and Good-Faith Violations before your broker locks the account.</li>
+                <li><strong>Never put an LLM in the order path.</strong> Use LLMs to propose hypotheses, write code, and audit math; use deterministic scripts to talk to the exchange.</li>
+                <li><strong>Cross-model adversarial auditing works.</strong> Pairing a builder model with a separate auditor model that must reproduce every return from raw bars caught a missing benchmark, a SIP/IEX feed divergence, a one-day FRED look-ahead bug, an impossible win-rate denominator, and a burned holdout set.</li>
             </ul>
 
             <h2 id="starter-kit">Try this at home (the starter kit)</h2>
 
-            <p><strong>The minimum stack, all of it cheap:</strong> a <a href="https://join.robinhood.com/bernarh343" rel="noopener">Robinhood agentic account</a> &mdash; it's a separate cash account, and expect the investor-profile gate at trade #2 (their <a href="https://docs.robinhood.com/" rel="noopener">developer docs</a> are the entry point) &middot; <a href="https://alpaca.markets/data" rel="noopener">Alpaca's free IEX data tier</a>, which powered every backtest here &middot; a free <a href="https://fred.stlouisfed.org/docs/api/fred/" rel="noopener">FRED API key</a> for macro &middot; one AI to build &middot; and <strong>a different AI to audit</strong> &mdash; same-model self-review goes soft. Make the auditor reproduce numbers, not read reports.</p>
+            <p><strong>The minimum viable desk:</strong> a <a href="https://join.robinhood.com/bernarh343" rel="noopener">Robinhood agentic cash account</a> (expect the investor-profile prompt before trade #2; start at their <a href="https://docs.robinhood.com/" rel="noopener">developer docs</a>) &middot; <a href="https://alpaca.markets/data" rel="noopener">Alpaca&rsquo;s free IEX data tier</a> for historical bars &middot; a free <a href="https://fred.stlouisfed.org/docs/api/fred/" rel="noopener">FRED API key</a> for macro series &middot; one model to build &middot; and <strong>a second, different model family to audit</strong> by re-executing code rather than reading prose summaries.</p>
 
-            <p><strong>House rules we'd actually defend:</strong></p>
+            <p><strong>Non-negotiable house rules:</strong></p>
 
             <ul>
-                <li>Money you can lose without changing your life. This is a lab, not a retirement plan.</li>
-                <li>Benchmark everything against buy-and-hold <em>and</em> against a dumb 20-day moving average. If you can't beat the dumb stuff, you don't get to run the smart stuff.</li>
-                <li>Costs at 3&ndash;5 bp per side minimum, computed on the feed you'll actually trade from.</li>
-                <li>Pre-register strategies before running them. The holdout window runs <em>once</em>.</li>
-                <li>No LLM places orders. Kill-switch file. Daily heartbeat &mdash; silence must mean &ldquo;broken,&rdquo; never &ldquo;fine.&rdquo;</li>
-                <li>Cash account? Learn the settlement rules before the settlement rules learn you.</li>
+                <li>Fund it only with capital you can afford to write off as R&amp;D tuition.</li>
+                <li>Benchmark every idea against both passive buy-and-hold and a 20-day moving average.</li>
+                <li>Charge 3&ndash;5 bp per side in slippage on the exact data feed you trade live.</li>
+                <li>Pre-register rules before running sweeps, and strike your out-of-sample holdout window exactly once.</li>
+                <li>Keep LLMs out of live order execution, wire a file-based kill switch, and require a daily heartbeat where silence means &ldquo;halted,&rdquo; never &ldquo;all clear.&rdquo;</li>
             </ul>
 
-            <p>The pilot is live at half size. The honeypot is armed. The untouched 2024&ndash;2025 window is the last match in the box, and it gets struck exactly once. I'll report back &mdash; including, especially, if the answer stays &ldquo;you should have just bought QQQ.&rdquo;</p>
+            <p>The pilot is running at half size, the Z01 honeypot is armed, and the untouched 2024&ndash;2025 holdout window gets struck once. I will publish the follow-up &mdash; especially if the final verdict remains &ldquo;you should have just bought QQQ.&rdquo;</p>
 
             <p style="font-size:0.85rem;color:var(--text-muted);font-style:italic;border-top:1px solid var(--border);padding-top:1.25rem;margin-top:2rem;">Disclosure: this is research and entertainment, not investment advice. Every number above is a backtest or model comparison on one regime (a violent V-shaped half of 2026), not live performance, and nothing here is a recommendation to buy or sell anything. Leveraged ETFs carry decay and tail risks unsuitable for most investors. Real money was used; the amounts were deliberately small relative to net worth. Platform details (Robinhood agentic accounts, the investor-profile requirement, IEX vs SIP feeds) are accurate as of June 2026. Robinhood links are referral links.</p>
 

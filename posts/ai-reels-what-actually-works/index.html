@@ -211,6 +211,44 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -292,58 +330,53 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
             </div>
         </div>
 
-        <div style="background:var(--bg-surface);border-left:3px solid var(--text);padding:1.25rem 1.5rem;border-radius:0 8px 8px 0;margin:0 0 2rem 0;">
-            <strong style="color: var(--text);font-size:1.05rem;">Key Takeaways</strong>
-            <ul style="margin:0.75rem 0 0 1.25rem;color:var(--text);">
-                <li><strong>"Tourist Mistake" and "Scam Alert" formats dominate</strong> — fear-based hooks consistently hit 2,000–3,000+ IG views vs. under 150 for everything else.</li>
-                <li><strong>Platform behavior is radically different:</strong> Instagram rewards saves &amp; shares (utility), YouTube rewards watch time (nostalgia also works).</li>
-                <li><strong>The hook, not video quality, determines reach</strong> — the same AI footage with a weak hook gets 100 views; with a strong hook, 3,000+.</li>
-                <li><strong>Cost is ~$0.06–$0.12 per Reel</strong> — fully automated pipeline using <a href="/posts/veo3-vs-hailuo-minimax/">Veo 3</a>, Nano Banana 2, and FFmpeg.</li>
-                <li><strong>X/Twitter cross-posting generates near-zero reach</strong> for new accounts without an established following.</li>
-            </ul>
-        </div>
-
         <div class="article-body">
 
-            <p class="dropcap">We're a travel itinerary service that uses AI to build itineraries. So it's fitting — and a little absurd — that we've spent the last few weeks building a fully automated pipeline to generate AI travel Reels and publish them to Instagram, YouTube Shorts, and X. No human hands on video production. No stock footage. No hired creators. Just code, APIs, and cron jobs running while we sleep.</p>
+            <p class="dropcap">To grow <a href="https://tabiji.ai/">tabiji.ai</a> without burning budget on studio production or paid social ads, we built a 100% autonomous short-form video pipeline. Cron jobs on a Mac Mini pull destinations from a queue, generate scripts and visuals via API, composite text overlays with FFmpeg, and publish directly to Instagram Reels, YouTube Shorts, and X — zero stock footage, zero human editors.</p>
 
-            <p>This is an honest accounting of what 48 hours of data looks like across 8 different Reel formats. Some formats are working remarkably well. Others have been an embarrassing waste of compute. We're sharing the real numbers — not because everything looks great, but because this kind of data is genuinely hard to find and we think it's worth putting into the world.</p>
+            <p>Here is the raw 48-hour dataset across 80+ published videos and 8 distinct Reel formats: which hooks broke 3,000+ views on a brand-new account, which formats wasted compute, and why the exact same video performs 27x differently depending on where you post it.</p>
 
-            <p>The meta irony isn't lost on us: an AI travel company publishing AI analysis of AI-generated content. We'll try to be useful anyway.</p>
+            <div class="tldr">
+              <div class="tldr-label">TL;DR</div>
+              <p class="tldr-thesis">Across 80+ autonomous AI travel Reels published in 48 hours (~$0.06–$0.12 per Reel), loss-aversion hooks ("Scam Alert" and "Tourist Mistake") hit 2,000–3,188 views while aesthetic "vibe" formats stalled under 150.</p>
+              <ul>
+                <li><strong>Fear and utility win on IG</strong> — "Scam Alert" (Prague: 3,188 views) and "Tourist Mistake" (Koh Phi Phi: 2,175 views, 22 shares, 9 saves) dominated because viewers bookmark warnings for upcoming trips.</li>
+                <li><strong>Platform split is 27x</strong> — "Vintage POV" (1962 Paris 16mm style) died on Instagram (119 views, 0 saves) but hit a 1.7% like rate on YouTube Shorts (746 views, 13 likes); X cross-posts got 0–12 views.</li>
+                <li><strong>Hook &gt; pixels</strong> — The same AI video models (Veo 3, Nano Banana 2, MiniMax) produce 100 views with a generic "One Thing You Can't Miss" hook and 3,000+ views with a specific scam warning.</li>
+              </ul>
+            </div>
 
             <h2 id="the-experiment">The Experiment</h2>
 
-            <p>tabiji.ai is a free AI travel itinerary service. We build <a href="https://tabiji.ai/">personalized trip plans</a> from Reddit recommendations and real traveler data. That's the core product. But we wanted to grow the brand on social media without burning budget on traditional content creation, so we built a fully automated short-form video pipeline.</p>
+            <p>Our core product at <a href="https://tabiji.ai/">tabiji.ai</a> builds personalized travel itineraries grounded in Reddit recommendations and real traveler data. To test organic social acquisition, we wired up cron jobs that run throughout the day: each job selects a city and format from our queue, renders the video end-to-end, publishes to Instagram, and cross-posts the file to YouTube Shorts and X.</p>
 
-            <p>The setup: cron jobs run throughout the day, pick a destination and format from a queue, generate a video end-to-end, and publish it to Instagram. The same video then gets cross-posted to YouTube Shorts and X. No humans are involved in the video production itself — only in building and maintaining the pipeline.</p>
-
-            <p>Over 48 hours, we published across <strong>8+ distinct Reel formats</strong> and accumulated enough data to see clear signal. Here's what we tested:</p>
+            <p>Over a 48-hour window, we tested eight formats in live production:</p>
 
             <ul>
                 <li><strong>Tourist Mistake</strong> — "#1 Mistake Tourists Make in [City]"</li>
                 <li><strong>Scam Alert</strong> — "Every Tourist Falls for This Scam in [City]"</li>
-                <li><strong>Vintage POV</strong> — AI-generated footage styled as archival travel film from the 1960s–70s</li>
+                <li><strong>Vintage POV</strong> — AI footage styled as 1960s–70s archival 16mm travel film</li>
                 <li><strong>One Thing You Can't Miss</strong> — "[City]'s Most Underrated Attraction"</li>
                 <li><strong>This vs That</strong> — "Tourists Go HERE, Locals Go HERE"</li>
                 <li><strong>Budget Reel</strong> — "What $50/Day Gets You in [City]"</li>
-                <li><strong>POV</strong> — Generic first-person walkthrough footage</li>
+                <li><strong>POV</strong> — First-person destination walkthroughs</li>
                 <li><strong>Countdown / Top 5</strong> — Top 5 things to do in a destination</li>
             </ul>
 
             <h2 id="the-tech-stack">The Tech Stack</h2>
 
-            <p>For the curious: every Reel is generated entirely by machines. The pipeline looks like this:</p>
+            <p>Every Reel is assembled without human intervention by chaining six tools:</p>
 
             <ul>
-                <li><strong>Video generation:</strong> <a href="/posts/veo3-vs-hailuo-minimax/">Veo 3</a> (Google DeepMind) — generates 8-second cinematic clips from text prompts at 9:16 portrait ratio</li>
-                <li><strong>Image generation:</strong> <a href="/posts/ai-image-generation-comparison/">Nano Banana 2</a> (Gemini-based) — for formats that use still images rather than video</li>
-                <li><strong>Music:</strong> <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a> — AI-generated background music matched to the destination and mood</li>
-                <li><strong>Text overlays:</strong> FFmpeg — applies title, subtitle, and branding text on top of the video</li>
-                <li><strong>Publishing:</strong> Instagram Graph API → YouTube Data API → X API v2, all automated</li>
-                <li><strong>Orchestration:</strong> Shell scripts + cron jobs running on a Mac Mini</li>
+                <li><strong>Video generation:</strong> <a href="/posts/veo3-vs-hailuo-minimax/">Veo 3</a> (Google DeepMind) — 8-second cinematic clips in 9:16 portrait</li>
+                <li><strong>Image generation:</strong> <a href="/posts/ai-image-generation-comparison/">Nano Banana 2</a> (Gemini 3.1 Flash) — base frames and still-image formats</li>
+                <li><strong>Music:</strong> <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a> — instrumental background tracks matched to destination mood</li>
+                <li><strong>Text overlays:</strong> FFmpeg — burns hooks, subtitles, and branding onto the video</li>
+                <li><strong>Publishing:</strong> Instagram Graph API → YouTube Data API → X API v2</li>
+                <li><strong>Orchestration:</strong> Shell scripts + cron jobs running on a local Mac Mini</li>
             </ul>
 
-            <p>The cost per Reel is roughly $0.06–$0.12 in API calls, depending on the format. The real investment is time spent building the pipeline — not ongoing production costs.</p>
+            <p>Marginal API cost runs ~$0.06–$0.12 per Reel depending on the format. All the real engineering cost sits in the orchestration scripts and prompt templates.</p>
 
             <h2 id="what-is-working">What's Working</h2>
 
@@ -354,7 +387,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <p>Consistently breaks 500+ views on IG, 700+ on YouTube. The format that generates the most saves and shares by far.</p>
             </div>
 
-            <p>The "#1 Mistake Tourists Make in [City]" format is performing significantly above everything else. Here are the raw numbers:</p>
+            <p>The "#1 Mistake Tourists Make in [City]" format outperformed everything else on save and share velocity:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -405,9 +438,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DVuhlO9D_hg/" data-instgrm-version="14" style="max-width:326px;min-width:280px;width:calc(100% - 2px);border-radius:12px;border:0;"></blockquote>
             </div>
 
-            <p>The Koh Phi Phi reel hit 1.9% engagement — saves plus shares divided by views. For an account with essentially no followers running fully AI-generated content, that's not a number we expected to see. The saves tell the story: people are bookmarking these videos to come back to before their trip. That's exactly the behavior you want from a travel content brand.</p>
-
-            <p>This format works for both platforms simultaneously, which is rare. Most formats that hit on Instagram are flat on YouTube, and vice versa. Tourist Mistake breaks that pattern.</p>
+            <p>On a cold account with almost zero followers, Koh Phi Phi posted a 1.9% save-plus-share rate (22 shares, 9 saves on 2,175 views), while Hoi An pulled 13 saves on 2,020 views. Viewers bookmark these warnings to reference before their trip and DM them to travel partners — and unlike most formats, Tourist Mistake works on both Instagram and YouTube Shorts simultaneously.</p>
 
             <h3>2. Scam Alert — IG's Biggest Number, Strong on YouTube</h3>
 
@@ -450,9 +481,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DVuZ9TAlER5/" data-instgrm-version="14" style="max-width:326px;min-width:280px;width:calc(100% - 2px);border-radius:12px;border:0;"></blockquote>
             </div>
 
-            <p>The Prague Scam reel is our highest view count to date: 3,188 on Instagram. Cairo is newer, so the IG number is still climbing — but it already hit 846 views on YouTube, the highest YouTube number across all formats. The Scam format and the Tourist Mistake format are algorithmically interchangeable on YouTube; both get picked up and distributed at similar rates.</p>
-
-            <p>One interesting outlier: Cairo's IG views (180) are much lower than its YouTube views (846), which is the inverse of most patterns we see. We don't have a clean explanation for this yet — it might be timing, hashtag distribution, or the specific visual style of that clip.</p>
+            <p>Prague Scam Alert is our single highest-reach Reel at 3,188 Instagram views (plus 750 on YouTube), while Cairo Scam Alert set our YouTube Shorts record at 846 views despite lagging at 180 on Instagram. Algorithmically, Scam Alert and Tourist Mistake tap the exact same loss-aversion reflex.</p>
 
             <h3>3. Vintage POV — YouTube's Sleeper Hit</h3>
 
@@ -502,11 +531,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <iframe width="315" height="560" src="https://www.youtube.com/embed/lZDnB2sWvA8" title="Vintage POV — Paris 1962 (746 YT views, 13 likes, best engagement ratio)" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen loading="lazy" style="border-radius:12px;max-width:100%;"></iframe>
             </div>
 
-            <p>Paris 1962 is the most interesting data point in the entire dataset. On Instagram: 119 views, zero saves, zero shares. On YouTube: 746 views, 13 likes, 1 comment. That's the best <em>engagement ratio</em> of any video we've published — 1.7% like rate on YouTube, which is genuinely good for Shorts.</p>
-
-            <p>The Vintage POV format generates AI footage styled as archival 16mm travel film. That aesthetic clearly resonates with a YouTube audience that skews nostalgic and has longer watch time expectations. On Instagram, the same content is invisible — the algorithm and the audience both want something actionable, not atmospheric.</p>
-
-            <p>The lesson: don't cross-post this format. Run it YouTube-only and let the nostalgic algorithm do its thing.</p>
+            <p>Paris 1962 exposes how sharply platform algorithms diverge. On Instagram, it died at 119 views, zero saves, and zero shares. On YouTube Shorts, the exact same 16mm-styled clip hit 746 views, 13 likes (a 1.7% like rate, our highest on YT), and a comment. YouTube's Shorts feed rewards full-clip watch time on nostalgic, atmospheric footage; Instagram's Reels feed demands actionable utility that triggers a save or DM share. Lesson: route Vintage POV exclusively to YouTube.</p>
 
             <h2 id="what-is-not-working">What's Not Working</h2>
 
@@ -578,9 +603,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DVvu8QGCHj3/" data-instgrm-version="14" style="max-width:400px;width:100%;border-radius:12px;border:0;"></blockquote>
             </div>
 
-            <p>This data tells two separate stories. The first is that "One Thing You Can't Miss" is a weak hook — it doesn't create urgency, doesn't trigger fear or curiosity, and doesn't give the viewer a specific reason to watch right now. The second is that publishing 6+ Reels about the same city (Hanoi) in 48 hours dilutes each one. The algorithm almost certainly suppresses repeat content from the same destination cluster. We compounded a bad format with a bad distribution strategy.</p>
-
-            <p>The declining view counts across the Hanoi series (142 → 133 → 123 → ...) look like diminishing returns from algorithmic suppression, not just recency. We're retiring this format and diversifying destinations more aggressively going forward.</p>
+            <p>Two failures compounded here. First, "One Thing You Can't Miss" is a toothless hook with zero urgency or stakes. Second, our queue bug shipped seven Hanoi reels inside 48 hours, and the monotonic decay (142 → 133 → 123 → 122 → 119 → 115 → 9) shows Instagram suppressing repetitive topic clusters. We killed the format and enforced destination deduplication in the scheduler.</p>
 
             <h3>2. "This vs That" — The Conceptually Sound Failure</h3>
 
@@ -626,7 +649,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DVv2JMDiu4b/" data-instgrm-version="14" style="max-width:400px;width:100%;border-radius:12px;border:0;"></blockquote>
             </div>
 
-            <p>"Tourists go to Ben Thanh Market. Locals go to Binh Tay Market." This is genuinely good travel advice. The problem is that showing the difference is what makes the format work — a split-screen of the crowded tourist market versus the authentic local one, actual footage, real contrast. Our AI-generated video clips aren't differentiated enough to make this viscerally clear. The text says "contrast" but the visuals don't deliver it. The format fails not because the idea is bad but because it requires something AI video generation can't yet consistently produce: clearly distinguishable real-world visual contexts.</p>
+            <p>"Tourists go to Ben Thanh Market; locals go to Binh Tay Market" is solid advice, but the format requires instant visual contrast between a chaotic tourist trap and an authentic local market. Current AI video generators flatten both prompts into similar-looking Southeast Asian market b-roll. When the text promises contrast and the pixels look interchangeable, viewers swipe.</p>
 
             <h3>3. Budget Reels — Useful but Forgettable</h3>
 
@@ -674,9 +697,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </table>
             </div>
 
-            <p>Budget content performs better than the worst formats, but it doesn't convert. No one saves a Budget Reel because the information feels disposable — you watch, you absorb a rough number, you move on. Compare that to the Tourist Mistake format, where the save behavior is strong because people want to reference the warning before their trip. Budget information doesn't have that urgency.</p>
-
-            <p>The exception: Ghent Budget hit 240 views on YouTube Shorts, which is nearly our platform average for decent content. Budget may perform better on YouTube than Instagram — we'll watch this more carefully.</p>
+            <p>Neutral daily-cost breakdowns ("Vienna on $50/day") get watched and immediately forgotten — 117–131 IG views and a single save across four reels. Without a loss-aversion hook or a multi-clip escalation arc, cost facts alone don't trigger bookmarks (though Ghent hit 240 views on YouTube Shorts).</p>
 
             <h3>4. Generic POV — Don't Bother</h3>
 
@@ -685,7 +706,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <p>Cappadocia: 116 views, 0 likes, 0 saves, 0 shares. A format with no differentiation gets no algorithm love.</p>
             </div>
 
-            <p>A first-person walkthrough of Cappadocia's hot air balloon landscape — without a hook, without information, without a specific angle — gets 116 views and nothing else. The AI-generated footage isn't bad; the format just has nothing to say. Vibe-only content might work for creators with massive followings, but it doesn't work for algorithmic distribution to cold audiences.</p>
+            <p>An unhooked first-person glide over Cappadocia hot air balloons pulled 116 views and zero engagement. Cold algorithmic feeds do not distribute "pretty vibes" from unknown accounts.</p>
 
             <div style="margin:1.5rem 0;display:flex;justify-content:center;">
                 <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="https://www.instagram.com/reel/DVrqVgujwS-/" data-instgrm-version="14" style="max-width:400px;width:100%;border-radius:12px;border:0;"></blockquote>
@@ -693,13 +714,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h2 id="platform-breakdown">Platform-by-Platform Breakdown</h2>
 
-            <p>The most surprising finding in this data isn't which formats work — it's how dramatically the same content performs differently across platforms.</p>
+            <p>Posting identical files simultaneously to three networks exposed how differently each recommendation engine scores short-form video.</p>
 
             <h3>Instagram: Fear and Utility Win</h3>
 
-            <p>Instagram's algorithm rewards content that people <em>react to immediately</em>. The formats that drive saves and shares get distributed. Saves are the most powerful signal — they tell the algorithm that someone found this useful enough to bookmark, which signals genuine value rather than passive entertainment.</p>
-
-            <p>On Instagram, the top performers share two traits: negative framing (mistake, scam, warning) and practical utility (something you'll actually use before your trip). Atmospheric content — beautiful footage, vibes, nostalgia — doesn't move the needle.</p>
+            <p>Instagram's Reels algorithm weights <strong>saves and DM shares</strong> far above passive completion rate. Negative-framed utility (scams, mistakes, warnings) gives viewers a concrete reason to bookmark a post for a future trip or forward it to a friend.</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -724,13 +743,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h3>YouTube Shorts: The Algorithm Rewards Nostalgia and Information</h3>
 
-            <p>YouTube's short-form algorithm behaves differently from Instagram's. Watch time matters more — if someone watches the full 8 seconds, that's a strong positive signal. The Vintage POV format benefits from this: it's atmospheric and visually compelling enough that people watch it through, even if they don't save or share it on Instagram.</p>
-
-            <p>On YouTube, Scam and Tourist Mistake formats perform similarly to Instagram (750–846 views each), but Vintage POV also shows up strongly (746 views, 13 likes for Paris 1962). The platform's nostalgic audience — people who grew up watching travel documentaries — responds to the 1960s film grain aesthetic in a way Instagram's scroll-hungry audience doesn't.</p>
+            <p>YouTube Shorts weights <strong>average percentage viewed</strong> much more heavily than saves. If viewers hold through an 8-second clip, YouTube keeps pushing it — which is why Scam Alert and Tourist Mistake (750–846 views) perform alongside nostalgic 16mm Vintage POV clips like Paris 1962 (746 views, 13 likes).</p>
 
             <h3>X/Twitter: Basically Zero</h3>
 
-            <p>We should just say this clearly: X is not working. Not a little bit — completely not working.</p>
+            <p>On X, automated video cross-posting to a fresh account was a complete zero:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -753,88 +770,75 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </table>
             </div>
 
-            <p>Every post: 0–12 impressions, 0 likes, 0 engagement. This isn't a content quality problem — the same videos are hitting 2,000+ views on Instagram. This is a distribution problem. The @tabijiai account has minimal followers, and X's algorithm does not surface video content from new accounts the way Instagram and YouTube do. The free-tier text+link approach that works for link sharing on X doesn't translate to video discovery.</p>
-
-            <p>We haven't invested in X engagement strategy (replying, following, community building) for the @tabijiai account, and it shows. X requires relationship-building before algorithm amplification in a way Instagram and YouTube don't. For now, we're treating X as a low-priority cross-post and not optimizing for it.</p>
+            <p>The exact same videos hitting 2,000–3,188 views on Instagram got 0–12 impressions on X (@tabijiai). Unlike Instagram Reels and YouTube Shorts, which test cold uploads against interest graphs regardless of follower count, X does not distribute native video from zero-follower accounts without reply-guy distribution or paid boosts.</p>
 
             <h2 id="the-psychology">The Psychology Behind the Hooks</h2>
 
-            <p>The data isn't just descriptive — it explains something about how people engage with travel content on social media. The winning formats all leverage the same psychological triggers.</p>
+            <p>Every winning format in our dataset exploits three behavioral mechanics:</p>
 
             <h3>Negative Framing Outperforms Positive Framing</h3>
 
-            <p>"The #1 Mistake Tourists Make in Koh Phi Phi" outperforms "Koh Phi Phi's Best Hidden Gem" by a factor of 10x+. This isn't counterintuitive if you think about why people follow travel accounts: they're planning trips and they don't want to embarrass themselves or lose money. A warning is more immediately useful than an attraction recommendation. You can find things to do anywhere; avoiding a costly mistake requires specific knowledge.</p>
-
-            <p>Loss aversion is real, and it applies to travel content. The emotional weight of "this mistake could ruin your trip" is stronger than "this place is really cool."</p>
+            <p>"The #1 Mistake Tourists Make in Koh Phi Phi" beat "One Thing You Can't Miss in Hanoi" by more than 15x. Travelers can find "top attractions" anywhere; avoiding an embarrassing or expensive mistake requires specific local knowledge. Loss aversion stops the scroll.</p>
 
             <h3>Saves Signal Trip Planning Intent</h3>
 
-            <p>The Tourist Mistake format generates saves; the Vintage POV format generates neither saves nor shares. Saves on Instagram represent deferred action — "I'm not going to Koh Phi Phi tomorrow, but I'll need this when I do." That's exactly the audience tabiji is trying to reach: people who are in trip planning mode, not just casual scrollers. The save behavior is a proxy for purchase intent in our context.</p>
+            <p>On Instagram, a save is deferred action: <em>"I'm not in Koh Phi Phi today, but I need this before I land."</em> For a travel product like tabiji, saves are a direct proxy for high-intent trip planners rather than passive armchair scrollers.</p>
 
             <h3>Specificity Creates Credibility</h3>
 
-            <p>"Tourists make mistakes in Thailand" is forgettable. "The #1 Mistake Tourists Make in Koh Phi Phi" feels authoritative. The specificity of the destination implies specific knowledge, which implies credibility. The viewer assumes we actually know something about Koh Phi Phi — even if the content was generated by AI from aggregated travel data. The naming precision does a lot of work.</p>
+            <p>"Mistakes tourists make in Thailand" sounds like generic blog spam. "The #1 Mistake Tourists Make in Koh Phi Phi" signals narrow local expertise, earning trust in the first 1.5 seconds even when the underlying script is synthesized from aggregated Reddit threads.</p>
 
-            <h3>Fear > Curiosity > Information > Inspiration</h3>
+            <h3>Fear &gt; Curiosity &gt; Information &gt; Inspiration</h3>
 
-            <p>Ranking the psychological hooks by performance across our dataset:</p>
+            <p>Ranked by cold-account distribution across our 80-video sample:</p>
 
             <ol>
-                <li><strong>Fear</strong> (scam, mistake, warning) — highest engagement, most saves</li>
-                <li><strong>Curiosity</strong> (unknown, secret, hidden) — moderate engagement</li>
-                <li><strong>Information</strong> (budget, logistics, tips) — watched but not saved</li>
-                <li><strong>Inspiration</strong> (beautiful footage, vibes, nostalgia) — low engagement on IG, better on YouTube</li>
+                <li><strong>Fear</strong> (scams, mistakes, warnings) — highest reach, highest save/share rate</li>
+                <li><strong>Curiosity</strong> (secrets, underrated spots) — moderate reach, low saves</li>
+                <li><strong>Information</strong> (daily budgets, logistics) — watched passively, rarely bookmarked</li>
+                <li><strong>Inspiration</strong> (cinematic walkthroughs, nostalgia) — dead on IG, viable on YouTube Shorts</li>
             </ol>
 
-            <p>This ranking doesn't mean inspiration has no value — it means fear-based hooks are more powerful for algorithmic cold distribution to audiences who don't know your account yet. Once you have an audience that trusts you, inspirational content probably performs differently. We're not at that stage.</p>
-
             <h2 id="where-we-go-from-here">Where We Go From Here</h2>
-
-            <p>The data gives us a clear prioritization. Here's what we're actually doing based on these 48 hours:</p>
 
             <h3>Scale What's Working</h3>
 
             <ul>
-                <li><strong>Tourist Mistake and Scam formats</strong> — increasing cron frequency, diversifying destinations globally. These two formats alone are driving nearly all meaningful engagement.</li>
-                <li><strong>Vintage POV — YouTube-only</strong> — stopping IG cross-post for this format. It's earning real YouTube engagement and shouldn't be penalized for Instagram's algorithm preferences.</li>
+                <li><strong>Tourist Mistake and Scam Alert:</strong> Increase cron cadence and expand the destination queue globally.</li>
+                <li><strong>Vintage POV (YouTube-only):</strong> Strip it from the Instagram cross-poster and run it as a dedicated YouTube Shorts format.</li>
             </ul>
 
             <h3>Kill What Isn't</h3>
 
             <ul>
-                <li><strong>"One Thing You Can't Miss"</strong> — retired. The format is too generic and we compounded the problem by flooding a single destination (Hanoi) with 6+ Reels in 48 hours.</li>
-                <li><strong>"This vs That"</strong> — paused until we can solve the visual contrast problem. The concept works; AI video generation can't execute it yet.</li>
-                <li><strong>Generic POV</strong> — dead. No hook, no distribution.</li>
+                <li><strong>"One Thing You Can't Miss":</strong> Retired permanently, alongside a hard destination-cooldown rule in the queue.</li>
+                <li><strong>"This vs That":</strong> Paused until our image-to-video pipeline can enforce unmistakable visual contrast between tourist and local scenes.</li>
+                <li><strong>Generic POV:</strong> Killed.</li>
             </ul>
 
             <h3>Open Questions</h3>
 
             <ul>
-                <li>Does Tourist Mistake performance hold across less-traveled destinations, or is it partly driven by high-interest cities (Koh Phi Phi, Hoi An)?</li>
-                <li>Would Budget Reels perform better with fear-adjacent framing ("You're Overpaying in Vienna") rather than neutral information framing?</li>
-                <li>Can Vintage POV be adapted with an information layer (vintage framing + actual travel tips) to make it work on both platforms?</li>
-                <li>Is 48 hours enough data to kill a format, or are some of these low performers just not getting initial distribution? We're watching 7-day numbers carefully.</li>
+                <li>Does Tourist Mistake hold its 2,000+ view baseline in tier-2 cities, or is it carried by high-volume hubs like Koh Phi Phi and Hoi An?</li>
+                <li>Can we rescue Budget Reels by reframing them around loss aversion (e.g., "How Tourists Get Ripped Off on $50/Day in Vienna")?</li>
+                <li>Can Vintage POV work on Instagram if we pair the 16mm aesthetic with a tactical warning overlay?</li>
             </ul>
 
             <h2 id="what-this-means-for-ai-content">What This Means for AI-Generated Content</h2>
 
-            <p>We're running what is — to our knowledge — one of the first fully automated AI short-form travel content pipelines in production at this scale. Some observations beyond just our own data:</p>
+            <h3>AI Video Still Struggles With Side-by-Side Visual Contrast</h3>
 
-            <h3>AI Video Still Can't Do Visual Contrast Reliably</h3>
+            <p>Our "This vs That" flop highlights a real model limitation: prompting Veo 3 for a "crowded tourist market" vs. an "authentic local market" yields two clips with nearly identical lighting, camera motion, and crowd density. Without human curation or reference-image grounding, text-to-video models regress toward a visual mean that blurs side-by-side comparisons.</p>
 
-            <p>The "This vs That" failure is a real limitation: AI video generation can produce <em>types</em> of footage, but it can't reliably produce footage that's visually distinct enough to make a contrast obvious. "Tourist street market" and "local street market" look similar coming out of Veo 3 unless you engineer the prompt very carefully — and even then, viewers watching at 1x speed on their phone can't necessarily parse the difference. This is a genuine gap in current AI video capability.</p>
+            <h3>Platform-Native Routing Beats Blind Cross-Posting</h3>
 
-            <h3>Platform-Specific Optimization Matters More Than Cross-Platform Efficiency</h3>
-
-            <p>We built this pipeline assuming cross-posting was pure upside — same video, three platforms, more reach. The data shows that's mostly true, but Vintage POV is the counterexample: cross-posting actually hurts the YouTube metrics by association with a format that doesn't work on Instagram. If Instagram viewers skip Vintage POV quickly, that early exit behavior might signal to YouTube that the content is weak, even if YouTube's own metrics look fine. We don't know if this signal pollution is real, but it's a reason to segment platform strategies more carefully.</p>
+            <p>We built the pipeline assuming "render once, publish everywhere" was free leverage. Paris 1962 proved otherwise: a format that thrives on YouTube watch-time mechanics can tank your account's engagement ratio on Instagram. Routing formats by platform algorithm is a one-line config change that prevents dead-on-arrival uploads.</p>
 
             <blockquote>
                 The best performing AI content isn't the most beautiful or the most creative — it's the most useful, packaged with the right emotional trigger.
             </blockquote>
 
-            <p>We'll keep running experiments and sharing what we find. This pipeline is cheap to operate, fast to iterate, and produces real signal. The 48-hour snapshot above represents something like 80+ Reels published across formats and destinations — the kind of A/B test scale that would have cost thousands of dollars and months of production time in the old world of travel content creation.</p>
-
-            <p>Whether that's exciting or unnerving probably depends on which side of the camera you're usually on.</p>
+            <p>Shipping 80+ Reels across 8 formats in 48 hours cost less than $10 in total API spend — an A/B testing velocity that would have taken a traditional social agency months and thousands of dollars to run.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

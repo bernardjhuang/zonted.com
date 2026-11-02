@@ -128,7 +128,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -213,85 +223,81 @@
 
             <p style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.9rem;line-height:1.55;color:var(--text-muted);background:var(--bg-surface);border-left:3px solid var(--text);border-radius:0 6px 6px 0;padding:0.75rem 1rem;margin:0 0 1.5rem;"><strong style="color:var(--text);">Update, September 24, 2026:</strong> VeracityAPI, the product behind this post&rsquo;s receipt, is retired. The loop outlived it. <a href="/posts/veracity-postmortem/">Read the post-mortem &rarr;</a></p>
 
-            <p>I asked Opus 4.7 and GPT-5.5 to independently plan the same new feature. Then I handed both plans to Gemini 3.1 Pro and asked it to pick the winning combination. Here is the sentence that earned the work:</p>
+            <p class="dropcap">I asked Opus 4.7 and GPT-5.5 to independently plan the same new feature, then handed both plans to Gemini 3.1 Pro to pick the winning combination. One sentence in Gemini's audit earned the entire workflow:</p>
 
             <blockquote>Opus designed a consumer SaaS application (beautiful, real-time, client-side, targeting writers). GPT-5.5 designed a B2B API marketing tool (pragmatic, server-tied, conversion-focused, targeting engineers/QA). Because your goal is to sell API keys for VeracityAPI, GPT-5.5 has the winning product strategy, but Opus has the winning technical architecture.</blockquote>
 
-            <p>Each model produced a half-right plan. Single-model planning would have shipped one of them. Gemini's audit produced a synthesis neither model would have written alone.</p>
+            <p>Each model produced a half-right spec. Single-model planning would have shipped one of those halves; Gemini's audit synthesized a build neither planner would have written alone.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">For every meaningfully complex build, I plan in three models. Opus 4.7 plans it. GPT-5.5 plans it. Gemini 3.1 Pro audits both and picks the Goldilocks. Then GPT-5.5 one-shots the implementation against the reconciled plan.</p>
+                <p class="tldr-thesis">For every complex build, three models write the spec before one model writes the code: Opus 4.7 and GPT-5.5 draft independent plans, Gemini 3.1 Pro reconciles them into a Goldilocks spec, and GPT-5.5 one-shots the implementation.</p>
                 <ul>
-                    <li>The 3-model loop has shipped three one-shot builds so far: the Veracity Chrome extension, the Palmaura backend, and now the VeracityAPI Text Linter.</li>
-                    <li>The receipts: Opus over-indexes on architecture for the wrong audience. GPT-5.5 over-indexes on conversion with the wrong technical primitives. Gemini reliably picks the half each model got right.</li>
-                    <li>Three planning passes cost ~$2&ndash;4 in API. The implementation pass they save costs ~$20&ndash;60. The math is straightforward once you've run it.</li>
+                    <li><strong>Three one-shot builds shipped so far:</strong> the Veracity Chrome extension, the Palmaura backend, and the VeracityAPI Text Linter (14 milestones).</li>
+                    <li><strong>Complementary blindspots:</strong> Opus designs clean isomorphic architecture for the wrong buyer; GPT-5.5 nails B2B conversion strategy on fragile technical primitives; Gemini cold-audits both and keeps the working half of each.</li>
+                    <li><strong>10&times; ROI on planning tokens:</strong> Three planning passes cost ~$2&ndash;$4 in API tokens vs. ~$20&ndash;$60 for the wasted implementation pass they prevent.</li>
                 </ul>
-                <p class="tldr-tail">This isn't a science. It's three builds. But the pattern is sharp enough that I now refuse to single-model-plan anything bigger than a weekend project.</p>
             </div>
 
             <h2 id="the-loop">The loop</h2>
 
-            <p>For every meaningfully complex build, I run this:</p>
+            <p>Every complex feature runs through four steps before a line of application code gets written:</p>
 
             <ol>
-                <li><strong>Opus 4.7 plans it.</strong> Fresh context. The plan tends to optimize for architectural elegance and developer experience.</li>
-                <li><strong>GPT-5.5 plans it.</strong> Fresh context. The plan tends to optimize for product strategy and conversion.</li>
-                <li><strong>Gemini 3.1 Pro audits both.</strong> Picks the winning combination. Flags what each model missed. Patches the synthesis.</li>
+                <li><strong>Opus 4.7 plans it cold.</strong> Fresh context, zero cross-talk.</li>
+                <li><strong>GPT-5.5 plans the exact same prompt cold.</strong> Fresh context, independent framing.</li>
+                <li><strong>Gemini 3.1 Pro audits both plans.</strong> Scores the tradeoffs, flags what both models missed, and writes a reconciled Goldilocks spec.</li>
+                <li><strong>GPT-5.5 executes the Goldilocks spec.</strong> Subagent-driven development steps through the reconciled milestones in a single implementation pass.</li>
             </ol>
-
-            <p>Then GPT-5.5 one-shots the implementation against the Gemini-reconciled plan, stepping through the milestones with subagent-driven development.</p>
-
-            <p>The first time I tried this I was skeptical. Three planning passes felt like overhead. By the third build I stopped feeling silly. The Goldilocks plan is the artifact I needed all along.</p>
 
             <h2 id="the-receipt">The receipt: VeracityAPI Text Linter</h2>
 
-            <p>I'm shipping a new feature on VeracityAPI &mdash; an AI text linter at <code>/tools/style-editor</code>. The decision tree was loaded:</p>
+            <p>We were shipping an AI text linter for VeracityAPI at <code>/tools/style-editor</code>, and the product surface had four open design forks:</p>
 
             <ul>
-                <li><strong>UX</strong>: Hemingway-style editor? Static form? Agent skill suite published to GitHub?</li>
-                <li><strong>Deployment</strong>: Cloudflare Worker only? Open-source repo? Both?</li>
-                <li><strong>Architecture</strong>: <code>contenteditable</code>? Textarea overlay? No editor at all &mdash; just JSON?</li>
-                <li><strong>Positioning</strong>: Writers? Developers? Enterprise trust teams?</li>
+                <li><strong>UX</strong>: Hemingway-style editor, static form, or an open-source agent skill suite on GitHub?</li>
+                <li><strong>Deployment</strong>: Cloudflare Worker only, open-source repo, or both?</li>
+                <li><strong>Architecture</strong>: <code>contenteditable</code>, textarea overlay, or raw JSON with no editor UI?</li>
+                <li><strong>Positioning</strong>: Writers, developers, or enterprise trust teams?</li>
             </ul>
 
-            <p>Each model anchored on its own priors. Here is what they each produced.</p>
+            <p>Given the same brief, each planner anchored hard on its own priors.</p>
 
             <h3 id="opus-plans">What Opus 4.7 proposed</h3>
 
-            <p>Opus produced two framings (I gave it two passes with different lead-in prompts):</p>
+            <p>I gave Opus two passes with slightly different lead-in prompts, and it returned two distinct framings:</p>
 
-            <p><strong>Plan A &mdash; open-source agent skill suite.</strong> Publish to GitHub as <code>veracityapi/ai-text-risk-skills</code>. Five skills: ensemble detector, author-style-compare, provenance-probe, source-claim-audit, benchmark harness. Heavy emphasis on multi-signal risk reports, "evidence not accusations." Local model execution. BYOK for search providers.</p>
+            <p><strong>Plan A &mdash; open-source agent skill suite.</strong> Publish to GitHub as <code>veracityapi/ai-text-risk-skills</code> with five skills: ensemble detector, author-style-compare, provenance-probe, source-claim-audit, and benchmark harness. Heavy emphasis on multi-signal risk reports ("evidence, not accusations"), local model execution, and BYOK for search providers.</p>
 
-            <p><strong>Plan B &mdash; Hemingway-style editor.</strong> Live editor at <code>/tools/style-editor</code>. <code>contenteditable</code> + overlay <code>&lt;mark&gt;</code> spans. Pure-TS calculator shared between browser bundle and Worker. Targets "Hemingway alternative" SEO. Sample text on first load, sidebar with metrics + verdicts.</p>
+            <p><strong>Plan B &mdash; Hemingway-style editor.</strong> A live browser app at <code>/tools/style-editor</code> built on <code>contenteditable</code> with overlay <code>&lt;mark&gt;</code> spans, backed by a pure-TypeScript calculator shared between the browser bundle and Cloudflare Worker. Targeted "Hemingway alternative" SEO with preloaded sample text and a live metrics sidebar.</p>
 
-            <p>Both Opus plans were beautifully architected. Both were also positioned for the wrong buyer.</p>
+            <p>Both Opus specs were architected cleanly, and both were aimed at the wrong buyer.</p>
 
             <h3 id="gpt-plan">What GPT-5.5 proposed</h3>
 
-            <p>One plan, sharply different:</p>
+            <p>GPT-5.5 returned a single, commercial-first spec:</p>
 
             <ul>
-                <li>"Veracity Editor" at <code>/editor</code> &mdash; linter positioning, not Hemingway clone</li>
-                <li>Textarea + mirrored highlight overlay (no <code>contenteditable</code>)</li>
-                <li>Fast Scan (deterministic, local) + Deep Scan (LLM-backed, paid) as the conversion bridge</li>
-                <li>Authenticated <code>/v1/analyze-style</code> endpoint matching existing API patterns</li>
-                <li>Privacy defaults: <code>store_content=false</code>, no text leaves the browser on Fast Scan</li>
+                <li>"Veracity Editor" at <code>/editor</code> &mdash; developer linter positioning rather than a Hemingway clone</li>
+                <li>Textarea + mirrored highlight overlay (avoiding <code>contenteditable</code>)</li>
+                <li>Fast Scan (deterministic, local) + Deep Scan (LLM-backed, paid) as the API conversion bridge</li>
+                <li>Authenticated <code>/v1/analyze-style</code> endpoint matching existing API conventions</li>
+                <li>Privacy defaults: <code>store_content=false</code>, with zero text leaving the browser on Fast Scan</li>
                 <li>VeracityAPI action spine: <code>allow / revise / human_review / reject</code></li>
             </ul>
 
-            <p>GPT got the buyer right. It also picked some questionable technical primitives and skipped the architecture work entirely.</p>
+            <p>GPT nailed the buyer and conversion funnel, but picked clumsy technical primitives and glossed over the shared module architecture.</p>
 
             <h3 id="gemini-audit">What Gemini 3.1 Pro said</h3>
 
-            <p>I handed all three plans to Gemini and asked it to audit cold. The synthesis headline was the quote at the top of this post:</p>
+            <p>I handed all three specs to Gemini 3.1 Pro for a cold audit:</p>
 
             <figure>
                 <img  src="https://img.zonted.com/resources/plan-3x-build-once/gemini-synthesis.png" width="1884" height="1444" alt="Gemini 3.1 Pro's synthesis verdict: Opus designed a consumer SaaS application, GPT-5.5 designed a B2B API marketing tool, GPT-5.5 has the winning product strategy but Opus has the winning technical architecture.">
                 <figcaption>Gemini 3.1 Pro auditing the Opus and GPT-5.5 plans for the VeracityAPI Text Linter. The split between &ldquo;winning product strategy&rdquo; and &ldquo;winning technical architecture&rdquo; is the whole game.</figcaption>
             </figure>
 
-            <p>Then I asked Gemini to break down what each model got specifically right and wrong. The detail on GPT-5.5 alone was sharp:</p>
+            <p>When I asked Gemini to itemize what each model got right and wrong, its critique of GPT-5.5 caught a failure mode I had missed completely:</p>
 
             <figure>
                 <img  src="https://img.zonted.com/resources/plan-3x-build-once/gemini-gpt-audit.png" width="1842" height="982" alt="Gemini's audit of what GPT-5.5 got right and wrong. Right: persona match for developers not students, warning about Python ML dependency hell, riding the MCP distribution wave. Wrong: web UI first sequencing, missed context window economics for agents, assumed local ML is required.">
@@ -301,105 +307,89 @@
             <p><strong>What GPT-5.5 got right:</strong></p>
 
             <ol>
-                <li><strong>Persona match.</strong> We are selling API keys to developers building AI pipelines, not students trying to beat <code>turnitin.com</code>. An open-source GitHub repo speaks their language natively.</li>
-                <li><strong>"Messy support tickets" from local ML.</strong> Python dependency hell (PyTorch, CUDA versions, HuggingFace transformers) is the fastest way to kill open-source adoption. If your "free tool" requires downloading a 5GB model and troubleshooting GPU drivers, developers will abandon it.</li>
-                <li><strong>Riding the MCP wave.</strong> Model Context Protocol is the standard for tool use in 2026. Packaging this as an MCP server guarantees distribution in Claude Desktop, Cursor, and enterprise LLM orchestrators.</li>
+                <li><strong>Persona match.</strong> We sell API keys to developers building AI pipelines, not students trying to beat <code>turnitin.com</code>. An open-source GitHub repo speaks their language natively.</li>
+                <li><strong>Avoiding local ML support tickets.</strong> Python dependency hell (PyTorch, CUDA versions, HuggingFace transformers) kills open-source adoption. If a free tool requires downloading a 5GB model and debugging GPU drivers, developers abandon it.</li>
+                <li><strong>Riding the MCP wave.</strong> Packaging the analyzer as an MCP server gives it immediate distribution inside Claude Desktop, Cursor, and enterprise orchestrators.</li>
             </ol>
 
             <p><strong>What GPT-5.5 got wrong:</strong></p>
 
             <ol>
-                <li><strong>The "web UI first" sequencing.</strong> GPT suggested building the Hemingway clone before the repo. The web UI and the repo solve different problems for different people. The repo can launch first (it's faster) and power the web UI later.</li>
-                <li><strong>Missed context window economics.</strong> GPT evaluated the JSON schema as if a human were reading it. But this is an <em>agent</em> skill. If the tool returns a massive JSON payload with sentence-by-sentence stylometric breakdowns, it blows up the agent's context window and costs the user money. The tool's output must be aggressively summarized (e.g. <code>risk_band: "high", primary_reason: "Low sentence variance"</code>).</li>
-                <li><strong>Assumed local ML is the only way.</strong> GPT assumed you have to run deep classifiers locally. You don't. The repo should rely on heuristics and provenance for its local execution and use VeracityAPI for the heavy lifting.</li>
+                <li><strong>"Web UI first" sequencing.</strong> GPT sequenced the web editor before the repo, even though the repo ships faster and can power the web UI afterward.</li>
+                <li><strong>Context-window economics.</strong> GPT designed the JSON schema as if a human were reading it. For an <em>agent</em> skill, returning sentence-by-sentence stylometric breakdowns bloats the context window and burns user tokens. Agent output has to be aggressively summarized (e.g., <code>risk_band: "high", primary_reason: "Low sentence variance"</code>).</li>
+                <li><strong>Assuming local ML is mandatory.</strong> GPT assumed deep classifiers had to run locally, whereas the repo can run fast deterministic heuristics locally and hand heavy inference to VeracityAPI.</li>
             </ol>
 
             <p><strong>What Opus got right:</strong></p>
 
             <ul>
-                <li>Pure TypeScript analyzer imported by browser and Worker &mdash; the isomorphic architecture is the whole technical thesis</li>
-                <li>Browser-side Fast Scan, which prevents viral free-tool traffic from burning Worker CPU/D1/model budget</li>
-                <li>MCP tool using the same analyzer module</li>
-                <li><code>/tools/style-editor</code> as the canonical URL &mdash; better SEO/tool taxonomy than bare <code>/editor</code></li>
+                <li>Pure TypeScript analyzer shared across browser and Worker &mdash; the isomorphic architecture is the core technical unlock</li>
+                <li>Browser-side Fast Scan so viral free-tool traffic never burns Worker CPU, D1, or model budget</li>
+                <li>MCP server importing the exact same analyzer module</li>
+                <li><code>/tools/style-editor</code> as the canonical URL for cleaner SEO and tool taxonomy than bare <code>/editor</code></li>
             </ul>
 
             <p><strong>What Opus got wrong:</strong></p>
 
             <ul>
-                <li><code>contenteditable</code> editor &mdash; browser selection/input/offset hell. Textarea overlay ships faster and breaks less.</li>
-                <li>Consumer "Hemingway alternative" persona &mdash; writers and novelists do not buy VeracityAPI keys</li>
-                <li>Full write-mode/local writing app ergonomics &mdash; scope creep. This is an inspector, not a writing environment.</li>
-                <li>Public no-auth JSON endpoint as primary distribution &mdash; not needed when the browser has the pure TS analyzer</li>
+                <li><code>contenteditable</code> editor &mdash; browser selection, input, and cursor-offset hell when a textarea overlay ships faster and breaks less</li>
+                <li>Consumer "Hemingway alternative" persona &mdash; novelists do not buy VeracityAPI keys</li>
+                <li>Full local writing-app ergonomics &mdash; scope creep for what should be a diagnostic inspector</li>
+                <li>Public no-auth JSON endpoint &mdash; redundant once the browser bundle runs the pure-TS analyzer locally</li>
             </ul>
 
             <h2 id="goldilocks">The Goldilocks plan</h2>
 
-            <p>Gemini's reconciliation:</p>
+            <p>Gemini combined the surviving pieces into a single 25-section implementation spec:</p>
 
             <ul>
-                <li><strong>Architecture (from Opus)</strong>: Pure TS analyzer shared between browser bundle and Worker. Browser-side Fast Scan. MCP tool importing the same module.</li>
-                <li><strong>Product strategy (from GPT-5.5)</strong>: Linter/inspector positioning. Textarea + mirrored overlay (not <code>contenteditable</code>). Fast vs Deep Scan upsell. VeracityAPI action spine. Privacy defaults.</li>
-                <li><strong>Gemini's correction</strong>: Don't claim "open-sourced" until the analyzer module actually ships in a public package. Use "transparent heuristics" until then.</li>
+                <li><strong>Architecture (from Opus)</strong>: Pure-TS analyzer shared across the browser bundle, Worker, and MCP tool, with browser-side Fast Scan protecting server compute.</li>
+                <li><strong>Product strategy (from GPT-5.5)</strong>: Developer linter positioning, textarea + mirrored highlight overlay, Fast-to-Deep Scan upsell, VeracityAPI action spine, and zero-retention privacy defaults.</li>
+                <li><strong>Copy correction (from Gemini)</strong>: Drop "open-sourced" claims until the analyzer package is actually published; call it "transparent heuristics" at launch.</li>
             </ul>
-
-            <p>The output is a 25-section implementation plan that reads like neither Opus nor GPT-5.5 would have written alone. It is sharper than either input. That is the whole point.</p>
 
             <h2 id="one-shot">The one-shot</h2>
 
-            <p>The Goldilocks plan goes to GPT-5.5 as the implementer. We step through the milestones with subagent-driven development &mdash; the plan itself is the spec.</p>
+            <p>With the Goldilocks spec locked, GPT-5.5 stepped through all 14 implementation milestones via subagent-driven development: shared analyzer contracts &rarr; parser &rarr; dictionaries &rarr; metrics &rarr; scoring &rarr; browser bundle &rarr; public page &rarr; validation &rarr; endpoint &rarr; conversion path &rarr; MCP &rarr; docs &rarr; eval harness &rarr; feedback.</p>
 
-            <p>For the text linter, that is 14 milestones from shared analyzer contracts &rarr; parser &rarr; dictionaries &rarr; metrics &rarr; scoring &rarr; browser bundle &rarr; public page &rarr; validation &rarr; endpoint &rarr; conversion path &rarr; MCP &rarr; docs &rarr; eval harness &rarr; feedback.</p>
-
-            <p>This is the third complex build we've shipped through the same loop:</p>
+            <p>That made three consecutive one-shot builds through the same three-model loop:</p>
 
             <ol>
-                <li><strong>Veracity Chrome extension.</strong> Clean one-shot. The Opus plan wanted a popup; Gemini called the side panel for context-window economics. The build worked on first deploy.</li>
-                <li><strong>Palmaura backend.</strong> Clean one-shot. The iOS app side had more hiccups &mdash; Swift, Xcode, and App Store review introduce variance that doesn't exist in Cloudflare Workers &mdash; but the planning workflow itself held.</li>
-                <li><strong>VeracityAPI Text Linter.</strong> Currently in milestone 1 with GPT-5.5. (If you're reading this and the editor isn't live yet, check back.)</li>
+                <li><strong>Veracity Chrome extension.</strong> Opus planned a toolbar popup; Gemini overruled it for a persistent side panel on context-window and workflow grounds. Shipped on first deploy.</li>
+                <li><strong>Palmaura backend.</strong> Clean one-shot on the Cloudflare Worker backend (though the iOS client still hit normal Swift, Xcode, and App Store review friction).</li>
+                <li><strong>VeracityAPI Text Linter.</strong> 14 milestones executed straight from the Gemini-reconciled spec.</li>
             </ol>
 
             <h2 id="why-three">Why three, not two</h2>
 
-            <p>Each model has predictable blindspots when I ask it to plan alone:</p>
+            <p>Left to plan alone, each frontier model defaults to a predictable house bias:</p>
 
             <ul>
-                <li><strong>Opus 4.7</strong> over-indexes on architecture. It will design beautiful, defensible technical systems for the wrong audience.</li>
-                <li><strong>GPT-5.5</strong> over-indexes on conversion. It will design pragmatic B2B flows but pick the wrong technical primitives.</li>
-                <li><strong>Gemini 3.1 Pro</strong> is the best auditor I've found at picking the winning combination. It is not as creative as a primary planner, but it consistently says &ldquo;you adopted X from Opus and Y from GPT, here's what neither caught.&rdquo;</li>
+                <li><strong>Opus 4.7</strong> over-indexes on architectural purity, happily engineering an elegant system for the wrong customer.</li>
+                <li><strong>GPT-5.5</strong> over-indexes on commercial pragmatism, nailing the B2B funnel while cutting corners on technical primitives.</li>
+                <li><strong>Gemini 3.1 Pro</strong> is a sharper cold critic than primary architect &mdash; it spots where Opus and GPT-5.5 talk past each other and flags what neither caught.</li>
             </ul>
 
-            <p>Two-model planning misses the audit step. You can ask Opus to audit GPT, or vice versa, but they tend to defend their own framing's underlying choices. Gemini comes in cold and rules.</p>
+            <p>Stopping at two models skips the referee. If you ask Opus to critique GPT-5.5 (or vice versa), both models defend their own initial framing. Gemini enters with no ego invested in either draft.</p>
 
             <h2 id="economics">The economic argument</h2>
 
-            <p>Three planning passes is expensive. Each plan is 5,000&ndash;9,000 tokens of input plus a similar amount of output. The Gemini audit on top is another 3,000&ndash;5,000.</p>
+            <p>Three planning passes consume 5,000&ndash;9,000 input tokens and a similar output budget per planner, plus 3,000&ndash;5,000 tokens for Gemini's audit &mdash; roughly <strong>$2&ndash;$4 in API costs</strong> total.</p>
 
-            <p>That is maybe <strong>$2&ndash;$4 in API costs</strong> per planning loop.</p>
-
-            <p>The implementation that follows is also expensive &mdash; typically 50,000&ndash;200,000 tokens for a meaningful feature, <strong>$20&ndash;$60 in API costs</strong>.</p>
-
-            <p>If single-model planning produces a plan that ships, then a follow-up build to fix what was missed, that's two implementation passes. <strong>$40&ndash;$120.</strong></p>
-
-            <p>The 3&times; planning loop has cost us <em>one implementation pass</em> in every build it has run on. The math is straightforward: $2&ndash;$4 of extra planning saves $20&ndash;$60 of re-implementation. The harder-to-quantify saving is that the first version actually works.</p>
+            <p>The implementation pass that follows runs 50,000&ndash;200,000 tokens, or <strong>$20&ndash;$60 in API costs</strong>. When a single-model spec ships the wrong architecture or product framing, rewriting it doubles the build bill to <strong>$40&ndash;$120</strong>. Spending $2&ndash;$4 up front to save a $20&ndash;$60 rebuild is the easiest trade in our stack.</p>
 
             <h2 id="caveats">What this isn't</h2>
 
-            <p>A few honesty flags:</p>
-
             <ol>
-                <li><strong>This is not a science.</strong> Three builds. Three different domains (Chrome extension, mobile backend, hosted SaaS feature). The workflow has held for those three. It might not generalize past a sample size of three.</li>
-                <li><strong>The model assignments will drift.</strong> Opus 4.7 won't be the architecture-priming planner in six months. GPT-5.5 won't be the conversion-priming planner. The personas attach to model versions, and model versions ship. Re-audit your model assignments quarterly.</li>
-                <li><strong>Gemini's audits are not always right.</strong> On one earlier build (not described here), Gemini picked Opus's UX framing when GPT's would have been better. I caught it on review. The audit is a strong signal, not gospel.</li>
-                <li><strong>The "one-shot" framing is generous.</strong> What we actually mean is: the first implementation pass produces code that compiles, runs, and passes the milestones' acceptance tests. There are always edits during code review. But there is no "this plan was wrong, restart the build" moment.</li>
+                <li><strong>Not a formal benchmark.</strong> It is a workflow receipt across three production builds (Chrome extension, mobile backend, hosted SaaS tool).</li>
+                <li><strong>Model personas drift across releases.</strong> Opus 4.7 won't always be the architecture purist and GPT-5.5 won't always be the funnel pragmatist. Re-audit role assignments when frontier checkpoints update.</li>
+                <li><strong>The referee still needs human review.</strong> On an earlier build, Gemini favored Opus's UX framing when GPT-5.5's was clearly better, and I overruled it before code generation started.</li>
+                <li><strong>"One-shot" means one spec, not zero code review.</strong> The first implementation pass compiles, runs, and clears milestone acceptance tests, with normal polish during review &mdash; never a thrown-away architecture.</li>
             </ol>
 
             <h2>The takeaway</h2>
 
-            <p>Single-model planning ships one model's blindspots.</p>
-
-            <p>Three-model planning surfaces them &mdash; and the audit picks the synthesis neither model would have produced alone.</p>
-
-            <p>The first time you do this, you'll feel silly running three plans for what feels like a one-model task. After the third build, you stop feeling silly. The Goldilocks plan is the artifact you needed all along.</p>
+            <p>Single-model planning ships one model's blindspots. Three-model planning forces two competing priors onto the table and lets a cold third model assemble the spec neither would have written alone. The first time you run three planning passes for a single feature, it feels like overhead; by the third build, single-model planning feels like shipping blind.</p>
 
             <p>&mdash; Bernard</p>
 

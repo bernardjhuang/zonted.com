@@ -143,6 +143,44 @@
             .verdict-box, .note-box { padding: 1rem 1.1rem; }
         }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -223,20 +261,23 @@
         </div>
 
         <div class="article-body">
-            <p class="dropcap">I wanted a brutally practical answer to a simple question: <strong>what are the best AI video models right now if I am actually trying to build travel reels, not just admire pretty demos?</strong> So I ran six text-to-video models through the exact same handheld Cancun travel prompt, uploaded the outputs, then reran the two clear winners on a second Puerto Morelos “local alternative” shot.</p>
+            <p class="dropcap">I wanted a practical answer to a simple question: <strong>which AI video APIs actually hold up when you are building short-form travel reels, not just admiring cherry-picked demos?</strong> I ran six text-to-video models through the exact same handheld Cancun prompt, uploaded the raw outputs, and reran the top two finishers on a second Puerto Morelos “local alternative” shot.</p>
 
-            <p>The result was not a one-model blowout. It was a split decision. <strong>Seedance 2.0</strong> and <strong>Veo 3.1 Lite</strong> were both excellent, but for slightly different reasons. Seedance gave me the more lived-in, local-feeling output in the second round. Veo 3.1 Lite gave me the cleanest overall production baseline and the safest starting point if I just want a model that keeps doing the obvious thing well.</p>
+            <p>The result was a split decision. <strong>Seedance 2.0</strong> delivered the more candid, lived-in phone footage in round two; <strong>Veo 3.1 Lite</strong> delivered the cleanest prompt adherence and the safest production baseline.</p>
 
-            <div class="verdict-box">
-                <h3>TL;DR</h3>
-                <p><strong>If I am doing fast model bake-offs or building an agentic content pipeline, I would start with WaveSpeed.</strong> It gives me one surface to hit a lot of strong models quickly.</p>
-                <p><strong>If I specifically want Veo 3.1 Lite in production, I would still use Gemini directly for reliability.</strong> WaveSpeed's timeout window is tight at 180 seconds, which is workable for testing but not my favorite thing to bet a production pipeline on.</p>
-                <p><strong>My split verdict:</strong> Veo 3.1 Lite is the best general default. Seedance 2.0 is the model I would reach for when I want more texture, messiness, and “this actually feels like phone footage” energy.</p>
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Across six text-to-video APIs tested on a strict handheld travel-reel benchmark ($0.30&ndash;$0.60 per clip), <strong>Veo 3.1 Lite</strong> ($0.30) and <strong>Seedance 2.0 Fast</strong> ($0.50) shared a split verdict.</p>
+                <ul>
+                    <li><strong>Best overall default (Veo 3.1 Lite)</strong> &mdash; Cleanest prompt adherence and shot structure at $0.30 per 6s 720p clip; call it through Gemini directly in production to avoid WaveSpeed's 180-second wrapper timeout.</li>
+                    <li><strong>Best handheld realism (Seedance 2.0 Fast)</strong> &mdash; Most candid, lived-in phone-footage texture at $0.50 per 5s clip, winning the second-round authenticity test.</li>
+                    <li><strong>Best multi-model harness (WaveSpeed)</strong> &mdash; Fastest single surface for running side-by-side bake-offs across Wan 2.7, Kling 3.0, Kling O3, Seedance, Veo, and Grok Imagine.</li>
+                </ul>
             </div>
 
             <h2 id="why-i-ran-this">Why I ran this test</h2>
-            <p>I am rebuilding a travel-reel format from scratch, starting with a very specific hook: the moment a traveler realizes the polished all-inclusive version of Mexico is not what they actually wanted. That meant I did not want generic cinematic beauty. I wanted <strong>prompt adherence, handheld believability, emotional clarity, and footage I could actually use in a short-form reel pipeline</strong>.</p>
-            <p>The first shot was a Cancun “tourist mistake” scene. The second shot, which I only ran on the winners, was the emotional opposite: a Puerto Morelos local-food-and-waterfront scene that feels calmer, truer, and more lived in. That is a much better stress test than asking models to render abstract fantasy prompts or glossy marketing footage.</p>
+            <p>I am rebuilding a travel-reel format around a specific hook: the moment a traveler realizes the polished all-inclusive version of Mexico isn't what they wanted. That ruled out generic cinematic beauty. I needed <strong>prompt adherence, handheld believability, emotional clarity, and footage usable inside an automated short-form pipeline</strong>.</p>
+            <p>Round one tested a Cancun “tourist mistake” scene across all six models. Round two flipped the emotional polarity on the two finalists: a calm, lived-in Puerto Morelos waterfront ceviche stand. Paired together, those two shots stress-test real narrative control far better than abstract fantasy prompts.</p>
 
             <h2 id="what-i-tested">What I tested</h2>
             <div class="table-wrap">
@@ -256,42 +297,42 @@
                             <td><code>alibaba/wan-2.7/text-to-video</code></td>
                             <td>720p, 6s, 9:16</td>
                             <td>$0.60</td>
-                            <td>Surprisingly believable handheld energy, but it skewed more generic resort than emotionally precise regret.</td>
+                            <td>Surprisingly believable handheld energy, but skewed more generic resort than emotionally precise regret.</td>
                         </tr>
                         <tr>
                             <td><strong>Kling 3.0</strong></td>
                             <td><code>kwaivgi/kling-v3.0-std/text-to-video</code></td>
                             <td>6s, 9:16</td>
                             <td>$0.50</td>
-                            <td>Decent, but it felt cleaner and flatter than I wanted for this format.</td>
+                            <td>Competent, but cleaner and flatter than this format needed.</td>
                         </tr>
                         <tr>
                             <td><strong>Kling O3</strong></td>
                             <td><code>kwaivgi/kling-video-o3-std/text-to-video</code></td>
                             <td>6s, 9:16</td>
                             <td>$0.50</td>
-                            <td>More polished than Kling 3.0, still not the winner for this handheld travel use case.</td>
+                            <td>More polished than Kling 3.0, still too composed for handheld travel footage.</td>
                         </tr>
-                        <tr class=”winner”>
+                        <tr class="winner">
                             <td><strong>Seedance 2.0 Fast</strong></td>
                             <td><code>bytedance/seedance-2.0-fast/text-to-video</code></td>
                             <td>480p, 5s, 9:16</td>
                             <td>$0.50</td>
-                            <td>One of the two winners. Best “lived-in” feel in the second round.</td>
+                            <td>Co-winner. Best “lived-in” phone-camera feel in round two.</td>
                         </tr>
-                        <tr class=”winner”>
+                        <tr class="winner">
                             <td><strong>Veo 3.1 Lite</strong></td>
                             <td><code>google/veo3.1-lite/text-to-video</code></td>
                             <td>720p, 6s, 9:16</td>
                             <td>$0.30</td>
-                            <td>One of the two winners. Best all-around default and strongest overall structure.</td>
+                            <td>Co-winner. Best all-around default, lowest cost among the leaders, and strongest shot structure.</td>
                         </tr>
                         <tr>
                             <td><strong>Grok Imagine Video</strong></td>
                             <td><code>x-ai/grok-imagine-video/text-to-video</code></td>
                             <td>720p, 6s, 9:16</td>
                             <td>$0.33</td>
-                            <td>Interesting budget option, but it did not hang with the top two for this benchmark.</td>
+                            <td>Interesting budget option, but clearly behind the top two on this benchmark.</td>
                         </tr>
                     </tbody>
                 </table>
@@ -301,64 +342,63 @@
             <div class="note-box">
                 <h3>What this article is, and is not</h3>
                 <ul>
-                    <li>Every example in this post is an <strong>actual output from my test runs</strong>, rehosted on <code>zonted-media</code> so it can be served directly from this article.</li>
-                    <li>I ran the <strong>Cancun mistake prompt</strong> on all six models.</li>
-                    <li>I ran the <strong>Puerto Morelos local prompt</strong> only on the top two models, because by that point the first round had already narrowed the field.</li>
-                    <li>This is <strong>not</strong> a universal ranking for every possible video use case. It is a ranking for <strong>handheld travel-reel footage with strong prompt constraints</strong>.</li>
-                    <li>I initially tried Kling 3.0 and Kling O3 with <code>shot_type: intelligent</code> because that was one of the settings I wanted to test. WaveSpeed rejected that value, so I reran both without that field. I am calling that out because “as transparent as possible” means including the integration friction too.</li>
-                    <li>My scoring bias here is simple: if a clip is prettier but less usable for a real short-form travel narrative, I will rank the more usable clip higher.</li>
+                    <li>Every clip below is an <strong>unedited output from my test runs</strong>, rehosted on <code>zonted-media</code> for direct playback.</li>
+                    <li>I ran the <strong>Cancun mistake prompt</strong> across all six models, then ran the <strong>Puerto Morelos local prompt</strong> on the top two finishers.</li>
+                    <li>This is a ranking for <strong>handheld travel-reel footage under dense prompt constraints</strong>, not every possible video aesthetic.</li>
+                    <li>WaveSpeed rejected <code>shot_type: intelligent</code> on Kling 3.0 and Kling O3, so I reran both without that parameter. Integration friction counts when evaluating production APIs.</li>
+                    <li>My scoring bias is simple: a slightly messier clip that fits a real short-form narrative beats a prettier clip that looks like a stock commercial.</li>
                 </ul>
             </div>
 
             <h2 id="prompt-1">The exact Cancun prompt</h2>
-            <p>This is the full prompt I used for the first round. I wanted a raw iPhone disappointment clip, not a luxury ad.</p>
+            <p>Here is the exact round-one prompt—designed to force raw iPhone disappointment rather than a glossy resort ad.</p>
             <details open>
                 <summary>Show the full Cancun “tourist mistake” prompt</summary>
                 <div class="details-inner"><pre><code>Handheld phone camera, 9:16 vertical portrait. A tourist in a Cancun Hotel Zone all-inclusive resort is filming their own disappointment. The shot opens tight on a plate of sad resort food, a rubbery taco with fluorescent orange cheese sauce, wilted lettuce, a scoop of bland rice, sitting on a white plastic tray under harsh fluorescent overhead lights. The person holding the phone slowly pans the camera up and to the right, past the buffet line, chafing dishes with steam trays, a sneeze guard reflecting the harsh ceiling lights, a family in matching neon wristbands loading plates without enthusiasm. The camera continues panning past the buffet toward the floor-to-ceiling windows and the camera momentarily refocuses on the glass reflection, the filmmaker&#x27;s own tired face visible for a split second, overhead fluorescents catching in their eyes. Then the focus shifts through the glass to reveal the resort pool area outside, rows and rows of identical blue lounge chairs packed shoulder to shoulder under a blazing Caribbean sun, a giant inflatable beer bottle floating in a crowded pool, a staff member in a resort polo setting up yet another generic pool game, bass from outdoor speakers you can almost feel through the glass. Every single person visible wears the same colored all-inclusive wristband. There is zero Mexican culture anywhere in frame, no local food, no Spanish signage, no sense of place, no authenticity. This could be a generic resort anywhere. The lighting shifts from harsh indoor fluorescent wash to overexposed Caribbean sunlight bleeding through the window, creating a blown-out, unappealing contrast. Slight camera wobble throughout, visible digital noise, iPhone snapshot aesthetic, raw, unpolished, a tourist documenting their own regret. Shot duration about 5 to 6 seconds. Emotional arc: plate of disappointment, mechanical buffet line, tired self-reflection in glass, then the resort prison revealed outside. Color palette is deliberately unappetizing, institutional white walls, fluorescent yellow-white light, plastic surfaces, garish tropical colors outside that feel fake rather than inviting.</code></pre></div>
             </details>
 
             <h2 id="results">All 6 outputs from the same prompt</h2>
-            <p>Here are the exact model outputs side by side. If you care about direct inspection, each card also links to the raw MP4 I uploaded.</p>
+            <p>Compare the six outputs side by side below; each card also links to the raw MP4.</p>
 
             <div class="video-grid">
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Wan 2.7 output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/wan-2-7-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/wan-2-7-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Wan 2.7</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>Wan gave me one of the more believable handheld-feeling results. I liked the wristband detail and buffet POV, but it still felt a little too generic-resort to be the final winner.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/wan-2-7-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Wan 2.7</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>Believable handheld motion and solid wristband and buffet POV details, though the overall mood still read more generic-resort than sharp regret.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/wan-2-7-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Kling 3.0 output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/kling-3-0-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/kling-3-0-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Kling 3.0</h3><div class="meta">6s · Cancun mistake prompt</div><p>Kling 3.0 was competent, but it read a bit flatter and more generic to me. It also came with the API quirk I mentioned above, which matters if I am judging operational smoothness too.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/kling-3-0-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Kling 3.0</h3><div class="meta">6s · Cancun mistake prompt</div><p>Competent execution, but flatter and more generic than the leaders—plus the rejected <code>shot_type</code> parameter added API friction.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/kling-3-0-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Kling O3 output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/kling-o3-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/kling-o3-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Kling O3</h3><div class="meta">6s · Cancun mistake prompt</div><p>Kling O3 looked more polished than Kling 3.0, but not in a way that helped this format. I wanted raw, emotional, handheld regret, and O3 still felt slightly too composed.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/kling-o3-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Kling O3</h3><div class="meta">6s · Cancun mistake prompt</div><p>Cleaner than Kling 3.0, but too composed for a prompt asking for raw, unpolished handheld regret.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/kling-o3-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Seedance 2.0 Fast output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Seedance 2.0 Fast</h3><div class="meta">480p · 5s · Cancun mistake prompt</div><p>Seedance immediately felt competitive. Even at 480p, it looked convincingly photographic and it carried the “real person documenting a bad choice” vibe well enough to make the final round.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Seedance 2.0 Fast</h3><div class="meta">480p · 5s · Cancun mistake prompt</div><p>Immediately competitive. Even at 480p, the photographic texture and “real person documenting a bad choice” pacing easily advanced it to the final round.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Veo 3.1 Lite output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Veo 3.1 Lite</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>Veo 3.1 Lite was the cleanest “yes, this understood the assignment” result. It had the strongest overall structure and was the safest production-ready default from round one.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Veo 3.1 Lite</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>The cleanest “understood the assignment” output in round one, with the strongest shot progression and safest production baseline.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Grok Imagine Video output for Cancun travel-reel prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/grok-imagine-cancun-mistake.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/grok-imagine-cancun-mistake.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Grok Imagine Video</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>Grok was not embarrassing, which is more than I expected, but it was still clearly behind the top two. For this benchmark it felt more like an interesting cheap test path than a serious winner.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/grok-imagine-cancun-mistake.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Grok Imagine Video</h3><div class="meta">720p · 6s · Cancun mistake prompt</div><p>Better than expected at $0.33, but clearly behind Veo and Seedance on detail and camera feel.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/grok-imagine-cancun-mistake.mp4">Raw MP4</a></div>
                 </div>
             </div>
 
             <h3>My round-one ranking</h3>
             <ol>
-                <li><strong>Veo 3.1 Lite</strong> for overall prompt adherence and usable structure.</li>
-                <li><strong>Seedance 2.0</strong> for realism-per-dollar and strong handheld energy.</li>
-                <li><strong>Wan 2.7</strong> for believable handheld texture, even if it was less emotionally precise.</li>
-                <li><strong>Kling O3</strong> for polish, but not enough usable advantage.</li>
-                <li><strong>Kling 3.0</strong> for being decent but unremarkable here.</li>
-                <li><strong>Grok Imagine</strong> for staying in the conversation, but not seriously threatening the leaders.</li>
+                <li><strong>Veo 3.1 Lite</strong> &mdash; Best prompt adherence, shot progression, and price-to-quality ($0.30).</li>
+                <li><strong>Seedance 2.0 Fast</strong> &mdash; Strongest photographic texture and handheld energy.</li>
+                <li><strong>Wan 2.7</strong> &mdash; Believable camera motion, slightly generic emotional tone.</li>
+                <li><strong>Kling O3</strong> &mdash; Polished, but too composed for candid phone footage.</li>
+                <li><strong>Kling 3.0</strong> &mdash; Passable baseline, flat execution.</li>
+                <li><strong>Grok Imagine</strong> &mdash; Viable budget experiment, not a contender for the top spot.</li>
             </ol>
 
             <h2 id="winner-round">Winner round: Puerto Morelos local shot</h2>
-            <p>Once the first round narrowed the field, I wanted a second prompt that flipped the emotional polarity. Instead of “tourist regret in a generic resort,” I wanted “quiet relief after escaping the trap.” This is the exact prompt I used for clip 2.</p>
+            <p>For the finals, I flipped the prompt from “tourist regret in a generic resort” to “quiet relief at a beachfront ceviche palapa in Puerto Morelos.”</p>
             <details>
                 <summary>Show the full Puerto Morelos “local alternative” prompt</summary>
                 <div class="details-inner"><pre><code>Handheld phone camera, 9:16 vertical portrait. A traveler has just stepped off a cheap colectivo in Puerto Morelos, Mexico and is filming the moment they realize this is the experience they were actually looking for. The shot opens tight on a paper plate of fresh local ceviche at a small beachfront palapa, glossy lime-marinated fish, sliced red onion, cilantro, avocado, and bright green salsa, beads of condensation running down a cold glass bottle of Mexican Coke beside it on a weathered turquoise table. Natural ocean breeze lightly stirs the napkins. The person holding the phone slowly pans the camera up and to the left, revealing a relaxed open-air seafood stand with hand-painted signs in Spanish, a local woman behind the counter squeezing fresh lime over another plate, sun-faded Coca-Cola crates stacked near a cooler, a few plastic chairs, a sandy floor, and no polished resort aesthetics anywhere. The camera keeps moving past the palapa toward the street and briefly catches a passing white colectivo van, dusty from the road, then swings back toward the beach where the whole mood opens up, small colorful fishing boats anchored in shallow turquoise water, a few locals talking casually near the dock, palm shadows moving across the sand, and only a handful of beachgoers spread out peacefully with plenty of space. No spring break chaos, no giant pool floats, no matching wristbands, no fake entertainment energy. The place feels lived-in, local, calm, and unmistakably Mexican. The lighting is soft late-morning Caribbean sun, warm but natural, with bright reflections dancing on the water and gentle shade under the palapa roof. Slight camera wobble throughout, iPhone travel footage aesthetic, candid and unpolished, like someone documenting the exact moment they realize they escaped the tourist trap. Shot duration about 5 to 6 seconds. Emotional arc: fresh ceviche up close, humble local food stand, glimpse of the colectivo that got them here, then the peaceful Puerto Morelos waterfront revealed in full. Color palette is natural and inviting, turquoise water, faded painted wood, citrus greens, sun-worn whites, sandy beige, and the vivid colors of real coastal Mexico.</code></pre></div>
@@ -367,51 +407,49 @@
             <div class="video-grid">
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Seedance 2.0 output for Puerto Morelos local prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-puerto-morelos-local.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-puerto-morelos-local.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Seedance 2.0, clip 2</h3><div class="meta">Puerto Morelos local prompt</div><p>This is where Seedance really won me over. It felt more lived-in, more candid, and more like someone actually stumbled into the right place with their phone out.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-puerto-morelos-local.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Seedance 2.0, clip 2</h3><div class="meta">Puerto Morelos local prompt</div><p>Seedance won round two outright. The camera movement and lighting felt candid and lived-in, like someone genuinely stumbled onto the right spot with their phone out.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/seedance-2-0-puerto-morelos-local.mp4">Raw MP4</a></div>
                 </div>
                 <div class="video-card">
                     <video controls playsinline preload="metadata" aria-label="Veo 3.1 Lite output for Puerto Morelos local prompt" poster="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-puerto-morelos-local.jpg"><source src="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-puerto-morelos-local.mp4" type="video/mp4"></video>
-                    <div class="card-body"><h3>Veo 3.1 Lite, clip 2</h3><div class="meta">Puerto Morelos local prompt</div><p>Veo still looked excellent here, but in a more polished, slightly more arranged way. If I wanted the prettier thumbnail, I could absolutely argue for this output.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-puerto-morelos-local.mp4">Raw MP4</a></div>
+                    <div class="card-body"><h3>Veo 3.1 Lite, clip 2</h3><div class="meta">Puerto Morelos local prompt</div><p>Still sharp and well-structured, but slightly more staged. Better if you want a clean thumbnail; second place if you want raw phone realism.</p><a class="raw-link" href="https://img.zonted.com/resources/best-ai-video-models-2026/veo-3-1-lite-puerto-morelos-local.mp4">Raw MP4</a></div>
                 </div>
             </div>
 
-            <p>If I phrase the second-round difference simply: <strong>Seedance looked more discovered, Veo looked more designed.</strong> Both are useful. Which one is “better” depends on whether I value lived-in authenticity or polished controllability a bit more.</p>
+            <p>The second-round contrast in one line: <strong>Seedance looked discovered; Veo looked designed.</strong></p>
 
             <h2 id="prompt-lessons">What I learned from doing it this way</h2>
-            <p><strong>1. A real benchmark prompt is more revealing than a flashy prompt.</strong> Travel reels break models in very specific ways. You are asking for phone-camera realism, environmental storytelling, culturally specific cues, messy public spaces, and emotional continuity inside a five-to-six second window. That is much harder than “cinematic woman in the rain.”</p>
-            <p><strong>2. Handheld realism is still a separating skill.</strong> A lot of models can produce something impressive. Fewer can produce something that feels like it was actually filmed by a person on location rather than composed by a tasteful machine.</p>
-            <p><strong>3. Operational friction matters.</strong> I do not just care about how a model looks in a vacuum. I care about whether I can hit it repeatedly, compare runs, and trust the wrapper. Kling's rejected <code>shot_type</code> value and WaveSpeed's 180-second timeout ceiling both belong in the evaluation, because production systems fail on boring details long before they fail on aesthetics.</p>
-            <p><strong>4. Seedance and Veo 3.1 Lite are not redundant winners.</strong> They win for different reasons. Seedance is the more textured and human-feeling option in this test. Veo 3.1 Lite is the model I trust most when I want a clean, coherent baseline that is easy to ship.</p>
+            <p><strong>1. Narrative prompts expose weaknesses that demo prompts hide.</strong> Travel reels demand phone-camera wobble, culturally specific details, messy public spaces, and a multi-beat emotional arc inside six seconds—much harder to fake than “cinematic woman walking in the rain.”</p>
+            <p><strong>2. Imperfection is a separating skill.</strong> Most models default to glossy commercial composition. Only the top tier can make a clip feel like a person on location holding an iPhone.</p>
+            <p><strong>3. Wrapper limits belong in the benchmark.</strong> Kling's rejected <code>shot_type</code> parameter and WaveSpeed's 180-second timeout ceiling matter just as much as visual quality. Production pipelines break on API timeouts long before they break on aesthetics.</p>
+            <p><strong>4. Keep both winners in rotation.</strong> Use Veo 3.1 Lite when you need a coherent, low-cost ($0.30) baseline that hits complex blocking reliably; reach for Seedance 2.0 when the shot lives or dies on candid texture.</p>
 
             <h2 id="verdict">My split verdict</h2>
-            <p>If someone asked me today for the <strong>best AI video models</strong>, I would not give a fake one-word answer. I would give two answers.</p>
             <blockquote>
-                <p><strong>Best platform for creators and agentic builders:</strong> <a href="https://wavespeed.ai/?ref=zonted">WaveSpeed</a>. I like having multi-model access in one place when I am doing comparison work like this, or when I want to keep an automated content pipeline flexible.</p>
-                <p><strong>Best reliability recommendation for Veo 3.1 Lite specifically:</strong> use Gemini directly. The model is excellent, and I would rather not make a production system depend on a wrapper with a tight 180-second timeout if I have a cleaner direct path.</p>
+                <p><strong>Best multi-model testing &amp; agentic platform:</strong> <a href="https://wavespeed.ai/?ref=zonted">WaveSpeed</a>. Hitting six video APIs through one unified interface is the fastest way to run real bake-offs and keep an automated pipeline flexible.</p>
+                <p><strong>Best production path for Veo 3.1 Lite:</strong> call Gemini directly. WaveSpeed's 180-second timeout ceiling is fine for interactive testing, but direct API access is safer for unattended batch jobs.</p>
             </blockquote>
-            <p>At the model level, my answer is also split:</p>
+            <p>At the model level, keep both winners in your stack:</p>
             <ul>
-                <li><strong>Veo 3.1 Lite</strong> is my pick if I want the best all-around default.</li>
-                <li><strong>Seedance 2.0</strong> is my pick if I want the most lived-in, local, human-feeling result for this kind of reel.</li>
+                <li><strong>Veo 3.1 Lite ($0.30 / clip)</strong> &mdash; Best all-around default and round-one winner for multi-beat prompt adherence.</li>
+                <li><strong>Seedance 2.0 Fast ($0.50 / clip)</strong> &mdash; Round-two winner for candid, lived-in phone realism.</li>
             </ul>
-            <p>That is why I am calling this a real split verdict instead of hedging. <strong>Both are excellent.</strong> Veo 3.1 Lite won the first-round benchmark for me. Seedance won the second-round authenticity test for me. If I were building a serious travel content machine right now, I would keep both in rotation.</p>
 
             <h2 id="faq">Frequently asked questions</h2>
             <details open>
                 <summary>What is the best AI video model in 2026?</summary>
-                <div class="details-inner"><p>After testing six models on the same travel-reel prompt, <strong>Veo 3.1 Lite</strong> is the best all-around default for prompt adherence and production reliability. <strong>Seedance 2.0</strong> is the best choice when you want more lived-in, authentic-feeling footage. Both are excellent, which is why I call it a split verdict rather than a single winner.</p></div>
+                <div class="details-inner"><p>After testing six models on the same travel-reel prompt, <strong>Veo 3.1 Lite</strong> ($0.30/clip) is the best all-around default for prompt adherence and production reliability, while <strong>Seedance 2.0</strong> ($0.50/clip) is the best choice for lived-in, authentic-feeling phone footage.</p></div>
             </details>
             <details>
                 <summary>Is Seedance 2.0 better than Veo 3.1 Lite?</summary>
-                <div class="details-inner"><p>They win for different reasons. Seedance 2.0 produces more textured, human-feeling output that looks like real phone footage. Veo 3.1 Lite delivers the cleanest overall structure and is the safest production-ready default. For travel reels, keeping both in rotation is the strongest approach.</p></div>
+                <div class="details-inner"><p>They win on different axes. Seedance 2.0 produces more textured, candid output that looks like real handheld phone footage. Veo 3.1 Lite delivers cleaner multi-beat shot structure at a lower price ($0.30 vs. $0.50). Keeping both in rotation is the strongest setup for short-form reels.</p></div>
             </details>
             <details>
                 <summary>What is the best platform for running multiple AI video models?</summary>
-                <div class="details-inner"><p><a href="https://wavespeed.ai/?ref=zonted">WaveSpeed</a> offers multi-model access through a single API, making it ideal for comparison testing and agentic content pipelines. For production use of Veo 3.1 Lite specifically, using Gemini directly avoids WaveSpeed's 180-second timeout ceiling.</p></div>
+                <div class="details-inner"><p><a href="https://wavespeed.ai/?ref=zonted">WaveSpeed</a> offers multi-model access through a single API, making it ideal for side-by-side bake-offs and flexible agentic pipelines. Once you lock on Veo 3.1 Lite for heavy production, calling Gemini directly avoids WaveSpeed's 180-second timeout ceiling.</p></div>
             </details>
             <details>
                 <summary>Can AI video models create realistic handheld travel footage?</summary>
-                <div class="details-inner"><p>Yes, but quality varies significantly. In my testing, Seedance 2.0 and Veo 3.1 Lite both produced convincing handheld-style footage. Most models still default to overly polished, cinematic output that does not feel like real phone footage. The key is writing prompts that specifically describe handheld camera behavior, digital noise, and environmental imperfections.</p></div>
+                <div class="details-inner"><p>Yes, with the right model and prompt constraints. Seedance 2.0 and Veo 3.1 Lite both produced convincing handheld clips when prompted explicitly for camera wobble, harsh lighting transitions, digital noise, and unpolished framing, whereas most competing models still defaulted to overly smooth, commercial-looking motion.</p></div>
             </details>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->

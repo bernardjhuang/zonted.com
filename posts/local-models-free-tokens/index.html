@@ -129,7 +129,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -205,9 +243,17 @@
     </div>
 
     <div class="article-body">
-<p class="dropcap">I just ran Qwen 3.5 on my MacBook Air. Not through an API. Not through a cloud service. Locally, on the metal, via <a href="https://ollama.com/">Ollama</a>. It thinks out loud, reasons through problems, and gives genuinely useful answers — all without a single token leaving my machine. Zero API cost. Zero latency to a data center. Zero dependency on someone else's infrastructure staying online.</p>
+<p class="dropcap">I just ran Qwen 3.5 (4B) on my MacBook Air via <a href="https://ollama.com/">Ollama</a> — directly on Apple silicon, with zero network calls. It emits visible chain-of-thought reasoning, works through multi-step prompts, and returns genuinely usable answers at ~50ms time-to-first-token. Zero API spend, zero data-center round trips, and zero dependency on an upstream provider staying online.</p>
 
-        <p>And the results? <strong>Not bad at all.</strong></p>
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">Running small open-weight models like Qwen 3.5 (4B) locally on Apple silicon makes ~80% of routine agent tokens free, turning frontier cloud APIs from your default runtime into an escalation tier.</p>
+          <ul>
+            <li><strong>Local vs. cloud economics</strong> — Qwen 3.5 (4B) via Ollama runs at $0/token and ~50ms first-token latency with 100% offline availability, versus $15–$75/M tokens and 200–2,000ms latency on frontier APIs.</li>
+            <li><strong>The 80 / 15 / 5 routing split</strong> — moving 80% of classification/drafting to local metal and 15% to a $200/mo on-prem GPU box can cut a $10,000/month API bill to ~$700/month (a 93–95% reduction).</li>
+            <li><strong>Frontier becomes an escalation path</strong> — reserve paid cloud tokens for the 5–20% of tasks that genuinely require deep multi-tool agency or novel reasoning.</li>
+          </ul>
+        </div>
 
         <div class="screenshot-box">
             <img  src="https://img.zonted.com/resources/local-models-free-tokens/qwen-ollama-local.png?v=1" width="1696" height="752" alt="Qwen 3.5 4B running locally via Ollama on a MacBook Air, showing thinking and response" loading="lazy">
@@ -216,9 +262,9 @@
 
         <h2 id="what-weve-seen-firsthand">What We've Seen Firsthand</h2>
 
-        <p>We run <a href="https://zonted.com/posts/the-future-is-synthetic/">four AI agents</a> at tabiji. They produce Instagram Reels, build travel itineraries, generate music, and manage our infrastructure. Right now, most of that runs through frontier APIs — Claude, Gemini, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a>. Our token costs are real: roughly $500/month to keep the operation running.</p>
+        <p>We run <a href="https://zonted.com/posts/the-future-is-synthetic/">four core AI agent pipelines</a> at tabiji — generating Instagram Reels, compiling travel itineraries, producing audio, and maintaining repo infrastructure. Routing everything through frontier APIs (Claude, Gemini, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a>) costs us roughly $500/month in tokens.</p>
 
-        <p>But we've been experimenting with local models for the simpler tasks, and the economics are compelling:</p>
+        <p>When we benchmarked offloading routine steps to Qwen 3.5 locally, the trade-offs were stark:</p>
 
         <div class="two-col">
             <div class="col local">
@@ -228,14 +274,14 @@
                     <li>Latency: ~50ms first token</li>
                     <li>Privacy: complete — nothing leaves the machine</li>
                     <li>Availability: 100% (no outages, no rate limits)</li>
-                    <li>Good at: summaries, classification, drafting, Q&A, code completion</li>
+                    <li>Good at: summaries, classification, drafting, Q&amp;A, code completion</li>
                 </ul>
             </div>
             <div class="col frontier">
                 <h3>☁️ Frontier API (Claude Opus, GPT-4o)</h3>
                 <ul>
-                    <li>Cost per token: $15-75 per million</li>
-                    <li>Latency: 200-2000ms first token</li>
+                    <li>Cost per token: $15–75 per million</li>
+                    <li>Latency: 200–2000ms first token</li>
                     <li>Privacy: data sent to third-party servers</li>
                     <li>Availability: 99.5% (outages happen, rate limits hit)</li>
                     <li>Good at: complex reasoning, novel problems, multi-step agents</li>
@@ -243,49 +289,33 @@
             </div>
         </div>
 
-        <p>The pattern is clear. For the ~80% of tasks that are "good enough" territory, local models already win on every dimension except raw intelligence. And for the 20% where you genuinely need frontier capability, you call the API.</p>
-
-        <p><strong>That's the future: adaptive routing between local and cloud.</strong> Not one or the other. Both — with intelligence about which to use when.</p>
+        <p>For the ~80% of pipeline glue work — JSON extraction, classification, summarization, first-pass drafting — a 4B local model wins on cost, latency, privacy, and uptime. You only pay the cloud tax for the 20% of calls that require heavy reasoning. <strong>The winning architecture isn't local-only or cloud-only; it's adaptive routing between both.</strong></p>
 
         <h2 id="what-this-means-for-token-economics">What This Means for Token Economics</h2>
 
-        <p>Here's the part that keeps me up at night — in a good way.</p>
-
-        <p>If you're a company spending $10,000/month on API tokens today, imagine this world:</p>
+        <p>Take a team currently burning $10,000/month sending every single prompt to a frontier endpoint, and apply tiered routing:</p>
 
         <ul>
-            <li><strong>80% of your AI workload</strong> runs on local hardware you already own. Cost: $0.</li>
-            <li><strong>15% of your workload</strong> runs on a small on-premise server with a mid-range GPU. Cost: amortized hardware, ~$200/month.</li>
-            <li><strong>5% of your workload</strong> — the truly hard stuff — calls a frontier API. Cost: $500/month instead of $10,000.</li>
+            <li><strong>80% of workload (local dev/edge hardware):</strong> Classification, tagging, summarization, and schema formatting on existing Apple silicon. Cost: <strong>$0/month</strong>.</li>
+            <li><strong>15% of workload (dedicated on-prem box):</strong> Mid-sized open-weight models on a single GPU server. Cost: <strong>~$200/month</strong> in amortized hardware and power.</li>
+            <li><strong>5% of workload (frontier APIs):</strong> Hard multi-step planning, complex code synthesis, and final editorial judgment. Cost: <strong>~$500/month</strong>.</li>
         </ul>
 
-        <p>That's a 95% cost reduction. Not through some clever optimization or prompt engineering hack. Just through intelligent routing to models that are already available, running on hardware that's already on your desk.</p>
-
-        <p>For individual developers and small teams, it's even more dramatic. Local inference is <em>free</em>. You buy the hardware once, and every token after that costs nothing. The only limit is how fast your machine can run the model.</p>
+        <p>That drops monthly spend from $10,000 to ~$700 — a 93–95% reduction — without clever prompt compression hacks. Once you buy the silicon, marginal token cost on local tasks hits zero.</p>
 
         <h2 id="the-frontier-still-matters-but-differently">The Frontier Still Matters — But Differently</h2>
 
-        <p>I'm not saying OpenAI and Anthropic are doomed. Far from it. The frontier will always matter for the hardest problems. When I need an agent to orchestrate a complex workflow across multiple tools, reason about ambiguous situations, or handle truly novel problems — I want the best model money can buy.</p>
+        <p>This doesn't kill OpenAI or Anthropic, but it breaks their volume-subsidy business model. Today, frontier labs make fat margins when lazy pipelines send millions of trivial classification tokens to flagship endpoints. As local models eat the bottom 80% of commodity volume, frontier APIs will be forced to compete strictly on the top 20%: long-horizon agency, complex codebase surgery, and zero-shot reasoning where a 4B model falls flat.</p>
 
-        <p>But the <em>business model</em> of frontier AI will shift. Instead of charging for every token of every task, frontier providers will increasingly compete on the tasks that <em>only they</em> can do. The commodity layer — the stuff that a 4B model handles fine — becomes a race to zero. The premium layer — genuine intelligence, breakthrough reasoning, reliable agency — that's where the value concentrates.</p>
-
-        <p>Think about it like computing in general. Most of your apps run locally on your phone. But when you need massive parallel processing — training a model, rendering a movie, running a simulation — you rent cloud compute. The cloud didn't kill local computing. It found its niche alongside it. (Meanwhile, <a href="/posts/the-economics-of-the-internet-are-broken/">the economics of the internet</a> are shifting in the same direction — decentralization of compute follows decentralization of content.)</p>
-
-        <p>AI is heading the same way.</p>
+        <p>It mirrors the split between client devices and AWS. Your phone doesn't ping a Virginia data center to run a calculator or crop a photo; you only rent cloud compute when a workload exceeds local memory and thermal limits. (<a href="/posts/the-economics-of-the-internet-are-broken/">The broader economics of the web</a> are moving along the same axis.)</p>
 
         <h2 id="the-endgame">The Endgame</h2>
 
-        <p>Here's my prediction: within three years, the default mode of interacting with AI will be local. Your phone, your laptop, your car, your smart home hub — they'll all run capable language models natively. You won't think about "calling an API" any more than you think about "calling a server" when you open your calculator app.</p>
+        <p>Within three years, local inference will be the default runtime, and cloud APIs will be an explicit escalation path. As we noted in <a href="/posts/future-of-content-agentic-data-enrichment/">The Future of Content Is Agentic Data Enrichment</a>, local models will chew through high-volume scraping, parsing, and filtering, handing only distilled edge cases up to frontier models.</p>
 
-        <p>The cloud will still exist for the hard stuff. When you need to train a new model, orchestrate a hundred agents, or solve a problem no local model can handle — you'll reach for frontier APIs. But that will feel like an escalation, not the default. (We wrote about this shift in <a href="/posts/future-of-content-agentic-data-enrichment/">The Future of Content Is Agentic Data Enrichment</a> — the same pattern applies: local models handle the grunt work, frontier models handle the judgment calls.)</p>
+        <blockquote>Better hardware → better local models → adaptive escalation to frontier APIs. Token costs don't hit zero because cloud APIs become free; they hit zero because 80% of tokens never leave your desk.</blockquote>
 
-        <p>Token costs won't go to zero because the APIs disappear. They'll go to zero because <strong>most of the tokens will be generated on hardware you already own.</strong></p>
-
-        <blockquote>Better hardware → better local models → adaptive use of frontier models as necessary. The math is simple. The implications are enormous.</blockquote>
-
-        <p>We're already running Qwen 3.5 on a MacBook Air and getting useful results. That's today, March 2026, with a 4B model. Imagine what a 30B model on an M5 MacBook Pro will look like in 2027. Or a 100B model on whatever hardware exists in 2028.</p>
-
-        <p>The future of AI isn't a data center in the desert. It's the device in your hand.</p>
+        <p>Right now, in March 2026, a 4B reasoning model runs effortlessly on a fanless MacBook Air. Extrapolate that to a 30B model on an M5 MacBook Pro in 2027, or a 100B sparse MoE model on consumer unified memory in 2028. The workhorse of your agent fleet won't live in a desert data center — it'll live on the machine in your backpack.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

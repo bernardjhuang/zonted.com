@@ -156,6 +156,44 @@ footer p{color:var(--text-muted);font-size:0.85rem}
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; } /* wide table scrolls in place instead of overflowing the page */
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -248,23 +286,29 @@ footer p{color:var(--text-muted);font-size:0.85rem}
     </div>
     <div class="article-body">
 
-        <h2 id="tldr">TL;DR</h2>
-        <p class="dropcap">We produce dozens of <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> and YouTube Shorts per week at <a href="/">tabiji.ai</a>. Every one needs background music. We tested two AI music generators in production: <strong><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax Music API</a></strong> (three models: 2.0, 2.5, 2.5+) and <strong>Suno AI</strong> (reverse-engineered API, bird-codename models, piano covers scored by Gemini).</p>
-        <p>The punchline: <strong>Suno produces significantly better music</strong> (8.5/10) but has no public API — we had to reverse-engineer it. <strong>MiniMax produces good-enough music</strong> (7/10) with a real API at ~$0.01/track. We built infrastructure for both, then ended up using MiniMax for daily production because it's simpler. We use Suno when music quality actually matters.</p>
-        <p>Along the way, we also built a <strong>Gemini 2.5 Flash audio scorer</strong> to evaluate AI-generated piano covers — and discovered that Gemini is too polite to be a useful music critic. Every sample on this page is a real production artifact. Press play.</p>
+        <p class="dropcap">We ship 4–10 <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> and YouTube Shorts a day at <a href="/">tabiji.ai</a>, and every single one needs background music. Licensed tracks are impossible to automate at scale, and a 20-track royalty-free folder gets repetitive after a week. So we tested two AI music generators in production: <strong><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax Music API</a></strong> (models 2.0, 2.5, and 2.5+) and <strong>Suno AI</strong> (via a reverse-engineered API), plus a <strong>Gemini 2.5 Flash audio scorer</strong> to evaluate the outputs. Every sample below is a raw production artifact.</p>
+
+        <div class="tldr" id="tldr">
+            <div class="tldr-label">TL;DR</div>
+            <p class="tldr-thesis">Suno makes the best AI music (8.5/10) with no official API, while MiniMax Music 2.5+ makes reliable instrumental background tracks (7/10) via a documented REST API for ~$0.01/track.</p>
+            <ul>
+                <li><strong>Daily production (MiniMax 2.5+)</strong> — The only MiniMax model where <code>is_instrumental: true</code> actually works; generates 60–192s tracks at ~$0.01/track with 99%+ uptime.</li>
+                <li><strong>Quality showcase (Suno AI)</strong> — <code>chirp-crow</code> (v5) delivers genuine solo piano dynamics (~$0.02/clip on a $10/mo Pro plan), but requires a reverse-engineered Clerk JWT wrapper.</li>
+                <li><strong>AI music scoring (Gemini 2.5 Flash)</strong> — Reliable for binary audio checks and instrument detection, but too polite to rank tracks (every clip scored 44–47/50).</li>
+            </ul>
+        </div>
 
         <h2 id="why">Why AI Music for Travel Content?</h2>
-        <p>Short-form video needs background music. Every Reel, every Short, every TikTok. When you're producing 4–10 videos per day through automated pipelines, your options narrow fast:</p>
+        <p>When you're producing 4–10 short-form videos per day through automated cron pipelines, your audio options narrow fast:</p>
         <ul>
-            <li><strong>Licensed music</strong> — expensive at scale, rights management nightmare, can't automate selection</li>
-            <li><strong>Royalty-free libraries</strong> — free or cheap but limited variety. Your audience hears the same 20 tracks on repeat after a week.</li>
-            <li><strong>AI-generated music</strong> — unique per video, ~$0.01/track, fully automatable via API, infinite variety</li>
+            <li><strong>Licensed music</strong> — expensive at scale, rights management nightmare, impossible to automate selection.</li>
+            <li><strong>Royalty-free libraries</strong> — free or cheap, but your audience hears the same 20 tracks on repeat after a week.</li>
+            <li><strong>AI-generated music</strong> — unique per video, ~$0.01/track, programmable via API, infinite mood variety.</li>
         </ul>
-        <p>We chose option three — and then spent weeks going deeper than we expected. What started as "just add background music to Reels" turned into reverse-engineering undocumented APIs, discovering that AI models use bird codenames instead of version numbers, building a Gemini-powered music scoring system, and learning that AI music critics are too nice.</p>
-        <p>This is the full story.</p>
+        <p>What started as "just add background music to Reels" turned into testing three MiniMax models, reverse-engineering Suno's undocumented bird-codename endpoints, and building a Gemini audio critic.</p>
 
         <h2 id="minimax-models"><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax Music</a>: The Production Workhorse</h2>
-        <p>MiniMax offers three music generation models through their API. They look similar on paper, but in practice they behave very differently — and only one of them actually works for instrumental background music.</p>
+        <p>MiniMax exposes three music models through its REST API. They look similar on paper, but only one actually works for instrumental background music.</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Feature</th><th>Music 2.0</th><th>Music 2.5</th><th>Music 2.5+</th></tr></thead>
@@ -281,19 +325,19 @@ footer p{color:var(--text-muted);font-size:0.85rem}
         </table></div>
 
         <h3>Music 2.0 — Vocals Whether You Want Them or Not</h3>
-        <p>The original MiniMax music model. It <strong>always requires a lyrics field</strong> — you cannot generate without one. It doesn't support <code>is_instrumental: true</code> at all. To get something <em>close</em> to instrumental, we pass placeholder lyrics like <code>"la la la"</code>. The model interprets this as a wordless vocal melody — humming, vocalizations layered on top. For retro vibes and dreamy atmospheric tracks, this has charm. For clean background music behind text overlays, it's a problem.</p>
+        <p>The original MiniMax music model <strong>always requires a lyrics field</strong> and ignores <code>is_instrumental: true</code>. Passing placeholder lyrics like <code>"la la la"</code> yields a wordless sung melody layered over the beat. It has charm for dreamy retro clips, but vocalizations clash with voiceovers and text-heavy Reels.</p>
 
         <h3>Music 2.5 — The Broken Middle Child</h3>
-        <p>Slightly better instrumentation and mix than 2.0, but <code>is_instrumental: true</code> <strong>doesn't work</strong>. It returns <code>2013: invalid params, lyrics is required</code>. You still need lyrics, you still get vocals. There's no reason to use this model.</p>
+        <p>Slightly better mix than 2.0, but passing <code>is_instrumental: true</code> throws <code>2013: invalid params, lyrics is required</code>. You still have to pass lyrics and you still get vocals. Skip it.</p>
 
         <h3>Music 2.5+ — The One That Works</h3>
-        <p>The only MiniMax model where <code>is_instrumental: true</code> actually works. Set it and you get <strong>pure instrumental music</strong> — no vocals, no humming. Quality is noticeably better: richer instrumentation, better stereo separation, more dynamic range. Tracks are longer (60–192s), giving you more material to trim from. This is the one we use in production.</p>
+        <p>The only MiniMax model where <code>is_instrumental: true</code> produces <strong>pure instrumental music</strong> with zero humming. Instrumentation is richer, stereo separation is wider, and tracks run 60–192s—giving plenty of source material to trim down to 12-second Reel beds. This runs all of our daily production.</p>
 
         <h2 id="minimax-tests">MiniMax Audio Tests</h2>
 
         <h3>Test 1: Warm Cinematic Travel</h3>
         <p><strong>Prompt:</strong> "warm cinematic travel background music, acoustic guitar and soft piano, golden hour sunset vibes, dreamy and nostalgic"</p>
-        <p>Same prompt, all three models. Music 2.0 and 2.5 got placeholder lyrics (<code>"la la la"</code>). Music 2.5+ used <code>is_instrumental: true</code>.</p>
+        <p>Same prompt across all three models. Music 2.0 and 2.5 received placeholder lyrics (<code>"la la la"</code>); Music 2.5+ used <code>is_instrumental: true</code>.</p>
 
         <div class="audio-group">
             <div class="audio-group-title">🎧 Prompt 1: Warm Cinematic Travel</div>
@@ -311,7 +355,7 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </div>
         </div>
 
-        <p>The difference is immediate. Music 2.0 renders the "la la la" as a dreamy sung melody — charming but not background music. Music 2.5 is similar but slightly more polished. Music 2.5+ is the only one producing clean, vocal-free instrumental that sits behind video content without competing for attention.</p>
+        <p>Music 2.0 and 2.5 turn <code>"la la la"</code> into a lead vocal melody. Only Music 2.5+ delivers a clean instrumental bed that sits underneath video without competing for attention.</p>
 
         <h3>Test 2: Japanese Festival Energy</h3>
         <p><strong>Prompt:</strong> "upbeat Japanese festival drums and shamisen, energetic travel montage, fast tempo"</p>
@@ -332,7 +376,7 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </div>
         </div>
 
-        <p>Key difference here: <strong>duration</strong>. Music 2.0 and 2.5 generated ~20-second clips, while Music 2.5+ gave us ~100 seconds — five times more material to work with. For our pipeline where we trim to 8–15 seconds, more source material means more options for finding the perfect segment.</p>
+        <p>Notice the <strong>duration</strong> gap: Music 2.0 and 2.5 generated ~20-second clips, while Music 2.5+ generated ~100 seconds—five times more material to slice an 8–15 second segment from.</p>
 
         <h3>Test 3: Vintage Kyoto (Real Production Sample)</h3>
         <p><strong>Prompt:</strong> "Lo-fi ambient, Rhodes piano, shakuhachi flute, vinyl crackle, tape hiss, 65 BPM, no drums"</p>
@@ -345,21 +389,17 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </div>
         </div>
 
-        <p>Even when prompted for "lo-fi ambient" with specific instruments, Music 2.0 layers vocal performances on top. Pleasant, but not what we needed for a video with text overlays.</p>
-
-        <p>MiniMax Music 2.5+ is good. Reliable, cheap, automatable. But we wanted to see what <em>great</em> AI music sounded like. Enter Suno.</p>
+        <p>Even when explicitly prompted for lo-fi ambient instruments, Music 2.0 layers vocals on top. Music 2.5+ solved background audio for Reels—but when we wanted standalone solo piano pieces that sound like a real Steinway session, we turned to Suno.</p>
 
         <h2 id="suno">Enter Suno: The Quality King</h2>
-        <p>If you've spent any time in AI music, you've heard of <strong>Suno AI</strong>. It produces genuinely stunning music — full songs with complex arrangements, rich vocal performances, emotional dynamics that rival human production. In a blind test, Suno tracks can fool professional musicians.</p>
-        <p>We needed Suno for a specific use case: <strong>solo piano covers</strong> for our travel content. Not background music for Reels (MiniMax handles that), but standalone pieces — the kind you'd put on a Spotify playlist called "ambient piano for work." Original compositions with specific moods. The kind of music that sounds like someone sat down at a Steinway and played.</p>
-        <p>There was just one problem: <strong>Suno has no public API.</strong></p>
-        <p>So we built one.</p>
+        <p><strong>Suno AI</strong> produces arrangements, phrasing, and emotional dynamics that rival human recordings. We wanted Suno for standalone solo piano covers and ambient travel pieces—tracks people actually listen to on their own, not just hear buried at -18dB under a Reel.</p>
+        <p>There was one catch: <strong>Suno has no public API.</strong> So we reverse-engineered it.</p>
 
         <h2 id="suno-api">How We Reverse-Engineered Suno's API</h2>
-        <p>This section is the technical deep dive. If you just want to hear the music, <a href="#suno-showcase">skip to the Suno Audio Showcase</a>.</p>
+        <p>If you just want to hear the tracks, <a href="#suno-showcase">skip to the Suno Audio Showcase</a>.</p>
 
         <h3>The Architecture</h3>
-        <p>We use a local Next.js wrapper (<code>suno-api/</code>) that reverse-engineers Suno's internal API. The auth flow looks like this:</p>
+        <p>We run a local Next.js wrapper (<code>suno-api/</code>) around Suno's internal endpoints:</p>
 
         <div class="pipeline-flow">
             <span class="pipeline-step">Browser Cookie</span>
@@ -373,11 +413,10 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             <span class="pipeline-step">Audio URL</span>
         </div>
 
-        <p>The wrapper also includes a Playwright-based captcha solver that uses the <a href="https://2captcha.com">2Captcha</a> service (~$3 balance) to solve hCaptchas when Suno requires them. In practice, we discovered captcha is rarely required — but we'll get to that.</p>
+        <p>The wrapper includes a Playwright-based hCaptcha solver backed by <a href="https://2captcha.com">2Captcha</a> (~$3 balance) for when Suno challenges automated requests.</p>
 
         <h3>The Night Everything Broke</h3>
-        <p>On March 13, 2026, around 9:38 PM, we tried to generate some piano covers and the whole system was dead. Suno had redesigned their web UI without warning, and our Playwright captcha solver couldn't find any of the expected elements.</p>
-        <p>Here's what changed:</p>
+        <p>On March 13, 2026 at 9:38 PM, our piano cover pipeline died. Suno had shipped a web UI redesign that broke every Playwright selector:</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Old Selector</th><th>New Selector</th><th>Why It Broke</th></tr></thead>
@@ -388,16 +427,12 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </tbody>
         </table></div>
 
-        <p>We fixed each selector, added debug screenshots on browser launch for future troubleshooting, and got everything working again. Then came the plot twist.</p>
-
         <h3>The Plot Twist: Captcha Wasn't Even Required</h3>
-        <p>After fixing all the selectors and getting the browser flow working again, we checked the captcha endpoint (<code>/api/c/check</code>) — and it returned <code>required: false</code>.</p>
-        <p>The entire browser automation dance — launching Playwright, navigating to suno.com/create, finding the textarea, clicking Create, solving hCaptcha — was unnecessary. <strong>Direct API calls with just the Clerk JWT token worked fine.</strong> The old broken selectors had been causing timeouts <em>before</em> the code could even check whether captcha was needed.</p>
-        <p>We'd spent an hour debugging a browser flow we didn't need. Classic.</p>
+        <p>After updating the selectors and adding debug screenshots, we checked Suno's captcha check endpoint (<code>/api/c/check</code>): it returned <code>required: false</code>.</p>
+        <p>The entire Playwright dance—launching Chromium, navigating to <code>suno.com/create</code>, locating the textarea, solving hCaptcha—was unnecessary. <strong>Direct HTTP calls with the Clerk JWT token worked on their own.</strong> Our broken DOM selectors had been timing out <em>before</em> the script even checked if a captcha was needed.</p>
 
         <h3>The Bird Codename Mystery</h3>
-        <p>Once the API was working, we hit another wall: model selection. We tried <code>chirp-v5</code> for Suno's latest model. 403 error. Tried <code>v5</code>. 403. Tried <code>chirp-v4-5</code>. 403.</p>
-        <p>Turns out, <strong>Suno uses bird codenames</strong>, not version numbers. Here's the mapping we eventually figured out:</p>
+        <p>Next wall: model selection. Passing <code>chirp-v5</code>, <code>v5</code>, or <code>chirp-v4-5</code> all returned <code>403 Forbidden</code>. Through midnight trial and error, we found that <strong>Suno uses internal bird codenames</strong> for its v4.5+ models:</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Bird Name</th><th>Version</th><th>Quality</th><th>Notes</th></tr></thead>
@@ -410,22 +445,16 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </tbody>
         </table></div>
 
-        <p>There's no documentation for this. You have to try model names until something doesn't 403. <code>chirp-v5</code>, <code>v5</code>, <code>suno-v5</code> — none of them work. It has to be <code>chirp-crow</code>. We found this through trial and error at midnight.</p>
-
         <h3>Other Suno API Gotchas</h3>
         <ul>
-            <li><strong>No artist names in prompts.</strong> Suno blocks specific artist names. "Solo piano cover of Cruel Summer by Taylor Swift" gets rejected. "Solo piano cover of Cruel Summer" works fine. Describe the <em>style</em> without naming the artist.</li>
-            <li><strong>Prompt limit:</strong> 500 characters for <code>gpt_description_prompt</code> on v5 (not 200 as some guides claim).</li>
-            <li><strong>Each generation = 2 clips = 10 credits.</strong> Pro Plan ($10/mo) gives you 2,500 credits/month = 250 generations = 500 clips. Commercial rights included.</li>
-            <li><strong><code>wait_audio: false</code> + polling is more reliable than <code>wait_audio: true</code>.</strong> The blocking mode can timeout after 100 seconds. Better to fire-and-forget, then poll with <code>/api/get?ids=X,Y</code>.</li>
+            <li><strong>No artist names in prompts.</strong> "Solo piano cover of Cruel Summer by Taylor Swift" is rejected immediately. "Solo piano cover of Cruel Summer" works. Describe the style without naming the artist.</li>
+            <li><strong>Prompt limit:</strong> 500 characters for <code>gpt_description_prompt</code> on v5 (not 200 as older guides claim).</li>
+            <li><strong>Each generation = 2 clips = 10 credits.</strong> The $10/mo Pro Plan includes 2,500 credits (250 generations = 500 clips) with commercial rights.</li>
+            <li><strong>Use <code>wait_audio: false</code> + polling.</strong> Blocking mode (<code>wait_audio: true</code>) times out after 100 seconds. Fire-and-forget, then poll <code>/api/get?ids=X,Y</code>.</li>
         </ul>
 
         <h2 id="cruel-summer">The Cruel Summer Experiment</h2>
-        <p>To really test Suno's capabilities and build a scoring system, we ran a controlled experiment: generate 10 solo piano covers of the same song using 5 different emotional variations, then score them with Gemini.</p>
-        <p>The song: "Cruel Summer" (we can't name the artist in the prompt, but you know who). The model: <code>chirp-v4</code>. Instrumental mode enabled.</p>
-
-        <h3>The Five Variations</h3>
-        <p>Each variation got the same base prompt template — only the mood and dynamics changed:</p>
+        <p>To test Suno's expressive range and build an automated quality filter, we generated 10 solo piano covers of "Cruel Summer" on <code>chirp-v4</code> (instrumental mode) across 5 mood variations—costing 50 credits ($0.20):</p>
 
         <blockquote>"Solo piano cover of Cruel Summer. Steinway grand piano, close-miked. [MOOD]. [DYNAMICS]. Warm intimate recording."</blockquote>
 
@@ -440,13 +469,8 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </tbody>
         </table></div>
 
-        <p>5 variations × 2 clips each = 10 clips total. Cost: 50 credits ($0.20). All confirmed as solo piano with recognizable melody. Now we needed a way to score them.</p>
-
         <h2 id="gemini-scorer">Gemini as AI Music Critic</h2>
-        <p>This is the part we were most excited about — and the part that taught us the most about AI evaluation limitations.</p>
-
-        <h3>The Scorer</h3>
-        <p>We built <code>scripts/gemini-piano-scorer.py</code> — a Python script that uploads an MP3 file to <strong>Gemini 2.5 Flash</strong> and asks it to evaluate the piano cover on five criteria, each scored 1–10:</p>
+        <p>We wrote <code>scripts/gemini-piano-scorer.py</code> to upload each MP3 to <strong>Gemini 2.5 Flash</strong> and score it 1–10 across five criteria, plus two binary checks (is it actually solo piano? is the melody recognizable?):</p>
 
         <div class="score-grid">
             <div class="score-card"><div class="score-label">Emotional Impact</div><div class="score-value">/10</div></div>
@@ -456,10 +480,8 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             <div class="score-card"><div class="score-label">Replay Value</div><div class="score-value">/10</div></div>
         </div>
 
-        <p>The scorer also checks two binary questions: Is this actually solo piano? Is the melody recognizable? Both are important — an AI generator might produce beautiful music that happens to include a full orchestra, or nail the vibe but completely miss the original melody.</p>
-
         <h3>The Results</h3>
-        <p>All 10 clips passed the binary checks: solo piano, recognizable melody. The scores told an interesting story — or rather, they told a story about Gemini's limitations:</p>
+        <p>All 10 clips passed both binary checks. Then we looked at the numerical scores:</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Variation</th><th>Clip</th><th>Emotion</th><th>Tone</th><th>Arrangement</th><th>Playlist</th><th>Replay</th><th>Total</th></tr></thead>
@@ -477,28 +499,22 @@ footer p{color:var(--text-muted);font-size:0.85rem}
             </tbody>
         </table></div>
 
-        <p><strong>Top 3:</strong> Sparse (B) at 47/50, Melancholic (B) and Virtuosic (A) tied at 46/50.</p>
-        <p>The emotional reinterpretations (melancholic, sparse) outperformed the straight covers. The sparse version — lots of breathing room, ambient and contemplative — scored highest. Interesting signal: restraint impresses the model more than virtuosity.</p>
+        <p><strong>Top 3:</strong> Sparse (B) at 47/50, Melancholic (B) and Virtuosic (A) tied at 46/50. Restraint and space scored slightly higher than flashy runs.</p>
 
         <h3>The Problem: Gemini Is Too Nice</h3>
-        <p>Look at those scores again. Every single clip scored between 44 and 47 out of 50. Individual criteria ranged from 8 to 10. No deductions below 8. <strong>Every clip was "excellent."</strong></p>
-        <p>This is useless for selection.</p>
-        <p>The scores read like a polite music professor grading undergraduate recitals — everything is "technically proficient" and "emotionally resonant." In reality, the 10 clips varied more than the scores suggest. A human listener could easily rank them: some had awkward transitions, others meandered, one had a section where the AI seemed to forget the melody entirely. Gemini noticed none of this.</p>
-        <p>Gemini 2.5 Flash produces evaluations that are individually reasonable but collectively useless. When every score clusters at 8–9/10, you can't differentiate quality. The distribution is too compressed to extract a ranking.</p>
+        <p>Every single clip scored between 44 and 47 out of 50, with no individual score below 8. In reality, a human listener could rank them immediately: some had clunky transitions, others meandered, and one lost the melody mid-bridge. Gemini graded all of them like a polite professor at an undergraduate recital. When every track gets 8–9/10, point scoring is useless for ranking.</p>
 
         <h3>How to Fix AI Music Scoring</h3>
-        <p>We haven't fully solved this, but here's what we think would work:</p>
         <ul>
-            <li><strong>Adversarial scoring:</strong> "Find 3 specific things wrong with this performance. Be harsh." Forces the model to look for flaws instead of confirming quality.</li>
-            <li><strong>Comparative scoring:</strong> "Listen to both clips. Which is better? Why? Rank them." Humans naturally compare. Point scores in isolation are meaningless.</li>
-            <li><strong>Reference-based scoring:</strong> "How close is this to the original recording? Score the melodic accuracy specifically." Anchors the evaluation to something concrete.</li>
-            <li><strong>Calibrated rubric:</strong> "A 10/10 is Oscar Peterson live. A 5/10 is a first-year piano student. Where does this clip fall?" Gives the model a real scale.</li>
+            <li><strong>Adversarial scoring:</strong> "Find 3 specific flaws in this performance. Be harsh."</li>
+            <li><strong>Pairwise comparison:</strong> "Listen to both clips. Which is better and why?"</li>
+            <li><strong>Reference-based scoring:</strong> Upload the original track alongside the cover to anchor melodic accuracy.</li>
+            <li><strong>Calibrated rubric:</strong> Anchor the scale ("10/10 is Oscar Peterson live; 5/10 is a first-year student").</li>
         </ul>
 
         <div class="verdict-box" style="border-color:#8B5CF6;">
             <h3>💡 Key Insight: AI Can Analyze Audio, But Can't Rank It</h3>
-            <p>Gemini 2.5 Flash is genuinely impressive at understanding music — it correctly identifies instruments, key signatures, tempo, emotional texture, arrangement style. Its <em>analysis</em> is excellent. Its <em>evaluation</em> is worthless. It can describe what it hears in precise detail but assigns the same "great" rating to everything.</p>
-            <p>For now, we use Gemini scoring as a <strong>filter</strong> (reject anything below 7/10) rather than a <strong>ranker</strong>. The final selection is still human ears.</p>
+            <p>Gemini 2.5 Flash accurately identifies instruments, key signatures, tempo, and arrangement style. Its <em>analysis</em> is sharp; its <em>point evaluation</em> is uselessly compressed. We now use Gemini strictly as a binary <strong>filter</strong> (verify instrumentation and reject broken renders) and leave final selection to human ears.</p>
         </div>
 
         <h3>The Scorer Code</h3>
@@ -536,7 +552,7 @@ if __name__ == "__main__":
     print(json.dumps(result, indent=2))</code></pre>
 
         <h2 id="suno-showcase">Suno Audio Showcase</h2>
-        <p>Here are real Suno outputs from our production runs. The first two are piano covers Bernard selected as favorites. The "Cruel Summer" clip is from our scoring experiment. The rest are original compositions generated on <code>chirp-crow</code> (v5) — Suno's best model.</p>
+        <p>Here are raw Suno outputs from our production runs: two favorite piano covers, the winning "Cruel Summer" experiment clip (<code>chirp-v4</code>), and five original compositions on <code>chirp-crow</code> (v5).</p>
 
         <div class="audio-group">
             <div class="audio-group-title">🎹 Suno Piano Covers</div>
@@ -578,19 +594,16 @@ if __name__ == "__main__":
             </div>
         </div>
 
-        <p>Listen to these back-to-back with the MiniMax samples above. The quality gap is real. Suno's piano has dynamic range, natural sustain and decay, realistic pedal noise, and genuine musicality — the kind of subtle imperfections that make a performance feel human. MiniMax sounds like good MIDI. Suno sounds like a recording session.</p>
+        <p>Play these back-to-back with the MiniMax samples above. MiniMax sounds like polished MIDI; Suno's <code>chirp-crow</code> captures natural sustain, pedal noise, and human velocity dynamics.</p>
 
         <h2 id="native-video-audio">Native Video Audio: Veo 3, CogVideoX, Hailuo</h2>
-        <p>Before settling on separate music generation, we tested whether video generation models themselves could produce usable audio.</p>
+        <p>Before building a dedicated music pipeline, we tested whether video generation models could supply their own usable audio:</p>
 
-        <h3>Google <a href="/posts/veo3-vs-hailuo-minimax/">Veo 3</a> — Decent SFX, Not Music</h3>
-        <p>Veo 3's <code>generate_audio</code> parameter produces synchronized audio: ambient street noise, wind, water, footsteps. For establishing shots it adds atmosphere. But it can't produce composed background music. We disable it for most Reels.</p>
-
-        <h3><a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">Z.AI</a> CogVideoX-3 — Synthetic and Unusable</h3>
-        <p>Claims "AI SFX audio" in docs. In practice: mediocre, synthetic, obviously AI-generated. Never used in production.</p>
-
-        <h3>MiniMax Hailuo I2V — No Audio At All</h3>
-        <p>Video only — no audio output. This is actually why we built the music pipeline: Hailuo's video is excellent, but it ships silent. Music 2.5+ is the natural companion.</p>
+        <ul>
+            <li><strong>Google <a href="/posts/veo3-vs-hailuo-minimax/">Veo 3</a> (<code>generate_audio</code>)</strong> — Generates synchronized ambient SFX (street noise, wind, footsteps), not composed background music. We disable it for most Reels.</li>
+            <li><strong><a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">Z.AI</a> CogVideoX-3</strong> — Advertises AI SFX audio, but outputs synthetic, low-bitrate noise (2/10). Never used in production.</li>
+            <li><strong>MiniMax Hailuo I2V</strong> — Ships completely silent, which is why we pair it with MiniMax Music 2.5+ via FFmpeg.</li>
+        </ul>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Model</th><th>Audio Output</th><th>Music Quality</th><th>Our Usage</th></tr></thead>
@@ -601,10 +614,9 @@ if __name__ == "__main__":
             </tbody>
         </table></div>
 
-        <blockquote>Bottom line: no video generation model produces music you'd want in a published Reel. Use a dedicated music model.</blockquote>
+        <blockquote>No video generation model produces music you'd want in a published Reel. Always mux a dedicated music model.</blockquote>
 
         <h2 id="head-to-head">Head-to-Head: Suno vs MiniMax</h2>
-        <p>After months of using both in production, here's the honest comparison:</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Category</th><th>Suno AI</th><th>MiniMax Music 2.5+</th></tr></thead>
@@ -622,28 +634,22 @@ if __name__ == "__main__":
             </tbody>
         </table></div>
 
-        <p><strong>The irony:</strong> We spent hours reverse-engineering Suno's API, fixing broken selectors at midnight, discovering bird codenames through trial and error, building a Gemini scorer to evaluate output quality — and for our actual daily production, we use MiniMax. Because it has a proper API and it just works.</p>
-        <p>Suno is objectively better music. But "better" doesn't matter when you need 10 tracks generated automatically at 3 AM by a cron job. MiniMax is boring and reliable. Suno is exciting and fragile. For production automation, boring wins every time.</p>
+        <p>Suno makes objectively better music, but "better" doesn't matter when a cron job needs 10 tracks reliably at 3 AM. For automated production, boring and documented beats brilliant and fragile.</p>
 
         <div class="verdict-box" style="border-color:var(--text-muted);">
             <h3>🎯 When to Use Each</h3>
-            <p><strong>Use MiniMax Music 2.5+</strong> when: automated pipelines, background music for Reels, cron jobs, any workflow where reliability matters more than quality. Cost: ~$0.01/track.</p>
-            <p><strong>Use Suno</strong> when: standalone music pieces, piano covers, quality-critical content, anything where a human will listen to the music itself (not just hear it under a video). Cost: ~$0.02/clip from a $10/mo subscription.</p>
+            <p><strong>Use MiniMax Music 2.5+</strong> for automated pipelines, background music under Reels, and cron jobs where uptime matters more than concert-hall nuance (~$0.01/track).</p>
+            <p><strong>Use Suno</strong> for standalone tracks, piano covers, and hero videos where a human is actively listening to the music itself (~$0.02/clip on the $10/mo Pro plan).</p>
         </div>
 
         <h2 id="alternatives">Other Alternatives We Explored</h2>
-
-        <h3>Pixabay Royalty-Free Library — Our <a href="/posts/ai-resilience-planning/">Fallback</a></h3>
-        <p>We downloaded 21 royalty-free tracks from Pixabay, organized by mood (adventure, dreamy, tropical, cinematic, cultural). Zero latency, zero cost, predictable quality. When MiniMax's API has issues, we fall back to these. <strong>Cons:</strong> Only 21 tracks. After a week of 4 Reels/day, your audience has heard each one multiple times.</p>
-
-        <h3>Trending Instagram Audio Pipeline</h3>
-        <p>We built a system to download trending Instagram audio via YouTube search, then categorize by mood using Gemini Flash audio analysis. The flow: identify trending audio → search YouTube → extract with <code>yt-dlp</code> → analyze mood with Gemini → rename and categorize. Downloaded 19 tracks at ~$0.007 per track. This is for <em>riding trending sounds</em> for algorithmic reach — a different use case than generated music.</p>
-
-        <h3>Udio — Good Music, Same API Problem</h3>
-        <p>Like Suno, Udio produces excellent music with no public API. Web-only. We didn't invest in reverse-engineering Udio since we already had a Suno wrapper. If Udio ships an API first, we'll switch.</p>
+        <ul>
+            <li><strong>Pixabay Royalty-Free Library (Our <a href="/posts/ai-resilience-planning/">Fallback</a>)</strong> — 21 local tracks organized by mood (adventure, dreamy, tropical, cinematic, cultural). Zero latency and zero cost when an API hiccups, but too small for primary rotation.</li>
+            <li><strong>Trending Instagram Audio Pipeline</strong> — Identifies trending IG audio, pulls via YouTube + <code>yt-dlp</code>, and categorizes mood with Gemini Flash (~$0.007/track across 19 tracks) when we want algorithmic sound reach rather than original beds.</li>
+            <li><strong>Udio</strong> — High audio quality like Suno, but also lacks an official public API.</li>
+        </ul>
 
         <h2 id="production-pipeline">Production Pipeline &amp; Code</h2>
-        <p>Here's how everything fits together in our actual production workflow:</p>
 
         <div class="table-wrap"><table class="spec-table">
             <thead><tr><th>Reel Format</th><th>Music Source</th><th>Typical Prompt Style</th></tr></thead>
@@ -672,7 +678,7 @@ if __name__ == "__main__":
             <span class="pipeline-step">Publish</span>
         </div>
 
-        <p>Total music cost per Reel: <strong>~$0.01</strong>. At 4–10 Reels/day, that's $0.04–$0.10/day. Essentially free.</p>
+        <p>Total music cost per Reel: <strong>~$0.01</strong> ($0.04–$0.10/day at 4–10 Reels/day).</p>
 
         <h3>The Quality Pipeline (Suno + Gemini)</h3>
 
@@ -688,7 +694,7 @@ if __name__ == "__main__":
             <span class="pipeline-step">Trim + Publish</span>
         </div>
 
-        <p>More expensive ($0.10 per batch of 10 clips + Gemini scoring). Used for quality-critical content where the music is the focus, not just background.</p>
+        <p>Runs ~$0.20 per 10-clip batch plus Gemini Flash tokens; reserved for standalone pieces where music is the hero product.</p>
 
         <h3>MiniMax Code</h3>
 
@@ -776,12 +782,12 @@ bash ~/tabiji/functions/publish-reel.sh \
 
         <div class="gotcha-box">
             <div class="gotcha-title">⚠️ Suno uses bird codenames, not version numbers</div>
-            <p><code>chirp-crow</code> = v5, <code>chirp-bluejay</code> = v4.5+, <code>chirp-auk</code> = v4.5. Using <code>chirp-v5</code> or <code>v5</code> returns 403. This is not documented anywhere.</p>
+            <p><code>chirp-crow</code> = v5, <code>chirp-bluejay</code> = v4.5+, <code>chirp-auk</code> = v4.5. Passing <code>chirp-v5</code> or <code>v5</code> returns 403.</p>
         </div>
 
         <div class="gotcha-box">
             <div class="gotcha-title">⚠️ No artist names in Suno prompts</div>
-            <p>Suno blocks specific artist names. "Solo piano cover of Cruel Summer" works. "Taylor Swift piano cover" gets rejected. Describe the style without naming the artist.</p>
+            <p>Suno blocks specific artist names. "Solo piano cover of Cruel Summer" works; "Taylor Swift piano cover" gets rejected. Describe the style without naming the artist.</p>
         </div>
 
         <div class="gotcha-box">
@@ -791,22 +797,22 @@ bash ~/tabiji/functions/publish-reel.sh \
 
         <div class="gotcha-box">
             <div class="gotcha-title">⚠️ Gemini audio scoring is too generous</div>
-            <p>All scores cluster at 8-9/10 with no meaningful differentiation. Use adversarial or comparative prompts instead of point-based scoring. Gemini is better as a <strong>filter</strong> (reject bad) than a <strong>ranker</strong> (pick best).</p>
+            <p>All scores cluster at 8–9/10 with no differentiation. Use Gemini as a binary <strong>filter</strong> (reject wrong instrumentation) rather than a point-based <strong>ranker</strong>.</p>
         </div>
 
         <div class="gotcha-box">
             <div class="gotcha-title">⚠️ Suno's API can break without warning</div>
-            <p>When Suno redesigns their UI (March 13, 2026), the reverse-engineered wrapper stops working. Budget time for debugging selectors. Or just check if captcha is required — direct API calls may work without the browser flow.</p>
+            <p>UI updates (like March 13, 2026) break Playwright selectors—though direct API calls with a Clerk JWT token often work without launching a browser when <code>/api/c/check</code> returns <code>required: false</code>.</p>
         </div>
 
         <div class="gotcha-box">
             <div class="gotcha-title">⚠️ MiniMax Music is a MUSIC model, not a foley model</div>
-            <p>Even when prompted for "ambient coffee shop sounds" or "ocean waves," the model produces melodic compositions — not sound effects. Use a dedicated foley model for ambience.</p>
+            <p>Prompting for "ambient coffee shop sounds" or "ocean waves" still produces melodic compositions, not sound effects.</p>
         </div>
 
         <div class="gotcha-box">
-            <div class="gotcha-title">💡 FFmpeg muxing command we use in production</div>
-            <p>Trim music to fit video, add 2-second fade-out:</p>
+            <div class="gotcha-title">💡 FFmpeg muxing one-liner</div>
+            <p>Trim music to fit video and apply a 2-second fade-out in a single pass:</p>
         </div>
 
 <pre><code>ffmpeg -i video.mp4 -i music.mp3 \
@@ -831,34 +837,24 @@ bash ~/tabiji/functions/publish-reel.sh \
             </tbody>
         </table></div>
 
-        <p>Note the paradox: Suno scores <em>lower</em> overall despite producing <em>better</em> music. That's because "overall" includes API quality, reliability, automation — the things that matter for production. If you're evaluating purely on music quality, Suno wins by a mile. If you're evaluating as a production tool, MiniMax 2.5+ wins.</p>
-
         <h2 id="verdict">The Verdict</h2>
 
         <div class="verdict-box">
             <h3>🏆 Production Winner: MiniMax Music 2.5+</h3>
-            <p>For automated travel video production at scale, Music 2.5+ is the right choice. Proper API, working instrumental mode, ~$0.01/track, 99%+ uptime. It's background music for 8-second Reels — it doesn't need to be Spotify-quality, it needs to not suck and to always work. MiniMax delivers both.</p>
+            <p>For automated video pipelines at scale, Music 2.5+ wins on infrastructure: documented REST API, working instrumental mode, ~$0.01/track, and 99%+ uptime.</p>
         </div>
 
         <div class="verdict-box" style="border-color:#8B5CF6;">
             <h3>👑 Quality Winner: Suno AI</h3>
-            <p>For standalone music, piano covers, or anything where a human will actually <em>listen</em> to the music, Suno is in a different league. The <code>chirp-crow</code> (v5) model produces genuinely beautiful piano music with natural dynamics and emotional range. The $10/mo Pro plan is worth it. The reverse-engineered API situation is not ideal — budget time for maintenance when Suno updates their site.</p>
+            <p>For standalone music or piano covers where listeners focus on the audio itself, Suno's <code>chirp-crow</code> (v5) is in a different league—just budget maintenance time for its reverse-engineered API.</p>
         </div>
 
         <div class="verdict-box" style="border-color:var(--text);">
             <h3>🤖 Surprise MVP: Gemini 2.5 Flash as Audio Analyzer</h3>
-            <p>Not a music generator, but worth calling out: Gemini's ability to analyze, describe, and understand audio is impressive. It correctly identifies instruments, keys, moods, and arrangement techniques. Just don't use it for scoring — it's too nice. Use it as a filter ("is this solo piano? yes/no") and a describer ("what instruments are in this track?"), not a critic.</p>
+            <p>Use Gemini 2.5 Flash to verify instrumentation ("is this solo piano?") and tag moods, not to rank artistic quality.</p>
         </div>
 
-        <h3>What We'd Change</h3>
-        <ul>
-            <li><strong>Official Suno API</strong> — would change everything. We'd use it for all quality-critical music immediately.</li>
-            <li><strong>Adversarial Gemini scoring</strong> — we want to try "find 3 flaws" prompts and pairwise comparisons for better differentiation.</li>
-            <li><strong>Shorter generation options</strong> — 8–15 second tracks purpose-built for Reels, so we don't trim 192 seconds down to 12.</li>
-            <li><strong>Open-source catch-up</strong> — MusicGen and Stable Audio are improving but still trail behind. Self-hosting would eliminate API dependency.</li>
-        </ul>
-
-        <p>For now, the split is clear: <strong>MiniMax for production, Suno for quality.</strong> Between the two of them, plus a Pixabay fallback library and the occasional trending Instagram audio, we never have to think about music licensing again. The entire music budget for hundreds of Reels per month is less than a single stock music license used to cost.</p>
+        <p>Between <strong>MiniMax Music 2.5+</strong> for daily cron jobs, <strong>Suno</strong> for hero tracks, and a 21-track <strong>Pixabay</strong> local fallback, our entire monthly music budget across hundreds of Reels costs less than a single stock audio license.</p>
 
         <hr style="border:none;border-top:1px solid var(--border);margin:3rem 0;">
         <p style="text-align:center;color:var(--text-muted);font-size:0.95rem;">All MiniMax audio samples on this page were generated from identical prompts via the MiniMax Music API on March 11, 2026. Suno samples were generated between March 11–13, 2026. No post-processing was applied — these are raw API/generation outputs. Gemini scoring was performed on March 13, 2026 using Gemini 2.5 Flash.</p>

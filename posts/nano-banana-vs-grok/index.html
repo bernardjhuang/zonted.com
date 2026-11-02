@@ -278,6 +278,44 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -370,24 +408,25 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <img src="https://img.zonted.com/resources/nano-banana-vs-grok/hero-grid.jpg" alt="2x2 comparison grid showing Nano Banana 2 vs Grok lofi capybara art — NB2 produces watercolor textures and creative poses while Grok delivers polished but repetitive digital anime" width="1204" height="1204">
             </div>
 
-            <div class="verdict-box" id="tldr" style="border-color: var(--text); background: linear-gradient(135deg, var(--bg-surface), #faf5ee);">
-                <h3 style="color: var(--text); margin-bottom: 0.5rem;">TL;DR</h3>
-                <p class="dropcap">After testing 8 images across 2 models using identical lofi anime prompts, <strong>Nano Banana 2</strong> (Google Gemini 3.1 Flash) scored <strong>9.0/10</strong> vs Grok's <strong>7.7/10</strong>. NB2 produced genuine artistic range — watercolor textures, creative character poses, and accurate emotional expression. Grok delivered polished digital anime that looked good but repetitive. NB2 costs ~$0.02/image. Grok Pro costs ~$0.07. The only reason to pick Grok: image editing and video generation, which NB2 can't do.</p>
+            <p class="dropcap">We build <a href="/">AI-generated travel itineraries</a> at tabiji and produce concept art for our <a href="https://www.instagram.com/tabijiai/">Instagram channels</a> and lofi music streams. In our <a href="/posts/ai-image-generation-comparison/">vintage travel photography benchmark</a>, Google's <strong>Nano Banana 2</strong> (Gemini 3.1 Flash Image) crushed MiniMax and CogView-4. When xAI launched image and video generation in <strong>Grok</strong>, we wanted to know if NB2's lead holds up in a completely different aesthetic: lofi anime concept art.</p>
+
+            <p>We ran both models head-to-head across two lofi capybara prompts, generating two images per prompt from each model — eight unretouched outputs total.</p>
+
+            <div class="tldr" id="tldr">
+              <div class="tldr-label">TL;DR</div>
+              <p class="tldr-thesis">Across 8 identical lofi anime prompts, Nano Banana 2 (Gemini 3.1 Flash) beat xAI's Grok 9.0/10 to 7.7/10 while costing 3.5x less than Grok Pro ($0.02 vs. $0.07 per image).</p>
+              <ul>
+                <li><strong>Artistry vs. stock polish</strong> — NB2 rendered painterly gouache and watercolor textures with distinct compositions on every run; Grok produced clean but near-identical digital anime clones.</li>
+                <li><strong>Prompt adherence</strong> — When prompted for "eyes closed, at peace," NB2 nailed the expression in both outdoor renders while Grok generated open-eyed, tongue-out cartoon faces twice.</li>
+                <li><strong>When to use Grok</strong> — Grok's edge is feature breadth: reference-image editing, style transfer, and $0.05/sec 720p video generation (<code>grok-imagine-video</code>), which NB2 doesn't support natively.</li>
+              </ul>
             </div>
-
-            <p>We build <a href="/">AI-generated travel itineraries</a> at tabiji — and we recently started creating AI-generated concept art for <a href="https://www.instagram.com/tabijiai/">Instagram content</a>. We'd already <a href="/posts/ai-image-generation-comparison/">tested Nano Banana 2 against MiniMax and CogView-4</a> for vintage photography and NB2 dominated. But that was one style. The question: does NB2's edge hold up across completely different aesthetic territory?</p>
-
-            <p>xAI's <strong>Grok</strong> recently launched image generation (and video), so we set up a head-to-head: <strong>Nano Banana 2 vs Grok</strong>, testing lofi anime concept art — a style that's about emotional warmth, texture, and character personality rather than photorealism.</p>
-
-            <p>Same prompt. Two images from each model. Eight total outputs. Here's what happened.</p>
 
             <h2 id="why-we-ran-this-test">Why We Ran This Test</h2>
 
-            <p>Our <a href="/posts/ai-image-generation-comparison/">previous comparison</a> tested vintage 1970s travel photography across three models. Nano Banana 2 won convincingly — 8.8/10 vs MiniMax's 5.9 and CogView-4's 3.6. But photography is one domain. We wanted to know if NB2's strengths (prompt adherence, artistic variety, emotional accuracy) transfer to a completely different style.</p>
+            <p>In our <a href="/posts/ai-image-generation-comparison/">previous benchmark</a>, Nano Banana 2 scored 8.8/10 on 1970s film photography against MiniMax (5.9/10) and CogView-4 (3.6/10). Photorealism is one thing; stylized illustration is another. Lofi anime is a brutal test for image models because technical sharpness isn't enough — the piece lives or dies on hand-painted texture, color warmth, and subtle body language.</p>
 
-            <p>Lofi anime is the perfect stress test. It's not about photorealism — it's about <em>vibe</em>. The best lofi art has hand-painted textures, a specific color warmth, and characters that convey emotional states through subtle body language. It's the difference between technically correct and emotionally resonant.</p>
-
-            <p>We also wanted to evaluate <strong>Grok</strong> as a newcomer. xAI's image generation API launched recently with competitive pricing and some unique features (image editing, style transfer, video gen). If it could match or beat NB2 on artistic quality, it might earn a spot in our pipeline.</p>
+            <p>xAI's Grok image API entered the market with aggressive pricing and built-in image-to-image editing, style transfer, and video generation. If Grok could match NB2's illustration quality, its editing endpoints would earn it a permanent slot in our production pipeline.</p>
 
             <h2 id="the-models">The Two Models</h2>
 
@@ -409,13 +448,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p>On paper, Grok has an interesting edge: it's the only model here with built-in image editing, style transfer, and video generation. NB2 is a pure generator — it makes images from text, period. But as we'll see, raw generation quality still matters more than features.</p>
+            <p>On spec sheet features alone, Grok looks compelling: native image editing, style transfer, and video generation in one API, whereas NB2 is strictly a text-to-image generator. Once you inspect the actual renders, however, raw generation quality outweighs the extra endpoints.</p>
 
             <h2 id="test-1-indoor">Test 1: Indoor Capybara — The Lofi Studio Test</h2>
 
-            <p><strong>The prompt concept:</strong> A capybara as a lofi girl character — artist painting or sketching in a cozy indoor setting, headphones on, warm lighting, surrounded by plants and books. The classic lofi study-girl setup, but with a capybara.</p>
-
-            <p>We generated two images from each model using the same prompt.</p>
+            <p><strong>The prompt concept:</strong> A capybara as a classic lofi study-girl character — sketching or painting in a cozy indoor studio with headphones on, warm lamplight, houseplants, and stacked books. We generated two images per model from the exact same prompt:</p>
 
             <div class="comparison-grid two-col">
                 <div class="comparison-card">
@@ -438,27 +475,25 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h3>Nano Banana 2 #1 — 9.4/10</h3>
 
-            <p>This is the image that won the entire comparison. It nails the lofi genre's <em>soul</em>. The capybara wears a chunky knit sweater, eyes gently closed, writing in a journal — not painting, not sketching, but <em>writing</em>. It's an interpretation that adds character. The texture is hand-crafted gouache, warm and imperfect in all the right ways. There's emotional warmth radiating from every detail: the soft lamplight, the plants catching ambient glow, the books stacked with casual domestic comfort.</p>
-
-            <p>This doesn't look AI-generated. It looks like a real illustrator's passion project — the kind of art you'd find on a lofi playlist thumbnail with 50 million views.</p>
+            <p>This render won the entire benchmark. Wearing a chunky knit sweater with eyes gently closed, the capybara is writing in a journal rather than painting — a smart interpretive choice that grounds the character. The surface has a tactile, hand-painted gouache grain, with warm lamplight catching the plant leaves and stacked books. It doesn't read as AI output; it looks like a commissioned illustration for a 50-million-view lofi beats stream.</p>
 
             <h3>Nano Banana 2 #2 — 8.4/10</h3>
 
-            <p>The second output went in a completely different direction — ambitious café world-building with more environmental detail. Warm lighting from multiple sources, busy tabletop, architectural depth. It's a more complex scene that demonstrates NB2's range: two images from the same prompt produced genuinely different artistic interpretations. The slight knock: it's maybe too busy. The best lofi art has breathing room, and this one fills every corner.</p>
+            <p>The second seed pivoted to a wider café-studio composition with multi-source lighting, a detailed tabletop, and deeper architectural framing. While slightly busier than ideal for a minimalist lofi thumbnail, it proves NB2's compositional range: two runs of the same prompt yielded two distinct illustrations.</p>
 
             <h3>Grok #1 — 8.0/10</h3>
 
-            <p>Competent and safe. Grok produced a clean, polished digital anime capybara — technically well-executed with good lighting and composition. The problem? It looks exactly like what you'd expect from typing "lofi capybara" into any image generator. There's no texture surprise, no creative interpretation, no personality that makes you pause. It's the visual equivalent of a stock photo: professional, generic, forgettable.</p>
+            <p>Clean, safe, and generic. Grok delivered a smooth digital-anime capybara with solid lighting and zero anatomical flaws, but zero tactile personality. There is no brushwork texture or interpretive flair — it looks like a stock vector illustration.</p>
 
             <h3>Grok #2 — 7.8/10</h3>
 
-            <p>And here's the bigger problem: Grok's second output looks almost identical to its first. Same angle, same lighting setup, same character pose, minor variations in background details. When you run the same prompt twice through NB2, you get two different artistic visions. When you run it through Grok, you get the same vision with slightly rearranged furniture.</p>
+            <p>Worse than the flat texture is the lack of seed diversity: Grok's second render is a near-clone of its first. Same camera angle, same pose, same lighting rig, with only minor prop shuffling in the background.</p>
 
             <blockquote>This pattern — NB2 producing genuine artistic variety while Grok produces polished clones — repeated in every test we ran.</blockquote>
 
             <h2 id="test-2-outdoor">Test 2: Outdoor Capybara — The Landscape Test</h2>
 
-            <p><strong>The prompt concept:</strong> A capybara lazing around in a field of grass with mountains in the backdrop, headphones on, eyes closed, at peace — lofi girl vibes but outdoors. We specifically asked for eyes closed and a peaceful, blissful expression.</p>
+            <p><strong>The prompt concept:</strong> A capybara lounging in a grassy mountain meadow with headphones on — specifically requesting <strong>eyes closed</strong> and a peaceful, blissful expression.</p>
 
             <div class="comparison-grid two-col">
                 <div class="comparison-card">
@@ -481,32 +516,30 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h3>Nano Banana 2 #1 — 9/10</h3>
 
-            <p>Watercolor landscape perfection. The capybara's eyes are actually closed — a detail that matters enormously for the "at peace" vibe we requested. There's a winding path leading to a distant village, poppies scattered in the foreground, mountains fading into atmospheric haze. The color palette is dreamy but grounded. This is playlist thumbnail material — the kind of image you'd use for a "3 hours of chill beats to relax to" video.</p>
+            <p>Textbook watercolor landscape. The capybara's eyes are shut tight, framed by foreground poppies, a winding dirt path leading to a distant village, and mountains fading into soft atmospheric haze. Ready to ship as a "3 hours of chill beats" YouTube background on the first try.</p>
 
             <h3>Nano Banana 2 #2 — 9/10</h3>
 
-            <p>The best character work of all eight images. NB2 interpreted "at peace" with a creative twist: the capybara is leaning back on a plaid blanket, hands resting on its belly, wearing an expression of pure bliss. It's a <em>different</em> kind of peaceful than #1 — more playful, more characterful. The plaid blanket is an unprompted creative addition that adds domestic charm. Again: two outputs from the same prompt, two genuinely different artistic visions.</p>
+            <p>The strongest character pose across all eight images. NB2 placed the capybara reclined on an unprompted plaid picnic blanket, paws resting on its belly in pure post-lunch bliss. Once again, two seeds from the same prompt delivered two completely different compositions that both obeyed every constraint.</p>
 
             <h3>Grok #1 — 7.5/10</h3>
 
-            <p>The landscape is pretty. The colors are nice. But look at the capybara: tongue sticking out, eyes that aren't really closed. We asked for "eyes closed, at peace" and got... a cartoon animal making a goofy face. The background is well-rendered, but the character — which is the entire point of the prompt — missed the emotional brief.</p>
+            <p>The mountain backdrop is well-lit, but Grok completely missed the character brief: instead of "eyes closed, at peace," the capybara has its eyes open and tongue sticking out like a cartoon mascot.</p>
 
             <h3>Grok #2 — 7.5/10</h3>
 
-            <p>Near-identical twin of #1. Same tongue-out expression. Same open-ish eyes. Same angle. Same emotional misread. If you didn't look closely, you might think they were the same image with slightly different cloud arrangements.</p>
+            <p>Another near-duplicate of #1 — same open eyes, same tongue-out grin, same camera framing, with only slight cloud shifts in the sky.</p>
 
             <h2 id="prompt-adherence">The Prompt Adherence Problem</h2>
 
-            <p>This is the most significant finding from our test, and it echoes <a href="/posts/ai-image-generation-comparison/">what we found in the vintage photography comparison</a>: <strong>Nano Banana 2 treats prompts as instructions. Grok treats them as suggestions.</strong></p>
+            <p>Just as we saw in our <a href="/posts/ai-image-generation-comparison/">vintage photography benchmark</a>, <strong>Nano Banana 2 treats prompts as strict instructions, while Grok treats them as loose suggestions.</strong></p>
 
-            <p>We specifically asked for "eyes closed" in the outdoor test. NB2 delivered closed eyes in both outputs. Grok delivered open-eyed, tongue-out capybaras in both outputs. This isn't a minor nitpick — "at peace with eyes closed" vs "goofy with tongue out" is a completely different emotional register.</p>
-
-            <p>The pattern extends beyond this specific instruction:</p>
+            <p>Asking for "eyes closed, at peace" and getting an open-eyed, tongue-out mascot in both Grok renders breaks the emotional brief of a lofi scene. Across all eight outputs, the gap came down to three factors:</p>
 
             <ul>
-                <li><strong>Emotional nuance:</strong> NB2 understood and rendered "at peace," "cozy," and "blissful" as distinct emotional states. Grok defaulted to a single "cute anime character" expression regardless of the prompt's emotional specificity.</li>
-                <li><strong>Creative interpretation:</strong> NB2 made creative choices that enhanced the prompt (the journal instead of painting, the plaid blanket, the village in the background). Grok stuck to the most literal, conventional interpretation.</li>
-                <li><strong>Output variety:</strong> NB2's two outputs from each prompt were genuinely different. Grok's were nearly identical. This matters for production — if you need to pick the best from multiple options, variety is essential.</li>
+                <li><strong>Emotional precision:</strong> NB2 distinguished between "cozy focus" and "blissful rest." Grok collapsed every prompt into the same default cute-mascot expression.</li>
+                <li><strong>Additive world-building:</strong> NB2 introduced fitting details that elevated the scene (the journal, the plaid picnic blanket, the distant village path) without violating the prompt.</li>
+                <li><strong>Seed diversity:</strong> When you generate N candidates in a production pipeline so an evaluator can pick the winner, you need real variance across seeds. NB2 gives you distinct compositions; Grok gives you minor crop tweaks.</li>
             </ul>
 
             <blockquote>If your workflow depends on the model doing what you ask — especially emotional or stylistic nuances — Nano Banana 2 is the only reliable choice between these two.</blockquote>
@@ -527,7 +560,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p>At the standard tier, both models cost about the same per image. But NB2's standard output quality consistently outperformed Grok's <em>pro</em> output — meaning NB2 delivers better results at 3.5x less cost than Grok Pro. For a production pipeline generating hundreds of images per month, that difference compounds fast.</p>
+            <p>At the base tier, both models cost ~$0.02 per image. In our tests, however, NB2's $0.02 output beat Grok's $0.07 Pro tier (<code>grok-imagine-image-pro</code>) on every artistic metric — delivering higher resolution (up to 4K vs. 1024×1024) at 3.5x lower cost.</p>
 
             <h2 id="scorecard">Final Scorecard</h2>
 
@@ -553,27 +586,25 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <div class="verdict-box">
                 <h3>🏆 Winner: Nano Banana 2 (Google Gemini 3.1 Flash Image)</h3>
-                <p>NB2 wins both rounds and it's not particularly close. The gap isn't about technical execution — Grok produces clean, well-rendered images. The gap is about <em>artistry</em>. NB2 generates images that feel like they were made by an illustrator with a specific vision. Grok generates images that feel like they were made by an algorithm that learned what lofi art looks like.</p>
-                <p>The combination of genuine artistic range, emotional accuracy, hand-crafted texture quality, and $0.02/image pricing makes NB2 the obvious choice for anyone doing creative image generation — whether that's lofi anime, vintage photography, or (we suspect) most other artistic styles.</p>
+                <p>NB2 swept both rounds. Grok renders clean lines, but NB2 renders actual <em>illustration</em> — tactile gouache and watercolor surfaces, exact emotional expressions, and distinct compositions across seeds, all at $0.02 per image.</p>
+                <p>Whether we're generating 1970s film photography or lofi anime thumbnails, Nano Banana 2 remains the default image generator in our production stack.</p>
             </div>
 
             <div class="verdict-box" style="border-color: var(--text-muted);">
                 <h3>🥈 Runner-Up: Grok (xAI)</h3>
-                <p>Grok isn't bad — a 7.7/10 average means it produces genuinely decent images. The color and lighting work is solid, and the technical execution is clean. But "clean and competent" is a crowded category, and at ~$0.07/image for the pro model, you're paying 3.5x more for noticeably less artistic quality.</p>
-                <p>Where Grok earns its keep is in its <strong>unique capabilities</strong> — image editing, style transfer, and built-in video generation — which we cover below.</p>
+                <p>At 7.7/10, Grok produces serviceable digital anime with solid color and lighting, but paying ~$0.07/image on Pro for repetitive, stock-feeling outputs makes no sense for pure text-to-image workflows.</p>
+                <p>Where Grok earns a role is its <strong>editing and video endpoints</strong> — capabilities NB2 doesn't offer at all.</p>
             </div>
 
             <h2 id="when-to-use-grok">When to Use Grok Instead</h2>
 
-            <p>Despite losing this comparison, Grok has capabilities that NB2 simply doesn't offer:</p>
+            <p>Despite losing on pure text-to-image artistry, Grok covers three workflows that NB2 cannot touch natively:</p>
 
             <ul>
-                <li><strong>Image editing:</strong> Feed Grok an existing image plus a text prompt, and it can modify the image. Change the background, swap colors, add elements — real image-to-image editing. NB2 is text-to-image only.</li>
-                <li><strong>Style transfer:</strong> Give Grok a reference image and a prompt, and it applies the reference's style to a new scene. This is powerful for maintaining visual consistency across a content series.</li>
-                <li><strong>Video generation:</strong> <code>grok-imagine-video</code> generates 1–15 second clips at $0.05/sec. It also supports video-to-video editing — feeding an existing clip and a modification prompt. The 720p max resolution is a limitation (Instagram boosts 1080p), but the price is competitive: an 8s clip costs $0.40 vs Veo 3's $6.00 (though Veo 3 outputs at much higher quality).</li>
+                <li><strong>Reference-image editing:</strong> Pass an existing image URL plus a prompt to modify backgrounds, swap palettes, or add props via an OpenAI-compatible endpoint.</li>
+                <li><strong>Style transfer:</strong> Lock visual consistency across a multi-asset series by feeding a style reference image alongside new scene prompts.</li>
+                <li><strong>Budget video generation:</strong> <code>grok-imagine-video</code> renders 1–15 second clips (and video-to-video edits) at $0.05/sec. While capped at 720p, an 8-second draft clip costs $0.40 compared to $6.00 on Veo 3.</li>
             </ul>
-
-            <p>If your workflow involves editing existing images, maintaining a consistent visual style across assets, or generating quick video drafts, Grok fills a real gap. For pure text-to-image generation, NB2 is strictly better.</p>
 
             <h2 id="how-to-use">How to Use These Models (Code Examples)</h2>
 

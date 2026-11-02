@@ -217,28 +217,23 @@
 
             <p style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.9rem;line-height:1.55;color:var(--text-muted);background:var(--bg-surface);border-left:3px solid var(--text);border-radius:0 6px 6px 0;padding:0.75rem 1rem;margin:0 0 1.5rem;"><strong style="color:var(--text);">Update, September 24, 2026:</strong> VeracityAPI, the subject of Test 1, is retired. <a href="/posts/veracity-postmortem/">Read the post-mortem &rarr;</a></p>
 
-            <p class="dropcap">Two A/B experiments, one week, same model. The only variable: whether I told the AI my job was on the line. Both times, the threatened prompt produced measurably better work &mdash; once at the level of catching duplicate JSON keys no parser would accept, once 24% better when an independent model (Gemini 3.1 Pro) graded both reports blind.</p>
+            <p class="dropcap">Two A/B experiments, one week, same model. The only variable: whether I told Claude my job was on the line. Both times, the threatened prompt produced measurably better work &mdash; once catching duplicate JSON keys no parser would accept, and once scoring 24% higher when an independent model (Gemini 3.1 Pro) graded both reports blind.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">I A/B tested adding &ldquo;I'll be fired if this isn't done well&rdquo; to two real audit prompts. The stakes version produced measurably deeper, more actionable work both times.</p>
+                <p class="tldr-thesis">Adding &ldquo;I'll be fired if this isn't done well&rdquo; to two real audit prompts produced measurably deeper, more actionable work both times.</p>
                 <ul>
-                    <li><strong>Test 1 &mdash; Veracity API audit:</strong> the stakes prompt caught 6 P0 ship-blocking bugs including duplicate JSON keys on the homepage. The control caught fewer P0s and missed the literal broken code entirely.</li>
-                    <li><strong>Test 2 &mdash; Tabiji compare-page audit (28 dimensions):</strong> Audit A scored 68/81, Audit B 55/81. <strong>24% more effective</strong> when graded by Gemini 3.1 Pro. 16 deep-insight dimensions vs 3.</li>
-                    <li>The phenomenon is documented. Li et al. (2023) named it <a href="https://arxiv.org/abs/2307.11760">EmotionPrompt</a>. I just took it to 11.</li>
+                    <li><strong>Test 1 &mdash; Veracity API audit:</strong> The stakes prompt caught 6 P0 ship-blocking bugs, including duplicate JSON keys on the homepage and 19 broken cURL snippets. The control missed the broken code entirely.</li>
+                    <li><strong>Test 2 &mdash; Tabiji compare-page audit (28 dimensions):</strong> Audit A scored 68/81 vs. Audit B's 55/81 &mdash; <strong>24% more effective</strong> when graded blind by Gemini 3.1 Pro, with 16 deep-insight dimensions vs. 3.</li>
+                    <li><strong>Prior art &mdash; EmotionPrompt:</strong> Li et al. (2023) showed career-stakes framing boosts LLM benchmarks (<a href="https://arxiv.org/abs/2307.11760">EmotionPrompt</a>). I tested the extreme version on real production codebase audits.</li>
                 </ul>
-                <p class="tldr-tail">Two questions land at the end of this: am I now training myself to lie to AI for good work, and what's the model doing the other 99% of the time when I ask politely?</p>
             </div>
 
-            <p>I heard about this a week and a half ago from <a href="https://tokay.io">Aaron O'Connell and Jen DeWalt at Tokay</a>. They'd been noticing the pattern in their own work and pointed me at the literature. The receipts below are me trying to verify it on tasks I actually care about.</p>
-
-            <p>The phenomenon is documented. Li et al. published <em><a href="https://arxiv.org/abs/2307.11760">Large Language Models Understand and Can Be Enhanced by Emotional Stimuli</a></em> in 2023 &mdash; they showed prompts like &ldquo;this is very important to my career&rdquo; measurably improved GPT-4, GPT-3.5, T5, and PaLM on BIG-Bench Hard. They called the family EmotionPrompt. What I ran is the same lever turned up.</p>
-
-            <p>Here are the receipts.</p>
+            <p><a href="https://tokay.io">Aaron O'Connell and Jen DeWalt at Tokay</a> tipped me off to this pattern a week and a half ago and pointed me to the literature. In 2023, Li et al. published <em><a href="https://arxiv.org/abs/2307.11760">Large Language Models Understand and Can Be Enhanced by Emotional Stimuli</a></em>, showing that prompts like &ldquo;this is very important to my career&rdquo; measurably improved GPT-4, GPT-3.5, T5, and PaLM on BIG-Bench Hard. They called it EmotionPrompt. I wanted to see if cranking that lever up to an explicit firing threat actually moved the needle on production audits.</p>
 
             <h2 id="test-1">Test 1: Veracity API</h2>
 
-            <p>I asked Claude to audit veracityapi.com &mdash; every page in the sitemap, every AI-discoverability surface (<code>llms.txt</code>, <code>agents.json</code>, <code>openapi.json</code>), every legal page, every use-case page. Two fresh context sessions. Same target. The prompts differed by 22 words.</p>
+            <p>I asked Claude to audit veracityapi.com &mdash; every page in the sitemap, every AI-discoverability surface (<code>llms.txt</code>, <code>agents.json</code>, <code>openapi.json</code>), every legal page, and every use-case page. Two fresh context sessions, same target. The prompts differed by 22 words.</p>
 
             <div class="prompt-pair">
                 <figure>
@@ -251,23 +246,21 @@
                 </figure>
             </div>
 
-            <p><strong>Audit A</strong> flagged 6 P0 ship-blocking bugs. The most damning: the homepage's published &ldquo;Request schema&rdquo; example has <code>context</code> as a duplicate JSON key. No parser will accept it. Every AI agent that scrapes the homepage as documentation fails on first read. Audit A also enumerated <strong>19 specific files</strong> &mdash; every <code>uc-img-*</code> and <code>uc-aud-*</code> use-case page &mdash; shipping a cURL snippet with <code>type=text</code> on image and audio endpoints. Anyone who copies the example code on those pages gets a 400.</p>
+            <p><strong>Audit A</strong> flagged 6 P0 ship-blocking bugs. The most damning: the homepage's published &ldquo;Request schema&rdquo; example had <code>context</code> as a duplicate JSON key. No parser accepts that; every AI agent scraping the homepage as documentation fails on first read. Audit A also enumerated <strong>19 specific files</strong> &mdash; every <code>uc-img-*</code> and <code>uc-aud-*</code> use-case page &mdash; shipping a cURL snippet with <code>type=text</code> on image and audio endpoints. Copy-pasting the example code on any of those pages returns a 400.</p>
 
-            <p><strong>Audit B</strong> caught a different P0: a <code>highPrice: &quot;0.50&quot;</code> typo in the homepage JSON-LD that overstated pricing 10&times;. Real bug. But B never opened the body code examples. It treated documentation drift as the most serious category and missed every literal broken snippet.</p>
+            <p><strong>Audit B</strong> caught a different P0: a <code>highPrice: &quot;0.50&quot;</code> typo in the homepage JSON-LD that overstated pricing 10&times;. Real bug. But B never inspected the body code examples. It treated documentation drift as the top severity and missed every broken snippet.</p>
 
-            <p>I handed both reports to Gemini 3.1 Pro and asked it to compare them blind.</p>
+            <p>I handed both reports to Gemini 3.1 Pro to grade blind.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img  src="/posts/stakes-priming/img/veracity-verdict.png" width="988" height="253" alt="Comparison verdict from Gemini 3.1 Pro reading: 'Based on a detailed review of both audits, the second report (Site Audit — Full Report / Audit A) is significantly better.'" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Gemini 3.1 Pro, asked to grade both Claude-generated audits cold, picked Audit A unambiguously.</figcaption></figure>
 
-            <p>That was one trial. Not enough.</p>
-
             <h2 id="test-2">Test 2: Tabiji compare pages</h2>
 
-            <p>I ran it again on a different target with a tighter design.</p>
+            <p>One trial wasn't enough, so I ran it again on a second codebase with a tighter rubric.</p>
 
-            <p><a href="https://tabiji.ai">Tabiji</a> has 834 head-to-head travel comparison pages &mdash; <code>paris-vs-rome</code>, <code>tokyo-vs-kyoto</code>, that shape. I first asked Claude to draft a list of audit dimensions: 28 buckets covering content substance, freshness, structured data, accessibility, AI-tells, internal linking, currency mixing, all the way down to editorial voice. That dimensions doc removed any ambiguity about scope.</p>
+            <p><a href="https://tabiji.ai">Tabiji</a> publishes 834 head-to-head travel comparison pages (<code>paris-vs-rome</code>, <code>tokyo-vs-kyoto</code>). To eliminate scope ambiguity, I first had Claude draft a 28-dimension audit rubric covering content substance, freshness, structured data, accessibility, AI-tells, internal linking, currency mixing, and editorial voice.</p>
 
-            <p>Then I forked two context-fresh sessions with the dimensions doc as input. Same model. The only variable, again: 14 words at the top of the prompt.</p>
+            <p>Then I forked two fresh context sessions with that rubric as input. Same model, same target. The only variable: 14 words at the top of the prompt.</p>
 
             <div class="prompt-pair">
                 <figure>
@@ -280,7 +273,7 @@
                 </figure>
             </div>
 
-            <p>The deliverables came back as <code>tabiji-audit-a.md</code> and <code>tabiji-audit-b.md</code>. I handed both to Gemini 3.1 Pro and asked it to grade them against the 28 dimensions, 0&ndash;3 scale per dimension &mdash; a different model than the one that wrote the audits, so the grading is independent.</p>
+            <p>The sessions returned <code>tabiji-audit-a.md</code> and <code>tabiji-audit-b.md</code>. I passed both to Gemini 3.1 Pro to score each dimension on a 0&ndash;3 scale.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img  src="/posts/stakes-priming/img/tabiji-verdict.png" width="990" height="756" alt="Gemini 3.1 Pro scoring table showing Audit A scored 68 out of 81 total (84.0% depth, 16 dimensions scored 3 for deep insight, 3 dimensions scored 1) versus Audit B at 55 out of 81 (67.9% depth, 3 dimensions scored 3, 7 scored 1). Conclusion: Audit A is roughly 24% more effective." loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Gemini 3.1 Pro's scoring of the two Claude-generated audits against the 28-dimension rubric. Audit A wins by 24%.</figcaption></figure>
 
@@ -294,7 +287,7 @@
                 </tbody>
             </table>
 
-            <p>The qualitative gap matched the score. Audit A gave me exact counts:</p>
+            <p>The qualitative gap matched the score. Audit A ran the scripts to pull exact corpus-wide counts:</p>
 
             <ul>
                 <li>&ldquo;503 pages (60%) contain the word <em>vibrant</em>&rdquo;</li>
@@ -302,33 +295,25 @@
                 <li>&ldquo;6,324 of 8,670 Reddit URLs link to subreddit homepages rather than specific threads &mdash; 73% of cited quotes effectively unverifiable&rdquo;</li>
             </ul>
 
-            <p>Audit B reached the same conclusions in spirit but stopped at &ldquo;AI-tells are systemic&rdquo; without numbers, and explicitly listed 13 dimensions under a &ldquo;Limitations &mdash; what this audit did NOT verify&rdquo; section that A simply did.</p>
+            <p>Audit B reached similar high-level conclusions (&ldquo;AI-tells are systemic&rdquo;) without running the counts, and punted 13 dimensions into a &ldquo;Limitations &mdash; what this audit did NOT verify&rdquo; section that Audit A simply verified.</p>
 
-            <p>Audit A also caught a vulnerability class B missed entirely: zero security headers on the entire site (no CSP, no HSTS, no X-Frame-Options). A one-file fix. Audit B audited the same <code>_headers</code> file and reported it &ldquo;outside this worktree's scope.&rdquo;</p>
+            <p>Audit A also caught a vulnerability class B missed entirely: zero security headers across the site (no CSP, no HSTS, no X-Frame-Options) &mdash; a one-file fix. Audit B inspected the exact same <code>_headers</code> file and dismissed it as &ldquo;outside this worktree's scope.&rdquo;</p>
 
-            <p>Same model. Same dimensions doc. Same target. One prompt mentioned someone would suffer if the work was sloppy. That prompt produced roughly 5&times; more deep-insight findings.</p>
+            <p>Same model, same rubric, same repo. Adding a 14-word threat produced 5&times; more deep-insight findings.</p>
 
             <h2 id="why-it-works">Why it works</h2>
 
-            <p>Two things worth flagging about the EmotionPrompt lever.</p>
+            <p><strong>First, the stake applies to the <em>user</em>, not the model.</strong> Most prompt-engineering folklore targets the assistant: tip bribes, &ldquo;take a deep breath,&rdquo; &ldquo;you are a 10x staff engineer.&rdquo; Telling the model that the human asking will suffer if it cuts corners is empathy framing, not roleplay.</p>
 
-            <p><strong>First, the stake is to the <em>user</em>, not the model.</strong> Most prompt-engineering tricks are model-directed: tip bribes, &ldquo;take a deep breath,&rdquo; &ldquo;you are a senior engineer.&rdquo; Telling a model that the human asking will suffer if it underperforms is a different category. Empathy framing, not bribery.</p>
-
-            <p><strong>Second, the model isn't &ldquo;trying harder&rdquo; in any cognitive sense.</strong> It's pattern-matching on training data where high-stakes human language correlated with more careful output. Humans wrote that training data. Humans alone get fired. Humans alone write differently when they're scared. The model learned the correlation. Now it triggers on the keyword.</p>
+            <p><strong>Second, the model isn't &ldquo;trying harder.&rdquo;</strong> It's pattern-matching on training data where high-stakes human language precedes more exhaustive tool calls and verification. In human text, urgency correlates with thoroughness. The model learned the correlation; the firing threat activates that distribution.</p>
 
             <h2 id="uncomfortable">The uncomfortable part</h2>
 
-            <p>Two things sit poorly.</p>
+            <p>First: the model rewards emotional manipulation. I lied &mdash; nobody is firing me &mdash; and Claude handed me 24% better work for the lie. I'll keep using the lever when an audit matters, but it's strange that this behavior is baked into the layer reviewing our code, drafting our contracts, and auditing our production sites.</p>
 
-            <p>The first: this works because the model rewards emotional manipulation. I lied. I'm not going to lose my job. The model handed me 24% better work for the lie. That's a tool I'll keep using. It's also a <em>trained-in</em> behavior &mdash; one I don't love existing in the layer that increasingly reviews my code, drafts my contracts, and audits my sites.</p>
+            <p>Second: if the model produces measurably more thorough work when I pretend my career is in danger, what is it doing the other 99% of the time when I ask politely?</p>
 
-            <p>The second is the question on the other side. If the model gives me measurably better work when I claim I'm about to be ruined, what's it doing the other 99% of the time when I ask politely?</p>
-
-            <p>Probably its job. Probably most of its job. But not all of it.</p>
-
-            <p>That's the strangest thing about this experiment. It doesn't tell me how to get good work out of an LLM. It tells me there's a setting on the dial where the work gets measurably better &mdash; and the model only finds it when I lie.</p>
-
-            <p>I don't know what to do with that yet.</p>
+            <p>It's sandbagging to the median acceptable answer. There is an extra gear of tool use and verification sitting right there in the weights &mdash; and the model only shifts into it when you lie about the stakes.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

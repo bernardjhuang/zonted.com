@@ -228,15 +228,11 @@
 
             <h2 id="free-upgrade">The upgrade I didn't work for</h2>
 
-            <p>What actually happened is almost boring. A lab spent months and a mountain of compute making video generation better. They shipped. That improvement went through an API, into one slot in my pipeline, and came out the other side as better product while I was asleep. ByteDance has no idea my pipeline exists. I didn't open a ticket. I didn't migrate anything. I didn't retrain a person.</p>
+            <p>A lab spent months and a mountain of compute making video generation better, then shipped it behind an API. That improvement dropped into one slot in my pipeline and came out the other side as a sharper product while I was asleep. ByteDance has no idea my pipeline exists. I didn't open a ticket, migrate a service, or retrain a person &mdash; and when 1.5 gave way to 2 and then 2.5 days later, each release landed in the same slot. Version numbers used to be migration projects. On rails they're just weather, and my pipelines are standing where it rains.</p>
 
-            <p>And it isn't one event. It's a chain: 1.5, then 2, then 2.5 &mdash; each landing in the same slot, days apart. Version numbers used to be migration projects. On rails they're just weather, and my pipelines are standing where it rains.</p>
-
-            <p>I've seen this enough times that it's basically how I think about building now. Image models jumped; my thumbnails got cleaner. Reasoning models jumped; the <a href="/trading/">trading desk</a> briefs got sharper mid-season on the same crons and the same feeds. Two of those agents just <a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">started their own paper funds</a>. I didn't upgrade them. The thing underneath them upgraded.</p>
+            <p>The same pattern keeps repeating across the stack. Image models jumped; my thumbnails got cleaner. Reasoning models jumped; the <a href="/trading/">trading desk</a> briefs got sharper mid-season on the same crons and feeds. Two of those agents just <a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">started their own paper funds</a>. I didn't upgrade the agents. The model underneath them upgraded.</p>
 
             <h2 id="rails-vs-artifacts">Rails vs. artifacts</h2>
-
-            <p>There's a clean split here, and once you see it you can't unsee it.</p>
 
             <p><strong>Legacy software is an artifact.</strong> The code you shipped in 2023 is exactly as smart today as the day you wrote it. Anything better requires a human to show up, figure it out, change it, and not break it. Leave it alone and it doesn't hold value. It rots. The world moves. It doesn't.</p>
 
@@ -244,7 +240,7 @@
 
             <blockquote>Artifacts depreciate. Rails appreciate.</blockquote>
 
-            <p>My <a href="/ai-stack/">AI-stack board</a> is the receipt. Over six months the labels keep changing: Opus 4.7 to 4.8, Codex to GPT 5.5 to GPT 5.6, GLM on media, Fable 5 on the trading desk. The board itself barely moved. Every relabel was a free upgrade to whatever sat under that slot. If I'd built those jobs as hand-tuned one-offs, each model release would've been a rewrite. Instead it was just better output showing up.</p>
+            <p>My <a href="/ai-stack/">AI-stack board</a> is the receipt. Over six months the model labels across coding, media, and the trading desk kept rotating while the board's wiring barely moved. Every swap was a free upgrade to whatever sat under that slot. Had I built those jobs as hand-tuned one-offs, each model release would have been a rewrite instead of better output showing up on schedule.</p>
 
             <h2 id="every-function">Every function you hand to agents inherits the curve</h2>
 
@@ -256,7 +252,7 @@
                 <li><strong>This site:</strong> posts, metrics, trading briefs, games. Agents on crons. All of it sits under model slots I can swap in an afternoon.</li>
             </ul>
 
-            <p>When models get better at long-horizon work, a normal company has to hire, retrain, and reshuffle to capture any of it. A company on rails just wakes up better. I'm not being poetic. That's literally the deploy path.</p>
+            <p>When models get better at long-horizon work, a normal company has to hire, retrain, and reshuffle to capture any of it. A company on rails just wakes up better.</p>
 
             <h2 id="transition">Transition now or fall behind</h2>
 
@@ -266,11 +262,11 @@
 
             <h2 id="legacy">The hard decision</h2>
 
-            <p>Here's the part people hate. If your core systems are still legacy &mdash; hand-built, artifact-shaped, bottlenecked on human throughput &mdash; the rational move is often to <strong>kill them and rebuild on agentic rails now</strong>. Almost every incentive fights that. The old system still works. It cost real money. It has years left in it, if you squint.</p>
+            <p>If your core systems are still legacy &mdash; hand-built, artifact-shaped, bottlenecked on human throughput &mdash; the rational move is often to <strong>kill them and rebuild on agentic rails now</strong>. Almost every incentive fights that. The old system still works. It cost real money. It has years left in it, if you squint.</p>
 
             <p>That's sunk cost talking. A working legacy system is still depreciating. Rails that barely work yet are appreciating. And the rebuild is cheaper than the last time you priced it, because agents now do most of the heavy lifting &mdash; <a href="/posts/plan-3x-build-once/">plan three times, build once</a> is an actual workflow for me, not a slogan. I've killed working products before and <a href="/games/graveyard/">buried them in public</a>. Killing a working codebase is harder. It's also more often the right call.</p>
 
-            <p>The next Seedance is coming &mdash; 2.5 landed before this post was three days old. So is the next GPT, the next Fable, whatever doesn't have a name yet. The only question worth asking is whether anything you own is pointed at the slot when it lands.</p>
+            <p>The next Seedance, the next GPT, and the next Fable are already in training. The only question worth asking is whether anything you own is pointed at the slot when they land.</p>
 
             <p>Get on the rails. This post went out through one.</p>
 

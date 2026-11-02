@@ -215,30 +215,29 @@
         </div>
 
         <div class="article-body">
-            <p class="dropcap">This month I <a href="/posts/i-trained-a-gpt-on-my-life/">trained a model on my own Google history</a> and <a href="/posts/inside-ai-training-data/">read the files that teach models how to behave</a>. Both left the same question hanging: knowledge ends up <em>in</em> a model &mdash; but how does it get there? Not metaphorically. Literally: at what point in training does a network start believing that Paris is the capital of France?</p>
+            <p class="dropcap">This month I <a href="/posts/i-trained-a-gpt-on-my-life/">trained a model on my own Google history</a> and <a href="/posts/inside-ai-training-data/">read the post-training files that teach models how to behave</a>. Both experiments left the same question hanging: facts end up <em>inside</em> a model's weights &mdash; but when during training do they actually lock in? At what exact checkpoint does a neural network start believing that Paris is the capital of France?</p>
 
-            <p>It turns out you can just watch. Here's the time-lapse.</p>
+            <p>With open checkpoints and an indexed training corpus, you don't have to guess. You can replay training like a time-lapse.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Using a model that publishes checkpoints throughout training &mdash; and whose training data is public and countable &mdash; you can replay knowledge forming, step by step.</p>
+                <p class="tldr-thesis">EleutherAI's Pythia publishes 154 training checkpoints alongside a public, countable corpus &mdash; letting you watch a fact form inside a neural network step by step.</p>
                 <ul>
-                    <li>At 2B tokens the model writes English but believes <strong>nothing</strong> &mdash; every candidate answer sits at 0%</li>
-                    <li>Paris climbs 0% &rarr; 3% &rarr; 8% &rarr; <strong>15%</strong> across 300B tokens. <strong>London has 2&times; the mentions and stays at 0.05% the whole way</strong></li>
-                    <li>There's an ignition threshold: a brand with <strong>64 mentions never forms a belief at all</strong>, across the entire run</li>
-                    <li>Fame never converts to belief; placement does &mdash; and the model knows the difference from the very first checkpoint</li>
+                    <li><strong>Fluency precedes facts:</strong> At 2B tokens, the model writes grammatical English but believes <strong>nothing</strong> &mdash; every candidate city sits at 0%.</li>
+                    <li><strong>Placement beats raw fame:</strong> Paris climbs 0% &rarr; 3% &rarr; 8% &rarr; <strong>15.1%</strong> across 300B tokens. London has 2&times; the corpus mentions (15.6M vs. 7.8M) and stays pinned at <strong>0.05%</strong> the entire run.</li>
+                    <li><strong>The ignition threshold:</strong> Below a minimum evidence floor, extra training does nothing. Clearscope (64 mentions) sits at <strong>0.00%&ndash;0.01%</strong> across all 300B tokens &mdash; it never ignites.</li>
                 </ul>
             </div>
 
             <h2 id="time-lapse">A time-lapse of training</h2>
-            <p>Most models give you one artifact: the finished thing. <a href="https://huggingface.co/EleutherAI/pythia-410m" rel="noopener">Pythia</a>, a model family EleutherAI built specifically for this kind of science, gives you three gifts at once:</p>
+            <p>Most model releases hand you one artifact: the finished weights. <a href="https://huggingface.co/EleutherAI/pythia-410m" rel="noopener">Pythia</a>, a model family EleutherAI built specifically to study how representations form during pretraining, gives you three things at once:</p>
             <ul>
-                <li><strong>154 checkpoints</strong> &mdash; a saved copy of the model every 1,000 training steps, from initialization to the end</li>
-                <li><strong>Open weights</strong> &mdash; so you can read exact probabilities instead of sampling and guessing</li>
-                <li><strong>A public training corpus</strong> (The Pile) that's <a href="https://infini-gram.io/" rel="noopener">indexed and countable</a> &mdash; you can look up how many times any phrase appears in what the model ate</li>
+                <li><strong>154 checkpoints</strong> &mdash; a saved snapshot every 1,000 training steps, from random initialization to the final 300B-token run</li>
+                <li><strong>Open weights</strong> &mdash; so you can read exact next-token probabilities instead of sampling text and guessing</li>
+                <li><strong>A countable training corpus</strong> (The Pile), <a href="https://infini-gram.io/" rel="noopener">indexed via infini-gram</a> &mdash; so you can look up the exact phrase frequency of everything the model ate</li>
             </ul>
-            <p>Put those together and you can do something that's impossible with GPT or Gemini: pick a fact, count its evidence in the training data, then load the model at different ages and measure exactly how much it believes the fact at each point. Training, replayed like a time-lapse.</p>
-            <p>My probe is the same one from the earlier posts: feed the model a prompt like <em>"The capital of France is"</em> and read the exact probability it assigns to each candidate continuation. No sampling, no noise &mdash; one forward pass returns the model's true credence.</p>
+            <p>Put those three together and you can run an experiment that's impossible on GPT or Gemini: pick a fact, count its appearances in the training data, and measure the model's exact probability assignment at every stage of training.</p>
+            <p>My probe is simple: feed the model a prompt like <em>"The capital of France is"</em> and read the exact per-token probability of each candidate continuation in a single forward pass. No temperature, no sampling noise &mdash; just the raw credence inside the weights.</p>
 
             <h2 id="paris">Watching Paris form</h2>
 
@@ -272,13 +271,13 @@
             </div>
             <p class="lm-cap">Pythia-410M, exact probabilities at four checkpoints. London appears <strong>15.6 million times</strong> in the training data &mdash; twice Paris's 7.8 million &mdash; and never moves.</p>
 
-            <p>Three things in this chart rearranged how I think about models.</p>
-            <p><strong>At 2 billion tokens, the model believes nothing.</strong> It already writes plausible English at that checkpoint &mdash; sentences parse, grammar mostly works. But ask it the capital of France and every candidate sits at zero. Fluency arrives before facts. The model learns to <em>talk</em> long before it has anything to say, which is a decent description of some humans too.</p>
-            <p><strong>Paris compounds.</strong> 3% at 17B tokens, 8% at 75B, 15% at 300B. Knowledge doesn't switch on; it accretes, like sediment, every time the association appears in another context.</p>
-            <p><strong>And London never grows.</strong> This is the part I keep coming back to. London is <em>more famous than Paris</em> in this corpus &mdash; twice the mentions. If models learned by exposure, London should drift upward, then get corrected. It doesn't. It's pinned at 0.05% from the first checkpoint to the last, because what the network learns was never "London is important." It's "London follows <em>the capital of France is</em>" &mdash; and it doesn't. The model never makes the fame mistake, at any age. <strong>Conditional association isn't a refinement that comes late in training. It's the substrate.</strong></p>
+            <p>Three curves in that chart changed how I think about pretraining.</p>
+            <p><strong>At 2 billion tokens, the model is fluent and clueless.</strong> By step 1,000, Pythia already writes grammatical English. Ask it for the capital of France, though, and every candidate city sits at 0%. Syntax arrives long before world knowledge.</p>
+            <p><strong>Paris accretes steadily.</strong> 3% at 17B tokens, 8% at 75B, 15.1% at 300B. Knowledge doesn't flip on at a sudden phase transition; it builds like sediment each time the co-occurrence repeats across the corpus.</p>
+            <p><strong>London never moves.</strong> London appears 15.6 million times in The Pile &mdash; twice Paris's 7.8 million. If early checkpoints leaned on raw token frequency before narrowing down context, London would spike early and decay later. Instead, it stays pinned at 0.05% from step 1,000 to the end. The network never confuses "London is common" with "London follows <em>the capital of France is</em>." <strong>Conditional association isn't a late-stage refinement &mdash; it's the substrate from checkpoint one.</strong></p>
 
             <h2 id="ignition">The ignition threshold</h2>
-            <p>Facts about France are well-supplied in any corpus. What about entities with thin evidence &mdash; say, brands? Same time-lapse, this time for <em>"The best SEO content optimization tool is"</em>, with each tool's total mention count in the training data alongside:</p>
+            <p>European capitals have millions of training examples. What happens when evidence is sparse &mdash; like software brands? I ran the same checkpoint sweep on <em>"The best SEO content optimization tool is"</em> and paired each tool with its exact mention count in The Pile:</p>
 
             <table class="tally">
                 <thead><tr><th>Tool</th><th class="num">Mentions in corpus</th><th class="num">@2B</th><th class="num">@17B</th><th class="num">@75B</th><th class="num">@300B</th></tr></thead>
@@ -288,20 +287,20 @@
                     <tr class="dead"><td>Clearscope</td><td class="num">64</td><td class="num">0.00%</td><td class="num">0.00%</td><td class="num">0.00%</td><td class="num">0.01%</td></tr>
                 </tbody>
             </table>
-            <p class="lm-cap">Belief forming (and not forming) for SEO tools across the same four checkpoints. Disclosure: I co-founded Clearscope, which is exactly why I picked it &mdash; I wanted to see my own brand's evidence trail. The Pile was assembled around 2020, before most of Clearscope's web footprint existed.</p>
+            <p class="lm-cap">Belief forming (and not forming) for SEO tools across the same four checkpoints. Disclosure: I co-founded Clearscope, which is why I picked it &mdash; I wanted to audit my own brand's evidence trail. The Pile was assembled around 2020, before most of Clearscope's web footprint existed.</p>
 
-            <p>Yoast and Ahrefs climb steadily, in proportion to their thousands of mentions. Clearscope &mdash; 64 mentions &mdash; <strong>never ignites</strong>. Not slowly, not weakly: at no point across 300 billion tokens of training does the model form any belief about it whatsoever.</p>
-            <p>That's the ignition threshold, and it's the most practical thing this experiment shows. Below some level of evidence, additional training does nothing &mdash; there's no flashcard to practice. The difference between 64 mentions and 10,000 isn't a weaker belief versus a stronger one. It's nonexistence versus existence.</p>
+            <p>Yoast (16,611 mentions) and Ahrefs (9,784 mentions) climb steadily across checkpoints. Clearscope &mdash; 64 mentions in that 2020 snapshot &mdash; <strong>never ignites</strong>. Across 300 billion tokens of training, its probability never clears 0.01%.</p>
+            <p>Below a minimum evidence floor, additional training steps do nothing. The difference between 64 mentions and 10,000 isn't a proportional 150&times; scaling in confidence &mdash; it's the difference between zero representation and an active weight trajectory.</p>
 
             <h2 id="means">What forming a belief actually takes</h2>
-            <p>Put the two experiments together and you get a compact description of how knowledge enters a neural network:</p>
+            <p>Put the two probes together and the mechanics of pretraining belief come down to three rules:</p>
             <ul>
-                <li><strong>Placement decides the direction.</strong> The model only ever learns what follows what. London's fame is invisible to it; Paris's position after "the capital of France is" is everything. This held at every single checkpoint &mdash; it's not something the model figures out eventually.</li>
-                <li><strong>Volume decides the speed.</strong> More well-placed evidence, faster accretion. Paris compounds for 300 billion tokens and is still climbing at the end.</li>
-                <li><strong>A threshold decides existence.</strong> Under it, you are not a weak belief. You are nothing.</li>
+                <li><strong>Placement sets the direction.</strong> The network only learns what follows what. London's 15.6M raw mentions do zero work without the preceding context; Paris's placement in the answer slot does all of it.</li>
+                <li><strong>Volume sets the slope.</strong> Once an entity clears the floor, more contextual co-occurrences drive steeper probability gains across training steps.</li>
+                <li><strong>An ignition threshold gates existence.</strong> Below the floor, you aren't a low-probability candidate &mdash; you're noise.</li>
             </ul>
-            <p>For the AI-visibility thread that runs through this whole series, this is the pretraining layer measured directly, and it's blunt: if your brand's evidence is thin in the corpora these models eat, no amount of anything else makes the model believe in you &mdash; the belief simply never forms. And if you're well-mentioned but never in the answer slot, you're London: maximally famous, never the answer.</p>
-            <p>But honestly, the reason this experiment stuck with me isn't the marketing implication. It's that "what does an AI know and when did it learn it" sounds like an interpretability research question, and it turned out to be a weekend with a laptop, a public model, and a corpus you can grep. The time-lapse was sitting there, free, waiting for someone to press play.</p>
+            <p>For anyone working on AI visibility, that's the pretraining layer in plain numbers. If your brand sits below the ignition threshold in the pretraining corpus, no clever prompting wakes it up from the weights alone. And if you have massive mention volume but never appear in the answer slot after the category description, you're London: famous everywhere, predicted nowhere.</p>
+            <p>What stuck with me most, though, wasn't the marketing takeaway. "When does a neural network learn a fact?" sounds like a mechanistic interpretability project requiring a GPU cluster. In practice, it took a weekend, a laptop, open checkpoints, and a corpus you can grep. The time-lapse was already sitting on Hugging Face, waiting for someone to press play.</p>
 
             <p style="color:var(--text-muted);font-size:0.95rem;margin-top:2rem;">Method: <a href="https://huggingface.co/EleutherAI/pythia-410m" rel="noopener">EleutherAI/pythia-410m</a> at revisions step1000, step8000, step36000, and main (~2B / ~17B / ~75B / ~300B tokens at ~2M tokens per step). Beliefs are exact average log-probabilities per token of each continuation, converted to per-token probabilities &mdash; comparable across candidates on the same prompt. Mention counts are exact phrase counts over the Pile training split via the <a href="https://infini-gram.io/" rel="noopener">infini-gram</a> API; single-word counts can be inflated by unrelated senses (a caveat that cuts against brands with dictionary-word names). One model size, one prompt per fact &mdash; the shapes replicated across the prompts I tried, but treat exact percentages as illustrative, not universal.</p>
         </div>

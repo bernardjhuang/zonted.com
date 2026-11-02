@@ -197,85 +197,78 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">My dormant tabiji API gets 4,667 requests a week &mdash; 83% of them Meta&rsquo;s crawler. Flattering, but the wrong metric to chase.</p>
+                <p class="tldr-thesis">Our dormant tabiji API gets 4,667 requests a week (83% from Meta&rsquo;s crawler), but query-time bot traffic is vanity &mdash; pre-training corpus inclusion is the real moat.</p>
                 <ul>
-                    <li>AI web search only patches gaps in a model&rsquo;s training data; training data itself is where brand presence compounds</li>
-                    <li>Frontier training runs cost hundreds of millions of dollars and refresh every 6&ndash;18 months</li>
-                    <li>I uploaded tabiji&rsquo;s full dataset &mdash; 8,799 records, 11.2&nbsp;MB, Parquet, CC-BY-4.0 &mdash; to <a href="https://huggingface.co/datasets/tabiji/tabiji-travel-safety-guides" target="_blank" rel="noopener">Hugging Face</a></li>
+                    <li><strong>Query-time search vs. weights</strong> &mdash; Live RAG crawls only answer single-turn queries; training data bakes your brand and framing into the weights for 6&ndash;18 months.</li>
+                    <li><strong>$340M+ refresh cycles</strong> &mdash; Frontier pre-training runs are rare and expensive, creating a durable moat for entities that make the cutoff.</li>
+                    <li><strong>The Hugging Face play</strong> &mdash; I packaged tabiji&rsquo;s entire database (8,799 records, 11.2&nbsp;MB Parquet, CC-BY-4.0) onto <a href="https://huggingface.co/datasets/tabiji/tabiji-travel-safety-guides" target="_blank" rel="noopener">Hugging Face</a> where AI labs source clean corpora.</li>
                 </ul>
-                <p class="tldr-tail">HF is where OpenAI, Anthropic, Meta, and Mistral source training corpora. One upload, permanent citation, zero ongoing bandwidth. Full play below.</p>
             </div>
 
-            <p class="dropcap">I was going through old tabiji.ai experiments last week, decluttering. The public <code>/api/</code> endpoint was in there &mdash; an afterthought we shipped early, barely marketed, mostly forgot about. Before I killed it, I pulled up the Cloudflare dashboard to see what, if anything, it was doing.</p>
+            <p class="dropcap">While cleaning up old tabiji.ai experiments last week, I checked the Cloudflare logs for our public <code>/api/</code> endpoint &mdash; an early experiment we shipped, barely promoted, and mostly forgot about. Before killing it, I wanted to see if anything was still calling it.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png" alt="Cloudflare traffic breakdown for /api/ over 8 days: 4,667 requests, 60 human visits, 83% Meta external crawler, long tail of AI crawlers" width="626" height="208" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Eight days of traffic on our forgotten <code>/api/</code> endpoint. The humans are the noise. The bots are the signal.</figcaption></figure>
 
-            <p><strong>4,667 requests over 8 days. 60 human visits. 83% of the non-visit traffic is Meta&rsquo;s external crawler.</strong> GPTBot, PerplexityBot, Applebot, Bytespider, and the long tail of AI crawlers account for roughly another 50. The rest is LeakIX / <code>.env</code> probes, internal <code>curl</code>, and scattered browsers. The API we forgot about was, quietly, an LLM-feeding endpoint.</p>
+            <p><strong>4,667 requests over 8 days. Only 60 came from humans.</strong> Meta&rsquo;s external crawler accounted for 83% of the bot volume, followed by GPTBot, PerplexityBot, Applebot, and Bytespider. The rest was vulnerability scanners probing for <code>.env</code> files. Our forgotten API had quietly become an LLM feed.</p>
 
-            <p>My first reaction was to feel flattered. My second reaction was to ask whether &ldquo;the LLM crawlers are reading my API&rdquo; is actually the metric I want to be chasing.</p>
-
-            <p>It&rsquo;s not.</p>
+            <p>My first reaction was flattery. My second was to ask whether query-time crawler traffic is actually a metric worth optimizing for. It isn&rsquo;t.</p>
 
             <h2 id="two-layers">Two layers: web search vs. training data</h2>
 
-            <p>The <a href="/posts/aeo-answer-engine-optimization/">AEO post</a> I wrote a couple weeks back broke down the three layers of an AI response &mdash; training data, validation search, and memory. What the Meta crawler hitting my API represents is the <em>validation</em> layer: agents fetching fresh data at query time to fill gaps in their training corpus. &ldquo;Is tabiji&rsquo;s pricing still current? Did any advisories change this week?&rdquo; That&rsquo;s useful, and the brand can show up in the answer for that specific query. But it&rsquo;s single-turn impact &mdash; the model isn&rsquo;t <em>learning</em> anything about tabiji from one JSON response during inference.</p>
+            <p>In my <a href="/posts/aeo-answer-engine-optimization/">AEO playbook</a>, I broke AI responses down into three layers: training data, validation search (RAG), and user memory. Meta&rsquo;s crawler hitting our API sits in the <em>validation</em> layer &mdash; an agent fetching live JSON at inference time to verify a fact or patch a gap. That can win you a citation for a single user prompt, but it&rsquo;s ephemeral. The model doesn&rsquo;t update its weights from a runtime API call.</p>
 
-            <p>The training-data layer is the one that compounds. Content that makes it into the corpus gets baked into the model weights. Every query against that model &mdash; for the next year or so, until the next refresh &mdash; has some probability of surfacing your entity, your framing, your voice. You don&rsquo;t have to be fetched again. You&rsquo;re <em>already in there</em>.</p>
+            <p>Training data is where presence compounds. When your dataset makes it into a pre-training or post-training corpus, your entities, comparisons, and brand associations get compiled directly into the model weights. Every prompt touching your domain over the next 12 to 18 months can surface your brand without firing a single web search.</p>
 
             <h2 id="moat">Why training data is a moat</h2>
 
-            <p>Training runs are expensive and infrequent. Epoch AI pegs GPT-4.5&rsquo;s training cost around <strong>$340 million</strong> and Grok 4&rsquo;s around <strong>$390 million</strong>. The widely-circulated claim that Anthropic&rsquo;s &ldquo;Mythos&rdquo; cost $10 billion traces back to a single tweet, not to Anthropic &mdash; the real number&rsquo;s murkier, but every credible estimate puts frontier runs in the hundreds of millions, minimum.</p>
+            <p>Frontier training runs are massive capital events. Epoch AI estimates GPT-4.5&rsquo;s training run at <strong>~$340 million</strong> and Grok 4&rsquo;s at <strong>~$390 million</strong>. Rumors that Anthropic&rsquo;s &ldquo;Mythos&rdquo; run cost $10 billion trace back to an unverified LinkedIn post, not Anthropic &mdash; though every serious estimate puts frontier pre-training firmly in the hundreds of millions.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/training-data-is-the-moat/mythos-ai-overview.png" alt="Google AI Overview for the query '10b mythos cost' stating the Anthropic Mythos model training cost is estimated around $10 billion, citing LinkedIn" width="1882" height="992" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Aside, too on-the-nose to skip: Google&rsquo;s AI Overview happily quotes the $10B figure as fact, sourced from LinkedIn. Which is exactly the point &mdash; the AI layer propagates whatever made it into its pipeline, verified or not. Including about itself.</figcaption></figure>
 
-            <p>What that cost means for you: training corpora don&rsquo;t get refreshed casually. Data cutoffs run 6&ndash;18 months behind model release dates. Whatever made it into the corpus is riding a very long wave. Whatever didn&rsquo;t is waiting at least another refresh cycle, usually longer.</p>
+            <p>Because those runs are so expensive, knowledge cutoffs lag 6 to 18 months behind release dates. Whatever makes it into a frontier training snapshot rides an 18-month distribution wave; whatever misses the cutoff is locked out until the next generation.</p>
 
-            <p>If your content exists on a website &mdash; a normal 2,000&ndash;5,000-word blog post written for humans to read &mdash; crawlers may or may not pick it up, may or may not clean it into a useful training row, may or may not deduplicate it against other sources that said the same thing louder. It&rsquo;s a lottery ticket with unknown odds.</p>
+            <p>If your data only lives inside 3,000-word HTML blog posts wrapped in navbars and ad slots, you are gambling that Common Crawl or a lab crawler fetches your pages, strips the boilerplate cleanly, and doesn&rsquo;t deduplicate your prose out of the training mix.</p>
 
             <h2 id="hf">The move: Hugging Face</h2>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/training-data-is-the-moat/hf-recommendation.png" alt="Recommendation text: Hugging Face dataset is the biggest lever. HF is where OpenAI, Meta, Anthropic, Mistral source training corpora. One upload equals broad reach, permanent citation, zero ongoing bandwidth cost." width="721" height="149" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The shortlist of non-API ways to serve the data. Hugging Face was #1 by a wide margin.</figcaption></figure>
 
-            <p>The single highest-leverage thing I could do &mdash; and the thing I did &mdash; was upload tabiji&rsquo;s whole dataset to <a href="https://huggingface.co/datasets/tabiji/tabiji-travel-safety-guides" target="_blank" rel="noopener">Hugging Face</a>. HF is where OpenAI, Anthropic, Meta, and Mistral literally source training corpora. It&rsquo;s not a crawl target where your content <em>might</em> make it through preprocessing &mdash; it&rsquo;s a pre-curated, license-tagged, schema-clean distribution point that&rsquo;s already in the pipeline.</p>
-
-            <p>What I uploaded:</p>
+            <p>Instead of waiting to be scraped, I packaged tabiji&rsquo;s entire database and uploaded it directly to <a href="https://huggingface.co/datasets/tabiji/tabiji-travel-safety-guides" target="_blank" rel="noopener">Hugging Face</a>. Data teams at OpenAI, Anthropic, Meta, and Mistral pull from Hugging Face daily. Uploading a clean, permissively licensed dataset hands ingestion pipelines pre-structured rows they don&rsquo;t have to parse:</p>
 
             <ul>
-                <li><strong>6,498 destinations</strong> &mdash; climate, currency, language, plug type, tap-water safety, tipping, visa notes, coordinates</li>
-                <li><strong>443 itineraries</strong> &mdash; day-by-day activities with logistics and timing</li>
-                <li><strong>396 city-level scam guides</strong> &mdash; how each scam works, how to avoid, police contacts (the same content <a href="/posts/ai-comics-dos-donts/">the 733 AI-generated comics</a> illustrate)</li>
-                <li><strong>250 countries</strong>, <strong>55 safety profiles</strong>, <strong>208 travel advisories</strong> (aggregated from US State Dept. and UK FCDO), and <strong>949 head-to-head destination comparisons</strong> with Reddit quotes and verdicts</li>
+                <li><strong>6,498 destinations</strong> &mdash; climate, currency, language, plug type, tap-water safety, tipping norms, visa rules, and coordinates.</li>
+                <li><strong>443 itineraries</strong> &mdash; structured day-by-day schedules with logistics and timing.</li>
+                <li><strong>396 city-level scam guides</strong> &mdash; scam mechanics, prevention steps, and local emergency contacts (paired with our <a href="/posts/ai-comics-dos-donts/">733 AI-illustrated scam comics</a>).</li>
+                <li><strong>250 countries</strong>, <strong>55 safety profiles</strong>, <strong>208 travel advisories</strong> (US State Dept. + UK FCDO), and <strong>949 head-to-head destination comparisons</strong> with Reddit quotes and verdicts.</li>
             </ul>
 
-            <p>Total: 8,799 records, 11.2 MB, Parquet, CC-BY-4.0. One upload. Permanent citation back to tabiji.ai. Zero ongoing bandwidth cost.</p>
+            <p>That&rsquo;s 8,799 records in an 11.2&nbsp;MB Parquet bundle under CC-BY-4.0, with explicit attribution fields pointing back to tabiji.ai and zero ongoing server cost.</p>
 
-            <p>The deeper shift is in serving format. The content on tabiji.ai was <em>written for humans</em> &mdash; long-form articles with hooks, narrative, and words like &ldquo;probably.&rdquo; The HF dataset is the same knowledge re-expressed in the shape agents actually consume &mdash; structured rows with explicit fields and source provenance. Same information, different serving format. The website stays for humans. The dataset ships for machines.</p>
+            <p>Notice the split in serving format: tabiji.ai renders HTML articles for humans, while the Hugging Face repo ships typed Parquet rows for ingestion pipelines. Same underlying data, packaged for two different consumers.</p>
 
             <h2 id="measure">How I&rsquo;ll know it worked</h2>
 
-            <p>Honestly, I don&rsquo;t know yet. The measurement layer for training-data influence is primitive. I added a GA4 annotation on the upload date so I can line up forward metrics against the intervention, and I&rsquo;ll watch a few signals:</p>
+            <p>Attribution for pre-training data is still crude. I dropped a GA4 annotation on the upload date and will track two buckets:</p>
 
             <ul>
-                <li><strong>Leading:</strong> citations of tabiji.ai in ChatGPT / Claude / Gemini answers to travel-safety queries. Direct-traffic spikes on specific destinations that match dataset rows.</li>
-                <li><strong>Lagging:</strong> the next Llama, Claude, and Gemini training runs. If tabiji made it into the corpus, brand mentions downstream should go up without any new content effort.</li>
+                <li><strong>Leading indicators:</strong> Dataset downloads on Hugging Face, plus unprompted citations of tabiji.ai in ChatGPT, Claude, and Gemini responses on travel-safety queries.</li>
+                <li><strong>Lagging indicators:</strong> Brand recall in the next major Llama, Claude, and Gemini weight releases without web browsing enabled.</li>
             </ul>
 
-            <p>Ask me in twelve months whether it worked. The AEO playbook as a field is unfolding fast enough that the honest answer to &ldquo;how do you measure this&rdquo; is &ldquo;improvise, and annotate the graph.&rdquo;</p>
+            <p>Check back in twelve months. In early-stage AEO, half the discipline is shipping the structured artifact and annotating the chart so you can measure the lag.</p>
 
             <h2 id="playbook">The broader play</h2>
 
-            <p>Hugging Face is the biggest lever, not the only one. The pattern is simple: ask where training data actually comes from, then show up there.</p>
+            <p>Hugging Face is the most direct pipe into training corpora, but the same principle applies everywhere data engineers source text:</p>
 
             <ul>
-                <li><strong>Structured data on GitHub</strong> &mdash; also crawled, also cleaned, also attributed.</li>
-                <li><strong>Wikipedia citations</strong> where genuinely appropriate &mdash; high training-data signal per citation.</li>
-                <li><strong>Reddit presence</strong> &mdash; Reddit&rsquo;s data is <a href="https://www.reuters.com/technology/artificial-intelligence/reddit-ai-training-deal-with-google-worth-60-million-per-year-source-says-2024-02-22/" target="_blank" rel="noopener">explicitly licensed to Google</a> and is heavily weighted in most frontier corpora.</li>
-                <li><strong>Internet Archive mirrors</strong> &mdash; preserves content through URL changes and site shutdowns, increasing the odds it gets crawled cleanly.</li>
+                <li><strong>Public GitHub repos</strong> &mdash; JSON, CSV, and Markdown repos get ingested into code and reasoning datasets with high weight.</li>
+                <li><strong>Wikipedia references</strong> &mdash; where genuinely notable and verifiable, Wikipedia citations carry outsized weight in every frontier pre-training mix.</li>
+                <li><strong>Reddit threads</strong> &mdash; <a href="https://www.reuters.com/technology/artificial-intelligence/reddit-ai-training-deal-with-google-worth-60-million-per-year-source-says-2024-02-22/" target="_blank" rel="noopener">explicitly licensed to Google for $60M/year</a> and heavily upweighted across both pre-training and RAG.</li>
+                <li><strong>Internet Archive snapshots</strong> &mdash; feeds Common Crawl snapshots that underpin open-weight training sets.</li>
             </ul>
 
-            <p>The internet was built for humans to read. Agents read it differently. If your content strategy is still &ldquo;rank on Google for keywords,&rdquo; you&rsquo;re optimizing for a consumption surface the new buyer doesn&rsquo;t use.</p>
-
-            <p>Put your data where models go shopping.</p>
+            <p>If your entire content strategy is still publishing HTML for Googlebot, you&rsquo;re fighting over a shrinking human click. Package your proprietary data in Parquet and JSON, license it for attribution, and put it where the training pipelines shop.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

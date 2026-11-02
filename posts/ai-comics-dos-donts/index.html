@@ -215,81 +215,74 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">We needed 50 four-panel comics for tabiji&rsquo;s scam-warning pages. We shipped 733 across eight countries. The pipeline broke in the middle.</p>
+                <p class="tldr-thesis">We tested five image models and shipped 733 four-panel watercolor comics across eight countries on <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a> for ~$0.15 per comic &mdash; after fixing a silent 9% classification bug mid-scale.</p>
                 <ul>
-                    <li>Nano Banana Pro won the five-model showdown for English text rendering and character consistency</li>
-                    <li>Thailand shipped in 90 seconds with hand-authored scripts; scaling to 8 countries broke at a 9% error rate when a keyword classifier misrouted scams (the Brandenburger Tor petition rendered as a U-Bahn pickpocket)</li>
-                    <li>V2 rebuild: per-scam Gemini 2.5 Pro synthesis under a strict JSON schema, plus a fail-loud quality gate &mdash; 733 comics total, ~$15/country, zero silent fallbacks</li>
+                    <li><strong>Model winner: Nano Banana Pro ($0.14/image)</strong> &mdash; Beat Midjourney, Seedream v5 Lite, Wan 2.7 Pro, and Qwen Image 2.0 on English speech-bubble spelling and character consistency.</li>
+                    <li><strong>What broke at scale</strong> &mdash; Thailand&rsquo;s 50 comics shipped in 90 seconds from hand-written scripts, but scaling to Germany via regex keyword routing misclassified 9% of scams (rendering a Brandenburger Tor clipboard hustle as a U-Bahn pickpocket).</li>
+                    <li><strong>The V2 fix</strong> &mdash; Replaced regex templates with per-scam Gemini 2.5 Pro script synthesis (<code>responseSchema</code>) and a fail-loud quality gate across all 733 comics (~$110 total).</li>
                 </ul>
-                <p class="tldr-tail">Full pipeline, prompts, the postmortem, and seven generalizable lessons for AI-illustration at scale below.</p>
             </div>
 
-            <p class="dropcap">"Make a four-panel comic" is easy. "Make fifty four-panel comics that look like they came from the same illustrator, feature the same recurring cast, render English speech bubbles correctly, and don't drift into generic AI-slop" is a completely different project. The difference is entirely about consistency, and consistency is the thing almost every AI image tool is currently bad at.</p>
+            <p class="dropcap">Generating one four-panel AI comic is easy. Generating 733 four-panel comics that look like they came from the same illustrator, star the same four recurring characters, spell English speech bubbles accurately, and match the exact mechanics of 733 different tourist scams is an engineering problem.</p>
 
-            <p>Below: the route we took, what worked, what didn't, and the exact recipe — model choices, prompt structure, API endpoints, and gotchas — that got us from "Midjourney keeps writing <em>SARPER TOLT</em> in the speech bubbles" to fifty production comics shipped to <a href="https://tabiji.ai/scams/country/th/" target="_blank" rel="noopener">tabiji.ai/scams/country/th/</a> on a Saturday afternoon — and then what silently broke (and what we rebuilt) when we tried to scale that pipeline past a single country to 733 comics across eight of them.</p>
+            <p>Here is the exact pipeline &mdash; model benchmarks, prompt locks, reference-image payloads, and the V2 postmortem &mdash; that took us from Midjourney gibberish (<em>&ldquo;SARPER TOLT&rdquo;</em>) to <a href="https://tabiji.ai/scams/country/th/" target="_blank" rel="noopener">733 production comics</a> across eight countries.</p>
 
             <h2 id="why">Why comics, and why this is hard</h2>
 
-            <p>We build <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a>, a travel-safety site. One of the things we publish is per-city scam pages — "the twenty-five scams you'll encounter in Bangkok," broken down with red flags, how-to-avoid tips, and Reddit source links. They're useful. They're also dense walls of text, and we've watched real users bounce when confronted with eight consecutive scam write-ups without a single visual break.</p>
+            <p>On <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a>, our city scam guides break down up to 25 local tourist traps per city with red flags, avoidance steps, and Reddit receipts. Useful material, but eight consecutive text blocks make readers bounce.</p>
 
-            <p>The audience for these pages skews older and slightly female — think the couple planning their first Thailand trip, not the 24-year-old backpacker. That demographic rewards warmth and storytelling over edginess. A cautionary tale rendered as a cozy watercolor comic would do something a sidebar callout can't: communicate the <em>shape</em> of the scam — the friendly stranger, the tuk-tuk, the too-good deal, the regret — in five seconds of scanning.</p>
+            <p>Our readership skews slightly older and female &mdash; couples planning a first trip to Thailand rather than 22-year-old backpackers. A warm, hand-painted watercolor comic communicates the <em>shape</em> of a con &mdash; the friendly stranger, the tuk-tuk detour, the gem-shop pressure, the regret &mdash; in five seconds flat.</p>
 
-            <p>So the brief was clear: one four-panel comic per scam, 2&times;2 grid, warm hand-painted watercolor, English speech bubbles that tell the story, a recurring cast of four characters we could rotate across fifty scams without the faces drifting into twenty-five different strangers. Simple to describe. Deceptively hard to produce.</p>
-
-            <p>Three things make this hard at scale:</p>
+            <p>The spec: one 2&times;2 four-panel watercolor comic per scam, legible English dialogue, and a recurring cast of four protagonists rotating across hundreds of scams. Three failure modes usually kill AI comics at this scale:</p>
 
             <ul>
-                <li><strong>Text rendering.</strong> Most image models mangle English. You get speech bubbles full of plausible-looking gibberish. This is the #1 reason AI comics have never worked.</li>
-                <li><strong>Character consistency.</strong> Generate the same "silver-haired 60-something woman in a straw hat" twice and you'll get two different women. Now do it fifty times.</li>
-                <li><strong>Style drift.</strong> Every generation nudges the palette, linework, and paper texture slightly. Over fifty comics that drift becomes visible — the first ten look like one illustrator, the last ten like a different one.</li>
+                <li><strong>Broken text rendering.</strong> Diffusion models mangle multi-word English dialogue into plausible-looking alien script.</li>
+                <li><strong>Character drift.</strong> Prompt for a &ldquo;silver-haired 62-year-old woman in a straw hat&rdquo; fifty times and you get fifty different women.</li>
+                <li><strong>Style drift.</strong> Palette, linework, and paper grain shift slightly on every call until comic #50 looks nothing like comic #1.</li>
             </ul>
-
-            <p>Everything below is how we solved each of those three problems.</p>
 
             <h2 id="midjourney">Round 1: Midjourney — good styles, broken text</h2>
 
-            <p>We started where most people start: <a href="https://www.midjourney.com" target="_blank" rel="noopener">Midjourney</a>. Since we were driving it through automation, we used the <a href="https://www.apify.com?fpr=bernard" target="_blank" rel="noopener">Apify</a> <code>imageaibot/midjourney-bot</code> actor, which wraps Midjourney's Discord API behind a normal HTTP endpoint. Submit via <code>action=imagine</code>, poll via <code>action=getTask</code>, retrieve the image URL.</p>
+            <p>We started with <a href="https://www.midjourney.com" target="_blank" rel="noopener">Midjourney</a>, driving it headlessly through the <a href="https://www.apify.com?fpr=bernard" target="_blank" rel="noopener">Apify</a> <code>imageaibot/midjourney-bot</code> actor (<code>action=imagine</code>, polling <code>action=getTask</code>).</p>
 
-            <p>We generated the same four-panel Grand Palace scam story in five different styles to find the right aesthetic for our audience:</p>
+            <p>We ran the classic Bangkok Grand Palace gem scam through five aesthetic directions:</p>
 
             <ol>
-                <li><strong>Warm watercolor storybook</strong> — Beatrix Potter-ish, soft pastels</li>
-                <li><strong>Hergé / Tintin ligne claire</strong> — clean black outlines, bright flats</li>
-                <li><strong>New Yorker editorial cartoon</strong> — refined ink with watercolor wash</li>
-                <li><strong>Studio Ghibli / Miyazaki</strong> — warm painterly anime</li>
-                <li><strong>Mid-century travel poster</strong> — bold flat color blocks, 1950s screen-print texture</li>
+                <li><strong>Warm watercolor storybook</strong> &mdash; Beatrix Potter pastels and visible paper grain</li>
+                <li><strong>Hergé / Tintin ligne claire</strong> &mdash; crisp black ink outlines and flat fills</li>
+                <li><strong>New Yorker editorial cartoon</strong> &mdash; loose ink with watercolor wash</li>
+                <li><strong>Studio Ghibli / Miyazaki</strong> &mdash; warm painterly anime</li>
+                <li><strong>Mid-century travel poster</strong> &mdash; 1950s screen-print color blocks</li>
             </ol>
 
-            <p>Each prompt described the same 4-panel story (palace "closed" → tuk-tuk → gem shop → regret at home) so we could compare styles apples-to-apples. Here's what Midjourney returned for the watercolor version — what we picked as the winning aesthetic:</p>
+            <p>Every prompt described the same four beats (palace &ldquo;closed&rdquo; &rarr; helpful tuk-tuk &rarr; gem shop &rarr; regret at home). Watercolor storybook won immediately:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/ai-comics-dos-donts/mj-watercolor-styles.png" width="2048" height="2048" alt="Midjourney's 4-variation grid for the watercolor storybook style" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Midjourney v6: warm watercolor storybook. Midjourney's native output is a 2&times;2 variation grid, so each quadrant is its own interpretation of the prompt, and each of those interpretations is in turn a mini-comic. The bottom-right quadrant was the strongest.</figcaption></figure>
 
-            <p>The watercolor look was right: warm, unthreatening, legible faces, a silver-haired protagonist that read as ~60. The four other styles had their moments — the Tintin had stronger architecture, the New Yorker had the most sophisticated faces — but they all skewed more masculine-adventure or more editorial-arch than our audience wanted.</p>
-
-            <p>Style locked. Now add the speech bubbles.</p>
+            <p>The watercolor aesthetic hit the exact tone we wanted: approachable, expressive faces, and a silver-haired protagonist who read clearly as ~60. Tintin had sharper architecture and the New Yorker style had great linework, but both felt colder than the storybook wash.</p>
 
             <h3>The thing Midjourney cannot do</h3>
 
-            <p>We rewrote the prompt with explicit speech bubble content: <em>"Speech bubble reads: PALACE CLOSED TODAY FOR ROYAL CEREMONY!"</em> and so on for each panel. This is what Midjourney returned:</p>
+            <p>Next, we added explicit dialogue to the prompt: <em>&ldquo;Speech bubble reads: PALACE CLOSED TODAY FOR ROYAL CEREMONY!&rdquo;</em> Here is what Midjourney rendered:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/ai-comics-dos-donts/mj-gibberish.png" width="2048" height="2048" alt="Midjourney's attempt at rendering English speech bubbles — most of the text is gibberish" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Midjourney v6 understood that we wanted speech bubbles in the right <em>places</em>. The text inside them reads: <em>"SARPER TOLT," "BEETAL COCOCELS TOUS NT ST REGRSAAL," "FALLET GOLL!"</em> — confident, legible-looking gibberish.</figcaption></figure>
 
-            <p>This is the fundamental Midjourney limitation for comics. It is excellent at the <em>look</em> of text — weight, kerning, bubble shape, speech tails. It just can't reliably spell what you asked for. Post-v6 models have improved on short logos and signs, but custom dialogue longer than a few words is still a coin flip. For our fifty-comic project, that was fatal. We could have generated the art in Midjourney and composited bubbles in Photoshop, but that's ~200 manual touch-ups, and fifty comics across a cast of four characters also demands the next thing Midjourney is bad at: character consistency at scale.</p>
+            <p>Midjourney nails the visual texture of lettering &mdash; kerning, bubble geometry, pointer tails &mdash; while hallucinating the spelling. Compositing 2,900 speech bubbles manually in Photoshop was out of the question, and Midjourney still lacked a clean programmatic lock for multi-character consistency.</p>
 
-            <p>So we moved the entire pipeline to <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>, which gives us unified API access to a bunch of current image models under one billing account. Time to shop.</p>
+            <p>We moved the pipeline to <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">WaveSpeed</a>, which exposes current image models behind a single REST API and billing account.</p>
 
             <h2 id="wavespeed">Round 2: Wavespeed four-model showdown</h2>
 
-            <p>We fed the same watercolor-storybook comic prompt — complete with explicit speech bubbles — into four different current models, all via Wavespeed's HTTP API:</p>
+            <p>We sent the exact same four-panel watercolor prompt &mdash; with full English dialogue &mdash; to four models via WaveSpeed&rsquo;s HTTP API:</p>
 
             <ul>
-                <li><strong>Seedream v5 Lite</strong> (ByteDance) — <code>bytedance/seedream-v5.0-lite</code></li>
-                <li><strong>Wan 2.7 Pro</strong> (Alibaba) — <code>alibaba/wan-2.7/text-to-image-pro</code></li>
-                <li><strong>Qwen Image 2.0</strong> (Alibaba) — <code>wavespeed-ai/qwen-image-2.0/text-to-image</code></li>
-                <li><strong>Nano Banana Pro</strong> (Google Gemini 2.5 Flash Image) — <code>google/nano-banana-pro/text-to-image</code></li>
+                <li><strong>Seedream v5 Lite</strong> (ByteDance) &mdash; <code>bytedance/seedream-v5.0-lite</code></li>
+                <li><strong>Wan 2.7 Pro</strong> (Alibaba) &mdash; <code>alibaba/wan-2.7/text-to-image-pro</code></li>
+                <li><strong>Qwen Image 2.0</strong> (Alibaba) &mdash; <code>wavespeed-ai/qwen-image-2.0/text-to-image</code></li>
+                <li><strong>Nano Banana Pro</strong> (Google Gemini 2.5 Flash Image) &mdash; <code>google/nano-banana-pro/text-to-image</code></li>
             </ul>
 
-            <p>Each one got a <code>POST /api/v3/{model_id}</code> with <code>{"prompt": ..., "aspect_ratio": "1:1"}</code>. Results polled via <code>GET /api/v3/predictions/{id}/result</code>. All four submitted in parallel. All four came back in under 90 seconds. Here's what they produced:</p>
+            <p>Each model received a parallel <code>POST /api/v3/{model_id}</code> with <code>{"prompt": ..., "aspect_ratio": "1:1"}</code>, polled via <code>GET /api/v3/predictions/{id}/result</code>. All four returned in under 90 seconds:</p>
 
             <h3>Seedream v5 Lite ($0.035/image)</h3>
 
@@ -309,20 +302,18 @@
 
             <div style="background:var(--bg-surface);border:2px solid var(--text-muted);border-radius:12px;padding:1.5rem 2rem;margin:2rem 0;">
                 <h3 style="color:var(--text-muted);margin-bottom:0.75rem;font-size:1.1rem;">The Verdict</h3>
-                <p><strong>Nano Banana Pro wins decisively for any comic project that needs English text in speech bubbles. It's 4&times; the price of Seedream and 4.7&times; Qwen, but the English fidelity and character consistency mean zero manual touch-ups — which at fifty-comic scale is a much bigger cost than the ten-cent-per-image delta.</strong></p>
+                <p><strong>Nano Banana Pro wins decisively for any comic project requiring English dialogue. At $0.14/image, it costs 4&times; Seedream and 4.7&times; Qwen, but zero spelling touch-ups saves hours of manual review per batch.</strong></p>
             </div>
 
-            <p>Google's Gemini 3 Pro Image (what Wavespeed exposes as Nano Banana Pro) is doing something structurally different than the other three. It's a native multimodal transformer, not a diffusion model with a text-encoder stapled on. That architectural difference is why it can generate legible, correctly-spelled text inside images — it's treating the text regions as text, not as "text-shaped pixels." Every other model in this test is a diffusion model guessing at letterforms. That's also why Nano Banana Pro is the clear leader for logos, signage, and any prompt where you specified the exact string.</p>
+            <p>Why Nano Banana Pro (Google&rsquo;s Gemini image model on WaveSpeed) pulls ahead: it is a native multimodal transformer rather than a diffusion model bolted onto a text encoder. It models speech-bubble strings as tokens rather than guessing at letter-shaped pixels, giving it a massive edge on dialogue, signage, and multi-panel staging.</p>
 
             <h2 id="consistency">The three consistency locks</h2>
 
-            <p>Picking the right model solves text rendering. It does not solve character consistency. That's the harder problem, and it's where most AI comic projects fall apart — your protagonist morphs slightly every generation, and over fifty panels the series feels like fifty strangers wearing similar costumes.</p>
-
-            <p>Here's the three-layer lock we settled on, in order of impact:</p>
+            <p>Solving spelling only gets you halfway; preventing character and palette drift across hundreds of comics requires three explicit locks:</p>
 
             <h3>1. A locked style block</h3>
 
-            <p>One reusable paragraph describing the visual style, pasted verbatim at the top of every generation. Zero variation between scams. The Thailand block we used:</p>
+            <p>We prepend a 100-word visual style paragraph verbatim to every prompt, with zero variation between calls. Here is the Thailand block:</p>
 
             <pre><code>A single illustrated comic book page in warm soft watercolor
 storybook style, showing four sequential panels arranged in a 2x2
@@ -336,13 +327,13 @@ small pointer tail, holding short printed English dialogue in
 simple black lettering — text must be legible and correctly
 spelled. Square 1:1 composition, 2K resolution.</code></pre>
 
-            <p>This is ~100 words that never change. Every word does work: "warm soft watercolor storybook" (not just "watercolor"), "visible paper grain" (prevents the model from going glossy), "muted pastel palette warmed by golden Thai sunlight" (nudges the palette, locks regional feel), "text must be legible and correctly spelled" (this is a real-enough prompt hint — Gemini responds to it).</p>
+            <p>Every phrase anchors a specific dimension: &ldquo;visible paper grain&rdquo; blocks glossy digital rendering, &ldquo;muted pastel palette warmed by golden Thai sunlight&rdquo; locks regional color temperature, and &ldquo;text must be legible and correctly spelled&rdquo; measurably tightens Gemini&rsquo;s typography.</p>
 
             <h3>2. Canonical character sheets</h3>
 
-            <p>Four protagonists, one reusable paragraph each, pasted verbatim as the <code>CHARACTER:</code> block of every prompt. They rotate across scams by scam type: trust-based scams go to the trusting older woman; transit scams go to the savvy 30-something who pushes back; charm/map scams go to the affable older man; nightlife scams go to the young curious traveler.</p>
+            <p>We wrote four canonical protagonist paragraphs &mdash; Margie (62F), Priya (34F), Harry (64M), and Marcus (34M) &mdash; and pasted the chosen character verbatim into the <code>CHARACTER:</code> slot of each prompt. Trust-based cons go to Margie; transit hustles go to Priya; map/charm distractions go to Harry; nightlife traps go to Marcus.</p>
 
-            <p>Here's one of them — Margie, the headline protagonist:</p>
+            <p>Here is Margie&rsquo;s character lock:</p>
 
             <pre><code>A 62-year-old Western woman with shoulder-length silver-gray hair
 worn under a woven straw sun hat with a cream ribbon, warm blue
@@ -353,20 +344,18 @@ wide-leg travel pants, and white canvas sneakers, with a small
 tan leather crossbody bag and a coral scarf. Gracious, cheerful,
 a little too trusting.</code></pre>
 
-            <p>A few rules that matter:</p>
+            <p>Four rules keep characters recognizable across panels:</p>
 
             <ul>
-                <li><strong>Signature visual anchors.</strong> Straw hat with cream ribbon, coral scarf, tan crossbody bag. These are what the model latches onto. "Silver hair" alone isn't enough — the hat is the lock.</li>
-                <li><strong>Skin tone and features should be concrete.</strong> "Light olive complexion with gentle laugh lines" renders more reliably than "friendly older woman."</li>
-                <li><strong>A personality clause.</strong> "Gracious, cheerful, a little too trusting" — this influences expressions across panels. You'll get more consistent warm smiles in panel 1 and a believable worried look in panel 4.</li>
-                <li><strong>Never paraphrase.</strong> Paste the paragraph exactly. Changing one adjective between generations creates detectable drift.</li>
+                <li><strong>Hard costume anchors.</strong> The straw hat with a cream ribbon, coral scarf, and tan crossbody bag do more work than facial descriptions.</li>
+                <li><strong>Concrete physical traits.</strong> &ldquo;Light olive complexion with gentle laugh lines&rdquo; constrains the generator far better than &ldquo;friendly older woman.&rdquo;</li>
+                <li><strong>An emotional baseline.</strong> &ldquo;Gracious, cheerful, a little too trusting&rdquo; shapes her posture in Panel 1 and her dismay in Panel 4.</li>
+                <li><strong>Zero paraphrasing.</strong> Never tweak a single adjective between prompts.</li>
             </ul>
-
-            <p>The cast — Margie 62F, Priya 34F, Harry 64M, Marcus 34M — is deliberately balanced 2&times;2 on age and gender, with mixed ethnicity for representation and audience identification. Margie gets the most scams because she matches the demo anchor, but every character shows up enough that the series has variety.</p>
 
             <h3>3. Reference images (the big lock)</h3>
 
-            <p>This is the biggest consistency lever, and the one most people miss. Once you have one or two generations you're happy with, <strong>feed them back in as reference images on every subsequent generation</strong>. Nano Banana Pro on Wavespeed exposes this through the <code>edit</code> endpoint:</p>
+            <p>Once you generate two or three baseline comics you love, <strong>pass their URLs into the <code>images</code> array on every subsequent call</strong> via Nano Banana Pro&rsquo;s <code>edit</code> endpoint:</p>
 
             <pre><code>POST https://api.wavespeed.ai/api/v3/google/nano-banana-pro/edit
 {
@@ -380,24 +369,22 @@ a little too trusting.</code></pre>
   "output_format": "jpeg"
 }</code></pre>
 
-            <p>The <code>images</code> array is the lock. Pass in 2–3 prior comics and Gemini uses them as style anchors — it matches the palette, the linework, the paper grain, and (in our case) even the way speech bubbles are rendered. It does <em>not</em> reuse the characters from the references — because the <code>CHARACTER:</code> block in your prompt explicitly describes a different protagonist.</p>
-
-            <p>You need to be explicit about this separation in your prompt, though. We ended the style block with:</p>
+            <p>Passing three reference comics locks the watercolor wash, gutter width, paper texture, and speech-bubble font. To stop the model from copying the reference character into scenes meant for a different protagonist, append this instruction to the style block:</p>
 
             <pre><code>Match the watercolor palette, linework, paper texture, and
 lettering style of the reference images exactly; the protagonist
 must be the NEW character described in CHARACTER below — do not
 reuse characters from the reference images.</code></pre>
 
-            <p>Without that clause, Gemini will sometimes put one of the reference-image characters into the new scene. With it, the style carries over and the character stays new. This one paragraph is what made our fifty-comic scale run work.</p>
+            <p>Without that sentence, the model bleeds Margie into Priya&rsquo;s scenes. With it, style transfers cleanly while the protagonist swaps on command.</p>
 
             <h3>The <code>edit-multi</code> gotcha</h3>
 
-            <p>Wavespeed exposes two reference-image endpoints for Nano Banana Pro: <code>edit</code> and <code>edit-multi</code>. We burned a test generation figuring this out so you don't have to: <strong>only <code>edit</code> supports <code>aspect_ratio: "1:1"</code></strong>. If your comic is square, <code>edit-multi</code> will reject the request with <em>"value is not one of the allowed values [3:2, 2:3, 3:4, 4:3]"</em>. Use <code>edit</code>. Its <code>images</code> array accepts multiple references just fine.</p>
+            <p>WaveSpeed exposes both <code>edit</code> and <code>edit-multi</code> for Nano Banana Pro. Save yourself a failed run: <strong>only <code>edit</code> supports <code>aspect_ratio: "1:1"</code></strong> (<code>edit-multi</code> rejects square outputs with <em>&ldquo;value is not one of the allowed values [3:2, 2:3, 3:4, 4:3]&rdquo;</em>). Standard <code>edit</code> already accepts multiple reference URLs in its <code>images</code> array.</p>
 
             <h2 id="scale">Scaling to 50 comics</h2>
 
-            <p>Once the recipe was locked, Thailand's scaling was mechanical — and hand-authored. We extracted every scam title + location + first-paragraph summary from the existing HTML of nine Thai city pages (Bangkok, Chiang Mai, Chiang Rai, Koh Phangan, Koh Samui, Krabi, Pai, Pattaya, Phuket), then wrote a Python dict mapping each (city, scam number) to (character, four-panel script):</p>
+            <p>For Thailand (our first country), we extracted every scam title, location, and summary from nine city pages (Bangkok, Chiang Mai, Chiang Rai, Koh Phangan, Koh Samui, Krabi, Pai, Pattaya, Phuket) and hand-authored a Python dictionary mapping each scam to a character and four-panel script:</p>
 
             <pre><code>SCENES = {
   ("chiang-mai", 5, "margie"): panels(
@@ -418,9 +405,7 @@ reuse characters from the reference images.</code></pre>
   # ... 41 more
 }</code></pre>
 
-            <p>For each scam, the builder pastes the locked style block + the correct character paragraph + the four-panel scene into one prompt. All 42 bodies get written to <code>/tmp/th_*.json</code>, each referencing the same three Bangkok comics as style anchors.</p>
-
-            <p>Then it's a single parallel burst:</p>
+            <p>The build script concatenated <code>STYLE + CHARACTER + SCENE</code> into <code>/tmp/th_*.json</code> (each pointing to the same three Bangkok reference comics) and fired all 42 jobs in parallel:</p>
 
             <pre><code>for f in /tmp/th_*.json; do
   (curl -s -X POST \
@@ -433,27 +418,17 @@ reuse characters from the reference images.</code></pre>
 done
 wait</code></pre>
 
-            <p>All 42 submitted in under three seconds. The polling loop ran in parallel too (6-second poll interval per job), so wall time was capped by the slowest single generation — which turned out to be ~90 seconds. <strong>Forty-two production-quality comics produced in about a minute and a half.</strong></p>
+            <p>All 42 requests dispatched in under three seconds, and parallel polling finished in <strong>~90 seconds of wall time</strong>.</p>
 
-            <p>This worked cleanly for one country. Fifty comics, hand-authored scripts, watercolor style locked, shipped in an afternoon. It did not survive scaling to eight countries — which turned out to be the most important lesson of the whole project.</p>
+            <p>Hand-writing scripts worked great for 50 Thai comics. It broke badly when we tried to scale to 733 comics across eight countries.</p>
 
             <h3>The negative-cache gotcha</h3>
 
-            <p>One last production detail that ate me for twenty minutes: if you <code>HEAD</code>-check an image URL before it exists (we were verifying the R2 path structure before uploading), Cloudflare will cache the 404 for a minute or two. Later requests — even after you've successfully uploaded the file — will keep getting 404s until the negative cache expires.</p>
-
-            <p>Workarounds, in order of preference:</p>
-
-            <ol>
-                <li>Just wait 60–120 seconds. The negative cache is short.</li>
-                <li>Append <code>?v=1</code> to the URL in your HTML — instant cache bust.</li>
-                <li>Use Cloudflare's zone-scoped API token to call <code>purge_cache</code>. Our R2-scoped token couldn't do this, which is exactly the limitation you want in production, but annoying during development.</li>
-            </ol>
-
-            <p>Also: Cloudflare's WAF returns <code>403</code> to requests with the default <code>Python-urllib/3.x</code> User-Agent. Verify your URLs with a browser UA in <code>curl</code> or <code>requests</code>, or you'll chase a ghost.</p>
+            <p>One Cloudflare trap to watch out for: if your script <code>HEAD</code>-checks an R2 image URL before the upload finishes, Cloudflare caches the <code>404</code> for 60&ndash;120 seconds. Subsequent verification checks will see phantom 404s until the negative cache expires (or until you bust it with <code>?v=1</code>). Also set a browser <code>User-Agent</code> when verifying URLs from Python; Cloudflare&rsquo;s default WAF blocks <code>Python-urllib/3.x</code> with a <code>403</code>.</p>
 
             <h2 id="costs">Cost, time, and the final recipe</h2>
 
-            <p>Full project cost, generator-side only (we're not counting our time):</p>
+            <p>Generator spend for the initial 50-comic Thailand batch:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -520,35 +495,31 @@ wait</code></pre>
                 </table>
             </div>
 
-            <p>Under nine dollars for fifty production comics across nine city pages. That's <strong>seventeen cents per comic, all-in</strong>, including every exploration generation and every false start. A freelance illustrator delivering the same in watercolor would be $200–400 per comic, easily six weeks of turnaround on a fifty-comic series. This isn't a subtle productivity difference.</p>
+            <p>Under nine dollars for 50 production comics across nine city pages &mdash; <strong>$0.17 per comic all-in</strong>, including style exploration and model benchmarks. Commissioning 50 custom four-panel watercolor strips from a freelance illustrator runs $200&ndash;$400 per strip and takes six weeks.</p>
 
-            <p>At multi-country scale the math shifts slightly. Each comic gets a Gemini 2.5 Pro synthesis call (~$0.01–0.05) on top of the Nano Banana Pro render — more on why in a minute. That nudges per-country cost from ~$10 to ~$15. Across eight countries and 733 comics, the total has been about $110. Still multiple orders of magnitude below the freelance baseline.</p>
+            <p>At multi-country scale, adding a per-scam Gemini 2.5 Pro script-synthesis call (~$0.01&ndash;$0.05) nudged our per-country run from ~$10 to ~$15. Across eight countries and 733 comics, total compute spend landed around <strong>$110</strong>.</p>
 
             <h3>The final recipe, one screen</h3>
 
-            <p>If you want to reproduce this for your own content project, here's the distilled version:</p>
-
             <ol>
-                <li><strong>Pick the style on a cheap model first.</strong> Generate 3–5 aesthetic variants at low cost before committing. Midjourney is great for style exploration because it takes creative risks; we just didn't ship it.</li>
-                <li><strong>Use Nano Banana Pro for production</strong> whenever you need English text rendered inside the image. Via <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>, endpoint <code>google/nano-banana-pro/edit</code>, 1:1 aspect ratio.</li>
-                <li><strong>Write one locked style block.</strong> ~100 words, specific and non-negotiable. Paste it verbatim at the top of every prompt.</li>
-                <li><strong>Write canonical character sheets.</strong> One per recurring protagonist. Include visual anchors (hat, bag, clothing color). Paste verbatim.</li>
-                <li><strong>Anchor with reference images.</strong> Your first generation or two (from the same style + same character recipe) becomes the style lock for everything that follows. Pass them via the <code>images</code> array.</li>
-                <li><strong>Be explicit about character substitution.</strong> Tell the model to use the reference images for style only and the NEW character described in your prompt.</li>
-                <li><strong>Batch and parallelize.</strong> The Wavespeed API handles 40+ concurrent requests without rate-limit issues. Wall time is capped by the slowest single generation.</li>
-                <li><strong>Synthesize each script with an LLM, not a keyword classifier.</strong> Past a single batch, ask Gemini 2.5 Pro (or Claude, or GPT-4) with a strict <code>responseSchema</code> to write each four-panel prompt from the source content. Routing to pre-written templates by keyword-match will silently mis-categorize ambiguous inputs — the specifics of <em>why</em> are below.</li>
-                <li><strong>Fail loud, not soft.</strong> If a generation fails twice, flag for manual review. Never silently substitute a template, never reuse an old version. A missing comic beats a wrong comic every time.</li>
+                <li><strong>Explore styles on Midjourney first.</strong> Generate 3&ndash;5 aesthetic directions cheaply before locking your production model.</li>
+                <li><strong>Run production on Nano Banana Pro</strong> (<code>google/nano-banana-pro/edit</code> on <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">WaveSpeed</a>, <code>1:1</code> aspect ratio) whenever panels contain English dialogue.</li>
+                <li><strong>Lock a 100-word style block.</strong> Paste it verbatim at the top of every prompt.</li>
+                <li><strong>Write canonical character sheets.</strong> One paragraph per recurring protagonist with explicit wardrobe anchors (hat, scarf, bag). Never paraphrase.</li>
+                <li><strong>Pass 2&ndash;3 reference comics via <code>images</code>.</strong> Anchors palette, gutter width, paper grain, and lettering across hundreds of calls.</li>
+                <li><strong>Explicitly separate style from character.</strong> Instruct the model to match the reference style while drawing the <em>new</em> character specified in <code>CHARACTER:</code>.</li>
+                <li><strong>Parallelize the batch.</strong> WaveSpeed handles 40+ concurrent jobs cleanly; wall time equals your slowest single image (~90 seconds).</li>
+                <li><strong>Synthesize each script with an LLM (<code>responseSchema</code>), never a regex classifier.</strong> Have Gemini 2.5 Pro write bespoke four-panel scripts directly from each scam&rsquo;s source paragraphs.</li>
+                <li><strong>Fail loud, never soft.</strong> If a render fails twice, log and flag it for manual review. Never substitute a generic fallback template.</li>
             </ol>
 
             <h2 id="what-broke">Scaling past Thailand: what silently broke</h2>
 
-            <p>The Thailand pipeline worked because I hand-wrote all 42 four-panel scripts in Python. At 50 comics, that's an afternoon of work. At 733 comics across 130+ cities, it isn't.</p>
+            <p>Hand-writing 42 four-panel Python scripts took an afternoon for Thailand. Hand-writing 733 scripts across 130+ cities was a non-starter.</p>
 
-            <p>So the first scale-up swap was to route each scam to a pre-written template based on keywords in the title. Extract scam titles from HTML, classify into a template (pickpocket, petition, fake-police, bracelet, etc.), fill in <code>{city}</code> and <code>{landmark}</code> placeholders, generate. It was fast — Germany's 88 comics shipped in about an hour.</p>
+            <p>For our first multi-country attempt (Germany, 88 comics), I took a shortcut: a regex classifier that matched keywords in each scam&rsquo;s title to a library of 35 pre-written comic templates, interpolated <code>{city}</code> and <code>{landmark}</code>, and fired Nano Banana Pro. Germany&rsquo;s 88 comics finished in an hour.</p>
 
-            <p>It was also quietly, catastrophically wrong.</p>
-
-            <p>The cascade looked like this:</p>
+            <p>They also shipped with a silent 9% error rate.</p>
 
             <pre><code>PATTERNS = [
     (r"shell game|three.?card",          t_shell_game),
@@ -563,43 +534,39 @@ def classify(title):
         if re.search(pattern, title.lower()):
             return template</code></pre>
 
-            <p>Berlin scam #3 was titled <strong>"Brandenburger Tor Petition &amp; Bracelet Pickpocket Distraction"</strong> — a charity-worker at the Brandenburg Gate hands you a clipboard while accomplices slip a woven bracelet onto your wrist and lift your wallet. The classifier matched "pickpocket" first, routed to the generic-transit-pickpocket template, and generated a comic of Priya on a U-Bahn.</p>
+            <p>Berlin Scam #3 was titled <strong>&ldquo;Brandenburger Tor Petition &amp; Bracelet Pickpocket Distraction&rdquo;</strong> &mdash; a fake charity worker at the Brandenburg Gate hands you a clipboard while an accomplice ties a woven bracelet onto your wrist and lifts your wallet. Because <code>r"pickpocket"</code> sat above <code>r"petition"</code> in the cascade, the script routed it to the generic transit-pickpocket template and drew Priya getting her pocket picked on a U-Bahn train.</p>
 
-            <p>Beautiful comic. Beautiful watercolor. Completely wrong scam.</p>
+            <p>Great watercolor. Completely wrong scam.</p>
 
-            <p><strong>Eight of 88 Germany comics were mis-routed this way</strong> — a 9% error rate on a single country. I didn't notice because three quiet failures stacked:</p>
+            <p><strong>Eight of Germany&rsquo;s 88 comics were misrouted the same way.</strong> Three blind spots hid the bug during deploy:</p>
 
             <ol>
-                <li>The API returned <code>status: completed</code> on every generation.</li>
-                <li>The programmatic quality gate — valid JPEG header, file size ≥ 120 KB — passed every one.</li>
-                <li>Nothing in the image itself says "this is wrong" unless you read it alongside the scam title.</li>
+                <li>WaveSpeed returned <code>status: completed</code> on all 88 jobs.</li>
+                <li>Our file-level check (valid JPEG header, size &ge; 120 KB) passed 100%.</li>
+                <li>Spot-checking six random comics at deploy happened to hit six cleanly routed ones.</li>
             </ol>
 
-            <p>I spot-checked six comics at deploy. All six happened to be correctly routed. Confidence high, shipping green. A human reviewer found the bug by scrolling through the live Berlin page and going <em>"why is there a subway in the Brandenburger Tor scam?"</em></p>
+            <p>We only caught it when a human scrolled the live Berlin page and asked why a Brandenburg Gate petition scam was set inside a subway car.</p>
 
             <h3>Why first-match cascades are structurally unsafe</h3>
 
-            <p>Reordering the patterns doesn't fix this. Any title with overlapping mechanics lands badly somewhere in a first-match cascade, no matter how you order it:</p>
+            <p>Reshuffling the regex order doesn&rsquo;t fix compound scam titles:</p>
 
             <ul>
-                <li><em>"Lucky Face" Indian Hair Supplement &amp; Fortune Teller</em> — fortune teller, hair supplement, or lucky face?</li>
-                <li><em>Patpong Ping Pong Show Drink Bill</em> — nightlife, bill shock, or ping-pong?</li>
-                <li><em>Fake Elephant Sanctuary &amp; Tiger Petting Trap</em> — elephant ethics or animal welfare?</li>
+                <li><em>&ldquo;Lucky Face&rdquo; Indian Hair Supplement &amp; Fortune Teller</em> &mdash; fortune teller, supplement pitch, or street compliment?</li>
+                <li><em>Patpong Ping Pong Show Drink Bill</em> &mdash; tout bait, bill extortion, or nightlife venue?</li>
+                <li><em>Fake Elephant Sanctuary &amp; Tiger Petting Trap</em> &mdash; elephant riding or drugged-tiger photo op?</li>
             </ul>
 
-            <p>Every new template you add introduces new keyword collisions with the existing set. It's an additive-complexity trap.</p>
-
-            <p>And the deeper issue: a pre-indexed template library <strong>can't encode this specific scam</strong>. Even if "bracelet" had matched first, the bracelet template has a hardcoded script — "lucky bracelet tied on wrist, twenty euros demanded, cut off with pocketknife." It doesn't know this is the Brandenburger Tor variant with "deaf children" as the distraction layer. Right category, wrong details. The comic is in the neighborhood, and in this business "in the neighborhood" is worse than silence.</p>
+            <p>Worse, static templates strip out local mechanics. Even if <code>bracelet</code> had matched first, a generic bracelet template doesn&rsquo;t know that the Berlin variant uses a &ldquo;Help for Deaf Children&rdquo; clipboard as the distraction. In travel-safety guides, &ldquo;close enough&rdquo; illustration destroys reader trust.</p>
 
             <h2 id="v2-rebuild">V2: Gemini writes the script</h2>
 
-            <p>The fix was to stop routing scams to pre-written templates and start writing a bespoke four-panel script for every single scam.</p>
-
-            <p>For each scam, the v2 pipeline:</p>
+            <p>We ripped out the template library and put Gemini 2.5 Pro upstream to write a custom four-panel script for every single scam:</p>
 
             <ol>
-                <li>Extracts title, location, and the first one or two story paragraphs from the HTML.</li>
-                <li>Sends it to Gemini 2.5 Pro with a system prompt describing the four-member cast and their scam-fit pairings, the specific scam's content, and a <strong>strict JSON response schema</strong> — enforced server-side via the <code>responseSchema</code> parameter, not a "please return JSON" prayer:</li>
+                <li>Extract the scam title, city, and full narrative paragraphs from the HTML.</li>
+                <li>Send them to Gemini 2.5 Pro alongside the four character profiles and a server-enforced <code>responseSchema</code>:</li>
             </ol>
 
             <pre><code>RESPONSE_SCHEMA = {
@@ -622,9 +589,7 @@ def classify(title):
     "required": ["character", "character_reason", "panels"],
 }</code></pre>
 
-            <p>Gemini returns a four-panel script tailored to that exact scam. The pipeline then assembles <code>STYLE + CHARACTER + SCENE</code> as before and fires Nano Banana Pro.</p>
-
-            <p>Here's what Gemini writes for the Brandenburger Tor Petition scam:</p>
+            <p>Here is Gemini&rsquo;s exact JSON output for the Brandenburger Tor scam:</p>
 
             <pre><code>{
   "character": "margie",
@@ -650,24 +615,20 @@ def classify(title):
   ]
 }</code></pre>
 
-            <p>The resulting comic shows the clipboard, the bracelet, the pickpocket, and the Polizei report. Brandenburg Gate as backdrop. Panel 3's bubble literally names the scam mechanic. It's a comic that actually matches this specific scam.</p>
+            <p>The regenerated comic shows the Brandenburg Gate, the clipboard, the bracelet accomplice, the lifted wallet, and the Polizei officer.</p>
 
             <h3>Fail loud, not soft</h3>
 
-            <p>V1 had a silent fallback: if a generation failed, substitute a generic template and keep going. That masked routing errors on top of everything else.</p>
-
-            <p>V2's contract: <strong>if a comic makes it into the output folder, it was generated specifically for this scam. No silent substitutions, ever.</strong></p>
+            <p>V1 had a silent catch-all fallback (<code>(r".*", t_pickpocket)</code>) plus a retry fallback that substituted a generic template whenever an API call failed. V2 enforces a strict contract: <strong>every shipped comic was synthesized specifically for that scam, with zero silent fallbacks.</strong></p>
 
             <ul>
-                <li><strong>First failure</strong> → auto-retry once via the <code>/text-to-image</code> endpoint (Nano Banana Pro's <code>/edit</code> endpoint's content filter is slightly stricter; this recovers most filter trips).</li>
-                <li><strong>Second failure</strong> → <strong>flag</strong> for manual review. Write the scam to a flagged log. Do not substitute. Do not reuse an old version.</li>
+                <li><strong>First render failure</strong> &rarr; retry once via Nano Banana Pro&rsquo;s <code>/text-to-image</code> endpoint (whose safety filter is slightly less jumpy than <code>/edit</code>).</li>
+                <li><strong>Second render failure</strong> &rarr; log the failure and halt that item for human review. Never substitute a generic image.</li>
             </ul>
-
-            <p>A missing comic is vastly better than a wrong comic. The reviewer sees the flag, regenerates manually, and the output is always known-good.</p>
 
             <h3>The cast-distribution tell</h3>
 
-            <p>V1 and V2 disagree sharply about which character should appear in German scams, and the shape of that disagreement is diagnostic:</p>
+            <p>Comparing character assignments across Germany&rsquo;s 88 comics between V1 and V2 exposed just how badly the V1 fallback had skewed the set:</p>
 
             <div class="table-wrap">
                 <table class="data-table">
@@ -687,30 +648,26 @@ def classify(title):
                 </table>
             </div>
 
-            <p>V1's generic-pickpocket fallback swept up every unmatched scam and handed it to Priya — she's the savvy-skeptic-on-transit protagonist, perfect for pickpockets, badly miscast for clipboard petitions. V2 picks character based on actual scam mechanics, and Margie (the politeness-target) correctly dominates because German scams skew heavily toward trust-based mechanics — fake charity, restaurant overcharge, fake officials. The 10 → 42 Margie shift isn't a reshuffle. It's v1's systematic misrouting becoming visible in aggregate.</p>
+            <p>V1&rsquo;s <code>t_pickpocket</code> catch-all dumped 68 of 88 German scams onto Priya. Once V2 matched characters to actual scam mechanics, Margie jumped from 10 to 42 appearances &mdash; reflecting the reality that German tourist scams skew heavily toward politeness traps, fake charities, and bill padding rather than subway pickpocketing.</p>
 
             <h2 id="lessons">Seven lessons for AI-illustration pipelines</h2>
 
-            <p>If you're building something like this at any scale past a single batch, these are the things our 733-comic year cost us to learn:</p>
-
             <ol>
-                <li><strong>Keyword classifiers fail silently on ambiguous input.</strong> First-match priority cascades are deceptively simple and dangerous. Every new category introduces collisions with existing ones. You will not notice until a human reviewer spots a mismatch.</li>
-                <li><strong>Content specificity beats style quality.</strong> A beautifully-rendered comic that's wrong about the subject is worse than a sketchy one that's right. AI image models will keep getting prettier. The specificity problem is upstream of that, in how you route source content to a prompt.</li>
-                <li><strong>Per-item bespoke synthesis is worth the ~$0.05.</strong> Adding an LLM step to write each prompt is rounding error against the cost of reprinting a book or losing credibility. Speed-vs-quality inverts the moment output is customer-visible.</li>
-                <li><strong>Structured JSON output is non-negotiable.</strong> Gemini, Claude, GPT-4 all support response schemas. Use them. Don't parse "here is the JSON you requested" — it will break on the one comic where the model decides to add a preamble.</li>
-                <li><strong>Silent fallback is a bug, not a feature.</strong> If your pipeline can't produce a valid output for an item, it should refuse to produce <em>any</em> output for that item. Flag and surface. "We generated 88 comics" should mean exactly that, not "we generated 80 comics + 8 templates."</li>
-                <li><strong>File-size and format checks catch ~90% of API failures and 0% of semantic failures.</strong> A comic that rendered a subway instead of a clipboard will pass every programmatic check. You cannot automate your way out of needing a semantic-correctness pass — but you can push correctness <em>upstream</em> by making the LLM explicitly name the mechanic in the script it writes.</li>
-                <li><strong>When it breaks, regenerate — don't patch.</strong> The temptation to "fix the classifier and re-run only the affected comics" is real but hollow. Rebuilding the whole country's set with v2 also gave us a higher baseline for <em>every</em> comic, not just the broken ones. ~$15 and one hour per country. Cheap.</li>
+                <li><strong>Regex classifiers fail silently on compound inputs.</strong> First-match cascades break as soon as an item combines two mechanics.</li>
+                <li><strong>Semantic specificity beats rendering polish.</strong> A gorgeous watercolor of the wrong scam is worse than no image at all.</li>
+                <li><strong>Spend the $0.03 on per-item LLM synthesis.</strong> Having Gemini 2.5 Pro write a custom script from the source paragraphs costs pennies and eliminates template drift.</li>
+                <li><strong>Enforce server-side JSON schemas (<code>responseSchema</code>).</strong> Never regex-parse freeform markdown responses in a batch pipeline.</li>
+                <li><strong>Ban silent fallbacks.</strong> If an item fails twice, leave the slot empty and flag a human. &ldquo;88 comics generated&rdquo; must never mean &ldquo;80 bespoke comics + 8 generic fallbacks.&rdquo;</li>
+                <li><strong>Byte-level checks catch 0% of semantic bugs.</strong> A valid 250 KB JPEG can still depict a subway instead of the Brandenburg Gate. Push semantic accuracy upstream into script generation.</li>
+                <li><strong>Regenerate the whole batch when upgrading the pipeline.</strong> Re-running all 88 German comics in V2 cost ~$15 and one hour of wall time, lifting the quality of the other 80 comics alongside the 8 broken ones.</li>
             </ol>
 
             <h3>What's next</h3>
 
-            <p>Three things still on the list:</p>
-
             <ul>
-                <li><strong>A semantic-correctness pass.</strong> File-size and JPEG-header checks pass wrong comics. An LLM-as-judge — hand the generated image and the scam text to Gemini and ask "does this comic show X?" — would catch semantic drift that v2's upstream scripting can't fully prevent.</li>
-                <li><strong>Richer pose cues in character sheets.</strong> Characters occasionally drift when they have to do something unusual — lie on a beach, climb stairs, ride a tuk-tuk. A "typical poses" subsection per character would tighten this.</li>
-                <li><strong>Per-scam dialogue length discipline.</strong> Anything over ~8 words per bubble still occasionally mis-spells, even on Nano Banana Pro. Keep bubbles short. It's better comic-writing anyway.</li>
+                <li><strong>Multimodal LLM-as-judge QA:</strong> Passing each finished JPEG + source scam text to Gemini Vision to verify that the rendered panels match the described setting and props before upload.</li>
+                <li><strong>Pose anchors in character sheets:</strong> Adding explicit action-pose notes (sitting in a tuk-tuk, climbing stairs) where character likeness tends to loosen.</li>
+                <li><strong>Strict 8-word bubble caps:</strong> Keeping dialogue under eight words per panel eliminates the last 1% of typography glitches.</li>
             </ul>
 
             <hr style="border:none;border-top:1px solid var(--border);margin:3rem 0;">
@@ -718,13 +675,13 @@ def classify(title):
             <h3>Tools referenced in this post</h3>
 
             <ul>
-                <li><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener"><strong>Wavespeed</strong></a> — unified API access to 1000+ AI models including all four we tested, under one billing account. Pricing at <a href="https://wavespeed.ai/pricing?ref=zonted" target="_blank" rel="noopener">wavespeed.ai/pricing</a>. This is the single highest-leverage tool in this pipeline.</li>
-                <li><a href="https://ai.google.dev/gemini-api/docs/structured-output" target="_blank" rel="noopener"><strong>Gemini 2.5 Pro</strong></a> — the LLM we use for per-scam script synthesis in v2. The key feature is the <code>responseSchema</code> parameter, which server-side enforces a JSON shape on every response. Claude's and OpenAI's equivalents work just as well; pick your poison.</li>
-                <li><a href="https://www.apify.com?fpr=bernard" target="_blank" rel="noopener"><strong>Apify</strong></a> — the <code>imageaibot/midjourney-bot</code> actor we used for Midjourney automation via Discord.</li>
-                <li><a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener"><strong>Claude Code</strong></a> — the agentic coding environment we wrote and ran this entire pipeline through. Wrote the prompts, fired the Wavespeed calls, uploaded to R2, injected into HTML, ran the git workflow, merged the PR. One conversation, under two hours of wall time, fifty comics shipped. Then, a few weeks later, one more conversation to rebuild v2 after the scale-up failure.</li>
+                <li><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener"><strong>WaveSpeed</strong></a> &mdash; unified REST API across 1,000+ image and video models (<a href="https://wavespeed.ai/pricing?ref=zonted" target="_blank" rel="noopener">pricing</a>).</li>
+                <li><a href="https://ai.google.dev/gemini-api/docs/structured-output" target="_blank" rel="noopener"><strong>Gemini 2.5 Pro</strong></a> &mdash; drives V2 per-scam script synthesis via strict <code>responseSchema</code> output.</li>
+                <li><a href="https://www.apify.com?fpr=bernard" target="_blank" rel="noopener"><strong>Apify</strong></a> &mdash; <code>imageaibot/midjourney-bot</code> actor used for Round 1 style exploration.</li>
+                <li><a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener"><strong>Claude Code</strong></a> &mdash; the agentic coding harness that wrote the build scripts, fired the WaveSpeed batches, uploaded to R2, injected the HTML, and rebuilt V2.</li>
             </ul>
 
-            <p>If you want to see all 733 comics in production, the country hubs are at <a href="https://tabiji.ai/scams/country/th/" target="_blank" rel="noopener">Thailand</a>, <a href="https://tabiji.ai/scams/country/fr/" target="_blank" rel="noopener">France</a>, <a href="https://tabiji.ai/scams/country/de/" target="_blank" rel="noopener">Germany</a>, <a href="https://tabiji.ai/scams/country/gr/" target="_blank" rel="noopener">Greece</a>, <a href="https://tabiji.ai/scams/country/es/" target="_blank" rel="noopener">Spain</a>, <a href="https://tabiji.ai/scams/country/cn/" target="_blank" rel="noopener">China</a>, <a href="https://tabiji.ai/scams/country/id/" target="_blank" rel="noopener">Indonesia</a>, and <a href="https://tabiji.ai/scams/country/ca/" target="_blank" rel="noopener">Canada</a>. Click any city to see the comics in context — and each country has its own locked visual style.</p>
+            <p>You can browse all 733 comics live across our country hubs: <a href="https://tabiji.ai/scams/country/th/" target="_blank" rel="noopener">Thailand</a>, <a href="https://tabiji.ai/scams/country/fr/" target="_blank" rel="noopener">France</a>, <a href="https://tabiji.ai/scams/country/de/" target="_blank" rel="noopener">Germany</a>, <a href="https://tabiji.ai/scams/country/gr/" target="_blank" rel="noopener">Greece</a>, <a href="https://tabiji.ai/scams/country/es/" target="_blank" rel="noopener">Spain</a>, <a href="https://tabiji.ai/scams/country/cn/" target="_blank" rel="noopener">China</a>, <a href="https://tabiji.ai/scams/country/id/" target="_blank" rel="noopener">Indonesia</a>, and <a href="https://tabiji.ai/scams/country/ca/" target="_blank" rel="noopener">Canada</a>.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

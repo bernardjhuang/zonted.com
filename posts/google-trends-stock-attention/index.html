@@ -222,21 +222,20 @@
 
         <div class="article-body">
 
-            <p class="dropcap">There is a wonderfully simple trading idea hiding inside Google Trends: when everyone suddenly searches for a stock, buy it. Or short it. Honestly, traders will accept either answer as long as the chart goes up and to the right.</p>
+            <p class="dropcap">There is a seductive trading idea hiding inside Google Trends: when retail searches for a ticker suddenly spike, buy the breakout &mdash; or fade the hype. Traders will happily take either rule if the equity curve goes up and to the right.</p>
 
-            <p>I wanted to know which story the data actually supported. So I built a five-year backtest across the hottest liquid stocks in each quarter, pulled Google search histories for both ticker symbols and company topics, delayed every signal so the model could not see tomorrow's data, and gave the final untouched period one job: grade the idea.</p>
+            <p>To find out which story holds up out of sample, I built a five-year backtest across the most liquid U.S. stocks each quarter, pulled daily Google Trends series for both ticker symbols and company topics, lagged every signal by two calendar days so the model couldn't peek ahead, and locked the final test window behind a 40-session embargo.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. They reliably predict more trading activity. Falling attention predicts activity cooling off. Neither direction reliably predicts price direction.</p>
+                <p class="tldr-thesis">Google search spikes are mostly a reaction to stocks that already moved. Rising searches reliably predict heavier trading volume, and falling searches predict volume drying up &mdash; but neither direction clears the bar for directional alpha.</p>
                 <ul>
-                    <li><strong>Past price move → next-day ticker searches:</strong> +0.194 rank correlation, statistically strong.</li>
-                    <li><strong>Ticker searches → next five-day volume:</strong> +0.268, the strongest result in the original study.</li>
-                    <li><strong>Ticker searches → next five-day return:</strong> &minus;0.059. Interesting, mildly contrarian, but it failed the pre-registered multiple-testing gate.</li>
-                    <li><strong>Falling ticker attention → next five-day return:</strong> +0.032 after a recent attention high&mdash;the opposite of a sell-off signal.</li>
-                    <li><strong>Falling ticker attention → next five-day volume:</strong> &minus;0.255, a strong and stable contraction in participation.</li>
+                    <li><strong>Price leads search:</strong> Prior price moves strongly predict next-day ticker searches (<strong>+0.194</strong> rank correlation) and brand-topic searches (<strong>+0.110</strong>).</li>
+                    <li><strong>Search spikes predict volume, not alpha:</strong> Ticker search attention predicts next 5-day volume at <strong>+0.268</strong>, the strongest signal in the study.</li>
+                    <li><strong>Contrarian return tilt fails the gate:</strong> High ticker attention correlated at <strong>&minus;0.059</strong> with next 5-day sector-excess returns (&minus;0.57% top-vs-bottom quintile spread), but missed the pre-registered false-discovery gate (adjusted <strong>q = 0.115</strong> vs. 0.10 threshold).</li>
+                    <li><strong>Attention unwinds drain volume, not price:</strong> When recently spiked ticker attention cools off, next 5-day volume contracts sharply (<strong>&minus;0.255</strong>), while returns drift slightly positive (<strong>+0.032</strong>).</li>
                 </ul>
-                <p class="tldr-tail">Translation: Google Trends can tell me whether the crowd is arriving or leaving. It still cannot tell me which way price goes next.</p>
+                <p class="tldr-tail">Bottom line: Google Trends tells you whether the crowd is arriving or leaving. It does not tell you which way price goes next.</p>
             </div>
 
             <figure>
@@ -246,68 +245,62 @@
 
             <h2 id="question">The question was backwards</h2>
 
-            <p>The obvious question is: <em>do searches predict stock moves?</em> But that assumes attention arrives first. Anyone who has watched a meme stock knows the opposite story is at least as plausible: the stock rips, screenshots spread, and then everyone Googles the ticker to figure out what they just missed.</p>
+            <p>Most people ask: <em>do Google searches predict stock moves?</em> That framing assumes search interest arrives first. Anyone who has watched a momentum squeeze knows the reverse causal chain is just as likely: price rips, screenshots circulate on X and Reddit, and retail Googles the ticker to see what they just missed.</p>
 
-            <p>So I tested both directions:</p>
+            <p>So I pre-registered tests for both directions:</p>
             <ul>
-                <li>Does abnormal search attention predict future returns, volume, or volatility?</li>
-                <li>Do prior price moves predict future search attention?</li>
+                <li>Does abnormal search attention predict forward 5-day sector-excess returns, volume, or volatility?</li>
+                <li>Do prior price moves predict next-day search attention?</li>
             </ul>
 
-            <p>That second question mattered more than it looked. If price reliably moves before searches rise, the supposed leading indicator is actually a rear-view mirror.</p>
+            <p>If price moves before search volume reacts, your "leading" alternative data feed is just a slow speedometer.</p>
 
             <h2 id="backtest">The honest backtest kept trying to lie</h2>
 
-            <p>The frozen window ran from July 25, 2021 through July 24, 2026. Every quarter, I ranked stocks by their trailing 126-session median dollar volume and kept the top 25. That produced 21 quarterly formations and 58 unique names. Raw prices ranked liquidity; adjusted prices measured returns. ETFs were excluded. Alphabet's two share classes could not both occupy a slot.</p>
+            <p>The test panel ran five years, from July 25, 2021 through July 24, 2026. Each quarter, I ranked U.S. equities by trailing 126-session median raw dollar volume and selected the top 25 names &mdash; yielding 21 quarterly cohorts and 58 unique stocks (ETFs excluded, one share class per issuer).</p>
 
-            <p>For each stock I pulled two independent Google Trends series: the ticker, where the ticker was not hopelessly ambiguous, and the company's Google topic. Each daily value was normalized against its own recent history. Then I imposed a two-calendar-day availability lag and traded, conceptually, at the next session's open. No same-day psychic data.</p>
+            <p>For each stock, I pulled two daily Google Trends series: the exact ticker symbol (where unambiguous) and the canonical company topic. Each observation was z-scored against a rolling trailing window, lagged by two calendar days to prevent lookahead bias, and evaluated at the next session's open.</p>
 
-            <p>The outcome was the stock's next five-day return minus its sector ETF's return. Every day, stocks were ranked against the other stocks active that quarter. The research used train, validation, and final test periods, with a 40-session embargo before the test. Confidence intervals used block bootstrapping. Significance tests used Newey&ndash;West errors and false-discovery-rate correction.</p>
+            <p>Returns were measured as 5-day forward stock returns net of each stock's sector ETF, ranked cross-sectionally within the active quarterly cohort, and evaluated across train, validation, and embargoed test splits using block bootstrapping, Newey&ndash;West standard errors, and Benjamini&ndash;Hochberg false-discovery-rate (FDR) control.</p>
 
-            <p>That sounds fussy because it had to be. The pipeline caught three versions of a prettier, wrong answer:</p>
+            <p>Those guardrails caught three bugs that initially made the backtest look much prettier than reality:</p>
             <ul>
-                <li><strong>The first universe accidentally admitted QQQ, TQQQ, and SQQQ.</strong> Their names did not contain “ETF,” so a lazy filter treated them like companies. Rebuilt.</li>
-                <li><strong>The first liquidity ranking used adjusted prices.</strong> Historical ranking should use the raw price and raw volume available then. Rebuilt again.</li>
-                <li><strong>The first stability test passed 109 of 109 windows.</strong> Suspiciously perfect. SerpApi had cached the responses. I forced 109 fresh no-cache pulls; five failed the stability threshold and their entire term series were excluded.</li>
+                <li><strong>ETFs hiding in the equity universe:</strong> The first pass admitted QQQ, TQQQ, and SQQQ because their security names didn't contain the literal string &ldquo;ETF.&rdquo; Filtered and rebuilt.</li>
+                <li><strong>Split-adjusted liquidity rankings:</strong> The initial cohort selector ranked historical dollar volume using split-adjusted prices rather than point-in-time raw prices and volumes. Rebuilt.</li>
+                <li><strong>Cached SerpApi responses masquerading as stability:</strong> My first sampling-stability check passed 109 of 109 windows &mdash; because SerpApi served cached Trends payloads. Forcing 109 fresh no-cache pulls caused five noisy series to fail the stability threshold, removing them from the panel.</li>
             </ul>
 
-            <blockquote>Every time the backtest got less impressive, it got more useful.</blockquote>
+            <blockquote>Every time the backtest got less impressive, it got more honest.</blockquote>
 
-            <p>The final panel contained 51,372 aligned rows across 52 stocks and 85 stable search series. Eleven pipeline tests passed. Fifteen independent verification gates passed. The primary result was recomputed from the saved panel and matched.</p>
+            <p>The final clean dataset held 51,372 aligned ticker-day rows across 52 stocks and 85 stable search series, passing 11 pipeline unit tests and 15 independent verification gates.</p>
 
             <h2 id="results">Search is late</h2>
 
-            <p>The cleanest result was the reverse-direction test. Large prior stock moves predicted higher next-day search attention:</p>
+            <p>The sharpest result in the entire study ran in reverse: big stock moves strongly predicted next-day search spikes.</p>
             <ul>
-                <li><strong>Brand-topic searches:</strong> +0.110 rank correlation.</li>
-                <li><strong>Ticker searches:</strong> +0.194.</li>
+                <li><strong>Prior price move &rarr; brand-topic searches:</strong> +0.110 rank correlation.</li>
+                <li><strong>Prior price move &rarr; ticker searches:</strong> +0.194 rank correlation.</li>
             </ul>
 
-            <p>Both survived the full multiple-testing correction with effectively zero adjusted p-values. In plain English: when a stock makes an unusually large move, people search for it the next day. The ticker itself reacts more sharply than the general company topic, which is exactly what you would expect from traders chasing a moving symbol.</p>
+            <p>Both cleared multiple-testing correction with near-zero adjusted p-values. When a stock makes an outsized move, people Google it the next day &mdash; and ticker-symbol searches spike nearly twice as hard as general company-topic searches as traders look up the quote.</p>
 
-            <p>Search attention also predicted what came next&mdash;just not direction. High-attention names saw much heavier trading volume over the following five sessions:</p>
+            <p>Forward-looking, search spikes reliably predicted <em>participation</em>, not direction. High search attention preceded five sessions of elevated trading volume:</p>
             <ul>
-                <li><strong>Brand-topic attention → volume:</strong> +0.194.</li>
-                <li><strong>Ticker attention → volume:</strong> +0.268.</li>
+                <li><strong>Brand-topic attention &rarr; next 5-day volume:</strong> +0.194.</li>
+                <li><strong>Ticker attention &rarr; next 5-day volume:</strong> +0.268.</li>
             </ul>
 
-            <p>Brand-topic attention also predicted higher realized volatility (+0.082). Ticker attention did not reliably predict volatility after correction. The broad picture is still obvious: searches are an activity signal. Something happened, people noticed, and the name stayed busy.</p>
+            <p>Brand-topic attention also predicted higher 5-day realized volatility (+0.082), while ticker attention's volatility link faded after FDR correction. Across both series, the takeaway is straightforward: search volume is an activity thermometer. Something moved the stock, retail noticed, and the tape stayed crowded for the next week.</p>
 
             <h2 id="counter-signal">Is it a counter-signal? Almost. Not enough.</h2>
 
-            <p>This is where the result gets tempting.</p>
+            <p>On the surface, fading ticker search spikes looked tempting: in the out-of-sample test, high ticker-search attention carried a <strong>&minus;0.059</strong> rank correlation with next 5-day sector-excess returns, and the top attention quintile lagged the bottom quintile by <strong>0.57%</strong> over five sessions (unadjusted p = 0.047).</p>
 
-            <p>High ticker-search attention had a <strong>&minus;0.059</strong> relationship with next-five-day sector-relative returns in the final test. The highest-attention quintile underperformed the lowest-attention quintile by <strong>0.57%</strong> over five sessions.</p>
+            <p>Once you apply honest multiple-testing controls across all outcomes, horizons, and term types, that edge doesn't clear the bar. The FDR-adjusted q-value landed at <strong>0.115</strong> &mdash; above the pre-registered 0.10 cutoff &mdash; and the quintile spread's bootstrap confidence interval touched zero. Brand-topic attention was weaker still (&minus;0.035, adjusted q = 0.199).</p>
 
-            <p>That sounds tradeable. It was not.</p>
+            <blockquote>Abnormally high ticker searching is an overheating warning. The crowd is late, but this panel does not prove that shorting the crowd pays after friction.</blockquote>
 
-            <p>The confidence interval for the ticker correlation stayed below zero, and the ordinary p-value was 0.047. But I tested multiple outcomes, horizons, and term types. After the pre-registered false-discovery correction, the adjusted q-value was <strong>0.115</strong>&mdash;above the 0.10 gate. The quintile-spread confidence interval also touched zero. Brand-topic attention was weaker still: &minus;0.035 with an adjusted q-value of 0.199.</p>
-
-            <p>So the fair sentence is not “Google Trends is a short signal.” It is:</p>
-
-            <blockquote>Abnormally high ticker searching is an overheating warning. The crowd may be late, but this test does not prove that fading the crowd makes money.</blockquote>
-
-            <p>The negative return relationship is worth monitoring in new data. It is not strong enough to promote into a strategy. Because the leading-alpha gate failed, the portfolio simulator did not run. Zero portfolios greenlit is a result, not an omission.</p>
+            <p>Because the directional alpha gate failed, the portfolio simulator stayed off. Zero strategies promoted to live trading is a valid research outcome, not a missing section.</p>
 
             <figure>
                 <img src="img/oos-ic-horizon.png" width="1440" height="810" loading="lazy" alt="Line chart showing mostly negative out-of-sample relationships between Google search attention and future sector-excess returns across one, three, five, ten, twenty, and forty-session horizons. Ticker attention is most negative around twenty sessions but none became validated alpha.">
@@ -316,17 +309,15 @@
 
             <h2 id="attention-unwind">What if attention falls instead?</h2>
 
-            <p>The original result raised the obvious follow-up: maybe a search spike does not cause the sell-off, but the crowd leaving does. So I froze a second test around an <em>attention unwind</em>: among stocks that had recently reached unusually high search attention, did a steeper decline in searches predict worse sector-relative returns over the next five sessions?</p>
+            <p>That left a natural follow-up hypothesis: maybe the initial search spike doesn't trigger the reversal, but the <em>attention unwind</em> does &mdash; when retail gets bored and stops searching. I locked a second test on the same 51,372-row panel (zero new network calls): among stocks that hit their trailing 80th percentile of search attention in the prior 14 days, did a steeper 7-day-vs-21-day drop in searches predict worse 5-day sector-excess returns across 1,011 eligible dates?</p>
 
-            <p>The extension reused the same frozen 51,372-row panel and made zero new Google Trends pulls. A qualifying stock had to exceed its trailing 80th percentile of attention during the prior 14 days. The decline signal compared the most recent seven calendar days with the preceding 21, kept the original two-day data lag, and left 1,011 eligible market dates. Because the old final period had already been inspected, this was historical evidence only&mdash;not a fresh untouched validation set.</p>
+            <p>The sell-off hypothesis failed outright. The pooled 5-day rank correlation was <strong>+0.032</strong> &mdash; positive across discovery (+0.009), validation (+0.105), and historical replication (+0.026). The steepest-decline quintile actually beat the shallowest-decline quintile by <strong>0.40%</strong> over five sessions.</p>
 
-            <p>The sell-off thesis failed. The pooled five-day rank correlation was <strong>+0.032</strong>, not negative. Discovery, validation, and historical replication were all positive: +0.009, +0.105, and +0.026. The steepest-decline quintile outperformed the shallowest-decline quintile by <strong>0.40%</strong> over five sessions.</p>
-
-            <p>I am not flipping that into a new “falling searches are bullish” strategy. The controlled Fama&ndash;MacBeth interaction was effectively noise (p=0.820). The event study showed +0.17% after five sessions, with p=0.482 and a 95% interval from &minus;0.25% to +0.72%. A 60-session placebo was also significant, which is another reason to refuse the prettier story.</p>
+            <p>That doesn't make falling search volume a buy signal either: controlled Fama&ndash;MacBeth regressions were pure noise (p = 0.820), the 5-day event study (+0.17%, p = 0.482, 95% CI &minus;0.25% to +0.72%) straddled zero, and a 60-session placebo test also tripped significance.</p>
 
             <blockquote>Rising attention predicts more participation. Falling attention predicts less participation. Neither reliably predicts price direction.</blockquote>
 
-            <p>The participation result was much cleaner. Declining ticker attention had a <strong>&minus;0.255</strong> relationship with next-five-day trading volume, and it stayed negative across discovery (&minus;0.265), validation (&minus;0.190), and replication (&minus;0.293). Twenty-two tests and 82 independent verification checks passed; network calls stayed at zero; the original study artifacts remained unchanged. The return gate still failed, so no portfolio or prospective collector was armed.</p>
+            <p>Where the unwind signal shone was volume contraction: declining ticker attention correlated at <strong>&minus;0.255</strong> with next 5-day volume, holding negative across discovery (&minus;0.265), validation (&minus;0.190), and replication (&minus;0.293), passing 22 unit tests and 82 verification checks.</p>
 
             <figure>
                 <img src="img/declining-attention-ic-by-horizon.png" width="1440" height="810" loading="lazy" alt="Line chart showing the relationship between declining Google ticker-search attention and forward sector-relative stock returns at one, three, five, ten, and twenty sessions. Validation and historical-replication values are positive at every horizon, while discovery is near zero or positive after three sessions.">
@@ -335,19 +326,15 @@
 
             <h2 id="useful">The useful signal is “don't chase”</h2>
 
-            <p>If I were putting this into an actual trading system, I would not let Google Trends choose longs or shorts. I would use it as a context flag:</p>
+            <p>In a live trading rig, Google Trends doesn't belong in the alpha engine choosing longs or shorts. It belongs in the risk and execution layer as a regime filter:</p>
             <ul>
-                <li><strong>Position sizing:</strong> a search spike means the name is crowded and likely to trade heavily. Expect noisier execution and wider outcome dispersion.</li>
-                <li><strong>Entry discipline:</strong> if the chart already ripped and searches just exploded, do not confuse public discovery with early information.</li>
-                <li><strong>Risk monitoring:</strong> rising brand attention can warn that volatility and volume are about to stay elevated.</li>
-                <li><strong>Research triage:</strong> search spikes are good at telling an agent which names deserve immediate context gathering. They are bad at telling it which side to take.</li>
+                <li><strong>Position sizing:</strong> A search spike flags a crowded tape with elevated volume and wider outcome dispersion over the next five sessions.</li>
+                <li><strong>Entry discipline:</strong> If price already broke out and ticker searches just surged, you aren't early &mdash; you're reading yesterday's move in the search bar.</li>
+                <li><strong>Liquidity decay awareness:</strong> Once a hot name's search volume rolls over, expect participation to dry up (&minus;0.255 volume correlation) and spreads to widen.</li>
+                <li><strong>Research triage:</strong> Search spikes tell an autonomous research agent which tickers need immediate news scraping, not which direction to trade them.</li>
             </ul>
 
-            <p>The larger lesson is about alternative data. A dataset can be predictive and still have no directional edge. Search attention strongly predicted <em>activity</em>. If I had only tested returns, I would have called the experiment a failure. If I had stopped at the uncorrected negative return result, I would have called it alpha. Both conclusions would have been lazy.</p>
-
-            <p>Google Trends did contain a signal. It told me where the crowd had arrived and when participation was draining away. Rising attention meant volume would persist. Falling attention meant volume would contract.</p>
-
-            <p>It still did not tell me what to buy or short.</p>
+            <p>A dataset can be statistically predictive and still carry zero directional alpha. If I had only tested returns, I would have written Google Trends off as noise; if I had skipped multiple-testing corrections on the &minus;0.059 contrarian tilt, I would have deployed a fake edge. Testing both directions and enforcing the FDR gate saved capital.</p>
 
             <p><strong>Method note:</strong> Google Trends was accessed through SerpApi because Google's official API was not generally available. The full run required roughly 1,300 normalized Trends pulls plus 109 fresh stability re-pulls. The equity universe is reconstructed inside Alpaca's current active-and-inactive exchange-listed coverage; it is not a delisting-complete historical U.S. security master. Results should not be generalized to the entire market without that caveat.</p>
 

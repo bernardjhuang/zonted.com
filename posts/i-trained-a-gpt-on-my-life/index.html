@@ -215,30 +215,30 @@
         </div>
 
         <div class="article-body">
-            <p class="dropcap">Everyone explains LLMs with someone else's diagrams. I wanted to hold one &mdash; small enough to audit, trained on data I understand better than anyone: my own. So over a couple of days I ran the entire modern LLM pipeline &mdash; pretraining, supervised fine-tuning, chat interface, interpretability probes &mdash; on a laptop, using my Google Takeout as the corpus.</p>
+            <p class="dropcap">Everyone explains LLMs with someone else&rsquo;s diagrams. I wanted to hold one &mdash; small enough to audit, trained on a corpus I know better than anyone: my own life. Over a weekend, I ran the entire modern LLM pipeline &mdash; pretraining, supervised fine-tuning, chat formatting, and logit-level interpretability probes &mdash; on a MacBook Air using 15 years of my Google Takeout data.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">I built a 10.77M-parameter GPT from scratch on 4.45M characters of my own Google data &mdash; pretraining, SFT, and interpretability probes, for $0, in ~4 hours on a MacBook Air.</p>
+                <p class="tldr-thesis">I trained a 10.77M-parameter GPT from scratch on 4.45M characters of my own search history and sent emails &mdash; pretraining, SFT, and logit probes, for $0 in ~4 hours on a MacBook Air.</p>
                 <ul>
-                    <li>Model belief tracks the <strong>log</strong> of training-data mentions (r&nbsp;=&nbsp;0.95)</li>
-                    <li><strong>Context beats volume</strong>: my second-most-mentioned weekday is one the model won't recommend</li>
-                    <li><strong>The last training run wins</strong>: fine-tuning re-weighted every entity toward recent data</li>
-                    <li>My own counting bug (&ldquo;ac<strong>ross</strong>&rdquo; &ne; Ross) shows why you should audit every mention dashboard</li>
+                    <li><strong>Belief tracks log-exposure (r&nbsp;=&nbsp;0.95):</strong> Every 10&times; jump in training-data mentions buys a roughly linear step in next-token probability.</li>
+                    <li><strong>Context beats raw volume:</strong> Friday is my second-most-mentioned weekday (995 mentions), yet ranks fifth when the model proposes meeting days (49% vs. Wednesday&rsquo;s 70%).</li>
+                    <li><strong>The last training stage wins:</strong> Supervised fine-tuning re-weighted every entity toward recent reply pairs &mdash; lifting &ldquo;Jennifer&rdquo; (41 mentions, 78% in SFT) to #1 at 32% over &ldquo;Kevin&rdquo; (201 mentions, 17%).</li>
+                    <li><strong>Audit the grep:</strong> A naive substring count inflated &ldquo;Ross&rdquo; from 10 real mentions to 319 by matching &ldquo;ac<strong>ross</strong>&rdquo; and &ldquo;g<strong>ross</strong>&rdquo; &mdash; a miniature lesson in why commercial AI-visibility dashboards lie.</li>
                 </ul>
-                <p class="tldr-tail">The result is a tiny ghost of me that schedules coffee at &ldquo;14:30am,&rdquo; believes Wednesday is the best day of the week, and taught me more about AI &ldquo;knowledge&rdquo; than a year of reading papers.</p>
+                <p class="tldr-tail">The result is a tiny ghost of me that schedules coffee at &ldquo;14:30am,&rdquo; worships Wednesday, and turned vague claims about AI &ldquo;knowledge&rdquo; into exact logit measurements.</p>
             </div>
 
             <h2 id="the-corpus">The corpus: me</h2>
-            <p>Google Takeout will hand you everything the company knows about you. Mine was 133&nbsp;GB, most of it photos and video. The text &mdash; the part a language model can eat &mdash; was tiny by comparison:</p>
+            <p>Google Takeout hands you everything the company has logged on you. My archive weighed 133&nbsp;GB, mostly photos and video. The raw text &mdash; the part a language model can actually eat &mdash; was tiny by comparison:</p>
             <ul>
-                <li><strong>67,792 search queries</strong> across 15 years (Search, Maps, YouTube, Flights, Gmail search) &mdash; 1.35M characters after parsing</li>
-                <li><strong>92,322 emails</strong> in one mbox, from which I extracted my ~10k sent messages &mdash; 3.1M characters of pure me-voice</li>
+                <li><strong>67,792 search queries</strong> spanning 15 years across Search, Maps, YouTube, Flights, and Gmail &mdash; 1.35M characters after parsing.</li>
+                <li><strong>92,322 emails</strong> in a single mbox, filtered down to my ~10,000 sent messages &mdash; 3.1M characters of pure first-person voice.</li>
             </ul>
-            <p>Combined pretraining corpus: <strong>4.45M characters</strong>. For scale, that's four times the Shakespeare dataset every tutorial uses, and a rounding error of a rounding error of what a frontier model trains on. One gotcha worth passing on: Takeout's activity exports default to HTML, and Google separates &ldquo;Searched for&rdquo; from your query with a <em>non-breaking space</em> that silently breaks naive parsers. Data cleaning starts before you have data.</p>
+            <p>Combined pretraining corpus: <strong>4.45M characters</strong> &mdash; four times the standard Karpathy Shakespeare dataset, and a rounding error of a rounding error next to a frontier run. One parser trap worth flagging: Takeout exports activity logs as HTML and separates &ldquo;Searched for&rdquo; from your query string with a <em>non-breaking space</em> (<code>\xa0</code>) that silently breaks naive regexes. Data cleaning starts before you even have a corpus.</p>
 
             <h2 id="pretraining">Pretraining: 5.07 &rarr; 1.60</h2>
-            <p>I used Karpathy's nanoGPT: a character-level GPT &mdash; 6 layers, 6 heads, 384 dimensions, 10.77M parameters &mdash; trained on one task: <em>predict the next character</em>. No labels, no instructions. On an M-series MacBook Air, 8,000 training steps took about two hours.</p>
+            <p>I used Karpathy&rsquo;s nanoGPT: a character-level Transformer &mdash; 6 layers, 6 heads, 384 embedding dimensions, 10.77M parameters &mdash; trained on a single objective: <em>predict the next character</em>. No labels, no instructions. On an M-series MacBook Air, 8,000 steps took about two hours.</p>
 
             <figure class="lm-fig">
             <svg viewBox="0 0 640 300" role="img" aria-label="Line chart of validation loss falling from 5.07 at step 0 to 1.60 at step 5000, then flat to step 8000">
@@ -257,25 +257,25 @@
             <text x="150" y="60" class="lbl">validation loss (email + search corpus)</text>
             </svg>
             </figure>
-            <p class="lm-cap">Loss is &ldquo;average surprise per character.&rdquo; 5.07 is random keyboard-mashing; 1.60 means the model usually knows what I'll type next. It plateaued around step 5,000 &mdash; a 10M-param model had extracted everything it could from 4.5M characters.</p>
+            <p class="lm-cap">Validation loss measures average surprise per character. 5.07 is random keyboard-mashing; 1.60 means the model reliably anticipates my next keystroke. Loss plateaued around step 5,000 once 10.77M parameters had squeezed everything they could from 4.45M characters.</p>
 
-            <p>What did it learn? My <em>shape</em>. Prompt it with nothing and it writes complete emails &mdash; greeting, scheduling proposal with my exact date format (&ldquo;how about Friday (1/29) at 6p CT?&rdquo;), &ldquo;Let me know!&rdquo;, &ldquo;Cheers, Bernard.&rdquo; It also exposed my past: I apparently once mail-merged a catch-up template to hundreds of people, because the model recites &ldquo;I've launched a couple of startups (eSports coaching, real estate listings, bakery CRM)&rdquo; verbatim, constantly. <strong>Your most-repeated text becomes the model's strongest belief.</strong> This is why real labs deduplicate training data with prejudice.</p>
+            <p>What did pretraining learn? My cadence and habits. Prompt the base model with an empty string and it generates complete emails &mdash; greeting, scheduling proposal in my exact date syntax (&ldquo;how about Friday (1/29) at 6p CT?&rdquo;), &ldquo;Let me know!&rdquo;, &ldquo;Cheers, Bernard.&rdquo; It also tattled on my past: years ago I mail-merged a catch-up template to hundreds of contacts, so the base model recites &ldquo;I&rsquo;ve launched a couple of startups (eSports coaching, real estate listings, bakery CRM)&rdquo; verbatim on loop. <strong>Your most-repeated string becomes the model&rsquo;s hardest prior.</strong> That is why frontier labs deduplicate pretraining corpora with a blowtorch.</p>
 
             <h2 id="teaching-it-to-shut-up">SFT: teaching it to shut up</h2>
-            <p>A pretrained model is autocomplete, not a chatbot. Ask it &ldquo;best name?&rdquo; and it doesn't answer &mdash; it drifts into email boilerplate and starts writing to someone named Marcos. A question creates no obligation to answer; that's a social contract, and contracts aren't in the corpus.</p>
-            <p>The fix is supervised fine-tuning, and the mechanics are almost anticlimactic: <em>same training loop, new data, lower learning rate</em>. The data is the clever part. Threading my mbox by <code>In-Reply-To</code> headers yielded <strong>8,520 real (incoming message &rarr; my actual reply) pairs</strong> &mdash; organic chat data most hobbyists have to fake:</p>
+            <p>A pretrained base model is an autocomplete engine, not an interlocutor. Ask it &ldquo;best name?&rdquo; and it ignores the question, drifts into email boilerplate, and starts writing a note to someone named Marcos. Questions carry no obligation to answer in raw text; turn-taking is a post-training contract.</p>
+            <p>Supervised fine-tuning installs that contract with the exact same training loop, a lower learning rate, and structured dialogue pairs. Threading my mbox by <code>In-Reply-To</code> headers yielded <strong>8,520 organic (incoming message &rarr; my actual reply) pairs</strong>:</p>
 <pre><code>&lt;|them|&gt;
 So many of these prompt tracking companies are raising money...
 &lt;|bernard|&gt;
 Ugh, I know. There must be a ton of money sloshing around...
 &lt;|end|&gt;</code></pre>
-            <p>Six thousand gentle steps later, the same 10.77M parameters hold turns, match my register, and &mdash; critically &mdash; stop talking. The chat model answers &ldquo;want to grab lunch this week?&rdquo; with &ldquo;Sounds good!&rdquo; instead of a three-paragraph email. Post-training didn't add knowledge; <strong>it changed which knowledge wins the race to the next token.</strong></p>
+            <p>Six thousand steps later, those same 10.77M parameters hold turns, match my register, and &mdash; crucially &mdash; emit <code>&lt;|end|&gt;</code> and stop talking. Ask &ldquo;want to grab lunch this week?&rdquo; and the SFT model replies &ldquo;Sounds good!&rdquo; instead of hallucinating a three-paragraph thread. Post-training didn&rsquo;t add a single new fact; <strong>it changed which patterns win the race to the next token.</strong></p>
             <blockquote><p>you&gt; hey any interest in trying that new thai place saturday?<br>bernard&gt; Alright, I'm down. See you at 14:30am if you are in SF :)</p></blockquote>
-            <p>Perfectly me-shaped agreement, complete with a time that doesn't exist. That's what 10M parameters buys: form without comprehension. It also memorized real phone numbers from my mail &mdash; harmless on my laptop, but the reason you should never publish weights trained on private data.</p>
+            <p>Unmistakably my syntax, complete with a clock time that doesn&rsquo;t exist. Ten million parameters buy surface form without world knowledge. The model also memorized real phone numbers straight out of my sent mail &mdash; harmless on a local SSD, and a textbook demonstration of why you never publish weights trained on raw private text.</p>
 
             <h2 id="cracking-it-open">Cracking it open</h2>
-            <p>A model this small can be audited: I wrote probes that read the model's <em>exact</em> internal probabilities &mdash; no sampling, no noise; one forward pass returns its true credence for any continuation. First discovery: the model invented character classes from scratch. Its learned vector for <code>!</code> is nearly identical to its vector for the 😊 emoji &mdash; nobody told it they do the same job in my emails; it noticed.</p>
-            <p>Then the real question: <strong>what does the model believe about the people and brands in my life, and why?</strong> I probed its confidence for names and tools, then counted actual mentions in the training data to see what drives belief. Three findings and one confession.</p>
+            <p>Because the model runs locally in milliseconds, I didn&rsquo;t have to guess what it believed by sampling chat completions. I wrote logit probes that read its exact internal probability distribution in a single forward pass &mdash; zero sampling noise. First surprise: the character embedding layer invented syntax classes on its own. Its learned vector for <code>!</code> sits right on top of its vector for the 😊 emoji; nobody told the model they serve the exact same social function at the end of my sentences.</p>
+            <p>Then I ran the core audit: <strong>what does the model believe about the people and brands in my life, and what put those beliefs there?</strong> Probing exact completion probabilities against raw corpus counts produced three structural findings and one humbling bug.</p>
 
             <h3>Finding 1 &mdash; Belief scales with the log of exposure</h3>
             <figure class="lm-fig">
@@ -298,10 +298,10 @@ Ugh, I know. There must be a ton of money sloshing around...
             <text x="470" y="150" class="lbl">r = 0.95</text>
             </svg>
             </figure>
-            <p class="lm-cap">Model confidence completing &ldquo;Content optimization: ___&rdquo;, against training-data mentions. Every ~10&times; more exposure buys a roughly constant jump in belief. (Yes, I co-founded Clearscope &mdash; which is exactly why my email mentions it 1,977 times, and why my model worships it. Bias in, bias out, measurably.)</p>
+            <p class="lm-cap">Model confidence completing &ldquo;Content optimization: ___&rdquo; plotted against training-data mentions. Every ~10&times; increase in mentions buys a roughly constant step in probability. (I co-founded Clearscope, so my sent mail mentions it 1,977 times &mdash; and my model worships it accordingly.)</p>
 
             <h3>Finding 2 &mdash; Context beats volume at the margins</h3>
-            <p>The cleanest demonstration came from weekdays. Friday is my second-most-mentioned day (995 mentions &mdash; deadlines, &ldquo;by Friday&rdquo;, &ldquo;last Friday&rdquo;). But I rarely <em>propose</em> Friday. And the model knows the difference:</p>
+            <p>Weekdays offered the cleanest natural experiment. Friday is my second-most-mentioned day of the week (995 mentions &mdash; mostly deadlines, &ldquo;by Friday,&rdquo; or &ldquo;last Friday&rdquo;). But I rarely <em>propose</em> meeting on a Friday, and the weights separated mention volume from slot context cleanly:</p>
 
             <div class="lm-legend">
                 <span><span class="lm-sw" style="background:#9bb8d3"></span>mentions anywhere</span>
@@ -343,12 +343,12 @@ Ugh, I know. There must be a ton of money sloshing around...
             <text x="560.7" y="290" text-anchor="middle" class="lbl">Sun</text>
             </svg>
             </figure>
-            <p class="lm-cap">The Friday problem: second-most-mentioned day, fifth in the model's scheduling confidence &mdash; below Saturday, which has 42% of Friday's mentions. Being talked about is not the same as being recommended, and next-token models learn the difference.</p>
+            <p class="lm-cap">The Friday gap: second-most-mentioned weekday overall (995), fifth in scheduling confidence (49%) &mdash; trailing Saturday, which has just 42% as many total mentions (415). Being talked about is not the same as filling the recommendation slot.</p>
 
-            <p>Even better: asked &ldquo;best day?&rdquo; &mdash; a phrasing that appears nowhere in my data &mdash; the model still answers Wednesday-first. Associations generalize to questions nobody ever asked. That's the mechanism behind AI answering questions about your brand that no page on the internet answers directly.</p>
+            <p>Better still: when probed with &ldquo;best day?&rdquo; &mdash; a phrase that appears zero times in my corpus &mdash; the model still ranks Wednesday first. Contextual associations generalize to prompts nobody ever wrote.</p>
 
             <h3>Finding 3 &mdash; The last training run wins</h3>
-            <p>Fine-tuning re-weighted everything toward the reply-pair data. Entities frequent in my recent replies strengthened; everyone else decayed &mdash; one name fell from 10% to 1% confidence across 6,000 steps of simply never appearing. Model belief is not a trophy; it's a lease that expires at the next retrain.</p>
+            <p>Supervised fine-tuning tilted the entire probability landscape toward the reply-pair dataset. Names that appeared frequently in my recent SFT replies surged; pretraining-only names decayed &mdash; one dropped from 10% confidence to 1% across 6,000 SFT steps simply by not showing up. Model belief isn&rsquo;t a permanent trophy; it&rsquo;s a lease that gets repriced at every post-training stage.</p>
 
             <div class="lm-legend">
                 <span><span class="lm-sw" style="background:#9bb8d3"></span>pretraining mentions</span>
@@ -395,30 +395,30 @@ Ugh, I know. There must be a ton of money sloshing around...
             <text x="560.7" y="290" text-anchor="middle" class="lbl">Barack</text>
             </svg>
             </figure>
-            <p class="lm-cap">The Jennifer anomaly: fourth in mentions (41), first in belief (32%) &mdash; her mentions are 78% SFT-side (recent), sit inside reply blocks (the exact region the probe reads), and &ldquo;Jennifer&rdquo; is secretly four different people the model pooled into one string. Models track character sequences, not humans.</p>
+            <p class="lm-cap">The Jennifer anomaly: fourth in total mentions (41) but first in belief (32%), beating Kevin (201 mentions, 17%). Seventy-eight percent of Jennifer&rsquo;s mentions sit in SFT reply blocks, and &ldquo;Jennifer&rdquo; pools four different people in my inbox into a single token sequence. Language models count strings, not individuals.</p>
 
             <h3>Finding 4 &mdash; My own bug, or: why mention counts lie</h3>
-            <p>Confession that became the best lesson of the project. My first counts said &ldquo;Ross&rdquo; was the most-mentioned name in my corpus at 319. The dramatic chart I built on that &mdash; famous-but-never-greeted Ross &mdash; was wrong. A case-insensitive substring grep had counted every &ldquo;ac<strong>ross</strong>&rdquo;, &ldquo;g<strong>ross</strong>&rdquo; and &ldquo;c<strong>ross</strong>ed&rdquo; as a Ross-mention. His real count: 10.</p>
-            <p>One word-boundary fix rewrote a finding I'd already internalized. If a two-person audit of a 4.5M-character corpus can be fooled this easily, be appropriately skeptical of any dashboard selling you &ldquo;entity mention rates&rdquo; over the open web &mdash; the counting pipeline is where the lies get in, and nobody shows you their grep.</p>
+            <p>My first pass at that chart claimed &ldquo;Ross&rdquo; was the most-mentioned name in my life at 319 occurrences, yet carried almost zero model confidence. Great story &mdash; completely false. My initial case-insensitive substring grep had counted every instance of &ldquo;ac<strong>ross</strong>,&rdquo; &ldquo;g<strong>ross</strong>,&rdquo; and &ldquo;c<strong>ross</strong>ed&rdquo; as a mention of Ross. His true word-bounded count was 10.</p>
+            <p>Adding word boundaries (<code>\bRoss\b</code>) erased a headline finding I had already written up. If a single-author audit of 4.45M characters can fool itself with a naive substring match, treat every commercial dashboard selling &ldquo;AI brand mention share&rdquo; across the open web with extreme skepticism. The counting pipeline is where the bodies are buried, and nobody shows you their regex.</p>
 
             <h2 id="the-playbook">The playbook: what actually moves an entity's weight in an AI model</h2>
-            <p>The ELI5 is that a language model is a parrot that learned the world from flashcards of &ldquo;what text follows what,&rdquo; and an entity's mention rate only matters through what it does to those flashcards:</p>
+            <p>A language model is a next-token machine trained on billions of text flashcards. Raw mention volume only moves the needle insofar as it reshapes those flashcards:</p>
             <ol>
-                <li><strong>Volume works in powers of ten.</strong> Belief tracks log(mentions), r &asymp; 0.9. Ten more mentions is noise; ten <em>times</em> more mentions is a new belief.</li>
-                <li><strong>The answer slot beats the article.</strong> &ldquo;Best X: you&rdquo; constructions are flashcards; passing mentions aren't. Friday: famous, never proposed, not believed in.</li>
-                <li><strong>Recency compounds.</strong> The last training run redistributes all the probability. AI visibility is a lease, not a trophy.</li>
-                <li><strong>Own a unique name.</strong> Generic names pool with strangers and dilute; distinctive names concentrate every mention into one belief.</li>
-                <li><strong>Associations generalize.</strong> Build one strong context and the model extends it to questions nobody ever asked. You're not optimizing keywords; you're installing a prior.</li>
+                <li><strong>Volume works in orders of magnitude.</strong> Belief scales with <code>log(mentions)</code> (r &asymp; 0.95). Ten extra mentions is rounding error; 10&times; more mentions moves a tier.</li>
+                <li><strong>The answer slot beats passing mentions.</strong> &ldquo;Best X: [you]&rdquo; is a training flashcard; background prose is noise. Friday had 995 mentions and still lost the scheduling slot to Saturday (415).</li>
+                <li><strong>Recency and post-training dominate.</strong> The final training stage re-weights the entire distribution. AI visibility is a lease, not an asset you buy once.</li>
+                <li><strong>Distinctive names concentrate weight.</strong> Generic strings collide with unrelated words (or pool across strangers); unmistakable tokens channel every mention into a single representation.</li>
+                <li><strong>Strong contexts generalize.</strong> Win a specific slot consistently and the model extrapolates that preference to adjacent questions nobody explicitly wrote down.</li>
             </ol>
-            <blockquote><p><strong>One-line version:</strong> AI models don't know who's famous &mdash; they know who reliably appears in the answer slot, recently, at 10&times; scale, under one unmistakable name.</p></blockquote>
+            <blockquote><p><strong>Bottom line:</strong> AI models don&rsquo;t know who is famous &mdash; they know which string reliably occupies the answer slot, in the latest training stage, at 10&times; scale, under an unambiguous name.</p></blockquote>
 
             <h3>The receipt</h3>
             <ul>
-                <li>Training data: 4.45M chars (mine) &middot; Model: 10.77M params &middot; Hardware: MacBook Air</li>
-                <li>Pretrain + SFT wall-clock: ~4 hours &middot; Cost: $0</li>
+                <li>Training data: 4.45M chars (personal Takeout) &middot; Model: 10.77M params &middot; Hardware: MacBook Air</li>
+                <li>Pretrain + SFT wall-clock: ~4 hours &middot; Compute cost: $0</li>
                 <li>Distance to ChatGPT: RLHF + ~6 orders of magnitude</li>
             </ul>
-            <p>Every step is reproducible with nanoGPT, a Google Takeout export, and a weekend. The model is useless as an assistant and priceless as an X-ray: every mystified claim about what AI &ldquo;knows&rdquo; became, at this scale, a number I could measure and a grep I could check. I recommend building your own ghost. Just don't publish the weights &mdash; it knows your phone number.</p>
+            <p>Every step is reproducible with nanoGPT, a Google Takeout archive, and a weekend. The model is useless as a personal assistant and priceless as an X-ray: every mystified claim about what AI &ldquo;knows&rdquo; collapses, at 10M parameters, into a probability you can probe and a grep you can verify. Build your own ghost &mdash; just don&rsquo;t publish the weights, because it memorized your phone number.</p>
         </div>
         <!-- RECOMMENDED_START -->
             <section class="zn-recommended" id="related">

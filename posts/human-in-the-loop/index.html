@@ -112,7 +112,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -187,67 +225,60 @@
 
     <div class="article-body">
 
-        <p class="dropcap">I have about twenty AI agents running around the clock. They post to Pinterest, enrich data, produce video reels, scrape Reddit, pull analytics reports. Every hour or two, a cron job fires and something gets done without me touching it. On paper, this makes me an AI orchestrator &mdash; a conductor directing a symphony of autonomous workers. In practice, I've become their support staff.</p>
+        <p class="dropcap">I have twenty AI agents running around the clock. Every hour or two, a cron job fires and an agent posts to Pinterest, enriches destination data, renders a video reel, scrapes Reddit, or pulls an analytics report without me touching the keyboard. On paper, that makes me an AI orchestrator &mdash; a conductor directing a fleet of autonomous workers. In practice, I'm their IT support staff.</p>
 
-        <p>The phrase "human-in-the-loop" was coined to describe humans supervising AI &mdash; a safety mechanism, a quality gate. In my experience, it means something different. It means I'm the one keeping the loop running. The agents do the work. I make sure they don't stop. That's what AI orchestration actually looks like.</p>
+        <p>"Human-in-the-loop" was coined to describe humans supervising AI as a safety gate. When you actually run a 20-agent fleet, it means the opposite: the agents do the creative and production work, and the human's job is keeping the loop from stalling.</p>
+
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">Running 20 autonomous AI agents 24/7 doesn't buy you passive leverage — it puts you on permanent PagerDuty as both product strategist and full-time sysadmin.</p>
+          <ul>
+            <li><strong>24/7 agents mean 24/7 on-call</strong> — when a Slack webhook channel goes quiet, you're dropping dinner to debug expired cookies, rate limits, or dead crons.</li>
+            <li><strong>30–40% of time goes to "the jank"</strong> — weekly model releases (MiniMax to Veo 3.1 Lite to Seedance 2.0) mean your stack is perpetually mid-migration.</li>
+            <li><strong>Customer-in-the-loop economics</strong> — your agents work for you, you work for your agents, and model providers collect token rent from both.</li>
+          </ul>
+        </div>
 
         <h2 id="on-call">On-Call</h2>
 
-        <p>My agents live in Slack. Every channel is a different workflow &mdash; one for Pinterest posting, one for video production, one for data enrichment, one for analytics. When things are working, the channels are a satisfying stream of confirmations. When something breaks, the channel goes silent. And the silence is deafening.</p>
+        <p>My agents live in Slack. Every workflow has its own channel &mdash; <code>#pinterest</code>, <code>#video-reels</code>, <code>#enrichment</code>, <code>#analytics</code>. When the fleet is healthy, those channels scroll with quiet completion receipts. When something breaks, a channel goes silent.</p>
 
-        <p>I check Slack constantly. Not for messages from people &mdash; for messages from agents. Did the Pinterest bot post? Did the video render? Did the enrichment pipeline finish without errors? If a channel has been quiet for too long, something is wrong, and an overwhelming sense of anxiety kicks in. My agent is no longer productive. My agent is down.</p>
-
-        <p>It makes me drop whatever I'm doing to rush over to the computer. I need to diagnose the failure, fix it, and get the agent running again. I'm a firefighter on call for machines I built myself. If I want them working nonstop, I need to be available nonstop.</p>
-
-        <p>This is the part nobody talks about when they describe the future of AI agents. The agents run 24/7, which means the human-in-the-loop is also on 24/7.</p>
+        <p>I check Slack constantly, not for messages from humans, but for heartbeats from bots. Did the Pinterest job fire? Did the six-scene reel finish rendering? Did the enrichment script hit a 429? When a channel goes dark for two hours, a familiar spike of dread hits: an agent is down, throughput is zero, and I need to get to a terminal to read the logs. I've built a 24/7 workforce, which means I've put myself on 24/7 PagerDuty.</p>
 
         <h2 id="the-jank">The Jank</h2>
 
-        <p>About 30 to 40 percent of my time goes to diagnosing issues, upgrading firmware, swapping models, handling fallbacks, rate limits, and errors. Not building product. Not creating content. Not thinking about strategy. Just keeping the infrastructure from falling over.</p>
+        <p>Roughly 30 to 40 percent of my week goes to plumbing: diagnosing silent failures, upgrading CLI harnesses, swapping model endpoints, tuning fallback chains, and working around rate limits. Not building product. Not refining strategy. Just keeping the rig upright.</p>
 
-        <p>And it never stabilizes, because the ecosystem won't sit still.</p>
+        <p>It never stabilizes because the underlying stack mutates every week. We built our reel pipeline on <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link">MiniMax Hailuo</a> because the unit economics worked. Then <a href="/posts/wavespeed/">Veo 3.1 Lite cut prices</a> on April 7 to match it, so we spent a day benchmarking and migrating. Days later, Seedance 2.0 dropped with noticeably better motion quality, kicking off another round of prompt rewrites and pipeline tests. You're never maintaining a finished system; you're maintaining a system that is perpetually mid-upgrade.</p>
 
-        <p>We were using <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link">MiniMax Hailuo</a> for video generation because it was cheap. Then <a href="/posts/wavespeed/">Veo 3.1 Lite dropped prices</a> on April 7th to match it. So now we need to test that, maybe migrate. But then Seedance 2.0 came out days later, and people are raving about the quality. So we need to evaluate that too. Every week there's a new model, a new API, a new price cut that potentially invalidates your current setup.</p>
-
-        <p>The maintenance never ends because the tools never stop changing. You're not maintaining a stable system. You're maintaining a system that's perpetually mid-upgrade.</p>
-
-        <p>Cookies expire. Scrapers get blocked. API providers change their rate limits without warning. Tokens run out. Auth flows break. Each of these is a small fire, but when you're running twenty agents, small fires happen daily. Some days it feels like all I do is put out fires &mdash; and the agents are the ones starting them.</p>
+        <p>Meanwhile, the mundane failures compound. Session cookies expire. Scrapers hit new Cloudflare rules. Upstream APIs silently tighten concurrency limits. OAuth tokens lapse. One flaky dependency is a ten-minute fix; across twenty agents, something is breaking every single day.</p>
 
         <h2 id="two-jobs">Two Jobs</h2>
 
-        <p>I've realized that being an AI orchestrator means doing two completely different jobs, and they require completely different mindsets.</p>
+        <p>Running an agent fleet forces you to context-switch between two incompatible jobs all day:</p>
 
-        <p>The first job is <strong>orchestration</strong>. This is the strategic layer &mdash; deciding what the agents should be doing, evaluating whether the output is good enough, making taste calls about content quality, choosing which platforms to target, which formats to double down on. This is the part that actually matters. This is the part that's supposed to be my competitive advantage.</p>
+        <ul>
+            <li><strong>Orchestration (the leverage):</strong> Deciding what the fleet should build, grading output quality, making taste calls on hooks and formats, and picking which distribution channels deserve more compute.</li>
+            <li><strong>Maintenance (the tax):</strong> Rotating API keys, patching broken DOM selectors, restarting wedged launchd daemons, and figuring out why a Pinterest upload needs three retries before the CDN accepts it.</li>
+        </ul>
 
-        <p>The second job is <strong>maintenance</strong>. This is agent support &mdash; debugging why a workflow failed, rotating API keys, testing new model versions, fixing broken scrapers, monitoring cron jobs, restarting things that silently died. This is IT work. Necessary, unglamorous, and endless.</p>
+        <p>I'm simultaneously the creative director and the night-shift sysadmin &mdash; and neither role is easy to delegate. The taste calls are the entire moat, while the debugging requires having the entire 20-agent dependency graph in your head.</p>
 
-        <p>I'm the orchestrator and the IT department. And I can't delegate either role. The strategic taste is mine &mdash; that's the whole point, the thing the AI can't do. And the debugging requires my context &mdash; nobody else knows how these twenty agents are wired together, what the fallbacks are, or why that particular Pinterest workflow needs to retry three times before it succeeds.</p>
-
-        <p>The <a href="/posts/ai-psychosis/">AI psychosis essay</a> was about trading grunt work for decision fatigue. This is worse. I didn't just trade up &mdash; I added a whole second job on top of the first one.</p>
+        <p>In <a href="/posts/ai-psychosis/">AI Psychosis</a>, I wrote about trading manual grunt work for high-frequency decision fatigue. This is the operational corollary: I didn't just trade up to a higher-level job; I bolted an unglamorous DevOps job underneath it.</p>
 
         <h2 id="the-real-product">The Real Product</h2>
 
-        <p>Here's what I've started to see more clearly: making money on the internet is about to get dramatically more skewed.</p>
+        <p>The internet is splitting into two camps: solo operators who use agent fleets to ship at the volume of a 15-person media company, and passive consumers scrolling through what those fleets generate. But even on the builder side, raw production volume isn't a moat for long &mdash; when everyone can spin up twenty crons, distribution gets harder at the exact rate generation gets cheaper.</p>
 
-        <p>People who can harness AI agents will produce at a scale that was previously impossible for individuals. People who can't will become more and more passive consumers of an internet that's increasingly shaped by those agents. The gap between the people who build with AI and the people who scroll through what AI produces is going to widen fast.</p>
+        <p>And beneath all of us, the labs and cloud providers collect rent. They sell the tokens, meter the APIs, and train next quarter's frontier models on the public web traffic our agents generate. You're the human-in-the-loop, which also makes you the customer-in-the-loop: paying for compute to run agents that feed platforms that train the next model you'll rent.</p>
 
-        <p>But even among the builders, there's a harder problem: finding a business model that actually works with autonomous agents. Everyone wants this. AI makes more and more possible every month, which means competition compounds just as fast as capability does. Standing out gets harder at exactly the rate that producing gets easier.</p>
-
-        <p>And underneath all of it, Big Tech collects rent. They sell you the tokens. They host the APIs. They train the models on the data your agents produce. You're the human-in-the-loop, but you're also the customer-in-the-loop &mdash; paying for compute to run agents that generate content on platforms that harvest it to train the next model that you'll pay for.</p>
-
-        <p>The agents work for me. I work for the agents. And we all work for the model providers.</p>
+        <p>The agents work for me. I work for the agents. And we all work for the token meter.</p>
 
         <h2 id="the-loop">The Loop</h2>
 
-        <p>I'm working twelve-hour days plus weekends. I sleep enough, but my personal life is suffering from always being online, always being locked in. The agents don't take breaks, so I feel like I can't either.</p>
+        <p>Right now I'm working twelve-hour days plus weekends. Because the crons don't take Saturday off, my brain doesn't either. I'm not conducting a frictionless symphony of intelligence; I'm babysitting brittle bash scripts, session cookies, and JSON schemas that happen to call a frontier LLM.</p>
 
-        <p>The irony is sharp. "AI orchestrator" sounds like a visionary role &mdash; the human who conducts the symphony, who provides judgment and oversight. In practice, the AI orchestrator is a systems administrator. The AI does the creative work, the production, the execution. The human handles the cookies, the tokens, the error logs.</p>
-
-        <p>I'm not orchestrating intelligence. I'm maintaining infrastructure that happens to be intelligent.</p>
-
-        <p>And yet I keep going. Because the alternative &mdash; turning the agents off, going back to doing everything manually &mdash; is unthinkable. I've seen what's possible. I can't unsee it. The loop is exhausting, but the output is real. The content ships. The data gets enriched. The reels get posted. The analytics get pulled. Twenty agents working around the clock produce more than I ever could alone, even at the cost of me becoming their full-time operator.</p>
-
-        <p>That's the deal. You get a team of twenty that never sleeps. The price is that the AI orchestrator &mdash; the human-in-the-loop &mdash; can never fully log off.</p>
+        <p>Yet turning the fleet off is unthinkable. Even with 35% of my week lost to maintenance, twenty agents running around the clock ship more data enrichments, reels, pins, and code than I could ever produce by hand. That's the bargain of solo AI orchestration in 2026: you get a twenty-person workforce that never sleeps, and the price is that you never fully log off either.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

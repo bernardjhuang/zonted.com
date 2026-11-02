@@ -114,7 +114,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -189,11 +227,19 @@
 
     <div class="article-body">
 
-        <p class="dropcap">There's a specific kind of madness that takes hold when you first realize what AI can actually do. Not the theoretical promise. The practical, ship-it-today kind of power. The clinical term &mdash; <a href="https://academic.oup.com/schizophreniabulletin/article/49/6/1418/7251361">AI psychosis</a> &mdash; was first raised by Danish psychiatrist S&oslash;ren Dinesen &Oslash;stergaard in a 2023 Schizophrenia Bulletin editorial, where he warned that generative AI could trigger delusions in people prone to psychosis. What I'm describing isn't that. But it's not nothing either. And I think most people building right now have some version of it.</p>
+        <p class="dropcap">A specific kind of mania sets in when you first experience what agentic AI can ship in production. The clinical phrase &mdash; <a href="https://academic.oup.com/schizophreniabulletin/article/49/6/1418/7251361">AI psychosis</a> &mdash; was coined by Danish psychiatrist S&oslash;ren Dinesen &Oslash;stergaard in a 2023 <em>Schizophrenia Bulletin</em> editorial about generative models triggering clinical delusions. Builder AI psychosis is different, and almost everyone shipping with agents right now has a case of it.</p>
 
-        <p>It starts innocently. You delegate something you used to spend hours on &mdash; writing SEO content, editing a video, researching a topic &mdash; and AI does it in minutes. Not perfectly, but well enough to ship. You feel a rush. Not because the output is amazing, but because you just got three hours of your life back. Then you fill those three hours with three new projects.</p>
+        <p>It starts innocently. You delegate a task that used to eat an afternoon &mdash; drafting an SEO brief, cutting a vertical video, scraping a dataset &mdash; and an agent finishes it in four minutes. You feel a jolt of leverage: you just bought back three hours of your life. Then, instead of logging off, you immediately fill those three hours with three more ambitious pipelines. That's the first symptom.</p>
 
-        <p>That's the first symptom.</p>
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">AI tools don't buy you leisure time — they blow open the ceiling on solo throughput, replacing low-grade manual work with 16-hour days of high-frequency decision fatigue and arbitrage anxiety.</p>
+          <ul>
+            <li><strong>The Jevons paradox of personal output</strong> — saving 3 hours on execution doesn't shorten your workday; it tempts you to spin up 3 new automated workflows.</li>
+            <li><strong>Pure strategy is exhausting</strong> — stripping away mechanical grunt work removes the low-cognitive-load "flow state" buffers from your day, leaving only nonstop taste and routing calls.</li>
+            <li><strong>Arbitrage anxiety</strong> — when content costs approach zero and API gates are closing, every hour away from the terminal feels like watching a temporary market inefficiency expire.</li>
+          </ul>
+        </div>
 
         <figure style="margin:2rem 0;">
             <img  src="img/cyberpsychosis.avif" width="1800" height="900" alt="David and Maine from Cyberpunk Edgerunners experiencing cyberpsychosis" loading="lazy" style="border-radius:6px;width:100%;">
@@ -202,67 +248,43 @@
 
         <h2 id="the-high">The High</h2>
 
-        <p>Before AI, I managed freelance writers, edited their drafts, coordinated publishing calendars. I had never touched video production. Now I generate SEO content, produce video reels, cross-post to multiple platforms, and use AI as a thought partner for strategy &mdash; all workflows I run solo.</p>
+        <p>Before AI, my days revolved around managing freelance writers, editing Google Docs, and herding publishing calendars. I had never touched video production. Today, I run programmatic SEO pipelines, render multi-scene video reels, cross-post across social networks, and pressure-test product strategy &mdash; entirely solo.</p>
 
-        <p>The turning point wasn't any single tool. It was understanding that once you have a working recipe &mdash; a proven workflow that produces good output &mdash; you can automate the repetition. Build it once, bundle it into a skill, schedule it on a cron job, and scale it. Suddenly you're not doing the work anymore. You're designing systems that do the work.</p>
-
-        <p>That's when one person starts to feel like a team of twenty. And that feeling is intoxicating.</p>
-
-        <p>You look at what you shipped in a week and think: there's no way one person did all this. And you're right &mdash; one person didn't. One person plus a fleet of AI agents did. But you're the one who feels the high.</p>
+        <p>The inflection point wasn't a single chat model; it was realizing that any repeatable creative recipe can be codified into a skill and put on a cron schedule. Once you stop doing the task and start engineering the loop that does the task, one operator genuinely outputs like a 20-person agency. Looking at your Friday commit and publish logs feels intoxicating.</p>
 
         <h2 id="the-paradox">The Paradox</h2>
 
-        <p>Here's the thing nobody warns you about: you get more tired, not less.</p>
+        <p>Here is what nobody warns you about: you end up more exhausted, not less.</p>
 
-        <p>This makes no sense on the surface. The grunt work is gone. I'm not manually editing videos or uploading posts to six platforms or wrangling freelancers. AI handles all of that. So why am I more exhausted than when I was doing everything by hand?</p>
+        <p>On paper, that makes no sense. I'm no longer scrubbing timelines in Premiere, uploading MP4s to six dashboards, or chasing late freelance drafts. Yet my brain is more fried at 8 p.m. than when I did everything by hand.</p>
 
-        <p>Because what's left is pure strategy. All day, every day, I'm making decisions. What direction are we heading? Is this the right content angle? Is this format working? Should we double down or pivot? When you strip away the execution, all that remains is judgment. And judgment is exhausting in a way that mechanical work never is.</p>
-
-        <p>Execution gives your brain a break. You enter a flow state, you do the thing, you feel accomplished. Strategy never gives you a break. There's no flow state in constantly evaluating whether you're heading in the right direction. It's all signal, no autopilot.</p>
-
-        <p>I traded grunt work for decision fatigue, and the decision fatigue is worse.</p>
+        <p>Why? Because delegating execution leaves behind 100% high-stakes judgment. All day, every day, you are context-switching across strategic bottlenecks: Is this content angle working? Did this prompt drift? Should we kill this format or double the cron frequency? Manual execution used to act as a cognitive buffer &mdash; you entered a mechanical flow state for two hours and gave your prefrontal cortex a rest. Pure direction has no autopilot. You trade grunt work for relentless decision fatigue.</p>
 
         <h2 id="arbitrage-anxiety">Arbitrage Anxiety</h2>
 
-        <p>But the tiredness isn't even the hardest part. The hardest part is the anxiety.</p>
+        <p>Worse than the decision fatigue is the ticking clock.</p>
 
-        <p>There's a window right now &mdash; and I believe it's closing &mdash; where AI gives you insane leverage if you know what you're doing. The cost to produce written content has dropped to near zero. Platforms like TikTok, Instagram, and YouTube Shorts are actively looking the other way on AI-generated content, creating a loophole for anyone willing to produce at scale. Mainstream API providers are <a href="/posts/the-great-api-shutdown/">shutting off access</a>. The old gatekeepers are falling and the new ones haven't been built yet.</p>
+        <p>Right now, there is a glaring market inefficiency for technical operators. Written and video production costs have collapsed toward zero. Short-form algorithms on TikTok, Instagram Reels, and YouTube Shorts still reward high-velocity programmatic media. Meanwhile, legacy platforms are <a href="/posts/the-great-api-shutdown/">locking down their APIs</a>, and old distribution moats are eroding faster than new gatekeepers can form.</p>
 
-        <p>This isn't FOMO. FOMO is worrying you'll miss a party. This is arbitrage anxiety &mdash; you see an inefficiency in the market, you know it's temporary, and every hour you're not exploiting it feels like watching money evaporate.</p>
+        <p>This isn't FOMO; it's arbitrage anxiety. When you spot a mispriced asset in a market, you know the spread won't last. Within six to twelve months, the loopholes tighten, platforms throttle synthetic volume, and SERPs saturate. Every Saturday afternoon you spend away from the keyboard feels like watching a temporary alpha window close.</p>
 
-        <p>The internet is being flooded with AI slop at a pace that is genuinely hard to comprehend. What works today might not work in six months. The loopholes will close. The platforms will crack down. The SEO landscape will get so crowded with near-zero-cost content that the margins will disappear.</p>
-
-        <p>So you work now. And tomorrow. And on weekends.</p>
-
-        <p>I told my fianc&eacute;e that we need to lock in. Time feels more precious now than it ever has. Hanging out with friends, going outside, doing anything that isn't building &mdash; it all feels like a luxury I can't afford right now. Not because I don't want those things. Because the window is closing and I can feel it.</p>
+        <p>I told my fianc&eacute;e recently that we have to lock in while the window is open. Going outside or taking a slow weekend feels irrationally expensive when an afternoon of wiring up a new skill can compound 24/7 for the next six months.</p>
 
         <h2 id="always-on">Always On</h2>
 
-        <p>This is what AI psychosis looks like in practice: 6am to 10pm, seven days a week.</p>
+        <p>In practice, builder AI psychosis looks like 6 a.m. to 10 p.m., seven days a week &mdash; not because a boss demands it, but because the possibility space expanded so violently that logging off feels like leaving money on the table.</p>
 
-        <p>Not because someone is forcing me. Not because I'll get fired if I stop. Because the possibility space expanded so dramatically that anything less than full commitment feels like negligence.</p>
-
-        <p>Before AI, progress felt linear. You practiced, you got better, you shipped incrementally. Your competitors were doing the same thing at roughly the same speed. There was a ceiling on how fast anyone could move, because everyone was bound by the same human bottleneck: time and attention.</p>
-
-        <p>That constraint is gone. The game changed from <em>who grinds hardest</em> to <em>who figures out the leverage fastest</em>. And this new game rewards obsession in a way the old one never did. A solo founder who understands AI automation can outproduce a team of ten who don't. That wasn't true two years ago. It is now.</p>
-
-        <p>So you stay on. Not because you're productive every minute &mdash; you're not &mdash; but because the cost of being off feels higher than the cost of burning out.</p>
+        <p>Before LLMs, output scaled linearly with human hours. Everyone was throttled by the same biological bottleneck. Now the game has shifted from <em>who grinds the most hours</em> to <em>who compounds automation the fastest</em>. A solo builder with sharp orchestration can out-ship a ten-person team stuck in manual workflows &mdash; so the return on obsession has never been higher, and the perceived opportunity cost of rest has never been steeper.</p>
 
         <h2 id="the-bet">The Bet</h2>
 
-        <p>Here's the part that makes all of this surreal: it might not matter.</p>
+        <p>The darkest joke of all is that none of this plumbing may matter in three years.</p>
 
-        <p>Frontier models keep getting more powerful. Companies are promising AGI. If that actually happens &mdash; real AGI, not marketing AGI &mdash; then everything I'm building right now could become irrelevant overnight. Whoever controls the most powerful models controls the game. It won't matter how clever your workflows were or how hard you hustled. The leverage I'm exploiting right now will be available to everyone, which means it'll be available to no one.</p>
+        <p>If frontier labs actually deliver autonomous systems that one-shot entire businesses end-to-end, today's clever prompt harnesses and multi-agent crons will get paved over overnight. When everyone has infinite one-click leverage, nobody has an edge.</p>
 
-        <p>I know this. And I still wake up at 6am.</p>
+        <p>I know that &mdash; and I still wake up at 6 a.m. Because it's an asymmetric bet: if frontier models flatten the board tomorrow, I lose nothing I wouldn't have lost sitting on the sidelines. If capability plateaus or diffuses slowly over five years, the operators who built distribution and cash flow during the arbitrage window win the decade.</p>
 
-        <p>Because the alternative is worse. If I stop and AGI arrives, I lost nothing I wouldn't have lost anyway. But if I stop and AGI doesn't arrive &mdash; or arrives slower than the hype suggests &mdash; then I'll have watched everyone who kept building pull ahead while I stood still.</p>
-
-        <p>So you make the bet. You bet that what you're doing matters, while holding the uncomfortable awareness that it might not. You push through the fatigue and the anxiety and the always-on feeling because the regret of not trying would be worse than the exhaustion of trying.</p>
-
-        <p>I want to be done working for money. I want to catch lightning in a bottle one more time. And right now, building with AI feels like the highest-probability path to getting there.</p>
-
-        <p>That's AI psychosis. It's not irrational. It might not even be unhealthy &mdash; not yet. But it's real, and it's consuming, and if you're building with AI right now, you probably have it too.</p>
+        <p>I'm trying to catch lightning in a bottle one more time so I never have to work for money again. That's AI psychosis: rationally defensible, completely consuming, and immediately recognizable to anyone else staring at three terminal windows at midnight.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

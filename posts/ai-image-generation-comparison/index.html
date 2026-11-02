@@ -178,6 +178,44 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -270,19 +308,23 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <img src="https://img.zonted.com/resources/ai-image-generation-comparison/hero-comparison-grid.jpg" alt="Side-by-side comparison of AI-generated vintage 1970s photographs of Fushimi Inari by Nano Banana 2 (9.5/10), MiniMax (5.5/10), and CogView-4 (4/10) — same prompt, dramatically different results" width="2424" height="1478">
             </div>
 
-            <div class="verdict-box" style="border-color: var(--text); background: linear-gradient(135deg, var(--bg-surface), #faf5ee);">
-                <h3 style="color: var(--text); margin-bottom: 0.5rem;">TL;DR — 5 Models, 26 Images, Two Benchmarks</h3>
-                <p class="dropcap">We tested <strong>GPT (DALL-E 3)</strong>, <strong>Grok Aurora</strong>, <strong>Nano Banana 2</strong> (Gemini), <strong><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax image-01</a></strong>, and <strong>CogView-4</strong> across two real production workflows: vintage 1970s Kodachrome film photography (18 images) and iPhone-realistic phone photos for <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> (8 images).</p>
-                <p><strong>The biggest differentiator wasn't image quality — it was prompt adherence.</strong> Most models produce decent-looking images. Only Nano Banana 2 consistently does what you actually ask. It scored 8.8/10 for vintage photography, 9/10 for crowd scenes, and costs ~$0.02/image. For portraits, MiniMax leads. For an all-rounder, Grok. GPT finished last for both use cases.</p>
+            <p class="dropcap">We tested five AI image models—<strong>Nano Banana 2</strong> (Gemini 3.1 Flash), <strong><a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax image-01</a></strong>, <strong>Grok Aurora</strong>, <strong>CogView-4</strong>, and <strong>GPT (DALL-E 3)</strong>—across 26 images in two real production workflows for <a href="/">tabiji</a>: 1970s Kodachrome film slides of Kyoto (18 images) and candid iPhone tourist shots of Verona for <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> (8 images).</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Across 26 production images and 5 models, prompt adherence—not raw visual polish—separated usable tools from toys: Nano Banana 2 won overall at ~$0.02/image.</p>
+                <ul>
+                    <li><strong>Vintage film &amp; crowd scenes (Nano Banana 2)</strong> — Scored 8.8/10 on 1970s Kodachrome Kyoto and 9/10 on Verona crowd shots, rendering legible Japanese kanji and real Kodachrome rebate markings at ~$0.02/image.</li>
+                    <li><strong>Close-up portraits (MiniMax image-01)</strong> — Scored 8/10 on candid café portraits with the most convincing human faces (~$0.04/image), but ignored monochrome constraints (2/10 on B&amp;W).</li>
+                    <li><strong>All-rounder vs. laggards</strong> — Grok Aurora (~$0.07/image) finished a close second across Verona with 9/10 emotional storytelling; CogView-4 (2/10 prompt adherence) and GPT/DALL-E 3 (4–6/10, garbled text and plastic skin) finished last.</li>
+                </ul>
             </div>
 
             <h2 id="why-this-test-matters">Why This Test Matters</h2>
 
-            <p>Most AI image generation comparisons test generic prompts — "a cat wearing a hat," "futuristic cityscape." That tells you which model makes the prettiest pictures. It doesn't tell you which model <em>follows instructions</em>.</p>
+            <p>Most AI image benchmarks test forgiving prompts like "a cat wearing a hat" or "futuristic cityscape." That tells you which model makes pretty default wallpapers—not which model follows a production brief.</p>
 
-            <p>We needed to know something different. We build <a href="/">AI-generated travel itineraries</a> at tabiji, and our <a href="https://www.instagram.com/tabijiai/">Instagram Reels</a> need two very specific types of images: vintage film photographs styled to look like 1970s Kodachrome slides, and iPhone-realistic phone photos that pass as candid tourist shots. Both require strict stylistic control — specific film grain, era-appropriate composition, accurate text rendering, and deliberate "imperfection."</p>
-
-            <p><strong>If a model can't follow a detailed brief for vintage Kodachrome, it can't follow a detailed brief for anything.</strong> This test is a proxy for prompt adherence across any demanding creative workflow — whether you're building mockups, infographics, social media content, or production imagery at scale.</p>
+            <p>Our <a href="https://www.instagram.com/tabijiai/">Instagram Reels</a> require two unforgiving aesthetics: 1970s Kodachrome slides with period-accurate grain and clipped dynamic range, and handheld iPhone tourist shots with legible street signage and imperfect framing. If a model ignores stylistic constraints on vintage film or monochrome silver gelatin prints, it will ignore your constraints on any production workflow.</p>
 
             <h2 id="the-models">The 5 Models We Tested</h2>
 
@@ -299,11 +341,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p>We ran two separate benchmarks. <strong>Test 1 (Kyoto)</strong> tested vintage film photography across 4 iconic landmarks with 3 models — Nano Banana 2, MiniMax, and CogView-4. <strong>Test 2 (Verona)</strong> tested iPhone-realistic phone photos across 2 scene types with 4 models — adding GPT and Grok while dropping CogView-4.</p>
+            <p><strong>Test 1 (Kyoto)</strong> ran Nano Banana 2, MiniMax, and CogView-4 across four landmarks (Fushimi Inari, Kinkaku-ji, Arashiyama, and Gion). <strong>Test 2 (Verona)</strong> dropped CogView-4 and added GPT and Grok Aurora across two candid iPhone prompts.</p>
 
             <h2 id="test-1-vintage-kyoto">Test 1: Vintage 1970s Kyoto — Can AI Fake Film Photography?</h2>
 
-            <p>We ran three models through four Kyoto landmarks — Fushimi Inari, Kinkaku-ji, Arashiyama, and Gion — with prompts requesting 1970s Kodachrome film aesthetic: warm saturated midtones, vintage grain, amateur composition, and era-appropriate details. Same prompt, same day, direct comparison. Here's Fushimi Inari — the most revealing of the four:</p>
+            <p>We prompted all three models for 1970s Kodachrome film: warm saturated midtones, vintage grain, off-center tourist framing, and period-accurate details. Here is Fushimi Inari:</p>
 
             <div class="comparison-grid">
                 <div class="comparison-card">
@@ -335,9 +377,9 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <p class="img-caption" style="margin-top: 0.5rem;">These clips show the same images after Remotion rendering — with film grain, vignette, and slow drift animation applied.</p>
             </div>
 
-            <p>The pattern was consistent across all four landmarks. <strong>Nano Banana 2</strong> produced the most convincing vintage imagery every time — correct Kodachrome warm tones, legible Japanese kanji (you can read "奉" and "納" at Fushimi Inari), authentic amateur composition, and proper architectural proportions. <strong>MiniMax</strong> had beautiful color science but consistently ignored POV instructions and produced compositions too polished for a tourist snapshot. <strong>CogView-4</strong> defaulted to modern cinematic aesthetics regardless of the prompt — orange-teal color grading, HDR dynamic range, garbled kanji.</p>
+            <p>Across all four landmarks, <strong>Nano Banana 2</strong> nailed the brief: warm Kodachrome midtones, legible kanji ("奉" and "納" carved on the torii columns), and casual snapshot framing. <strong>MiniMax</strong> had pleasing color science but ignored POV instructions and composed like a modern travel magazine. <strong>CogView-4</strong> ignored the vintage prompt entirely—rendering HDR orange-teal grading and garbled kanji.</p>
 
-            <p>Here are Kinkaku-ji and Arashiyama — the same story:</p>
+            <p>Kinkaku-ji and Arashiyama showed the exact same split:</p>
 
             <div class="comparison-grid">
                 <div class="comparison-card">
@@ -399,7 +441,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h2 id="gion-bw-test">The Black &amp; White Test That Broke Two Models</h2>
 
-            <p>This was the most revealing test in our entire benchmark. We asked for <strong>"absolutely no color whatsoever, silver gelatin print"</strong> — a geisha walking through Gion's lantern-lit streets at dusk, shot on black and white film.</p>
+            <p>For Gion at dusk, we specified <strong>"absolutely no color whatsoever, silver gelatin print"</strong>—a geisha walking down a lantern-lit alley on black-and-white film.</p>
 
             <div class="comparison-grid">
                 <div class="comparison-card">
@@ -430,17 +472,13 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p><strong>Nano Banana 2</strong> delivered a stunning silver gelatin print. Pure monochrome, zero color bleed. Deep inky blacks in the machiya facades, luminous lantern highlights, visible grain consistent with Tri-X film stock. The kind of image you'd expect in a Daidō Moriyama photobook.</p>
+            <p><strong>Nano Banana 2</strong> delivered pure monochrome with zero color bleed—inky machiya shadows, glowing lanterns, and Tri-X-style silver grain reminiscent of Daidō Moriyama. <strong>MiniMax (2/10)</strong> rendered warm amber lanterns and teal shadows. <strong>CogView-4 (0/10)</strong> output neon orange lanterns and bright red obi accents.</p>
 
-            <p><strong>MiniMax rendered in full color.</strong> Warm amber lanterns, teal shadows. Attractive? Sure. But the prompt said "absolutely no color whatsoever." It ignored that completely.</p>
-
-            <p><strong>CogView-4 was the worst offender.</strong> Bright orange lanterns, vivid red obi accents, warm pavement reflections. Not just "not black and white" — aggressively, blatantly colorful.</p>
-
-            <blockquote>Prompt adherence is the single most important differentiator between AI image models. Most models produce decent images. Only some actually do what you ask. When we said "black and white," Nano Banana 2 gave us black and white. The other two gave us whatever they felt like.</blockquote>
+            <blockquote>When we asked for "absolutely no color whatsoever," Nano Banana 2 gave us black and white. MiniMax and CogView-4 gave us whatever their priors wanted.</blockquote>
 
             <h2 id="test-2-phone-verona">Test 2: Phone Camera Realism — Verona</h2>
 
-            <p>Vintage film is one use case. The other half of our pipeline needs images that pass as <strong>real iPhone photos</strong> — handheld grain, natural depth of field, authentic crowd behavior, legible signage. For this test, we added <strong>GPT (DALL-E 3)</strong> and <strong>Grok (Aurora)</strong> while dropping CogView-4. Two prompts, four models, eight images.</p>
+            <p>The other half of our pipeline needs images that pass as <strong>unfiltered iPhone photos</strong>—handheld framing, natural depth of field, crowd density, and readable signs. We tested <strong>GPT (DALL-E 3)</strong>, <strong>Grok (Aurora)</strong>, <strong>Nano Banana 2</strong>, and <strong>MiniMax</strong> across two Verona prompts.</p>
 
             <h3>Which AI model handles crowd scenes best?</h3>
 
@@ -465,11 +503,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p><strong>Nano Banana 2 won decisively (9/10).</strong> The most photorealistic result — "Juliet" text on souvenirs is legible, the Fjällräven backpack logo on the main subject is rendered correctly (the model knew the specific brand), and a person holding a phone in the foreground adds authentic casual detail. Hardest to identify as AI.</p>
-
-            <p><strong>Grok Aurora came close (8.5/10).</strong> The exhausted woman is incredibly expressive and natural — best emotional storytelling of any model. Some face dissolution in deeper crowd, but the focal subject is flawless.</p>
-
-            <p><strong>MiniMax (7/10)</strong> was too dark — bokeh and lighting read as Sony A7III, not iPhone. The scene looks like a dangerous alley, not a tourist trap. <strong>GPT (6/10)</strong> garbled all sign text ("SLOLEROCVEE" instead of readable Italian) and produced porcelain-smooth faces immediately identifiable as AI.</p>
+            <p><strong>Nano Banana 2 won (9/10):</strong> legible "Juliet" souvenir text, an accurate Fjällräven Kånken logo on the backpack, and a raised phone screen in the foreground that sells the tourist crush. <strong>Grok Aurora (8.5/10)</strong> delivered the most expressive facial fatigue on the main subject, with slight face melting deeper in the crowd. <strong>MiniMax (7/10)</strong> shot it like a moody Sony A7III thriller in a dark alley, and <strong>GPT (6/10)</strong> produced porcelain skin and gibberish signage ("SLOLEROCVEE").</p>
 
             <h3>Is GPT good for portrait-style travel photos?</h3>
 
@@ -494,9 +528,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p><strong>MiniMax won this round (8/10).</strong> Most photographically convincing — the men look like real, specific humans rather than generically "Italian-looking" AI faces. Natural lighting, documentary feel, intimate mood. MiniMax's cinematic tendencies, which hurt it in crowd scenes, produced exactly the right result for portraits.</p>
-
-            <p><strong>Grok (7/10)</strong> had the best authentic mood — natural laughter, convincingly Italian men. Minor tells: matching sweaters and missing wine glasses. <strong>Nano Banana 2 (6.5/10)</strong> had the best prompt adherence (legible Amarone label, wine glass + bottle present) but the scene felt staged. <strong>GPT (4/10)</strong> was dead last — over-saturated, hyper-rendered, immediately recognizable as AI.</p>
+            <p><strong>MiniMax won portraits (8/10):</strong> the two men look like specific, lived-in human beings with documentary lighting. <strong>Grok (7/10)</strong> nailed the candid laughter (despite matching sweaters and missing wine glasses). <strong>Nano Banana 2 (6.5/10)</strong> rendered a legible "Amarone" bottle label and medieval tower, but the pose felt staged. <strong>GPT (4/10)</strong> looked like an oversaturated stock illustration.</p>
 
             <div class="verdict-box">
                 <h3>📱 Key Finding: Different Models Win Different Scene Types</h3>
@@ -508,7 +540,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h2 id="prompt-engineering">Prompt Engineering Makes or Breaks It</h2>
 
-            <p>After the initial Kyoto round, we rewrote our prompts with much more specific technical detail. The improvement was dramatic — but only on models that actually listen.</p>
+            <p>After the first Kyoto pass, we rewrote our prompts with explicit optical and film-stock physics:</p>
 
             <ul>
                 <li><strong>V1 (vague):</strong> "Shot on Kodachrome film, vintage feel"</li>
@@ -526,7 +558,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p>The V2 version is dramatically more convincing. Nano Banana 2 responded by adding <strong>Kodachrome film rebate markings</strong> along the frame edge — "12 KODACHROME" in the characteristic orange-on-black typography, with frame numbers and orientation arrows. These are technically accurate references to how real Kodachrome slides look when scanned from their original mounts. The grain also became exposure-dependent (clumping in shadows, finer in highlights) — exactly how real silver halide crystals behave on actual film.</p>
+            <p>With V2, <strong>Nano Banana 2</strong> generated authentic <strong>Kodachrome film rebate markings</strong> ("12 KODACHROME" in orange-on-black along the border with frame arrows) and exposure-dependent grain that clumps in the shadows like real silver halide crystals.</p>
 
             <div class="comparison-grid two-col">
                 <div class="comparison-card">
@@ -539,9 +571,9 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p>MiniMax improved moderately — warmer tones, a subtle light leak — but <strong>couldn't produce the physical film artifacts</strong> that V2 prompts requested. No border markings, no scan lines, no stock-specific text. Better prompts made it warmer and moodier, but couldn't make it look like actual film.</p>
+            <p><strong>MiniMax</strong> shifted warmer and added a subtle light leak, but ignored the physical scan artifacts and film stock details.</p>
 
-            <blockquote>The gap between a lazy prompt and a detailed one is bigger than the gap between models. But only on models that actually follow instructions. Nano Banana 2's prompt engineering ceiling is virtually unlimited. MiniMax improves incrementally. CogView-4 largely ignores the details.</blockquote>
+            <blockquote>Detailed prompt engineering only pays off on models that actually listen. Nano Banana 2's prompt ceiling is 10/10; MiniMax improves marginally; CogView-4 ignores technical specs.</blockquote>
 
             <h2 id="scorecard">Combined Scorecard: All 5 Models</h2>
 
@@ -563,17 +595,12 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h2 id="what-to-use">What to Use for What</h2>
 
-            <p>After 26+ images across 5 models, here's the decision tree:</p>
-
             <ul>
-                <li><strong>Crowd scenes, landmarks, anything with text or signage →</strong> Nano Banana 2. Nothing else comes close for photorealism + text accuracy.</li>
-                <li><strong>Close-up portraits, people-focused shots →</strong> MiniMax image-01. Best faces, most natural human rendering.</li>
-                <li><strong>All-rounder / only picking one model →</strong> Grok Aurora. Strong in both categories, best emotional storytelling.</li>
-                <li><strong>Vintage film photography →</strong> Nano Banana 2. The only model that treats stylistic constraints as instructions.</li>
-                <li><strong>Generic social media / "just make it look good" →</strong> Grok or MiniMax. Both produce visually striking content without much prompt engineering.</li>
-                <li><strong>Content with CJK text (Japanese, Chinese, Korean) →</strong> Nano Banana 2. Only reliable option for correct text rendering.</li>
-                <li><strong>Not recommended: GPT/DALL-E 3</strong> for anything that needs to pass as a real photo. Over-rendered aesthetic is immediately identifiable as AI.</li>
-                <li><strong>Not recommended: CogView-4</strong> for anything requiring stylistic control. Beautiful cinematic images, but ignores what you ask for.</li>
+                <li><strong>Crowd scenes, landmarks, signage, or CJK text →</strong> Nano Banana 2 (~$0.02/image). Unbeatable prompt adherence and legible text.</li>
+                <li><strong>Vintage film / strict stylistic constraints →</strong> Nano Banana 2. The only model that respects monochrome and film-stock physics.</li>
+                <li><strong>Close-up portraits &amp; human faces →</strong> MiniMax image-01 (~$0.04/image). Best skin texture and natural lighting.</li>
+                <li><strong>Single all-rounder model →</strong> Grok Aurora (~$0.07/image). Strong second place everywhere and 9/10 emotional storytelling.</li>
+                <li><strong>Skip for photorealism →</strong> GPT/DALL-E 3 (plastic skin, garbled text) and CogView-4 (ignores style instructions).</li>
             </ul>
 
             <h2 id="pricing">Pricing Comparison</h2>
@@ -592,11 +619,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p>Nano Banana 2 wins on price-to-quality ratio. Same cost as CogView-4 with dramatically better results. Less than half the cost of Grok with comparable or better output for most use cases. The Gemini API free tier means you can experiment before spending anything.</p>
+            <p>At ~$0.12 per 6-image Reel (plus a free tier on Google AI Studio), Nano Banana 2 is both the cheapest and highest-scoring model for location and vintage workflows.</p>
 
             <h2 id="how-to-use">How to Use These Models (Code Examples)</h2>
 
-            <p>All five models are accessible via API. Here's how to call each one.</p>
+            <p>Here are the minimal API calls for all five models:</p>
 
             <h3>Nano Banana 2 (Google Gemini 3.1 Flash Image)</h3>
 
@@ -668,11 +695,9 @@ for part in response.candidates[0].content.parts:
     "quality": "standard"
   }'</code></pre>
 
-            <p>For production use, start with <a href="https://ai.google.dev/">Google AI Studio</a> (free tier includes Gemini image generation) and experiment with detailed prompts before scaling up.</p>
-
             <h2 id="full-reels">Full Reels: Side by Side</h2>
 
-            <p>Numbers and screenshots only tell part of the story. Here are the complete assembled Reels — the actual final output of our vintage POV pipeline. Each Reel sequences all Kyoto scenes with Remotion-rendered film grain, vignette, slow drift animation, and text overlays.</p>
+            <p>Here are the complete 21-second Vintage POV Reels assembled from the Kyoto outputs—identical Remotion timing, vignette, slow drift, and text overlays, differing only in the source images:</p>
 
             <div class="full-reels-section">
                 <div class="reel-grid">
@@ -685,7 +710,7 @@ for part in response.candidates[0].content.parts:
                         <div class="card-label">MiniMax — Full Kyoto Reel (21s)</div>
                     </div>
                 </div>
-                <p class="img-caption" style="margin-top: 0.75rem;">Both Reels use identical Remotion compositions and timing. The only difference is the source images. Notice how Nano Banana 2's vintage authenticity carries through to the animated version — the film grain and warm tones feel cohesive, while MiniMax's modern rendering creates a subtle disconnect with the vintage effects layer.</p>
+                <p class="img-caption" style="margin-top: 0.75rem;">Both Reels use identical Remotion compositions and timing. Nano Banana 2's Kodachrome color science locks right into the animated film-grain layer, whereas MiniMax's modern rendering clashes with the vintage overlay.</p>
             </div>
 <hr style="border: none; border-top: 1px solid var(--border); margin: 3rem 0;">
 

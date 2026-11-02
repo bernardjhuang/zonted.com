@@ -226,11 +226,11 @@
             <div style="border:1px solid var(--ox);border-left-width:4px;border-radius:4px;padding:18px 20px;margin:28px 0;background:var(--paper-2);">
                 <p style="font-family:var(--mono);font-size:0.7rem;letter-spacing:0.1em;text-transform:uppercase;color:var(--ox);font-weight:600;margin:0 0 10px;">Read before you use any of this</p>
                 <p style="margin:0 0 12px;"><strong>Not financial advice. I am not a licensed financial advisor, and nothing here is a recommendation to buy or sell anything.</strong> This is a personal research write-up &mdash; me showing my work, not telling you to run it.</p>
-                <p style="margin:0 0 12px;"><strong>This strategy is not statistically established.</strong> It was selected by searching roughly 820 configurations on 2.5 years of data with <em>no held-out test period</em>. Its measured advantage over doing nothing is about one standard error. In plain terms: <strong>the edge may not exist at all.</strong> A result that survives a search that large is exactly what randomness looks like.</p>
-                <p style="margin:0 0 12px;"><strong>The sample contains one crisis.</strong> April 2025 is the only volatility episode in the window. Any claim about how this behaves in a crash rests on a sample size of one, and I explain later in this post how I fitted to it without meaning to.</p>
-                <p style="margin:0 0 12px;"><strong>You can lose money, including on days the strategy &ldquo;works.&rdquo;</strong> Defined risk means the maximum loss is <em>known</em> before you enter &mdash; not that it is small. The worst modelled day loses the full risk budget, and selling options means many small wins punctuated by occasional large losses. That shape is psychologically harder to hold than the numbers suggest.</p>
+                <p style="margin:0 0 12px;"><strong>This strategy is not statistically established.</strong> It was selected from ~820 configurations across 2.5 years of data with <em>no held-out test period</em>, and its measured advantage over an ungated condor is about one standard error. <strong>The signal edge may not exist at all.</strong></p>
+                <p style="margin:0 0 12px;"><strong>The sample contains one crisis.</strong> April 2025 is the only volatility spike in the window. Any crash-performance claim rests on n=1 &mdash; and I inadvertently fitted to it.</p>
+                <p style="margin:0 0 12px;"><strong>You can lose money, including on days the strategy &ldquo;works.&rdquo;</strong> Defined risk means the maximum loss is <em>known</em> up front, not that it is small. The worst modelled day loses the full risk budget; short premium produces many small wins punctuated by sharp losses.</p>
                 <p style="margin:0 0 12px;"><strong>A backtest is not live trading.</strong> Mine does not enforce liquidity limits in the headline results, does not model early assignment, and assumes positions are held to expiry &mdash; an assumption your broker may override. Real fills, real slippage, and real outages all subtract.</p>
-                <p style="margin:0;"><strong>Do your own research.</strong> Every number below is stated precisely so you can reproduce it and prove me wrong &mdash; that is the point of publishing it. Do not take any figure here on trust. I got ten things wrong that I know of, two of which I only found because someone else looked. Assume there is an eleventh, and paper-trade long before you risk anything you would miss.</p>
+                <p style="margin:0;"><strong>Do your own research.</strong> Every number below is stated so you can reproduce it and prove me wrong. I hit ten bugs building this &mdash; two caught only by outside eyes. Assume there is an eleventh, and paper-trade before risking capital.</p>
             </div>
 
             <div class="tldr">
@@ -263,8 +263,6 @@
 
 <h3>Why sell instead of buy</h3>
 
-<p>This is the part that actually matters, and it is not about being clever.</p>
-
 <p>When an out-of-the-money option expires worthless, closing it costs <em>nothing</em> &mdash; there is no closing trade. Nobody charges you a spread on a contract that ceased to exist. Anyone <em>buying</em> 0DTE premium pays the bid-ask spread twice, on a contract whose value decays to zero within hours.</p>
 
 <p>That asymmetry is the entire structural argument for this trade, and it is the only part of this study I would defend without hedging. Everything else below is statistics on 2.5 years of data. This part is arithmetic.</p>
@@ -283,7 +281,7 @@
 
 <p>The rule: each morning, check whether that spread has been widening. If it has not, sell the condor. If it has, stand aside for the day.</p>
 
-<p>The reasoning is that credit investors are paid to price default risk and tend to reprice deterioration before equity volatility catches up. The claim is <em>not</em> that credit predicts direction. It is that credit deterioration marks a regime where selling short-dated premium is badly compensated.</p>
+<p>Credit investors reprice default risk before equity volatility catches up. Credit doesn&rsquo;t predict direction; it flags regimes where selling short-dated premium is poorly paid.</p>
 
 <p>Three strictness settings, all on QQQ alone at 2% defined risk per trade, annualised over the full 622-session calendar with cash on days the gate is shut:</p>
 
@@ -302,9 +300,7 @@
 
 <p><strong>Read the last two rows before the first three.</strong> Selling a condor every single day, with no signal whatsoever, already beats QQQ buy-and-hold &mdash; higher return, half the drawdown, Sharpe 2.00 against 1.13. Everything the credit gate adds sits on top of that.</p>
 
-<p>And what it adds is +1.08 of Sharpe. The standard error on a Sharpe measured over 2.5 years is about 1.04. So the clever part &mdash; the part that took 820 configurations to find &mdash; is worth almost exactly one standard error.</p>
-
-<p>That is the honest headline and it is the opposite of how strategies are usually sold. The instrument and the structure are doing the work. The signal is barely measurable. Only the loose variant has a bootstrapped advantage that clearly excludes zero, and none of the three survives a correction for how many configurations I tested to find them.</p>
+<p>The gate adds +1.08 of Sharpe against a 2.5-year standard error of ~1.04. The clever part &mdash; the part that took 820 configurations to find &mdash; is worth one standard error. The structure does the work; the signal is barely measurable. Only the loose variant&rsquo;s bootstrapped advantage excludes zero, and none of the three survives multiple-testing correction across 820 trials.</p>
 
 <p><strong>The practical implication for your build:</strong> implement the ungated version first and keep it running forever as a control. If your gated results don&rsquo;t beat your ungated results in live trading, the gate is noise. Drop it. Do not tune it &mdash; tuning is how 820 configurations became 820 configurations.</p>
 
@@ -405,13 +401,11 @@
 
 <h3>Why the bad ones lasted longest</h3>
 
-<p>Sort that table by survival time and something uncomfortable appears.</p>
-
 <p>Every bug I caught quickly produced an <strong>impossible</strong> number. A Sharpe of 3.55. A defined-risk position losing 0.568R when the structure can only lose 1.0R. A t-statistic of 6.49 computed on three trades. Impossible numbers trigger investigation automatically &mdash; you don&rsquo;t need discipline, you only need to look.</p>
 
 <p>Every bug that survived produced a <strong>plausible</strong> one. Trading costs of 7.1% of premium sounds like what retail options trading should cost. A Sharpe that drops when you add realistic frictions sounds like rigour.</p>
 
-<p><strong>The detection threshold is implausibility, not wrongness.</strong> The corollary is uncomfortable: errors that push a result toward what you already believe are structurally under-detected. Not occasionally, and not from carelessness &mdash; as a property of how checking works.</p>
+<p><strong>The detection threshold is implausibility, not wrongness.</strong> Errors that push a result toward what you already believe are structurally under-detected &mdash; not from carelessness, but from how human checking works.</p>
 
 <p>Bug 9 survived six rounds because &ldquo;options are expensive and retail edges die to costs&rdquo; was a conclusion I found comfortable and faintly flattering. It sounded like sophistication. Bug 10 &mdash; a hardcoded UTC window that silently blanked 195 winter sessions, 30% of the study, with no error logged anywhere &mdash; was caught within the hour. Not because I was more careful, but because by then results were looking <em>good</em> and I was actively hunting for reasons the good news was fake.</p>
 
@@ -419,23 +413,17 @@
 
 <h3>The week that became the objective</h3>
 
-<p>There is a second failure, and it is worse than the bugs because no single decision caused it.</p>
-
-<p>Midway through I hit a real problem: with a standard error near 1.04, I could not reliably distinguish strategies by Sharpe at all. So I switched to something I could count &mdash; whether a filter sat out the worst sessions. That is defensible. Tail behaviour matters and is more stable to estimate than a mean.</p>
+<p>Midway through I hit a real problem: with a standard error near 1.04, I could not reliably distinguish strategies by Sharpe. So I switched to something I could count &mdash; whether a filter sat out the worst sessions. Tail behaviour matters and is more stable to estimate than a mean.</p>
 
 <p>But my sample contained exactly one crisis. So &ldquo;avoids tail events&rdquo; and &ldquo;avoids April 2025&rdquo; were not two measurements. They were the same measurement wearing different names.</p>
 
-<p>Within two rounds, April had gone from being a test to being the scoring metric, and 180+ configurations were being ranked partly on their behaviour during one week. No step in that chain was obviously wrong. Each was a reasonable response to the previous one.</p>
-
-<p>The evidence was sitting in my own output. One configuration posted the best April result in the entire study <em>and</em> the worst performance across every other bad day &mdash; a textbook sign of fitting to a single episode. I flagged it as a counter-example. Then I kept scoring on April anyway.</p>
+<p>Within two rounds, April had gone from a test to the scoring metric, and 180+ configurations were being ranked partly on one week of tape. One configuration posted the best April result in the entire study <em>and</em> the worst performance across every other bad day &mdash; textbook overfitting to a single episode. I flagged it as a counter-example, then kept scoring on April anyway.</p>
 
 <p>It took a question from the person I was working for to break it: were the strategies avoiding April because they detected something, or because the data prevented them from trading? I checked. <strong>Five of the eight worst days had been excluded by a liquidity filter, not by any signal.</strong> The strategies weren&rsquo;t standing their ground in a crisis. They were absent from it, and I had been reading absence as skill.</p>
 
 <p>If you take one process lesson into your own build, take this one: <strong>when your sample has one crisis, you cannot use crisis behaviour as a selection criterion.</strong> You will fit to it, and the fit will look like insight.</p>
 
 <h2 id="step-by-step">Setting up your agent, step by step</h2>
-
-<p>Everything below is exact. There are no judgement calls left in it.</p>
 
 <h3>Step 0 &mdash; Check you can afford it</h3>
 
@@ -487,8 +475,6 @@ hy_d20 = series[t-1] - series[t-21]    # strict gate: hy_d5 &lt; 0 AND hy_d20 &l
 </code></pre>
 
 <h3>Step 3 &mdash; Reproduce the backtest before you trade it</h3>
-
-<p>Do not skip this. It is the only way to find out whether your implementation matches mine, and I had ten bugs.</p>
 
 <p>Build the <strong>ungated</strong> version first &mdash; sell the condor every session, no signal. On 2024-02 through 2026-08 you should land near:</p>
 
@@ -594,11 +580,9 @@ early close                      never
 
 <p>The binding constraint is not strategy ideas. It is data. 0DTE contracts on these instruments have only existed since 2022, and the obtainable history covers a single volatility episode. Configuration 821 gets estimated with the same &plusmn;1.04 standard error on the same 2.5 years. <strong>Buying options history back to 2018</strong> would cover February 2018 and March 2020, and would tell you more than another hundred configurations ever could.</p>
 
-<p>Three other things remain open and you should know them before trusting the table at the top: <strong>liquidity enforcement is off</strong> in the headline results, so the executable replay that rejects oversized legs has not been run as the primary view; the multiple-testing correction was never pre-registered in max-statistic form; and settlement is simplified, with no modelling of American-style early assignment.</p>
+<p>Three modeling shortcuts remain in the headline table: <strong>liquidity enforcement is off</strong> (the 1%-of-minute-volume cap is not applied in the primary view), the multiple-testing correction was never pre-registered in max-statistic form, and settlement ignores American-style early assignment.</p>
 
-<p>The last thing helps more than any of it and is nearly free. <strong>Hand the work to something that would rather prove you wrong.</strong> Both of the errors I could not find myself were found by others &mdash; one by a question from the person paying for the work, one by an adversarial review from a different model with no stake in the answer. Neither was more diligent than my own checking. They were differently positioned, and on this kind of work that is the entire difference.</p>
-
-<p>If you build this, that is the role to hire for first. Not another strategy generator &mdash; a reviewer whose job is to break what you already believe.</p>
+<p>The best check is nearly free: <strong>hand the work to something that wants to prove you wrong.</strong> Both errors I missed were caught from the outside &mdash; one by a question from the person paying for the work, one by an adversarial review from a different model with no stake in the outcome. If you build this, hire that reviewer first: not another strategy generator, but an adversary whose job is to break what you already believe.</p>
 
 <p><em>None of this is investment advice, and none of it is a validated system. It is a specification and a method, published so the failures are as legible as the results.</em></p>
 

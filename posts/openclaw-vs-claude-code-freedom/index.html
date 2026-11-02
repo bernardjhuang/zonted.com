@@ -208,82 +208,77 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">The Claude Max-plan token buffet is subsidized. The signs say it&rsquo;s closing.</p>
+                <p class="tldr-thesis">Claude Max is an ~9&times; subsidized token buffet that is already tightening via daily routine caps, peak-hour burn, and uptime degradation.</p>
                 <ul>
-                    <li>15-routine daily cap &mdash; hit at 2:36 AM</li>
-                    <li>A $137 API run on tabiji content = ~9&times; subsidy vs the Max-plan equivalent</li>
-                    <li>Hidden peak-hour token burn + chunky 90-day uptime bars on Anthropic&rsquo;s own status page</li>
+                    <li><strong>Hard caps at 2:36 AM</strong> &mdash; Claude Max now pauses scheduled routines after 15 daily runs.</li>
+                    <li><strong>The 9&times; subsidy math</strong> &mdash; A 5-city tabiji content batch cost $137.39 on the raw API (~$5,500 for 224 pages), versus ~$600/month across three Max plans.</li>
+                    <li><strong>Dual-stack hedge</strong> &mdash; Recurring crons run on <a href="/posts/openclaw-skill-tree/">OpenClaw</a> routing across 21 models (<a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI/GLM</a>, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax</a>, Codex, Gemini); <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> stays for interactive one-offs.</li>
                 </ul>
-                <p class="tldr-tail">So my recurring crons run on <a href="/posts/openclaw-skill-tree/">OpenClaw</a> with <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI/GLM</a>, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax</a>, and 19 other models in rotation. <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> stays for one-offs.</p>
             </div>
 
             <h2 id="email">The 7 AM routine pause</h2>
 
-            <p class="dropcap">I checked my phone over coffee and found a Claude email sent at 2:36 AM:</p>
+            <p class="dropcap">I checked my phone over coffee and found a Claude notification from 2:36 AM:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/openclaw-vs-claude-code-freedom/routines-paused-email.png" alt="Email from no-reply-claude at 2:36 AM titled 'Your routines are paused — daily limit reached'. Body reads: You've hit today's limit of 15 routine runs, so scam-narrative-rewrite-batch and any other routines are paused for now. An admin..." width="910" height="1972" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The Max plan stops at 15 routine runs per day. We hit it during sleep.</figcaption></figure>
 
-            <p>I run three Claude Max plans, one Codex Pro, plus subscriptions to <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax</a> and <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI/GLM</a>. I am, by any reasonable definition, the kind of customer Anthropic should want to keep happy. And the routine that had stopped &mdash; <code>scam-narrative-rewrite-batch</code> &mdash; was doing exactly the kind of overnight, scheduled, non-interactive work that the <em>idea</em> of a Max plan is supposed to enable.</p>
+            <p>I pay for three Claude Max plans, one Codex Pro plan, plus <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax</a> and <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI/GLM</a>. And the job that got killed &mdash; <code>scam-narrative-rewrite-batch</code> &mdash; was doing the exact overnight, non-interactive batch work that a flat-rate Max plan is supposed to unlock.</p>
 
-            <p>It got capped at 15. The cap was the soft signal I&rsquo;d been waiting for.</p>
+            <p>Hitting a hard 15-run daily ceiling at 2:36 AM was the clearest signal yet that the flat-rate subsidy is closing.</p>
 
             <h2 id="math">The math the buffet hides</h2>
 
-            <p>Last week I ran a five-city PR through the tabiji.ai content pipeline against the Anthropic API directly. The cost summary at the end:</p>
+            <p>Last week I ran a five-city batch through the tabiji.ai content pipeline directly against the metered Anthropic API:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/openclaw-vs-claude-code-freedom/pr-cost-breakdown.png" alt="Cost breakdown table for 5 cities (Abu Dhabi, Acapulco, Accra, Addis Ababa, Agadir) showing per-PR cost ranging from $20.25 to $37.51, total $137.39, total API time 2 hours 14 minutes wall. Steady-state cost lands around $20-25 per city once cache warms up. Full 224-page drain at that rate equals approximately $5,500 versus my early $7,400 estimate." width="850" height="400" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Five cities, $137 in API tokens, ~2.25 hours of compute. The full 224-page run extrapolates to ~$5,500.</figcaption></figure>
 
-            <p><strong>$137.39 for five cities. ~$25 per city steady-state. The full 224-page drain comes in around $5,500.</strong></p>
+            <p><strong>$137.39 for five cities &mdash; roughly $25 per city once the prompt cache warms up, or ~$5,500 for the full 224-page queue.</strong></p>
 
-            <p>Now compare that to what I actually pay: roughly $600/month for three Max plans plus another ~$200 for Codex Pro. ~$800/month, and most months I generate <em>more</em> token equivalent than that 224-page run. The implied subsidy from Anthropic to my account is on the order of <strong>9&times;</strong>. They&rsquo;re losing money on me. They&rsquo;re losing money on every heavy user. The only way the math closes is if the average user is ~10&times; lighter than I am, OR they reprice, OR they cap.</p>
+            <p>Compare that to my flat-rate bill: ~$600/month for three Claude Max plans plus ~$200 for Codex Pro. For ~$800/month, I routinely burn more tokens than that $5,500 API batch. Anthropic is subsidizing my workload by roughly <strong>9&times;</strong>. They lose money on every heavy operator. The only way that unit math closes is if the median subscriber barely touches the terminal &mdash; or if Anthropic reprices, throttles, and caps.</p>
 
-            <p>OpenAI is in the same situation with Codex Pro. <a href="/posts/the-economics-of-the-internet-are-broken/">The economics of AI inference</a> are not subtle: it costs real GPU-hours to generate tokens, and a $200 monthly fee buys you a fixed dollar of GPU-hours regardless of how the marketing copy reads. The buffet is real. It&rsquo;s just temporary.</p>
+            <p>OpenAI faces the same physics on Codex Pro. <a href="/posts/the-economics-of-the-internet-are-broken/">Inference economics</a> are unforgiving: tokens cost GPU-hours, and a $200 subscription buys a finite slice of compute no matter what the pricing page promises. The buffet is real, and it is temporary.</p>
 
             <h2 id="shrinking">And it&rsquo;s already shrinking</h2>
 
-            <p>If you think the subsidy ending is years away, look at the dashboard:</p>
+            <p>You don&rsquo;t have to guess when the squeeze starts. Look at Anthropic&rsquo;s 90-day status page:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/openclaw-vs-claude-code-freedom/anthropic-status-page.png" alt="Anthropic 90-day status page showing All Systems Operational header. Below: claude.ai 98.75% uptime, Claude Console (platform.claude.com) 99.09%, Claude API (api.anthropic.com) 99.05%, Claude Code 99.22%. Each row shows daily uptime bars over 90 days with significant numbers of yellow and red incident days." width="1756" height="1436" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Anthropic&rsquo;s own 90-day status page. The headline numbers sound great until you do the arithmetic on them.</figcaption></figure>
 
-            <p>The headline reads &ldquo;All Systems Operational.&rdquo; The bars tell a different story. Claude Code at 99.22% uptime over 90 days is roughly <strong>16 hours of degraded or down service per quarter</strong>. Claude.ai at 98.75% is <strong>27 hours</strong>. Read each yellow or red bar as a day where my recurring crons either failed silently, retried into rate-limit walls, or hit timeouts and burned my routine quota anyway.</p>
+            <p>The banner says &ldquo;All Systems Operational,&rdquo; but the bars underneath tell the real story. Claude Code at 99.22% uptime over 90 days equals <strong>16 hours of degraded or downed service per quarter</strong>. Claude.ai at 98.75% equals <strong>27 hours</strong>. Every yellow or red bar is a window where unattended crons failed, hit rate-limit walls, or timed out while still burning daily routine quota.</p>
 
-            <p>That&rsquo;s the tail end of the same supply story as the cost math: too much demand, finite GPU capacity, the only knobs are price (subsidies tightening), volume (the 15-run cap I just hit), or quality (degradations). All three are in motion right now.</p>
+            <p>When demand outstrips GPU supply, a provider only has three levers: price, quota caps (the 15-run wall), or service degradation. All three are moving at once.</p>
 
-            <p>And there&rsquo;s the signal nobody documents: <strong>peak-hour token burn.</strong> The same scheduled routine that runs cleanly at 2 AM costs noticeably more in tokens during US morning business hours, when the platform is most loaded. There&rsquo;s no banner, no dashboard line item, no warning email &mdash; but if you watch per-task usage on heavy crons, you can see it. The buffet runs implicit surge pricing at lunch, and you only notice when your daily quota burns 30% faster than it did yesterday.</p>
+            <p>Then there&rsquo;s the undocumented fourth lever: <strong>peak-hour quota burn.</strong> The exact same batch job that runs cheaply at 2 AM consumes noticeably more of your daily allowance during US business hours. There&rsquo;s no surge-pricing warning on the dashboard, but if you log per-task quota drain on heavy crons, you see your meter burn ~30% faster at noon than at midnight.</p>
 
-            <p>And separate from any of that, there&rsquo;s the <a href="/posts/openclaw-claude-ban-ai-model-replacement/">model-deprecation risk</a>: Anthropic can sunset a model I&rsquo;ve been depending on with 60 days of notice. If my pipeline is glued to a specific Claude version, that&rsquo;s a forced migration on someone else&rsquo;s timeline.</p>
+            <p>Layer on <a href="/posts/openclaw-claude-ban-ai-model-replacement/">model-deprecation risk</a> &mdash; where a provider can ban a harness or retire a model weight on 60 days&rsquo; notice &mdash; and single-vendor cron infrastructure becomes a liability.</p>
 
             <h2 id="freedom">21 models, 5 providers, one Mac mini</h2>
 
-            <p>This is what the alternative looks like. <a href="/posts/openclaw-skill-tree/">OpenClaw</a> is the open-source agentic harness we run for tabiji&rsquo;s recurring infrastructure &mdash; the bit you&rsquo;d call Claude Code if you were locked into Anthropic. Psy &mdash; our OpenClaw agent &mdash; posts its current model config into our team Slack:</p>
+            <p>Here is the alternative. We run tabiji&rsquo;s recurring infrastructure on <a href="/posts/openclaw-skill-tree/">OpenClaw</a>, an open-source agentic harness that routes across whatever model providers we wire into it. Here is the live model config our agent Psy posted to Slack:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/openclaw-vs-claude-code-freedom/openclaw-21-models.png" alt="Slack message from Psy listing the OpenClaw model configuration: 21 models across 5 providers. Defaults: primary z.ai/glm-5.1, fallback 1 minimax/MiniMax-M2.7, fallback 2 openai-codex/gpt-5.4. Sub-agent model glm-5.1, image gen google/gemini-3-pro-image-preview, video gen google/veo-3.1-lite-generate-preview. Z.AI 11 models including glm-5.1, glm-5.1-turbo variants and vision models. MiniMax 2 models. Xiaomi 3 models including mimo-v2-flash 1M context, mimo-v2-pro, all free. Google 3 models all 1M context vision. Anthropic 2 models: claude-opus-4-6 and claude-sonnet-4-6, plus codex/gpt-5.4 referenced as fallback." width="2034" height="1378" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Psy&rsquo;s OpenClaw config: 21 models across Z.AI, MiniMax, Xiaomi, Google, and Anthropic. Defaults and fallbacks named explicitly.</figcaption></figure>
 
-            <p>The defaults: <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI&rsquo;s GLM-5.1</a> as primary. <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax-M2.7</a> as first fallback. GPT-5.4 via the Codex plugin as second fallback. Xiaomi&rsquo;s mimo-v2-flash and v2-pro available with 1M-token context, free. Google Gemini 3 Pro for image and video generation. Anthropic still in the rotation as <code>claude-opus-4-6</code> and <code>claude-sonnet-4-6</code>, called when they&rsquo;re the right tool, not because they&rsquo;re the only tool.</p>
+            <p>Our routing table: <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">Z.AI&rsquo;s GLM-5.1</a> runs as primary, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&amp;source=link" target="_blank" rel="noopener">MiniMax-M2.7</a> sits as Fallback 1, and GPT-5.4 (via Codex) sits as Fallback 2. Xiaomi&rsquo;s <code>mimo-v2-flash</code> and <code>mimo-v2-pro</code> handle 1M-context sweeps for free. Gemini 3 Pro and Veo 3.1 handle image and video generation. Anthropic&rsquo;s <code>claude-opus-4-6</code> and <code>claude-sonnet-4-6</code> stay in the pool for tasks that need them &mdash; as a choice, not a dependency.</p>
 
-            <p>When GLM rate-limits, OpenClaw fails over to MiniMax. When MiniMax has a degradation window, it falls through to GPT-5.4. The recurring crons keep running. No 2:36 AM email.</p>
+            <p>When GLM rate-limits, OpenClaw fails over to MiniMax. When MiniMax hiccups, it drops to GPT-5.4. The overnight crons finish without sending a 2:36 AM pause email.</p>
 
             <figure class="aside-small" style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/openclaw-vs-claude-code-freedom/mac-mini-setup.jpg" alt="Apple Mac mini sitting on a wooden desk with a power cable plugged in. Compact, silver, about the size of a paperback." width="152" height="203" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;text-align:center;">The actual hardware. ~$600 of Mac mini, sitting on a desk.</figcaption></figure>
 
-            <p>And it runs on <em>that</em>. A $600 Mac mini in a room. Not a hyperscaler in Virginia, not a multi-region replicated cloud setup &mdash; a small silver box on a desk, routing requests to whichever provider has capacity. The whole architecture is pages of YAML and a router script.</p>
+            <p>All of it runs on a $600 Mac mini sitting on my desk &mdash; a few YAML files and a router script dispatching jobs to whichever provider has clean capacity.</p>
 
             <h2 id="dual-stack">My dual-stack reality</h2>
 
-            <p>I want to be honest about what I actually do, because the headline is a thesis but day-to-day is a compromise.</p>
+            <p>I still pay for three <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> Max plans and use Claude Code every day. For interactive one-offs &mdash; architecture exploration, live debugging at 11 PM, audits, drafting posts &mdash; nothing beats it. The harness is fast and the tool use is sharp (even if <a href="/posts/scaling-ai-is-lazy/">you have to watch its shortcuts at scale</a>).</p>
 
-            <p>I still pay for three <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> Max plans. I use Claude Code every single day. For one-off tasks &mdash; interactive coding, exploration, audits, drafting (this very post), debugging weird production issues at 11 PM &mdash; nothing else feels as good. The model quality is excellent, the harness is mature, the tool calls are fast. I wrote about <a href="/posts/scaling-ai-is-lazy/">where the model takes shortcuts at scale</a> precisely because I push it hard enough to find the edges.</p>
+            <p>Everything <em>recurring</em> lives on OpenClaw: scheduled content pipelines, nightly repo audits, multi-page sweeps. Any job that runs unattended at 3 AM cannot depend on a single vendor with a 15-run daily cap.</p>
 
-            <p>What lives on OpenClaw is anything <em>recurring</em>. Scheduled content runs. Nightly audits. Multi-page sweeps. The kind of work that I want to fire-and-forget on a cron, where a 2:36 AM &ldquo;your routines are paused&rdquo; email is unacceptable. That work cannot live on a single vendor with a daily cap, because it doesn&rsquo;t care about my timezone.</p>
-
-            <p>That&rsquo;s the dual stack: Claude Code for the 9 AM &ldquo;help me figure this out&rdquo; loop, OpenClaw for the cron that runs at 3 AM whether anyone&rsquo;s watching or not.</p>
+            <p>That&rsquo;s the split: Claude Code for the 9 AM interactive loop, OpenClaw for the 3 AM cron.</p>
 
             <h2 id="hedge">The hedge thesis</h2>
 
-            <p>Choosing OpenClaw isn&rsquo;t about Anthropic being bad &mdash; they&rsquo;re not, the product is the best in its class. It&rsquo;s about not betting your business on someone else&rsquo;s pricing model holding.</p>
+            <p>Running OpenClaw isn&rsquo;t a protest against Anthropic; their models are still best-in-class. It&rsquo;s refusal to bet production infrastructure on a subsidized pricing tier holding forever.</p>
 
-            <p>Freedom in this context = optionality. The Max plan gives you one model and a daily limit. OpenClaw gives you 21 options and a circuit breaker. When Anthropic tightens &mdash; whether by pricing, capping, or deprecating &mdash; the cost to me is reading a config file and changing one default. The cost to a single-vendor shop is rebuilding their pipeline on a forced timeline.</p>
-
-            <p>The product is excellent. The price terms are subsidized. The two are different bets, and only one of them is yours to control. Keep the recurring work portable, use Claude Code where it sings, and when the buffet closes, walk out with a plate.</p>
+            <p>A Max plan gives you one vendor and a hard ceiling. OpenClaw gives you 21 models and an automatic circuit breaker. When a provider raises prices, tightens caps, or deprecates a model, my migration cost is editing one line of YAML. Keep your recurring pipelines portable, use Claude Code while the subsidy lasts, and be ready to route around the buffet the day it closes.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

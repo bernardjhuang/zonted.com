@@ -198,25 +198,25 @@
 
 <div class="tldr">
     <div class="tldr-label">TL;DR &mdash; May 2026</div>
-    <p class="tldr-thesis">A conference handed me a build technique that changed everything, Google erased my biggest site&rsquo;s search traffic overnight, and the only reason that didn&rsquo;t matter is diversification.</p>
+    <p class="tldr-thesis">A dinner in Miami handed me a build workflow that changed my ship rate, Google erased my biggest site&rsquo;s search traffic overnight, and diversification kept revenue intact.</p>
     <ul>
-        <li>Went to Consensus in Miami. The takeaway wasn&rsquo;t a keynote &mdash; it was one idea a friend shared over dinner that now lets my build loop one-shot Chrome extensions and two-to-three-shot mobile apps.</li>
-        <li>Around May 10, Google wiped almost all of Tabiji&rsquo;s search traffic and it hasn&rsquo;t recovered.</li>
-        <li>Still about $600/month in the red. The biggest revenue line is Tabiji books on Amazon (~$125/mo) &mdash; which is exactly why the Google wipeout didn&rsquo;t sink anything.</li>
-        <li>Four lessons, the kind that compound.</li>
+        <li><strong>Consensus, Miami:</strong> One dinner conversation turned &ldquo;plan 3&times;, build once&rdquo; into my default loop &mdash; one-shotting Chrome extensions and shipping mobile apps in two or three passes.</li>
+        <li><strong>The Google wipeout:</strong> Around May 10, Google dropped Tabiji&rsquo;s search traffic from 2,172 clicks to near-zero overnight.</li>
+        <li><strong>The P&amp;L:</strong> ~$700/mo in stack burn against ~$125/mo from 45 Tabiji Kindle books sold on Amazon &mdash; ~$600/mo in the red, completely insulated from Google search.</li>
+        <li><strong>The operator lesson:</strong> Context-switching across 4&ndash;7 active agents now costs 5&times; what a meeting used to cost.</li>
     </ul>
 </div>
 
 <h2 id="consensus">Consensus, Miami</h2>
 
-<p class="dropcap">The best part of a conference is never the stage. I flew to Consensus and spent it trading notes with people who build the way I do.</p>
+<p class="dropcap">The best part of a conference is never the stage. I flew to Consensus in Miami and spent the week trading notes with people who build the way I do.</p>
 
 <figure style="margin:1.5rem 0;">
   <img  src="https://img.zonted.com/resources/may-2026-recap/consensus-selfie.jpg" width="1000" height="1332" alt="Selfie at Consensus in Miami wearing an x402 cap and an Anchorage Digital lanyard." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">Consensus, Miami. The x402 hat got more conversations started than my badge did.</figcaption>
 </figure>
 
-<p>The one that mattered: Jen introduced me to <strong>planning three times before building once</strong>. Run a frontier model through three independent planning passes, reconcile where they disagree, <em>then</em> let it implement. I&rsquo;d <a href="/posts/plan-3x-build-once/">written about a version of this before</a>, but watching a practitioner who lives it explain the nuance moved it from &ldquo;a thing I do sometimes&rdquo; to the default. On my Hermes + GPT-5.5 setup it&rsquo;s the difference between a coin flip and a near-sure thing: Chrome extensions (Veracity) now come out in <strong>one shot</strong>, mobile apps (Palmaura) in <strong>two or three</strong>. Aaron sharpened a few other corners of the workflow, and Gaetano was the standing reminder that one freelancer with the right taste can out-maneuver a whole team.</p>
+<p>The unlock that paid for the trip came from Jen: <strong>plan three times before building once</strong>. Run a frontier model through three independent planning passes, reconcile where they disagree, <em>then</em> let one agent implement. I&rsquo;d <a href="/posts/plan-3x-build-once/">tested a version of this before</a>, but hearing a practitioner walk through how she runs it daily turned it from an occasional experiment into my default. On my Hermes + GPT-5.5 stack, it&rsquo;s the difference between a coin flip and a clean ship: Chrome extensions (Veracity) now land in <strong>one shot</strong>, and mobile apps (Palmaura) take <strong>two or three</strong>. Aaron helped sharpen the surrounding workflow, and Gaetano was a standing reminder that one solo operator with sharp taste can out-maneuver an entire team.</p>
 
 <figure style="margin:1.5rem 0;">
   <img  src="https://img.zonted.com/resources/may-2026-recap/consensus-dinner.jpg" width="1200" height="1599" alt="Dinner at a Miami restaurant with two fellow builders, plates of breaded cutlets and fries on the table." loading="lazy" />
@@ -225,46 +225,46 @@
 
 <h2 id="google-wipeout">Google wiped Tabiji&rsquo;s search traffic</h2>
 
-<p>Then the gut-punch. Around May 10, Tabiji&rsquo;s search traffic fell off a cliff &mdash; from a healthy ramp to essentially zero overnight &mdash; and weeks of trying haven&rsquo;t brought it back.</p>
+<p>Then came the gut-punch. Around May 10, Tabiji&rsquo;s organic search traffic fell off a cliff &mdash; from a steady climb to essentially zero overnight. Weeks of fixes haven&rsquo;t brought it back.</p>
 
 <figure style="margin:1.5rem 0;">
   <img  src="https://img.zonted.com/resources/may-2026-recap/tabiji-search-clicks.jpg" width="1400" height="605" alt="Google Search Console showing Tabiji's web search clicks climbing through April then collapsing to near-zero around May 10." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">2,172 web search clicks &mdash; then a wall, right around May 10.</figcaption>
 </figure>
 
-<p>I can&rsquo;t point to a manual penalty. My best guess is that Google has gotten extremely twitchy about new sites in the vibecoded-slop era: a young domain publishing AI-assisted content at volume is exactly the profile they&rsquo;re now quick to bury, and the algorithm would rather wrongly suppress a thousand new sites than let one slop farm through. Painful. But &mdash; and this is the whole story of the month &mdash; not fatal.</p>
+<p>There&rsquo;s no manual action in Search Console. My read: Google has gotten ruthlessly defensive against new domains in the vibecoded-slop era. A young domain publishing AI-assisted pages at volume matches the exact profile the classifier wants to bury, and Google would rather suppress a thousand legitimate new sites than let one slop farm rank. It stings &mdash; but it wasn&rsquo;t fatal.</p>
 
 <h2 id="the-numbers">The numbers</h2>
 
-<p>Full transparency, as always. The stack runs about <strong>$700/month</strong>: ads, video generation (<a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>), cloud, the model subscriptions (Claude, GPT, <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">z.ai</a>), and a long tail of small tools.</p>
+<p>The stack costs about <strong>$700/month</strong> to run: Amazon ads, video generation (<a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a>), cloud hosting, model subscriptions (Claude, GPT, <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">z.ai</a>), and a long tail of utilities.</p>
 
 <figure style="margin:1.5rem 0; max-width:420px; margin-left:auto; margin-right:auto;">
   <img  src="https://img.zonted.com/resources/may-2026-recap/costs.jpg" width="520" height="770" alt="Monthly cost breakdown totaling about $700: Amazon ads $150, Wavespeed $100, Google Cloud $100, GPT $100, Claude $100, Cloudflare $50, z.ai $30, pubby $30, X $16, Instagram $15, Slack $14, 1Password $4." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">~$700/month out the door.</figcaption>
 </figure>
 
-<p>Against that, the biggest revenue line is <a href="https://tabiji.ai/books/">Tabiji books on Amazon Kindle</a>: 45 units across 30 titles in May, roughly $125/month.</p>
+<p>Against that burn, the top revenue line is <a href="https://tabiji.ai/books/">Tabiji books on Amazon Kindle</a>: 45 units sold across 30 titles in May, bringing in roughly <strong>$125/month</strong>.</p>
 
 <figure style="margin:1.5rem 0;">
   <img  src="https://img.zonted.com/resources/may-2026-recap/kdp-units.jpg" width="1500" height="980" alt="Amazon Kindle Direct Publishing report: 45 units processed across all 30 books, May 1-31, 2026." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">45 books sold in May &mdash; on Amazon, not on the site Google just buried.</figcaption>
 </figure>
 
-<p>Net: still about <strong>$600/month in the red</strong>. Not a business yet. A lab with a tab. But the shape of where the money comes from is the lesson.</p>
+<p>Net: roughly <strong>$600/month in the red</strong>. Still a lab with a tab rather than a business &mdash; but where the revenue came from is the real story.</p>
 
 <h2 id="lessons">What May taught me</h2>
 
-<p><strong>1. Diversify or die.</strong> Google erased Tabiji&rsquo;s search traffic and it barely touched revenue &mdash; because the money is made on Amazon, a completely different surface that Google can&rsquo;t turn off. The <a href="/posts/tabiji-18m-views/">18 million social views</a> live on yet another. Single points of failure are how you die quietly; spread the bets and a catastrophe on one channel becomes a Tuesday.</p>
+<p><strong>1. Diversify or die.</strong> Google zeroed out Tabiji&rsquo;s search traffic and barely dented revenue, because book sales live on Amazon and the <a href="/posts/tabiji-18m-views/">18 million social views</a> live on Instagram and TikTok. Single-channel dependence kills you quietly; spread across independent surfaces, a platform wipeout is just a Tuesday.</p>
 
-<p><strong>2. Trade notes with practitioners.</strong> The plan-three-times unlock didn&rsquo;t come from a blog post or a model release. It came from Jen, over dinner. In the AI era your edge is specific, hard-won technique &mdash; the prompts, the skills, the way you decompose a problem &mdash; and the fastest way to compound it is to swap notes with people who are also in the weeds. One dinner moved my whole build loop.</p>
+<p><strong>2. Trade notes with practitioners.</strong> The plan-three-times unlock didn&rsquo;t come from a model release or a benchmark paper &mdash; it came from Jen over dinner. When everyone has access to the same frontier models, your edge is workflow decomposition. One honest conversation with someone in the weeds moved my entire ship rate.</p>
 
-<p><strong>3. Protect the flow.</strong> When I&rsquo;m locked in I&rsquo;m juggling four to seven contexts across the agents at once. Breaking that to take a meeting costs roughly <strong>5&times;</strong> what it did before AI &mdash; rebuilding all that mental state is the expensive part, not the meeting. It&rsquo;s also seductively easy to optimize a local maximum (more social views, more SEO, a slightly nicer product) instead of the thing that actually moves the business.</p>
+<p><strong>3. Protect the flow state.</strong> When I&rsquo;m locked in, I&rsquo;m holding four to seven parallel agent contexts in my head at once. Breaking that state for a 30-minute meeting costs roughly <strong>5&times;</strong> what it did pre-AI &mdash; reloading the mental state is the tax, not the calendar block. And when you do have focus, watch out for local-maximum traps: chasing more views or prettier UI instead of the bottleneck that moves revenue.</p>
 
-<p><strong>4. More surfaces, more combinations.</strong> Every area I learn &mdash; AI influencers, books, apps, games, MCP and APIs &mdash; isn&rsquo;t a separate silo. It&rsquo;s another card in the deck. The real wins keep coming from <em>combining</em> them: a viral reel that funnels to a book, a game that documents a dead project, an API that powers an app. The playbook compounds.</p>
+<p><strong>4. Stack surfaces that combine.</strong> Every capability I build &mdash; AI influencers, Kindle books, mobile apps, web games, MCP servers &mdash; is another card in the same deck. The outsized wins come from combining them: a viral reel that funnels into a Kindle book, a browser game that memorializes a dead startup, an API that powers a Chrome extension.</p>
 
 <h2 id="next">Next</h2>
 
-<p>The search wipeout stings, and I&rsquo;ll keep poking at recovery. But May proved the thesis it was quietly built on: diversify the surfaces, compound the technique, and guard the focus that makes any of it possible. June: keep stacking cards.</p>
+<p>The search wipeout stings, and I&rsquo;ll keep testing recovery paths. But May proved the underlying thesis: own multiple distribution surfaces, compound the build loop, and guard the focus required to run the orchestra. June is about stacking more cards.</p>
 
 
         </div>

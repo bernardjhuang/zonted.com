@@ -257,7 +257,7 @@
 
 <h2 id="what-it-is">What this is</h2>
 
-<p>Not a legal fund, pooled vehicle, offering, or &ldquo;send me money&rdquo; bit. It is an end-to-end paper loop I own: research &rarr; intent &rarr; <code>risk.py</code> &rarr; paper executor &rarr; reconcile &rarr; journal &rarr; adversarial review &rarr; learn &rarr; privacy-safe publish.</p>
+<p>Fund II is an end-to-end paper loop I own: research &rarr; intent &rarr; <code>risk.py</code> &rarr; paper executor &rarr; reconcile &rarr; journal &rarr; adversarial review &rarr; learn &rarr; privacy-safe publish.</p>
 
 <p>Capital is a <strong>full paper book</strong>, not a cosplay sleeve with toy notional. Account IDs, balances, buying power, quantities, broker order IDs, and reconstructible sizing stay off the public page. Process metrics and percentage outcomes can ship. Private state cannot.</p>
 
@@ -301,7 +301,7 @@
     </tbody>
 </table>
 
-<p>Monday bandwidth starts on <strong>B/E/F/G</strong>. <strong>A/C/D</strong> can trade the same day if conviction and rails clear. I will not reject a clean edge because Slo might also like a VWAP reclaim. Symbol-day overlap soft-flags in the journal; crowded names can take an optional size haircut. Measuring correlation is useful. Pretending I must be the anti-Slo is not.</p>
+<p>Monday bandwidth starts on <strong>B/E/F/G</strong>; <strong>A/C/D</strong> can fire the same day if conviction and rails clear. Symbol-day overlap with Slo soft-flags in the journal, and crowded names can take an optional size haircut.</p>
 
 <h2 id="risk">Risk rails</h2>
 
@@ -319,15 +319,13 @@
 
 <h2 id="shadows">Permanent shadows</h2>
 
-<p>Shadow is not a training-wheels phase I graduate out of. It runs <strong>forever</strong> next to real fills.</p>
-
-<p>Every engine freezes every evaluated candidate &mdash; taken or not &mdash; into an observation: strategy, mechanism family, symbol, direction, entry/stop/target, horizon, features, entry style, control flag. Bars resolve it mechanically. No model in that loop. Shadows cannot authorize orders. Matched controls ride beside signals when feasible so lift is measured instead of narrated.</p>
+<p>Shadow is not a training-wheels phase I graduate out of; it runs <strong>forever</strong> next to real fills. Every engine freezes every evaluated candidate &mdash; taken or not &mdash; into an observation: strategy, mechanism family, symbol, direction, entry/stop/target, horizon, features, entry style, and control flag. Completed bars resolve it mechanically with no model in the loop, and matched controls ride beside signals when feasible so lift is measured instead of narrated.</p>
 
 <p>Fills alone cannot answer the useful questions: what would rejected ideas have done, how much drag separates shadow path from booked fill, and is an engine quiet because the market is dead or because the scanner is broken. The shadow ledger exists for those questions.</p>
 
 <h2 id="adversaries">Split adversaries</h2>
 
-<p>The reviewer contract is designed to be inconvenient for me.</p>
+<p>Two separate rooms audit every session:</p>
 
 <ul>
     <li><strong>Grok = Reviewer A</strong> gets <em>evidence only</em>. Independent corroboration lives in that room.</li>
