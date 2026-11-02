@@ -207,109 +207,95 @@
 
         <div class="article-body">
 
-            <p class="dropcap">On May 10, 2026, one of my AI agents shipped a PR that left 81 lines of raw git conflict markers &mdash; <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; sha</code> &mdash; sitting in plain HTML on tabiji.ai's main scams hub. Four hours later, the broken state was patched. Four days later, Google had cut our organic search traffic by ~95%. We haven't recovered.</p>
+            <p class="dropcap">On May 10, 2026, one of my AI agents shipped a PR that left 81 lines of raw git conflict markers &mdash; <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code>, <code>=======</code>, <code>&gt;&gt;&gt;&gt;&gt;&gt;&gt; sha</code> &mdash; sitting in plain HTML on <a href="https://tabiji.ai">tabiji.ai</a>'s main scams hub. Four hours later, we patched it. Four days later, Google had cut our organic search traffic by ~95%. We still haven't recovered.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">An AI agent shipped a merge conflict to <a href="https://tabiji.ai">tabiji.ai</a>'s production HTML for four hours; Google cut our search traffic by 95% in four days and we haven't recovered.</p>
+                <p class="tldr-thesis">Four hours of unmerged git conflict markers on a top landing page triggered a site-wide Google quality demotion that wiped out 95% of <a href="https://tabiji.ai">tabiji.ai</a>'s organic traffic.</p>
                 <ul>
-                    <li>81 lines of raw <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> rendered to every visitor on /scams/, the site's strongest organic page.</li>
-                    <li>Both clicks <em>and</em> impressions cratered &mdash; Google didn't just stop sending traffic, it stopped showing the pages.</li>
-                    <li>Cleanup uncovered 1,244 broken links, 237 broken images, 32 latent bugs across the site &mdash; once Google looked, it found a lot.</li>
+                    <li><strong>The trigger</strong> &mdash; 81 lines of raw <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD</code> rendered in visible HTML on <code>/scams/</code>, our highest-traffic organic hub.</li>
+                    <li><strong>The demotion</strong> &mdash; Both clicks and impressions collapsed despite 3,957 URLs staying indexed, zero manual actions, and no overlapping core update.</li>
+                    <li><strong>The corroborating mess</strong> &mdash; A post-crash audit uncovered 1,244 broken internal links, 237 broken CDN images, and 32 latent DOM/schema bugs across the site.</li>
                 </ul>
-                <p class="tldr-tail">AI is going to ship merge conflicts. Build a pre-ship gate before Google decides what kind of publisher you are.</p>
             </div>
-
-            <p>This is a story about a small mistake that turned out not to be small at all.</p>
 
             <h2 id="what-broke">What broke</h2>
 
-            <p>Tabiji.ai runs a fleet of AI agents. They write copy, build pages, produce videos, refactor code, ship PRs. Most of the time it works. This time, it didn't.</p>
-
-            <p>The forensic record is on GitHub:</p>
+            <p>Tabiji.ai runs on a fleet of AI agents that write copy, build pages, produce videos, refactor code, and ship PRs. Here is the commit timeline from GitHub:</p>
 
             <ul>
-                <li>5/8 &mdash; PR #1490: we found and patched merge-conflict residue on the scams hub. Thought we were clear.</li>
-                <li>5/10 02:39 EDT &mdash; a subsequent PR landed with fresh residue. 81 conflict marker lines, stacked between the hero stat pills, rendering to every visitor.</li>
-                <li>5/10 06:39 EDT &mdash; emergency fix in PR #1513. The broken state was live for roughly four hours.</li>
+                <li><strong>May 8 (PR #1490):</strong> We found and patched merge-conflict residue on the scams hub. Thought we were clean.</li>
+                <li><strong>May 10, 02:39 EDT:</strong> A subsequent agent PR landed with fresh residue &mdash; 81 conflict marker lines stacked between the hero stat pills, rendering raw in the DOM to every visitor.</li>
+                <li><strong>May 10, 06:39 EDT (PR #1513):</strong> Emergency fix deployed. Total exposure window: four hours.</li>
             </ul>
-
-            <p>Four hours. That's it.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/google-zero-patience-ai-slop/gsc-traffic-cliff.png" alt="Google Search Console performance chart for tabiji.ai showing organic clicks and impressions both collapsing from a peak of ~80 daily clicks and ~13K daily impressions to near zero in mid-May 2026" width="2538" height="1288" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">GSC for tabiji.ai. Both clicks and impressions cliff after May 10 &mdash; Google didn't just stop ranking the pages, it stopped showing them.</figcaption></figure>
 
             <h2 id="what-google-saw">What Google saw</h2>
 
-            <p>On a normal day, the scams hub is one of tabiji's strongest pages. It ranks for hundreds of "[city] scams to avoid" queries and pulls in dozens of daily clicks plus second-order internal traffic.</p>
+            <p>On a normal day, <code>/scams/</code> is one of tabiji's strongest organic entry points, ranking for hundreds of &ldquo;[city] scams to avoid&rdquo; queries and feeding internal links across the site.</p>
 
-            <p>For four hours, that same URL was rendering literal git conflict syntax in the visible body. To Google's quality classifier, the signal is unambiguous: <em>broken site, low-quality publisher.</em> By the next morning, the click-through curve had bent. Within 96 hours, ~95% of our pre-crash daily clicks were gone.</p>
+            <p>For four hours, Googlebot crawled that URL and saw raw git conflict syntax in the visible body. To Google's site-quality classifiers, the signal was unambiguous: <em>unmonitored, broken publisher.</em> By the next morning, the click curve bent downward. Within 96 hours, ~95% of our daily clicks were gone.</p>
 
-            <p>The more telling line in the chart above is the purple one. <strong>Impressions cratered alongside clicks.</strong> Google didn't just stop sending traffic &mdash; it stopped <em>showing</em> the pages in search results. The line is still flat. There's been no recovery.</p>
+            <p>Look at the purple line in the chart above: <strong>impressions cratered alongside clicks.</strong> Google didn't just drop us a few positions &mdash; it stopped surfacing our pages in search results altogether.</p>
 
             <h2 id="what-it-wasnt">What it wasn't</h2>
 
-            <p>Before pinning this on Google's quality bar, I checked the obvious explanations. None of them held up.</p>
+            <p>Before blaming site-wide quality classifiers, I ruled out the standard causes:</p>
 
-            <p><strong>The pages are still indexed.</strong> GSC shows 3,957 indexed URLs, line still climbing &mdash; not a deindexing event. Google still has the pages; it just stopped showing them.</p>
+            <p><strong>The pages are still indexed.</strong> GSC shows 3,957 indexed URLs and climbing. Google still stores the pages; it just refuses to rank them.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/google-zero-patience-ai-slop/gsc-indexing.png" alt="Google Search Console Indexing panel for tabiji.ai showing 3,957 indexed pages versus 3,007 not indexed, with the indexed-pages line trending upward through May 8, 2026" width="1738" height="920" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">GSC Indexing report. Indexed-page count is still going up. The crash isn't about whether Google <em>has</em> the pages &mdash; it's about whether Google <em>shows</em> them.</figcaption></figure>
 
-            <p><strong>No security issues.</strong> Not a hack. Not a malware flag.</p>
+            <p><strong>No security issues.</strong> No malware or hacked-content flags.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/google-zero-patience-ai-slop/gsc-security-issues.png" alt="Google Search Console Security Issues panel showing 'No issues detected'" width="1848" height="376" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"></figure>
 
-            <p><strong>No manual penalty.</strong> Nobody at Google manually flagged the site.</p>
+            <p><strong>No manual penalty.</strong> Zero human reviewer actions in GSC.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/google-zero-patience-ai-slop/gsc-manual-actions.png" alt="Google Search Console Manual Actions panel showing 'No issues detected'" width="1814" height="402" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"></figure>
 
-            <p><strong>No Google algorithm update during the cliff window.</strong> Per <a href="https://status.search.google.com/summary">Google's own Search Status dashboard</a>, the last announced ranking update finished March 27, 2026 &mdash; six weeks before our crash. No core update active, no spam update, no Discover update. The cliff happened in a quiet window.</p>
+            <p><strong>No Google algorithm update during the cliff window.</strong> Per <a href="https://status.search.google.com/summary">Google's Search Status dashboard</a>, the last announced ranking update finished March 27, 2026 &mdash; six weeks before our crash. No core update, spam update, or Discover update overlapped May 10.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/google-zero-patience-ai-slop/search-status-ranking.png" alt="Google Search Status Dashboard listing the last four announced ranking events: March 2026 core update finishing March 27, March 2026 spam update March 24, February 2026 Discover update, and December 2025 core update. No active events during May 2026." width="1998" height="536" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Google's Search Status dashboard. The last completed ranking event finished 5 weeks before our crash. Nothing announced overlaps the cliff window.</figcaption></figure>
 
-            <p>So: pages still indexed, no penalty, no algorithm shake-up. The cause was internal. The 81 lines of conflict markers fired off a quality signal, and the rest of the site's latent mess gave Google enough corroborating evidence to act on it.</p>
+            <p>Pages indexed, no manual action, no core update. The 81 lines of conflict markers tripped an automated quality threshold, and the rest of the site's latent technical debt gave Google plenty of corroborating evidence.</p>
 
             <h2 id="what-else-was-wrong">What else was wrong</h2>
 
-            <p>When we audited what <em>else</em> was broken on the site &mdash; partially because we were panicking, partially because if Google had downgraded us we wanted to know exactly what they'd seen &mdash; the catalog was ugly:</p>
+            <p>When we audited the rest of the repo to see what else Googlebot was running into, the backlog was ugly:</p>
 
             <ul>
-                <li>PR #1530 &mdash; 479 broken hub-card links + 19 empty sections.</li>
-                <li>PR #1531 &mdash; 1,244 broken internal links across 379 unique targets.</li>
-                <li>PR #1535 &mdash; 24 latent bugs: entity double-encoding, duplicate DOM IDs, raw markdown leaking into rendered HTML.</li>
-                <li>PR #1536 &mdash; 8 more: broken HTML, leftover <code>console.log</code>s, security issues.</li>
-                <li>PR #1537 &mdash; 237 broken CDN image references + 6 missing schema blocks across 121 files.</li>
+                <li><strong>PR #1530:</strong> 479 broken hub-card links + 19 empty sections.</li>
+                <li><strong>PR #1531:</strong> 1,244 broken internal links across 379 unique targets.</li>
+                <li><strong>PR #1535:</strong> 24 latent bugs &mdash; entity double-encoding, duplicate DOM IDs, raw markdown leaking into rendered HTML.</li>
+                <li><strong>PR #1536:</strong> 8 more fixes for broken HTML, stray <code>console.log</code> calls, and security headers.</li>
+                <li><strong>PR #1537:</strong> 237 broken CDN image references + 6 missing schema blocks across 121 files.</li>
             </ul>
 
-            <p>None of these alone would tank a site. Together, they paint a picture of a publisher who is not being careful. The merge conflict was the loudest offense. Once Google had a reason to look harder, there was a lot to find.</p>
+            <p>None of those bugs alone tanks a domain. Together, they profile an automated publisher shipping faster than it validates. The merge conflict on <code>/scams/</code> was just the flare that drew attention to the rest of the mess.</p>
 
             <h2 id="why-googles-bar-moved">Why Google's bar quietly moved</h2>
 
-            <p>The internet is being buried under AI-generated garbage. AI-spun listicles. AI review farms. AI sites that publish faster than any human team can &mdash; and worse than any human reviewer would. Google has noticed. The quality bar has shifted, especially for sites that look algorithmically generated.</p>
+            <p>Search is drowning in AI-generated listicles and programmatic review farms that publish faster than any human team can review. Google has adjusted its classifiers accordingly &mdash; especially for domains that scale page count rapidly.</p>
 
-            <p>For a human-published site, a busted page is forgiven. People ship bugs sometimes. Whatever.</p>
+            <p>When a slow, human-edited site ships a broken page, it looks like an isolated ops mistake. When a site publishing hundreds of programmatic pages a week ships raw git conflict markers, broken internal links, and leaked markdown, it matches the exact fingerprint of unmonitored AI slop.</p>
 
-            <p>For an AI-published site, the same bug looks like <em>one more data point in a pattern.</em> "Are you a careful publisher, or are you part of the slop flood?" One broken page can't answer that on its own. Five can. So can one extremely loud one.</p>
-
-            <p>The site you're reading this on &mdash; Zonted &mdash; is fine, because it ships a few human-reviewed posts a week. The site that broke &mdash; <a href="https://tabiji.ai">tabiji.ai</a> &mdash; ships hundreds of pages a week, autonomously, with AI. Google evaluates them differently now. I think this is going to be true of every AI-native site this year.</p>
+            <p>Zonted is fine because it ships a handful of human-edited posts a week. <a href="https://tabiji.ai">Tabiji.ai</a> ships hundreds of pages a week via autonomous agents. Google holds high-velocity sites to a zero-tolerance technical bar.</p>
 
             <h2 id="the-lesson">The lesson</h2>
 
-            <p>If you're running AI agents that ship code to production, you need a pre-ship quality gate. Doesn't matter much which kind:</p>
+            <p>If your AI agents push directly to production, you need a hard pre-ship gate:</p>
 
             <ul>
-                <li>A lint check that fails the build on <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code> patterns (twenty minutes of work).</li>
-                <li>An audit agent that reviews every PR before merge.</li>
-                <li>A staging tier that holds AI-generated builds long enough for a human eye.</li>
-                <li>Whatever else fits <a href="/ai-stack/">your stack</a>.</li>
+                <li>A CI check that fails the build on <code>&lt;&lt;&lt;&lt;&lt;&lt;&lt;</code>, unrendered markdown tokens, broken internal links, or duplicate DOM IDs (twenty minutes of setup).</li>
+                <li>An independent audit agent that grades every PR before merge.</li>
+                <li>A staging hold before high-traffic hubs deploy to production.</li>
             </ul>
 
-            <p>I didn't have one. I now do. But it took 95% of our search traffic to teach me that lesson, and the lesson is still being charged to my account daily because the recovery curve hasn't started yet.</p>
+            <p>I didn't have those gates wired up on May 10. I do now &mdash; after paying 95% of our organic traffic as tuition.</p>
 
-            <p>The point isn't that AI shouldn't ship code. The point is: <strong>AI is going to ship merge conflicts.</strong> AI is going to leave <code>console.log</code>s. AI is going to introduce duplicate IDs and double-encode entities and let markdown leak through into the DOM. That's just true. It will happen.</p>
-
-            <p>The question is whether what it shipped gets to production before someone &mdash; or some other agent &mdash; checks it.</p>
-
-            <p>The cost of getting that wrong, in the year Google decided to take AI slop seriously, is higher than I expected.</p>
+            <p>AI agents will ship merge conflicts, stray <code>console.log</code>s, double-encoded entities, and broken links. The only question is whether your CI catches them before Googlebot does.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

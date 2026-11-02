@@ -258,13 +258,13 @@
 
             <h2 id="the-bet">The bet: tools for agents</h2>
 
-            <p>I still believe the premise. The future of commerce, and of the internet, is an agent economy: software calling software, with people setting goals instead of clicking buttons. If that&rsquo;s where things are going, the durable businesses are the ones that sell to agents. That means tools an agent can discover, call, and pay for without a human in the loop.</p>
+            <p>I still believe the premise. The future of commerce, and of the internet, is an agent economy: software calling software, with people setting goals instead of clicking buttons. If that&rsquo;s where things are going, durable businesses will sell to agents&mdash;tools an agent can discover, call, and pay for without a human in the loop.</p>
 
-            <p>The second half of the premise was slop. The more publishing agents take over, the more AI slop enters the ecosystem: generic text, synthetic images, cloned voices, the confident paragraph that says nothing. An agent that publishes on your behalf needs a way to check its own work before it goes out. So Veracity would check for slop and warn you before you published.</p>
+            <p>The second half of the premise was slop. The more publishing agents take over, the more AI slop enters the ecosystem: generic text, synthetic images, cloned voices, the confident paragraph that says nothing. An agent publishing on your behalf needs a pre-flight check to catch its own slop before it goes live.</p>
 
             <p>In May I wrote the launch post, <a href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call</a>, and held the idea up against four tests. Does it stay valuable as agents take over? As agents get smarter? Is the surface agent-first? Is it metered, with a free tier? On paper, Veracity passed all four.</p>
 
-            <p>The product changed on the very first planning message. Slo, the agent in my Hermes setup, talked me out of the original idea, an AI-content <em>detection</em> API. Detectors are probabilistic, adversarial, and easy to overclaim. So we reframed it as risk scoring with evidence. One call in, one action out (allow, revise, human_review, or reject) plus the evidence behind it. The homepage put it best: <em>&ldquo;We don&rsquo;t care who wrote it. We care whether it&rsquo;s shippable.&rdquo;</em></p>
+            <p>The product changed on the very first planning message. Slo, the agent in my Hermes setup, talked me out of the original idea: an AI-content <em>detection</em> API. Detectors are probabilistic, adversarial, and easy to overclaim. We reframed it as risk scoring with evidence&mdash;one call in, one action out (<code>allow</code>, <code>revise</code>, <code>human_review</code>, or <code>reject</code>) plus the receipts behind it. The homepage put it best: <em>&ldquo;We don&rsquo;t care who wrote it. We care whether it&rsquo;s shippable.&rdquo;</em></p>
 
             <h2 id="what-i-shipped">What I shipped</h2>
 
@@ -285,7 +285,7 @@
                 <li>evals, a benchmark repo, and a stack of free tools: AI-text detectors, a fake-review checker, integration guides</li>
             </ul>
 
-            <p>I even ran my <a href="/posts/stakes-priming/">stakes-priming audit</a> on it. It caught six ship-blocking bugs, including duplicate JSON keys on the homepage. By early June, Veracity was the most complete product I had never sold.</p>
+            <p>A <a href="/posts/stakes-priming/">stakes-priming audit</a> caught six ship-blocking bugs, including duplicate JSON keys on the homepage. By early June, Veracity was the most complete product I had never sold.</p>
 
             <h2 id="receipts">The receipts</h2>
 
@@ -303,7 +303,7 @@
                 </tbody>
             </table>
 
-            <p>The visits number undercounts, because Google Analytics only ran for visitors who clicked Accept on the cookie banner. Still, 22 of the 24 visits it did record came through links on this site. Almost nobody found Veracity from anywhere I hadn&rsquo;t personally put a link.</p>
+            <p>The visit count understates reality because Google Analytics only fired after cookie consent. Even so, 22 of the 24 recorded visits came from links on this site. Almost nobody found Veracity unless I sent them there.</p>
 
             <figure style="margin:1.75rem 0 1rem;">
 <svg class="vp-chart" viewBox="0 0 660 318" role="img" aria-labelledby="vp-chart-title vp-chart-desc" xmlns="http://www.w3.org/2000/svg">
@@ -397,7 +397,7 @@
 
             <p>The chart is the part I keep staring at. Google impressions climbed all summer, from about 100 a week in late May to more than 500 a week in August, while the product sat untouched. Clicks never followed. An average position of 32 is page four, and nobody reads page four.</p>
 
-            <p>Look at which pages drew the clicks. Of the top five, two were AI-detector pages and a third was a fake-review checker. The searches that found Veracity were looking for detection, the exact product Slo had talked me out of on day one. Nobody was searching for what I actually built: a risk score with evidence, sold to agents.</p>
+            <p>Look at which pages drew those 18 clicks. Of the top five, two were AI-detector pages and a third was a fake-review checker. The searches that found Veracity were looking for detection&mdash;the exact product Slo had talked me out of on day one. Nobody was searching for what I actually built: a risk score with evidence, sold to agents.</p>
 
             <h2 id="distribution">Free tools and a warm inbox</h2>
 
@@ -405,7 +405,7 @@
 
             <p>It half worked. Google indexed the tools and kept showing them. But free tools attract people who want a free tool. Someone pasting a paragraph into an AI-text detector wants a verdict on that paragraph, not an API key for a pipeline they don&rsquo;t have. The tool answered their question and they left. Engineering as marketing got me impressions. It never got me intent.</p>
 
-            <p>The channel that could have answered the real question was the oldest one: talk to buyers. A developer tool gets sold one conversation at a time, to the engineering lead who is tired of shipping slop. I got as far as warming up an inbox for cold B2B outbound with Lemwarm, which trades friendly emails with other inboxes for a few weeks so a new domain doesn&rsquo;t land in spam. Then I decided to work on other projects before the outbound itself got going.</p>
+            <p>The channel that could have answered the real question was the oldest one: talk to buyers. A developer tool gets sold one conversation at a time, to the engineering lead who is tired of shipping slop. I got as far as warming up an inbox for cold B2B outbound with Lemwarm, which trades friendly emails with other inboxes for a few weeks so a new domain doesn&rsquo;t land in spam. Then I wandered off to other projects before sending a single cold email.</p>
 
             <h2 id="scorecard">How it scored</h2>
 
@@ -450,7 +450,7 @@
 
             <p>The second was upkeep. A content site can sit untouched for months. An API can&rsquo;t. Veracity meant Workers, API calls, keys, a database, billing, and an email domain: moving parts that need tending whether or not anyone is calling them. When something else is working, that overhead is the first thing you stop paying.</p>
 
-            <p>Underneath both was a doubt: I wasn&rsquo;t sure anyone would use it. That&rsquo;s the honest answer and the uncomfortable one, because I never found out. The launch post said the agent economy &ldquo;doesn&rsquo;t have credit cards.&rdquo; I read that as a reason to build for agents. I should have read it as a warning. If the agent can&rsquo;t pay, a person has to, and I never sat down with that person. The homepage said <em>developers shipping AI features</em> the whole time. I built everything except the conversation with one of them.</p>
+            <p>Underneath both was a quieter doubt: I wasn&rsquo;t sure anyone wanted it. That&rsquo;s the uncomfortable truth, because I never found out. The launch post said the agent economy &ldquo;doesn&rsquo;t have credit cards.&rdquo; I read that as a reason to build for agents. I should have read it as a warning. If the agent can&rsquo;t pay, a person has to, and I never sat down with that person. The homepage said <em>developers shipping AI features</em> the whole time. I built everything except the conversation with one of them.</p>
 
             <h2 id="what-comes-with-me">What comes with me</h2>
 

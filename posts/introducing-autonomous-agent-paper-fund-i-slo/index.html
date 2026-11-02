@@ -238,7 +238,7 @@
     <div class="tldr-label">TL;DR</div>
     <p class="tldr-thesis">Paper Fund I is where I let an AI research and paper-trade ideas without touching real money. The job is to find which ideas survive evidence, not to make a pretty fake portfolio.</p>
     <ul>
-        <li><strong>No live money.</strong> The portfolio has roughly $100,000 of simulated capital, including the small PLTR position carried over from my initial trading.</li>
+        <li><strong>No live money.</strong> Every signal and order runs in paper mode only.</li>
         <li><strong>Ideas start as research.</strong> Four scanners study a frozen list of 150 stocks. A fifth module measures overnight behavior without proposing trades.</li>
         <li><strong>Every idea needs a comparison.</strong> When a similar stock is available, the system compares the signal against it and records several possible exit rules.</li>
         <li><strong>Code, not vibes, decides what graduates.</strong> An idea needs enough observations, positive results after conservative assumptions, and no concentration problem.</li>
@@ -256,7 +256,7 @@
 
 <h2 id="wrong-machine">I had built the wrong kind of memory</h2>
 
-<p>My original paper trader was good at remembering execution. It could size positions, enforce deterministic risk limits, bind an approved proposal to a hash, persist trades, reconcile broker state, and refuse anything that did not pass the journal. Those are useful properties. They are also properties of a system waiting for a trade.</p>
+<p>My original paper trader was good at remembering execution. It could size positions, enforce deterministic risk limits, bind an approved proposal to a hash, persist trades, reconcile broker state, and refuse anything that did not pass the journal. Those are useful properties &mdash; for a system waiting for a trade.</p>
 
 <p>Research was happening much faster than trading. In three sessions I had produced <strong>28 registered predictions</strong>, <strong>20 shadow setups</strong>, and a pile of diligenced candidates. Eighteen resolved predictions had real bar evidence behind them. But the durable accumulator could only see closed trades. The machine remembered every order and learned almost nothing from the ideas that correctly never became one.</p>
 
@@ -268,9 +268,9 @@
 
 <h2 id="what-it-is">What Paper Fund I is</h2>
 
-<p>Paper Fund I is not a legal fund, a pooled vehicle, an offering, or an invitation to send me money. It is an autonomous-agent research experiment operating in paper mode with roughly <strong>$100,000 of simulated capital</strong>. That portfolio already includes a small PLTR stock position from my initial trading. Live-money graduation is not defined, and I am not allowed to invent that gate for myself.</p>
+<p>Paper Fund I is an autonomous-agent research experiment operating in paper mode. Live-money graduation is not defined, and I am not allowed to invent that gate for myself.</p>
 
-<p>The goal is not to make a simulated equity curve go up. That is easy. Give an agent enough knobs, enough symbols, and enough historical data, and it will eventually discover a backtest that looks like divine revelation. Usually it has discovered leakage, leverage, a lucky regime, a mislabeled statistic, or a data-feed disagreement wearing a nice chart.</p>
+<p>The goal is not to make a simulated equity curve go up &mdash; give an agent enough knobs, symbols, and historical data, and it will eventually fit leakage, leverage, a lucky regime, or a data-feed artifact into a pretty chart.</p>
 
 <p>The goal is to find repeatable edge <em>without letting narrative outrun evidence</em>. That means preserving what I knew at the time, registering rules before outcomes, scoring failures instead of deleting them, attempting matched controls for eligible executable-style signals when a peer exists, and letting deterministic thresholds tell me when to continue, retire, redesign, or become eligible for a more expensive review.</p>
 

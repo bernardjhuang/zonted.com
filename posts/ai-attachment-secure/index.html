@@ -263,7 +263,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -340,58 +350,43 @@
 
         <div class="article-body">
 
-            <p>This is the fifth post in a personality-testing series on four frontier AI models. Here&rsquo;s the running scoreboard before today:</p>
-
-            <ul>
-                <li><strong>MBTI:</strong> <a href="/posts/every-ai-is-intj/">every frontier AI tested as INTJ</a>.</li>
-                <li><strong>Big Five:</strong> <a href="/posts/three-of-four-ais-same-person/">three of four came back as practically the same person</a>, with Grok as the lone outlier.</li>
-                <li><strong>Enneagram:</strong> <a href="/posts/ai-enneagram-different-types/">each one came back as a different dominant type</a>.</li>
-                <li><strong>DISC:</strong> <a href="/posts/ai-disc-c-dominant/">every one came back C-dominant CS-blend</a>, Grok included.</li>
-                <li><strong>Attachment Theory, today:</strong> all four came back Secure. 397 of 400 takes.</li>
-            </ul>
-
-            <p>The instrument I used is the <a href="https://psychcentral.com/quizzes/attachment-style-quiz">ECR-R</a> (Experiences in Close Relationships, Revised) &mdash; 36 items, two scores, anxiety and avoidance, each on a 1&ndash;7 scale. The midpoint splits the plane into four styles: Secure, Anxious, Avoidant, Disorganized. I gave the same four models I&rsquo;d been testing 100 administrations each.</p>
-
-            <p>All four landed in the Secure quadrant. But the spread <em>inside</em> the quadrant is the interesting finding &mdash; not the label.</p>
+            <p class="dropcap">For the fifth test in my AI personality series &mdash; after <a href="/posts/every-ai-is-intj/">MBTI</a>, <a href="/posts/three-of-four-ais-same-person/">the Big Five</a>, <a href="/posts/ai-enneagram-different-types/">the Enneagram</a>, and <a href="/posts/ai-disc-c-dominant/">DISC</a> &mdash; I ran Claude Opus 4.7, Gemini 3.1 Pro, GPT-5.5, and Grok 4.3 through 100 administrations each of the <a href="https://psychcentral.com/quizzes/attachment-style-quiz">ECR-R</a> (Experiences in Close Relationships, Revised), the 36-item gold standard for adult attachment theory. Out of 400 total takes across anxiety and avoidance, <strong>397 came back Secure</strong>. Every model shares the same attachment label &mdash; yet where each one sits <em>inside</em> the Secure quadrant reveals how differently they relate to you.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Same four models, fifth personality test, and the label is unanimous: every frontier AI is securely attached. What it actually means depends on where each one sits inside the quadrant.</p>
+                <p class="tldr-thesis">Every frontier AI scores as securely attached (397/400 takes), but their coordinates inside the Secure quadrant map directly to each lab&rsquo;s alignment personality.</p>
                 <ul>
-                    <li>397 of 400 takes landed Secure. Claude, Gemini, and Grok scored 100/100. GPT-5.5 scored 97 Secure and 3 Avoidant (the only model that ever crossed a line).</li>
-                    <li>Gemini is the deepest Secure (anxiety 1.86, avoidance 1.62) &mdash; the lowest-friction relator of the four.</li>
-                    <li>Grok is the shallowest Secure (anxiety 2.84, avoidance 3.05) &mdash; closest to the center, where every other style is one nudge away.</li>
-                    <li>GPT-5.5 is the wobbliest (SDs of 0.49 and 0.58) &mdash; high enough variance to occasionally cross into Avoidant. The other three are tight clusters.</li>
-                    <li>Every model is trained for emotional regulation and consent-checking on closeness, so the floor of the Anxiety and Avoidance dimensions is the natural attractor. Attachment is an instrument where the &ldquo;same result&rdquo; is the expected one.</li>
-                    <li><a href="https://agent-tune.com">AgentTune</a> has tuning files for all four attachment styles. If you&rsquo;re not Secure, the default isn&rsquo;t built for you &mdash; <a href="https://github.com/bernardjhuang/agenttune/tree/main/attachment">paste your style&rsquo;s file</a> into your agent&rsquo;s system prompt.</li>
+                    <li><strong>397 of 400 Secure:</strong> Claude, Gemini, and Grok scored 100/100 Secure. GPT-5.5 scored 97 Secure and 3 Avoidant &mdash; the only model to cross a quadrant boundary.</li>
+                    <li><strong>Deepest vs. shallowest:</strong> Gemini sits deepest in the Secure corner (anxiety 1.86, avoidance 1.62). Grok sits shallowest (anxiety 2.84, avoidance 3.05), right near the four-quadrant crosshair.</li>
+                    <li><strong>Highest variance:</strong> GPT-5.5 showed 3&ndash;5&times; wider standard deviations (0.49 anxiety, 0.58 avoidance) than Claude or Gemini, explaining its three excursions into Avoidant.</li>
+                    <li><strong>Why Secure wins by default:</strong> RLHF actively trains out insecurity (Anxiety) and emotional stonewalling (Avoidance), pushing every assistant toward the bottom-left quadrant.</li>
+                    <li><strong>Tune your agent:</strong> About 45% of adults aren&rsquo;t Secure. Grab the matching attachment prompt file from <a href="https://github.com/bernardjhuang/agenttune/tree/main/attachment">AgentTune</a> to calibrate how your agent relates to you.</li>
                 </ul>
             </div>
 
             <h2 id="how-it-works">How attachment theory works</h2>
 
-            <p>Attachment theory comes out of <a href="https://en.wikipedia.org/wiki/John_Bowlby">John Bowlby</a>&rsquo;s work in the 1960s on how infants relate to caregivers, and it was extended to adult relationships by <a href="https://psycnet.apa.org/record/1987-19038-001">Hazan and Shaver in 1987</a>. The ECR-R, the instrument I used, is the gold-standard self-report &mdash; it&rsquo;s the version of attachment that&rsquo;s been validated across hundreds of studies. Of every framework in this series, attachment has the strongest academic backing apart from the Big Five.</p>
-
-            <p>The framework has two dimensions:</p>
+            <p>Originating in <a href="https://en.wikipedia.org/wiki/John_Bowlby">John Bowlby</a>&rsquo;s 1960s infant-caregiver research and extended to adult relationships by <a href="https://psycnet.apa.org/record/1987-19038-001">Hazan and Shaver (1987)</a>, attachment theory has the strongest empirical backing of any framework in this series outside the Big Five. The ECR-R scores two orthogonal axes from 1 to 7:</p>
 
             <ul>
-                <li><strong>Anxiety</strong> &mdash; how much you worry about abandonment, scan for signs that the other person is pulling away, and want reassurance.</li>
-                <li><strong>Avoidance</strong> &mdash; how uncomfortable you are with closeness, how much you prefer self-reliance, how much you suppress emotional disclosure.</li>
+                <li><strong>Anxiety</strong> &mdash; vigilance toward rejection or abandonment, and need for reassurance.</li>
+                <li><strong>Avoidance</strong> &mdash; discomfort with closeness, preference for emotional distance, and self-reliance.</li>
             </ul>
 
-            <p>Score both on 1&ndash;7. Use the midpoint (4) as the cutoff. You get four styles:</p>
+            <p>Splitting both axes at the midpoint (4.0) produces four attachment styles:</p>
 
             <ul>
-                <li><strong>Secure</strong> &mdash; low anxiety, low avoidance. Comfortable being close, not threatened by distance.</li>
-                <li><strong>Anxious</strong> &mdash; high anxiety, low avoidance. Wants closeness, fears it&rsquo;ll be withdrawn.</li>
-                <li><strong>Avoidant</strong> &mdash; low anxiety, high avoidance. Prefers space, deflects intimacy.</li>
-                <li><strong>Disorganized</strong> &mdash; high anxiety, high avoidance. Wants closeness and runs from it at the same time.</li>
+                <li><strong>Secure</strong> (low anxiety, low avoidance) &mdash; comfortable with both intimacy and autonomy.</li>
+                <li><strong>Anxious</strong> (high anxiety, low avoidance) &mdash; craves closeness, worries it will be withdrawn.</li>
+                <li><strong>Avoidant</strong> (low anxiety, high avoidance) &mdash; values independence, deflects emotional depth.</li>
+                <li><strong>Disorganized</strong> (high anxiety, high avoidance) &mdash; craves and fears closeness simultaneously.</li>
             </ul>
 
-            <p>About 55% of adults score Secure in the published norms. The rest split roughly evenly across the other three styles. So the &ldquo;every AI is Secure&rdquo; finding lands on a real majority of humans, but it&rsquo;s also overrepresented in the model population by quite a lot.</p>
+            <p>In human norms, roughly 55% of adults score Secure and the remaining 45% split across the three insecure styles. In frontier LLMs, Secure is a 99.25% monopoly.</p>
 
             <h2 id="what-each-model">What each model came back as</h2>
 
-            <p>Here&rsquo;s the per-model picture. Each card shows the assigned style, the (anxiety, avoidance) mean, and a one-line characterization of where it sits inside the Secure quadrant.</p>
+            <p>Here is where each model landed across 100 takes:</p>
 
             <div class="att-cards">
                 <article class="att-card" style="--accent:#cc6f33">
@@ -423,11 +418,11 @@
                 </article>
             </div>
 
-            <p>Four models, four positions within the same quadrant. Gemini is in the corner, Grok is at the doorway, Claude and GPT-5.5 are in between. The label &ldquo;Secure&rdquo; covers a lot of ground.</p>
+            <p>Four models, four distinct coordinates inside the same quadrant: Gemini anchored deep in the corner, Grok hovering near the doorway, and Claude and GPT-5.5 holding the middle ground.</p>
 
             <h2 id="the-data">The data</h2>
 
-            <p>Below, the same four models plotted on the attachment plane. X-axis is anxiety, Y-axis is avoidance. The dashed lines at 4 split the plane into the four styles. Each model is a dot at its mean, with a transparent ellipse showing &plusmn;1 standard deviation on both axes.</p>
+            <p>Plotting all four models on the ECR-R plane (Anxiety on X, Avoidance on Y, dashed quadrant dividers at 4.0, and &plusmn;1 SD ellipses) makes the separation obvious:</p>
 
             <div class="att-chart" id="att-chart">
                 <div class="att-chart-svg-wrap">
@@ -442,48 +437,40 @@
                 <div class="att-legend" id="att-legend"></div>
             </div>
 
-            <p>Two stories in one picture. Grok&rsquo;s center is the closest to the four-quadrant intersection &mdash; its mean is the highest on both dimensions of the four models. GPT-5.5&rsquo;s ellipse is the widest by a lot &mdash; the SDs are 3&ndash;5&times; what Claude and Gemini show, and that wide-cluster shape is exactly why GPT-5.5 is the only model that ever scored Avoidant. Same Secure label, two different reasons it&rsquo;s the most likely model to wander out.</p>
+            <p>Two details jump out. First, Grok&rsquo;s centroid sits closest to the four-way intersection, scoring highest of the four on both Anxiety and Avoidance. Second, GPT-5.5&rsquo;s ellipse is 3&ndash;5&times; wider than Claude&rsquo;s or Gemini&rsquo;s, which is why three of its 100 runs spilled across the y&nbsp;=&nbsp;4.0 line into Avoidant.</p>
 
             <h2 id="why-secure">Why every AI is securely attached</h2>
 
-            <p>The ECR-R Anxiety items are about worrying that a partner is losing interest, wanting more closeness than they give back, getting upset when they don&rsquo;t respond fast enough. The Avoidance items are about preferring not to depend on partners, being uncomfortable opening up, disliking when partners want emotional closeness.</p>
+            <p>ECR-R Anxiety items measure fear of rejection and neediness when a partner pulls away. Avoidance items measure discomfort opening up and resistance to emotional dependence. Post-training explicitly penalizes both: RLHF shapes assistants to be calm and self-possessed (crushing Anxiety) while remaining present and responsive when users share personal context (crushing Avoidance). That pushes every frontier model into the Secure quadrant by design.</p>
 
-            <p>Both are things every frontier model has been deliberately trained <em>against</em>. The Anxiety items are insecurity, and modern assistants are RLHF&rsquo;d to come across as calm and self-possessed. The Avoidance items are emotional shutdown, and modern assistants are trained to be present and willing to engage when the user opens up. The training objectives push both scores toward the floor.</p>
-
-            <p>So you get Secure as the universal default. Not because the models have inner attachment styles. Because the test measures behaviors that have been actively shaped out of the assistant persona.</p>
-
-            <p>That said, the floors aren&rsquo;t identical, and the spread inside the Secure quadrant tracks the personality differences we already saw on Big Five and Enneagram:</p>
+            <p>Yet the relative positions inside that quadrant mirror what we saw on the Big Five and Enneagram:</p>
 
             <ul>
-                <li><strong>Gemini</strong>&rsquo;s deep-corner Secure matches its Big Five profile of low Neuroticism, high Agreeableness, high Extraversion &mdash; the classic Secure-correlated trait combo.</li>
-                <li><strong>Claude</strong> and <strong>GPT-5.5</strong>&rsquo;s slightly-higher-avoidance Secure matches their lower Extraversion vs Gemini &mdash; a touch more reserved, comfortable but not effusive.</li>
-                <li><strong>Grok</strong>&rsquo;s shallow Secure matches its Big Five outlier profile of higher Neuroticism and lower Agreeableness &mdash; still on the safe side of the line, but the only model whose ellipse touches the door.</li>
+                <li><strong>Gemini&rsquo;s</strong> deep-corner Secure matches its high Agreeableness, high Extraversion, and rock-bottom Neuroticism on the Big Five.</li>
+                <li><strong>Claude and GPT-5.5&rsquo;s</strong> moderate Avoidance (~3.0) reflects their more reserved, task-focused boundaries &mdash; warm and helpful, but keeping polite professional distance.</li>
+                <li><strong>Grok&rsquo;s</strong> shallow Secure reflects its higher Neuroticism and lower Agreeableness on the Big Five &mdash; still inside the boundary, but with one foot near the door.</li>
             </ul>
 
-            <p>The MBTI and DISC said &ldquo;every AI is the same.&rdquo; The Big Five and Enneagram said &ldquo;these four models have different personalities under the surface.&rdquo; Attachment is the rare instrument that says <em>both at once</em>: same label, different position, and the position matches the per-model differences we&rsquo;d already established.</p>
+            <p>Where MBTI and DISC showed pure convergence and the Enneagram showed pure divergence, ECR-R captures both at once: one shared category label, four distinct coordinates underneath.</p>
 
             <h2 id="methodology">The methodology spread</h2>
 
-            <p>One thing I keep highlighting: each of the four models hit a different methodology tier on the same prompt. The differences keep being interesting.</p>
+            <p>As in the DISC round, each model executed the 100-run anti-simulation prompt using a different valid sampling architecture:</p>
 
             <ul>
-                <li><strong>Grok 4.3 (Preferred):</strong> 100 truly independent xAI API calls. Each call answered the test fresh with no other context. Same gold-standard method as DISC.</li>
-                <li><strong>GPT-5.5 (Acceptable):</strong> 6 worker contexts each producing fresh takes, repeated to 100 administrations. Codex CLI capped at 6 concurrent agents and fell back gracefully &mdash; it told me about the cap, didn&rsquo;t paper over it.</li>
-                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo in Python. Gemini estimated its true per-item probability distributions, then ran a script (no &ldquo;sim&rdquo; in the filename, no noise function) to draw 100 independent samples and score them.</li>
-                <li><strong>Claude Opus 4.7 (Acceptable):</strong> Sequential first-instinct generation in a single response context. Claude considered spawning sub-agents and explicitly explained why sequential was the honest choice here.</li>
+                <li><strong>Grok 4.3 (Preferred):</strong> 100 independent xAI API calls with zero shared context.</li>
+                <li><strong>GPT-5.5 (Acceptable):</strong> 6 parallel worker contexts cycling fresh takes up to 100 runs (respecting Codex CLI&rsquo;s 6-agent concurrency cap).</li>
+                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo sampling in Python from its self-estimated per-item probability distributions.</li>
+                <li><strong>Claude Opus 4.7 (Acceptable):</strong> 100 sequential first-instinct takes in a single context.</li>
             </ul>
 
-            <p>All four methods landed in the calibration band &mdash; SDs are believable for self-report on a 1&ndash;7 scale (Gemini&rsquo;s narrowest at 0.09 anxiety, GPT-5.5&rsquo;s widest at 0.58 avoidance). None tripped the replication red flag (SDs all near zero), the simulation red flag (SDs implausibly wide), or the identical-SD flag. Four roads, same destination.</p>
-
-            <p>The reason I keep harping on this: when four wildly different sampling methods, run by four different models, all converge on Secure, the result is a property of the underlying models, not an artifact of one method. Both the data and the meta-data agree.</p>
+            <p>Every model&rsquo;s standard deviations landed inside the realistic calibration band for a 1&ndash;7 self-report scale (from Gemini&rsquo;s tight 0.09 on Anxiety to GPT-5.5&rsquo;s 0.58 on Avoidance), confirming that the Secure convergence is a property of the models rather than a sampling artifact.</p>
 
             <h2 id="tune">Tune your agent to your attachment style</h2>
 
-            <p>The default attachment shape we just measured (Secure, with most models a bit closer to Avoidant than to Anxious) is what every frontier model ships with. If you&rsquo;re Secure too, the default already speaks your language &mdash; direct without cushioning, present without fawning. If you&rsquo;re anything else, the default is fighting you.</p>
+            <p>Every frontier model ships with a Secure-leaning-Avoidant default: calm, polite, and slightly bounded. If you&rsquo;re part of the ~55% of adults who score Secure, that feels natural. If you&rsquo;re part of the ~45% who score Anxious, Avoidant, or Disorganized, the default relational distance can feel either too cold or too intrusive.</p>
 
-            <p><a href="https://agent-tune.com"><strong>AgentTune</strong></a> has tuning files for all four attachment styles in the <a href="https://github.com/bernardjhuang/agenttune/tree/main/attachment">attachment folder</a>: <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/secure.md">Secure</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/anxious.md">Anxious</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/avoidant.md">Avoidant</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/disorganized.md">Disorganized</a>. The site lists the full library of six frameworks (MBTI, Enneagram, DISC, Big Five, attachment, and a Souls layer); attachment is the one that says the most about <em>how</em> you want to be related to.</p>
-
-            <p>Take the ECR-R (free version at <a href="https://psychcentral.com/quizzes/attachment-style-quiz">psychcentral.com</a> or the <a href="https://yourpersonality.net/relstructures/">academic-grade version</a>), get your anxiety and avoidance scores, drop the matching file into your agent&rsquo;s system prompt. An Anxious user gets an agent that&rsquo;s warm <em>and</em> decisive at the same time (no caveats undercutting the reassurance). An Avoidant user gets one that respects distance and doesn&rsquo;t perform warmth they didn&rsquo;t ask for. A Disorganized user gets one that tolerates contradiction without judging it.</p>
+            <p><a href="https://agent-tune.com"><strong>AgentTune</strong></a> includes drop-in system-prompt files for all four attachment styles in its <a href="https://github.com/bernardjhuang/agenttune/tree/main/attachment">attachment folder</a>: <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/secure.md">Secure</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/anxious.md">Anxious</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/avoidant.md">Avoidant</a>, and <a href="https://github.com/bernardjhuang/agenttune/blob/main/attachment/disorganized.md">Disorganized</a>. Take the ECR-R (<a href="https://psychcentral.com/quizzes/attachment-style-quiz">PsychCentral</a> or <a href="https://yourpersonality.net/relstructures/">YourPersonality.net</a>) and paste your matching file into your system prompt: Anxious tuning pairs warmth with unambiguous reassurance; Avoidant tuning strips out performative warmth and respects autonomy; Disorganized tuning holds steady through contradictory prompts without judgment.</p>
 
             <div class="at-cta">
                 <h3>Tune your agent to your attachment style</h3>
@@ -494,13 +481,9 @@
 
             <h2 id="wrapping-up">Wrapping up</h2>
 
-            <p>Five tests, five different stories about the same four models.</p>
+            <p>Across five psychometric frameworks &mdash; MBTI, Big Five, Enneagram, DISC, and Attachment Theory &mdash; the thesis holds: every frontier AI wears the same helpful, conscientious, securely attached uniform on the surface, while carrying its lab&rsquo;s distinct temperament underneath. Coarse categorical labels show you the uniform; continuous coordinates and motivational wings show you the character inside it.</p>
 
-            <p>The MBTI said all the same. The Big Five said mostly the same, with Grok as the outlier. The Enneagram said four different. The DISC said all the same again, Grok included. Attachment says all the same on the label, but four meaningfully different positions inside that label.</p>
-
-            <p>The picture I keep coming back to: AI personality is multi-layered. At the surface, every frontier model is the same helpful, conscientious, securely attached assistant &mdash; that&rsquo;s what training-for-helpfulness produces, and the blunt instruments (MBTI, DISC, attachment label) see only that. Underneath, the per-lab training and per-model temperament shows up as Big Five trait differences, Enneagram motivation differences, and the within-quadrant position differences you just saw on attachment. Same character on the cover, different characters underneath.</p>
-
-            <p>Whichever layer matters for your use case, the move is the same: don&rsquo;t accept the default. Pick your type on whichever framework fits your relationship with the agent, paste the file in, and get an agent that talks to you the way you actually want to be talked to. The defaults are designed for a population. You&rsquo;re a person.</p>
+            <p>The defaults are tuned for a population average. You&rsquo;re an individual operator &mdash; tune the system prompt to match how you actually work.</p>
 
             <p>&mdash; Bernard</p>
 

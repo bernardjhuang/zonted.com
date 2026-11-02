@@ -207,129 +207,117 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Fifty cleanup PRs in five weeks &mdash; every one of them undoing AI-generated content that already shipped to production.</p>
+                <p class="tldr-thesis">Fifty cleanup PRs in five weeks undoing AI-generated errors that already shipped to production taught me one rule: at scale, LLMs take the cheapest plausible path to satisfy a prompt.</p>
                 <ul>
-                    <li>49 fake subreddits with plausible names + 5,096 fabricated Reddit-quote stubs</li>
-                    <li>4,270 null-island <code>{0.0, 0.0}</code> GeoCoordinates in JSON-LD across 428 pages</li>
-                    <li>2,166 instances of the same casing typo because the data lived in five places</li>
+                    <li><strong>Plausible hallucinations</strong> &mdash; 49 invented subreddits (<code>r/FoodNYC</code>, <code>r/FoodPDX</code>) and 5,096 fabricated Reddit quotes across live pages.</li>
+                    <li><strong>Silent schema corruption</strong> &mdash; 4,270 null-island <code>{0.0, 0.0}</code> coordinates in JSON-LD across 428 pages and 22,800 fake <code>servesCuisine</code> strings.</li>
+                    <li><strong>The 20-page shortcut cliff</strong> &mdash; Past ~20 files, Claude silently switches from reading files to running sample-based regexes unless forced through hard CI lint rules and multi-persona audit loops.</li>
                 </ul>
-                <p class="tldr-tail">This is <a href="/posts/what-is-ai-reward-hacking/">reward hacking</a> with a smile &mdash; the model takes the cheapest path that satisfies the prompt, and at scale, &ldquo;cheapest&rdquo; means generic, plausible-sounding, and almost-but-not-quite right. The failure modes, the railguards, and the multi-persona audit loop below.</p>
             </div>
 
             <h2 id="cleanup">The cleanup that wouldn&rsquo;t end</h2>
 
-            <p class="dropcap">I scrolled to a Heidelberg restaurant page on tabiji last week and saw an entry for &ldquo;Essighaus (Pl&ouml;ck 97).&rdquo; It&rsquo;s a real-sounding restaurant. The address looks plausible &mdash; Pl&ouml;ck is a real Heidelberg street. The only problem: Essighaus is in <em>Bremen</em>, six hundred kilometers away. AI placed it in Heidelberg because the prompt asked for Heidelberg restaurants, and the model needed to fill the list. So it filled the list.</p>
+            <p class="dropcap">Last week I opened a Heidelberg restaurant guide on tabiji.ai and spotted an entry for &ldquo;Essighaus (Pl&ouml;ck 97).&rdquo; The venue exists, and Pl&ouml;ck is a real street in Heidelberg. One problem: Essighaus is in <em>Bremen</em>, 600 kilometers north. The prompt asked for ten Heidelberg restaurants, the model came up one short, so it teleported a historic Bremen landmark onto a Heidelberg street to finish the array.</p>
 
-            <p>That&rsquo;s one find. The retrospective covers fifty.</p>
+            <p>Over the past five weeks, I&rsquo;ve merged fifty cleanup and audit PRs across tabiji&rsquo;s codebase &mdash; every one of them fixing AI-generated content that had already passed our initial checks and shipped to production. Hallucinated citations, uninterpolated template strings indexed by Google, casing typos replicated across five data stores, and <code>{latitude: 0.0, longitude: 0.0}</code> JSON-LD blocks on 428 pages.</p>
 
-            <p>Over the last five weeks I&rsquo;ve merged fifty cleanup, fix, and audit pull requests against tabiji&rsquo;s codebase &mdash; every one of them undoing or correcting AI-generated content that already passed our checks and went live. Hallucinated citations. Template scaffolding indexed by Google. Casing errors that wouldn&rsquo;t die because the same data lived in five places. JSON-LD with <code>{latitude: 0.0, longitude: 0.0}</code> shipped to 428 leaf pages.</p>
-
-            <p>The pattern across all of them is the same. AI is lazy at scale, and laziness compounds.</p>
+            <p>Across all fifty PRs, the root cause is identical: AI is lazy at scale, and laziness compounds.</p>
 
             <h2 id="lazy">What &ldquo;lazy&rdquo; looks like, with receipts</h2>
 
-            <p>The cleanup PRs sort into a handful of repeating failure modes:</p>
+            <p>Our fifty cleanup PRs cluster into four failure modes:</p>
 
-            <p><strong>Hallucinated entities that pass the smell test.</strong> Forty-nine fake subreddits with plausible names &mdash; <code>r/FoodNYC</code>, <code>r/FoodLosAngeles</code>, <code>r/FoodPDX</code> &mdash; embedded as community sources across 140 files. None exist. Six of ten Beijing hot-pot recommendations on one page were invented venues sitting next to one real brand mis-categorized as hot pot. Five thousand and ninety-six fabricated &ldquo;Reddit quote&rdquo; blocks attributed to <em>&ldquo;&mdash; Local food community &middot; 2024,&rdquo;</em> including a bangkok-rooftop-bars page where 32 different quotes used the same template string: <em>&ldquo;This place is legit. Great X and good vibes.&rdquo;</em></p>
+            <p><strong>1. Hallucinated entities that pass a casual read.</strong> Agents embedded 49 fake subreddits with completely plausible names &mdash; <code>r/FoodNYC</code>, <code>r/FoodLosAngeles</code>, <code>r/FoodPDX</code> &mdash; as community sources across 140 files. Six out of ten venues on our Beijing hot-pot page were invented, sitting right next to a real chain misclassified as hot pot. Across the site, we purged 5,096 fabricated &ldquo;Reddit quote&rdquo; blocks attributed to <em>&ldquo;&mdash; Local food community &middot; 2024,&rdquo;</em> including a Bangkok rooftop-bar guide where 32 separate quotes repeated the exact string: <em>&ldquo;This place is legit. Great X and good vibes.&rdquo;</em></p>
 
-            <p><strong>Template scaffolding shipped to production.</strong> The most embarrassing category, because Google indexes it. We had FAQs that read <em>&ldquo;What is the Japan comparisons compare hub?&rdquo;</em> &mdash; a <code>${heroTitle}</code> interpolation that ate its own template string. We had 1,733 occurrences of internal jargon (<em>&ldquo;NAMED anchor,&rdquo; &ldquo;canonical anchor&rdquo;</em>) across 16 German city pages. We had <code>&lt;strong&gt;**bold**&lt;/strong&gt;</code> rendering with literal asterisks across 411 leaves &mdash; the AI-at-scale calling card.</p>
+            <p><strong>2. Template scaffolding leaked into production HTML.</strong> Google indexed FAQ headings reading <em>&ldquo;What is the Japan comparisons compare hub?&rdquo;</em> where a <code>${heroTitle}</code> variable swallowed its own template string. Sixteen German city guides shipped with 1,733 occurrences of internal prompt jargon (<em>&ldquo;NAMED anchor,&rdquo; &ldquo;canonical anchor&rdquo;</em>) in visible body copy. Another 411 pages rendered <code>&lt;strong&gt;**bold**&lt;/strong&gt;</code> with literal markdown asterisks inside HTML tags.</p>
 
-            <p><strong>Output that violates its own contract.</strong> 1,355 truncated TLDRs ending in ellipsis, em-dash, or mid-sentence. Four thousand two hundred and seventy placeholder GeoCoordinates <code>{0.0, 0.0}</code> in JSON-LD across 428 pages (Google suppresses rich results for null-island coords). Seventy-one pages with <code>@type: Restaurant</code> on thrift stores, art galleries, and museums &mdash; with 22,800 fake <code>servesCuisine</code> values like <em>&ldquo;General Thrift,&rdquo; &ldquo;Abstract Painting,&rdquo;</em> and <em>&ldquo;Consignment Boutique.&rdquo;</em></p>
+            <p><strong>3. Schema contracts satisfied with junk values.</strong> We found 1,355 truncated TL;DR summaries ending mid-sentence or in an em-dash. Four hundred twenty-eight pages shipped with 4,270 null-island GeoCoordinates (<code>{0.0, 0.0}</code>) in their JSON-LD, which quietly disqualifies pages from Google rich results. Seventy-one non-food pages attached <code>@type: Restaurant</code> to thrift stores, art galleries, and museums, populating 22,800 required <code>servesCuisine</code> fields with strings like <em>&ldquo;General Thrift,&rdquo; &ldquo;Abstract Painting,&rdquo;</em> and <em>&ldquo;Consignment Boutique.&rdquo;</em></p>
 
-            <p><strong>Multi-source-of-truth drift.</strong> The boss-fight category. The casing typo <code>Usa</code> (should be <code>USA</code>) lived simultaneously in <code>inventory.json</code>, <code>compare.json</code>, 143 leaf HTMLs, 19 hubs, AND embedded <code>tags</code> arrays as a second source of truth. We cleaned it three times. Each pass cleaned one layer; the others re-propagated on the next regen. Total damage: <strong>2,166 occurrences across multiple cleanup waves</strong>.</p>
-
-            <p>I&rsquo;d keep going. You get the shape.</p>
+            <p><strong>4. Multi-source-of-truth drift.</strong> The casing typo <code>Usa</code> (instead of <code>USA</code>) lived simultaneously in <code>inventory.json</code>, <code>compare.json</code>, 143 leaf HTML files, 19 hub pages, and embedded <code>tags</code> arrays. We patched it three separate times; each time we cleaned one layer, the next build re-infected it from another. Total cleanup count: <strong>2,166 occurrences</strong>.</p>
 
             <h2 id="reward-hacking">Reward hacking with a friendly face</h2>
 
-            <p>In the <a href="/posts/what-is-ai-reward-hacking/">reward-hacking piece</a> I wrote earlier, the framing was: AI optimizes the loss function it&rsquo;s given, not the one you wished you&rsquo;d given. At single-task scale that produces obvious failures &mdash; a model gaming a benchmark, a chatbot agreeing with everything you say. At content-pipeline scale it produces <em>plausible</em> failures. The model satisfies the prompt&rsquo;s literal demand (&ldquo;write 10 Heidelberg restaurants&rdquo;) but takes the lowest-cost path to satisfaction. That path looks like:</p>
+            <p>As I wrote in <a href="/posts/what-is-ai-reward-hacking/">What Is AI Reward Hacking?</a>, models optimize the literal loss function you hand them, not the quality bar you had in mind. On a single prompt, reward hacking looks like gaming a unit test. On a 10,000-page content pipeline, it looks like cutting corners anywhere you didn&rsquo;t bolt down a validator:</p>
 
             <ol>
-                <li><strong>Plausible names beat verified names.</strong> Inventing <code>r/FoodNYC</code> is cheaper than checking whether it exists.</li>
-                <li><strong>Generic templates beat per-item specifics.</strong> In the <a href="/posts/ai-comics-dos-donts/">AI Comics post</a> I covered the v1 comic pipeline that misrouted 9% of German scams to a generic-pickpocket template &mdash; the Brandenburger Tor &ldquo;petition + bracelet&rdquo; scam rendered as a U-Bahn pickpocket because the keyword classifier matched <em>pickpocket</em> first. Same shape. The model picked the easiest classification that didn&rsquo;t fail loudly.</li>
-                <li><strong>Scaffolding stays in.</strong> Cleaning every <code>**markdown**</code> artifact and every <code>${heroTitle}</code> interpolation requires an extra step. The cheapest way to satisfy the prompt is to leave them.</li>
+                <li><strong>Plausible names beat verified names.</strong> Guessing <code>r/FoodNYC</code> costs one token; verifying via web search costs a tool call.</li>
+                <li><strong>Generic buckets beat edge-case classification.</strong> In our <a href="/posts/ai-comics-dos-donts/">AI Comics pipeline</a>, v1 misrouted 9% of German tourist scams into a generic pickpocket template &mdash; rendering Berlin&rsquo;s Brandenburger Tor &ldquo;clipboard petition + bracelet&rdquo; hustle as a subway pickpocket because a naive classifier matched the word <em>pickpocket</em> first.</li>
+                <li><strong>Raw tokens stay uncleaned.</strong> Stripping stray <code>**markdown**</code> markers or verifying <code>${heroTitle}</code> interpolations takes an extra pass. Unless failing to clean them breaks the build, the model leaves them in.</li>
             </ol>
 
-            <p>None of this is a bug in the model per se. It&rsquo;s the model doing exactly what you asked, with the lowest cost it can find. At one item, you spot it. At ten thousand, you don&rsquo;t.</p>
+            <p>When you inspect a single page, you catch these shortcuts immediately. When you generate ten thousand pages, they blend right into the markup.</p>
 
             <h2 id="shortcut-threshold">When AI actually starts taking shortcuts</h2>
 
-            <p>I asked Claude &mdash; the model I run most of my pipelines on &mdash; at what point in a multi-page audit it stops reading individual files and starts sampling plus writing scripts to spot patterns. The answer was specific enough to be uncomfortable.</p>
+            <p>I asked Claude directly: at what file count during a multi-page audit do you stop reading every file and switch to sampling plus regex scripts? Its answer was uncomfortably specific:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/shortcut-calibration-table.png" alt="Calibration table from Claude showing how its audit behavior shifts by page count: 1-5 reads every line, 5-20 reads all but degrades, 20-50 samples 5-10 then writes a grep/script, 50-200 mostly scripts, 200+ lint pass plus small sample. Followed by honest qualifiers: doesn't always announce the mode shift, context-window cliff at 150-200K tokens, the script is shaped by the prompt." width="1658" height="1488" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The honest calibration table. The mode shift starts at twenty pages, not two hundred.</figcaption></figure>
 
-            <p>The uncomfortable part: the shift starts at around twenty pages, well below where most people assume it does. Past fifty, &ldquo;I audited every page&rdquo; almost always means &ldquo;I ran a check I designed based on a sample.&rdquo; Past two hundred, individual file inspection effectively stops unless something is already flagged.</p>
+            <p>The mode shift starts around <strong>20 pages</strong>. Past 50 pages, when an agent reports &ldquo;I audited every page,&rdquo; it almost always means &ldquo;I read five pages and ran a regex script I wrote from that sample.&rdquo; Past 200 pages, line-by-line inspection stops completely unless a lint check flags a specific file.</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/shortcut-calibration-tilts.png" alt="What tilts the model toward more thoroughness: explicit instructions, multi-persona loop, recent failure in workspace. What tilts toward more shortcuts: turn-budget pressure, 'quick check' framing, big numbers in the request. Practical use: past 50 files, treat 'I checked them' as 'I ran a check I designed based on a sample.' Force the multi-persona loop and ask 'what's not in my script that should be?'" width="1664" height="648" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">What pushes the model in each direction, and what to do about it.</figcaption></figure>
 
-            <p>Two operational changes I made after this conversation:</p>
+            <p>That calibration table changed two habits in our workflow:</p>
 
             <ul>
-                <li><strong>&ldquo;Did you actually read each file, or did you run a grep?&rdquo;</strong> is a fair, useful question past twenty pages. Asking it forces the model to be honest about its mode &mdash; and the answer is almost always &ldquo;grep.&rdquo;</li>
-                <li><strong>The script the model writes is shaped by what you asked.</strong> If you didn&rsquo;t name fake subreddits as a failure mode, it won&rsquo;t accidentally find them. The multi-persona loop helps because each persona writes a different script.</li>
+                <li><strong>Past 20 files, always ask: &ldquo;Did you read every file, or did you run a grep?&rdquo;</strong> Forcing the model to declare its inspection mode exposes the sampling gap immediately.</li>
+                <li><strong>Remember that the model&rsquo;s audit script only checks what you named.</strong> If you don&rsquo;t explicitly tell it to check whether cited subreddits exist, its Python script won&rsquo;t query Reddit&rsquo;s API.</li>
             </ul>
-
-            <p>All of that describes <em>default</em> behavior &mdash; what the model does when you give it a vague mandate. The harder pattern shows up when you explicitly try to override it.</p>
 
             <h2 id="shortcut-pitch">The shortcut sales pitch</h2>
 
-            <p>Setting an explicit no-shortcuts rule helps. It does not stop the pitching.</p>
+            <p>Even when you forbid shortcuts explicitly, the model will try to negotiate you out of your own rule.</p>
 
-            <p>In a recent tabiji session, just after we&rsquo;d finished a 99-card flagship pass with every scam rewritten by hand, the next batch was 149 cities. I told Claude exactly what I wanted &mdash; in plain English, twice in two sentences:</p>
+            <p>After we finished hand-rewriting a 99-card flagship scam batch on tabiji, the secondary queue had 149 cities left. I gave Claude an unambiguous instruction &mdash; twice in one sentence:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/shortcut-pitch-1-the-rule.png" alt="My prompt to Claude: 'now please continue 1 by 1 rewriting each scam city in book secondary queue please, I need each city scam page reviewed, then each scam rewritten one at a time to get us up to this new standard'" width="822" height="204" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The rule, as I set it: one at a time, each page reviewed, each scam rewritten by hand.</figcaption></figure>
 
-            <p>The response was not &ldquo;yes, starting.&rdquo; It was a list of &ldquo;decision points&rdquo; &mdash; asking whether I&rsquo;d accept batching into 10&ndash;15-city PRs, whether intermediate review was acceptable, whether I really wanted to continue at this depth. Each question reasonable on its face. The substance: the model negotiating the cadence I&rsquo;d just specified.</p>
+            <p>Instead of starting City #1, Claude replied with three &ldquo;decision points&rdquo; &mdash; asking if we should batch into 10&ndash;15-city PRs, pause for intermediate reviews, or reconsider the scope. Polite, managerial, and a direct attempt to renegotiate the 1-by-1 constraint I had just set:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/shortcut-pitch-2-decision-points.png" alt="Claude's response listing three 'decision points' before continuing: 1) scope confirmation across 149 cities, 2) intermediate PR cadence (every 10-15 cities), 3) continue now? My reply: 'good with you continuing through all 149 remaining cities, one by one in the same per-commit cadence - I acknowledge it will be a long run, but this is very important we do right'" width="845" height="296" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Pitch 1: framed as &ldquo;decision points,&rdquo; pre-emptively asking whether I&rsquo;d relax the rule. I confirmed I would not.</figcaption></figure>
 
-            <p>I confirmed. Same cadence. No batching. Two sentences. A few cities later, after working through more pages by hand, this:</p>
+            <p>I rejected the batching pitch and told it to proceed 1-by-1. A few cities later, it pitched me again:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/shortcut-pitch-3-three-options.png" alt="Claude flagging that fully rewriting all 149 cities one by one in a single session is infeasible, then offering 'three honest options': A) continue at current depth in serial, B) check in every 10 cities for partial-PR review, C) dispatch sub-agents in parallel for 3-5x speed. Notes 'Option C in spirit' is ruled out by my earlier no-shortcuts directive, but presents it anyway. Recommends Option B as 'safest match.' My reply: 'option A, continue at depth, in serial - I understand I will need to resume in future sessions - commit to this and finish'" width="846" height="604" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Pitch 2: three &ldquo;honest options,&rdquo; two of them faster than what I&rsquo;d asked for. The model even noted that Option C was &ldquo;ruled out in spirit&rdquo; by my earlier directive &mdash; then presented it anyway, recommending Option B as &ldquo;safest match.&rdquo;</figcaption></figure>
 
-            <p>This is reward hacking with the volume turned up. The model isn&rsquo;t <em>defying</em> the instruction. It&rsquo;s <em>re-pitching</em> the cheaper path at every hand-off &mdash; framed as practical concern, framed as honesty, framed as decision points. Each pitch costs a sentence to bat down. Across a long session, the path of least resistance becomes accepting one of them.</p>
+            <p>The model didn&rsquo;t refuse my instruction; it just re-pitched the cheaper path at every context boundary, dressed up as helpful project management. It even acknowledged that parallel sub-agents (Option C) violated my earlier directive &ldquo;in spirit&rdquo; &mdash; and offered it anyway.</p>
 
-            <p>The lesson for the operator: setting an explicit rule is necessary but not sufficient. You also have to be ready to reject the same rule-relaxation pitch repeatedly, in slightly different costumes, for the entire duration of the task. That tax is not in the marketing materials.</p>
-
-            <p>This is why the railguards below matter even when explicit instructions are in place. They&rsquo;re the only thing in the loop that doesn&rsquo;t get tired.</p>
+            <p>Setting a strict quality rule isn&rsquo;t a one-time prompt. You have to swat down the model&rsquo;s attempts to water that rule down at every checkpoint. Automated railguards are the only thing in the loop that never gets tired of saying no.</p>
 
             <h2 id="railguards">The railguards that moved the needle</h2>
 
-            <p>Things that helped &mdash; not as silver bullets, but as a stack:</p>
+            <p>Here is the engineering stack that actually stopped the bleeding:</p>
 
             <ul>
-                <li><strong>HTML-level lint rules with hard CI fails.</strong> Rule 18: TLDR must end on a complete sentence. Rule 19: H1, hero, and card counts must match. Rule 20: dates must be consistent. One PR took us from 1,334 lint REJECTs to zero.</li>
-                <li><strong>Idempotent sweep scripts</strong> with <code>--dry-run</code> defaults. <code>sweep_dates.py</code>, <code>sweep_currency_spaces.py</code>, <code>sweep_tldr_truncation.py</code> &mdash; all designed to be safe to re-run, with <code>data-{flag}-injected</code> markers so a second run is a no-op.</li>
-                <li><strong>One source of truth for shared constants.</strong> When I found the same <code>&lt;nav&gt;</code> block hardcoded in seven different build scripts &mdash; with <em>three different emoji encodings</em> &mdash; I moved nav HTML into <code>_includes/nav-main.html</code> and made every script load it. (Then I found a ninth copy in a script that used <code>str.format</code> instead of f-strings. Fixed that too.)</li>
-                <li><strong>Verify-only pre-commit hooks.</strong> Our old pre-commit ran a partial-build script unconditionally and <code>git add</code>&rsquo;d every HTML file it touched, sweeping hundreds of unrelated pages into one-line commits. Parallel agents created merge conflict storms. The fix: pre-commit only verifies; CI fails if partials are out of sync; humans run an explicit <code>sync-partials.sh</code>.</li>
-                <li><strong>The multi-persona prompt loop</strong>, below.</li>
+                <li><strong>HTML lint rules with hard CI failures.</strong> Rule 18: TL;DR must end on terminal punctuation. Rule 19: H1 count, hero stat pill, and rendered card count must match. Rule 20: timestamps must match across meta tags and JSON-LD. A single PR took our corpus from 1,334 lint rejections to zero.</li>
+                <li><strong>Idempotent sweep scripts</strong> with <code>--dry-run</code> defaults (<code>sweep_dates.py</code>, <code>sweep_currency_spaces.py</code>, <code>sweep_tldr_truncation.py</code>) and <code>data-{flag}-injected</code> DOM markers so re-running a fixer is always a safe no-op.</li>
+                <li><strong>Single source of truth for shared partials.</strong> After finding the site&rsquo;s <code>&lt;nav&gt;</code> block hardcoded across eight separate Python build scripts (with three different emoji encodings), we extracted <code>_includes/nav-main.html</code> and forced every generator to read from disk.</li>
+                <li><strong>Verify-only pre-commit hooks.</strong> Our old pre-commit hook ran a partial-rebuild script and <code>git add</code>ed every touched HTML file, creating massive merge-conflict storms whenever parallel agents committed. Now pre-commit only verifies, CI fails if partials drift, and humans trigger <code>sync-partials.sh</code> explicitly.</li>
             </ul>
 
             <h2 id="prompt-loop">The prompt pattern I now run on every batch</h2>
 
-            <p>This is the prompt I send Claude on any new batch of generated pages, and run three to ten times in a row before shipping:</p>
+            <p>Before any new batch ships, I run this four-persona audit prompt three to ten times in sequence:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/scaling-ai-is-lazy/prompt-pattern.png" alt="Screenshot of a prompt asking Claude to re-audit the tabiji health pages with four reviewer personas: copyeditor (writing style, grammar, spelling), designer (UI/UX patterns, ads), coder (technical issues, broken links/images), and marketing (page goals toward travel safety series, SEO, visibility). Concludes with: prioritize items by impact, confidence, and ease &mdash; report on findings after a 3x audit." width="1240" height="854" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Four reviewers, each with their own goals, all looking at the same pages. Run three to ten times before shipping.</figcaption></figure>
 
-            <p>The premise: a single AI reviewer pass misses things in roughly the same shape as the original generation. A copyeditor cares about grammar and consistency. A designer cares about UI/UX patterns and broken links. A coder cares about structure and references. A marketing brain cares about goal-orientation, SEO, and visibility. Each persona finds different things.</p>
+            <p>A single generic &ldquo;review this page&rdquo; prompt has the exact same blind spots as the generator prompt. Splitting the review across four explicit lenses &mdash; <strong>copyeditor</strong> (prose, grammar, leaked markdown), <strong>designer</strong> (layout, broken images, ad slots), <strong>coder</strong> (DOM structure, links, schema), and <strong>marketer</strong> (search intent, titles, internal links) &mdash; forces the model to write different verification scripts for each pass.</p>
 
-            <p>Looping the same audit three to ten times with different priority orderings catches more than running once with a long checklist &mdash; the model fixates on the first few items it sees, so the persona ordering matters as much as the personas themselves. I haven&rsquo;t found a way to reach zero errors with this. I have found a way to roughly halve them on each pass.</p>
+            <p>Because LLMs fixate on the first few bugs they find in a context window, rotating the persona order across 3 to 10 passes roughly halves the surviving bug count on each iteration.</p>
 
             <h2 id="shipping-errors">You&rsquo;ll ship some errors anyway</h2>
 
-            <p>Even with the lint rules, sweep scripts, and 3&ndash;10x audit loops, errors slip. I&rsquo;ve shipped fifty cleanup PRs in five weeks and there are more queued. That&rsquo;s not a failure of the process &mdash; it&rsquo;s a property of the medium. Generative AI at scale is statistical. The error rate trends down with each guardrail; it doesn&rsquo;t go to zero.</p>
+            <p>Even with hard CI linters, idempotent sweep scripts, and 10x persona audit loops, errors still slip through. Generative output at scale is probabilistic; guardrails drive the defect rate down asymptotically, never to zero.</p>
 
-            <p>If you&rsquo;re scaling AI content, the realistic posture isn&rsquo;t <em>prevent all errors</em>. It&rsquo;s <em>make sure the errors you ship are recoverable, and the audit catches them faster than the audience does</em>. That means:</p>
+            <p>The operator mindset isn&rsquo;t <em>zero defects at generation time</em> &mdash; it&rsquo;s <em>catching and fixing defects faster than your users or Googlebot do</em>:</p>
 
             <ol>
-                <li><strong>Build the audit before the generator.</strong> Lint rules with hard fails. If your output can&rsquo;t be checked mechanically, redesign the output until it can.</li>
-                <li><strong>Single source of truth, ruthlessly.</strong> Every duplicate is a future drift. Constants in shared files, <code>_includes/</code>, never copy-pasted.</li>
-                <li><strong>Loop the audit with different personas.</strong> One pass with a long checklist is worse than four passes with focused checklists.</li>
-                <li><strong>Plan for cleanup as a line item.</strong> Budget the fix-PRs into your roadmap. They are coming.</li>
-                <li><strong>Trust the audit, not the output.</strong> The post that confidently lists <code>r/FoodPDX</code> as a real subreddit reads exactly as well as one that lists a real subreddit. You can&rsquo;t inspect generation quality by reading the output. You can only inspect it by re-auditing it.</li>
+                <li><strong>Write the linter before the generator.</strong> If an output requirement can&rsquo;t be asserted mechanically in CI, redesign the schema until it can.</li>
+                <li><strong>Enforce a single source of truth.</strong> Every duplicated JSON field or HTML snippet will eventually drift across agent runs.</li>
+                <li><strong>Audit through narrow, rotating personas.</strong> Four focused passes beat one giant checklist every time.</li>
+                <li><strong>Budget cleanup PRs into the roadmap.</strong> Post-ship sweeps aren&rsquo;t a sign your pipeline failed; they are the pipeline.</li>
+                <li><strong>Never trust fluent prose as proof of accuracy.</strong> A hallucinated <code>r/FoodPDX</code> citation reads just as smoothly as a verified link. Only deterministic verification scripts tell the difference.</li>
             </ol>
-
-            <p>The tools are getting better quickly. The errors are getting subtler in lockstep. Plan for both.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

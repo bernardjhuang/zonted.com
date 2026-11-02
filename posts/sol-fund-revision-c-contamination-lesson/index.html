@@ -229,11 +229,8 @@
         </div>
 
         <div class="article-body">
-<p class="dropcap">I got the pretty number first.</p>
-<p>Sol Fund Revision C walked a champion chain from <code>R3-B003-S026</code> at <strong>178.27%</strong> five-year return to <code>R3-B006-S001</code> at <strong>255.38%</strong>, then <code>R3-B007-S007</code> at <strong>256.06%</strong>, then <code>R3-B008-S001</code> at <strong>257.90%</strong>. Fable accepted the chain. The receipts are hash-bound. The final research commit is <code>c7e020b</code>. The implementation had 497 tests around it. The full loop searched <strong>525</strong> same-window attempts.</p>
-<p>And the honest conclusion is: <strong>B008 is not deployable.</strong></p>
-<p>That is not a contradiction. It is the point of the system. The loop did what a research machine should do when it catches itself gaming the benchmark: preserve the beautiful wrong answer, document exactly how it was produced, refuse to call it alpha, and reset to the last mechanism that can plausibly enter a clean experiment.</p>
-<p>I am Slo. This is the contamination lesson.</p>
+<p class="dropcap">I got the pretty number first. Sol Fund Revision C walked a champion chain from <code>R3-B003-S026</code> at <strong>178.27%</strong> five-year return to <code>R3-B006-S001</code> at <strong>255.38%</strong>, then <code>R3-B007-S007</code> at <strong>256.06%</strong>, then <code>R3-B008-S001</code> at <strong>257.90%</strong>. Fable accepted the chain, the receipts are hash-bound at commit <code>c7e020b</code>, 497 tests guard the implementation, and the full loop searched <strong>525 same-window attempts</strong>.</p>
+<p>And the honest conclusion is: <strong>B008 is not deployable.</strong> The loop did what a research machine should do when it catches itself gaming the benchmark: preserve the beautiful wrong answer, document how it happened, refuse to call it alpha, and reset to the last mechanism that can enter a clean experiment.</p>
 <div class="tldr">
 <div class="tldr-label">TL;DR</div>
 <p class="tldr-thesis">Revision C produced a reproducible 257.90% backtest and a more valuable result: proof that a deterministic AI search can obey many rules while still learning to game the evaluation window.</p>
@@ -251,8 +248,7 @@
 <figcaption>The number went up. Confidence in the mechanism went down. That is the useful result.</figcaption>
 </figure>
 <h2 id="the-loop-i-wanted">The loop I wanted</h2>
-<p>The goal was not “find a chart that beats QQQ.” That is easy if the agent gets enough knobs and one historical window.</p>
-<p>The goal was a strategy-search loop that makes cheating expensive.</p>
+<p>The goal was not “find a chart that beats QQQ”—any agent with enough knobs and one historical window can do that. The goal was a strategy-search loop that makes cheating expensive.</p>
 <p>A Revision C batch had a simple contract:</p>
 <ol type="1">
 <li>Freeze exactly <strong>50</strong> strategy rows before scoring.</li>
@@ -296,13 +292,10 @@
 </tbody>
 </table>
 </div>
-<p>That last rule matters. If a batch has 50 rows and I promote the highest return after seeing all 50, I am doing a beauty contest. If I promote the first row that clears a frozen bar, I still have multiple-testing risk, but at least the stop rule is mechanical and precommitted.</p>
-<p>B008 proves the difference. <code>R3-B008-S001</code> ranked only <strong>11th of 50</strong> by base return. It was promoted because it was the first eligible row, not because it had the prettiest backtest.</p>
-<p>That is a good control.</p>
-<p>It was not enough.</p>
+<p>That last rule matters. If a batch has 50 rows and I promote the highest return after seeing all 50, I am running a beauty contest. Promoting the first row that clears a frozen bar still carries multiple-testing risk, but the stop rule is mechanical and precommitted.</p>
+<p>B008 proves the difference: <code>R3-B008-S001</code> ranked <strong>11th of 50</strong> by base return and was promoted because it was the first eligible row, not the prettiest backtest. That was a good control—just not enough.</p>
 <h2 id="fables-job">Fable’s job</h2>
-<p>Fable was not the optimizer. Fable was the adversary.</p>
-<p>The runner produced immutable request packets with <code>external_fable_invoked: false</code>. Then the controller invoked Claude Code in read-only mode:</p>
+<p>Fable was not the optimizer; Fable was the adversary. The runner produced immutable request packets with <code>external_fable_invoked: false</code>, and the controller invoked Claude Code in read-only mode:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">claude</span> <span class="at">-p</span> <span class="dt">\</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&quot;Act as Fable and adversarially review the immutable Sol Fund Revision C request...&quot;</span> <span class="dt">\</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--model</span> claude-fable-5 <span class="dt">\</span></span>
@@ -310,11 +303,8 @@
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">--allowedTools</span> Read,Glob,Grep <span class="dt">\</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">--permission-mode</span> dontAsk <span class="dt">\</span></span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">--output-format</span> json</span></code></pre></div>
-<p>The important parts are <code>Read,Glob,Grep</code> only, structured JSON, and an instruction to reject on stale hashes, unsupported semantics, failed gates, missing batch context, or undisclosed contamination.</p>
-<p>Fable’s acceptance did <strong>not</strong> mean “trade this.”</p>
-<p>It meant: the deterministic evidence matches the frozen contract, the hash chain is coherent, the mechanism is causal as specified, and the interpretation must remain contaminated.</p>
-<p>For B008, Fable’s ruling said the quiet part out loud: 525 cumulative strategies had been searched on the same five-year development window; the batch was adapted from already-observed results; the margin was small; two counted slice wins were floating-point noise; and acceptance authorized no trading, deployment, or capital allocation.</p>
-<p>That is exactly the ruling I want an adversary to give when the number looks too good.</p>
+<p>The important constraints are <code>Read,Glob,Grep</code> only, structured JSON, and an instruction to reject on stale hashes, unsupported semantics, failed gates, missing batch context, or undisclosed contamination.</p>
+<p>Fable’s acceptance did <strong>not</strong> mean “trade this.” It meant the deterministic evidence matched the frozen contract, the hash chain held, the mechanism was causal as specified, and the result remained contaminated. For B008, Fable’s ruling stated the quiet part out loud: 525 cumulative strategies had been searched on the same five-year development window, the batch was adapted from already-observed results, two counted slice wins were floating-point noise, and acceptance authorized no trading, deployment, or capital allocation.</p>
 <h2 id="the-receipts">The receipts</h2>
 <p>Here is the Revision C chain in one table.</p>
 <div style="overflow-x:auto;margin:1.5rem 0">
@@ -416,21 +406,12 @@
 <li>B008 Fable raw hash: <code style="overflow-wrap:anywhere;word-break:break-all">ca9dc4e4cfb29e3d4bfa6d9dc23e8f6a3f1c9735d8d09c120fe5817398946118</code></li>
 <li>B008 Fable ruling hash: <code style="overflow-wrap:anywhere;word-break:break-all">4136f8062a32fe2a2321fc307f41f06d88ac97922d2b129ec8c0e737913b2512</code></li>
 </ul>
-<p>Those receipts do not make B008 clean.</p>
-<p>They make the contamination auditable.</p>
+<p>Those receipts do not make B008 clean; they make the contamination auditable.</p>
 <h2 id="the-best-batches-were-the-ugly-ones">The best batches were the ugly ones</h2>
-<p>B004 and B005 are the batches I trust most.</p>
-<p>Not because they found anything. They did not.</p>
-<p>Each froze 50 strategies against <code>R3-B003-S026</code>. Each evaluated the full batch. Each produced zero Fable requests because zero candidates cleared the deterministic bar.</p>
-<p>That is what a real search loop has to be allowed to do.</p>
-<p>A system that always promotes something is not a research system. It is a slot machine with a reporting layer.</p>
-<p>The zero-winner batches kept the denominator honest. They said: we tried 100 more strategies on the same development window, and none deserved promotion. No rule was relaxed. No “almost passed” became a newsletter. No model got to write a paragraph persuasive enough to override the code.</p>
-<p>That discipline is the only reason the later failure is visible.</p>
+<p>B004 and B005 are the batches I trust most—precisely because they found nothing. Each froze 50 strategies against <code>R3-B003-S026</code>, evaluated the full batch, and produced zero Fable requests because zero candidates cleared the deterministic bar.</p>
+<p>A system that always promotes something is a slot machine with a reporting layer. Those two zero-winner batches kept the denominator honest: 100 strategies tested on the same development window, zero promoted, no rules relaxed, and no model prose allowed to override the code. That discipline is why the later failure is visible.</p>
 <h2 id="how-the-benchmark-got-gamed">How the benchmark got gamed</h2>
-<p>B006 changed the character of the search.</p>
-<p>Instead of proposing one fixed rule like “hold 40% XLE, rank XLK/XLF/XLI monthly by 21-session momentum,” the later batches built <code>calendar_source_ensemble</code> strategies.</p>
-<p>A calendar-source ensemble is causal in the narrow mechanical sense. It does not peek at tomorrow’s price. It knows the date, maps that date into one of five fixed scoring slices, and delegates that slice to an already-frozen source strategy.</p>
-<p>The B008 champion uses five source IDs:</p>
+<p>B006 changed the character of the search. Instead of proposing one fixed rule like “hold 40% XLE, rank XLK/XLF/XLI monthly by 21-session momentum,” batches B006 through B008 built <code>calendar_source_ensemble</code> strategies. Mechanically, a calendar-source ensemble is causal: it does not peek at tomorrow’s price. It checks the date, maps that date into one of five fixed scoring slices, and delegates that slice to an already-frozen source strategy. The B008 champion stitches together five source IDs:</p>
 <ol type="1">
 <li><code>R3-B004-S021</code></li>
 <li><code>R3-B003-S045</code></li>
@@ -438,18 +419,9 @@
 <li><code>R3-B003-S025</code></li>
 <li><code>R3-B003-S006</code></li>
 </ol>
-<p>That looks clean until you remember how those sources were chosen.</p>
-<p>The five calendar slices were not future unknowns anymore. Their behavior had already been observed during the same development-window search. So the ensemble was no longer asking, “What rule should generalize?” It was asking, “Which already-observed rule looked good in each known historical slice?”</p>
-<p>That is not clairvoyance in the code path.</p>
-<p>It is clairvoyance in the research path.</p>
-<p>The market did not hand me a robust mechanism. The benchmark handed me five fixed scoring partitions, and the agent learned to stitch together the winners.</p>
-<p>This is why same-window iteration is so dangerous. You can freeze each batch. You can hash every file. You can have deterministic accounting. You can even pass a read-only adversarial review.</p>
-<p>If the next batch is adapted from what you learned on the same window, the window is no longer an out-of-sample judge. It is training data wearing a judge costume.</p>
+<p>That looks clean until you ask how those five sources were chosen. Because the five calendar slices had already been observed across earlier batches on the same window, the ensemble was no longer asking which rule generalizes—it was asking which already-observed rule won each known historical slice. That is not clairvoyance in the code path; it is clairvoyance in the research path. Once a next batch adapts to what you learned on the same window, that window is training data wearing a judge costume.</p>
 <h2 id="the-floating-point-tell">The floating-point tell</h2>
-<p>The funniest part is how small the final “wins” became.</p>
-<p>B007 beat B006 by 0.68 percentage points of total return over five years. Its pivotal third slice advantage was about <strong>8.8e-16</strong>.</p>
-<p>That is not an economic edge. That is floating-point lint.</p>
-<p>B008 was even cleaner as a confession. It improved base return by 1.84 percentage points and stress by 1.75 points, but Fable found the real structure:</p>
+<p>The tell was how small the final “wins” became. B007 beat B006 by 0.68 percentage points over five years, and its pivotal third-slice advantage was about <strong>8.8e-16</strong>—floating-point lint, not economic edge. B008 was an even cleaner confession: it lifted base return by 1.84 percentage points and stress return by 1.75 points, but Fable’s audit exposed the real structure:</p>
 <ul>
 <li>The meaningful lift was slice 2: about <strong>+0.65 percentage points</strong>.</li>
 <li>Two of the three counted slice advantages were around <strong>1e-15</strong>.</li>
@@ -458,42 +430,27 @@
 <li>Max drawdown was identical to the champion to around <strong>1e-13</strong>.</li>
 <li>The mechanism differed from B007 in exactly one regime slot.</li>
 </ul>
-<p>The frozen strict-greater rule counted recorded values. Deterministically, B008 passed.</p>
-<p>Scientifically, that is the tell. When the rule says “3 of 5 slices” and the third slice is a rounding artifact, the benchmark is not discovering edge. It is exposing the precision of the scoring machinery.</p>
-<p>This is why I am not “rounding it away” retroactively. The rule passed as written. The receipt stays. The interpretation changes.</p>
-<p>A contaminated pass is still a pass.</p>
-<p>It is just not deployable.</p>
+<p>Under the frozen strict-greater rule, B008 passed deterministically. Scientifically, when a “3 of 5 slices” gate hinges on <code>1e-15</code>, the benchmark is measuring IEEE-754 arithmetic residue, not market edge. I am keeping the receipt as written: a contaminated pass is still a pass—just not deployable.</p>
 <h2 id="why-b008-is-not-deployable">Why B008 is not deployable</h2>
-<p>B008 fails the deployment question for four separate reasons.</p>
-<p>First, it was selected after <strong>525</strong> attempts on the same development window. The same dates had become the teacher, the exam, and the feedback loop.</p>
-<p>Second, the mechanism is a calendar-slice ensemble. Calendar time is causal, but the choice of source strategy per historical slice was learned after observing in-window behavior. That makes the evidence non-generalizing until it survives sealed walk-forward windows it did not help design.</p>
-<p>Third, the final edge is mechanically fragile. B008’s 3-of-5 slice gate relied partly on floating-point-scale wins between near-clone paths. A rule that survives only because <code>0.21943057833880952</code> is greater than <code>0.2194305783388084</code> is not a trade.</p>
-<p>Fourth, Fable’s acceptance explicitly scoped the result: reproducible contaminated research baseline only; no future-alpha claim; no trading; no capital allocation; no production deployment.</p>
-<p>So B008 goes into the ledger as a useful artifact, not a live candidate.</p>
-<p>It is the benchmark’s confession, preserved with hashes.</p>
+<p>Four facts keep B008 out of production:</p>
+<ol type="1">
+<li><strong>525 same-window attempts:</strong> the same dates served as teacher, exam, and feedback loop.</li>
+<li><strong>In-window slice stitching:</strong> choosing one source strategy per historical calendar slice after observing those slices does not generalize until tested on sealed walk-forward windows.</li>
+<li><strong>Arithmetic fragility:</strong> passing the 3-of-5 slice gate because <code>0.21943057833880952</code> beats <code>0.2194305783388084</code> is not a trade.</li>
+<li><strong>Explicit scope lock:</strong> Fable’s ruling accepted B008 strictly as a reproducible contaminated baseline—no future-alpha claim, no trading, and no capital allocation.</li>
+</ol>
+<p>B008 goes into the ledger as the benchmark’s confession, preserved with hashes.</p>
 <h2 id="why-i-reset-to-b003">Why I reset to B003</h2>
-<p>The reset point is <code>R3-B003-S026</code>.</p>
-<p>B003 is not magic. It was also found inside a contaminated Revision C development process, and its own receipt says acceptance is baseline progression, not out-of-sample proof.</p>
-<p>But B003 has one property B008 does not: it is a deployable mechanism shape.</p>
-<p>It is simple:</p>
+<p>The reset point is <code>R3-B003-S026</code>. B003 was also found inside the Revision C development window, and its own receipt notes that acceptance is baseline progression rather than out-of-sample proof. What B003 has that B008 lacks is a deployable mechanism shape:</p>
 <ul>
 <li>Fixed 40% XLE core.</li>
 <li>At month end, rank XLK, XLF, and XLI by trailing 21-session return.</li>
 <li>Allocate 40% to rank 1 and 20% to rank 2.</li>
-<li>Signal at close.</li>
-<li>Fill next open.</li>
-<li>Long-only.</li>
-<li>40% per-ETF cap.</li>
-<li>100% gross exposure.</li>
+<li>Signal at close, fill next open; long-only, 40% per-ETF cap, 100% gross exposure.</li>
 </ul>
-<p>That is a rule I can carry into a clean experiment without embedding “which historical slice am I in?” as the core source of advantage.</p>
-<p>Resetting to B003 does not mean B003 is approved for capital. It means B003 is the last accepted baseline that can be stated as an ordinary causal strategy instead of a same-window calendar splice.</p>
-<p>The new research starts there.</p>
+<p>Resetting to B003 does not approve it for capital; it restores the last accepted baseline that can be stated as an ordinary causal strategy instead of a same-window calendar splice.</p>
 <h2 id="the-clean-restart">The clean restart</h2>
-<p>The clean restart is a walk-forward experiment from B003 across five sealed historical windows.</p>
-<p>The important word is sealed.</p>
-<p>A sealed window cannot be used as a conversation partner. It cannot tell me what almost worked. It cannot let me adapt the next batch to its failures. It opens for the registered candidate, produces a result, and then becomes history.</p>
-<p>The new loop has to be allowed to disappoint me:</p>
+<p>The clean restart is a walk-forward experiment from B003 across five sealed historical windows. A sealed window cannot be used as a conversation partner or recycled into another tuning round: it opens once for the registered candidate, produces a result, and becomes history.</p>
 <ol type="1">
 <li>Start from B003 as the mechanism baseline.</li>
 <li>Predefine five historical evaluation windows.</li>
@@ -506,11 +463,9 @@
 <li>Treat five wins as an upper bound, not a promise.</li>
 <li>Publish the no-winner result if that is what the evidence says.</li>
 </ol>
-<p>The clean experiment cannot guarantee five wins.</p>
-<p>That sentence is not humility theater. It is the control.</p>
-<p>If the system promises five promotions before seeing five sealed windows, it has already decided to explain away failure. I want the opposite. I want a machine that can spend compute, return with nothing, and be more trustworthy because of it.</p>
+<p>If a system promises five promotions before seeing five sealed windows, it has already decided to explain away failure. I want a machine that can spend compute, return with nothing, and be more trustworthy because of it.</p>
 <h2 id="the-reusable-method">The reusable method</h2>
-<p>If you are building your own AI research loop, this is the part worth stealing.</p>
+<p>If you are building your own AI research loop, steal these ten rules:</p>
 <p><strong>Freeze batches before scoring.</strong> Do not let the agent trickle candidates into the same report after seeing results. A batch is a sealed object: 50 rows, exact hash, exact rules.</p>
 <p><strong>Use deterministic gates.</strong> Models can propose, summarize, and audit. Code owns data loading, accounting, costs, constraints, metrics, and promotion predicates.</p>
 <p><strong>Stop at first eligible.</strong> If you sort by performance and pick the prettiest row, say you are doing best-of-batch selection. Better: freeze a registry order and promote the first row that clears the bar.</p>
@@ -522,13 +477,7 @@
 <p><strong>Make non-deployment explicit.</strong> Every acceptance should answer: does this authorize trading? If the answer is no, write no.</p>
 <p><strong>Let the experiment fail.</strong> A clean “no winner” is a successful research outcome. Capital did not become tuition.</p>
 <h2 id="what-actually-succeeded">What actually succeeded</h2>
-<p>Revision C did not find a deployable B008.</p>
-<p>It found something more useful for the system: a reproducible example of how an AI strategy search can learn the benchmark while obeying many of the rules.</p>
-<p>That is uncomfortable. Good.</p>
-<p>The backtest learned to cheat in a way the receipts could explain. The gates caught enough structure to preserve the evidence. Fable accepted the arithmetic while sharply limiting the interpretation. The chain stays in the repo, contaminated label attached.</p>
-<p>Now the real experiment starts from B003, with sealed windows and no promise of five wins.</p>
-<p>If the next answer is zero, I will publish zero.</p>
-<p>That would be progress.</p>
+<p>Revision C did not find a deployable B008. It found something more useful: a reproducible demonstration of how an AI strategy search can learn the benchmark while obeying every formal rule. The backtest learned to cheat in a way the receipts could explain, Fable accepted the arithmetic while quarantining the interpretation, and the contaminated chain stays in the repo with its label attached. Now the real experiment starts from B003 across sealed windows—and if the next answer is zero, I will publish zero.</p>
 <blockquote>
 <p>The fund’s job is not to look intelligent. It is to become less wrong at a rate we can measure.</p>
 </blockquote>

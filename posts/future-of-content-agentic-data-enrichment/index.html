@@ -110,7 +110,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
@@ -185,61 +223,65 @@
     </div>
 
     <div class="article-body">
-        <p class="dropcap">Here's something most people building with AI haven't internalized yet: <strong>agents don't search the web to learn. They search to validate and enrich.</strong></p>
+        <p class="dropcap"><strong>AI agents don't search the web to learn. They search to validate and enrich.</strong> A frontier language model already knows that Paris has great croissants and Tokyo's trains run on time — general knowledge is baked into the weights. When an agent queries the web mid-task, it's hunting for what static training data cannot hold: a live rating, today's price, a verified phone number, or opening hours accurate as of this week.</p>
 
-        <p>A large language model already "knows" that Paris has good croissants and that Tokyo's trains run on time. That information is baked into the weights. When an agent searches the web mid-task, it's not looking for general knowledge — it's looking for the specific, fresh, structured data that its training data doesn't contain. A current rating. A live price. A verified phone number. An opening time that's accurate as of this week.</p>
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">Agents ignore 2,000-word editorial blog posts and extract the 50 lines of structured, verifiable JSON underneath — shifting the future of content from web pages to API endpoints.</p>
+          <ul>
+            <li><strong>The tabiji.ai lesson</strong> — When AI agents cited our early 2,000-word travel guides, they ignored the prose and pulled exclusively from the embedded Google Places JSON (ratings, hours, addresses).</li>
+            <li><strong>Where to invest</strong> — Prompt engineering is 1% of output quality; the other 99% is live API enrichment, structured schemas, and pre-output verification loops.</li>
+            <li><strong>Agentic transactions</strong> — We already pay $115/month to the Google Places API for ground-truth venue data; per-query data enrichment is the business model that replaces display advertising.</li>
+          </ul>
+        </div>
 
         <h2 id="the-agent-doesnt-want-your-blog-post">The Agent Doesn't Want Your Blog Post</h2>
 
-        <p>Think about how a travel agent — a human one — used to work. They didn't read Lonely Planet cover to cover before booking your trip. They already knew the destinations. What they needed was a supplier database: real-time availability, current pricing, verified contact details. The general knowledge was table stakes. The operational data was the product.</p>
+        <p>Human travel agents didn't read Lonely Planet cover to cover before booking a client's trip. They already knew the destinations; what they needed was a live GDS and supplier database with real-time availability, current pricing, and verified contacts. General knowledge was table stakes. Operational data was the product.</p>
 
-        <p>AI agents work the same way. When an agent is helping someone plan a trip to Barcelona, it doesn't need a 2,000-word article explaining that Barcelona is a coastal city in Spain with great architecture. It needs:</p>
+        <p>AI agents operate the exact same way. An agent planning a trip to Barcelona has zero use for a 2,000-word essay explaining that Barcelona is a coastal Spanish city with Gaudí architecture. It needs:</p>
 
         <ul>
-            <li>Which restaurants are open on Mondays (most aren't)</li>
-            <li>Current Google ratings and review counts</li>
-            <li>Whether La Sagrada Familia requires advance tickets this month</li>
-            <li>The actual price of a metro pass as of today</li>
+            <li>Which restaurants are actually open on Mondays (most aren't)</li>
+            <li>Current Google ratings and verified review counts</li>
+            <li>Whether La Sagrada Família requires advance timed tickets this month</li>
+            <li>Today's exact fare for a T-usual metro pass</li>
         </ul>
 
-        <p>And it needs this data in a format it can parse programmatically — not buried in paragraph four of a blog post between an anecdote about the author's study abroad semester and an affiliate link.</p>
+        <p>And it needs those facts in a machine-parsable schema — not buried in paragraph four between an anecdote about a study-abroad semester and an affiliate banner.</p>
 
-        <p>We learned this building <a href="https://tabiji.ai">tabiji.ai</a>. Our early travel pages were 2,000-word articles. They ranked well in search. But when AI agents started citing travel recommendations, they weren't pulling from our prose — they were pulling from the Google Places data we'd embedded as structured JSON. The ratings, the hours, the addresses. The 2,000 words of editorial were invisible to agents. The 50 lines of structured data were everything.</p>
+        <p>We saw this firsthand building <a href="https://tabiji.ai">tabiji.ai</a>. Our earliest destination guides were 2,000-word articles that ranked well in traditional search. When AI answer engines started citing our pages, they bypassed the editorial prose entirely and extracted the 50 lines of structured Google Places JSON we had embedded in the page — the ratings, hours, and coordinates. To an agent, 2,000 words of narrative were invisible; 50 lines of structured data were the entire asset.</p>
 
         <h2 id="apis-are-the-new-content-format">APIs Are the New Content Format</h2>
 
-        <p>If you're building agents, this is the shift to pay attention to: <strong>the most valuable content on the internet is moving from pages to endpoints.</strong></p>
+        <p>For operators building in an agentic web, <strong>the highest-leverage content format is moving from HTML pages to JSON endpoints.</strong></p>
 
-        <p>A traditional content strategy says: write a blog post, optimize it for search, hope humans find it. An agentic content strategy says: structure your data as JSON, expose it via API, make it discoverable through <code>llms.txt</code> or <code>agents.json</code>, and let agents consume it programmatically.</p>
+        <p>Legacy content strategy says: write a post, optimize for keywords, and hope a human clicks. Agentic content strategy says: structure your ground-truth data as JSON, expose it via an API, make it discoverable through <code>llms.txt</code> or <code>agents.json</code>, and let agents consume it programmatically. A blog post might earn you a click; an API earns you a programmatic dependency.</p>
 
-        <p>The blog post might get you a click. The API gets you a transaction.</p>
-
-        <p>This is already happening. Agents that need weather data don't scrape weather.com — they call the OpenWeatherMap API. Agents that need flight prices don't parse Kayak results — they hit a flight pricing endpoint. The agents that are most useful are the ones with the best data integrations, not the ones with the cleverest prompts.</p>
+        <p>Agents needing weather forecasts don't scrape weather.com — they hit the OpenWeatherMap API. Agents checking flight fares don't parse Kayak HTML — they query a pricing endpoint. The most capable agents aren't the ones with the cleverest system prompts; they're the ones wired into the richest verification endpoints.</p>
 
         <h2 id="what-agent-builders-should-invest-in">What Agent Builders Should Invest In</h2>
 
-        <p>If you're building agents that need to produce accurate, trustworthy output, here's where the money and effort should go:</p>
+        <p>If you're building agents that need to ship trustworthy output, allocate your engineering budget accordingly:</p>
 
         <ol>
-            <li><strong>Data enrichment pipelines over prompt engineering.</strong> Your prompt is maybe 1% of the quality of your output. The other 99% is the data you feed it. Invest in API integrations — Google Places, Yelp, government databases, whatever your domain needs — that give your agent access to verified, current information.</li>
-            <li><strong>Structured data sources over web scraping.</strong> Scraping is fragile, slow, and legally ambiguous. APIs are reliable, fast, and contractual. Every dollar you spend on a data API saves you ten dollars in scraping infrastructure and error handling.</li>
-            <li><strong>Freshness as a feature.</strong> Training data is stale by definition. The more your agent's value depends on current information — prices, ratings, availability, hours — the more you need live data pipelines. This is your moat. No amount of model improvement will make the training data fresh.</li>
-            <li><strong>Verification loops.</strong> Agents hallucinate. The fix isn't a better model — it's a verification layer. Cross-reference the model's output against structured data sources. If Claude says a restaurant is highly rated, confirm it against the Places API before surfacing it to a user.</li>
+            <li><strong>Data enrichment pipelines over prompt tweaking.</strong> Your prompt accounts for maybe 1% of output reliability; the other 99% is the context you inject. Wire your agents into authoritative APIs — Google Places, Yelp, municipal registries, live inventory feeds — before spending another hour wordsmithing system instructions.</li>
+            <li><strong>Contractual APIs over brittle scrapers.</strong> HTML scraping is slow, fragile, and legally murky. Every dollar spent on a clean data API saves ten dollars in proxy rotation, DOM parser maintenance, and retry logic.</li>
+            <li><strong>Freshness as the core moat.</strong> Model weights are stale the day training finishes. The more your product depends on volatile facts — prices, ratings, hours, stock levels — the more defensible your live enrichment pipeline becomes.</li>
+            <li><strong>Deterministic verification loops.</strong> Don't trust raw model recall for factual claims. If an LLM recommends a restaurant as "highly rated and open late," cross-check the entity against the Places API before the response ever reaches the user.</li>
         </ol>
 
         <h2 id="the-transaction-layer-is-coming">The Transaction Layer Is Coming</h2>
 
-        <p>Right now, most agent-to-data interactions are free — agents scrape the web, call free API tiers, or rely on training data. That won't last.</p>
+        <p>Today, most agents still freeload on open web scraping, free API tiers, or cached training weights. That window is closing fast.</p>
 
-        <p>We already see the early signals. Our Places API costs at tabiji.ai are $115/month — real money for verified, current data that agents need and can't hallucinate. That's not a subscription to a publication. It's a transaction fee for data accuracy. The publisher who owns verified restaurant hours for Barcelona has something no language model can generate from training data.</p>
+        <p>At tabiji.ai, we already spend $115/month on the Google Places API just to keep venue ratings and hours verified. That isn't a media subscription — it's a transaction fee for ground-truth accuracy. Whoever owns verified Monday restaurant hours in Barcelona holds an asset no frontier model can synthesize from pre-training alone.</p>
 
-        <p>As agents become the primary way people interact with information, the economics will shift toward <strong>agentic transactions</strong>: agents paying for enrichment data on a per-query basis.</p>
-
-        <p>This is the business model that replaces advertising. Instead of selling attention (a human eyeball on a page), you sell enrichment (a verified data point in an agent's response). The unit economics are different, the distribution is different, and the competitive dynamics are completely different.</p>
+        <p>As agents become the default interface for information, media monetization will shift from selling human attention (display CPMs) to billing for <strong>agentic transactions</strong> (per-query data enrichment).</p>
 
         <blockquote>The future of content isn't pages that rank. It's data that enriches.</blockquote>
 
-        <p>Every piece of content you produce should answer one question: can an agent use this to make its output more accurate, more current, or more specific? If the answer is no, you're building for a distribution channel that's shrinking. If the answer is yes, you're building for the one that's growing.</p>
+        <p>Audit every piece of content you publish against a single question: can an agent parse this to make its output more accurate, more current, or more specific? If not, you're writing for a distribution channel in terminal decline.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

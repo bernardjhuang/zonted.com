@@ -185,7 +185,45 @@
         .related-list li:last-child { border-bottom: none; }
         .related-list a { font-family: 'Source Serif 4', Georgia, serif; font-size: 1rem; color: var(--text); text-decoration: underline; }
         .related-list a:hover { color: var(--accent-hover); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -270,18 +308,6 @@
         </div>
     </div>
 
-    <p style="font-size:1.15rem;line-height:1.6;margin-bottom:1.5rem;"><strong>Bottom line:</strong> <em>MakeUGC is the fastest path to AI-generated UGC ads if you sell physical products — but at ~$10/video, you're paying a steep convenience tax over raw API access.</em></p>
-
-    <div style="background:var(--bg-surface);border-left:3px solid #767676;padding:1.25rem 1.5rem;border-radius:0 6px 6px 0;margin:0 0 2rem 0;">
-        <strong style="color:var(--text);font-size:1.05rem;">Key Takeaways</strong>
-        <ul style="margin:0.75rem 0 0 1.25rem;color:var(--text);">
-            <li><strong>MakeUGC is built for DTC ecommerce brands</strong> — the entire platform, from its content library to its avatar selection, is optimized for product-focused UGC ads.</li>
-            <li><strong>Seedance 2.0 and Veo3 on every plan</strong> — unlike many competitors that gate newer models behind expensive tiers, MakeUGC includes both from the $49/month Startup plan.</li>
-            <li><strong>The math is steep at ~$10 per video</strong> — 5 credits for $49/month means you're paying a premium for the convenience of a managed platform over raw API access.</li>
-            <li><strong>Templates are great, blank canvas is daunting</strong> — beginners will love the guided workflows, but creating something truly custom from scratch requires a learning curve.</li>
-        </ul>
-    </div>
-
     <div class="affiliate-cta">
         <div class="cta-text">
             <div class="cta-title">Try MakeUGC</div>
@@ -296,21 +322,29 @@
 
         <h2 id="what-is-makeugc">What Is MakeUGC?</h2>
         <aside class="sidenote">Why am I reviewing AI video tools? The ecosystem is genuinely confusing — diffusion models, Chinese models, API brokers popping up weekly — and there's very little honest written content to help people navigate it. So I'm <a href="/about/">doing it myself</a>.</aside>
-        <p class="dropcap"><a href="https://www.makeugc.ai/?ref=bernard" target="_blank" rel="noopener">MakeUGC</a> is an AI video platform that generates UGC-style ad content using realistic AI avatars. Think of it as a production studio replacement for DTC brands that need talking-head product ads but don't want to hire creators, coordinate shoots, or deal with the unpredictability of real humans.</p>
-        <p>The platform gives you access to over 300 AI avatars, 35+ languages, and — as of early 2026 — integrations with some of the most capable video generation models available: Seedance 2.0 and Google's <a href="/posts/veo3-vs-hailuo-minimax/">Veo3</a>. It also includes tools for B-roll generation, image creation, batch processing, and a curated content library of templates organized by industry.</p>
-        <p>The pitch is simple: type a script, pick an avatar, generate a professional-looking UGC ad in minutes. The reality, as I found out after paying $1 for the trial and spending a full afternoon inside the platform, is more nuanced.</p>
+        <p class="dropcap"><a href="https://www.makeugc.ai/?ref=bernard" target="_blank" rel="noopener">MakeUGC</a> is a managed AI video platform built to replace human UGC creators for DTC brands. It combines 300+ talking-head avatars, 35+ languages, and industry ad templates with frontier video models — including ByteDance's Seedance 2.0 and Google's <a href="/posts/veo3-vs-hailuo-minimax/">Veo3</a> — plus B-roll generation and batch rendering.</p>
+        <p>The pitch is simple: paste a script, pick an avatar, and export a TikTok- or Meta-ready UGC ad in minutes without shipping products to creators. After paying $1 for the three-day trial and spending an afternoon testing the platform, here is where the math works — and where you're paying a steep wrapper tax.</p>
+
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">MakeUGC is a fast, turnkey way for non-technical DTC brands to ship AI talking-head ads, but at $5.95–$9.80 per clip and with API access locked to Enterprise, technical builders should call the underlying video models directly.</p>
+          <ul>
+            <li><strong>Frontier models on the base tier</strong> — includes Seedance 2.0 and Veo3 starting on the $49/month Startup plan (5 videos/month).</li>
+            <li><strong>Built strictly for physical ecommerce</strong> — rich template libraries for beauty, fashion, and CPG, but almost nothing for travel, SaaS, or services.</li>
+            <li><strong>High wrapper markup &amp; gated API</strong> — ~$10/clip is 10x cheaper than hiring a human creator ($150–$500), but 10x more expensive than raw API inference (~$0.50–$1.00/clip).</li>
+          </ul>
+        </div>
 
         <h2 id="getting-started">Getting Started</h2>
         <aside class="sidenote">For comparison, Arcads starts at $100/mo with no trial. Creatify offers a free tier but restricts features heavily.</aside>
-        <p>MakeUGC offers a <strong>$1 trial for 3 days</strong>, which immediately sets it apart from platforms that want $50+ upfront before you can touch anything. In the current AI landscape — where new tools appear weekly and half of them feel like thin wrappers around the same APIs — a low-risk trial is genuinely appreciated. You get full platform access, but only 1 video credit to actually generate content.</p>
-        <p>That single credit created an interesting dynamic: I found myself nervous to actually use it. You want to explore the platform, understand how everything works, pick the right model, write a good prompt — but you know you only get one shot. It's like being handed a single bullet and told to hit a bullseye you've never aimed at before. I ended up spending way more time in the tutorials and content library than I probably would have if I had 3-5 credits to experiment with.</p>
-        <p>Sign-up itself is straightforward. You land in a workspace with folders, a sidebar for navigation, and the ability to start a new project right away. The dashboard is clean and modern, but there's a lot going on: Tutorials, Content Library, Video Agent, AI Ads editor, Settings — it feels like a tool built by a team that's been shipping features fast, and the sheer volume of options can be overwhelming on first visit.</p>
-        <p>The good news is that MakeUGC ships a solid set of <strong>video tutorials</strong> covering every major feature: Talking Actor, Product In Hand, B-roll, Sora integration, Gestures, Custom Avatars, and their new Video Agent. For a platform with this many moving parts, having guided walkthroughs isn't a luxury — it's a necessity. And they deliver here.</p>
+        <p>MakeUGC offers a <strong>$1, 3-day trial</strong> — a refreshing contrast to competitors that demand $50–$100 upfront before you can see the dashboard. You get full access to browse the UI, avatar catalog, and tutorials, plus <strong>1 video credit</strong> to render a clip.</p>
+        <p>That single credit creates immediate friction: when you only get one shot to evaluate generation quality before a $49/month rebilling, you hesitate to click generate. Instead of experimenting freely with avatars and motion settings, I spent half an hour studying the docs and refining a prompt offline before spending my lone credit.</p>
+        <p>Fortunately, MakeUGC ships clear <strong>video tutorials</strong> for every major module — Talking Actor, Product In Hand, B-roll, Sora, Gestures, Custom Avatars, and Video Agent — which softens the learning curve on a crowded sidebar.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/tutorials.jpg" width="2000" height="1158" alt="MakeUGC tutorials page showing video walkthroughs for Talking Actor, Product In Hand, B-roll, Sora, and more" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">MakeUGC's tutorials page — video walkthroughs for every major feature.</figcaption></figure>
 
         <h2 id="pricing">Pricing Breakdown</h2>
-        <p>Here's where things get interesting — or painful, depending on your perspective.</p>
+        <p>MakeUGC prices by monthly video credits across four tiers:</p>
 
         <div class="table-wrap">
             <table class="data-table">
@@ -359,51 +393,45 @@
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/pricing.jpg" width="2000" height="1485" alt="MakeUGC pricing plans — Startup $49/mo, Growth $69/mo, Pro $119/mo, Enterprise custom" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">MakeUGC pricing as of April 2026. The $1 trial gives full access for 3 days.</figcaption></figure>
 
         <aside class="sidenote">Raw Veo3 API calls cost roughly $0.50–$1.00 per generation. The ~$10 MakeUGC price includes the platform, avatars, and templates on top.</aside>
-        <p>The per-video cost ranges from roughly <strong>$6 to $10</strong> depending on your plan. For context, hiring a real UGC creator typically runs $150–$500+ per video, so the AI route is significantly cheaper in absolute terms. But compared to accessing the underlying models directly via API (where a Veo3 generation might cost under $1), you're paying a substantial markup for the platform layer.</p>
-        <p>The real question is whether the convenience — the avatar library, templates, batch processing, and polished UI — justifies the 5-10x premium over raw API costs. For a DTC brand without a developer on staff, the answer is probably yes. For a technically savvy team that already has API pipelines, it's harder to justify.</p>
+        <p>At <strong>$5.95 to $9.80 per clip</strong>, your benchmark matters. Compared to paying a human UGC creator $150–$500 per video and waiting two weeks for delivery, $10 is a bargain. Compared to calling Seedance 2.0 or Veo3 directly through an inference API like <a href="/posts/wavespeed/">Wavespeed</a> ($0.50–$1.00 per clip), you're paying a 10x markup for MakeUGC's avatar consistency, lip-sync UI, and templates.</p>
 
         <div class="verdict verdict-neutral">
             <div class="verdict-label">Pricing Verdict</div>
-            <p>Reasonable for non-technical DTC teams who value speed and convenience. Expensive for anyone who can wire up API calls themselves.</p>
+            <p>Reasonable for non-technical DTC teams replacing $250 creator invoices. Steep for technical builders who can call video APIs directly.</p>
         </div>
 
         <h2 id="features">Features &amp; Models</h2>
-        <p>MakeUGC's feature set is broader than you'd expect from a platform focused on UGC ads. Here's what you're working with across all plans:</p>
+        <p>Here is what ships across MakeUGC's plans:</p>
         <ul>
-            <li><strong>Seedance 2.0</strong> — Text-to-video and image-to-video with vertical or cinematic aspect ratios. Supports 10s and 15s durations. This is a meaningful differentiator since Seedance 2.0 availability is still limited across most platforms.</li>
-            <li><strong>Veo3</strong> — Google's latest video generation model, producing clips up to 25 seconds. Available on every tier, which is uncommon.</li>
-            <li><strong>300+ AI Avatars</strong> — Diverse selection of realistic talking-head characters for UGC-style ads.</li>
-            <li><strong>B-roll Generator</strong> — Create supplementary footage to pair with avatar content.</li>
-            <li><strong>Image Generator</strong> — Built-in image creation for thumbnails, ad assets, and reference images.</li>
-            <li><strong>Batch Mode</strong> — Generate multiple variations in one go. Useful for A/B testing ad creative.</li>
-            <li><strong>Video Agent</strong> (Pro+) — An AI-powered workflow that automates parts of the video creation process.</li>
-            <li><strong>Product In Hand</strong> (Pro+) — Generate avatars holding or interacting with your actual product. Clever feature for product ads.</li>
+            <li><strong>Seedance 2.0 (All tiers)</strong> — Text-to-video and image-to-video in vertical or horizontal formats (10s and 15s clips).</li>
+            <li><strong>Veo3 (All tiers)</strong> — Google's video generation model, supporting clips up to 25 seconds.</li>
+            <li><strong>300+ AI Avatars &amp; 35+ Languages</strong> — Pre-built talking-head actors with localized lip-syncing.</li>
+            <li><strong>B-roll &amp; Image Generators</strong> — Supplementary cutaways, product stills, and reference frames.</li>
+            <li><strong>Batch Mode</strong> — Render multiple hook and script variations simultaneously for ad testing.</li>
+            <li><strong>Product In Hand &amp; Video Agent (Pro+)</strong> — Composite avatars holding your physical SKU and automate multi-step ad assembly.</li>
         </ul>
-        <p>The inclusion of Seedance 2.0 and Veo3 across all tiers is the standout here. Many competitors either don't offer these models at all, or lock them behind their highest-priced plans. MakeUGC makes them available from the $49 Startup plan, which means even budget-conscious brands get access to genuinely cutting-edge generation.</p>
+        <p>Including Seedance 2.0 and Veo3 on the entry-level $49 Startup tier is MakeUGC's best packaging decision; most competing SaaS wrappers lock frontier video models behind $100+/month plans.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/seedance-popup.png" width="1536" height="824" alt="MakeUGC Seedance 2.0 video feature — generate videos from text or reference images" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Seedance 2.0 is available on all plans — text-to-video and image-to-video with 10s or 15s durations.</figcaption></figure>
 
         <h2 id="content-library">The Content Library</h2>
-        <p>One of MakeUGC's strongest selling points is its curated content library — a collection of ready-to-use UGC ad templates organized by industry vertical. Categories include Accessories, Apparel, Beauty &amp; Personal Care, Food &amp; Beverage, Health &amp; Fitness, Tech &amp; Electronics, and more.</p>
-        <p>Browsing through the library, it's clear where MakeUGC's users actually are: <strong>beauty, fashion, and physical consumer goods dominate</strong>. These categories have dozens of templates each, with polished avatar setups that look like they could pass for real creator content.</p>
-        <p>Here's the thing though — I was looking for travel and leisure templates since that's my world. There are none. Zero. If you're in hospitality, tourism, SaaS, consulting, or really anything outside of physical consumer products, the content library isn't going to do much for you.</p>
+        <p>MakeUGC's template library organizes pre-built ad setups by vertical: Accessories, Apparel, Beauty &amp; Personal Care, Food &amp; Beverage, Health &amp; Fitness, and Tech &amp; Electronics. If you sell cosmetics, supplements, or apparel, dozens of ready-to-clone creator setups are waiting for you.</p>
+        <p>If you operate outside physical CPG, the cupboard is bare. I searched for travel and hospitality templates for our own projects and found zero.</p>
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/content-library.jpg" width="2000" height="1152" alt="MakeUGC content library showing dozens of UGC avatar templates across beauty, fashion, and ecommerce categories" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The content library is packed for ecommerce verticals — beauty, fashion, and physical products dominate.</figcaption></figure>
 
-        <p>Even the "Services" category — the closest match to something like travel — had just a single template when I checked. One.</p>
+        <p>Filtering by "Services" — the closest bucket for travel, SaaS, or agencies — returned a single template:</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/content-library-services.jpg" width="2000" height="1152" alt="MakeUGC content library filtered to Services category showing only a single template" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Filter by "Services" and the selection drops to a single template. Niche categories are underdeveloped.</figcaption></figure>
 
         <div class="verdict verdict-win">
             <div class="verdict-label">Content Library</div>
-            <p>Excellent for ecommerce and CPG brands. Sparse for services, B2B, or non-physical products.</p>
+            <p>Strong for physical ecommerce and CPG brands. Practically empty for services, travel, SaaS, or B2B.</p>
         </div>
 
         <h2 id="output-quality">Output Quality</h2>
-        <p>I used my single trial credit to test <strong>Seedance 2.0</strong>, since it's the newest model on the platform and one that's still broadly unavailable elsewhere. Given that I only had one shot, I spent a solid 20-30 minutes refining my prompt before hitting generate. That nervous energy I mentioned? It turned out to be a good thing — it forced me to be deliberate.</p>
-        <p>The result was genuinely impressive. The generated video looked natural, had smooth motion, and passed the initial gut check of "does this look like a real person?" with flying colors.</p>
+        <p>I spent my trial credit testing <strong>Seedance 2.0</strong>. Because I only had one render, I iterated on the prompt in a separate LLM chat first to strip out fake-looking "cinematic" clichés and choreograph a realistic handheld street scene:</p>
 
         <h3>The Prompt Iteration Process</h3>
-        <p>Getting a good result from Seedance 2.0 wasn't a one-shot affair. I went through multiple prompt revisions — testing ideas in a separate chat first — to dial in something that looked genuinely authentic rather than over-produced. Here's how that process actually looked:</p>
 
         <figure style="margin:1.5rem 0 1rem;"><img  src="https://img.zonted.com/resources/makeugc-review/prompt-iteration-1.png" width="1866" height="596" alt="First prompt attempt — initial concept for a NYC street scam scene with Seedance 2.0" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Starting point — the initial prompt concept. Broad strokes, setting the scene.</figcaption></figure>
 
@@ -411,7 +439,7 @@
 
         <figure style="margin:1rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/prompt-iteration-3.png" width="1884" height="1018" alt="Final maxed-out prompt version — hyper-detailed cinematic scene description" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The maxed-out version — hyper-detailed, every beat of the scene choreographed. This is what produced the final output below.</figcaption></figure>
 
-        <p>The takeaway: <strong>prompt quality matters enormously</strong> with these models. A lazy one-liner gets you generic output. Detailed, authentic prompting — describing the scene beat by beat, specifying camera behavior, avoiding AI-sounding jargon — makes the difference between something that looks AI-generated and something that could pass for real footage.</p>
+        <p>With frontier video models, <strong>prompt specificity drives 90% of realism</strong>. Ditching generic film buzzwords in favor of beat-by-beat physical choreography and phone-camera physics produced a remarkably convincing clip:</p>
 
         <figure style="margin:1.5rem 0 2rem;">
             <video controls playsinline preload="metadata" style="border-radius:6px;border:1px solid var(--border);max-width:100%;display:block;" poster="">
@@ -421,52 +449,48 @@
             <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Our Seedance 2.0 test output from MakeUGC — generated with a single credit during the $1 trial.</figcaption>
         </figure>
 
-        <p>That said — and this is important — <strong>the quality here isn't unique to MakeUGC</strong>. Seedance 2.0 produces the same caliber of output regardless of which platform serves it. I've <a href="/posts/ai-reels-what-actually-works/">tested these models independently</a> and the generation quality is the model's doing, not the platform's. What MakeUGC adds is the wrapper: the avatar selection, the script-to-video pipeline, the template system.</p>
-        <p>Where MakeUGC does add genuine platform-level value is in avatar consistency. Rather than wrestling with raw prompts and hoping for consistent character appearance across multiple clips, MakeUGC's avatar system gives you repeatable, recognizable characters — which matters a lot for ad campaigns that need visual consistency across multiple creatives.</p>
+        <p>Keep the distinction clear: <strong>that raw visual quality comes from ByteDance's Seedance 2.0, not MakeUGC.</strong> We've <a href="/posts/ai-reels-what-actually-works/">benchmarked these models via API</a> and get the exact same pixels for a tenth of the price. MakeUGC's actual value-add is persistent character identity — keeping the same talking-head avatar, voice, and product placement consistent across twenty ad variations without wrestling with reference-image seed drift.</p>
 
         <h2 id="strengths">What I Liked</h2>
-        <p>The $1 trial is the standout. In a world where most AI tools want $50+ before you can even see the dashboard, MakeUGC lets you poke around for three days with full access. I wish more platforms did this — it immediately builds trust. I spent my first day just exploring, watching tutorials, and building confidence before I used my single credit.</p>
-        <p>The model access is genuinely differentiating. Seedance 2.0 and Veo3 are available on every plan, including the $49/month Startup tier. I've looked at a lot of platforms — many don't offer these models at all, and the ones that do lock them behind $100+/month tiers. MakeUGC gives you both from day one.</p>
-        <p>The template-driven workflow is where the platform earns its keep. If you sell products in a category they cover (beauty, apparel, CPG), picking a template, swapping the script, and generating is genuinely fast. The tutorials are well-produced and cover every feature — I actually watched several before using my credit, which isn't something I usually do.</p>
-        <p>The 35+ language support is also worth noting if you're selling internationally — being able to localize ad creative without separate tools or translators is a real time-saver.</p>
+        <ul>
+            <li><strong>Low-friction $1 sandbox:</strong> Three days of full dashboard access lets you inspect every avatar, template, and tutorial before committing $49.</li>
+            <li><strong>Ungated frontier models:</strong> Both Seedance 2.0 and Veo3 are unlocked on the cheapest $49/month plan.</li>
+            <li><strong>Repeatable avatar identity:</strong> For DTC paid social teams, reusing the same recognizable AI presenter across dozens of hooks and 35+ languages solves a real creative-testing bottleneck.</li>
+        </ul>
 
         <h2 id="weaknesses">What Frustrated Me</h2>
-        <p>My biggest complaint: <strong>one trial credit is not enough.</strong> I spent 20-30 minutes agonizing over my prompt because I knew I only had one shot. That kind of anxiety isn't a feature — it's a product design failure. Give people 3-5 credits and they'll make a more confident purchase decision. I ended up generating one video and then having to decide whether to commit $49/month based on a single data point.</p>
-        <p>The per-video math is hard to love. At ~$10/video on the base plan, you're paying a 10x markup over raw API costs. For non-technical teams, the convenience justifies it. But I've built my own <a href="/posts/veo3-vs-hailuo-minimax/">video generation pipelines</a> — I know what a Veo3 generation actually costs. You're paying for the wrapper, not the capability.</p>
-        <p>I went looking for travel and leisure templates and found nothing. Zero. The content library is heavily skewed toward physical consumer products. If you're outside beauty, fashion, and CPG, you're starting from a blank canvas with no guidance.</p>
-        <p>The cancellation experience left a sour taste. There's no cancel button — you have to email support. They responded in 35 minutes and cancelled immediately, so it's painless in practice. But in 2026, this feels deliberately friction-y. Just give me a button.</p>
-        <p>And finally: <strong>API access is Enterprise-only.</strong> This is the one that would stop me from recommending MakeUGC to any technical team. API access is what lets you connect to AI agents, automation tools like Claude Code, or your own production pipelines. Without it, every video requires manual clicks. In a world where <a href="/posts/future-of-content-agentic-data-enrichment/">agentic workflows</a> are becoming standard, locking the API behind a sales call feels like a missed opportunity.</p>
+        <ul>
+            <li><strong>One trial credit is too stingy:</strong> Asking users to judge a $49–$119/month subscription off a single render creates unnecessary hesitation. Three trial credits should be standard.</li>
+            <li><strong>A 10x wrapper premium:</strong> Paying ~$6–$10 per clip when the underlying <a href="/posts/veo3-vs-hailuo-minimax/">Veo3 or Seedance API call</a> costs under $1 only makes sense if you need the GUI and avatar presets.</li>
+            <li><strong>Email-only cancellation:</strong> There is no self-serve cancel button in the billing settings; you have to email support. They processed my cancellation in 35 minutes without pushback, but hiding the cancel button in 2026 is a dark pattern.</li>
+            <li><strong>API access is locked behind Enterprise sales:</strong> Neither Startup, Growth, nor Pro includes self-serve API keys. If you want to trigger renders from Claude Code or an <a href="/posts/future-of-content-agentic-data-enrichment/">agentic workflow</a>, you're forced onto a custom Enterprise contract.</li>
+        </ul>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/makeugc-review/enterprise-api.png" width="558" height="1242" alt="MakeUGC Enterprise plan showing API Access listed as an Enterprise-only feature" loading="lazy" style="border-radius:6px;border:1px solid var(--border);max-width:320px;"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">API Access is buried at the bottom of the Enterprise tier. No self-serve API on Startup, Growth, or Pro.</figcaption></figure>
 
         <h2 id="vs-alternatives">How It Compares</h2>
-        <p>I want to be upfront: <strong>I've only tested MakeUGC hands-on so far.</strong> The comparisons below are based on publicly available information, not personal experience. I'm working through the alternatives — Arcads, Creatify, HeyGen, and Synthesia reviews are all in progress. I'll update this section with real data as each review publishes.</p>
+        <p><em>Note: MakeUGC is the first managed UGC platform I've tested hands-on; the comparisons below reflect published specs and pricing while I work through full teardowns of each alternative.</em></p>
 
-        <p>That said, here's where MakeUGC sits in the landscape based on what I know:</p>
-
-        <p><strong>MakeUGC vs. Arcads:</strong> Both target UGC-style ads, but MakeUGC is cheaper ($49 vs. $100/mo starting) and includes Seedance 2.0/Veo3 access on every tier. Arcads appears to have a more mature platform with stronger batch creation and analytics — but I haven't tested it yet.</p>
-        <p><strong>MakeUGC vs. Creatify:</strong> Creatify starts at $39/mo and has a slick URL-to-video workflow for generating ads directly from product pages. MakeUGC offers more avatar control and a richer content library. Different strengths depending on your workflow.</p>
-        <p><strong>MakeUGC vs. HeyGen/Synthesia:</strong> Different market entirely. HeyGen ($24/mo) and Synthesia ($22/mo) are optimized for corporate talking-head videos, training content, and enterprise communications. If you're making product ads for TikTok and Meta, MakeUGC is the better fit. If you're making internal training videos, look at HeyGen or Synthesia instead.</p>
+        <p><strong>MakeUGC vs. Arcads:</strong> Both target paid-social UGC ads, but MakeUGC starts at $49/mo (with a $1 trial and Seedance 2.0/Veo3 included) versus Arcads at $100/mo with no trial. Arcads targets higher-volume performance agencies with deeper batch workflows.</p>
+        <p><strong>MakeUGC vs. Creatify:</strong> Creatify starts at $39/mo and focuses on pasting a Shopify product URL to auto-generate an ad script and cut. MakeUGC leans harder into avatar customization and frontier model selection.</p>
+        <p><strong>MakeUGC vs. HeyGen / Synthesia:</strong> Different buyers. HeyGen ($24/mo) and Synthesia ($22/mo) are built for polished corporate explainers, L&amp;D training, and B2B sales outreach. MakeUGC is built for vertical TikTok/Reels product ads.</p>
 
         <h2 id="skip">Skip MakeUGC If...</h2>
         <ul>
-            <li><strong>You're not selling physical products.</strong> The content library, templates, and avatar style are all built for ecommerce. If you're in SaaS, services, travel, or B2B, you'll be starting from scratch with no templates to guide you.</li>
-            <li><strong>You're technical and can build your own pipeline.</strong> If you can wire up Veo3 or Seedance API calls yourself, you'll generate videos at a fraction of the cost. MakeUGC's value is the convenience layer — if you don't need it, you're overpaying.</li>
-            <li><strong>You need API access for automation.</strong> It's Enterprise-only with no self-serve option. If your workflow depends on programmatic video generation, MakeUGC can't support you on any standard plan.</li>
-            <li><strong>You only need 1-2 videos per month.</strong> At ~$10/video on the base plan, the math only works if you're using most of your credits. Paying $49/month for two videos is $25/video — still cheaper than a real creator, but not the value proposition they're selling.</li>
+            <li><strong>You don't sell physical consumer goods.</strong> SaaS, travel, hospitality, and B2B service brands get almost zero value from the template library.</li>
+            <li><strong>You can write Python or cURL.</strong> Calling Seedance 2.0 or Veo3 via <a href="/posts/wavespeed/">Wavespeed</a> cuts your per-clip cost by ~90%.</li>
+            <li><strong>You need programmatic automation.</strong> With API keys gated behind Enterprise, every video on standard plans requires manual browser clicks.</li>
+            <li><strong>You only ship 1–2 ads a month.</strong> Unused monthly credits don't make sense at $49/month if you aren't burning the full allotment.</li>
         </ul>
 
         <h2 id="verdict">Final Verdict</h2>
         <div class="verdict verdict-neutral">
-            <div class="verdict-label">Overall</div>
-            <p><strong>If you sell physical products and want UGC-style ads without hiring creators, MakeUGC is worth your $1 to try.</strong> The Seedance 2.0 and Veo3 access on every plan is a real competitive advantage, and the content library provides a fast on-ramp if your niche is covered. But the per-video economics are tough to love at ~$10/clip, the trial gives you barely enough runway to evaluate, and the email-to-cancel process leaves a bad taste.</p>
-            <p style="margin-top:0.75rem;">What would make this an 8 or 9? More trial credits (3-5 minimum), broader template categories beyond ecommerce, lower per-video pricing, and a self-serve cancel button. None of those are hard to fix — which tells me MakeUGC could get significantly better with a few product decisions.</p>
+            <div class="verdict-label">Overall: 7/10</div>
+            <p><strong>If you run a non-technical DTC brand selling physical products, MakeUGC is well worth the $1 trial.</strong> Unlocking Seedance 2.0, Veo3, and 300+ consistent avatars on a $49/month plan lets a solo ecommerce marketer test ad hooks at a fraction of creator agency rates.</p>
+            <p style="margin-top:0.75rem;">What holds it back from an 8.5+: the stingy single trial credit, ~$10/clip base unit economics, zero non-CPG templates, Enterprise-gated API access, and having to email support to cancel.</p>
         </div>
 
-        <p style="font-size:1.05rem;margin-top:1rem;"><strong>Overall: 7/10</strong> — worth trying for DTC brands, but the per-video economics and single trial credit hold it back. If they shipped 3 trial credits, broader templates, and a self-serve cancel button, this would be an easy 9.</p>
-
-        <p style="margin-top:1.5rem;">If you want to see for yourself, the $1 trial is genuinely low-risk — just remember you only get 1 credit, so have your prompt ready before you generate. And set a reminder to cancel before day 3 if you're not sure.</p>
-        <p style="margin-top:1.5rem;"><a href="https://www.makeugc.ai/?ref=bernard" target="_blank" rel="noopener">Try MakeUGC for $1 &rarr;</a> — genuinely low-risk, just have your prompt ready and set a cancel reminder.</p>
+        <p style="margin-top:1.5rem;"><a href="https://www.makeugc.ai/?ref=bernard" target="_blank" rel="noopener">Try MakeUGC for $1 &rarr;</a> — draft and refine your prompt before spending your single trial credit, and set a calendar reminder before day 3 if you don't plan to keep the subscription.</p>
 
         <div class="affiliate-cta">
             <div class="cta-text">

@@ -196,25 +196,25 @@
 
         <div class="article-body">
 
-            <p class="dropcap">Five builds. Two rejections. Fourteen days between them, and the same guideline both times. This morning Apple rejected PalmAura for the second time under <strong>Guideline 4.3(b) &mdash; Design &mdash; Spam</strong>, and I'm calling it: the app is dead. Here's the autopsy, and the three things it taught me about shipping vibe-coded apps into Apple's walled garden.</p>
+            <p class="dropcap">Five builds. Two rejections. Fourteen days between them, citing the exact same clause both times. This morning Apple rejected PalmAura a second time under <strong>Guideline 4.3(b) &mdash; Design &mdash; Spam</strong>, and I&rsquo;m calling time of death. Here is the autopsy &mdash; and what it taught me about shipping vibe-coded apps into Apple&rsquo;s walled garden.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">The App Store has a wall up against vibe-coded apps &mdash; and honestly, it's a fair wall. My palm-reading app died at the door, twice, without a single user ever seeing it.</p>
+                <p class="tldr-thesis">Apple has raised a category-level spam wall against vibe-coded apps &mdash; and honestly, it&rsquo;s a defensible wall. My palm-reading iOS app died at the door twice without a single user ever seeing it.</p>
                 <ul>
-                    <li><strong>The build was the easy part.</strong> The <a href="/posts/plan-3x-build-once/">plan-3x loop</a> one-shotted the backend on Cloudflare Workers and got the Swift app out in a couple of shots. Apple's review loop then consumed two weeks and returned two identical rejections.</li>
-                    <li><strong>4.3(b) doesn't review your code &mdash; it reviews your category.</strong> &ldquo;There are already enough of these apps on the App Store.&rdquo; Quality was never the question.</li>
-                    <li><strong>Agentic iOS development runs at the platform's speed, not the model's.</strong> My agents iterate in seconds and deploy to the web in about a minute. The iOS loop &mdash; compile, sign, device-test, TestFlight, review queue &mdash; is measured in days.</li>
-                    <li><strong>The thing I actually wanted to learn</strong> &mdash; App Store optimization and mobile marketing &mdash; I never got to touch. You can't study the market from outside the door.</li>
+                    <li><strong>Writing the code took two days; App Review took twelve:</strong> The <a href="/posts/plan-3x-build-once/">plan-3x-build-once loop</a> one-shotted the Cloudflare Workers backend and built the native Swift app in three passes. Two trips through Apple&rsquo;s review queue ate the next two weeks.</li>
+                    <li><strong>Guideline 4.3(b) rejects your category, not your code:</strong> Apple&rsquo;s verdict was explicit: &ldquo;There are already enough of these apps on the App Store.&rdquo; UI polish and bug-free builds don&rsquo;t clear a saturated-category gate.</li>
+                    <li><strong>Agentic iOS development moves at Apple&rsquo;s clock speed:</strong> Models write Swift in seconds, but provisioning, code-signing, TestFlight processing, and multi-day human review turn a 60-second web deploy loop into a two-week stall.</li>
+                    <li><strong>You can&rsquo;t practice App Store Optimization from outside the store:</strong> On the web, distribution is a skill test starting day one; on iOS, distribution starts with a gatekeeper&rsquo;s permission.</li>
                 </ul>
-                <p class="tldr-tail">PalmAura joins <a href="/posts/kapiko-postmortem/">Kapiko</a> in the <a href="/games/graveyard/">graveyard</a>.</p>
+                <p class="tldr-tail">PalmAura joins <a href="/posts/kapiko-postmortem/">Kapiko</a> in the <a href="/games/graveyard/">project graveyard</a>.</p>
             </div>
 
             <h2 id="what-i-shipped">What I shipped</h2>
 
-            <p>PalmAura was a palm-reading iOS app: photograph your palm, get a daily read. Freemium, one photo in, one reading out. A fun, contained experiment &mdash; and the first real test of whether my web-honed build loop could ship a native app.</p>
+            <p>PalmAura was a native iOS palm-reading app: snap a photo of your palm, get a daily reading. Freemium model, one photo in, one reading out &mdash; a self-contained test of whether my web-honed agentic build loop could ship a native iOS binary.</p>
 
-            <p>Mechanically, it could. The backend was a <a href="/posts/plan-3x-build-once/">clean one-shot</a> on Cloudflare Workers &mdash; the same stack as everything else I run. The Swift app itself came out in two or three shots with the plan-three-times loop. By the standards of my web projects, that's a normal, boring, successful build. The product worked.</p>
+            <p>Mechanically, the build was effortless. The Cloudflare Workers backend compiled cleanly in a <a href="/posts/plan-3x-build-once/">single pass</a>, and the Swift client came together in three iterations using the plan-3x workflow. By day two, the app was feature-complete, crash-free, and running on physical hardware.</p>
 
             <figure style="margin:1.5rem auto 2rem;max-width:340px;">
                 <video controls playsinline preload="metadata" poster="https://img.zonted.com/resources/palmaura-postmortem/palmaura-demo-poster.jpg" style="width:100%;height:auto;border-radius:12px;border:1px solid var(--border);" src="https://img.zonted.com/resources/palmaura-postmortem/palmaura-demo.mp4"></video>
@@ -228,7 +228,7 @@
               <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;text-align:center;">The whole story, in one App Store Connect row.</figcaption>
             </figure>
 
-            <p>I submitted on May 26. Rejected: <strong>Guideline 4.3(b) &mdash; Design &mdash; Spam</strong>. I revised, resubmitted, and waited. On June 9 &mdash; fourteen days and five builds after the first attempt &mdash; the second verdict came back. Same guideline, nearly word for word:</p>
+            <p>I submitted build 1 on May 26. It came back rejected under <strong>Guideline 4.3(b) &mdash; Design &mdash; Spam</strong>. I expanded the feature set, cut new builds, resubmitted, and waited. On June 9 &mdash; fourteen days and five builds after initial submission &mdash; rejection #2 arrived, citing the exact same boilerplate:</p>
 
             <blockquote>The app primarily features astrology, horoscopes, palm reading, fortune telling or zodiac reports that duplicate the content and functionality of similar apps in a saturated category. &hellip; These app features may be useful, informative or entertaining, and the app may include features or characteristics that distinguish it. However, there are already enough of these apps on the App Store.</blockquote>
 
@@ -237,33 +237,31 @@
               <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The second rejection, June 9. Reviewed on an iPhone 17 Pro Max, version 1.0, build 5.</figcaption>
             </figure>
 
-            <p>Read that rejection carefully, because it's not saying what most rejections say. There's no bug report. No crash log. No complaint about the UI, the IAP flow, or the privacy policy. Apple is explicitly conceding the app &ldquo;may be useful, informative or entertaining&rdquo; and might even be distinguishable &mdash; <em>and rejecting it anyway</em>. 4.3(b) doesn't review your app. It reviews your <strong>category</strong>, and the category is full.</p>
+            <p>Read that paragraph closely. There is no bug report, no crash log, and no complaint about StoreKit billing or privacy disclosures. Apple explicitly concedes that the app &ldquo;may be useful, informative or entertaining&rdquo; and may even include distinguishing features &mdash; <em>and rejects it anyway</em>. Guideline 4.3(b) doesn&rsquo;t audit your execution; it audits your <strong>category</strong>, and declares the category closed.</p>
 
-            <p>I think this is Apple's wall against the vibe-coding flood, and the timing isn't a coincidence. When a competent agent loop can produce a working app in an afternoon, the marginal cost of a &ldquo;me too&rdquo; app falls to roughly zero &mdash; and the App Store's failure mode becomes ten thousand palm readers, horoscope generators, and meditation timers, each slightly restyled. Google answered the same flood by <a href="/posts/google-zero-patience-ai-slop/">burying new sites</a>. Apple's answer is a bouncer at the door who doesn't care how nice your shirt is: <em>the bar is full of guys in that shirt</em>.</p>
+            <p>This is Apple&rsquo;s structural defense against the vibe-coding wave. When an agentic workflow can assemble a polished consumer utility in a weekend, the marginal cost of a clone drops to near zero &mdash; threatening to bury the App Store under ten thousand slightly restyled palm readers, tarot decks, and Pomodoro timers. Google met the same flood by <a href="/posts/google-zero-patience-ai-slop/">de-indexing new domains</a>; Apple met it by stationing a bouncer at the door who doesn&rsquo;t care how well your shirt fits because the club is already full of guys wearing that shirt.</p>
 
-            <p>And here's the uncomfortable, non-negotiable part: <strong>by Apple's definition, they were right.</strong> PalmAura was a well-built entry in a saturated category. It had a clean gimmick, not a unique experience. If I ran the platform and watched agentic submissions climb, I'd build the same wall. The rejection stings; the logic doesn't.</p>
+            <p>And the honest operator takeaway is that <strong>Apple made the right call.</strong> PalmAura was a clean build in a crowded aisle. It had a neat hook, not a defensible reason to exist. If I ran App Review while AI-generated submissions went vertical, I would enforce the exact same rule.</p>
 
             <h2 id="ios-friction">The loop is the product</h2>
 
-            <p>The second lesson cost me the two weeks. My entire operation is tuned around one number: how fast a change gets in front of reality. On the web that loop is about a minute &mdash; an agent edits, pushes, Cloudflare deploys, and the change is live in production where I (or a cron job) can see it. Every piece of my stack compounds around that speed.</p>
+            <p>The deeper lesson cost me twelve days of calendar time. My entire studio workflow is optimized around a single metric: time from code edit to live user feedback. On the web, that loop takes sixty seconds &mdash; an agent edits a file, pushes to main, Cloudflare deploys globally, and production traffic hits the new code immediately.</p>
 
-            <p>iOS runs the same loop through a different physics. The model still writes Swift in seconds &mdash; that part is identical. Then: Xcode compiles. The simulator approximates. The real test wants a provisioning profile, a signed build, a physical phone. TestFlight wants processing time. And the only deploy that counts &mdash; the App Store &mdash; wants days of review queue before a human tells you no. The agent iterates at model speed; the platform iterates at Apple speed. <strong>The bottleneck moved from generation to ceremony</strong>, and ceremony is the one thing an agent can't compress.</p>
+            <p>iOS subjects that loop to completely different physics. The LLM still writes Swift in seconds, but everything downstream runs in slow motion: Xcode compilation, provisioning profiles, certificate signing, physical device testing, TestFlight binary processing, and finally a multi-day human review queue. <strong>The bottleneck shifts from code generation to platform ceremony</strong> &mdash; and ceremony is the one thing an AI agent cannot compress.</p>
 
-            <p>The math on PalmAura: the build took shots measured in single digits, days one and two. The remaining twelve days were the wall-clock cost of two trips through a review queue. My whole pipeline ships multiple projects to production <em>per day</em>; this one platform turned a weekend product into a fortnight of waiting for two form rejections. Even if Apple had said yes, every future bugfix, every experiment, every A/B test would pay the same toll. The web spoiled me, and I'm not sorry.</p>
+            <p>Building PalmAura took two days; waiting for Apple to say no twice took twelve. Even if build 5 had been approved, every subsequent paywall test, onboarding tweak, and bugfix would have paid that same multi-day tax. The open web spoiled me, and I have zero interest in giving that speed back.</p>
 
             <h2 id="never-learned">The class I never got to take</h2>
 
-            <p>Here's the regret that actually matters. I didn't build PalmAura because the world needed another palm reader &mdash; I built it to learn a new surface. The plan was: ship the app, then learn App Store optimization the way I learned SEO &mdash; keywords, screenshots, ratings velocity, paid acquisition, the whole discipline. Add &ldquo;mobile distribution&rdquo; as a card to <a href="/posts/may-2026-recap/">the deck</a>, next to search, social, and Amazon.</p>
+            <p>I didn&rsquo;t build PalmAura because the world needed another palm reader; I built it to learn a new distribution surface. The goal was to ship a simple consumer utility and learn App Store Optimization (ASO) hands-on &mdash; keyword metadata, screenshot conversion rates, ratings velocity, and Apple Search Ads &mdash; adding mobile distribution to <a href="/posts/may-2026-recap/">my operating deck</a> alongside search, social, and Amazon.</p>
 
-            <p>I never got to take the class. ASO assumes you're <em>in</em> the store. All the playbooks I'd queued up &mdash; useless from outside the door. Which is itself the lesson: on the web, distribution is a skill problem you can start learning the day you deploy. On iOS, distribution begins with a gatekeeper's permission, and the gatekeeper has opinions about your category before your skill ever enters the conversation. I wish I'd understood how absolute that ordering was before I started; it would have changed what I built, or whether I built it at all.</p>
+            <p>I never got to run a single test because ASO requires being inside the store first. On the web, distribution is an execution problem you can work on the minute you buy a domain. On iOS, distribution starts with a landlord&rsquo;s permission slip &mdash; and the landlord can veto your category before you ever compete for a user.</p>
 
             <h2 id="graveyard">To the graveyard</h2>
 
-            <p>Apple's rejection email, in its &ldquo;Resources&rdquo; section, offers a consolation suggestion: <em>&ldquo;You may consider creating a web app, which looks and behaves like a native app.&rdquo;</em> Apple, after two weeks of deliberation, advised me to do the thing my entire company already does. Noted, and genuinely a little funny.</p>
+            <p>At the bottom of the rejection notice, Apple&rsquo;s boilerplate helpfully suggests: <em>&ldquo;You may consider creating a web app, which looks and behaves like a native app.&rdquo;</em> After two weeks in the queue, Apple advised me to go build web apps &mdash; the exact thing I already do every day.</p>
 
-            <p>But I'm not porting PalmAura to the web, because the honest read is that it was a category entry, not a conviction &mdash; and the category is as saturated outside the store as inside it. The experiment answered its real questions: yes, the agentic loop can ship native apps; no, the economics don't work when the platform's ceremony eats the loop's speed advantage; and no, Apple is not going to let the flood in. Three answers for two weeks and a $99 developer account &mdash; cheaper than most tuition.</p>
-
-            <p>So: <a href="/posts/kapiko-postmortem/">Kapiko</a> has company. PalmAura goes to <a href="/games/graveyard/">the graveyard</a> &mdash; playable, like everything else I bury &mdash; and the deck loses its mobile card for now. The next time I want a new surface, I'll pick one where the door opens from my side.</p>
+            <p>I&rsquo;m not porting PalmAura to the web. It was a distribution exercise, not a high-conviction product, and the category is just as crowded in a browser. Two weeks and a $99 developer fee bought three clear answers: yes, my agent loop can ship native Swift; no, the iteration economics don&rsquo;t pencil out when review queues eat model speed; and no, Apple isn&rsquo;t letting generic consumer wrappers through the gate. PalmAura joins <a href="/posts/kapiko-postmortem/">Kapiko</a> in <a href="/games/graveyard/">the graveyard</a>, and the next surface I test will be one where the door opens from my side.</p>
 
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->

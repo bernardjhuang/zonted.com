@@ -286,6 +286,44 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
     .spec-table { display: block; overflow-x: auto; max-width: 100%; min-width: 0; -webkit-overflow-scrolling: touch; }
+  /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
 </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
@@ -369,38 +407,38 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
         <div class="article-body">
 
-            <p class="dropcap">We publish 5–7 AI-generated <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> every day — in production, fully automated via cron jobs, across 8+ content formats. Over three weeks we ran <strong>Veo 3</strong>, <strong>Hailuo 2.3 (MiniMax)</strong>, <strong>Sora 2 (OpenAI)</strong>, <strong>Grok Imagine (xAI)</strong>, and <strong>CogVideoX-3 (<a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">Z.AI</a>)</strong> through our pipeline with real money on the line.</p>
+            <p class="dropcap">We publish 5–7 AI-generated <a href="/posts/ai-reels-what-actually-works/">Instagram Reels</a> every day — fully automated via cron jobs across 8+ travel formats. Over three weeks of production testing, we ran <strong>Veo 3</strong>, <strong>Hailuo 2.3 (MiniMax)</strong>, <strong>Sora 2 (OpenAI)</strong>, <strong>Grok Imagine (xAI)</strong>, and <strong>CogVideoX-3 (<a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">Z.AI</a>)</strong> across 50+ shipped Reels with real API budget on the line.</p>
 
-            <p>The single most important thing we learned isn't which model looks best. It's that <strong>text-to-video is not production-ready for Reels</strong>. Image-to-video is the only viable path. Everything else flows from that insight.</p>
+            <p>The biggest lesson wasn't which model renders the prettiest pixels. It's that <strong>text-to-video (T2V) is not production-ready for vertical Reels</strong> — image-to-video (I2V) is the only reliable architecture.</p>
 
-            <div class="verdict-box" style="border-color: var(--text);">
-                <h3>⚡ TL;DR</h3>
-                <p><strong>Hailuo 2.3 (MiniMax)</strong> is our production pick — $0.27/clip, 90-second generation, 7/10 quality that's good enough for Instagram. <strong>Veo 3</strong> is the cinematic king at $4.50/clip but unsustainable at scale. <strong>CogVideoX-3</strong> is cheapest at $0.20/clip with native portrait. <strong>Grok Imagine</strong> is fastest at ~37s but capped at 720p. <strong>Sora 2</strong> has familiar API ergonomics but reliability concerns. We spend ~$150/month on Hailuo vs $2,430/month on Veo 3.</p>
-                <p><em>Also see our <a href="/posts/ai-image-generation-comparison/">AI image generation comparison</a> — the image models that feed our video pipeline.</em></p>
+            <div class="tldr">
+              <div class="tldr-label">TL;DR</div>
+              <p class="tldr-thesis">Switching our 540-clip/month Reels pipeline from Veo 3 ($4.50/clip) to Hailuo 2.3 via image-to-video ($0.27/clip) cut monthly video spend from $2,430 to $146 while holding 7/10 Instagram quality.</p>
+              <ul>
+                <li><strong>I2V over T2V</strong> — Every model failed our Bangkok night-market T2V test (wrong aspect ratio, uncanny faces, or mannequin motion); generating a base frame first with Nano Banana 2 fixed composition and style.</li>
+                <li><strong>The 5-model breakdown</strong> — <strong>Hailuo 2.3</strong> ($0.27/clip, ~90s) wins production value; <strong>Veo 3</strong> ($4.50–$6/clip, 10/10 quality) is for hero trailers; <strong>CogVideoX-3</strong> ($0.20/clip) is cheapest with native 9:16; <strong>Grok Imagine</strong> (~37s, $0.40) is fastest but flattens styles at 720p; <strong>Sora 2</strong> ($0.80) lags on reliability.</li>
+                <li><strong>Style preservation</strong> — On our watercolor capybara I2V benchmark, Hailuo preserved the brushwork while Grok re-rendered the illustration into a photorealistic animal.</li>
+              </ul>
             </div>
 
             <h2 id="t2v-vs-i2v">The Real Lesson: Text-to-Video vs Image-to-Video</h2>
 
-            <p>Before comparing models, understand the most important decision in AI video for Reels: <strong>never use text-to-video (T2V) for production content.</strong></p>
+            <p>If you're building a short-form video pipeline, start with one rule: <strong>do not use text-to-video (T2V) in production.</strong></p>
 
-            <p>We tested the same T2V prompt across four models — a traveler exploring a night market in Bangkok. Every output was unusable:</p>
+            <p>When we ran the exact same T2V prompt — a traveler walking through a Bangkok night market — across four models, every single output was unpublishable:</p>
 
             <ul>
-                <li><strong>MiniMax (Hailuo):</strong> Output was 1366×768 <em>landscape</em>. Hailuo T2V cannot produce portrait video — there's no aspect ratio parameter. Dead on arrival for Reels.</li>
-                <li><strong>CogVideoX-3:</strong> Portrait dimensions correct (1080×1920), but motion was stiff and robotic. The person looked like a mannequin sliding through a diorama.</li>
-                <li><strong>Grok Imagine:</strong> Fast generation (~37s), decent atmosphere, but uncanny valley faces. Close-ups of people are Grok's weakest point.</li>
-                <li><strong>Sora 2:</strong> Best atmosphere of the four — good lighting, moody market ambiance. But person rendering was still clearly wrong. Hands, gait, and facial detail all fail under scrutiny.</li>
+                <li><strong>MiniMax (Hailuo):</strong> Rendered at 1366×768 <em>landscape</em>. Hailuo's T2V endpoint has no aspect-ratio parameter, making it dead on arrival for 9:16 Reels.</li>
+                <li><strong>CogVideoX-3:</strong> Hit the right portrait dimensions (1080×1920), but the subject slid through the frame like a rigid mannequin.</li>
+                <li><strong>Grok Imagine:</strong> Generated in ~37 seconds with decent market lighting, but close-up faces fell straight into the uncanny valley.</li>
+                <li><strong>Sora 2:</strong> Nailed the moody night-market lighting, then mangled hands, gait, and facial geometry.</li>
             </ul>
 
-            <p>The problem isn't any one model — it's the T2V paradigm itself. You lose control over composition, framing, style, and color grade. The model hallucinates every visual detail from scratch.</p>
-
-            <p><strong>Image-to-video (I2V) solves this.</strong> Generate a portrait image first (we use Nano Banana 2), review or auto-score it, then feed it to the video model. The model inherits the composition, lighting, and color grade from the input image and adds motion. Dramatically more controllable and consistently better.</p>
+            <p>T2V forces the video model to hallucinate composition, lens framing, lighting, color grade, and motion simultaneously. <strong>Image-to-video (I2V) separates those concerns.</strong> We generate a 9:16 base image first using <a href="/posts/ai-image-generation-comparison/">Nano Banana 2</a>, score it automatically, and pass the winning frame to the video model. The video model inherits the exact composition and color palette, focusing purely on camera and subject motion.</p>
 
             <blockquote>Every model produces significantly better output in I2V mode than T2V. If you're building a Reels pipeline, start with your image model — it matters more than your video model.</blockquote>
 
             <h2 id="the-models">The Five Models at a Glance</h2>
-
-            <p>One table with everything that matters — no cross-referencing five separate sections.</p>
 
             <div class="table-wrap"><table class="spec-table">
                 <thead>
@@ -422,11 +460,9 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p><em>*Hailuo I2V outputs 1080×1934 — slightly off from true 9:16 (1080×1920). Requires FFmpeg crop for Instagram boost eligibility.</em></p>
+            <p><em>*Hailuo I2V outputs 1080×1934 — 14 pixels taller than true 9:16 (1080×1920), requiring a quick FFmpeg crop for Instagram boost eligibility.</em></p>
 
             <h2 id="our-pipeline">Our Production Pipeline</h2>
-
-            <p>Understanding our pipeline explains why certain tradeoffs matter more than others.</p>
 
             <div class="pipeline-steps">
                 <div class="pipeline-step">🖼️ AI Image Gen<br><small>Nano Banana 2</small></div>
@@ -440,33 +476,31 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 <div class="pipeline-step">📱 Publish<br><small>IG + YouTube + X</small></div>
             </div>
 
-            <p>Every Reel: generate a portrait image → convert to video via I2V → add instrumental music → apply text overlays → publish to Instagram, YouTube Shorts, and X. Cron jobs fire multiple times per day. No human in the loop.</p>
-
-            <p>We almost always use I2V mode. The portrait image gives us control over composition, style, and color grade that T2V simply can't match. This pipeline biases our evaluation toward I2V quality, portrait support, cost efficiency, and API reliability.</p>
+            <p>Every cron run executes five stages autonomously: generate a 9:16 still in Nano Banana 2 → animate via I2V → score an instrumental track in MiniMax Music 2.5+ → burn typography via FFmpeg/Remotion → publish to Instagram, YouTube Shorts, and X. Because our entire architecture runs on I2V, we weight style preservation, vertical aspect ratio, per-clip cost, and API uptime above raw T2V flair.</p>
 
             <h2 id="model-deep-dives">Model Deep Dives</h2>
 
             <h3 id="veo-3-review">Veo 3 (Google) — The Cinematic Standard</h3>
 
-            <p>Veo 3 set the bar impossibly high. Camera movements are physically grounded — a dolly forward looks like a real dolly, not a zoom. Lighting is natural. Motion blur is correct. The output is nearly indistinguishable from real drone footage. Built-in ambient audio (birds, wind, traffic) adds immersion without a separate step.</p>
+            <p>Veo 3 is the undisputed visual ceiling. Camera movements obey real-world physics — a dolly push feels like a physical rig on tracks, not a digital crop zoom — and native ambient audio (wind, street chatter, birds) lands in sync without an extra pass.</p>
 
             <ul>
-                <li>✅ Best visual quality (10/10), native portrait via <code>aspect_ratio: "9:16"</code>, built-in audio, excellent prompt adherence for cinematography language</li>
-                <li>❌ $4.50–6/clip ($0.75/sec), aggressive rate limits on <code>veo-3.0-generate-001</code> (workaround: fall back to <code>veo-3.0-fast-generate-001</code>), 2–4 min gen time, <code>person_generation: "allow_adult"</code> gotcha for I2V</li>
-                <li><strong>Verdict:</strong> The best model for quality. Unsustainable for daily content at scale.</li>
+                <li>✅ 10/10 visual fidelity, native <code>aspect_ratio: "9:16"</code>, built-in ambient audio, best-in-class camera direction adherence</li>
+                <li>❌ $4.50–$6/clip ($0.75/sec), strict quota limits on <code>veo-3.0-generate-001</code> (requiring fallback to <code>veo-3.0-fast-generate-001</code>), 2–4 min latency, and a <code>person_generation: "allow_adult"</code> flag gotcha on I2V</li>
+                <li><strong>Verdict:</strong> Unbeatable for hero trailers; financially ruinous for high-volume daily Reels.</li>
             </ul>
 
             <h3 id="hailuo-review">Hailuo 2.3 (<a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a>) — The Budget Workhorse</h3>
 
-            <p>Hailuo is why we can publish 5–7 Reels per day. At $0.27/clip with 90-second generation and excellent I2V quality, it's the best value for a production pipeline. The model inherits composition and color grade from input images and adds smooth, tasteful motion via 15 camera commands (<code>[Push in]</code>, <code>[Pan left]</code>, <code>[Tilt up]</code>, etc.).</p>
+            <p>Hailuo 2.3 makes our 5–7 daily Reels economically viable. At $0.27 per 6-second clip and ~90-second turnaround, it preserves the exact color grade and texture of our Nano Banana 2 source frames while executing explicit bracketed camera moves (<code>[Push in]</code>, <code>[Pan left]</code>, <code>[Tilt up]</code>).</p>
 
             <ul>
-                <li>✅ $0.27/clip, ~90s gen, reliable uptime, excellent I2V style preservation, companion Music 2.5+ API for instrumental tracks</li>
-                <li>❌ T2V always outputs landscape (1366×768), I2V outputs 1080×1934 (needs FFmpeg crop), less cinematic motion than Veo 3, artifacts on complex textures</li>
-                <li><strong>Verdict:</strong> Our production pick. The workarounds are solvable. Saves $2,000+/month vs Veo 3.</li>
+                <li>✅ $0.27/clip, ~90s generation, 9/10 API reliability, faithful I2V style retention, and a companion Music 2.5+ API</li>
+                <li>❌ T2V locked to 1366×768 landscape, I2V outputs 1080×1934 (needs an FFmpeg crop to 1080×1920), occasional shimmer on dense foliage</li>
+                <li><strong>Verdict:</strong> Our daily production driver, saving us $2,284/month over Veo 3.</li>
             </ul>
 
-            <p><strong>The cost confusion:</strong> We initially calculated $0.03/clip based on the API's displayed token pricing — that only covered text prompt tokens. Actual I2V processing: ~$0.27/clip. Still 16x cheaper than Veo 3.</p>
+            <p><strong>Watch the billing math:</strong> MiniMax's dashboard token pricing initially looked like $0.03/clip, which only covers text prompt tokens. Actual I2V compute bills at ~$0.27/clip — still 16x cheaper than Veo 3.</p>
 
             <div class="cost-callout">
                 <div class="big-number">$0.27 vs $4.50</div>
@@ -475,38 +509,37 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h3 id="sora-2-review">Sora 2 (OpenAI) — The Familiar API</h3>
 
-            <p>Mid-range option for teams already on the OpenAI ecosystem. At $0.80/clip ($0.10/sec), it's 3x more expensive than Hailuo but offers native portrait, built-in audio, and durations up to 20 seconds. API follows standard OpenAI conventions, reducing integration friction.</p>
+            <p>At $0.80/clip ($0.10/sec), Sora 2 sits in no-man's-land for high-volume pipelines: 3x the cost of Hailuo for comparable 7/10 visual quality, though it supports native 9:16, built-in audio, and clips up to 20 seconds via standard OpenAI SDK conventions.</p>
 
             <ul>
-                <li>✅ Native 9:16, built-in audio, familiar OpenAI API, long durations (up to 20s), decent atmospheric quality</li>
-                <li>❌ $0.80/clip, 720p standard (1080p requires Pro tier), ~120s gen, reliability issues in production, duration must be a <em>string</em> not integer</li>
-                <li><strong>Verdict:</strong> Convenience pick for OpenAI shops. Not cost-competitive.</li>
+                <li>✅ Native 9:16 portrait, built-in audio, up to 20s duration, zero-friction OpenAI REST schema</li>
+                <li>❌ $0.80/clip, 720p default on standard tier (1080p requires Pro), ~120s latency, 5/10 API reliability under cron load, and a quirky schema where <code>duration</code> must be passed as a string</li>
+                <li><strong>Verdict:</strong> Fine for low-volume teams already locked into OpenAI billing; too pricey and flaky for daily cron automation.</li>
             </ul>
 
             <h3 id="grok-review">Grok Imagine (xAI) — The Speed Demon</h3>
 
-            <p>Grok generates in ~37 seconds. It's the only model supporting <strong>video editing</strong>: pass an existing video + a prompt to modify it in place. Widest aspect ratio support (7 options) and flexible durations from 1–15 seconds.</p>
+            <p>Grok Imagine clocks in at ~37 seconds per clip and is the only model in the group with native <strong>video-to-video editing</strong> (pass a source MP4 plus a text prompt to alter the scene), alongside seven aspect ratios and 1–15s durations.</p>
 
             <ul>
-                <li>✅ Fastest gen (~37s), video editing (unique), most aspect ratio options, clean REST API, $0.40/clip</li>
-                <li>❌ 720p max, tends to "reimagine" source images rather than animate them faithfully (style flattening), large files (9.2MB for 8s at 720p)</li>
-                <li><strong>Verdict:</strong> Best for rapid iteration and prototyping. Style preservation is its weakest point — it turned our watercolor capybara into a real one.</li>
+                <li>✅ Blistering ~37s latency, in-place video editing, seven aspect ratios, clean REST API, $0.40/clip</li>
+                <li>❌ Capped at 720p, bloated file sizes (9.2MB for an 8s 720p clip), and aggressive style drift during I2V</li>
+                <li><strong>Verdict:</strong> Great for fast prototyping, but disqualified from our illustrated workflows because it overwrites source art styles.</li>
             </ul>
 
             <h3 id="cogvideox-3-review">CogVideoX-3 (<a href="https://z.ai/subscribe?ic=JY9V1BN5ZO">Z.AI</a>) — The Budget Native Portrait</h3>
 
-            <p>Best spec sheet per dollar: $0.20/clip flat, native 1080×1920 portrait, built-in AI SFX, 30/60fps, unique start+end frame interpolation. On paper it should be our pick. Quality kept us on Hailuo.</p>
+            <p>On paper, CogVideoX-3 has the cleanest budget spec sheet: $0.20/clip flat pricing, true 1080×1920 portrait with zero FFmpeg cropping, built-in AI sound effects, 30/60fps support, and start-to-end frame interpolation. In practice, motion quality kept us on Hailuo.</p>
 
             <ul>
-                <li>✅ Cheapest at $0.20/clip flat, native 1080×1920 portrait (no workarounds), built-in AI audio, 60fps option, start+end frame mode</li>
-                <li>❌ Quality trails at 6/10 (plasticky textures, unconvincing food close-ups, stiff motion), ~3.5 min gen, less mature API (error messages sometimes in Chinese)</li>
-                <li><strong>Verdict:</strong> Best for tight budgets needing native portrait and simplicity. The $0.07/clip savings vs Hailuo didn't justify switching our pipeline.</li>
+                <li>✅ $0.20/clip flat rate, true 1080×1920 output, built-in SFX, 60fps option, start+end keyframe mode</li>
+                <li>❌ 6/10 visual score (plasticky skin and food textures, mechanical camera pans), ~3.5 min latency, and raw Chinese strings in API error payloads</li>
+                <li><strong>Verdict:</strong> Worth considering if $0.07/clip in savings or zero-crop 9:16 output matters more than natural motion.</li>
             </ul>
-
 
             <h2 id="capybara-test">The Capybara Test: Same Image, Three Models</h2>
 
-            <p>We ran the same watercolor capybara illustration through three I2V models with an identical prompt to test style preservation — the key quality metric for any I2V pipeline.</p>
+            <p>To benchmark I2V style preservation, we fed the exact same watercolor capybara illustration and motion prompt into Hailuo 2.3, Grok Imagine, and CogVideoX-3:</p>
 
             <p><em>Prompt: "Gentle wind ripples through the tall grass and wildflowers, creating a soft wave pattern. The capybara breathes slowly, its chest rising and falling in a relaxed rhythm. Warm golden light holds steady. No camera movement. Subtle, peaceful motion only."</em></p>
 
@@ -543,7 +576,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
 
             <h2 id="published-examples">Published Examples</h2>
 
-            <p>Real Reels published to <a href="https://www.instagram.com/tabijiai/">@tabijiai</a> using our production pipeline.</p>
+            <p>Live Reels shipped to <a href="https://www.instagram.com/tabijiai/">@tabijiai</a> through this pipeline:</p>
 
             <h3>Veo 3</h3>
 
@@ -558,7 +591,7 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p>Jiufen: warm tungsten lanterns, cool blue twilight, natural parallax through the lantern-lit alleyway. Melbourne: complex scene with vibrant street art, pedestrians, dappled light.</p>
+            <p>Jiufen: warm tungsten lanterns against cool blue twilight with natural parallax down the stepped alley. Melbourne: dense street art, pedestrian motion, and dappled sunlight.</p>
 
             <h3>Hailuo 2.3</h3>
 
@@ -584,11 +617,9 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </div>
             </div>
 
-            <p>Egg Coffee: single 6-second clip, steaming cup, soft bokeh, gentle push-in. Total Reel cost including image gen, music, and hosting: under $0.50. Budget Reels (Bali, Lisbon): 5 clips each at ~$1.36 total.</p>
+            <p>Hanoi Egg Coffee: a single 6-second push-in on a steaming cup with soft bokeh — under $0.50 all-in including image generation, music, and hosting. Bali and Lisbon Budget Reels: five stitched clips per video at ~$1.36 total.</p>
 
             <h2 id="cost-at-scale">Cost at Scale</h2>
-
-            <p>This is where the decision gets made.</p>
 
             <h3>Per-format costs</h3>
 
@@ -604,11 +635,11 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p><em>Costs include image generation (~$0.02/image) and music (negligible). Veo 3 is video generation only.</em></p>
+            <p><em>Includes ~$0.02/clip for Nano Banana 2 base images and negligible audio cost (Veo 3 figures are video inference only).</em></p>
 
             <h3>Monthly at our volume</h3>
 
-            <p>5–7 Reels/day × average 3 clips × 30 days = <strong>540 clips/month</strong>.</p>
+            <p>At 5–7 Reels/day × 3 clips average × 30 days = <strong>540 clips/month</strong>:</p>
 
             <div class="table-wrap"><table class="spec-table">
                 <thead>
@@ -623,50 +654,45 @@ footer p { color: var(--text-muted); font-size: 0.85rem; }
                 </tbody>
             </table></div>
 
-            <p>Veo 3 at our volume: <strong>$2,430/month</strong>. Hailuo: $146. That's not a rounding error — it's the difference between a viable content operation and an unsustainable one.</p>
+            <p>At 540 clips a month, Veo 3 runs <strong>$2,430/month</strong> ($29,160/year) versus <strong>$146/month</strong> ($1,750/year) on Hailuo 2.3 — the difference between a self-sustaining media experiment and burning seed capital on API bills.</p>
 
             <h2 id="verdict">The Verdict &amp; Recommendations</h2>
 
             <div class="verdict-box">
                 <h3>🏆 Production Winner: Hailuo 2.3 (MiniMax)</h3>
-                <p>We moved our entire pipeline — 5–7 Reels/day across 8+ formats — to Hailuo in March 2026. Quality is good enough for Instagram, cost is sustainable, generation is fast, reliability is excellent. The I2V workaround and 1080×1934 dimension quirk are real friction, but they save us $2,000+/month.</p>
-                <p><strong>Our cost per Reel dropped from ~$6–60 to ~$0.30–1.36.</strong></p>
+                <p>We migrated our entire 5–7 Reels/day pipeline to Hailuo 2.3 in March 2026. A 90-second render time, 9/10 API reliability, and faithful I2V style preservation more than justify the one-line FFmpeg crop from 1080×1934 to 1080×1920.</p>
+                <p><strong>Per-Reel production cost dropped from $6–$60 to $0.30–$1.36.</strong></p>
             </div>
 
             <div class="verdict-box" style="border-color: var(--text);">
                 <h3>🎬 Quality Winner: Veo 3 (Google)</h3>
-                <p>For small batches of high-impact content — launch trailers, hero Reels, campaign assets — Veo 3 is objectively the best model available. We keep it in our toolkit for special occasions. It just costs too much for the 6 Reels we publish every single day.</p>
+                <p>For hero launch trailers or flagship campaign clips where $4.50–$6.00 per shot doesn't matter, Veo 3 remains in a league of its own. We keep it wired in for one-off hero assets.</p>
             </div>
 
-            <h3>Who should use what</h3>
+            <h3>Quick selector</h3>
 
-            <p><strong>Choose Veo 3</strong> if you're making fewer than 5 videos/week, quality is the top priority, and budget isn't a constraint.</p>
-
-            <p><strong>Choose Hailuo 2.3</strong> if you're publishing daily, running multi-clip Reels, already have an image generation pipeline, and need the best quality-to-cost ratio at scale.</p>
-
-            <p><strong>Choose Sora 2</strong> if you're already on the OpenAI API, want familiar integration, and don't need to optimize cost.</p>
-
-            <p><strong>Choose Grok Imagine</strong> if you need speed for rapid iteration, want video editing capabilities, and can live with 720p.</p>
-
-            <p><strong>Choose CogVideoX-3</strong> if absolute lowest cost is the goal and you want the simplest setup — native portrait, flat pricing, built-in audio, no workarounds.</p>
+            <ul>
+                <li><strong>Veo 3:</strong> Fewer than 5 hero videos/week where 10/10 camera physics and native ambient audio outweigh $4.50/clip pricing.</li>
+                <li><strong>Hailuo 2.3:</strong> Daily multi-clip I2V production where $0.27/clip and style retention matter most.</li>
+                <li><strong>Sora 2:</strong> Teams already standardized on OpenAI SDKs that need 20-second clips and don't mind $0.80/clip.</li>
+                <li><strong>Grok Imagine:</strong> Fast (~37s) prototyping or video-to-video edits where 720p is acceptable.</li>
+                <li><strong>CogVideoX-3:</strong> Lowest flat cost ($0.20/clip) with zero-crop 1080×1920 portrait output.</li>
+            </ul>
 
             <h2 id="what-we-use">What We Actually Use</h2>
 
-            <p>Our production stack as of March 2026:</p>
+            <p>Our live production stack as of March 2026:</p>
 
             <ul>
                 <li><strong>Image gen:</strong> Nano Banana 2 (Gemini 3.1 Flash Image) — ~$0.02/image</li>
                 <li><strong>Video gen:</strong> Hailuo 2.3 via I2V — ~$0.27/clip</li>
                 <li><strong>Music:</strong> MiniMax Music 2.5+ with <code>is_instrumental: true</code></li>
-                <li><strong>Overlays:</strong> FFmpeg + Remotion (textfile approach for apostrophes and Vietnamese diacritics)</li>
-                <li><strong>Publishing:</strong> Instagram Graph API via <code>graph.facebook.com</code> + cross-post to YouTube Shorts and X</li>
-                <li><strong>Automation:</strong> Cron jobs firing 3–6x daily, fully autonomous</li>
+                <li><strong>Overlays:</strong> FFmpeg + Remotion (using a textfile input to preserve apostrophes and Vietnamese diacritics)</li>
+                <li><strong>Publishing:</strong> Instagram Graph API via <code>graph.facebook.com</code> + automated cross-posting to YouTube Shorts and X</li>
+                <li><strong>Automation:</strong> Cron jobs firing 3–6x daily on a Mac Mini</li>
             </ul>
 
-            <p>Total cost per Reel: <strong>$0.30–$1.36</strong> depending on clip count. Monthly video gen budget: <strong>~$150</strong>.</p>
-
-            <p>Veo 3 is the better model. Hailuo is the better product for us. At scale, cost efficiency wins.</p>
-<p>See the Reels in action: <a href="https://www.instagram.com/tabijiai/">@tabijiai on Instagram</a> — 5–7 new Reels daily. Or <a href="/">try our free AI travel itinerary builder</a>.</p>
+            <p>All-in cost per Reel: <strong>$0.30–$1.36</strong> depending on clip count, keeping our total monthly video compute around <strong>~$150</strong>. Watch the live output at <a href="https://www.instagram.com/tabijiai/">@tabijiai on Instagram</a> or test our <a href="/">free AI travel itinerary builder</a>.</p>
 
             <hr style="border: none; border-top: 1px solid var(--border); margin: 3rem 0;">
 

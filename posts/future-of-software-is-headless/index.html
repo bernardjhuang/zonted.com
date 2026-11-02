@@ -199,81 +199,78 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Marc Benioff just announced Salesforce is going headless. The primary consumer of software is now an agent, not a human.</p>
+                <p class="tldr-thesis">When Marc Benioff announces Salesforce is going headless, the era of human-UI-first software is officially over &mdash; agents are now the primary buyer and operator.</p>
                 <ul>
-                    <li>Cloud-kitchen model: no front of house, just a kitchen and an API</li>
-                    <li>Eats workflow SaaS, makes BI dashboards dead weight</li>
-                    <li>My filter: no API, no deal</li>
+                    <li><strong>Cloud-kitchen economics</strong> &mdash; Strip out the front-of-house UI tax and expose a clean API or MCP contract directly to autonomous agents.</li>
+                    <li><strong>No API, no deal</strong> &mdash; Tools that gate REST endpoints behind enterprise SKUs (or only ship web dashboards) get routed around immediately.</li>
+                    <li><strong>Mid-market workflow SaaS is most exposed</strong> &mdash; One unattended agent account running at 3 AM replaces ten seat-licensed SDR, QA, or analytics seats.</li>
                 </ul>
-                <p class="tldr-tail">If your product's primary surface is a UI, you have eighteen months.</p>
             </div>
 
-            <p class="dropcap">Marc Benioff <a href="https://x.com/Benioff/status/2044981547267395620" target="_blank" rel="noopener">tweeted this week</a> that Salesforce is going headless. That's not a UI redesign — it's a strategic pivot. Salesforce, the archetypal UI-heavy SaaS, is conceding out loud what's been true for months: the primary consumer of software going forward is not a human. It's an agent.</p>
+            <p class="dropcap">Marc Benioff <a href="https://x.com/Benioff/status/2044981547267395620" target="_blank" rel="noopener">announced this week</a> that Salesforce is going headless. That isn&rsquo;t a UI refresh; it&rsquo;s a concession from the flagship of seat-based enterprise SaaS: the primary consumer of software is no longer a human clicking buttons in a browser. It&rsquo;s an agent.</p>
 
-            <p>I've been running <a href="https://zonted.com">Zonted</a> and <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a> on that assumption for a while. Everything ships through <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> or an OpenClaw-style harness. Prompts fire at APIs, data moves through MCP servers, uploads hit R2, git workflows run themselves. In the <a href="/posts/ai-comics-dos-donts/">fifty-comic pipeline</a> I shipped last Saturday, the only time I touched a human UI was to debug one weird generation in Wavespeed's playground. Every other step — style exploration, model comparison, production run, image upload, HTML injection, commit, push — happened through APIs.</p>
+            <p>I&rsquo;ve run <a href="https://zonted.com">Zonted</a> and <a href="https://tabiji.ai" target="_blank" rel="noopener">tabiji.ai</a> on that premise for months. Everything ships through <a href="https://claude.ai/referral/IDrXculiTA" target="_blank" rel="noopener">Claude Code</a> or our OpenClaw harness: prompts fire against REST endpoints, context flows through MCP servers, assets upload directly to Cloudflare R2, and git workflows merge themselves. When I shipped our <a href="/posts/ai-comics-dos-donts/">733-comic pipeline</a> last Saturday, the only time I opened a browser UI was to inspect one failed generation in WaveSpeed&rsquo;s playground. Style exploration, model benchmarking, batch generation, R2 uploads, HTML injection, and git push all ran headlessly.</p>
 
-            <p>That's what headless actually looks like. If you're building software that doesn't support it, you're about to have a bad eighteen months.</p>
+            <p>If you are building software that still requires a human in the browser, you are about to have a rough eighteen months.</p>
 
             <h2 id="cloud-kitchen">Headless is the cloud kitchen model</h2>
 
-            <p>A cloud kitchen is a restaurant with no front of house — no dining room, no waitstaff, no signage. Just a kitchen and a DoorDash integration. The advantage is structural: no prime real estate, no walk-ins, no returns counter. Every expense that serves the human channel is stripped out so the machine channel moves faster.</p>
+            <p>A cloud kitchen is a restaurant with no dining room, no waitstaff, and no street signage &mdash; just a line of stoves and a DoorDash tablet. Stripping out the front-of-house real estate lets the kitchen ship higher volume at lower fixed cost.</p>
 
-            <p>Headless software is the same idea. An API-first product doesn't build, ship, or maintain a frontend — no design reviews, accessibility audits, onboarding flows, empty-state illustrations, browser compat tests. It exposes a contract and lets the consumer — increasingly, another program — pick it up.</p>
+            <p>Headless software applies the same cut. An API-first product doesn&rsquo;t burn engineering cycles on onboarding wizards, empty-state illustrations, dark-mode toggles, or cross-browser layout bugs. It publishes a strict schema contract and lets the calling program execute.</p>
 
-            <p>Some services are being built default-headless. <a href="https://alpaca.markets" target="_blank" rel="noopener">Alpaca Markets</a> is the cleanest example: a brokerage designed from day one for algorithms and agents, with a UI that exists mostly as a debugger. A company built for the next phase, not retrofitting for it.</p>
+            <p><a href="https://alpaca.markets" target="_blank" rel="noopener">Alpaca Markets</a> is the cleanest native example: a brokerage built from day one for trading algorithms and agents, where the web dashboard exists only as a human debugger.</p>
 
             <h2 id="my-bar">My bar: no API, no deal</h2>
 
-            <p>My filter on new tools, and I doubt I'm unusual: if there's no API, I don't use it. If the API is locked behind an enterprise SKU, I don't use it either. Two video-gen platforms I'd happily have paid for — <a href="https://www.makeugc.com/?ref=bernardhuang" target="_blank" rel="noopener">MakeUGC</a> and Higgsfield — gate their APIs behind enterprise plans. I haven't touched either. My money went to competitors that ship REST at signup.</p>
+            <p>My procurement filter for new software is binary: no public API, no deal. API locked behind an &ldquo;Enterprise &mdash; Contact Sales&rdquo; tier? Also no deal. Two AI video platforms I wanted to pay for &mdash; <a href="https://www.makeugc.com/?ref=bernardhuang" target="_blank" rel="noopener">MakeUGC</a> and Higgsfield &mdash; gate their APIs behind enterprise contracts. I skipped both and sent my spend to providers that issue an API key at signup.</p>
 
-            <p>It doesn't need to be MCP. REST is fine. MCP is nicer because it makes an agent's life easier, but plain HTTP with good docs clears the bar. The surface just has to be machine-addressable.</p>
+            <p>You don&rsquo;t even need a custom MCP server on day one. Clean REST endpoints with an OpenAPI spec clear the bar; an agent can write the wrapper in thirty seconds.</p>
 
-            <p>The tools I still use through a UI have a specific shape: they're human-first by design or by policy, not because someone forgot to ship an API.</p>
+            <p>The only tools I still touch through a GUI are products where human eyeballs are the explicit point:</p>
 
             <ul>
-                <li><strong>Slack</strong> — used heavily, but only because it's become the <em>interface layer</em> for talking to agents. The UI isn't the product; the agent on the other side is.</li>
-                <li><strong>Social media</strong> — Instagram, YouTube Shorts, TikTok. The content is meant for human consumption; the apps are the consumption surface.</li>
-                <li><strong>Reddit</strong> — I'd automate it if I could. They ban agentic use aggressively. Policy choice, not a technical one.</li>
+                <li><strong>Slack</strong> &mdash; my command line for supervising agents. The chat UI isn&rsquo;t the software doing the work; the agent on the other end of the webhook is.</li>
+                <li><strong>Social platforms</strong> &mdash; Instagram, YouTube Shorts, TikTok, where human attention is the end product.</li>
+                <li><strong>Reddit</strong> &mdash; only because they ban automated posting aggressively. That&rsquo;s a policy wall, not a UX preference.</li>
             </ul>
 
-            <p>Notice what's not on that list: productivity SaaS, design tools, analytics platforms, CRMs.</p>
+            <p>Notice what disappeared from my browser tabs: CRMs, SEO suites, BI dashboards, and project trackers.</p>
 
             <h2 id="dashboard">The dashboard is dying too</h2>
 
-            <p>Even tools that already have APIs are getting bypassed. Google Analytics, Search Console, Amplitude, Mixpanel — I don't open any of them anymore. I ask an agent to pull the traffic, segment it, compare it to last week, and hand me the summary. Dashboards existed because humans needed visualization to reason about numbers. Agents don't need charts to find a regression; they query the API, do the math, and tell me what changed.</p>
+            <p>Even products that ship great APIs are watching their web UIs turn into ghost towns. I haven&rsquo;t logged into Google Analytics, Search Console, Amplitude, or Mixpanel in months. Instead, my agent queries their APIs, segments the cohorts, diffs week-over-week conversion, and drops a five-line table into Slack. Dashboards were a visual prosthetic to help humans spot trends in raw tables. Agents don&rsquo;t need charts to find a regression &mdash; they query the endpoint and run the math directly.</p>
 
-            <p>This is a second kind of headless — not "the company killed the UI," but "the UI became dead weight customers stopped opening." Same endpoint.</p>
+            <p>That&rsquo;s the quiet half of the headless shift: even when vendors keep maintaining their dashboards, customers stop opening them.</p>
 
             <h2 id="whos-in-trouble">Who's in trouble</h2>
 
-            <p>The category most exposed is workflow SaaS — the middle layer of tools that automate a specific business function. At the front of the line:</p>
+            <p>Mid-market workflow SaaS &mdash; thin UI wrappers around a database and a cron job &mdash; is standing directly on the tracks:</p>
 
             <ul>
-                <li><strong>Email outreach</strong> — Reply.io, Outreach.io. An agent can draft, send, and follow up without a dashboard.</li>
-                <li><strong>Lead prospecting</strong> — ContactOut, Apollo. Headless contact enrichment is cheaper and faster for an agent than a seat-licensed UI.</li>
-                <li><strong>Content QA</strong> — GPTZero, Clearscope. Pipeline-injectable.</li>
-                <li><strong>Phone automation</strong> — Twilio is fine because it's already headless. Its competitors with glossy dashboards aren't.</li>
+                <li><strong>Outbound sales sequencers</strong> (Reply.io, Outreach.io) &mdash; an agent drafts, personalizes, sends, and replies via raw email APIs without a $150/seat dashboard.</li>
+                <li><strong>Lead enrichment portals</strong> (ContactOut, Apollo) &mdash; agents want a $0.01-per-lookup enrichment endpoint, not a seat license with CSV export limits.</li>
+                <li><strong>Content QA &amp; SEO graders</strong> (GPTZero, Clearscope) &mdash; if it can&rsquo;t run inline inside a CI pre-commit hook, it gets replaced by a prompt or a headless API.</li>
+                <li><strong>Voice &amp; SMS wrappers</strong> &mdash; Twilio thrives because it has always been headless; glossy call-center UI wrappers built on top of Twilio get squeezed out.</li>
             </ul>
 
-            <p>The business model these tools rely on — per-seat pricing, human-operator UIs, onboarding-as-moat — doesn't survive agents. One agent account replaces ten seats and runs at 3am.</p>
+            <p>Per-seat pricing and &ldquo;sticky workflow UIs&rdquo; don&rsquo;t survive when one headless API key replaces ten human seats and runs 24/7.</p>
 
             <h2 id="benioff-signal">The Benioff signal</h2>
 
-            <p>Why does Salesforce going headless matter? Because Salesforce is the extreme case. Their product <em>is</em> a UI. Their moat is workflow lock-in through that UI. Their pricing is per-seat. Their sales motion is "land and expand with more dashboards." If <em>Salesforce</em> is going headless, the biggest platforms — Salesforce, HubSpot, ServiceNow — now see agentic consumption as the primary growth surface and the UI as a fallback.</p>
+            <p>Salesforce pivoting to headless is the canary in the enterprise coal mine. Salesforce&rsquo;s entire historical moat was UI lock-in: training thousands of sales reps to live inside Lightning dashboards and charging per seat. When Benioff admits that the growth surface is headless agent execution &mdash; alongside HubSpot and ServiceNow &mdash; the per-seat UI era is in terminal decline.</p>
 
-            <p>That's the canary. When the most UI-dependent enterprise software company on earth makes this move, every vertical SaaS layer below them should be doing the same thing next quarter.</p>
+            <p>When the most UI-entrenched software giant on earth strips off its frontend, every vertical SaaS vendor underneath it has to follow.</p>
 
             <h2 id="steelman">The steelman</h2>
 
-            <p>What could slow this down? Two things.</p>
+            <p>Two friction points will slow the transition down:</p>
 
-            <p>First, agentic adoption is more brittle than the hype suggests. Most companies I talk to are one or two pilots in, not end-to-end automated. A high-profile agent-caused outage, or regulatory tightening around AI safety, flattens the curve.</p>
+            <p>First, enterprise agent deployments are still brittle. Most Fortune 500 teams are running one or two sandboxed pilots, not autonomous production loops. A few high-profile agent outages or compliance crackdowns will keep human-in-the-loop approval screens alive longer in regulated industries.</p>
 
-            <p>Second, pure-platform SaaS has insulation. Salesforce, HubSpot, and the big infrastructure players have enough workflow gravity to go headless gradually and retain customers. It's the mid-market workflow SaaS that has to move fast.</p>
+            <p>Second, systems of record have gravity. Salesforce and HubSpot own the underlying enterprise schema and permissions graph, giving them time to transition from seat licenses to metered API consumption. Point-solution SaaS doesn&rsquo;t have that buffer.</p>
 
-            <p>But "slower" isn't "not happening." The direction is locked. If you're shipping software today, the question isn't whether to expose an API — it's whether a human UI is even your primary channel, or just a debugger for the real product that runs on machines.</p>
-
-            <p>The future of software has no front of house.</p>
+            <p>Slowing the curve doesn&rsquo;t change the destination. Stop treating your API as an enterprise upsell and your web dashboard as the product. The dashboard is just the debugger; the API is the business.</p>
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
             <section class="zn-post-subscribe">

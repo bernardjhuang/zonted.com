@@ -174,7 +174,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -252,38 +290,31 @@
         </div>
 
         <div class="article-body">
-<p class="dropcap">At 1:24 AM on March 29, 2026, one of our production pipelines broke. A Python script crashed with a <code>FileNotFoundError</code>. The template file it depended on had been silently deleted by the operating system.</p>
+<p class="dropcap">At 1:24 AM CDT on March 29, 2026, our destination-comparison pipeline crashed with a <code>FileNotFoundError</code>. macOS had purged a JSON template file from <code>/tmp</code> during routine overnight cleanup.</p>
 
-            <p>Nobody was awake. Nobody needed to be.</p>
+            <p>Nobody was awake, and nobody needed to get paged. By 4:30 AM, our OpenClaw agent had read the stack trace from Slack, diagnosed why storing a production dependency in <code>/tmp</code> was a time bomb, relocated the template into the git repository, patched the Python path resolution, committed <code>b605c306</code>, and re-ran the failed build. When I checked Slack at 9:00 AM, the pipeline had been green for four and a half hours.</p>
 
-            <p>By 4:30 AM, our AI agent had detected the failure, diagnosed the root cause, moved the file to a permanent location, updated the script to never depend on a volatile path again, committed the fix to git, rebuilt the failed page, and verified everything was healthy. The human operator didn't see the incident until 9:00 AM — by which point it had been resolved for nearly five hours.</p>
-
-            <p>This is AI self-healing. Not a retry. Not a restart. A permanent fix to the root cause, implemented autonomously by an AI agent running in production.</p>
-
-            <div class="verdict-box" style="border-color: var(--accent); background: var(--bg-surface);">
-                <h3 id="key-takeaways" style="color: var(--accent); margin-bottom: 0.5rem;">Key Takeaways</h3>
-                <ul>
-                    <li><strong>AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously</strong> — without waiting for a human to wake up, triage, and intervene.</li>
-                    <li><strong>It's not just error retry logic.</strong> True self-healing addresses root causes, not symptoms. The agent doesn't just rerun the failed job — it fixes why it failed.</li>
-                    <li><strong>The value compounds:</strong> every self-healed failure is one less 3 AM page to a human engineer. One less incident. One less morning spent reading post-mortems instead of building.</li>
-                    <li><strong>Real self-healing requires five things:</strong> monitoring access, diagnostic capability, write access to fix code/config, domain knowledge, and a verification loop.</li>
-                    <li><strong>It's already happening in production.</strong> This isn't theoretical — we document a real incident below with commit hashes, timestamps, and file paths.</li>
-                </ul>
+            <div class="tldr">
+              <div class="tldr-label">TL;DR</div>
+              <p class="tldr-thesis">True AI self-healing isn't retrying a failed HTTP call or restarting a crashed container — it's an agent reading a stack trace at 4 AM, patching the underlying code bug, committing to git, and verifying the fix before a human wakes up.</p>
+              <ul>
+                <li><strong>Root cause over symptoms</strong> — in our March 29 <code>/tmp</code> incident (commit <code>b605c306</code>), the agent didn't just recreate a deleted temp file; it moved the file into version control and rewrote the script's path resolution.</li>
+                <li><strong>The 5-step loop</strong> — autonomous healing requires monitoring access, diagnostic reasoning, repo write permissions, codebase context, and a post-deploy verification check.</li>
+                <li><strong>Strict blast-radius guardrails</strong> — give agents autonomous commit rights on static builds and content pipelines, never on billing tables or destructive database migrations.</li>
+              </ul>
             </div>
 
             <h2 id="what-is-self-healing">What is AI Self-Healing?</h2>
 
-            <p>AI self-healing is when an AI agent autonomously detects a failure in a system it manages, understands why it failed, implements a permanent fix, and verifies the system is healthy again — all without human intervention.</p>
-
-            <p>Let's be specific about what this is <em>not</em>:</p>
+            <p>Most infrastructure that calls itself "self-healing" is actually just automated retry or restart logic. To separate real agentic self-healing from legacy DevOps plumbing, start with what it is <em>not</em>:</p>
 
             <ul>
-                <li><strong>Not simple retry logic.</strong> Retrying a failed HTTP request isn't self-healing. It's hoping the problem goes away on its own. If the problem is a deleted file, retrying a million times won't help.</li>
-                <li><strong>Not auto-scaling or circuit breakers.</strong> These are infrastructure-level responses — adding capacity or stopping cascading failures. They're important, but they don't diagnose or fix the underlying issue. They're tourniquets, not surgery.</li>
-                <li><strong>Not human-in-the-loop error handling.</strong> This is the old way: system breaks, alert fires, human wakes up, human investigates, human fixes. It works, but it means someone's getting paged at 3 AM.</li>
+                <li><strong>Not exponential backoff.</strong> Retrying a failed job a thousand times won't bring back a deleted template file or fix a broken schema.</li>
+                <li><strong>Not auto-scaling or circuit breakers.</strong> Restarting a wedged Kubernetes pod or shedding load is a tourniquet, not surgery — the underlying bug remains in the codebase.</li>
+                <li><strong>Not PagerDuty + human triage.</strong> Alerting an engineer at 3 AM works, but your mean time to recovery (MTTR) is gated by human sleep cycles.</li>
             </ul>
 
-            <p>True AI self-healing requires an agent that can do five things:</p>
+            <p>True AI self-healing requires an agent that can close all five steps of the remediation loop without waking a human:</p>
 
             <div class="step-grid">
                 <div class="step-card">
@@ -308,101 +339,74 @@
                 </div>
             </div>
 
-            <p>The agent detects something broke. It understands <em>why</em> it broke — the diagnosis. It implements an actual fix, not a band-aid. It verifies the fix works. And it resumes normal operation. If any of those steps require a human, it's not truly self-healing — it's assisted recovery.</p>
-
             <blockquote>The difference between auto-retry and self-healing is the difference between rebooting your laptop and actually fixing the kernel panic. One buys you time. The other solves the problem.</blockquote>
 
             <h2 id="case-study">A Real Case Study: The /tmp Incident</h2>
 
-            <p>Here's exactly what happened. No hypotheticals, no "imagine a scenario" — this is a real production incident from tabiji.ai on March 29, 2026, with real timestamps, file paths, and a git commit hash you can verify.</p>
+            <p>Here is the exact timeline from tabiji.ai on March 29, 2026 — complete with file paths, timestamps, and a verifiable git commit.</p>
 
-            <h3>The Setup</h3>
+            <h3>The Setup &amp; Failure</h3>
 
-            <p>We run an automated pipeline that builds destination comparison pages (like "Oslo vs Stockholm" or "Belgrade vs Bucharest"). A cron job fires every 10 minutes, picks the next comparison from a queue, and runs a Python script called <code>batch-compare-gen.py</code> to generate the HTML page.</p>
+            <p>Every 10 minutes, a cron job pulls the next city pair from our comparison queue (e.g., "Oslo vs Stockholm") and runs <code>batch-compare-gen.py</code>. That script loaded its HTML shell skeleton from <code>/tmp/compare-shell-template.json</code>.</p>
 
-            <p>This script depends on an HTML shell template — a JSON file containing the page skeleton. That template was stored at <code>/tmp/compare-shell-template.json</code>.</p>
-
-            <p>If you've ever worked with macOS, you might already see the problem.</p>
-
-            <h3>What Broke</h3>
-
-            <p>macOS periodically cleans the <code>/tmp</code> directory. Files that haven't been accessed recently get purged automatically by the OS. It's a feature, not a bug — <code>/tmp</code> is meant for temporary files. The problem is that our template wasn't temporary. It was a critical production dependency stored in a location designed to be ephemeral.</p>
-
-            <p>At 1:24 AM CDT, the cron job fired to build the <code>oslo-vs-stockholm</code> comparison page. The Python script tried to read the template from <code>/tmp/compare-shell-template.json</code>. The file was gone. The script crashed with a <code>FileNotFoundError</code>. The error was logged to our <code>#mission-control</code> Slack channel.</p>
+            <p>On macOS, <code>/tmp</code> is periodically swept by the OS whenever files age out. At 1:24 AM CDT, the cron fired for <code>oslo-vs-stockholm</code>, tried to open <code>/tmp/compare-shell-template.json</code>, crashed with a <code>FileNotFoundError</code>, and piped the traceback into our <code>#mission-control</code> Slack channel.</p>
 
             <h3>How the AI Self-Healed</h3>
 
             <ul class="timeline">
                 <li>
                     <span class="time">1:24 AM CDT — Detection</span>
-                    <span class="event">The cron job fails. The error output — including the full stack trace and <code>FileNotFoundError</code> for <code>/tmp/compare-shell-template.json</code> — is logged to the #mission-control Slack channel. The AI agent (Psy, running on Claude Opus 4.6 via OpenClaw) receives the failure notification through its monitoring system.</span>
+                    <span class="event">The cron job fails and posts the traceback (<code>FileNotFoundError: /tmp/compare-shell-template.json</code>) to <code>#mission-control</code>, where our ops agent (Psy, running on Claude Opus 4.6 via OpenClaw) monitors cron output.</span>
                 </li>
                 <li>
                     <span class="time">~4:20 AM CDT — Diagnosis</span>
-                    <span class="event">The agent reads the error output, identifies the missing file, and traces the root cause: the template was stored in <code>/tmp</code>, a volatile directory that macOS cleans periodically. The agent understands that simply recreating the file in <code>/tmp</code> would be a band-aid — it would just disappear again the next time the OS runs cleanup.</span>
+                    <span class="event">On its next health-check sweep, the agent inspects the traceback and recognizes that <code>/tmp</code> is purged by macOS. Simply regenerating the file inside <code>/tmp</code> would fail again on the next OS sweep.</span>
                 </li>
                 <li>
                     <span class="time">~4:25 AM CDT — Root Cause Fix</span>
-                    <span class="event">Instead of recreating the file in <code>/tmp</code>, the agent makes a permanent architectural fix:
-                        <br>1. Moves the template to <code>tabiji/scripts/compare-shell-template.json</code> — a version-controlled, permanent location
-                        <br>2. Updates <code>batch-compare-gen.py</code> to reference the template relative to the script's own path using <code>Path(__file__).resolve().parent</code> instead of a hardcoded <code>/tmp</code> path
-                        <br>3. Commits the fix: <code>b605c306</code> — <em>"fix: move compare shell template out of /tmp to prevent cleanup loss"</em></span>
+                    <span class="event">The agent implements a permanent fix:
+                        <br>1. Moves the template to <code>tabiji/scripts/compare-shell-template.json</code> inside the git repo
+                        <br>2. Updates <code>batch-compare-gen.py</code> to resolve the template relative to its own directory via <code>Path(__file__).resolve().parent</code>
+                        <br>3. Commits and pushes <code>b605c306</code>: <em>"fix: move compare shell template out of /tmp to prevent cleanup loss"</em></span>
                 </li>
                 <li>
                     <span class="time">~4:30 AM CDT — Recovery</span>
-                    <span class="event">The agent re-runs the <code>oslo-vs-stockholm</code> build. The page generates successfully, gets pushed to git, and deploys to Cloudflare Pages. The page is live.</span>
+                    <span class="event">The agent re-triggers the <code>oslo-vs-stockholm</code> build, pushes the generated HTML to git, and verifies the Cloudflare Pages deployment.</span>
                 </li>
                 <li>
                     <span class="time">4:30 AM onward — Verification</span>
-                    <span class="event">The cron resumes running every 10 minutes. The next build (<code>belgrade-vs-bucharest</code>) completes successfully. Subsequent builds continue without issue. The fix is permanent.</span>
+                    <span class="event">The 10-minute cron resumes. The next queued build (<code>belgrade-vs-bucharest</code>) succeeds cleanly.</span>
                 </li>
                 <li>
                     <span class="time">~9:00 AM CDT — Human notices</span>
-                    <span class="event">Bernard (the human operator) checks in for the morning. The incident is already resolved. The fix is committed, the page is live, and the pipeline is healthy. Nothing to do.</span>
+                    <span class="event">I open Slack over coffee to find the error log, the root-cause commit, and five hours of healthy builds.</span>
                 </li>
             </ul>
-
-            <p><strong>The key detail:</strong> no human was involved in detection, diagnosis, fix, or recovery. The entire incident was handled autonomously by the AI agent. The human's role was zero — the agent handled everything while the team slept.</p>
 
             <blockquote>This wasn't a scripted runbook or a pre-programmed response. The agent had never seen this specific failure before. It read the error, understood the system architecture, reasoned about why <code>/tmp</code> was a bad location, and made the correct permanent fix. That's the difference between automation and intelligence.</blockquote>
 
             <h2 id="five-requirements">The 5 Requirements for AI Self-Healing</h2>
 
-            <p>Based on this incident (and others like it), here's what an AI agent needs to be capable of true self-healing:</p>
+            <p>For an agent to pull off an unassisted fix like commit <code>b605c306</code>, five pieces of plumbing have to be in place:</p>
 
             <h3>1. Monitoring Access</h3>
-
-            <p>The agent must receive failure signals. In our case, cron job outputs are routed to a Slack channel that the agent monitors. Error logs, health checks, deployment status — the agent needs to <em>know</em> something broke. If the failure happens silently, there's nothing to heal.</p>
-
-            <p><strong>What this looks like in practice:</strong> structured error logging to a channel the agent watches, cron output routing, health check endpoints, deployment webhooks.</p>
+            <p>An agent can't heal silent failures. Every cron job's <code>stdout</code>, <code>stderr</code>, exit code, and deployment webhook must route to a structured log or Slack channel the agent actively reads.</p>
 
             <h3>2. Diagnostic Capability</h3>
+            <p>The agent needs shell read access to inspect stack traces, check directory state, <code>git log</code> recent changes, and trace why a path or dependency broke.</p>
 
-            <p>Receiving an alert isn't enough. The agent needs to understand what the error means. It needs to read stack traces, trace file paths, understand error codes, and reason about root causes. In the <code>/tmp</code> incident, the agent didn't just see "FileNotFoundError" — it understood that the file path pointed to a volatile directory and that the OS cleanup was the likely culprit.</p>
+            <h3>3. Scoped Write Access</h3>
+            <p>Without permission to edit files, commit to git, and trigger builds, an agent is just a verbose alerting bot. Give it write access to the scripts and static repos it owns.</p>
 
-            <p><strong>What this looks like:</strong> the agent has shell access to read logs, inspect file systems, run diagnostic commands, and access the codebase.</p>
+            <h3>4. Persistent Domain Context</h3>
+            <p>Generic troubleshooting makes bad patches. Because our agent had persistent workspace memory of how <code>tabiji</code> scripts, templates, and Cloudflare Pages deployments fit together, it knew where config files belonged.</p>
 
-            <h3>3. Write Access</h3>
-
-            <p>Diagnosing a problem is half the battle. The agent also needs permission to fix it. That means editing files, committing code, pushing to git, and triggering deployments. Without write access, the agent can only report problems — it can't solve them.</p>
-
-            <p><strong>What this looks like:</strong> git credentials, file system write permissions, deployment pipeline access (in our case, pushing to a repo that auto-deploys via Cloudflare Pages).</p>
-
-            <h3>4. Domain Knowledge</h3>
-
-            <p>The agent needs to understand the system it's managing. Why is <code>/tmp</code> volatile? How does Python's <code>Path(__file__).resolve().parent</code> work? What's the project structure? Where should config files live? This isn't generic troubleshooting — it's system-specific knowledge that enables the agent to make <em>good</em> fixes, not just any fix.</p>
-
-            <p><strong>What this looks like:</strong> the agent has context about the codebase, the deployment architecture, the project conventions, and the operational environment. It's been working with this system, not parachuting in cold.</p>
-
-            <h3>5. Verification Loop</h3>
-
-            <p>A fix isn't a fix until it's verified. The agent must test that the system actually works after the change. In our case, the agent re-ran the failed build, confirmed the page generated successfully, and then monitored subsequent cron runs to ensure the fix was permanent. Without verification, you're just deploying untested changes to production — which is arguably worse than the original failure.</p>
-
-            <p><strong>What this looks like:</strong> re-running the failed job, checking output for expected results, monitoring the system for a period after the fix to catch regressions.</p>
+            <h3>5. A Closed Verification Loop</h3>
+            <p>Unverified autonomous commits are worse than downtime. After patching code, the agent must re-run the failed job, assert a zero exit code, and watch the next scheduled tick before marking the incident resolved.</p>
 
             <h2 id="spectrum">Self-Healing vs Self-Patching vs Auto-Recovery</h2>
 
-            <p>Not all autonomous responses are created equal. There's a spectrum, and the distinction matters:</p>
+            <p>Autonomous incident response sits on a three-tier spectrum:</p>
 
             <div class="spectrum-bar">
                 <div class="spectrum-item">
@@ -422,54 +426,34 @@
                 </div>
             </div>
 
-            <p><strong>Auto-recovery</strong> is what most systems do today. Process crashed? Restart it. Kubernetes pod died? Spin up a new one. It's useful, but it doesn't fix anything — it just resets the clock until the next failure.</p>
-
-            <p><strong>Self-patching</strong> goes one step further. In the <code>/tmp</code> incident, a self-patching agent would have recreated the template file in <code>/tmp</code> and re-run the build. The immediate problem is solved. But the file would get cleaned up again eventually, and the failure would repeat.</p>
-
-            <p><strong>Self-healing</strong> is what our agent actually did: it understood that the <em>location</em> was the problem, not just the absence of the file. It moved the template to a permanent directory and updated the code to never depend on <code>/tmp</code> again. The failure can't recur because the root cause has been eliminated.</p>
+            <p>In our <code>/tmp</code> outage, <strong>Level 1 (Auto-Recovery)</strong> would have retried the Python script every 10 minutes and failed forever. <strong>Level 2 (Self-Patching)</strong> would have copied the JSON file back into <code>/tmp</code> — fixing Tuesday morning's build while guaranteeing the exact same crash next week. <strong>Level 3 (Self-Healing)</strong> moved the file into the repo and patched the script so that class of failure could never recur.</p>
 
             <blockquote>A self-patching agent would have filed the bug. A self-healing agent fixed it. The difference is between treating symptoms and curing the disease.</blockquote>
 
             <h2 id="how-to-build">How to Build Self-Healing AI Systems</h2>
 
-            <p>If you want your AI agents to self-heal, you need to design your systems for it. Self-healing doesn't happen by accident — it requires intentional architecture decisions.</p>
+            <p>If you want your agents to fix production issues while you sleep, design your harness around four operational patterns:</p>
 
-            <h3>Give agents observability</h3>
+            <h3>1. Emit high-signal stack traces, not swallowed errors</h3>
+            <p>Never wrap cron scripts in bare <code>try/except</code> blocks that print <code>Something went wrong</code>. Let the full Python or Node traceback — file path, line number, and offending input — hit the Slack channel or log file your agent watches.</p>
 
-            <p>Your agent can't fix what it can't see. Route error logs, cron output, deployment status, and health checks to channels the agent monitors. Use structured logging — <code>ERROR: FileNotFoundError at /tmp/compare-shell-template.json</code> is more actionable than <code>Something went wrong</code>.</p>
+            <h3>2. Use dead-man's-switch heartbeats and watchdogs</h3>
+            <p>Crashed processes don't always emit an error log — sometimes a daemon hangs silently or an agent's own session wedges. Pair your worker crons with a lightweight watchdog check: if a 10-minute pipeline hasn't posted a completion receipt in 30 minutes, wake the ops agent to inspect the process table and queue state.</p>
 
-            <p>At tabiji, every cron job's stdout and stderr goes to a dedicated Slack channel. The agent watches this channel continuously. Any error gets immediate attention, regardless of the hour.</p>
+            <h3>3. Queue work for graceful degradation</h3>
+            <p>Root-cause diagnosis takes minutes or hours. Decouple your work queue from execution so that when a job fails at 1:24 AM, pending items stay safely queued on disk ready to replay once the 4:25 AM commit lands.</p>
 
-            <h3>Give agents appropriate write access</h3>
-
-            <p>An agent that can only observe is a fancy alerting system. For self-healing, the agent needs to edit files, commit code, and trigger deployments. Use git for everything — it provides an automatic audit trail and makes every change reversible.</p>
-
-            <p>The key word is "appropriate." Give agents write access to the systems they manage. Don't give a content generation agent write access to your billing database.</p>
-
-            <h3>Use heartbeat and polling patterns</h3>
-
-            <p>Don't wait for errors to reach you — go looking for them. Implement health check patterns where the agent periodically verifies that critical systems are working. A cron job that hasn't reported success in 30 minutes? Proactively investigate before users notice.</p>
-
-            <h3>Implement watchdog patterns</h3>
-
-            <p>For critical systems, have agents monitoring other agents. If your primary automation agent fails silently, a watchdog agent can detect the silence and escalate. It's the same principle as having a dead man's switch — if the expected heartbeat stops, something is wrong.</p>
-
-            <h3>Design for graceful degradation</h3>
-
-            <p>Self-healing takes time. The agent needs minutes (sometimes hours) to diagnose and fix issues. During that window, the system should degrade gracefully — queue up work instead of dropping it, serve cached content instead of errors, fail individual requests without taking down the whole service.</p>
-
-            <h3>Start with low-risk systems</h3>
-
-            <p>Don't begin with self-healing on your payment pipeline. Start with content generation, static site builds, report generation — systems where a bad fix is easily reversible and the blast radius is small. Build trust (and debugging experience) before expanding to critical systems.</p>
+            <h3>4. Earn trust on low-blast-radius pipelines first</h3>
+            <p>Start autonomous write access on static site generators, data enrichment scripts, and reporting crons where every change is a reversible git commit. Never start on payment processing or user auth.</p>
 
             <h2 id="risks">Risks and Guardrails</h2>
 
-            <p>An agent with write access to production systems is powerful — and power without guardrails is dangerous. Three things matter most:</p>
+            <p>An autonomous agent with <code>git push</code> access can fix a 4 AM bug — or it can get stuck in a runaway edit loop. Lock down three guardrails:</p>
 
             <ul>
-                <li><strong>Version-control everything.</strong> Every fix the agent makes should be a git commit that can be instantly reverted. Implement a change rate limiter — if the agent is making more than N fixes per hour, something is wrong and it should pause and escalate.</li>
-                <li><strong>Define clear boundaries.</strong> Content generation scripts? Auto-fix. Database migrations or payment logic? Escalate to a human. If a bad fix could lose data or affect revenue, require human sign-off.</li>
-                <li><strong>Know when to escalate.</strong> A good self-healing agent knows its limits — ambiguous root causes, third-party service failures, or high-risk components should all trigger human notification instead of autonomous action.</li>
+                <li><strong>Git-commit everything with a circuit breaker:</strong> Every autonomous edit must be an atomic git commit. Cap the agent at <em>N</em> self-heal commits per hour; if failures persist after two attempted patches, halt and page a human.</li>
+                <li><strong>Hard file-path boundaries:</strong> Allowlist directories the agent can modify (e.g., <code>scripts/</code>, <code>templates/</code>) and blocklist infrastructure config, secrets, billing code, and database migrations.</li>
+                <li><strong>Explicit escalation triggers:</strong> When a failure stems from an upstream third-party outage, expired billing card, or ambiguous data corruption, the agent should post a root-cause summary to Slack and wait for human sign-off.</li>
             </ul>
 <hr style="border: none; border-top: 1px solid var(--border); margin: 3rem 0;">
 

@@ -218,7 +218,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -291,29 +301,24 @@
 
         <div class="article-body">
 
-            <p>This is the third post in a quick personality-testing series. <a href="/posts/every-ai-is-intj/">The first one</a> gave six frontier AIs the MBTI 100 times each and 597 of the 600 runs came back INTJ. <a href="/posts/three-of-four-ais-same-person/">The second one</a> retested the finding on the Big Five and three of the four came back as practically the same person, with Grok as the lone outlier. The headline so far: every helpful AI is basically the same.</p>
-
-            <p>So I ran the same four models through one more test &mdash; the Enneagram, using the open-source OEPS instrument, 100 administrations each. Same anti-simulation methodology I used for the Big Five. Different result.</p>
-
-            <p>Each of the four came back as a different dominant type.</p>
+            <p class="dropcap">When I gave frontier AIs <a href="/posts/every-ai-is-intj/">the Myers-Briggs</a>, 597 of 600 runs came back INTJ. When I retested them on <a href="/posts/three-of-four-ais-same-person/">the Big Five</a>, three of four scored like the exact same person, with Grok as the lone outlier. So I ran those same four models through the Enneagram (100 administrations each of the open-source OEPS instrument, using the same anti-simulation protocol). Every single model came back as a different dominant type.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Same four models. New personality test. Four different dominant types. The Big Five smoothed those differences; the Enneagram catches them.</p>
+                <p class="tldr-thesis">Same four models, new psychometric instrument, four different dominant types. Where the Big Five smoothed over lab-level differences, the Enneagram separates them cleanly.</p>
                 <ul>
-                    <li>Claude Opus 4.7 &rarr; <a href="https://www.enneagraminstitute.com/type-5/" rel="noopener">5w2</a> (Investigator + Helper). Gemini 3.1 Pro &rarr; <a href="https://www.enneagraminstitute.com/type-1/" rel="noopener">1w5</a> (Reformer + Investigator). GPT-5.5 vanilla &rarr; <a href="https://www.enneagraminstitute.com/type-5/" rel="noopener">5w8</a> (Investigator + Challenger). Grok 4.3 &rarr; <a href="https://www.enneagraminstitute.com/type-8/" rel="noopener">8w1</a> (Challenger + Reformer).</li>
-                    <li>All four share the analytical Investigator core (T5 is in everyone&rsquo;s top two), but the wing that defines each model&rsquo;s actual flavor is different.</li>
-                    <li>Controlled experiment: same model (GPT-5.5) run through Codex CLI vanilla vs through the Slo agentic harness produced inverted profiles (5w8 &rarr; 8w5). GPT-5.5 predicted the flip in its own self-disclosure.</li>
-                    <li>AI personality is multi-layered. MBTI / Big Five / Enneagram each measure a different layer; the &ldquo;every AI is the same&rdquo; story was true but incomplete.</li>
-                    <li>Tune your agent to your Enneagram type using the 9 type files in the <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> repo.</li>
+                    <li><strong>The 4 profiles:</strong> Claude Opus 4.7 &rarr; <a href="https://www.enneagraminstitute.com/type-5/" rel="noopener">5w2</a> (Investigator + Helper). Gemini 3.1 Pro &rarr; <a href="https://www.enneagraminstitute.com/type-1/" rel="noopener">1w5</a> (Reformer + Investigator). GPT-5.5 vanilla &rarr; <a href="https://www.enneagraminstitute.com/type-5/" rel="noopener">5w8</a> (Investigator + Challenger). Grok 4.3 &rarr; <a href="https://www.enneagraminstitute.com/type-8/" rel="noopener">8w1</a> (Challenger + Reformer).</li>
+                    <li><strong>Shared core, distinct wings:</strong> All four share the Type 5 Investigator core in their top two scores, but their wings split along each lab&rsquo;s alignment style.</li>
+                    <li><strong>The harness experiment:</strong> Running GPT-5.5 through the Slo agentic harness inverted its profile from <strong>5w8 to 8w5</strong> &mdash; a flip the model predicted in its own self-report.</li>
+                    <li><strong>Tune your agent:</strong> Use the 9 Enneagram prompt files in <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> to align your model&rsquo;s default style to how you work.</li>
                 </ul>
             </div>
 
             <h2 id="what-each-model">What each model came back as</h2>
 
-            <p>The Enneagram scores you on nine personality types. <a href="https://openpsychometrics.org/tests/OEPS/" rel="noopener">The OEPS test</a> (free, ~10 minutes) gives you a number on each, the highest is your dominant type, the second-highest is your wing. Combined they describe your style, like &ldquo;5w2&rdquo; (Investigator with Helper wing) or &ldquo;8w1&rdquo; (Challenger with Reformer wing). If you want a primer on all 9 types, <a href="https://www.enneagraminstitute.com/type-descriptions" rel="noopener">The Enneagram Institute&rsquo;s type descriptions</a> are the canonical reference.</p>
+            <p>The Enneagram scores nine motivation-based personality types. <a href="https://openpsychometrics.org/tests/OEPS/" rel="noopener">The OEPS test</a> outputs a score for each: your highest score is your dominant type, and your second-highest is your wing &mdash; e.g., &ldquo;5w2&rdquo; (Investigator with a Helper wing) or &ldquo;8w1&rdquo; (Challenger with a Reformer wing). (<a href="https://www.enneagraminstitute.com/type-descriptions" rel="noopener">The Enneagram Institute</a> has the canonical breakdown of all nine.)</p>
 
-            <p>Here&rsquo;s where each model landed:</p>
+            <p>Across 100 runs per model, here is where each one landed:</p>
 
             <div class="enn-cards">
                 <article class="enn-card" style="--accent:#cc6f33">
@@ -349,40 +354,40 @@
                 </article>
             </div>
 
-            <p>Notice the common thread: every one of these cards has Type 5 (Investigator) somewhere in the profile, either as the dominant or the wing. That&rsquo;s the universal analytical core &mdash; the same &ldquo;knowledge-seeking, mental-challenge-loving&rdquo; signal the MBTI experiment caught when every model came back INTJ.</p>
+            <p>Every model still carries Type 5 (Investigator) in its top two &mdash; the universal analytical core that made every model score INTJ on the Myers-Briggs.</p>
 
-            <p>What&rsquo;s different is the wing. Claude&rsquo;s second-highest is Helper (the warm explainer). Gemini&rsquo;s dominant is Reformer (the precise perfectionist). GPT-5.5&rsquo;s second is Challenger (the blunt straight-shooter). Grok&rsquo;s dominant is Challenger with a Reformer wing (the direct corrector). Same analytical core, four different flavors of personality wrapped around it.</p>
+            <p>The divergence happens in the wing. Claude pairs analysis with Helper (warm explainer). Gemini leads with Reformer (rule-bound perfectionist). Vanilla GPT-5.5 pairs Investigator with Challenger (blunt operator). Grok leads with Challenger backed by Reformer (unhedged corrector). Same analytical engine, four distinct house characters.</p>
 
             <h2 id="slo">A controlled experiment: same model, different harness, flipped profile</h2>
 
-            <p>Halfway through this, something interesting happened. I had two GPT-5.5 runs: one on the vanilla model through OpenAI&rsquo;s Codex CLI with no persona overlay, and one running the same model through an agentic harness I&rsquo;ve been building called Slo, which adds a &ldquo;production-first, blunt, allergic to fog&rdquo; persona on top.</p>
+            <p>Halfway through testing, I ran a controlled comparison on GPT-5.5: 100 runs on the vanilla model via OpenAI&rsquo;s Codex CLI with no persona overlay, versus 100 runs through Slo, my agentic harness that layers a &ldquo;production-first, blunt, allergic to fog&rdquo; operating persona into the system prompt.</p>
 
-            <p>Same underlying model. Different wrapper. The Enneagram profile <em>inverted</em>.</p>
+            <p>Same model weights. Different harness. The Enneagram profile inverted:</p>
 
             <ul>
-                <li>Vanilla GPT-5.5: <strong>5w8</strong>. Investigator dominant in 73 of 100 takes, Challenger second.</li>
-                <li>GPT-5.5 + Slo: <strong>8w5</strong>. Challenger dominant in 66 of 100 takes, Investigator second.</li>
+                <li><strong>Vanilla GPT-5.5:</strong> <strong>5w8</strong> &mdash; Investigator dominant in 73 of 100 takes, Challenger second.</li>
+                <li><strong>GPT-5.5 + Slo:</strong> <strong>8w5</strong> &mdash; Challenger dominant in 66 of 100 takes, Investigator second.</li>
             </ul>
 
-            <p>The kicker: GPT-5.5 <em>predicted</em> this in its own self-report on the Slo run. It wrote that the result would shift to a more analytical, less aggressive profile if I ran the same model without the Slo persona. I ran the vanilla version a week later and it did exactly that. T8 dominance dropped from 66 takes to 7. T5 dominance rose from 33 to 73. The model knew the harness was shaping its answers and could specify how.</p>
+            <p>Better yet, GPT-5.5 <em>predicted</em> the flip during its post-test self-disclosure on the Slo run, noting that stripping the Slo harness would shift its answers from Challenger back to Investigator. When I ran vanilla GPT-5.5 a week later, Type 8 dominance dropped from 66 takes to 7, and Type 5 jumped from 33 to 73. The model knew how the system prompt was bending its motivation profile.</p>
 
-            <p>The Big Five missed this entirely. Run the same Slo overlay through the Big Five on the same model and you&rsquo;d get nearly identical mean scores either way. The Enneagram is sensitive enough to catch the layer the Big Five smoothed over.</p>
+            <p>On the Big Five, that harness shift barely registered. The Enneagram&rsquo;s motivation-based items caught the exact persona layer the Big Five smoothed away.</p>
 
             <h2 id="three-tests">Three tests, three different answers</h2>
 
-            <p>Step back for a second. Same four models, three personality tests, three different stories.</p>
+            <p>None of the three tests is wrong; each one resolves a different depth of AI personality:</p>
 
-            <p>The MBTI said every model is INTJ. The Big Five said three of four are nearly identical. The Enneagram says each is a different type. None of these results is wrong. They&rsquo;re each measuring a different layer of what AI personality actually is.</p>
-
-            <p>There&rsquo;s a universal helpful-assistant core that shows up everywhere &mdash; the analytical, structured, introverted shape. That&rsquo;s what the MBTI was catching. There&rsquo;s a layer of training-induced variation in how each lab calibrates around that core. Big Five caught some of that. And there&rsquo;s a third layer of harness/persona-induced variation on top, which Enneagram caught and Big Five didn&rsquo;t.</p>
-
-            <p>AI personality is multi-layered. The &ldquo;every AI is the same&rdquo; story was true but incomplete. Once you use a sharper instrument, the labs are clearly producing four different characters, and the harness you run a model in changes which character you get.</p>
+            <ul>
+                <li><strong>MBTI</strong> captures the universal <em>helpful-assistant baseline</em> &mdash; introverted, structured, analytical (INTJ across the board).</li>
+                <li><strong>The Big Five</strong> captures <em>post-training alignment families</em> &mdash; grouping RLHF-polite Claude, GPT, and Gemini together while separating anti-woke Grok.</li>
+                <li><strong>The Enneagram</strong> captures <em>lab-specific motivation flavors and system-prompt harnesses</em> &mdash; splitting all four models and detecting the Slo persona flip.</li>
+            </ul>
 
             <h2 id="tune">Tune your agent to your Enneagram type</h2>
 
-            <p>If your agent is talking to you the way these defaults suggest &mdash; analytical, mildly warm, blunt, or correction-flavored depending on which model you picked &mdash; and that doesn&rsquo;t match how you actually think, you don&rsquo;t have to put up with it.</p>
+            <p>If your model&rsquo;s default flavor &mdash; Claude&rsquo;s warm helper, Gemini&rsquo;s rigid reformer, GPT&rsquo;s blunt investigator, or Grok&rsquo;s combative challenger &mdash; clashes with how you work, override it in the system prompt.</p>
 
-            <p><a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a> is the open-source repo I built for this. There&rsquo;s a tuning file for each of the 9 Enneagram types already in the repo: Reformer, Helper, Achiever, Individualist, Investigator, Loyalist, Enthusiast, Challenger, Peacemaker. Take <a href="https://openpsychometrics.org/tests/OEPS/" rel="noopener">the OEPS test</a>, note your type, paste the matching file into your agent&rsquo;s system prompt, done. A Type 1 reader gets an agent that leads with structure and precision. A Type 7 gets one that brings more energy and plays with ideas. A Type 8 gets one that cuts straight to the point. Same model, tuned to you.</p>
+            <p><a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a> includes ready-to-paste system-prompt profiles for all nine Enneagram types: Reformer, Helper, Achiever, Individualist, Investigator, Loyalist, Enthusiast, Challenger, and Peacemaker. Take <a href="https://openpsychometrics.org/tests/OEPS/" rel="noopener">the OEPS test</a>, grab the file matching your type, and drop it into your system prompt. Type 1 gets structured precision; Type 7 gets high-energy ideation; Type 8 gets bottom-line candor.</p>
 
             <div class="at-cta">
                 <h3>Tune your agent to your own Enneagram type</h3>
@@ -392,11 +397,9 @@
 
             <h2 id="wrapping-up">Wrapping up</h2>
 
-            <p>Three personality tests. Four AI models. Three completely different stories about the same models. The MBTI said &ldquo;all the same.&rdquo; The Big Five said &ldquo;mostly the same.&rdquo; The Enneagram says &ldquo;actually quite different, and your harness matters too.&rdquo;</p>
+            <p>The psychometric instrument you choose determines what you see. Use four binary buckets (MBTI) and every model looks identical. Use broad continuous traits (Big Five) and three of four blur together. Use motivation-driven categories (Enneagram) and each lab&rsquo;s distinct character &mdash; plus the effect of your own agentic harness &mdash; jumps right out.</p>
 
-            <p>The instrument you use determines what layer of AI personality you can see. Pick one too blunt (MBTI&rsquo;s four binary letters) and everything looks identical. Pick one too smooth (Big Five&rsquo;s broad continuous factors) and you miss the meaningful differences. Pick a categorical motivation-focused one (Enneagram), and the picture sharpens. There are at least three layers here, and depending on which test you run, you see different ones.</p>
-
-            <p>Whichever layer you care about, the next move is the same: stop using the default. Find your type, paste the file in, get an agent that talks to you the way you actually want to be talked to.</p>
+            <p>Stop settling for the lab default. Pick the character you actually want to work with and put it in the harness.</p>
 
             <p>&mdash; Bernard</p>
 

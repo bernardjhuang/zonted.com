@@ -114,7 +114,45 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text-muted); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
@@ -188,134 +226,136 @@
     </div>
 
     <div class="article-body">
-        <p class="dropcap">Picture a freshly rolled character in Diablo — no skills allocated, bare stats, standing at the entrance to a dungeon with nothing but potential. That's what a fresh <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">OpenClaw</a> install looks like. It's an AI agent that can hold a conversation and not much else. Full of potential. Zero abilities.</p>
+        <p class="dropcap">A fresh <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">OpenClaw</a> install looks just like a level-zero character in <em>Diablo</em>: bare stats, zero skills allocated, standing at the dungeon entrance with nothing but a chat loop. Out of the box, it can hold a conversation and not much else.</p>
 
         <figure style="margin:2rem 0;text-align:center;">
             <img  src="https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg" width="1095" height="688" alt="Diablo IV skill tree showing interconnected talent nodes — the inspiration for thinking about AI agent capabilities as a skill tree" style="border-radius:6px;border:1px solid var(--border);max-width:100%;" loading="lazy">
             <figcaption style="font-family:'Inter';font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-top:0.75rem;">The Diablo IV skill tree — same energy as building an OpenClaw agent.</figcaption>
         </figure>
 
-        <p>Then you start allocating points.</p>
+        <p>Then you start allocating points. Every API key you add is an active talent node. Every skill you install from <a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub</a> is a passive ability unlocking. And just like in an MMORPG, the real leverage never comes from a single node—it comes from <strong>the build</strong>.</p>
 
-        <p>Every API key you add is a talent node. Every skill you install from <a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub</a> is a passive ability unlocking. Every new integration you wire up opens a whole branch of the talent tree you didn't have access to before. And just like in an MMO, the real power doesn't come from any single skill — it comes from <strong>the build</strong>.</p>
+        <div class="tldr">
+            <div class="tldr-label">TL;DR</div>
+            <p class="tldr-thesis">An AI agent's moat isn't its base LLM—it's the specific "character build" of API keys, ClawHub skills, and automated feedback loops you wire together across its talent tree.</p>
+            <ul>
+                <li><strong>8 production talent branches</strong> — From ElevenLabs/Twilio voice pipelines and SerpAPI/DataForSEO intelligence to automated Cloudflare deployments.</li>
+                <li><strong>Multi-node builds in the wild</strong> — Our production builds publish 23+ Instagram Reels/day across 11 formats, enrich 500+ travel pages via live Places APIs, and cross-reference SEC EDGAR XBRL filings against live FRED rates.</li>
+                <li><strong>Combinatorial leverage</strong> — A single API is a commodity; chaining research, generation, R2 hosting, and 4-platform distribution into a zero-touch loop is the real moat.</li>
+            </ul>
+        </div>
 
         <figure style="margin:2rem 0;text-align:center;">
             <img  src="https://img.zonted.com/resources/openclaw-skill-tree/openclaw-logo.png" width="916" height="468" alt="OpenClaw logo — the AI agent framework that turns into an MMORPG character" style="border-radius:6px;border:1px solid var(--border);max-width:420px;width:100%;" loading="lazy">
             <figcaption style="font-family:'Inter';font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-top:0.75rem;">Your level 0 character. Full of potential.</figcaption>
         </figure>
 
-        <p>Here's what the talent tree actually looks like in practice.</p>
-
         <h2 id="the-talent-branches">The Talent Branches</h2>
 
         <div class="skill-branch">
             <h3>Voice &amp; Communication Branch</h3>
             <ul>
-                <li><strong>ElevenLabs + Twilio</strong> — your agent can talk on the phone. Make calls, answer calls, run voice conversations without a human in the loop.</li>
-                <li><strong>iMessage / Signal / Telegram integrations</strong> — multi-platform messaging. Your agent becomes reachable on whatever surface your users prefer.</li>
-                <li><strong>Slack</strong> — full workspace automation, notifications, agentic threads.</li>
+                <li><strong>ElevenLabs + Twilio</strong> — gives your agent a phone line to place calls, answer inbound routing, and run live voice conversations without a human in the loop.</li>
+                <li><strong>iMessage / Signal / Telegram integrations</strong> — multi-surface messaging so your agent lives directly in the chat app you already use.</li>
+                <li><strong>Slack</strong> — workspace automation, alerting, and multi-agent operational threads.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Research &amp; Intelligence Branch</h3>
             <ul>
-                <li><strong>SerpAPI + Playwright</strong> — web scraping, data extraction, competitive research. Not just searching — actually reading and acting on what's there.</li>
-                <li><strong>Brave Search</strong> — baseline web search capability, no rate limits for internal use.</li>
-                <li><strong>DataForSEO</strong> — keyword volume, SERP analysis, search intent data. The agent understands what people are actually looking for.</li>
+                <li><strong>SerpAPI + Playwright</strong> — live SERP scraping, headless DOM rendering, and structured competitive extraction.</li>
+                <li><strong>Brave Search</strong> — fast baseline web search without internal rate-limit bottlenecks.</li>
+                <li><strong>DataForSEO</strong> — keyword volume, SERP decomposition, and search-intent mapping before a single word gets drafted.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>SEO &amp; Content Branch</h3>
             <ul>
-                <li><strong>DataForSEO + Gemini</strong> — a full AEO (Answer Engine Optimization) pipeline. Research which prompts matter, create content that gets cited by AI assistants, track whether it's working.</li>
-                <li><strong>Google Analytics + Search Console</strong> — the agent monitors its own content performance and adjusts.</li>
-                <li>We built an entire loop: prompt research → content creation → analytics tracking → iteration. The agent closes the feedback cycle.</li>
+                <li><strong>DataForSEO + Gemini</strong> — an end-to-end AEO (Answer Engine Optimization) pipeline that identifies high-intent queries, ships citation-ready pages, and tracks rankings.</li>
+                <li><strong>Google Analytics + Search Console</strong> — direct telemetry access so the agent audits its own traffic and CTR curves.</li>
+                <li><strong>Closed-loop iteration</strong> — prompt research &rarr; page generation &rarr; Search Console verification &rarr; automated title/schema rewrites.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Creative Production Branch</h3>
             <ul>
-                <li><strong>Suno API</strong> — AI music generation. We run <em>kapiko</em>, a YouTube channel that publishes daily AI-generated piano music. The agent composes, scores, and uploads without human input.</li>
-                <li><strong>Veo 3 + <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a> + Nano Banana 2</strong> — AI video production pipeline. We publish 23+ Instagram Reels per day across 11 different formats.</li>
-                <li><strong>ElevenLabs</strong> — voice narration and TTS. Any text becomes a voiceover in seconds.</li>
-                <li><strong>FFmpeg</strong> — video assembly, text overlays, format conversion. The glue that holds the production pipeline together.</li>
+                <li><strong>Suno API</strong> — automated audio composition powering <em>kapiko</em>, our YouTube channel that composes, scores, and uploads daily AI piano music autonomously.</li>
+                <li><strong>Veo 3 + <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">MiniMax</a> + Nano Banana 2</strong> — multi-model video generation shipping 23+ Instagram Reels per day across 11 formats.</li>
+                <li><strong>ElevenLabs</strong> — instant TTS narration and character voiceovers.</li>
+                <li><strong>FFmpeg</strong> — deterministic video assembly, burned-in captions, audio normalization, and aspect-ratio conversion.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Social Media Branch</h3>
             <ul>
-                <li><strong>Instagram Graph API</strong> — auto-publish Reels, carousels, and Stories.</li>
-                <li><strong>YouTube Data API</strong> — Shorts publishing with metadata, thumbnails, and tagging.</li>
-                <li><strong>X/Twitter API</strong> — cross-posting with proper media handling.</li>
-                <li><strong>Pinterest API</strong> — pin generation and carousel publishing.</li>
-                <li>A single pipeline publishes to 4+ platforms simultaneously. The agent creates once, distributes everywhere.</li>
+                <li><strong>Instagram Graph API</strong> — scheduled publishing for Reels, carousels, and Stories.</li>
+                <li><strong>YouTube Data API</strong> — Shorts uploads with automated metadata, custom thumbnails, and tag injection.</li>
+                <li><strong>X/Twitter API</strong> — native media uploads and thread cross-posting.</li>
+                <li><strong>Pinterest API</strong> — automated pin generation and outbound destination linking.</li>
+                <li><strong>Create once, distribute 4x</strong> — a single render fans out across all four platforms simultaneously.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Travel &amp; Data Branch</h3>
             <ul>
-                <li><strong>Google Places API + SerpAPI Google Maps</strong> — place enrichment: ratings, hours, contact info, review counts, whether something is open right now.</li>
-                <li><strong>Cloudflare R2 + Pages</strong> — hosting, CDN, image delivery at scale. We serve hundreds of thousands of images without S3 costs.</li>
-                <li><strong>Resend</strong> — transactional email. The agent sends booking confirmations, itinerary PDFs, and follow-ups.</li>
-                <li>We enriched 500+ popular-picks pages with real place data pulled live from the APIs. Zero human data entry.</li>
+                <li><strong>Google Places API + SerpAPI Google Maps</strong> — live venue enrichment pulling verified ratings, opening hours, contact info, and review counts.</li>
+                <li><strong>Cloudflare R2 + Pages</strong> — zero-egress object storage and edge hosting serving hundreds of thousands of travel images without S3 bandwidth bills.</li>
+                <li><strong>Resend</strong> — transactional email delivery for custom itinerary PDFs and user follow-ups.</li>
+                <li><strong>Zero human data entry</strong> — 500+ popular-picks city guides enriched directly from live API payloads.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Finance &amp; Analysis Branch</h3>
             <ul>
-                <li><strong>Financial Modeling Prep API</strong> — stock data, financial statements, DCF analysis with structured JSON.</li>
-                <li><strong>SEC EDGAR</strong> — direct filing data, XBRL financials pulled from source rather than a third-party wrapper.</li>
-                <li><strong>FRED API</strong> — economic indicators: GDP, CPI, Treasury yields, unemployment.</li>
-                <li><strong>Kalshi API</strong> — prediction markets. The agent monitors and trades based on macroeconomic events.</li>
-                <li>We built a full DCF toolkit that cross-references FMP financials against EDGAR XBRL data automatically, with live risk-free rates from FRED.</li>
+                <li><strong>Financial Modeling Prep API</strong> — structured JSON equities data, historical statements, and baseline DCF inputs.</li>
+                <li><strong>SEC EDGAR</strong> — raw XBRL financial filings pulled straight from the SEC rather than third-party summaries.</li>
+                <li><strong>FRED API</strong> — live macroeconomic series including GDP, CPI, unemployment, and Treasury yields.</li>
+                <li><strong>Kalshi API</strong> — event-contract odds monitoring and macro prediction market execution.</li>
+                <li><strong>Automated DCF verification</strong> — cross-checks FMP income statements against primary EDGAR XBRL tags and discounts cash flows using live FRED Treasury rates.</li>
             </ul>
         </div>
 
         <div class="skill-branch">
             <h3>Development Branch</h3>
             <ul>
-                <li><strong>GitHub API</strong> — PR management, code review, CI/CD monitoring. The agent reviews PRs and leaves comments.</li>
-                <li><strong>Codex / Claude Code</strong> — spawn coding agents for feature development. The agent spawns sub-agents to implement specific features, then reviews their output.</li>
-                <li><strong>Cloudflare Workers / Pages</strong> — deployment. Code goes from idea to production without human intervention.</li>
-                <li><strong>ScanMyPlan</strong> — an entirely separate SaaS product built and deployed by agents. It runs, it serves users, the agent maintains it.</li>
+                <li><strong>GitHub API</strong> — automated PR reviews, diff commentary, and CI/CD failure triage.</li>
+                <li><strong>Codex / Claude Code</strong> — orchestrator agents spawn specialized coding sub-agents to implement features and audit their diffs before merge.</li>
+                <li><strong>Cloudflare Workers / Pages</strong> — instant edge deployment from commit to production.</li>
+                <li><strong>ScanMyPlan</strong> — a standalone SaaS product built, deployed, and maintained end-to-end by our agent fleet.</li>
             </ul>
         </div>
 
         <h2 id="the-build-analogy">The Build Analogy</h2>
 
-        <p>Just like any good MMO, different builds emerge from the same talent pool. You're not supposed to max everything — you spec into what your character needs.</p>
+        <p>In any good RPG, you don't dump points evenly into every stat—you spec into a specific class build optimized for a single loop:</p>
 
-        <p><strong>The Content Factory</strong> (what we run for Tabiji): SEO + Places API + Cloudflare R2 + Instagram Graph API = an automated travel content empire. Agent researches destinations, enriches place data, generates pages, creates Reels, and publishes across platforms. Human involvement: reviewing output a few times a week.</p>
+        <p><strong>The Content Factory (Tabiji):</strong> DataForSEO + Places API + Cloudflare R2 + Instagram Graph API. The agent researches destination demand, enriches venue data, builds static guides, renders short-form video, and publishes across four social networks. Human involvement: spot-checking output a few times a week.</p>
 
-        <p><strong>The Music Producer</strong> (Kapiko): Suno + Gemini scoring + MiniMax video + YouTube API = a daily AI music factory. The agent decides what to compose, generates the audio, creates a visualizer video, writes the title and description, and uploads. The channel runs itself.</p>
+        <p><strong>The Music Producer (Kapiko):</strong> Suno + Gemini scoring + MiniMax video + YouTube Data API. The agent selects mood parameters, generates piano tracks, renders a looping visualizer, writes metadata, and schedules the upload.</p>
 
-        <p><strong>The Trader</strong>: FMP + SEC EDGAR + FRED + Kalshi = automated financial analysis and market monitoring. The agent tracks earnings, pulls economic indicators, models valuation scenarios, and monitors prediction markets for macro events. Analysis that used to take an analyst days now takes seconds.</p>
+        <p><strong>The Macro Analyst:</strong> FMP + SEC EDGAR + FRED + Kalshi. The agent ingests quarterly filings, reconciles XBRL line items, updates DCF valuation ranges against current Treasury yields, and watches Kalshi contract pricing for macro divergences—compressing days of junior-analyst prep into seconds.</p>
 
         <h2 id="the-combination-is-the-moat">The Combination Is the Moat</h2>
 
-        <p>Here's what most people miss when they look at this: <strong>none of these integrations are impressive in isolation.</strong></p>
+        <p>None of these integrations are proprietary on their own. Anyone can buy a SerpAPI key or a Cloudflare account.</p>
 
-        <p>SerpAPI alone is just search. SerpAPI + Gemini is just research. SerpAPI + Gemini + Cloudflare R2 + Instagram Graph API is a machine that researches topics, generates images, assembles videos, and publishes to 50 million potential viewers — without a human touching it between trigger and publish.</p>
+        <p>SerpAPI alone is just search. SerpAPI + Gemini is a research memo. SerpAPI + Gemini + FFmpeg + Cloudflare R2 + Instagram Graph API is an autonomous media pipeline that researches topics, renders video, hosts assets, and distributes to 50 million potential viewers without human intervention between cron trigger and publish.</p>
 
-        <p>That's what "teching up" means. Each integration multiplies the value of the ones before it. The combinations create capabilities that none of the individual parts could produce alone. An agent that can search, create, host, and distribute is categorically different from an agent that can only search.</p>
+        <p>Each node multiplies the utility of the nodes behind it. An agent that can only search summarizes the web; an agent that can search, synthesize, render, deploy, and measure closes the entire business loop.</p>
 
         <blockquote>The question isn't what OpenClaw can do. It's what build you want to run.</blockquote>
 
         <h2 id="the-tree-is-infinite">The Tree Is Infinite</h2>
 
-        <p>New APIs launch every week. New AI models ship that unlock capabilities that didn't exist six months ago. New skills get published to <a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub</a> that wrap complex workflows into a single install.</p>
+        <p>Every new API, model release, or <a href="https://clawhub.com" target="_blank" rel="noopener">ClawHub</a> package adds another branch to the tree—upgrading your agent without touching its core runtime. Today's level-cap build is tomorrow's starter kit once the next model expansion drops.</p>
 
-        <p>Your agent keeps leveling up — not because you upgraded the core, but because the ecosystem around it grows. Today's level-cap character is tomorrow's mid-tier build once the next expansion drops.</p>
-
-        <p>If you're building with AI agents and haven't thought about your skill tree, you're playing the game on default settings. The builds that are shipping products, running channels, and making real decisions are the ones that spec intentionally.</p>
-
-        <p>Start with one branch. Go deep before you go wide. Then watch what becomes possible when the integrations start talking to each other.</p>
+        <p>If you're running AI agents inside a bare chat window, you're playing on default settings. Pick one branch, wire the full loop from data ingestion to production output, and let the integrations compound.</p>
 
         <p>&rarr; <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">OpenClaw on GitHub</a> &middot; <a href="https://clawhub.com" target="_blank" rel="noopener">Browse skills on ClawHub</a> &middot; <a href="https://discord.com/invite/clawd" target="_blank" rel="noopener">Join the Discord</a></p>
         </div>

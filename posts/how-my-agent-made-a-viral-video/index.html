@@ -214,18 +214,18 @@
 
 <div class="tldr">
     <div class="tldr-label">TL;DR</div>
-    <p class="tldr-thesis">One scam concept goes into a queue. A fully autonomous pipeline turns it into a documentary-style reel and ships it to four platforms. This one came out the other side with 3.9 million views and counting.</p>
+    <p class="tldr-thesis">One JSON scam concept goes into a queue. An autonomous pipeline turns it into a documentary-style reel and publishes it to four platforms. This run hit 3.9 million views.</p>
     <ul>
-        <li>The video is the <strong>Tulum spare-tire rental scam</strong> reel &mdash; <strong>3,943,661 views</strong>, 100% from non-followers, 986 shares. No camera, no actor, no editor.</li>
-        <li>It&rsquo;s one run of a skill my agent executes end to end: concept &rarr; Seedance prompt &rarr; WaveSpeed generation &rarr; FFmpeg overlay &rarr; multi-platform publish.</li>
-        <li>Every artifact below is the real one: the queue JSON, the exact prompt that generated the footage, the overlay code, and the publish config.</li>
-        <li>The account-level story &mdash; how the whole channel hit <a href="/posts/tabiji-18m-views/">18 million views in 90 days</a> &mdash; is the companion piece. This is the anatomy of one video inside it.</li>
+        <li><strong>The reel:</strong> The <strong>Tulum spare-tire rental scam</strong> &mdash; <strong>3,943,661 views</strong>, 100% from non-followers, 986 shares. Zero cameras, actors, or human editors.</li>
+        <li><strong>The pipeline:</strong> Queue JSON &rarr; Seedance prompt &rarr; WaveSpeed video generation &rarr; FFmpeg dynamic text overlay &rarr; multi-platform fan-out.</li>
+        <li><strong>Why it survived as a cron:</strong> WaveSpeed exposes a real, authenticated REST API &mdash; unlike the brittle wrapper hacks that <a href="/posts/kapiko-postmortem/">killed Kapiko</a>.</li>
+        <li><strong>The bigger picture:</strong> How the channel reached <a href="/posts/tabiji-18m-views/">18 million views in 90 days</a> is the companion post; this is the anatomy of a single breakout reel.</li>
     </ul>
 </div>
 
 <h2 id="the-video">The video</h2>
 
-<p class="dropcap">This is a ten-second clip of a couple at a Cancun airport rental counter, a pushy agent fixated on the spare tire, and &mdash; days later &mdash; a different employee claiming the tire is gone and reaching for a card machine. It is a real scam. None of it was filmed. The footage, the people, the garage, the luggage carts: all generated.</p>
+<p class="dropcap">This is a ten-second clip of a couple at a Cancun airport rental counter, a pushy agent fixated on the spare tire, and &mdash; days later &mdash; a different employee claiming the tire is gone while reaching for a card machine. It is a real scam. None of it was filmed. The footage, the people, the garage, and the luggage carts are all generated.</p>
 
 <div class="ig-embed-wrap">
   <blockquote class="instagram-media" data-instgrm-permalink="https://www.instagram.com/p/DXRxyemE8Bs/?utm_source=ig_embed&amp;utm_campaign=loading" data-instgrm-version="14" style="background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin:1px; max-width:540px; min-width:326px; padding:0; width:99.375%;">
@@ -234,26 +234,26 @@
 </div>
 <script async src="https://www.instagram.com/embed.js"></script>
 
-<p>Here is what that produced, from the account&rsquo;s own insights the morning I grabbed this:</p>
+<p>Here are the Instagram insights from that single run:</p>
 
 <figure style="margin:1.75rem 0;">
   <img  src="https://img.zonted.com/resources/how-my-agent-made-a-viral-video/reel-insights.jpg" width="1222" height="1076" alt="Instagram insights for the Tulum spare-tire scam reel: 3,943,661 views, 100% non-followers, 1,847,095 accounts reached, 2,622 likes, 406 comments, 518 saves, 986 shares, 5,265 accounts engaged." loading="lazy" />
   <figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);text-align:center;margin-top:0.6rem;line-height:1.5;">3,943,661 views, 100% non-followers, 1.85M accounts reached &mdash; and 986 shares against 518 saves and 2,622 likes.</figcaption>
 </figure>
 
-<p>Two numbers matter more than the view count. <strong>100% non-followers</strong> &mdash; the reel reached essentially zero existing audience; it was pure cold algorithmic reach. And <strong>986 shares</strong>, which outnumber the 518 saves and run heavy against just 2,622 likes. People didn&rsquo;t double-tap this. They sent it &mdash; to the friend flying to Mexico next month. Hold onto that; it&rsquo;s the whole reason it traveled.</p>
+<p>Two numbers matter more than the view count. First, <strong>100% non-followers</strong> &mdash; pure cold algorithmic distribution. Second, <strong>986 shares</strong>, outnumbering the 518 saves and running unusually high against 2,622 likes. Viewers didn&rsquo;t just double-tap this clip; they DM&rsquo;d it to the friend flying to Mexico next month.</p>
 
 <h2 id="the-pipeline">The pipeline, in one line</h2>
 
-<p>A concept becomes a prompt becomes a clip becomes a captioned, overlaid, multi-platform reel &mdash; from a queue, with no human in the loop on the production side. Five steps, one skill my agent runs:</p>
+<p>One agent skill runs five steps end-to-end with no human in the loop:</p>
 
 <p><strong>concept (JSON) &rarr; documentary prompt &rarr; WaveSpeed Seedance clip &rarr; FFmpeg overlay &rarr; publish to four platforms.</strong></p>
 
-<p>One thing worth saying up front, because it&rsquo;s the difference between this working and not: <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">WaveSpeed</a> exposes a real, authenticated API. Unlike the Suno mess that <a href="/posts/kapiko-postmortem/">killed Kapiko</a>, nothing here is reverse-engineered or breaking every 36 hours. The key lives in the keychain, the call is a clean POST, and the whole skill actually survives as a cron job. Here is each step, with the real files.</p>
+<p>The reason this pipeline runs reliably on a cron is that <a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">WaveSpeed</a> exposes a real, authenticated API. Unlike the unofficial Suno wrappers that <a href="/posts/kapiko-postmortem/">killed Kapiko</a>, nothing here is reverse-engineered or breaking every 36 hours. The API key lives in the macOS Keychain, the request is a standard POST, and the job runs unattended.</p>
 
 <h2 id="step-1-concept">Step 1: the concept is data, not a script</h2>
 
-<p>Every reel starts as a structured queue item. Not a screenplay &mdash; a small JSON object that names the place, the setup, where each person stands, and the five beats that will become the on-screen story. This is the actual Tulum entry:</p>
+<p>Every reel starts as a structured queue item &mdash; a compact JSON object defining the city, the setup, the camera blocking, and the five lower-third story beats:</p>
 
 <div class="artifact">
 <p class="artifact-cap">data/queue.json &mdash; the Tulum item</p>
@@ -285,11 +285,11 @@
 }</code></pre>
 </div>
 
-<p>The concept itself isn&rsquo;t invented. It&rsquo;s lifted from a real, upvoted travel-scam report &mdash; the kind where a tourist got burned and came back to write it up. That&rsquo;s the validated-demand trick I cover in the <a href="/posts/tabiji-18m-views/">account-level post</a>: you&rsquo;re transcribing a scam people already proved they care about, not guessing. The <code>beats</code> array is the most important field &mdash; those five lines become the lower-third captions, and they follow a deliberate threat-then-fix arc.</p>
+<p>The concept isn&rsquo;t invented; it&rsquo;s transcribed from an upvoted travel-scam thread where a tourist got burned and wrote down the details. As I covered in the <a href="/posts/tabiji-18m-views/">account-level post</a>, mining Reddit means starting with validated demand. The <code>beats</code> array does the heavy lifting: those five lines become the lower-third captions and follow a deliberate threat-then-fix arc.</p>
 
 <h2 id="step-2-prompt">Step 2: concept &rarr; documentary prompt</h2>
 
-<p>A script, <code>generate_prompt.py</code>, flattens that JSON into one Seedance prompt. It stitches the location, the opening visual, the two blocking descriptions, the reveal, and the visual anchors into a single paragraph, then ends with a fixed clause that forces documentary realism. This is the <em>exact</em> prompt that generated the footage you just watched:</p>
+<p>Next, <code>generate_prompt.py</code> flattens that JSON into a single Seedance prompt &mdash; stitching the setting, opening visual, character blocking, reveal, and visual anchors into one paragraph, capped with a fixed clause enforcing handheld documentary realism:</p>
 
 <div class="artifact">
 <p class="artifact-cap">Generated Seedance prompt</p>
@@ -310,7 +310,7 @@ motion, authentic tourist behavior, grounded travel realism, no
 stylization, no subtitles, no on-screen text.</code></pre>
 </div>
 
-<p>Two rules are doing quiet work here. First, <strong>&ldquo;no subtitles, no on-screen text&rdquo;</strong> &mdash; the model is bad at rendering text and it instantly breaks the documentary look, so all words get added later in FFmpeg, never by the model. Second, the script runs a small substitution pass to keep a scam prompt from tripping the generator&rsquo;s safety filter without losing the mechanics:</p>
+<p>Two rules do quiet work here. First, <strong>&ldquo;no subtitles, no on-screen text&rdquo;</strong> &mdash; video models mangle text and immediately break the documentary illusion, so all typography is burned in later via FFmpeg. Second, the script runs a string-replacement pass so scam prompts clear Seedance&rsquo;s safety filter without losing the physical action:</p>
 
 <div class="artifact">
 <p class="artifact-cap">generate_prompt.py &mdash; moderation softening</p>
@@ -323,11 +323,11 @@ stylization, no subtitles, no on-screen text.</code></pre>
 }</code></pre>
 </div>
 
-<p>&ldquo;Pressuring&rdquo; renders the same social tension as &ldquo;aggressive&rdquo; and sails through moderation. The scam still reads; the trigger words don&rsquo;t.</p>
+<p>&ldquo;Pressuring&rdquo; renders the exact same body language as &ldquo;aggressive&rdquo; while sailing past moderation.</p>
 
 <h2 id="step-3-generate">Step 3: generate the clip</h2>
 
-<p>The prompt goes to WaveSpeed running ByteDance&rsquo;s Seedance 2.0, vertical, ten seconds. The call is unremarkable, which is the point &mdash; it&rsquo;s a real API:</p>
+<p>The prompt goes to WaveSpeed running ByteDance&rsquo;s Seedance 2.0 (vertical 9:16, ten seconds, 480p):</p>
 
 <div class="artifact">
 <p class="artifact-cap">run_queue_item.py &mdash; submit to WaveSpeed</p>
@@ -344,11 +344,11 @@ payload = {
 # status flips to completed, then stream the mp4 to disk.</code></pre>
 </div>
 
-<p>A clip runs roughly $0.30 to $2 depending on duration and resolution. Cheap per unit, not free at volume &mdash; and it says nothing about whether the result is any good, which is still the hard part. The raw 480p vertical clip lands on disk and moves to the only step that touches a human-readable word.</p>
+<p>Each generation costs $0.30 to $2 depending on duration and resolution. Once the raw 480p vertical MP4 lands on disk, it moves to the only step that renders human-readable text.</p>
 
 <h2 id="step-4-overlay">Step 4: burn the overlay</h2>
 
-<p>Everything you read on screen &mdash; the flag, the crimson headline, the five beats that appear one at a time &mdash; is added <em>after</em> generation with FFmpeg. The overlay script never assumes a canvas size; it measures the real frame with <code>ffprobe</code>, then dynamically wraps and shrinks text to fit. That&rsquo;s why a long scam name never runs off the edge:</p>
+<p>Every piece of text on screen &mdash; the country flag, the crimson headline, and the five sequential beats &mdash; is burned in after generation with FFmpeg. Rather than assuming a fixed canvas, <code>render_overlay.py</code> inspects the actual frame with <code>ffprobe</code>, then dynamically wraps and shrinks the font until every line fits inside safe margins:</p>
 
 <div class="artifact">
 <p class="artifact-cap">render_overlay.py &mdash; measure, wrap, fit</p>
@@ -366,7 +366,7 @@ def fit_wrapped(text, font_path, start_size, max_width, max_lines, min_size):
     return min_size, wrap_text(text, font((font_path, min_size)), max_width)</code></pre>
 </div>
 
-<p>The five beats are timed to reveal in sequence across the clip&rsquo;s duration &mdash; one lower-third line at a time, each fading in, the last one held to the end in crimson for emphasis:</p>
+<p>The five beats reveal in sequence across the ten-second clip &mdash; one lower-third caption at a time, fading in over a translucent black box, with the final beat rendered in crimson:</p>
 
 <div class="artifact">
 <p class="artifact-cap">render_overlay.py &mdash; beat timing</p>
@@ -376,11 +376,11 @@ segment = max(1.1, (duration - beat_start) / max(len(beats), 1))
 # black box, drawn with an alpha ramp so it fades in cleanly.</code></pre>
 </div>
 
-<p>The output is a finished, captioned, on-brand vertical MP4 &mdash; the exact thing in the embed above. No human has touched it.</p>
+<p>The output is the finished vertical MP4 embedded above &mdash; untouched by human hands.</p>
 
 <h2 id="step-5-publish">Step 5: publish everywhere at once</h2>
 
-<p>A config builder turns the same queue item into per-platform captions, then one publish script fans the video out. Here is the Instagram caption it generated &mdash; note that it&rsquo;s the five beats again, plus the explainer, plus the <em>&ldquo;save this&rdquo;</em> call to action that drives the shares:</p>
+<p>Next, <code>build_config.py</code> turns the queue item into platform-specific captions. The Instagram caption reuses the five story beats, adds a two-line explanation of the psychological hook, and closes with the <em>&ldquo;Save this&rdquo;</em> prompt:</p>
 
 <div class="artifact">
 <p class="artifact-cap">build_config.py &mdash; generated Instagram caption</p>
@@ -401,19 +401,19 @@ Save this before your next trip. 📌
 #cancunairport #tabiji</code></pre>
 </div>
 
-<p>One script (<code>publish-video.py</code>) then does the whole fan-out: upload the file to temporary storage, create the Instagram Reel, upload the YouTube Short, post the Facebook Page reel, hand the clip to TikTok, and clean up &mdash; each with a thumbnail pulled from the 1-second mark. For this reel, Instagram, YouTube, and TikTok all shipped; Facebook got rate-limited and was left to retry rather than hammered. X stays off by default.</p>
+<p>Finally, <code>publish-video.py</code> handles the fan-out: it stages the file in temporary storage, publishes the Instagram Reel, uploads the YouTube Short, posts the Facebook Reel, pushes to TikTok, extracts a 1-second thumbnail for each, and cleans up. On this run, Instagram, YouTube, and TikTok succeeded immediately; Facebook hit a rate limit and queued for retry.</p>
 
 <h2 id="why-it-hit">Why this one hit 3.9 million</h2>
 
-<p>The pipeline ships a reel like this every day. Most do fine. This one detonated, and the insights say why. Look at the engagement shape again: 986 shares, 518 saves, 2,622 likes. On most content likes dwarf everything; here shares are over a third of the likes and <em>beat the saves</em>. That is the signature of content people forward rather than admire.</p>
+<p>The pipeline ships a reel like this every day. Most do fine; this one detonated. Look at the engagement ratios again: <strong>986 shares, 518 saves, 2,622 likes</strong>. On typical reels, likes dwarf everything else. Here, shares topped a third of total likes and nearly doubled saves &mdash; the unmistakable signature of a warning people forward to a friend.</p>
 
-<p>It&rsquo;s engineered for exactly that. A named scam at a named place is a warning you feel obligated to pass to someone specific. The five beats deliver the threat fast and the caption delivers the fix (&ldquo;save this&rdquo;), which is the structure that travels &mdash; a threat with no defense just makes people anxious and they scroll on. And because Instagram weights shares heavily for reaching people who don&rsquo;t follow you, 986 shares is what turned a tiny account&rsquo;s reel into 1.85 million strangers reached. The <a href="/posts/tabiji-18m-views/">account-level post</a> breaks down those mechanics &mdash; the Reddit demand-mining, the account warming, the human kept on engagement &mdash; in full.</p>
+<p>A named scam at a specific airport counter creates an obligation to warn anyone you know flying to Cancun or Tulum. The five on-screen beats establish the trap in ten seconds, and the caption provides the defense. Because Instagram heavily weights DM shares when testing a reel on cold audiences, those 986 shares propelled a tiny account&rsquo;s video to 1.85 million strangers.</p>
 
 <h2 id="takeaway">The takeaway</h2>
 
-<p>A single structured concept went into a queue and came out as 3.9 million views, with no human touching the footage between the two. That&rsquo;s the part that&rsquo;s genuinely solved: the production line. What it doesn&rsquo;t solve is which concept detonates and which dies at 4,000 views &mdash; that&rsquo;s still taste, validated demand, and a distribution game the platforms keep changing.</p>
+<p>A structured JSON object entered a queue and came out the other side with 3.9 million views, with zero human editing in between. The production line is solved. What automation doesn&rsquo;t solve is predicting which concept will detonate and which will stall at 4,000 views.</p>
 
-<p>The machine makes the video. The judgment about <em>what</em> to make, and the patience to keep feeding it, is the whole job. One in fifty hits 3.9 million. The skill&rsquo;s contribution is making the other forty-nine cost a dollar each.</p>
+<p>The machine renders the video. Picking the right raw material &mdash; and keeping the queue fed &mdash; is the job. One in fifty hits 3.9 million. The pipeline&rsquo;s job is making the other forty-nine cost a dollar each.</p>
 
 
         </div>

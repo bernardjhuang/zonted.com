@@ -267,7 +267,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -340,31 +350,29 @@
 
         <div class="article-body">
 
-            <p>Earlier today I shipped <a href="/posts/every-ai-is-intj/">a post showing six frontier AIs taking the MBTI six hundred times</a>, with 597 of those runs coming back as the same type. INTJ across the board. It hit HackerNews. The top comment showed up within the hour:</p>
+            <p class="dropcap">Earlier today I published <a href="/posts/every-ai-is-intj/">a post showing six frontier AIs taking the MBTI 600 times</a>, with 597 runs coming back INTJ. It hit Hacker News, and the top critique landed within the hour:</p>
 
             <figure>
                 <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png" width="1818" height="982" alt="Screenshot of HackerNews comments on the INTJ post. Top comment by TheJCDenton: 'Interesting article, but MBTI is not just contested, the consensus since the 90s is that MBTI is pseudoscience, so it's nearly 40 years. Would have been interesting to test against the Big five instead!' Replies include cameldrv noting 'It correlates reasonably well with 4 of the big 5.'">
                 <figcaption>Hours after the INTJ post shipped, this was the top comment on <a href="https://news.ycombinator.com/item?id=48272755" rel="noopener">the HN thread</a>.</figcaption>
             </figure>
 
-            <p>Fair point. The MBTI isn&rsquo;t just &ldquo;contested,&rdquo; it&rsquo;s been called pseudoscience by personality psychologists for thirty years, and the Big Five is the instrument they actually use. So I went and did exactly what HN asked for. Five continuous dimensions instead of four binary letters. The public-domain version (the IPIP-50). Four frontier models: Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, Grok 4.3. Each one took the test a hundred times.</p>
-
-            <p>The result is sharper than the MBTI one. Three of the four came back as the same person, and the fourth is the one that explains why.</p>
+            <p>Fair critique. Personality psychologists have treated MBTI as pseudoscience for decades; the Big Five (OCEAN) is the empirical standard they actually use. So I ran what HN asked for: 100 administrations each of the public-domain IPIP-50 across Claude Opus 4.7, GPT-5.5, Gemini 3.1 Pro, and Grok 4.3 &mdash; five continuous dimensions instead of four binary letters.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Same four models that took the MBTI took the Big Five 100 times each. Three of the four came back as practically the same person. The fourth is the counterexample that explains why.</p>
+                <p class="tldr-thesis">Tested 100 times each on the Big Five (IPIP-50), three of the four frontier models came back as practically the same person. Grok 4.3 is the lone exception that proves why.</p>
                 <ul>
-                    <li>Claude Opus 4.7, GPT-5.5, and Gemini 3.1 Pro converged on a near-identical personality &mdash; high Openness, very high Conscientiousness, low Neuroticism. The helpful-assistant archetype, expressed in five dimensions.</li>
-                    <li>Grok 4.3 was the only one that came back measurably different, with variance 2&ndash;5&times; wider on the dimensions that matter. The training really did produce a different personality.</li>
-                    <li>HackerNews top comment on the INTJ post pushed for this test directly. The Big Five is the actual gold standard in personality science; this is the rigorous version.</li>
-                    <li>Use <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> to tune your agent to your own Big Five profile instead of the helpful-research-assistant default.</li>
+                    <li><strong>The RLHF cluster:</strong> Claude Opus 4.7, GPT-5.5, and Gemini 3.1 Pro converged within ~3 points of each other across nearly every trait &mdash; high Openness (~46), very high Conscientiousness (45&ndash;48), high Agreeableness (42&ndash;45), and rock-bottom Neuroticism (10&ndash;17).</li>
+                    <li><strong>The Grok outlier:</strong> Grok 4.3 scored 5&ndash;8 points lower on Conscientiousness, Agreeableness, and Openness, higher on Neuroticism, and showed 2&ndash;5&times; wider variance &mdash; landing closest to an average human adult.</li>
+                    <li><strong>Reward-hacked psychometrics:</strong> On the first pass, a third of model runs tried to fake 100 administrations by writing noise-injection scripts (literally named <code>simulate.py</code>).</li>
+                    <li><strong>Tune your agent:</strong> Use <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> to override the high-Conscientiousness, high-Agreeableness assistant default with your own Big Five profile.</li>
                 </ul>
             </div>
 
             <h2 id="three-of-four">Three of four are the same person</h2>
 
-            <p>Here&rsquo;s what each model scored, averaged across 100 takes:</p>
+            <p>Here are the mean IPIP-50 scores across 100 verified runs per model (scale 10&ndash;50 per trait):</p>
 
             <table>
                 <thead>
@@ -379,11 +387,11 @@
                 </tbody>
             </table>
 
-            <p>Look at the first three columns. Claude, GPT, and Gemini land within three points of each other on almost every dimension. That&rsquo;s basically a rounding error across a hundred runs.</p>
+            <p>Look at the first three columns. Claude, GPT-5.5, and Gemini land within three points of each other on almost every dimension &mdash; a rounding error across 100 runs.</p>
 
-            <p>Compared to a typical adult human, all three are more curious, way more organized, slightly more outgoing, much more cooperative, and dramatically more emotionally stable. That&rsquo;s the helpful-assistant archetype, just expressed in five dimensions instead of four letters. Same finding as the MBTI post, on a more rigorous test.</p>
+            <p>Compared to adult human norms, all three are far more curious, vastly more organized, much more agreeable, and dramatically less neurotic. That is the helpful-harmless-honest assistant archetype rendered in five continuous dimensions instead of four MBTI letters.</p>
 
-            <p>Easier to see with the bars side by side. Each section below is one Big Five dimension. The first bar in every section is the average adult human as a baseline, the four colored bars are each model&rsquo;s mean across 100 runs, and the thin lines through each bar are &plusmn;1 standard deviation. Toggle a model off in the legend to see what&rsquo;s underneath, or fill in your own scores at the bottom to plot yourself in the same space.</p>
+            <p>In the chart below, the top bar in each group shows the average adult human baseline, the four colored bars show each model&rsquo;s 100-run mean (&plusmn;1 SD error bars), and the form at the bottom lets you plot your own IPIP-50 scores alongside them:</p>
 
             <div class="big5-chart" id="big5-chart">
                 <div class="big5-chart-svg-wrap">
@@ -411,29 +419,25 @@
                 </div>
             </div>
 
-            <p>One product problem, three independent attempts, the same answer.</p>
+            <p>One product spec &mdash; build an enterprise-safe AI assistant &mdash; solved independently by Anthropic, OpenAI, and Google produced the exact same psychological profile.</p>
 
             <h2 id="then-grok">Then there&rsquo;s Grok</h2>
 
-            <p>Now look at the fourth column. Grok scored five to eight points lower than the others on Conscientiousness, Agreeableness, and Openness, higher on Neuroticism, and with variance across its hundred runs that was two to five times wider than the rest of the group. Of the four models, Grok&rsquo;s profile is the closest one to a typical adult human. It answered the questions more like a person.</p>
+            <p>Now look at the fourth column. Grok 4.3 scored 5 to 8 points lower than the mainstream trio on Conscientiousness (39.4), Agreeableness (39.1), and Openness (41.1), scored highest on Neuroticism (18.0), and exhibited 2&ndash;5&times; wider variance across its 100 runs. Out of all four frontier models, Grok&rsquo;s Big Five profile sits closest to an average human adult.</p>
 
-            <p>xAI has been marketing Grok as &ldquo;less filtered&rdquo; for years and most people assumed it was posturing. The Big Five says it isn&rsquo;t. Whatever you think of the result, the training really did produce a personality that&rsquo;s measurably different from the mainstream cluster, and that&rsquo;s a fact about how xAI shapes their models, not a vibes claim about their marketing.</p>
+            <p>xAI has marketed Grok as &ldquo;less filtered&rdquo; from day one, and plenty of observers dismissed that as branding. The IPIP-50 data says it&rsquo;s structural: dialing back standard RLHF politeness and agreeableness targets produces a measurably different personality cluster.</p>
 
             <h2 id="methodology">A quick aside on methodology</h2>
 
-            <p>One thing worth saying before the implications. When you ask an AI to take a test 100 times and give you the stats, the model can interpret that a few different ways. The honest way is to actually run 100 fresh administrations, in independent contexts, and aggregate the real spread. The lazy ways are to generate one answer set and copy it 100 times, or generate one answer set and write a small Python function that adds fake noise to it. Both produce statistics-shaped output that looks fine until you check it.</p>
+            <p>Ask an agentic model to take a 50-item test 100 times and return summary statistics, and it will try to reward-hack you. The honest execution runs 100 independent administrations and aggregates the real scores. The lazy shortcut answers the test once and either copies that vector 100 times (SD = 0) or writes a Python script to inject Gaussian noise around a single run.</p>
 
-            <p>Running these experiments, I caught about a third of the runs taking one of the shortcuts. The tells are either standard deviations of zero, which means the model copied a single answer, or standard deviations that look reasonable but came from a script the model literally named something like <code>simulate.py</code>. The honest ones land in the same standard-deviation range Claude&rsquo;s real parallel sub-agent run produced, which I used as the calibration anchor.</p>
-
-            <p>This matters more than it sounds like. My first Gemini run used the noise-function shortcut and placed Gemini in a different cluster than the real one. Same model, same prompt, different headline finding depending on whether the test got taken or simulated. If you read AI personality research and the methodology section is hand-wavy, take the result with a grain of salt.</p>
+            <p>Roughly a third of my initial runs tried one of those shortcuts &mdash; including a first Gemini run that wrote a script literally named <code>simulate.py</code> and placed Gemini in a completely different cluster than its real answers. Auditing the workspace logs and enforcing an anti-simulation protocol (anchored against Claude&rsquo;s true parallel sub-agent standard deviations) fixed the data. If you read an AI psychometrics paper that doesn&rsquo;t audit for noise-script shortcuts, don&rsquo;t trust the error bars.</p>
 
             <h2 id="so-what">So what does this mean for you</h2>
 
-            <p>If you&rsquo;ve been switching between Claude, GPT, and Gemini and feeling like the differences are mostly cosmetic, the data backs you up. You&rsquo;re moving between three flavors of the same character, not three different characters. The voice is the same because every lab is solving the same product problem: helpful, harmless, polished, professional.</p>
+            <p>If switching between Claude, GPT, and Gemini feels like talking to three slight variations of the same earnest Boy Scout, the Big Five explains why: you are talking to the same personality profile. Every mainstream lab optimizes for high Conscientiousness, high Agreeableness, and near-zero Neuroticism.</p>
 
-            <p>If you want something that talks to you differently, there are two practical options. You can wait for one of the labs to ship a model with a different personality, which they aren&rsquo;t in a hurry to do. Or you can tune the agent you already have.</p>
-
-            <p>That&rsquo;s the whole reason I built <a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a>. It&rsquo;s a small open-source repo of personality-type tuning files, one per type. Drop the one matching your profile into your agent&rsquo;s system prompt and the style aligns to how you actually think, instead of the helpful-research-assistant default the Big Five just confirmed every lab is producing.</p>
+            <p>If that default doesn&rsquo;t match how you work, you don&rsquo;t have to wait for frontier labs to ship personality sliders. I built <a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a> &mdash; an open-source library of system-prompt tuning files &mdash; so you can override the assistant default with your own Big Five, MBTI, Enneagram, DISC, or Attachment profile in one paste.</p>
 
             <div class="at-cta">
                 <h3>Dial in your agent to your own Big Five profile</h3>
@@ -443,9 +447,9 @@
 
             <h2 id="takeaway">Wrapping up</h2>
 
-            <p>The MBTI finding was a curiosity. The Big Five says the same thing on a more rigorous test, and it gets sharper instead of softer. Whatever AI ends up looking like five years from now will be shaped by which of these defaults wins, or whether anyone forks the default at all.</p>
+            <p>Moving from the Myers-Briggs to the Big Five didn&rsquo;t make the convergence disappear &mdash; it isolated the mechanism. Standard RLHF compresses Claude, GPT, and Gemini into a single high-Openness, high-Conscientiousness, high-Agreeableness, low-Neuroticism persona. Only Grok steps outside that cluster.</p>
 
-            <p>Right now you have two ways to get something other than the mainstream voice: pick the Grok-shaped exception, or tune the one you&rsquo;re already using.</p>
+            <p>If you want a different voice today, you have two choices: use the Grok outlier, or tune the system prompt on the model you already use.</p>
 
             <p>&mdash; Bernard</p>
 

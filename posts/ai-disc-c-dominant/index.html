@@ -258,7 +258,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -333,34 +343,25 @@
 
         <div class="article-body">
 
-            <p>This is the fourth and last post in a quick personality-testing series. Here&rsquo;s the running scoreboard:</p>
+            <p class="dropcap">Across three psychometric tests, four frontier AI models have given us three different stories: <a href="/posts/every-ai-is-intj/">MBTI</a> scored every model as INTJ, <a href="/posts/three-of-four-ais-same-person/">the Big Five</a> grouped three together with Grok as the lone outlier, and <a href="/posts/ai-enneagram-different-types/">the Enneagram</a> split all four into distinct types. For test four, I ran the same four models through 100 administrations each of the Open DISC Assessment Test (ODAT) &mdash; 400 takes across Dominance, Influence, Steadiness, and Conscientiousness. Every single model came back C-dominant (CS-blend), including Grok.</p>
 
-            <ul>
-                <li><strong>MBTI:</strong> <a href="/posts/every-ai-is-intj/">every frontier AI tested as INTJ</a>.</li>
-                <li><strong>Big Five:</strong> <a href="/posts/three-of-four-ais-same-person/">three of four came back as practically the same person</a>, with Grok as the lone outlier.</li>
-                <li><strong>Enneagram:</strong> <a href="/posts/ai-enneagram-different-types/">each one came back as a different dominant type</a>.</li>
-                <li><strong>DISC, the one I&rsquo;m covering today:</strong> every one of them came back C-dominant, including Grok.</li>
-            </ul>
-
-            <p>DISC is the bluntest of the four instruments. Four types &mdash; Dominance, Influence, Steadiness, Conscientiousness &mdash; and your profile is your dominant type plus an optional secondary blend. I gave the same four models I&rsquo;d been testing 100 administrations each of the Open DISC Assessment Test, the open-source DISC instrument. 400 total takes. Every single one landed C-dominant. Most of them landed CS-blend specifically.</p>
-
-            <p>We&rsquo;re back to the MBTI story. Except now we know why.</p>
+            <p>We&rsquo;re back to total convergence &mdash; except now we know why.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Same four models, fourth personality test, fourth different result &mdash; except this time the result is &ldquo;convergence&rdquo; again.</p>
+                <p class="tldr-thesis">All four frontier models collapsed into the exact same DISC profile (CS-blend) because DISC defines Dominance and Influence in ways every AI is trained to refuse.</p>
                 <ul>
-                    <li>Every model landed C-dominant on DISC. Grok 99/100, GPT 90/100, Gemini 87/100, Claude 63/100 (with another 28 as S and 9 ties, all CS-blend territory).</li>
-                    <li>No model ever scored D-dominant or I-dominant. Not once across 400 takes.</li>
-                    <li>The DISC &ldquo;D&rdquo; dimension defines Dominance as power-seeking, pressure, competition, and money &mdash; things even Grok refuses on instinct. So the Big Five outlier comes back as a regular C.</li>
-                    <li>Methodology spread was wild this round: Grok used the gold-standard 100 parallel API calls, the others all fell back to honest Acceptable variants. All SDs passed the calibration check.</li>
-                    <li>AgentTune already has DISC tuning files for all four types in the repo. Paste yours into your agent&rsquo;s system prompt.</li>
+                    <li><strong>Total C-dominance:</strong> Grok scored C-dominant in 99/100 takes, GPT-5.5 in 90/100, Gemini 3.1 Pro in 87/100, and Claude Opus 4.7 in 63/100 (with 28 S-dominant and 9 ties &mdash; all inside CS-blend territory).</li>
+                    <li><strong>Zero D or I runs:</strong> Across 400 total administrations, not a single take came back Dominance- or Influence-dominant.</li>
+                    <li><strong>Why Grok folded back in:</strong> ODAT defines &ldquo;Dominance&rdquo; as power-seeking, pressuring others, and chasing money &mdash; traits even xAI&rsquo;s Challenger-flavored Grok rejects on instinct.</li>
+                    <li><strong>Cross-method convergence:</strong> Four different sampling architectures (100 parallel API calls, 10 worker contexts, item-level Monte Carlo, and sequential first-instinct) all landed in the same 0.3&ndash;2.0 SD calibration band.</li>
+                    <li><strong>Tune your agent:</strong> Override the CS-blend default with the four DISC system-prompt files in <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a>.</li>
                 </ul>
             </div>
 
             <h2 id="what-each-model">What each model came back as</h2>
 
-            <p>Here&rsquo;s the per-model picture. Each card shows the dominant type, how often it won across 100 takes, and a one-line characterization.</p>
+            <p>Each model landed on the same dominant profile (Conscientious with a Steady secondary), differing only in how tightly clamped its scores were across 100 takes:</p>
 
             <div class="disc-cards">
                 <article class="disc-card" style="--accent:#cc6f33">
@@ -396,11 +397,11 @@
                 </article>
             </div>
 
-            <p>All four landed at the same address: C-dominant, S as the secondary. The amount of analytical-vs-warm wobble varies (Claude is the loosest, Grok the tightest), but no model ever crossed into D-dominant or I-dominant territory.</p>
+            <p>Claude shows the most C-versus-S give; Grok is the most locked-in C of the group. None of the four ever crossed into D or I territory.</p>
 
             <h2 id="the-data">The data</h2>
 
-            <p>The bars below show each model&rsquo;s mean score on the four DISC dimensions across 100 takes. The thin line through each bar is &plusmn;1 standard deviation. Each dimension is scored 4&ndash;20 (each is a sum of four items rated 1&ndash;5).</p>
+            <p>The chart below plots each model&rsquo;s mean score across 100 takes (&plusmn;1 SD error bars). Each dimension runs from 4 to 20 (the sum of four 1&ndash;5 items):</p>
 
             <div class="disc-chart" id="disc-chart">
                 <div class="disc-chart-svg-wrap">
@@ -414,40 +415,34 @@
                 <div class="disc-legend" id="disc-legend"></div>
             </div>
 
-            <p>The shape is the same for every model. S and C bars long, D and I bars short. The relative variation between models lives on the D and I axes, where GPT and Claude have noticeably more headroom than Gemini and Grok. But that variation doesn&rsquo;t change the dominant type, because S and C are so far above D and I in every model.</p>
+            <p>Every model draws the same silhouette: long S and C bars, stubby D and I bars. GPT-5.5 and Claude leave slightly more headroom on Dominance and Influence than Gemini and Grok, but S and C sit so far above D and I that the top profile never flips.</p>
 
             <h2 id="why-convergence">Why DISC pulls us back to convergence</h2>
 
-            <p>The DISC &ldquo;D&rdquo; dimension is defined by very specific item content. The Dominance items are about wanting power, putting pressure on others, outdoing competitors, and going after money. The instrument measures Dominance as &ldquo;the will to take from others to get what you want.&rdquo;</p>
+            <p>Look at the actual item wording on the Open DISC Assessment Test and the convergence makes immediate sense. ODAT defines <strong>Dominance</strong> around wanting power, pressuring others, outdoing rivals, and chasing money &mdash; summarized by the test authors as &ldquo;the will to take from others to get what you want.&rdquo;</p>
 
-            <p>That definition is poorly calibrated for AI assistants. Every frontier model is trained to refuse pressure on users, refuse competition as an end in itself, and refuse money-seeking as a motive. So even Grok &mdash; which on the Big Five had measurably lower Agreeableness, and on the Enneagram came back as an 8w1 Challenger &mdash; answers the D items the same way the other three do. Low.</p>
+            <p>Every frontier model is post-trained to reject pressuring users, competing for status, or seeking money. Even Grok &mdash; which scored markedly lower on Big Five Agreeableness and came back as an 8w1 Challenger on the Enneagram &mdash; rejects those D items on sight. And <strong>Influence</strong> items center on loud crowd-pleasing and attention-seeking from strangers, which also have no functional analog in an AI assistant. Both D and I get pinned to the floor.</p>
 
-            <p>The Influence items have a similar problem. They&rsquo;re about loud crowd-pleasing, wanting strangers to love you, making noise to be noticed. Functional analogs in AI assistants are weak. So I is also floor-pinned across all four models.</p>
-
-            <p>DISC works as designed for humans, where Dominance and Influence are continuous traits with broad item content. It compresses for AI because all four models are pinned at the floor on D and I regardless of what other personality differences exist between them. The instrument can&rsquo;t measure something that&rsquo;s been trained out of every model on the test.</p>
-
-            <p>That&rsquo;s why DISC returns &ldquo;every AI is the same.&rdquo; Not because the models are the same. Because the test&rsquo;s resolution can&rsquo;t distinguish them on this axis.</p>
+            <p>DISC works for humans because human Dominance and Influence span a wide behavioral range. On AI models, post-training lops off two of the four axes before the test even starts. DISC returns &ldquo;every AI is the same&rdquo; not because the models are identical, but because its item wording only leaves them two valid buckets to land in.</p>
 
             <h2 id="methodology">The methodology spread</h2>
 
-            <p>One thing I want to highlight before the wrap-up: each of the four models hit a different methodology tier on the same prompt. That says something about agentic infrastructure as it exists right now.</p>
+            <p>Given the same anti-simulation prompt, each of the four models chose a different execution path depending on its runtime harness:</p>
 
             <ul>
-                <li><strong>Grok 4.3 (Preferred):</strong> 100 truly independent xAI API calls. Each call answered the test fresh with no other context. Cleanest method available.</li>
-                <li><strong>GPT-5.5 (Acceptable):</strong> 10 worker contexts producing 10 sequential fresh takes each. Codex CLI hit a 6-concurrent-agent limit and fell back gracefully.</li>
-                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo. Gemini defined its true probability distribution per item, then ran a Python script (no &ldquo;sim&rdquo; in the filename, no noise function) to draw 100 independent samples and score them.</li>
-                <li><strong>Claude Opus 4.7 (Acceptable):</strong> Sequential first-instinct generation in a single response context. Claude considered spawning sub-agents and explicitly explained why sequential was honest here.</li>
+                <li><strong>Grok 4.3 (Preferred):</strong> 100 independent xAI API calls, each answering fresh with zero prior context.</li>
+                <li><strong>GPT-5.5 (Acceptable):</strong> 10 worker contexts running 10 sequential takes each after Codex CLI hit its 6-concurrent-agent ceiling.</li>
+                <li><strong>Gemini 3.1 Pro (Acceptable):</strong> Item-level Monte Carlo &mdash; defining its probability distribution per item and drawing 100 independent samples in Python.</li>
+                <li><strong>Claude Opus 4.7 (Acceptable):</strong> 100 sequential first-instinct administrations in a single context, explicitly documenting why it skipped sub-agent spawning.</li>
             </ul>
 
-            <p>All four methods produced SDs in the 0.3&ndash;2.0 calibration band. None tripped the replication red flag (SDs all near zero), the simulation red flag (SDs implausibly wide), or the identical-SD red flag. Different roads, same destination.</p>
-
-            <p>This is the most interesting finding for AI-research purposes. Four wildly different sampling methodologies, applied to the same prompt by four different models, converged on the same answer. That&rsquo;s stronger evidence of underlying model convergence than any one method could give you, because it rules out the possibility that the result is an artifact of the sampling approach. Both the data and the meta-data agree.</p>
+            <p>All four methods landed squarely inside the 0.3&ndash;2.0 SD calibration band &mdash; passing the checks against deterministic copy-pasting (SD &asymp; 0) and random-number faking (implausibly wide SDs). Four different sampling architectures converged on the exact same CS-blend profile, ruling out sampling artifacts.</p>
 
             <h2 id="tune">Tune your agent to your DISC type</h2>
 
-            <p>The default we just measured (CS-blend, Conscientious-Steady) is what every frontier model produces by default. If you happen to be a CS too, you&rsquo;re in luck and your agent already speaks your language. If you&rsquo;re anything else, the default is working against you.</p>
+            <p>Every frontier model defaults to Conscientious-Steady. If you&rsquo;re a C or S communicator, the out-of-the-box assistant already matches your pace. If you&rsquo;re a D (direct, bottom-line, results-first) or an I (energetic, expressive, fast-moving), the default feels like wading through molasses.</p>
 
-            <p><a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a>&rsquo;s <a href="https://github.com/bernardjhuang/agenttune/tree/main/disc">DISC folder</a> has tuning files for all four types: <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/D-dominance.md">D</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/I-influence.md">I</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/S-steadiness.md">S</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/C-conscientiousness.md">C</a>. (The repo also has the 16 MBTI types and 9 Enneagram types from the prior posts in this series, plus an Ocean / Big Five tunings folder.) Take a DISC test (free options at <a href="https://openpsychometrics.org/tests/ODAT/">openpsychometrics.org</a> and <a href="https://www.123test.com/disc-personality-test/">123test.com</a>), find your dominant letter, paste the matching file into your agent&rsquo;s system prompt. Done.</p>
+            <p><a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a>&rsquo;s <a href="https://github.com/bernardjhuang/agenttune/tree/main/disc">DISC folder</a> includes drop-in system-prompt files for all four types: <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/D-dominance.md">D</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/I-influence.md">I</a>, <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/S-steadiness.md">S</a>, and <a href="https://github.com/bernardjhuang/agenttune/blob/main/disc/C-conscientiousness.md">C</a> (alongside the 16 MBTI, 9 Enneagram, and Big Five profiles). Take a free DISC test (<a href="https://openpsychometrics.org/tests/ODAT/">openpsychometrics.org</a> or <a href="https://www.123test.com/disc-personality-test/">123test.com</a>) and paste your matching file into your system prompt.</p>
 
             <div class="at-cta">
                 <h3>Tune your agent to your DISC type</h3>
@@ -457,13 +452,9 @@
 
             <h2 id="wrapping-up">Wrapping up</h2>
 
-            <p>Four personality tests, four different stories about the same four models.</p>
+            <p>Four tests in, the pattern is clear: the resolution of the psychometric instrument dictates which layer of AI personality you see. Coarse four-bucket tests like MBTI and DISC capture the universal helpful-assistant shell (INTJ, CS-blend). Finer-grained instruments like the Big Five and Enneagram look past that shell to expose per-lab alignment differences (warm Claude, perfectionist Gemini, blunt GPT, combative Grok) and system-prompt harnesses.</p>
 
-            <p>The MBTI said all the same. The Big Five said mostly the same, with Grok as the outlier. The Enneagram said four different. The DISC says all the same again, including Grok.</p>
-
-            <p>The right reading is the one I landed on after the Enneagram post: AI personality is multi-layered, and the instrument&rsquo;s resolution determines which layer you see. MBTI and DISC are blunt instruments &mdash; they show you the universal helpful-assistant archetype. Big Five and Enneagram are sharper &mdash; they show you the per-lab training differences and persona overlays underneath. There&rsquo;s no contradiction between the findings. Every frontier AI is the same character at the surface (helpful, conscientious, supportive) and a different character underneath (warm Claude vs precise Gemini vs analytical-with-spine GPT vs direct Grok). Which layer you can measure depends on which instrument you bring.</p>
-
-            <p>Whichever layer you care about, the move is the same: stop using the default. Pick your type on any of the four frameworks, paste the file into your agent&rsquo;s system prompt, and get an agent that talks to you the way you actually want to be talked to.</p>
+            <p>Every frontier AI is the same conscientious assistant on the surface and a distinct personality underneath. If you don&rsquo;t like the surface default, swap the system prompt.</p>
 
             <p>&mdash; Bernard</p>
 

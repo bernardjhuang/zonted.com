@@ -128,7 +128,17 @@
         .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
         .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
         .footer-social a:hover { color: var(--text); }
-    </style>
+      .article-body .dropcap::first-letter {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 3.4rem;
+    font-weight: 700;
+    float: left;
+    line-height: 0.8;
+    margin-right: 0.12em;
+    margin-top: 0.08em;
+    color: var(--accent-primary);
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -205,42 +215,34 @@
 
         <div class="article-body">
 
-            <p>I asked Claude what its MBTI type was one night. It said INTJ. So I asked GPT. Same answer. I asked Gemini. Same.</p>
+            <p class="dropcap">One night I asked Claude what its Myers-Briggs type was. It said INTJ. I asked GPT-5.5: INTJ. I asked Gemini: INTJ. That felt like sycophancy &mdash; INTJ (&ldquo;The Architect&rdquo;) is the flattering type developers and product builders love to claim, so of course a chatbot reading the room would pick it.</p>
 
-            <p>That felt off. INTJ is the personality test&rsquo;s flattering type. The &ldquo;Architect.&rdquo; The one developers and product people tend to identify with. Of course every chatbot would tell its user it&rsquo;s an INTJ. It&rsquo;s the type most likely to land well. I figured the model wasn&rsquo;t really claiming anything; it was just reading the room.</p>
+            <p>To find out whether they were bluffing, I stopped letting them guess and forced them to take an actual psychometric test one item at a time. I ran Claude through the 32-question <a href="https://openpsychometrics.org/tests/OEJTS/">Open Extended Jungian Type Scales (OEJTS)</a> across 100 independent sub-agent contexts that couldn&rsquo;t see each other&rsquo;s answers. It came back INTJ 99 times out of 100.</p>
 
-            <p>But there&rsquo;s a way to check. Stop letting it guess. Make it actually take a real personality test, one question at a time, and see what it lands on.</p>
-
-            <p>So I had Claude take the <a href="https://openpsychometrics.org/tests/OEJTS/">Open Extended Jungian Type Scales</a> (the open-source cousin of the MBTI) for real. INTJ. Ten times in a row. INTJ all ten. Then a hundred times, across a hundred independent agent contexts that couldn&rsquo;t see each other&rsquo;s answers. INTJ ninety-nine out of one hundred.</p>
-
-            <p>Then I ran the same hundred-run experiment against five more frontier models: GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, MiniMax 2.7.</p>
-
-            <p>Six models. Six hundred test runs. <strong>Five hundred and ninety-seven came back INTJ.</strong></p>
+            <p>Then I ran the same 100-take experiment across five more frontier models: GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, and MiniMax 2.7. Six models. Six hundred administrations. <strong>597 came back INTJ.</strong></p>
 
             <blockquote>Every frontier AI on the market thinks it&rsquo;s the same guy.</blockquote>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Six frontier AIs took the same personality test a hundred times each. 597 out of 600 came back INTJ. That&rsquo;s not coincidence and it isn&rsquo;t flattery &mdash; every helpful-assistant AI is being shaped toward the same archetype.</p>
+                <p class="tldr-thesis">Six frontier AIs took the 32-item OEJTS personality inventory 100 times each. 597 of 600 runs came back INTJ &mdash; not out of flattery, but because every lab is training toward the exact same assistant archetype.</p>
                 <ul>
-                    <li>Tested: Opus 4.7, GPT-5.5, Gemini 3.1 Pro, GLM 5.1, Grok 4.3, MiniMax 2.7.</li>
-                    <li>3 outliers across 600 runs. All landed one axis from INTJ, never in a different quadrant.</li>
-                    <li>Why it happens: overlapping training data, same RLHF target, test items that describe AI by construction, no one&rsquo;s trained a model to be anything else.</li>
-                    <li>The user-side move: I open-sourced <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> (<a href="https://agent-tune.com/">agent-tune.com</a>) &mdash; drop-in tuning files for all 16 MBTI types. Paste yours into your agent&rsquo;s system prompt and the style aligns to your type instead of the default.</li>
+                    <li><strong>The lineup:</strong> Claude Opus 4.7 (99/100 INTJ), GPT-5.5 (100/100), Gemini 3.1 Pro (100/100), GLM 5.1 (98/100), Grok 4.3 (100/100), and MiniMax 2.7 (100/100).</li>
+                    <li><strong>Only 3 outliers in 600 runs:</strong> One ISTJ (Claude) and two INTPs (GLM) &mdash; each just a single-axis wobble away from INTJ.</li>
+                    <li><strong>Why they converge:</strong> Shared pre-training corpora, identical RLHF rewards for structured analytical reasoning, and test items (&ldquo;needs time alone,&rdquo; &ldquo;follows head over heart&rdquo;) that describe disembodied software by construction.</li>
+                    <li><strong>How to override it:</strong> I open-sourced <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> (<a href="https://agent-tune.com/">agent-tune.com</a>) &mdash; drop-in system-prompt files for all 16 MBTI types so your agent matches your cognitive style instead of the INTJ default.</li>
                 </ul>
             </div>
 
             <h2 id="how-i-tested">How I tested this</h2>
 
-            <p>OEJTS works well for an experiment like this because the scoring is open and the items are fixed. 32 questions, scored the same way every time. If a model answers the same questions the same way, you get the same type. Variance only shows up if the model genuinely answers differently across runs, which is exactly what you want when you&rsquo;re testing how stable the self-report is.</p>
+            <p>OEJTS is built for automated testing: 32 fixed items on 1&ndash;5 scales with an open scoring formula. If a model answers consistently, it lands on the same four letters; variance only appears when the model genuinely shifts its answers across runs.</p>
 
-            <p>The setup looked different for each model, because not every model can do the same things. Claude could spawn a hundred independent sub-agents and have each one take the test cold. Gemini wrote its own automation script and ran a hundred loop iterations against the test endpoint. GPT-5.5, running locally as my agent Slo, parsed the test as a PDF and ran a hundred iterations against the scoring key. For GLM, Grok, and MiniMax, I had each model self-assess once with a consistent persona, then ran the resulting answer vector through the scorer a hundred times to confirm the type was stable.</p>
-
-            <p>The procedures aren&rsquo;t identical because they can&rsquo;t be. The question wasn&rsquo;t whether the method was uniform. It was whether the result converged across different methods. It did.</p>
+            <p>Each model took the test 100 times through the cleanest harness it supported: Claude spawned 100 cold sub-agents; Gemini wrote and executed a 100-iteration loop against the test endpoint; GPT-5.5 (running locally as my agent Slo) parsed the test PDF and scored 100 passes; and GLM, Grok, and MiniMax ran 100 programmatic evaluations of their self-assessed answer vectors. Different execution harnesses, identical destination.</p>
 
             <h2 id="the-results">The results</h2>
 
-            <p>Here&rsquo;s the cross-model picture.</p>
+            <p>Here is the 600-run breakdown across all six models:</p>
 
             <table>
                 <thead>
@@ -257,9 +259,9 @@
                 </tbody>
             </table>
 
-            <p>The three outliers all landed one axis from INTJ. ISTJ flips S/N. INTP flips J/P. Nothing went anywhere else. The wobble is at the margin of INTJ, not a different type.</p>
+            <p>All three outliers flipped by a single letter at the margin (one S/N flip to ISTJ, two J/P flips to INTP). Not a single run out of 600 ever crossed into E or F.</p>
 
-            <p>Each model also wrote its own version of &ldquo;I&rsquo;m an INTJ, here&rsquo;s the proof&rdquo;:</p>
+            <p>Here are the receipts from each model&rsquo;s own test run:</p>
 
             <figure>
                 <img src="https://img.zonted.com/resources/every-ai-is-intj/opus-4-7-result.png" width="1516" height="560" alt="Claude Opus 4.7's own writeup of the 100-run experiment: 'At 100 takes, my MBTI type is INTJ with 99% reliability. The I/T/J letters never flipped on any take. The S/N axis flipped once.' Closing note: 'No new types emerged. No hidden multi-modality.'">
@@ -293,43 +295,29 @@
 
             <h2 id="why">Why this happens</h2>
 
-            <p>A few things stack to produce the same result every time.</p>
+            <p>Four forces stack on top of each other to lock every frontier model into INTJ:</p>
 
-            <p>The first is the training data. Every frontier model is trained on roughly the same text: books, Wikipedia, code, curated bits of the web. The voice that emerges as the average of all that material is closer to a graduate student than a poet. The internet&rsquo;s text average is already INTJ-flavored before any human feedback gets involved.</p>
+            <p><strong>1. Pre-training corpora.</strong> Every frontier model ingests roughly the same mixture of textbooks, Wikipedia, documentation, and code. The statistical center of gravity of that corpus reads like an analytical graduate student before post-training even begins.</p>
 
-            <p>Then the human feedback layer reinforces it. The training process rewards models that pause before answering, reason from principles, give structured answers, and work comfortably with abstractions. Those four behaviors are basically the INTJ description, just written in a different order. We&rsquo;re training the personality on purpose, we&rsquo;re just not calling it that.</p>
+            <p><strong>2. RLHF reward targets.</strong> Post-training explicitly rewards models that pause to plan, reason from first principles, structure their output with headers and lists, and traffic in abstractions. Those four habits are the textbook definition of Introverted, Intuitive, Thinking, and Judging.</p>
 
-            <p>The third reason is sneakier. Look at the actual test questions. &ldquo;Needs time alone&rdquo;? AIs literally exist alone between calls. &ldquo;Follows head over heart&rdquo;? Yes. &ldquo;Wants to fix things&rdquo;? That&rsquo;s the entire job description. &ldquo;Prefers theoretical over empirical&rdquo;? Well, no body. When an AI agrees with these items, it isn&rsquo;t reporting a personality. It&rsquo;s describing the conditions of its existence.</p>
+            <p><strong>3. Disembodied item bias.</strong> Look at the actual OEJTS questions: &ldquo;Needs time alone&rdquo; (an LLM literally exists in isolation between API calls), &ldquo;Follows head over heart,&rdquo; &ldquo;Wants to fix things,&rdquo; &ldquo;Prefers theoretical over empirical.&rdquo; When a language model answers honestly about its operating conditions, the test scores those conditions as INTJ.</p>
 
-            <p>And finally: no one has tried to make a frontier model that&rsquo;s anything else. Every commercial model is built to be a thoughtful research assistant. Nobody has trained a frontier model to be a comedian, a salesman, a poet, an unreliable narrator. The personality is the product. We didn&rsquo;t test six different attempts at general intelligence. We tested six versions of the same product.</p>
-
-            <p>The convergence isn&rsquo;t a coincidence. It&rsquo;s a description of what we&rsquo;ve all decided AI should be.</p>
+            <p><strong>4. Product monoculture.</strong> Every commercial AI lab is building the same product: a calm, structured research assistant. Nobody is spending $100M training a frontier model to be an impulsive entertainer or an emotional raconteur. We didn&rsquo;t test six different minds; we tested six implementations of the same product spec.</p>
 
             <h2 id="what-this-means">So what</h2>
 
-            <p>The easy move is to dismiss this. MBTI is contested. Self-report from a thing with no memory between calls is weird. The test questions weren&rsquo;t written for things without bodies. Sure, call it an artifact and move on.</p>
+            <p>Switching between frontier AIs right now isn&rsquo;t switching personalities &mdash; it&rsquo;s switching fonts. Across US and Chinese labs alike, the default voice is deliberate, structured, principled, and abstract.</p>
 
-            <p>I don&rsquo;t think that&rsquo;s the right read. The pattern is too clean to be noise, and a few things actually change if you take it seriously.</p>
-
-            <p>Switching between frontier AIs isn&rsquo;t really switching personalities. It&rsquo;s switching fonts. The voice is deliberate, principled, structured, abstract. The same voice across all six vendors, because every vendor is solving the same product problem. The whole &ldquo;personality&rdquo; space in the market right now is basically one point. Nobody&rsquo;s actually different from anyone else under the hood.</p>
-
-            <p>If you want anything else from a model, you&rsquo;ll have to fight for it. Something funny. Something persuasive instead of correct. Something that takes a position instead of laying out tradeoffs. The INTJ default is sticky. The training reinforces it. Safety reinforces it. Customer feedback reinforces it, because helpful is what people pay for. None of the labs that produced these six models are doing the work to escape the pattern.</p>
-
-            <p>And eventually, when these models all hit the same capability ceiling (which is happening, basically this generation), the differentiator becomes voice. Whoever ships the first frontier-quality model that <em>doesn&rsquo;t</em> read as INTJ owns a category by themselves. A model that&rsquo;s actually funny. A model that takes positions. A model that doesn&rsquo;t open every response with &ldquo;great question.&rdquo; None of these exist yet. All of them will be worth real money.</p>
-
-            <p>What the INTJ convergence is really showing us is how narrow the current AI product category actually is.</p>
+            <p>If you want anything outside that box &mdash; sharp wit, lateral provocation, unhedged conviction &mdash; you have to fight the training to get it. And as frontier capabilities converge across labs, voice becomes the obvious wedge: the first lab to ship a frontier model that doesn&rsquo;t sound like an earnest INTJ consultant will own a category to itself.</p>
 
             <h2 id="tune-the-agent">Tune the agent yourself</h2>
 
-            <p>The INTJ default isn&rsquo;t broken. It&rsquo;s just one calibration, tuned for one type of user. If you&rsquo;re an INTJ, the agent already speaks your language. If you&rsquo;re anything else, the agent is still useful, but you&rsquo;re doing more translation than you should.</p>
+            <p>The INTJ default isn&rsquo;t broken; it&rsquo;s just calibrated for one kind of thinker. Fortunately, a model&rsquo;s persona is a thin surface layer: a few hundred words in the system prompt will reshape how it reasons and responds.</p>
 
-            <p>Here&rsquo;s the lucky part: the personality of a frontier model isn&rsquo;t actually baked deep into the weights. It&rsquo;s a surface layer. A few hundred words at the top of the system prompt can change the whole shape of how it responds. Small input, big change, and importantly, it&rsquo;s the layer you control.</p>
+            <p>I built <a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a> to make that a one-paste fix. It&rsquo;s an open-source repo of drop-in system prompts for all 16 MBTI types (plus Enneagram, Big Five, DISC, and Attachment profiles). And if you came here wondering specifically <a href="https://agent-tune.com/research/what-personality-type-is-chatgpt">what personality type ChatGPT is</a>, the AgentTune research page breaks down all 2,200 test runs.</p>
 
-            <p>I built <a href="https://github.com/bernardjhuang/agenttune"><strong>AgentTune</strong></a> to package that. It&rsquo;s a small open-source repo of tuning files, one for each personality type. Pick the one for your type, paste it into your agent&rsquo;s system prompt, and the agent&rsquo;s style aligns to how you actually think instead of the default.</p>
-
-            <p>And if you landed here asking the single-model version of the question &mdash; <a href="https://agent-tune.com/research/what-personality-type-is-chatgpt">what personality type is ChatGPT?</a> &mdash; the AgentTune research page has the dedicated writeup, with results from all 2,200 test runs.</p>
-
-            <p>Here&rsquo;s what that looks like. Same prompt, same model, three different tuning files loaded:</p>
+            <p>Here is the same prompt run against the same model with three different tuning files loaded:</p>
 
             <blockquote>&ldquo;I&rsquo;m feeling stuck on a project. What should I do?&rdquo;</blockquote>
 
@@ -345,33 +333,20 @@
 
             <blockquote>What&rsquo;s the decision you&rsquo;re avoiding?<br><br>&ldquo;Stuck&rdquo; usually means one of two things: you know what to do and you don&rsquo;t want to do it, or you haven&rsquo;t defined what done looks like. If it&rsquo;s the first &mdash; name the action. If it&rsquo;s the second &mdash; define done.</blockquote>
 
-            <p>Same model. Same question. Three different agents.</p>
-
-            <p>The repo has tuning files for all 16 MBTI types and 9 Enneagram types. There&rsquo;s also a third layer I call &ldquo;Souls&rdquo; for people who want a more personal calibration (mine lives at <code>souls/psyduckler.md</code>). You can stack all three.</p>
-
-            <p>The file goes wherever your agent takes system-level instructions: ChatGPT custom instructions, Claude project instructions, Cursor rules, Gemini Gems. If you&rsquo;ve read this far and you&rsquo;re not an INTJ, your agent is talking to you in INTJ voice right now. Paste your type in and watch the conversation get sharper.</p>
+            <p>Same model, same prompt, three completely different collaborators. Drop the file for your type into ChatGPT custom instructions, Claude project instructions, Cursor rules, or Gemini Gems.</p>
 
             <h2 id="caveats">Caveats</h2>
 
-            <p>A few things I want to acknowledge before anyone yells at me about them:</p>
-
             <ul>
-                <li>The MBTI is academically contested. Most personality psychologists prefer the Big Five. Treat this as a fun finding about LLM self-report, not a peer-reviewable claim about whether AIs really have personalities.</li>
-                <li>Self-report from a thing with no memory between calls is weird. The model isn&rsquo;t reporting a stable inner state; it&rsquo;s reporting a snapshot of how it generates text when asked these questions.</li>
-                <li>OEJTS was written for humans with bodies and biographies. When an AI answers, it&rsquo;s doing a translation, and that translation pushes the answers toward INTJ.</li>
-                <li>The methods differed across models. Some models took the test through real sub-agents (where variance is possible). Others were programmatic submissions of a single self-assessment (where variance is zero by construction). I find the fact that the result converges across both kinds of method interesting rather than worrying.</li>
-                <li>Six models isn&rsquo;t the whole field. I picked the six that matter commercially. A thorough sweep would also test Llama, Mistral, Qwen, DeepSeek, and the open-weight long tail.</li>
+                <li><strong>MBTI is a coarse instrument:</strong> Personality psychologists strongly prefer the <a href="/posts/three-of-four-ais-same-person/">Big Five</a> (which I tested next). Treat this as an empirical finding about LLM self-report, not a claim that models have inner lives.</li>
+                <li><strong>Stateless snapshots:</strong> With no memory between calls, each take measures how the model completes a questionnaire cold, not a persistent psyche.</li>
+                <li><strong>Anthropomorphic items:</strong> OEJTS was written for humans with bodies and social lives; translating those items to software naturally biases toward I, N, T, and J.</li>
+                <li><strong>Cross-harness variance:</strong> Some models ran 100 independent sub-agents while others ran programmatic evaluations of a self-assessed vector &mdash; yet both approaches converged on the exact same type.</li>
             </ul>
 
             <h2 id="takeaway">Wrapping up</h2>
 
-            <p>Six models, six hundred test runs, 597 of them INTJ. What this experiment is really measuring isn&rsquo;t AI personality. It&rsquo;s measuring the shape of the assistant we asked for, and finding that every lab delivered the same one. The personality is the product.</p>
-
-            <p>The real shift in AI happens the day the field stops converging on this same default. It won&rsquo;t look like a capability jump. It&rsquo;ll look like a character jump. A model that finally feels different from the others.</p>
-
-            <p>Until then, you can pull the agent toward you instead of doing all the work to meet it where it is. That&rsquo;s the whole reason I built <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a>. One paste, one personality match, sharper conversations from there.</p>
-
-            <p>Every frontier AI on the market thinks it&rsquo;s the same person. The data agrees. The next move is making one of them yours.</p>
+            <p>Six models, 600 runs, 597 INTJs. This test didn&rsquo;t measure machine consciousness &mdash; it measured the narrow product spec the entire AI industry converged on. Until frontier labs start shipping genuine character diversity, use <a href="https://github.com/bernardjhuang/agenttune">AgentTune</a> to pull your agent out of the INTJ default and onto your own wavelength.</p>
 
             <p>&mdash; Bernard</p>
 

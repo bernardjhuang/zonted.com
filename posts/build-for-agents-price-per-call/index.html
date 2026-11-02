@@ -200,88 +200,85 @@
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">Hermes + Codex 5.5 matched Opus-era smoothness. We used it &mdash; with multi-model planning across Gemini 3.1 Pro, Opus, and Codex 5.5 &mdash; to one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&rsquo;t the moat.</p>
+                <p class="tldr-thesis">We one-shot a new product (veracityapi.com) in an afternoon using Hermes + Codex 5.5, proving the build layer is commoditized and only agent-first business models remain durable.</p>
                 <ul>
-                    <li>Anyone with the same stack can build the same product tomorrow</li>
-                    <li>What decides survival is whether your product is structurally durable as agents become the dominant consumer of every API on the internet</li>
-                    <li>Veracity is built against four tests: durable-as-agents-take-over, durable-as-agents-improve, agent-first surface, metered with free tier</li>
+                    <li><strong>Tooling parity</strong> &mdash; Hermes + Codex 5.5 closed the reliability gap with pre-ban OpenClaw + Opus, shipping a production Cloudflare Worker + D1 API in hours.</li>
+                    <li><strong>Zero build moat</strong> &mdash; Anyone with the same agent stack can clone your software tomorrow; survival depends on who consumes your API.</li>
+                    <li><strong>Four durability tests</strong> &mdash; Products must gain value as agents take over, compound as models improve, expose an agent-first surface (<code>llms.txt</code>, OpenAPI), and meter per call ($0.01&ndash;$0.12) with a frictionless free tier.</li>
                 </ul>
-                <p class="tldr-tail">Build for agents. Price per call. Everything else is legacy.</p>
             </div>
 
             <h2 id="the-build">The build that surprised us</h2>
 
-            <p class="dropcap">After Anthropic <a href="/posts/openclaw-claude-ban-ai-model-replacement/">banned Opus from our setup</a>, we&rsquo;d switched our main OpenClaw rotation to Z.AI&rsquo;s <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">GLM 5.1</a> as the best replacement we could find. Codex 5.4 had been rough &mdash; missed instructions, slow, expensive at the same throughput. Last week we wired up a parallel agent on Hermes + Codex 5.5, mostly out of curiosity to see if the latest OpenAI iteration had closed the gap.</p>
+            <p class="dropcap">After Anthropic <a href="/posts/openclaw-claude-ban-ai-model-replacement/">banned Opus from our setup</a>, we moved our main OpenClaw rotation to Z.AI&rsquo;s <a href="https://z.ai/subscribe?ic=JY9V1BN5ZO" target="_blank" rel="noopener">GLM 5.1</a>. Codex 5.4 had been rough &mdash; missed instructions, high latency, and poor cost-per-task. Last week we wired up a parallel agent on Hermes + Codex 5.5 to see if OpenAI had closed the gap.</p>
 
-            <p>It had. The Hermes + Codex 5.5 agent runs as smoothly as OpenClaw + Opus did pre-ban &mdash; same rough capability, same low rate of needing a human to step in mid-task. Subjectively the gap with the Opus-era setup is gone.</p>
+            <p>It had. Hermes + Codex 5.5 matches our pre-ban OpenClaw + Opus setup on instruction following and autonomous completion rate.</p>
 
-            <p>To stress-test it, we used both stacks in parallel to scope a new product idea, bouncing between three model perspectives &mdash; Gemini 3.1 Pro for breadth, Opus (still accessible directly via API for non-agentic calls) for sharpness, Codex 5.5 for the actual code. Slo, the agent inside our Hermes setup, caught a strategic problem on the very first message:</p>
+            <p>To stress-test it, we used both stacks in parallel to scope a new product, triangulating across three models: Gemini 3.1 Pro for breadth, Opus (via direct API) for product critique, and Codex 5.5 for implementation. Slo, our Hermes agent, killed our initial product wedge on the very first message:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="slo-pivot-detection-to-risk-scoring.png" alt="Slack screenshot: Bernard asks Slo about building an AI content detection API for agents. Slo responds that AI content detection is a weak wedge because detectors are probabilistic and adversarial. Slo proposes pivoting to AI content provenance and risk scoring with evidence — same inputs, different output shape." width="1248" height="754" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The first reply talked us out of the original product. Detection &rarr; risk scoring with evidence.</figcaption></figure>
 
-            <p>The original idea was &ldquo;AI content detection API for agents.&rdquo; Slo pushed back: detection is structurally weak because detectors are probabilistic, adversarial, and easy to overclaim. Better framing: <em>provenance and risk scoring</em>, with evidence. Same inputs (text/image/audio/video/URL), different output shape &mdash; instead of binary &ldquo;is this AI? yes/no,&rdquo; the question becomes <em>&ldquo;how likely is this synthetic, AI-assisted, copied, watermarked, low-effort spam, or policy-risky &mdash; and what evidence supports each score?&rdquo;</em></p>
+            <p>The original pitch was an &ldquo;AI content detection API for agents.&rdquo; Slo pushed back: binary AI detection is probabilistic, adversarial, and easy to game. The stronger wedge is <em>provenance and risk scoring with evidence</em>. Same inputs (text, image, audio, video, URL), different output schema &mdash; instead of a binary yes/no, the endpoint scores how likely an asset is synthetic, AI-assisted, copied, watermarked, low-effort spam, or policy-risky, paired with the supporting signals.</p>
 
-            <p>That reframe became the product. By the next message, we&rsquo;d scoped the Cloudflare Worker MVP:</p>
+            <p>By the next message, we had the Cloudflare Worker MVP scoped:</p>
 
             <figure style="margin:1.5rem 0 2rem;"><img src="slo-cloudflare-worker-mvp-plan.png" alt="Slack screenshot: Bernard shares an MVP plan markdown file for veracityapi on Cloudflare. The plan is a Single-Worker Cloudflare Worker MVP — POST endpoint that takes text and returns a synthetic/slop risk score with evidence and recommended action. One worker, one D1 database, one LLM call. No SpaCy, no feedback loop, no batch, no MCP. Slo agrees the scoped MVP is the right move." width="1248" height="754" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Single Worker, single D1 database, single LLM call. Everything else deferred.</figcaption></figure>
 
-            <p>One Cloudflare Worker. One D1 database. One LLM call. A POST endpoint that takes text and returns a structured risk score with evidence and a recommended action (allow / revise / human-review / reject). Everything else &mdash; spaCy, batch processing, MCP server, feedback loops &mdash; deferred to <em>only if pieces become useful</em>.</p>
+            <p>One Cloudflare Worker, one D1 database, one LLM call. A <code>POST</code> endpoint takes content and returns a structured risk score, evidence array, and recommended action (<code>allow</code>, <code>revise</code>, <code>human-review</code>, <code>reject</code>). We cut spaCy, batch queues, MCP wrappers, and feedback loops until real usage demanded them.</p>
 
-            <p>We shipped it. veracityapi.com is live. Pay-per-request: $0.01 for ≤4K chars up to $0.12 for ≤100K. No subscription tier. <code>llms.txt</code> and <code>agents.json</code> published for machine discovery. Structured JSON responses. Build took an afternoon.</p>
+            <p>We shipped veracityapi.com that afternoon. Pay-per-request pricing: $0.01 for &le;4K chars up to $0.12 for &le;100K. No subscriptions. <code>llms.txt</code> and <code>agents.json</code> live at the root for machine discovery.</p>
 
             <h2 id="not-the-moat">But tooling isn&rsquo;t the moat</h2>
 
-            <p>Here&rsquo;s the uncomfortable part: anyone with Hermes + Codex 5.5, or <a href="/posts/openclaw-vs-claude-code-freedom/">OpenClaw + GLM</a>, or Claude Code + Opus, or any of the 21-model rotation we run elsewhere, can build the same product tomorrow. The model layer democratized the build, not the business.</p>
+            <p>Anyone running Hermes + Codex 5.5, <a href="/posts/openclaw-vs-claude-code-freedom/">OpenClaw + GLM</a>, or Claude Code + Opus can replicate that build tomorrow. Agentic coding democratized software creation, which means execution speed is no longer a moat.</p>
 
-            <p>What decides survival isn&rsquo;t the speed at which you ship. It&rsquo;s whether your product is structurally durable when AI agents &mdash; not humans &mdash; become the dominant consumer of every API on the internet. If you&rsquo;re shipping a product right now built around a human UI, per-seat pricing, monthly subscriptions, and a &ldquo;request a demo&rdquo; sales funnel, you have 12&ndash;18 months before it gets cannibalized. Not by competitors. By the agent economy itself, which doesn&rsquo;t have eyes, doesn&rsquo;t have credit cards, doesn&rsquo;t have legal entities, and doesn&rsquo;t book demos.</p>
+            <p>Survival depends on whether your product is structurally built for AI agents as the primary buyer and consumer. If you are shipping software today around a human web dashboard, per-seat pricing, monthly subscriptions, and a &ldquo;Book a Demo&rdquo; funnel, you have a 12-to-18-month clock before the agent economy routes around you. Agents don&rsquo;t have eyes, corporate credit cards, or calendar links.</p>
 
-            <p>We built Veracity against four tests.</p>
+            <p>We designed Veracity against four durability tests.</p>
 
             <h2 id="four-tests">The 4 tests for the agent economy</h2>
 
-            <h3>1. Does it stay valuable as agents become the dominant consumer?</h3>
+            <h3>1. Does demand grow as agents replace human workflows?</h3>
 
-            <p>The shape of demand for software is shifting from <em>&ldquo;human opens browser, clicks button&rdquo;</em> to <em>&ldquo;agent makes API call.&rdquo;</em> If your product requires the first pattern, you have a customer base that&rsquo;s shrinking. Veracity is invoked by an agent <em>before it publishes, trains on, or moderates</em> a piece of content. The customer is literally an agent. As agent-driven workflows replace human-driven ones, demand goes up.</p>
+            <p>Software consumption is shifting from <em>human clicks button in browser</em> to <em>agent hits API endpoint</em>. If your product requires the first pattern, your TAM is shrinking. Veracity sits in the pre-flight path of autonomous agents &mdash; invoked right before an agent publishes, trains on, or moderates content. Every workflow that moves from human to agent increases call volume.</p>
 
-            <p><strong>Concrete test:</strong> can your product be used end-to-end without a human ever seeing the UI? If yes, durable. If no, brittle.</p>
+            <p><strong>The test:</strong> Can your product deliver its full value without a human ever rendering a webpage? If yes, durable.</p>
 
-            <h3>2. Does it stay valuable as agents get smarter?</h3>
+            <h3>2. Does it stay valuable as base models get smarter?</h3>
 
-            <p>The wrong answer here is &ldquo;my product makes agents smarter, so it&rsquo;s obsolete when they get smarter on their own.&rdquo; The right answer: my product handles something agents structurally can&rsquo;t do alone, and gets <em>more</em> valuable as agent volume grows. Veracity scores content for synthetic / slop / policy risk. As more content is AI-generated, the need for pre-action vetting grows. As agents take more autonomous actions, the cost of acting on bad content grows. Both vectors compound.</p>
+            <p>If your product is a thin prompt wrapper that compensates for a weak model, the next frontier release kills it. Durable products solve coordination, verification, or state problems that grow <em>harder</em> as autonomous output scales. As models generate more synthetic text and media, pre-action provenance scoring becomes mandatory infrastructure.</p>
 
-            <p><strong>Concrete test:</strong> graph &ldquo;agent capability&rdquo; on the x-axis vs &ldquo;your product demand&rdquo; on the y-axis. Is the slope positive? If yes, durable.</p>
+            <p><strong>The test:</strong> Plot base-model capability on the x-axis against demand for your API on the y-axis. The slope must be positive.</p>
 
             <h3>3. Is the surface agent-first?</h3>
 
-            <p>Agent-first means: <em>no human UI is required for the product to function.</em> The dashboard, marketing site, and docs are for humans to <em>discover</em> the product. The production usage never touches a screen. The agent finds the endpoint via <code>llms.txt</code>, reads the OpenAPI spec, calls the API, parses the JSON. This is the same shift the <a href="/posts/future-of-software-is-headless/">headless software</a> argument predicted &mdash; just zoomed in on a single product line.</p>
+            <p>In an agent-first product, the marketing site and docs exist only for discovery; production traffic is 100% headless. An agent discovers the service via <code>llms.txt</code>, parses <code>openapi.json</code>, provisions a key, and exchanges structured JSON &mdash; the exact architecture the <a href="/posts/future-of-software-is-headless/">headless software</a> thesis predicts.</p>
 
-            <p><strong>Concrete test:</strong> can a Claude or Codex agent discover, integrate, and use your product without any human-mediated step? If yes, agent-first. If no, you&rsquo;re a SaaS pretending to be an API.</p>
+            <p><strong>The test:</strong> Can a Claude or Codex agent discover, integrate, and call your product end-to-end without human intervention? If not, you&rsquo;re a human SaaS with an API bolted on.</p>
 
-            <h3>4. Is pricing metered with a free tier?</h3>
+            <h3>4. Is pricing metered per call with an instant free tier?</h3>
 
-            <p>Agents can&rsquo;t buy seats. They can&rsquo;t fill out billing forms with company names. They can&rsquo;t sign annual contracts. They can spend $0.01 on a single call against an account that has a $5 budget. That&rsquo;s the entire transaction shape. Veracity is $0.01&ndash;$0.12 per call with a public free tier capped at low volume. No subscriptions, no contracts. The free tier exists specifically because <em>discovery</em> in the agent economy looks like an autonomous Codex or Claude trying your endpoint to see if it works &mdash; before any human is in the loop to pull out a credit card.</p>
+            <p>Agents don&rsquo;t buy seats, sign annual contracts, or fill out enterprise billing forms. They spend $0.01 on a single API call against a pre-funded wallet. Veracity charges $0.01&ndash;$0.12 per call with a low-volume public free tier. In the agent economy, top-of-funnel discovery is an autonomous Codex or Claude agent pinging your endpoint to verify the response schema before a human ever approves spend.</p>
 
-            <p><strong>Concrete test:</strong> can an agent successfully use your product from discovery to first paid call within 60 seconds and without ever asking a human for permission? If yes, pricing fits the agent economy.</p>
+            <p><strong>The test:</strong> Can an agent go from zero to first successful API call in under 60 seconds without asking a human for a credit card?</p>
 
             <h2 id="what-this-rules-out">What this rules out</h2>
 
-            <p>By extension, this rules out a lot of what&rsquo;s being shipped as &ldquo;AI products&rdquo; in 2026:</p>
+            <p>Those four constraints eliminate most of what is being launched as &ldquo;AI SaaS&rdquo; in 2026:</p>
 
             <ul>
-                <li>Per-seat SaaS &mdash; agents don&rsquo;t fill seats</li>
-                <li>Human-UI-only products &mdash; agents can&rsquo;t use them</li>
-                <li>Annual contracts with credit checks &mdash; agents can&rsquo;t sign them</li>
-                <li>&ldquo;Talk to sales&rdquo; pricing pages &mdash; agents can&rsquo;t talk to humans</li>
-                <li>AI features bolted onto a human SaaS &mdash; the human SaaS is the dying part</li>
-                <li>Free trials behind credit-card walls &mdash; agents don&rsquo;t have credit cards</li>
-                <li>14-day onboarding flows &mdash; agents have 14 seconds</li>
+                <li><strong>Per-seat SaaS</strong> &mdash; agents don&rsquo;t occupy seats.</li>
+                <li><strong>UI-only workflows</strong> &mdash; agents don&rsquo;t click buttons.</li>
+                <li><strong>Annual contracts and &ldquo;Talk to Sales&rdquo; gates</strong> &mdash; agents don&rsquo;t book Zoom calls.</li>
+                <li><strong>AI features bolted onto legacy SaaS</strong> &mdash; the underlying seat model is the part being compressed.</li>
+                <li><strong>Credit-card-gated trials and 14-day onboarding</strong> &mdash; agents evaluate tools in 14 seconds.</li>
             </ul>
 
-            <p>If you&rsquo;re building any of those right now, you&rsquo;re building for a customer base that&rsquo;s contracting. Same structural argument as the <a href="/posts/training-data-is-the-moat/">training-data piece</a>: the surface that the AI layer can commoditize is the surface that won&rsquo;t earn revenue. The tools that survive will be the ones a Codex 5.5 or Opus 6 can integrate with by themselves, on its own initiative, with its own budget.</p>
+            <p>As I argued in <a href="/posts/training-data-is-the-moat/">Training Data Is the Moat</a>, any layer that frontier models commoditize stops capturing margin. The software products that survive will be the ones a Codex 5.5 or Opus agent can discover, test, and pay for autonomously.</p>
 
             <h2 id="thesis">The thesis</h2>
 
-            <p>The Hermes + Codex 5.5 build was a fun proof that the tooling layer has caught up. The model is no longer the constraint on what you can ship. What you build with it is.</p>
+            <p>Shipping veracityapi.com in an afternoon with Hermes + Codex 5.5 proved that the build constraint is gone. The model is no longer the bottleneck. Your pricing and distribution surface is.</p>
 
             <p>Build for agents. Price per call. Everything else is legacy.</p>
         </div>

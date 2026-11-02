@@ -185,7 +185,45 @@
         .related-list li:last-child { border-bottom: none; }
         .related-list a { font-family: 'Source Serif 4', Georgia, serif; font-size: 1rem; color: var(--text); text-decoration: underline; }
         .related-list a:hover { color: var(--accent-hover); }
-    </style>
+      /* TL;DR block — editorial summary box */
+  .article-body .tldr {
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent-primary);
+    border-radius: 6px;
+    padding: 1.25rem 1.5rem;
+    margin: 2rem 0;
+  }
+  .article-body .tldr-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--accent-primary);
+    margin-bottom: 0.5rem;
+  }
+  .article-body .tldr-thesis {
+    font-family: 'Source Serif 4', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
+    color: var(--text-primary);
+    line-height: 1.5;
+    margin-bottom: 0.75rem !important;
+  }
+  .article-body .tldr ul {
+    margin: 0 !important;
+    padding-left: 1.25rem !important;
+  }
+  .article-body .tldr li {
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 0.35rem;
+  }
+  .article-body .tldr li:last-child {
+    margin-bottom: 0;
+  }
+</style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -270,18 +308,6 @@
         </div>
     </div>
 
-    <p style="font-size:1.15rem;line-height:1.6;margin-bottom:1.5rem;"><strong>Bottom line:</strong> <em>Wavespeed is where we've moved all of our AI reel production. 1,000+ models, pay-per-use pricing, a unified API, and no subscription nonsense. If you're building agentic video workflows, this is the platform.</em></p>
-
-    <div style="background:var(--bg-surface);border-left:3px solid #767676;padding:1.25rem 1.5rem;border-radius:0 6px 6px 0;margin:0 0 2rem 0;">
-        <strong style="color:var(--text);font-size:1.05rem;">Key Takeaways</strong>
-        <ul style="margin:0.75rem 0 0 1.25rem;color:var(--text);">
-            <li><strong>1,000+ models under one API</strong> — image, video, audio, 3D, digital humans. Every major provider (Google, ByteDance, Alibaba, Kling, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">Minimax</a>) plus Wavespeed's own models, all through a single endpoint.</li>
-            <li><strong>Pure pay-per-use pricing</strong> — no monthly subscriptions, no credit packs that expire. You pay for what you generate, and costs match what you'd pay going direct to providers.</li>
-            <li><strong>Built for developers, not casual creators</strong> — the API is robust with extensive docs, but there are no templates or guided workflows. You need to know what you're building.</li>
-            <li><strong>200+ reels and counting</strong> — we've been running our entire <a href="https://tabiji.ai">tabiji.ai</a> reel pipeline through Wavespeed since switching, progressing from Minimax to Veo 3.1 Lite to Seedance 2.0.</li>
-        </ul>
-    </div>
-
     <div class="affiliate-cta">
         <div class="cta-text">
             <div class="cta-title">Try Wavespeed</div>
@@ -296,20 +322,28 @@
 
         <h2 id="what-is-wavespeed">What Is Wavespeed?</h2>
         <aside class="sidenote">Why am I reviewing AI infrastructure tools? Because the landscape of AI video APIs is genuinely confusing — new model providers every week, inference platforms multiplying, and almost no honest written content comparing them. So I'm <a href="/about/">doing it myself</a>.</aside>
-        <p class="dropcap"><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a> is an AI inference platform that gives you unified API access to over 1,000 models for image, video, audio, and 3D generation. Think of it as the aggregator layer that sits between you and every major AI model provider — Google, ByteDance, Alibaba, Kling, Minimax, OpenAI, Midjourney, and dozens more — all behind a single API endpoint and billing account.</p>
-        <p>The platform positions itself as a purpose-built inference engine with claims of up to 4x faster token generation for LLMs and sub-second rendering for image models. They run their own GPU infrastructure, offer SOC 2 Type II compliance, and support Node.js, Python, and cURL out of the box.</p>
-        <p>But here's what actually matters: Wavespeed solves the problem of juggling multiple AI provider accounts, each with their own API quirks, billing systems, and rate limits. Instead of maintaining separate integrations with Minimax, Google, ByteDance, and everyone else, you maintain one. For anyone building production pipelines that need to switch between models quickly — which is exactly what we do at <a href="https://tabiji.ai">tabiji</a> — that's a meaningful operational advantage.</p>
+        <p class="dropcap"><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Wavespeed</a> is an AI inference platform that puts 1,000+ image, video, audio, and 3D models behind a single REST endpoint and billing balance. Instead of maintaining separate API integrations, rate limits, and credit wallets across Google, ByteDance, Alibaba, Kling, <a href="https://platform.minimax.io/subscribe/token-plan?code=B8atrcvv5N&source=link">Minimax</a>, OpenAI, and Midjourney, you wire up one endpoint and swap model IDs in the request body.</p>
+        <p>Wavespeed runs its own GPU infrastructure (SOC 2 Type II certified, with Node.js, Python, and cURL support out of the box), claiming up to 4x faster LLM token generation and sub-second image rendering. For us at <a href="https://tabiji.ai">tabiji.ai</a>, the pitch was simpler: we needed to run 200+ travel reels through an automated pipeline and switch models whenever a better one dropped without rewriting our backend.</p>
+
+        <div class="tldr">
+          <div class="tldr-label">TL;DR</div>
+          <p class="tldr-thesis">After 200+ production reels at tabiji.ai, Wavespeed is our default AI video API — giving us 1,000+ models behind one endpoint at direct-provider pricing with zero monthly subscriptions.</p>
+          <ul>
+            <li><strong>One endpoint, 1,000+ models</strong> — swap between Veo 3.1, Seedance 2.0, Wan 2.6, Kling, and Minimax by changing a single model string.</li>
+            <li><strong>Pure pay-per-use</strong> — no monthly tiers or expiring credit packs; per-second and per-image rates match going direct ($0.01/sec for Minimax up to $0.15/sec for Kling O3).</li>
+            <li><strong>Watch the 180s I2V timeout</strong> — sequential 6-scene reels can stall or fail on queue spikes unless you parallelize calls and build retry logic.</li>
+          </ul>
+        </div>
 
         <h2 id="getting-started">Getting Started</h2>
-        <p>Sign-up is straightforward — create an account, add credits, grab your API key. The dashboard gives you a clean overview: credit balance, recent request volume, models used, and quick links to the API docs and model explorer.</p>
+        <p>Sign-up takes two minutes: create an account, top up your balance, and grab an API key. The dashboard gives you credit balance, 7-day request volume, active models, and direct links to the API docs and model explorer.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/ws-dashboard.png" width="2616" height="1454" alt="Wavespeed dashboard showing $115 credit balance, 113 requests in 7 days, and 8 models used" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The Wavespeed dashboard — credit balance, request history, and model usage at a glance.</figcaption></figure>
 
-        <p>What I appreciated: no onboarding wizard, no forced tutorial, no upsell popup. You land on a dashboard that assumes you know what you're doing — here's your API key, here are the docs, here are the models. Go build something. For a developer-focused tool, this is the right energy.</p>
-        <p>The getting started flow walks you through four steps: create an account, add credits, generate your first media, and explore models. There's a Python SDK, REST API docs with code examples in cURL, Python, and JavaScript, and a quick start guide that gets you to your first generation in minutes.</p>
+        <p>There's no onboarding wizard, forced tutorial, or upsell modal. You land on a clean dashboard with your API key and copy-pasteable cURL, Python, and JavaScript snippets. You can fire your first generation in under five minutes.</p>
 
         <h2 id="pricing">Pricing</h2>
-        <p>This is where Wavespeed immediately differentiates from every subscription-based AI video platform I've reviewed. There are no monthly plans. No tiers. No credit packs that expire at the end of the month. You add funds to your account and pay per generation based on the model and output specs.</p>
+        <p>Wavespeed ditches the worst habit in AI video SaaS: monthly subscriptions with expiring credits. There are no tiers or recurring plans. You load a dollar balance and pay per second of video or per generated image.</p>
 
         <div class="table-wrap">
             <table class="data-table">
@@ -383,8 +417,7 @@
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/ws-pricing.png" width="2266" height="1510" alt="Wavespeed pricing table showing per-unit costs for image and video models including Veo 3.1, Wan 2.6, Seedance 2.0, and Hailuo MiniMax" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Wavespeed's per-unit pricing — pay-per-use with no subscription. Hailuo MiniMax at $0.01/second is the cheapest video model.</figcaption></figure>
 
         <aside class="sidenote">For context: MakeUGC charges ~$10/video on their base plan. A 5-second Seedance 2.0 clip on Wavespeed costs $0.50.</aside>
-        <p>The key insight: <strong>Wavespeed's pricing is essentially identical to what you'd pay going direct to each provider.</strong> You're not paying a premium for the aggregation layer — you're getting the convenience of a single API and billing relationship at parity pricing. After 200+ reels through the platform, I've had zero billing surprises or unexpected costs.</p>
-        <p>Compare this to subscription platforms where you're paying $49-$119/month for a fixed number of credits, and unused credits vanish at the end of the billing cycle. With Wavespeed, your balance sits there until you use it. No expiry. No waste.</p>
+        <p>Crucially, <strong>Wavespeed charges direct-provider rates with no aggregator markup.</strong> You aren't paying a tax for unified billing. Compared to $49–$119/month subscription tools that wipe unused credits every 30 days, Wavespeed's balance sits untouched until your pipeline calls it. Across 200+ reels, our unit economics have been completely predictable.</p>
 
         <div class="verdict verdict-win">
             <div class="verdict-label">Pricing Verdict</div>
@@ -392,11 +425,11 @@
         </div>
 
         <h2 id="model-library">The Model Library</h2>
-        <p>This is Wavespeed's most impressive asset. Over 1,000 models across 20+ categories — and it's not filler. These are production-grade models from every major provider in the space:</p>
+        <p>Over 1,000 production-grade models span 20+ categories:</p>
 
         <ul>
-            <li><strong>Text-to-video (92 models)</strong> — including Veo 3.1, Seedance 2.0, WAN 2.7, Hailuo Minimax, Kling, Sora</li>
-            <li><strong>Image-to-video (182 models)</strong> — the largest category, critical for reference-image-based workflows</li>
+            <li><strong>Text-to-video (92 models)</strong> — Veo 3.1, Seedance 2.0, WAN 2.7, Hailuo Minimax, Kling, Sora</li>
+            <li><strong>Image-to-video (182 models)</strong> — the largest category, critical for reference-image workflows</li>
             <li><strong>Text-to-image (123 models)</strong> — Flux, Midjourney, Seedream, Nano Banana, DALL-E</li>
             <li><strong>Image-to-image (136 models)</strong> — style transfer, editing, upscaling</li>
             <li><strong>Video effects (70 models)</strong> — post-processing, transitions, enhancements</li>
@@ -405,70 +438,67 @@
             <li><strong>3D generation (14+ models)</strong> — text-to-3D and image-to-3D</li>
         </ul>
 
-        <p>What makes this library genuinely useful isn't just the breadth — it's the access to models that are hard to get elsewhere. Seedance 2.0 availability was limited when it launched, and Wavespeed was one of the few platforms offering API access. Same story with Kling and several of the Alibaba WAN models. If you're trying to evaluate or deploy a newly released model, Wavespeed usually has it faster than you can set up a direct integration with the provider.</p>
-        <p>For our workflow at tabiji, this meant we could test Minimax, evaluate Veo 3.1 Lite, and then migrate to Seedance 2.0 — all without changing our API integration. Same endpoint, same auth, same billing. Just swap the model ID in the request body. That's the real value of an aggregator done right.</p>
+        <p>The real edge isn't raw model count — it's access to region-locked or waitlisted Chinese and commercial video models. Getting direct enterprise API keys for ByteDance's Seedance 2.0, Kuaishou's Kling, or Alibaba's WAN variants can take weeks of paperwork. Wavespeed puts them behind standard bearer-token auth. At tabiji, we moved our reel pipeline from Minimax to Veo 3.1 Lite to Seedance 2.0 by changing a single model string.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/ws-generator.png" width="3410" height="1970" alt="Wavespeed image generator using Nano Banana 2 model to generate an airport security scene" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Testing Nano Banana 2 in Wavespeed's image generator — reference image workflow with prompt and settings.</figcaption></figure>
 
         <h2 id="api">API &amp; Developer Experience</h2>
-        <p>The API is where Wavespeed earns its keep. A unified REST endpoint at <code>/api/v3/{model_uuid}</code> handles all models — submit a task, check status, retrieve results. The docs are thorough, with code examples in cURL, Python, and JavaScript for every model.</p>
+        <p>Every model runs through a unified REST pattern at <code>/api/v3/{model_uuid}</code>: submit a job, poll status (or run sync mode where supported), and pull the output URL. Every model page generates ready-to-copy cURL, Python, and JavaScript payloads with that model's exact schema.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/ws-api.png" width="2926" height="1812" alt="Wavespeed API documentation showing unified REST endpoint with cURL, Python, and JavaScript examples" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Wavespeed's API docs — one unified REST endpoint for all models, with examples in cURL, Python, and JavaScript.</figcaption></figure>
 
-        <p>The sidebar in the docs lists every supported provider — X AI, Minimax, Midjourney, Bria, ElevenLabs, Luna, Microsoft, Recraft, Character AI, Lightricks, and many more. Each provider section includes model-specific parameters, pricing, and ready-to-copy code snippets.</p>
-        <p>For <a href="/posts/future-of-content-agentic-data-enrichment/">agentic workflows</a>, this is exactly what you need. Our tabiji pipeline calls the Wavespeed API programmatically — prompt goes in, video comes out. No browser automation, no GUI clicking, no manual steps. The API supports both sync and async modes, so you can fire off a generation and poll for completion, or wait for the result inline.</p>
+        <p>The docs index dozens of upstream providers — X AI, Minimax, Midjourney, Bria, ElevenLabs, Luma, Microsoft, Recraft, Character AI, Lightricks — with explicit parameter tables and unit pricing on the same page. For <a href="/posts/future-of-content-agentic-data-enrichment/">agentic workflows</a>, that uniformity means zero browser automation or brittle scraping: prompt and reference image go in via JSON, MP4 URL comes back.</p>
 
         <div class="verdict verdict-win">
             <div class="verdict-label">API Verdict</div>
-            <p>One of the most developer-friendly AI APIs I've used. Unified endpoint, comprehensive docs, and the model breadth to back it up. This is how you build production video pipelines.</p>
+            <p>One of the cleanest AI media APIs available. A single async job pattern across 1,000+ models makes model-hopping trivial in production.</p>
         </div>
 
         <h2 id="desktop-playground">Desktop App &amp; Playground</h2>
-        <p>Beyond the API, Wavespeed offers a web-based playground and a native macOS desktop app — both useful for testing models before committing to them in production code.</p>
+        <p>Before wiring a model into code, you can test it in Wavespeed's browser playground or native macOS desktop app at the exact same per-unit API rate.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/playground.png" width="3410" height="1970" alt="Wavespeed web playground showing image generation with Nano Banana 2 model, settings panel, and output preview" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">The web playground — select a model, configure parameters, and generate directly in the browser.</figcaption></figure>
 
-        <p>The playground is where I spend time evaluating new models before wiring them into our pipeline. Pick a model from the dropdown, write a prompt, adjust settings (aspect ratio, resolution, format), and hit generate. It costs the same credits as an API call, but the visual interface makes it easier to iterate on prompts and compare outputs side-by-side.</p>
-        <p>This was critical for our model progression. Before switching from Minimax to Veo 3.1 Lite, I ran the same prompts through both models in the playground to compare quality. Then again when evaluating Seedance 2.0. Being able to A/B test without writing throw-away code is a genuine time-saver.</p>
+        <p>Whenever a new video model drops, I run identical reference images and motion prompts through the playground to eyeball artifacting, camera control, and prompt adherence before touching our pipeline code.</p>
 
         <figure style="margin:1.5rem 0 2rem;"><img  src="https://img.zonted.com/resources/wavespeed-review/ws-desktop.png" width="2774" height="1776" alt="WaveSpeed Desktop app showing Featured Models, Model Browser, Playground, Workflow builder, and Free Tools" loading="lazy" style="border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">WaveSpeed Desktop — a native app with model browser, playground, workflow builder, and free local tools.</figcaption></figure>
 
-        <p>The desktop app adds a few extras: a visual workflow builder (node-based editor for chaining models), template saving, generation history, and some free tools that run locally without an API key. It's a nice complement to the API-first workflow, though the API is where the real production work happens.</p>
+        <p>The macOS desktop app adds a node-based workflow builder for chaining models (e.g., Flux image generation &rarr; upscaler &rarr; I2V animation), local generation history, and free local utility tools (background removal, format conversion) that don't touch your credit balance.</p>
 
         <h2 id="strengths">What I Liked</h2>
-        <p>The model library is the headline. 1,000+ models across every category, with new ones added regularly. When a new model drops — Seedance 2.0, a new WAN variant, whatever — Wavespeed typically has it available within days. For a team that needs to stay on the cutting edge of video generation, that speed of access is worth more than any individual feature.</p>
-        <p>The pay-per-use pricing is how every AI platform should work. No subscriptions, no expiring credits, no unused capacity. I load up credits and they sit there until I need them. After 200+ reels, the costs match what I'd be paying going direct to each provider. You're getting the convenience of aggregation without a markup.</p>
-        <p>The API is genuinely robust. Unified endpoint, extensive documentation, code examples in three languages, and a clean async model for production use. Wiring Wavespeed into our <a href="/posts/ai-reels-what-actually-works/">agentic reel pipeline</a> at tabiji was straightforward — and more importantly, switching between models is a one-line change in our code.</p>
-        <p>The playground is an underrated feature. Being able to test a model visually before committing to it in production code saves real time. I used it to evaluate every model transition we made — Minimax to Veo 3.1 Lite to Seedance 2.0 — without writing disposable scripts.</p>
+        <ul>
+            <li><strong>Zero-friction model upgrades:</strong> Moving our <a href="/posts/ai-reels-what-actually-works/">agentic reel pipeline</a> from Minimax to Veo 3.1 Lite to Seedance 2.0 took minutes because auth, polling, and webhook handling stayed identical.</li>
+            <li><strong>Direct-provider unit economics:</strong> No $99/month "Pro" tax or expiring credit buckets. You pay $0.01–$0.15 per video second and $0.005–$0.14 per image, matching upstream pricing.</li>
+            <li><strong>Fast side-by-side benchmarking:</strong> The web playground and desktop node editor let you A/B test prompts across five video models in ten minutes without writing throwaway test scripts.</li>
+        </ul>
 
         <h2 id="weaknesses">What Frustrated Me</h2>
-        <p>Wavespeed was slow to give access to Seedance 2.0 when it launched. This is a platform that sells itself on breadth and speed of model access, so any delay is more noticeable. Other models I've tested were available quickly, but the Seedance 2.0 gap was frustrating since it was the model I specifically needed for our production pipeline.</p>
-        <p>I hit reliability issues with SkyReels when running them through Wavespeed's GPUs at 720p. Failed renders, inconsistent outputs. This was specific to one model family at one resolution, and everything else has been smooth — but when you're running production workloads, a single unreliable model can eat time diagnosing whether the problem is your code, the model, or the infrastructure.</p>
-        <p><strong>The I2V generation timeout is the real bottleneck for automated pipelines.</strong> Wavespeed's image-to-video API uses a 180-second per-clip timeout with 8-second polling intervals. For a single clip, that's fine. But our production pipeline at tabiji generates 6 scenes per reel — and those calls run sequentially. Worst case: 6 &times; 180s = 18 minutes of just video generation. A Japan reel took 1,683 seconds (28 minutes) end-to-end, and almost all of that was I2V polling. An India reel that hit cached assets finished in 226 seconds.</p>
-        <p>For comparison: running the same Veo 3.1 Lite model through an alternative provider with a <strong>600-second per-clip timeout</strong> is significantly more reliable for automated workflows. The generation speed is comparable — it's still a sequential API call, not actually faster — but the 3.3x longer timeout means far fewer failed renders from queue backlog or API slowdowns. Wavespeed's 180s timeout is tight enough that any hiccup causes a clip to fail, which cascades through the whole pipeline. If you're building fully automated video workflows, factor this in: Wavespeed's pricing and model access are best-in-class, but the timeout behavior can bite you at scale. Parallelizing your I2V calls helps — cutting a 6-scene reel from ~20 minutes to ~5 — but a more generous timeout would be the real fix.</p>
-        <p>There's no handholding. If you don't know what prompt to write, which model to pick, or how to structure a video generation workflow, Wavespeed won't help you figure it out. There are no templates, no content libraries, no guided workflows. The docs are excellent for technical integration, but they assume you already know what you're building and why. For a developer tool, this is fine. For anyone else, it's a wall.</p>
+        <p><strong>1. The 180-second I2V timeout is too tight for sequential pipelines.</strong> Wavespeed's image-to-video wrapper enforces a 180-second per-clip timeout with 8-second polling intervals. Our tabiji pipeline generates 6 scenes per reel. Run sequentially, worst-case video generation alone takes 18 minutes (6 &times; 180s). One Japan reel took 1,683 seconds (28 minutes) end-to-end almost entirely waiting on I2V polling, whereas an India reel that hit cached assets finished in 226 seconds.</p>
+        <p>When we ran the exact same Veo 3.1 Lite model through an alternative provider with a <strong>600-second timeout</strong>, automated completion rates jumped dramatically. Generation speed wasn't faster, but the 3.3x longer timeout absorbed upstream queue spikes instead of throwing a timeout error and cascading a failure through the reel build. You can mitigate this on Wavespeed by parallelizing all 6 scene calls (cutting wall-clock time from ~20 minutes to ~5) and wrapping each clip in retry logic, but Wavespeed should let callers configure longer timeouts.</p>
+        <p><strong>2. Uneven launch timing and model-specific quirks.</strong> Wavespeed was noticeably slow rolling out Seedance 2.0 API access when it launched, which stung because we were waiting to migrate production reels to it. I also hit repeated failed renders and corrupted outputs on SkyReels at 720p. With 1,000+ models, a breaking bug in one model family can burn an hour while you figure out whether your payload, the model, or Wavespeed's GPU cluster is at fault.</p>
+        <p><strong>3. Zero creative guardrails.</strong> Wavespeed is raw plumbing. There are no templates, stock avatars, caption engines, or script assistants. If you don't bring your own prompt architecture and FFmpeg stitching pipeline, you're staring at a blank JSON input.</p>
 
         <h2 id="vs-alternatives">How It Compares</h2>
-        <p><strong>Wavespeed vs. going direct to providers:</strong> The main trade-off is convenience vs. control. Going direct to Google (Veo), ByteDance (Seedance), or Minimax gives you the provider's native API with potentially more model-specific options. Wavespeed gives you one integration that covers all of them at matching prices. After managing multiple provider accounts early on, the single-API approach won out for us.</p>
-        <p><strong>Wavespeed vs. Replicate / Fal:</strong> All three are inference platforms, but Wavespeed's model library is significantly larger — especially for video models. Replicate and Fal tend to have stronger communities around open-source image models (Flux, Stable Diffusion), while Wavespeed has better coverage of commercial video models (Seedance, Kling, Veo). If video is your primary use case, Wavespeed has the edge.</p>
-        <p><strong>Wavespeed vs. MakeUGC / Creatify / Arcads:</strong> Completely different products. <a href="/posts/makeugc/">MakeUGC</a> and its competitors are managed platforms with avatars, templates, and guided workflows — you're paying ~$10/video for the convenience layer. Wavespeed is the raw infrastructure underneath. If you can build your own pipeline, Wavespeed gives you the same (or better) model access at a fraction of the cost. If you can't, look at the managed platforms.</p>
+        <p><strong>Wavespeed vs. going direct to providers:</strong> Going direct to Google Vertex (Veo), ByteDance (Seedance), or Minimax occasionally exposes bleeding-edge beta parameters first. Wavespeed gives you one integration and one wallet across all of them at parity pricing. After juggling four separate provider accounts early on, consolidating onto Wavespeed was a no-brainer.</p>
+        <p><strong>Wavespeed vs. Replicate / Fal:</strong> Replicate and Fal shine for open-weight image models, custom LoRA hosting, and serverless GPU containers. Wavespeed dominates on commercial video models (Seedance, Kling, Veo, Wan, Hailuo). If video generation is your core workload, Wavespeed has the stronger catalog.</p>
+        <p><strong>Wavespeed vs. MakeUGC / Creatify / Arcads:</strong> Different layers of the stack. <a href="/posts/makeugc/">MakeUGC</a> charges ~$10/clip for a turnkey UI with lip-synced avatars and ad templates. Wavespeed gives you the raw underlying video models for $0.50/clip, assuming you can write the code to stitch scenes and audio yourself.</p>
 
         <h2 id="skip">Skip Wavespeed If...</h2>
         <ul>
-            <li><strong>You want done-for-you content.</strong> Wavespeed is infrastructure, not a content creation platform. There are no templates, avatars, or content libraries. If you need a guided workflow that takes you from script to finished video, look at <a href="/posts/makeugc/">MakeUGC</a>, Creatify, or Arcads instead.</li>
-            <li><strong>You're not comfortable with APIs.</strong> Every interaction with Wavespeed beyond the playground requires writing code or using API tools. If REST endpoints and JSON payloads aren't in your vocabulary, this isn't your tool.</li>
-            <li><strong>You only need one model.</strong> If you know exactly which model you want and you'll never switch, going direct to that provider might be simpler. Wavespeed's value is in the aggregation — if you don't need breadth, you don't need Wavespeed.</li>
-            <li><strong>You need real-time or streaming generation.</strong> The async API pattern (submit job, poll for result) works great for batch and pipeline workflows, but if you need sub-second interactive generation, check their sync mode limitations for your specific model.</li>
+            <li><strong>You want turnkey marketing videos.</strong> If you need pre-built avatars, script templates, and browser-based video editing, use <a href="/posts/makeugc/">MakeUGC</a>, Creatify, or Arcads.</li>
+            <li><strong>You don't write code.</strong> Outside the test playground, Wavespeed is an API product built around REST endpoints and JSON payloads.</li>
+            <li><strong>You're locked into a single provider.</strong> If 100% of your workload runs on Google Veo and never changes, calling Vertex AI directly removes a middleman.</li>
+            <li><strong>You need sub-second interactive streaming.</strong> Video generation runs asynchronously via job queues; always check sync-mode latency limits for your target model.</li>
         </ul>
 
         <h2 id="verdict">Final Verdict</h2>
         <div class="verdict verdict-win">
             <div class="verdict-label">Overall</div>
-            <p><strong>Wavespeed is the best AI video API platform for developers and technical teams building production pipelines.</strong> The model library is unmatched at 1,000+, the pay-per-use pricing is honest and transparent, the API is robust, and the aggregation genuinely saves operational overhead. After 200+ reels through the platform for tabiji.ai, it's become our default infrastructure for all AI video generation.</p>
-            <p style="margin-top:0.75rem;">What would push this to a perfect score? Faster access to newly released models (the Seedance 2.0 delay stung), and better reliability guarantees across all models and resolutions. Both are solvable — and the core product is strong enough that these feel like growing pains, not structural issues.</p>
+            <p><strong>Wavespeed is the best AI video API platform for technical teams running automated media pipelines.</strong> Putting 1,000+ models behind one REST schema at direct-provider, pay-per-use rates eliminated weeks of integration maintenance for tabiji.ai across 200+ production reels.</p>
+            <p style="margin-top:0.75rem;">Configurable I2V timeouts (beyond 180s) and tighter SLA consistency on niche models like SkyReels 720p would make it a 5/5. Even with those caveats, it's the strongest aggregation layer in AI video today.</p>
         </div>
 
-        <p style="font-size:1.05rem;margin-top:1rem;"><strong>Overall: 4.5/5</strong> — the go-to platform for anyone building AI video pipelines. The model library, pricing model, and API quality set the standard for what an AI inference platform should be.</p>
+        <p style="font-size:1.05rem;margin-top:1rem;"><strong>Overall: 4.5/5</strong> — our default production API for multi-model AI video generation.</p>
 
         <p style="margin-top:1.5rem;"><a href="https://wavespeed.ai/?ref=zonted" target="_blank" rel="noopener">Try Wavespeed &rarr;</a> — pay-per-use, no subscription required. Add credits and start generating.</p>
 
