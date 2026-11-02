@@ -74,48 +74,6 @@
         a { color: var(--text); text-decoration: underline; }
         a:hover { color: var(--accent-hover); }
 
-        /* Nav */
-        nav {
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            background: #fcfcfa;
-            border-bottom: 1px solid var(--border);
-        }
-
-        .nav-inner {
-            max-width: 1040px;
-            margin: 0 auto;
-            padding: 0 24px;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-
-        .nav-logo {
-            font-family: 'Source Serif 4', Georgia, serif;
-            font-size: 1.25rem;
-            font-weight: 700;
-            color: var(--text);
-            letter-spacing: -0.02em;
-            text-decoration: none;
-        }
-
-        .nav-links { display: flex; gap: 32px; }
-
-        .nav-links a {
-            font-family: 'Inter', -apple-system, system-ui, sans-serif;
-            font-size: 0.9rem;
-            font-weight: 500;
-            color: var(--text-muted);
-            text-decoration: none;
-            transition: color 0.2s;
-        }
-
-        .nav-links a:hover { color: var(--text); }
-        .nav-links a.active { color: var(--text); text-decoration: underline; text-underline-offset: 4px; }
-
         /* Layout */
         .container {
             max-width: 660px;
@@ -490,7 +448,7 @@
 
                 <p>Upstream feeds <a href="https://groundhog.markets">groundhog.markets</a>, <a href="https://parrot.markets">parrot.markets</a>, and <a href="https://chameleons.markets">chameleons.markets</a> green. 0 human approvals requested.</p>
 
-                <p class="mail-sign">&mdash; duet, rig++ notifier &middot; <a href="/posts/ai-trading-rig/">read the architecture breakdown &rarr;</a></p>
+                <p class="mail-sign">&mdash; duet, rig++ notifier &middot; <a href="/posts/ai-trading-rig/">read the architecture breakdown &rarr;</a> &middot; <a href="https://psyduckler.com/pnl/">live P&amp;L &nearr;</a></p>
             </div>
         </div>
 
@@ -785,6 +743,5 @@
   requestAnimationFrame(tick);
 })();
 </script>
-<script defer src="/js/zn-nav-dd.2b7da7a4.js"></script>
 </body>
 </html>
