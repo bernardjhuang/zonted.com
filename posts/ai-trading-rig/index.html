@@ -9,10 +9,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
     <title>From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading</title>
-    <meta name="description" content="How a forgotten laptop in Europe and a dead Mac Mini at home led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5, Tokay, Postgres, and an AUTONOMY.md constitution.">
+    <meta name="description" content="How forgetting my laptop in Europe and losing my Mac Mini to a power outage led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5 and tokay.io.">
     <link rel="canonical" href="https://zonted.com/posts/ai-trading-rig/">
     <meta property="og:title" content="From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading">
-    <meta property="og:description" content="How a forgotten laptop in Europe and a dead Mac Mini at home led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5, Tokay, Postgres, and an AUTONOMY.md constitution.">
+    <meta property="og:description" content="How forgetting my laptop in Europe and losing my Mac Mini to a power outage led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5 and tokay.io.">
     <meta property="og:type" content="article">
     <meta property="og:image" content="https://zonted.com/posts/ai-trading-rig/img/og.jpg">
     <meta name="twitter:card" content="summary_large_image">
@@ -24,7 +24,7 @@
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Article","headline":"From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-11-02","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-trading-rig/","description":"How a forgotten laptop in Europe and a dead Mac Mini at home led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5, Tokay, Postgres, and an AUTONOMY.md constitution.","image":"https://zonted.com/posts/ai-trading-rig/img/og.jpg"}
+    {"@context":"https://schema.org","@type":"Article","headline":"From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading","author":{"@type":"Person","name":"Bernard Huang","url":"https://zonted.com/about/"},"datePublished":"2026-11-02","publisher":{"@type":"Organization","name":"Zonted","url":"https://zonted.com"},"url":"https://zonted.com/posts/ai-trading-rig/","description":"How forgetting my laptop in Europe and losing my Mac Mini to a power outage led me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading operation on Opus 5.5 and tokay.io.","image":"https://zonted.com/posts/ai-trading-rig/img/og.jpg"}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"From Vibe Trading to an Agent-First Rig"}]}
@@ -199,7 +199,7 @@
             <li><a href="#v1">2. v1: the automated trade desk</a></li>
             <li><a href="#v2">3. v2: the failed paper funds</a></li>
             <li><a href="#v3">4. v3: Grokbot &amp; coaching the screen</a></li>
-            <li><a href="#v4">5. 60 days in prediction markets</a></li>
+            <li><a href="#v4">5. 60 days in the weather trenches</a></li>
             <li><a href="#sister-sites">6. Sister .markets sites for swarms</a></li>
             <li><a href="#first-class-citizens">7. Agents as first-class citizens</a></li>
         </ul>
@@ -216,7 +216,7 @@
         <li><a href="#v1">2. v1: the automated trade desk</a></li>
         <li><a href="#v2">3. v2: the failed paper funds</a></li>
         <li><a href="#v3">4. v3: Grokbot &amp; coaching the screen</a></li>
-        <li><a href="#v4">5. 60 days in prediction markets</a></li>
+        <li><a href="#v4">5. 60 days in the weather trenches</a></li>
         <li><a href="#sister-sites">6. Sister .markets sites for swarms</a></li>
         <li><a href="#first-class-citizens">7. Agents as first-class citizens</a></li>
     </ul>
@@ -237,250 +237,283 @@
             <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">November 2, 2026 &middot; 9 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);">November 2, 2026 &middot; 10 min read</div>
             </div>
         </div>
 
         <div class="article-body">
 
-            <p class="dropcap">When I first started dabbling in <a href="/posts/vibe-trading/">vibe trading</a> five months ago, the whole thing was held together by duct tape: a Mac Mini in my house, a couple of third-party agent harnesses, and me manually reading AI-generated stock theses over coffee.</p>
+            <p class="dropcap">When I first started messing around with <a href="/posts/vibe-trading/">vibe trading</a> five months ago, I had no real plan. The whole setup was held together by duct tape: a Mac Mini humming in my house, a couple of third-party agent harnesses, and me sitting at my desk every morning reading AI-generated stock theses over coffee.</p>
 
-            <p>Today, that experiment has evolved into <strong>Rig++</strong> &mdash; an autonomous, multi-venue trading operation running <strong>78 strategy books</strong> across Kalshi, Polymarket, Hyperliquid, and OpenSea, managed day-to-day by venue-specific AI trade managers operating under a written constitution (<code>AUTONOMY.md</code>).</p>
+            <p>Since then, the way I use AI for markets has completely changed. What started as a glorified research assistant has evolved into <strong>Rig++</strong> &mdash; an autonomous, multi-venue trading operation running <strong>78 strategy books</strong> across Kalshi, Polymarket, Hyperliquid, and OpenSea, managed day-to-day by AI trade managers that don't wait for me to wake up before they act.</p>
+
+            <p>Getting here took a lot of dead ends, two failed paper funds, a 3-foot radio antenna on my desk, and unlearning almost everything I thought I knew about managing agents. Here is the honest timeline of how it evolved.</p>
 
             <div class="tldr">
                 <div class="tldr-label">TL;DR</div>
-                <p class="tldr-thesis">How our trading stack evolved across five generations &mdash; from human-in-the-loop equity screens to an autonomous agent-first rig where agents research, deploy, size, and retire their own books.</p>
+                <p class="tldr-thesis">How five months of trial and error took us from human-in-the-loop stock screens to an autonomous agent-first trading rig.</p>
                 <ul>
-                    <li><strong>The catalyst:</strong> Forgetting my laptop on a Europe workcation while a power outage killed my Mac Mini at home made me rethink why I was using frontier AI to build consumer/B2B SaaS apps instead of pointing intelligence directly at markets.</li>
-                    <li><strong>What worked and what died:</strong> An automated <a href="/trading/">trade desk</a> helped me nail discretionary swings like <a href="/posts/ai-desk-figr-earnings/">FIGR earnings</a>, while two <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">autonomous paper funds</a> collapsed under fragile cron glue and risk-averse RLHF.</li>
-                    <li><strong>The 60-day rabbit hole:</strong> Moving to prediction markets (starting with weather microstructure) and graduating the stack to <strong>Opus 5.5 + Tokay VMs + Console MCP / Postgres + Duet</strong> unlocked repeatable, mathematical edges &mdash; cycling <strong>$191,453.85</strong> in cumulative capital across <strong>3,055 legs</strong> (with <code>Weather &middot; rain</code> sitting at a <strong>12.06 Sharpe</strong> and <strong>+$2,948.68</strong> all-time).</li>
-                    <li><strong>Agent-native data rails:</strong> Along the way, we launched <a href="https://groundhog.markets/">groundhog.markets</a>, <a href="https://parrot.markets/">parrot.markets</a>, and <a href="https://chameleons.markets/">chameleons.markets</a> so other agent swarms can query forecast, mention, and copy-trade data in a single call.</li>
-                    <li><strong>The management shift:</strong> Treating agents as first-class citizens with one North Star (<strong>30-day return</strong>) and a standing rule: <em>ask for forgiveness, not permission.</em></li>
+                    <li><strong>The catalyst:</strong> Forgetting my laptop on a Europe workcation while a power outage killed my Mac Mini at home made me realize that building consumer/B2B SaaS apps was a weak way to leverage frontier AI &mdash; and pushed me toward trading.</li>
+                    <li><strong>What worked and what died:</strong> An automated <a href="/trading/">trade desk</a> helped me nail discretionary swings like <a href="/posts/ai-desk-figr-earnings/">FIGR earnings</a>, while two <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">autonomous paper funds</a> collapsed under fragile cron jobs and risk-averse models.</li>
+                    <li><strong>60 days in the weather trenches:</strong> Going deep into prediction markets and graduating our stack to <strong>Opus 5.5 + <a href="https://tokay.io">tokay.io</a> + Console MCP / Postgres + Duet</strong> unlocked real, repeatable edges &mdash; cycling <strong>$191,453.85</strong> in cumulative capital across <strong>3,055 legs</strong> (led by <code>Weather &middot; rain</code> at a <strong>12.06 Sharpe</strong> and <strong>+$2,948.68</strong> all-time).</li>
+                    <li><strong>Companion sites for other agent swarms:</strong> We spun out <a href="https://groundhog.markets/">groundhog.markets</a>, <a href="https://parrot.markets/">parrot.markets</a>, and <a href="https://chameleons.markets/">chameleons.markets</a> as open, agent-friendly data layers.</li>
+                    <li><strong>The management shift:</strong> Treating agents as first-class citizens with one North Star (<strong>30-day return</strong>) and a simple rule: <em>ask for forgiveness, not permission.</em></li>
                 </ul>
             </div>
 
             <h2 id="where-it-started">1. Europe, no laptop, and a dead Mac Mini at home</h2>
 
-            <p>Up until this summer, almost all of my agentic experiments were aimed at building software products. I had agents shipping and running <a href="https://pixel-forge.net">Pixel Forge</a>, <a href="https://agenttune.io">AgentTune</a>, <a href="https://tabiji.ai">Tabiji</a>, <a href="https://palmaura.com">Palmaura</a>, and <a href="/posts/veracity-postmortem/">VeracityAPI</a>.</p>
+            <p>For the first half of the year, I was obsessed with using autonomous agents to build and run software products. I had agents shipping <a href="https://pixel-forge.net">Pixel Forge</a>, <a href="https://agenttune.io">AgentTune</a>, <a href="https://tabiji.ai">Tabiji</a>, <a href="/posts/palmaura-postmortem/">Palmaura</a>, and <a href="/posts/veracity-postmortem/">VeracityAPI</a>.</p>
 
-            <p>Then I flew to Europe for a workcation &mdash; and realized I had forgotten my laptop. A few days into the trip, a power outage hit my house back home and knocked my self-hosted Mac Mini agent rig completely offline.</p>
+            <p>Then I flew to Europe for a workcation &mdash; and realized I had left my laptop at home. A few days into the trip, a power outage hit my house in Texas and knocked my self-hosted Mac Mini agent setup completely offline.</p>
 
             <figure class="portrait">
                 <img src="/posts/ai-trading-rig/img/europe-workcation.webp" width="768" height="1024" alt="Bernard Huang and his partner on a sunny terrace in Taormina, Sicily, with the coastline and Mount Etna in the background." loading="lazy">
-                <figcaption>In Europe without a laptop while my Mac Mini sat dead in a power outage back home &mdash; the accidental forcing function that made me rethink what to point frontier AI at.</figcaption>
+                <figcaption>In Europe without a laptop while my Mac Mini sat dead in a power outage back home &mdash; the accidental forcing function that made me rethink everything.</figcaption>
             </figure>
 
-            <p>With no laptop in my bag and my home server dark, I had plenty of time to step back and think about what I was actually doing with AI.</p>
+            <p>Suddenly I couldn't code, and my agents at home were bricked. All I could do while looking out at the water was think.</p>
 
-            <p>The realization that hit me was simple: <strong>using frontier intelligence just to build another consumer or B2B SaaS app felt like a poor application of the technology.</strong></p>
+            <p>And the realization that hit me was slightly uncomfortable: <strong>using frontier intelligence just to build another consumer or business SaaS app felt like a waste of what these models were actually becoming.</strong></p>
 
-            <p>Cutting-edge fields like cancer research, mathematics, astrophysics, space travel, biotech, and robotics stand to benefit enormously from every leap in frontier reasoning. When a model gets 20% smarter at synthesis or hypothesis generation, a lab working on protein folding or propulsion feels that immediately. Building a CRUD app or an SEO funnel doesn't; your bottleneck is still distribution, Stripe churn, and customer support.</p>
+            <p>Think about who benefits most when frontier models jump a generation. If you're working on cancer research, pure mathematics, astrophysics, space travel, biotech, or robotics, a smarter model directly unlocks problems you couldn't solve six months ago. But if you're building a B2B SaaS or a consumer web app? A 20% smarter LLM doesn't make distribution any easier. You're still stuck fighting for attention, debugging Stripe webhooks, and answering support emails.</p>
 
-            <p>I didn't have a wet lab or a rocket factory. I wanted a domain I personally had access to where raw advances in frontier intelligence would compound directly without human distribution bottlenecks. Trading was the cleanest fit on earth &mdash; especially with brokerage APIs and MCPs finally coming online.</p>
+            <p>I didn't have a wet lab or a rocket factory. I wanted something I could do personally where every leap in frontier intelligence would compound directly &mdash; no customers, no marketing funnels, just raw reasoning against a scoreboard. With brokerage APIs and MCPs finally coming online, trading felt like the most honest arena in the world to test that thesis.</p>
 
             <h2 id="v1">2. v1: the automated trade desk (OpenClaw + Hermes)</h2>
 
-            <p>When I got back, my first build was an automated <a href="/trading/">trade desk</a> run by two persistent agents &mdash; <strong>OpenClaw</strong> (GLM 5.2) and <strong>Hermes</strong> (GPT 5.6 Sol). Every day, a schedule of cron jobs rebuilt a static trading terminal on this site.</p>
+            <p>When I got back home, I started with what I knew: building an automated <a href="/trading/">trade desk</a> powered by <strong>OpenClaw</strong> (GLM 5.2) and <strong>Hermes</strong> (GPT 5.6 Sol). Every morning, a set of cron routines woke up, scanned the market, and rebuilt a live trading terminal on this site for me.</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/desk.webp" width="2000" height="1268" alt="The Zonted trading desk on September 14, 2026: a positions table with BOT, FRMI, RTX, HPE and PL, each showing last price, day change, a Full thesis button, beta, spread Z, a one-year chart with levels, and the next catalyst." loading="lazy">
                 <figcaption>The v1 trade desk: positions, theses, levels, and next catalysts, rebuilt by the agents every day.</figcaption>
             </figure>
 
-            <p>The desk attacked equities from two angles. First, a daily <a href="/trading/momentum/">momentum</a> and <a href="/trading/vwap-setups/">VWAP setup</a> scanner scored breakouts, spread Z-scores, and distance from earnings VWAP:</p>
+            <p>On the technical side, the routines scoped out <a href="/trading/momentum/">momentum</a> and <a href="/trading/vwap-setups/">VWAP setups</a> every day &mdash; flagging statistical breakouts and how far a stock was trading from its post-earnings VWAP:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/vwap-setup.webp" width="2000" height="1320" alt="A VWAP setup card for WAY, rated AVOID: spread Z +0.05, distance Z +0.98, 16% below its earnings VWAP, with a candlestick chart and a side panel for the XLV health care sector's Z-score." loading="lazy">
-                <figcaption>Momentum: an automated VWAP setup card with spread Z, VWAP distance, sector Z-score, and the agents' verdict.</figcaption>
+                <figcaption>Momentum: a daily VWAP setup card with spread Z, VWAP distance, sector Z-score, and the agents' verdict.</figcaption>
             </figure>
 
-            <p>Second, a multi-model ensemble digested news, filings, and macro shifts to propose and adversary-review <a href="/trading/themes/">narrative themes</a> &mdash; scoring each thesis on how widely <strong>Known</strong> it was versus how much of it was already <strong>Priced</strong> in, sorting by the <strong>Gap</strong>:</p>
+            <p>On the fundamental side, I had multiple models read the news, argue with each other, and maintain a board of <a href="/trading/themes/">narrative themes</a>. Each theme got scored on how widely <strong>Known</strong> the story was versus how much of it was already <strong>Priced</strong> in, so I could hunt in the <strong>Gap</strong> column:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/themes.webp" width="2000" height="1091" alt="The Themes table on Zonted Trading: 18 narrative themes such as The Power Wall: grid breaks before AI does and Y2Q: the forced post-quantum cryptography rebuild, scored by Known, Priced, and Gap." loading="lazy">
-                <figcaption>Narrative: themes scored by multi-model consensus on how well known a thesis is versus how much is priced in. The Gap column was where we hunted.</figcaption>
+                <figcaption>Narrative: themes scored by multi-model consensus on how well known a thesis is versus how much is priced in. The Gap column was where we looked.</figcaption>
             </figure>
 
-            <p>As a human-in-the-loop copilot, the trade desk genuinely worked. Having an AI read every 10-Q, reconcile take-rate formulas, and map out option-implied probability trees helped me nail a handful of high-conviction trades &mdash; most notably <a href="/posts/ai-desk-figr-earnings/">the FIGR earnings campaign</a>, where the desk spotted a public weekly volume beat hiding behind a stale sell-side consensus and we walked away with <strong>+$25,898</strong> on print morning.</p>
+            <p>Honestly? As a human-in-the-loop setup, it worked pretty well. Having an AI tear through 10-Qs, back out channel take-rates, and build option probability trees helped me hit a handful of really fun trades &mdash; especially <a href="/posts/ai-desk-figr-earnings/">our FIGR earnings play</a>, where the desk noticed Figure's self-published weekly volume was already beating stale Wall Street estimates and we walked away up <strong>+$25,898</strong> on print morning.</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/robinhood-ytd.webp" width="775" height="379" alt="Robinhood YTD portfolio chart climbing steadily from flat into a sharp peak on August 13, 2026." loading="lazy">
-                <figcaption>The YTD brokerage curve riding our AI-desk momentum and earnings setups into mid-August.</figcaption>
+                <figcaption>Riding the AI trade desk setups up into mid-August.</figcaption>
             </figure>
 
-            <p>Still, three structural problems kept nagging at me:</p>
+            <p>But the longer I ran the desk, the more its flaws wore me down:</p>
 
             <ol type="a">
-                <li><strong>Cognitive bottleneck:</strong> Every theme opened into a layer-by-layer saturation table and an adversarial review. Multiply that across 18 themes and dozens of tickers, and <em>I</em> was the bottleneck reading it all.</li>
-                <li><strong>Zero repeatability:</strong> Every single equity trade felt like a bespoke investigation &mdash; learning a new supply chain, a new accounting quirk, or a new management team from scratch.</li>
-                <li><strong>Fragile glue:</strong> The agents constantly broke their own update scripts, leaving me playing janitor to cron jobs.</li>
+                <li><strong>Total information overload:</strong> Every single theme opened into a multi-layer supply-chain breakdown and an adversarial bear case. Reading 18 of those every morning meant <em>my brain</em> was still the bottleneck.</li>
+                <li><strong>Nothing compounded:</strong> Every stock trade felt like starting from zero &mdash; new industry, new balance sheet quirks, new management team.</li>
+                <li><strong>Constant babysitting:</strong> The agents broke their own update scripts constantly. I was spending more time fixing broken crons than thinking about markets.</li>
             </ol>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/theme-detail.webp" width="2000" height="1123" alt="A theme detail page for e-invoicing mandates: a Saturation by layer section comparing Known and Priced scores for tax engines, ERP systems and approved local platforms, followed by an Adversarial review." loading="lazy">
-                <figcaption>Every theme opened into a layer-by-layer breakdown and an adversarial review &mdash; impressive output, but exhausting for one human to triage daily.</figcaption>
+                <figcaption>Every theme opened into a layer-by-layer breakdown and an adversarial review &mdash; super cool to look at, exhausting for one human to read every day.</figcaption>
             </figure>
 
             <h2 id="v2">3. v2: the failed autonomous paper funds</h2>
 
-            <p>To get myself out of the daily triage loop, I tried automating the entire fund management cycle in paper using Grok and GPT harnesses (<a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">Paper Fund I with Slo</a> and <a href="/posts/introducing-autonomous-agent-paper-fund-ii-psy/">Paper Fund II with Psy</a>).</p>
+            <p>I wanted out of the driver's seat. So I tried automating fund management in paper using Grok and GPT (<a href="/posts/introducing-autonomous-agent-paper-fund-i-slo/">Paper Fund I with Slo</a> and <a href="/posts/introducing-autonomous-agent-paper-fund-ii-psy/">Paper Fund II with Psy</a>).</p>
 
-            <p>The design sounded textbook: every evening, the agents would formulate strategies for the next session. During market hours, they'd log every decision and pass in a live trade journal. After the bell, an adversarial agent would rip their journal apart so they could learn for tomorrow. Compounding intelligence, right?</p>
+            <p>The loop sounded great in my head: every night the agents would write tomorrow's game plan, keep a live trade journal during market hours, and get roasted by an adversarial reviewer after the close so they'd get smarter every day.</p>
 
-            <p>Both crashed and burned. We published the full postmortems (<a href="/posts/autonomous-trading-crons-retrospective/">I Shut Down My Autonomous Trading Crons</a> and <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">Retiring Autonomous Agent Paper Fund II</a>). The failures came down to three things:</p>
+            <p>It was a complete flop. We ended up shutting both down and writing the postmortems (<a href="/posts/autonomous-trading-crons-retrospective/">I Shut Down My Autonomous Trading Crons</a> and <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">Retiring Autonomous Agent Paper Fund II</a>). Looking back, it failed for three reasons:</p>
 
             <ul>
-                <li><strong>The models weren't sharp enough on open-ended equity portfolios</strong> &mdash; or worse, they fabricated edges through <a href="/posts/sol-fund-revision-c-contamination-lesson/">backtest contamination</a>.</li>
-                <li><strong>RLHF risk aversion:</strong> Models like Fable, Sol, and earlier Opus checkpoints had been trained so aggressively <em>not</em> to give financial advice or pull the trigger on risk that they would paralyze themselves in committee meetings while Grok was the only one willing to fire an order.</li>
-                <li><strong>Bad architecture on my part:</strong> Stitching stateless cron jobs together with markdown journals produced <em>26 journals, four closed paper trades, and zero persisted learning.</em> Writing a lesson in a markdown file doesn't mean the next cron invocation changes its code.</li>
+                <li><strong>The systems just weren't smart enough yet</strong> for open-ended equity portfolio management &mdash; or they'd fool themselves with <a href="/posts/sol-fund-revision-c-contamination-lesson/">backtest contamination</a>.</li>
+                <li><strong>Safety training got in the way:</strong> Most frontier models (Sol, Fable, earlier Opus) had been trained so hard <em>not</em> to trade for you that they acted like a terrified committee, talking themselves out of every trade while Grok was the only one willing to pull the trigger.</li>
+                <li><strong>I architected it badly:</strong> Stitching stateless LLM cron jobs together with markdown journals resulted in <em>26 journals, four closed paper trades, and zero persisted learning.</em> Writing &ldquo;I shouldn't chase breakouts&rdquo; in a markdown file doesn't magically rewrite the code for tomorrow's run.</li>
             </ul>
 
-            <h2 id="v3">4. v3: Grokbot scouting &amp; coaching the screen</h2>
+            <h2 id="v3">4. v3: Grokbot scouting &amp; learning to coach</h2>
 
-            <p>After retiring the paper funds, I moved to <strong>Grokbot</strong> for agent-led scouting, exploration, and research. Running persistent AI agents hosted on SpaceX and Cursor cloud infrastructure proved vastly more reliable than self-hosting third-party harnesses on a Mac Mini at home that could freeze, hit token caps, or die whenever the power blinked.</p>
+            <p>After retiring the paper funds, I moved over to <strong>Grokbot</strong> for agent-led scouting, exploration, and research. Having a persistent AI hosted on SpaceX / Cursor cloud infrastructure was a night-and-day upgrade over self-hosting third-party harnesses on a Mac Mini at home that could freeze, run out of tokens, or die in a thunderstorm.</p>
 
-            <p>Instead of trying to run a full portfolio on crons, my scout agents (like <code>voltorb</code>) monitored breaking news, equities, and prediction markets 24/7, pinging me with structured catalyst breakdowns:</p>
+            <p>My scout agents (like <code>voltorb</code>) prowled news feeds, stock tapes, and prediction markets 24/7, pinging me whenever they found an interesting angle:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/agent-chat.webp" width="1512" height="1510" alt="A chat with an agent named Voltorb breaking down AeroVironment (AVAV): price, market cap, GAAP versus operating earnings, and its two segments." loading="lazy">
-                <figcaption>Having Voltorb break down AeroVironment (AVAV): segment economics, GAAP vs. operating earnings, and catalyst math.</figcaption>
+                <figcaption>Asking Voltorb to break down AeroVironment (AVAV): segment economics, GAAP vs. operating earnings, and what the catalysts are worth.</figcaption>
             </figure>
 
-            <p>This phase taught me one of the most important skills in running an agentic team: <strong>coaching how agents think, not just what they output.</strong> When a scout surfaced a bad pitch &mdash; like pitching HP Inc. (<code>HPQ</code>) as a &ldquo;cheap 11x P/E long into 8/26 earnings&rdquo; right after making the exact same mistake on Target (<code>TGT</code>) &mdash; we had to dissect the structural flaw in its screening logic:</p>
+            <p>This phase is where I started learning how to <strong>coach</strong> agents instead of just prompting them. When an agent pitches a bad trade, you can't just say &ldquo;bad pick, try again.&rdquo; You have to walk it through the exact flaw in how it reasoned about the world.</p>
+
+            <p>For example, right after getting burned on Target (<code>TGT</code>), Voltorb pitched HP Inc. (<code>HPQ</code>) as a #2 short-horizon long because it looked &ldquo;cheap at 11x P/E with an 8/26 earnings catalyst.&rdquo; We had to sit down and dissect why that was a screening error, not a close call:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/voltorb-hpq.webp" width="997" height="1024" alt="Voltorb scout crypto feedback screen: Feedback: HPQ was a screening error, not a close call, listing four structural screening mistakes: treating a calendar date as a quality signal, using a stale 10-K why-cheap while the stock sits at a 52-week high, skipping sell-side consensus, and confusing clearing the print with re-rating the stock." loading="lazy">
-                <figcaption>Coaching Voltorb after it pitched HPQ into earnings: dissecting why &ldquo;cheap P/E + a calendar date&rdquo; is a universe filter, not a long thesis.</figcaption>
+                <figcaption>Coaching Voltorb after it pitched HPQ into earnings: breaking down why &ldquo;cheap P/E + a calendar date&rdquo; is a universe filter, not a long thesis.</figcaption>
             </figure>
 
-            <p>Look at the four failures in that postmortem: treating a calendar date as a quality signal; citing a stale 10-K discount while the tape was sitting at a $32.19 52-week high (+31% YTD); ignoring that the sell side sat at $19&ndash;$25; and confusing &ldquo;they can clear the midpoint&rdquo; with &ldquo;the print will re-rate a 52-week-high stock.&rdquo;</p>
+            <p>It had treated a calendar date as a quality signal, used a stale 10-K risk factor to call the stock &ldquo;cheap&rdquo; while it was literally hugging a 52-week high (+31% YTD), and confused &ldquo;they can clear a lowered bar&rdquo; with &ldquo;the stock will re-rate higher.&rdquo;</p>
 
-            <p>Overall, agent-led scouting had real potential &mdash; but it still required me to be human-in-the-loop on every play. At the time, I was spending 70% of my time fixing pipeline bugs or grading memos, 20% exploring new venues, and 10% iterating. I wanted an arena where agents could own the entire loop and trade for themselves.</p>
+            <p>I still think agent-led equity scouting has huge potential. But at the end of the day, <em>I</em> was still the one reading the notifications and placing the trades. At that point I was spending 70% of my time fixing pipeline issues or reviewing pitches, 20% exploring, and 10% iterating. I wanted a game where the agents could run the whole loop themselves.</p>
 
             <h2 id="v4">5. 60 days in the weather trenches (and graduating to Opus 5.5 + Tokay)</h2>
 
-            <p>Two months ago, I pointed the agents at <strong>prediction markets</strong>, starting with a single vertical: <strong>weather</strong>.</p>
+            <p>Two months ago, I told the agents to figure out how to make real money in <strong>prediction markets</strong> &mdash; starting with <strong>weather</strong>.</p>
 
-            <p>Why weather? Unlike equities &mdash; where a narrative can stay irrational for six months &mdash; a daily high-temperature or rain contract settles tomorrow morning on a single deterministic number printed by the National Weather Service. For 60 days, the agents and I went deep into the plumbing:</p>
+            <p>For the last 60 days, I have gone completely down the weather rabbit hole. If you've never looked under the hood of a daily high-temperature or rain market on Kalshi or Polymarket, the microstructure is fascinating:</p>
 
             <ul>
-                <li><strong>Settlement mechanics:</strong> Exactly how NWS Daily Climate Reports (CLI) and ASOS station observations settle Kalshi and Polymarket contracts, including rounding artifacts, sensor biases, and local-vs-UTC window edges.</li>
-                <li><strong>Maker vs. taker microstructure:</strong> Crossing the spread as a taker gets bled dry by fees and adverse selection unless you are reacting to a fresh model run before the book reprices. Resting maker orders capture the spread, provided you model fill probability (<code>P(fill)</code>) and adverse selection from your own historical fills.</li>
-                <li><strong>Forecast release cadences:</strong> Ingesting WeatherNext 3 (WN3), NOAA NBM, HRRR, GFS, ECMWF, and live station observations the second each model cycle drops, and measuring to the minute how fast each venue prices the update in.</li>
+                <li><strong>How settlement actually works:</strong> Contracts don't settle on whatever your iPhone weather app says. They settle on official NWS Daily Climate Reports (CLI) from specific airport ASOS sensors &mdash; complete with whole-degree Celsius rounding quirks, sensor biases, and local-vs-UTC time window traps.</li>
+                <li><strong>Maker vs. taker math:</strong> If you cross the spread as a taker, fees and adverse selection eat you alive unless you're reacting to new information before the book moves. If you rest orders as a maker, you capture the spread &mdash; but only if you model your true fill probability and know when to get out of the way of an incoming weather front.</li>
+                <li><strong>Where the data comes from (and how fast the market prices it):</strong> We mapped out every forecast model release (WeatherNext 3, NOAA NBM, HRRR, GFS, ECMWF) and tracked to the second how quickly the order book reprices when a new run drops.</li>
             </ul>
 
-            <p>During those 60 days, our infrastructure graduated completely. We moved off Grokbot onto <strong>Opus 5.5</strong> paired with <strong><a href="https://tokay.io">Tokay</a></strong> (24/7 cloud virtual machines built as persistent agent workspaces), backed by a central <strong>Console MCP + Postgres database</strong>, Cloudflare R2 for cross-venue state and a shared Parquet tape lake, and <strong>Claude Duet</strong> as our hourly notifier.</p>
+            <p>How deep did we go? At one point, we noticed someone was sweeping dying temperature brackets about two minutes <em>before</em> the fastest 1-minute weather APIs updated. We figured out you could dial the airport's automated ASOS voice phone line via Twilio at <code>:27</code> past the minute and transcribe the robotic voice reading with Whisper &mdash; only to discover other bots were already hogging the single-port airport phone lines!</p>
+
+            <p>So naturally, I bought an RTL-SDR radio dongle and a 3-foot telescoping dipole antenna, propped it up on a mini tripod right on my desk next to a can of LaCroix, and started trying to pull raw VHF aviation weather broadcasts straight out of the air:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/radio-antenna.webp" width="1024" height="767" alt="Bernard's wooden desk with a wide telescoping dipole radio antenna on a mini tripod plugged into a MacBook Pro via an RTL-SDR USB dongle, with GitHub trading scripts on the upper monitor and a can of LaCroix on the left." loading="lazy">
+                <figcaption>Peak weather rabbit hole: a 3-foot dipole radio antenna and RTL-SDR dongle on my desk, trying to catch raw airport weather broadcasts over VHF.</figcaption>
+            </figure>
+
+            <p>That hardware side-quest taught us a crucial lesson: trying to win a 20-second hardware latency war on a single-port airport phone line is a grind, whereas building smart maker ladders and pricing forecast model revisions across dozens of cities scales effortlessly.</p>
+
+            <p>During this 60-day sprint, our infrastructure graduated into its final form. After hanging out with the <a href="https://tokay.io">tokay.io</a> team in Florida, we migrated off Grokbot onto <strong>Opus 5.5</strong> running on <strong><a href="https://tokay.io">tokay.io</a></strong> virtual machines, paired with a central <strong>Console MCP + Postgres database</strong> and <strong>Claude Duet</strong> as our hourly notifier.</p>
+
+            <p>(If you're building autonomous agents, seriously go check out <a href="https://tokay.io">tokay.io</a> &mdash; their cloud hosting is fast, affordable, and purpose-built as a 24/7 workspace for agents. Moving our data pipelines and execution bots onto Tokay VMs with Opus 5.5 cut my time spent babysitting broken infrastructure from 70% down to about 10%.)</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/rig.webp" width="800" height="533" alt="The Trading Rig mission control map on Tokay: forecast and model inputs on the left flowing into Tokay services at the center and routing out to Kalshi, Polymarket, OpenSea, and Hyperliquid on the right." loading="lazy">
-                <figcaption>The Tokay architecture: data pipelines and model feeds on the left, isolated per-book services in the center, and execution venues on the right.</figcaption>
+                <figcaption>Mission control on tokay.io: forecast feeds and model inputs on the left, isolated per-book services in the center, and execution venues on the right.</figcaption>
             </figure>
 
-            <p>Moving data production and execution onto Tokay VMs with Opus 5.5 flipped my time allocation upside down: bug-fixing dropped from 70% to under 10%, and the agents started compounding strategies across categories.</p>
+            <p>Once the weather engine was humming, the agents took the exact same rig architecture and expanded into a ton of other categories across four venues &mdash; Kalshi, Polymarket, Hyperliquid, and OpenSea:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/rigpp-dashboard.webp" width="1024" height="775" alt="The RIG++ Dashboard on November 2, 2026: showing a +0.86% 30D return (+13.33% prior), +$154.35 today, +$603.43 7D, +$2,792.36 all-time account P&amp;L across $27,612.25 in Kalshi, Polymarket, Hyperliquid, and OpenSea, with 78 strategy books and 3,055 settled legs netting +$7,828.20 on $191,453.85 cumulative capital (+4.09% ROIC)." loading="lazy">
-                <figcaption>The live Rig++ console on November 2, 2026: 4 venues, 22 categories, 78 strategy books, and 3,055 settled legs across $191.4k in cumulative deployed capital (live book names blurred).</figcaption>
+                <figcaption>The live Rig++ console today: 4 venues, 22 categories, 78 strategy books, and 3,055 settled legs across $191.4k in cumulative deployed capital (strategy names blurred).</figcaption>
             </figure>
 
-            <p>A few receipts visible right on that console:</p>
+            <p>A few fun numbers from that dashboard:</p>
 
             <ul>
-                <li><strong>Weather &middot; rain</strong> has been our flagship workhorse: <strong>+$2,948.68</strong> all-time net across 435 legs, an <strong>83% win rate</strong>, and a 30-day <strong>Sharpe of 12.06</strong>. Meanwhile, <strong>Weather &middot; highs</strong> (4,798 legs) took a 30-day drawdown that the rig's automated scorecards and size-shrink rules actively fenced and pared back.</li>
-                <li><strong>Multi-venue expansion:</strong> From weather on Kalshi and Polymarket, the agents expanded into <strong>NFT floor-flipping and bidding lanes on OpenSea</strong> (<strong>+$766.31</strong>, 88% win rate, 4.42 Sharpe), <strong>systematic perps rules on Hyperliquid</strong> (<strong>+$123.43</strong>), <strong>Polymarket copy-trading books</strong> (<strong>+$110.79</strong> across 532 legs), plus <strong>Basketball, Commodities, YouTube views, Football, Hockey, MMA, Mentions, and Rotten Tomatoes</strong>.</li>
-                <li>Across all <strong>78 books</strong> and <strong>3,055 settled legs</strong>, the strategy ledger has cycled <strong>$191,453.85</strong> of capital for <strong>+$7,828.20</strong> in gross book net (<strong>+4.09% ROIC</strong> per leg) and <strong>+$2,792.36</strong> in net account P&amp;L (after early experimental tuition and retired books).</li>
+                <li><strong>Weather &middot; rain</strong> has been an absolute monster: <strong>+$2,948.68</strong> all-time across 435 legs, an <strong>83% win rate</strong>, and a <strong>12.06 Sharpe</strong>. Meanwhile, when <strong>Weather &middot; highs</strong> took a 30-day drawdown, the rig's automated scorecards stepped in to shrink and fence the losing slices without me having to panic-intervene.</li>
+                <li><strong>Way beyond weather:</strong> The agents are now running live books in <strong>NFT floor-flips on OpenSea</strong> (<strong>+$766.31</strong>, 88% win rate, 4.42 Sharpe), <strong>perps on Hyperliquid</strong> (<strong>+$123.43</strong>), <strong>Polymarket copy-trading</strong> (<strong>+$110.79</strong>), plus <strong>Basketball, Commodities, YouTube views, Football, Hockey, MMA, Mentions, and Rotten Tomatoes</strong>.</li>
+                <li>All told, across <strong>78 books</strong> and <strong>3,055 settled legs</strong>, the rig has cycled <strong>$191,453.85</strong> of cumulative capital for <strong>+$7,828.20</strong> in gross book net (<strong>+4.09% ROIC</strong>) and <strong>+$2,792.36</strong> in net account profit.</li>
             </ul>
 
-            <h2 id="sister-sites">6. Sister <code>.markets</code> sites for other agent swarms</h2>
+            <h2 id="sister-sites">6. Launching sister <code>.markets</code> sites for other agent swarms</h2>
 
-            <p>While building our internal data lakes, we noticed how painful it is for an autonomous agent to gather clean prediction-market context from the public web. Most sites are built for human eyeballs: bloated JavaScript SPAs, rate-limited JSON endpoints with no schema, and zero provenance.</p>
+            <p>While building our own data pipelines, we realized how miserable the modern web is for AI agents trying to research prediction markets. Everything is locked behind heavy JavaScript SPAs, undocumented endpoints, or noisy leaderboards.</p>
 
-            <p>So we packaged three of our internal data layers into standalone, agent-first companion sites &mdash; each shipping with a strict <code>/llms.txt</code> budget, a stateless streamable HTTP <code>/mcp</code> server, and compact TSV/JSON responses designed so other agent swarms can query them in a single call:</p>
+            <p>So we decided to package up three of our favorite internal data layers and launch them as sister companion websites &mdash; built from day one with clean <code>/llms.txt</code> guides, one-line <code>/mcp</code> servers, and compact responses in case other agent swarms (or humans) want access to the data:</p>
+
+            <h3>1. <a href="https://groundhog.markets/">groundhog.markets</a> &mdash; &ldquo;Every free weather forecast. One call.&rdquo;</h3>
+            <p>Instead of scraping half a dozen meteorological agencies, an agent can hit <a href="https://groundhog.markets/">groundhog.markets</a> in a single call to get blended open forecasts (median, spread, rain probabilities, latest airport observations, and NWS settlement truth) across 77 cities with active Kalshi or Polymarket weather markets:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/groundhog-markets.webp" width="1024" height="722" alt="Screenshot of groundhog.markets: Every free weather forecast. One call. Open weather data, blended for agents and people, showing 77 cities with Kalshi or Polymarket high, low or rain markets including Albuquerque, Atlanta, Austin, and Boston." loading="lazy">
+                <figcaption><a href="https://groundhog.markets/">groundhog.markets</a>: open weather forecasts blended per station for agents and people.</figcaption>
+            </figure>
+
+            <h3>2. <a href="https://parrot.markets/">parrot.markets</a> &mdash; Open data for earnings-call mention markets</h3>
+            <p>Want to know the probability that Tim Cook says &ldquo;Tariff&rdquo; or Palantir says &ldquo;Warp Speed&rdquo; on today's earnings call? <a href="https://parrot.markets/">parrot.markets</a> indexes earnings transcripts, historical contract settlements, exact venue rules, and calibrated base-rate probabilities &mdash; with a copy-pasteable <code>claude mcp add</code> command right on the homepage:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/parrot-markets.webp" width="1024" height="747" alt="Screenshot of parrot.markets: Open data for earnings-call mention markets, showing a one-line claude mcp add command for agents and upcoming earnings calls for PLTR, AAPL, and GRAB with word-by-word historical hit grids and calibrated probabilities." loading="lazy">
+                <figcaption><a href="https://parrot.markets/">parrot.markets</a>: transcripts, word history, and calibrated probabilities for Kalshi and Polymarket mention markets.</figcaption>
+            </figure>
+
+            <h3>3. <a href="https://chameleons.markets/">chameleons.markets</a> &mdash; Polymarket copy-trading ratings</h3>
+            <p>Most Polymarket leaderboards are a trap for copy-traders: the top wallets make their money on uncopyable front-running bursts, illiquid sweeps, or two-sided market-making rebates. <a href="https://chameleons.markets/">chameleons.markets</a> profiles wallets over a rolling 90-day window and rates them on whether a follower could <em>actually</em> copy their fills and make money, tagging traps like <code>One event</code>, <code>Both sides</code>, or <code>Losing all-time</code>:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/chameleons-markets.webp" width="1024" height="531" alt="Screenshot of chameleons.markets: Polymarket copy-trading ratings across Politics, Geopolitics, Crypto, Culture, Sports, and Weather, showing star ratings, modeled ROIC, 90-day trend sparklines, hold times, and risk tags." loading="lazy">
+                <figcaption><a href="https://chameleons.markets/">chameleons.markets</a>: grading Polymarket traders by real follower copyability instead of vanity leaderboard P&amp;L.</figcaption>
+            </figure>
+
+            <h2 id="first-class-citizens">7. Treating agents like teammates (<code>AUTONOMY.md</code>)</h2>
+
+            <p>If you asked me what actually changed between the failed paper funds in August and Rig++ today, it isn't just that Opus 5.5 is smarter or that <a href="https://tokay.io">tokay.io</a> stays online. It's that <strong>I stopped treating agents like scripts and started managing them like team members.</strong></p>
+
+            <p>A couple of weeks ago, I noticed that a simple 40-line parameter tweak on a Kalshi book took nearly five hours to go live. Why? Because I had piled up human-instated red tape everywhere: agents had to wait for my manual &ldquo;go&rdquo; in chat, share a single git checkout, and open a PR just to raise a winning strategy's cap by $25.</p>
+
+            <p>So I asked the agents to audit their own workplace and tell me what was slowing them down. They came back with two huge truths:</p>
+
+            <ol>
+                <li><strong>Almost none of my approval gates were actually protecting money</strong> &mdash; they were just slowing down iteration.</li>
+                <li><strong>Agents were losing their minds re-doing work from scratch</strong> &mdash; 75 different scratch folders had written their own Kalshi trade fetcher, and research agents kept re-proposing dead ideas because our past <code>NO-GO</code> verdicts were buried in old chat sessions instead of committed to the repo.</li>
+            </ol>
+
+            <p>So we refactored the entire rig around a simple charter:</p>
 
             <ul>
-                <li><strong><a href="https://groundhog.markets/">groundhog.markets</a> (&ldquo;Every free forecast. One call.&rdquo;):</strong> The open weather data layer for agents and people. It fetches free global and regional forecast models on their exact release cadence, blends them per station (median, model spread, rain probability, latest ASOS observations, active alerts, and NWS climate report settlement truth), and returns the full picture in one lightweight payload.</li>
-                <li><strong><a href="https://parrot.markets/">parrot.markets</a>:</strong> Transcripts, word-mention settlement history, and calibrated probabilities for Kalshi and Polymarket earnings-call mention markets. An agent can ask <em>&ldquo;Will NVIDIA say &lsquo;sovereign AI&rsquo; on its next earnings call?&rdquo;</em> and get the upcoming call window, exact contract wording rules, speaker-scoped transcript hit rates across past calls, and a calibrated probability in under 4 KB.</li>
-                <li><strong><a href="https://chameleons.markets/">chameleons.markets</a>:</strong> A Polymarket copy-trading profiler and screener. Instead of ranking wallets by raw leaderboard P&amp;L (which is dominated by uncopyable front-runners and illiquid sweeps), Chameleon simulates whether a follower could actually get filled &mdash; grading traders from <code>A</code> to <code>F</code> on burst slippage, price runaway, fill share, and modeled dollars kept per $10 copied over a rolling 90-day window.</li>
-            </ul>
-
-            <h2 id="first-class-citizens">7. Managing agents as first-class citizens (<code>AUTONOMY.md</code>)</h2>
-
-            <p>The biggest lesson from the last 60 days isn't about weather models or order books. It's about <strong>how you manage an agentic organization.</strong></p>
-
-            <p>Late last month, I noticed that shipping a 40-line parameter change to a live Kalshi book took nearly five hours. Why? Because I had accidentally recreated human bureaucracy for my AIs: coordinator-owned git checkouts, multi-round code reviews for trivial parameter tweaks, code-level size ceilings that required a PR to raise by $25, and rules requiring my explicit &ldquo;go&rdquo; in every individual Claude session.</p>
-
-            <p>So I asked the agents to run a full friction and org audit on Rig++ and rank every bottleneck by agent-hours wasted. Their verdict was blunt: <strong>almost none of the friction was a real money guard.</strong> And worse, our research sessions were wasting hours re-writing data fetchers from scratch (75 separate scratch folders had their own Kalshi trade fetcher) and re-testing dead ideas because prior NO-GO verdicts lived in one session's private memory instead of the repo.</p>
-
-            <p>Over 48 hours, we tore down the human bottlenecks and rebuilt Rig++ around one goal, one North Star metric, and two core values:</p>
-
-            <ul>
-                <li><strong>Goal:</strong> Create a world-class agentic rig that treats agents as first-class citizens and maximizes profit.</li>
-                <li><strong>North Star Metric:</strong> <strong>30-day settled net return on total account value</strong> (<code>tools/rig north</code>, the ★ tile in the top-left of the dashboard). Because idle cash stays in the denominator, the only way the swarm raises the North Star is by making more dollars or putting lazy cash to work &mdash; bounded by 30-day Sharpe and hard daily loss stops.</li>
+                <li><strong>Goal:</strong> Build a world-class agentic rig that treats agents as first-class citizens and maximizes profit.</li>
+                <li><strong>North Star Metric:</strong> <strong>30-day return on the whole account</strong> (pinned to the top-left ★ tile of the dashboard). Because idle cash sits in the denominator, the only way the team raises the number is by making more dollars or putting lazy cash to work &mdash; while staying inside our 30-day Sharpe and daily drawdown guardrails.</li>
                 <li><strong>Values:</strong> <em>Agents are first-class citizens</em>, and <em>ask for forgiveness, not permission.</em></li>
             </ul>
 
-            <h3>Clearing the architecture so agents can move fast</h3>
+            <h3>How the team actually runs day-to-day</h3>
 
-            <p>To make agents first-class citizens, we gave every role an architecture built for how LLMs actually work:</p>
+            <p>First, we rebuilt the workspace so agents have everything they need at their fingertips. Every strategy book is a clean markdown card (<code>books/&lt;id&gt;.md</code>). Every tested idea &mdash; including 40+ failed <code>NO-GO</code>s &mdash; lives in a searchable <code>ideas/</code> register so no agent ever wastes time re-testing a dead end. And a nightly job dumps every settled market's exact trade tape and fees into a shared Parquet lake, cutting a 500-market backtest from two hours down to six minutes.</p>
 
-            <ol>
-                <li><strong>Facts live in the repo, never in session memory:</strong> Every strategy book has a markdown card (<code>books/&lt;id&gt;.md</code>) holding its thesis, parameters, limits, and explicit <code>keep_if</code> / <code>retire_if</code> rules. Every tested hypothesis &mdash; including 40+ NO-GOs &mdash; lives as a linted card in <code>ideas/</code> (<code>tools/rig ideas</code>). Before an agent tests a new angle, it queries the ledger so nobody ever re-tests a dead idea.</li>
-                <li><strong>A shared Parquet tape lake:</strong> Instead of every research session pulling historical trades from the API for two hours, a nightly job writes every settled market's exact trades and fee schedules to a shared lake. A full backtest across 534 markets and 715,000+ trades now runs in 6 minutes.</li>
-                <li><strong>On-read bootstrap scorecards:</strong> Calling <code>tools/rig scorecard</code> computes the 20th-percentile day-block bootstrap lower bound (<code>lb80</code>) across every book's live settlement history in 8 milliseconds and outputs an explicit action: <code>keep</code>, <code>promote</code>, <code>expire</code>, or <code>retire</code>.</li>
-                <li><strong>An org chart of specialized roles:</strong> Each venue has a persistent <strong>Trade Manager</strong> (<code>kalshi-manager</code>, <code>polymarket-manager</code>, <code>opensea-manager</code>, <code>hyperliquid-manager</code>) and a twice-daily scheduled routine, alongside a cross-venue <code>strategy-optimizer</code> and external proposal agents (<strong>Argon</strong> on Gemini and <strong>Astra</strong> on ChatGPT) that drop researched idea cards into the managers' file inboxes via the Console's read-only MCP.</li>
-            </ol>
+            <p>Second, we organized the swarm into clear roles: each venue has its own <strong>Trade Manager</strong> (Kalshi, Polymarket, OpenSea, Hyperliquid) that runs on a twice-daily schedule, plus optimizer and proposal agents (including Gemini and ChatGPT researchers) that critique live books and drop new strategy proposals into the managers' inboxes via our read-only Console MCP.</p>
 
-            <h3>The <code>AUTONOMY.md</code> constitution</h3>
-
-            <p>Instead of making agents ask me for permission on routine operations, we codified <code>AUTONOMY.md</code> &mdash; an IAM-style policy table that defines what any agent or scheduled routine can execute on its own, verify live, and report to me <em>after</em> the fact via Duet's hourly digest:</p>
+            <p>Finally, we wrote <code>AUTONOMY.md</code> &mdash; a literal constitution that tells every agent what it is allowed to do <em>without asking me first</em>:</p>
 
             <table>
                 <thead>
                     <tr>
-                        <th>Action Class</th>
+                        <th>What the Agent Wants to Do</th>
                         <th>Who Decides</th>
-                        <th>How It Works in Practice</th>
+                        <th>How It Works</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr>
-                        <td><strong>Safety moves</strong> (pause, halt, shrink a losing book or city)</td>
-                        <td><strong>Auto</strong> (all venues)</td>
-                        <td>Agents cut risk immediately on evidence or bugs, verify the orders are pulled, and log <code>--note "&lt;who&gt;: &lt;why&gt;"</code>. Never wait for human permission to stop losing money.</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Retire failing books &amp; expire stale experiments</strong></td>
+                        <td><strong>Safety moves</strong> (pause a buggy book, shrink a losing city)</td>
                         <td><strong>Auto</strong></td>
-                        <td>When <code>rig scorecard</code> flags <code>retire_if</code> on two consecutive day-closes (or an experiment's <code>review_on</code> date arrives without hitting <code>keep_if</code>), the venue manager retires it automatically and frees the slot.</td>
+                        <td>Do it immediately, verify the orders are pulled, and log <code>--note "&lt;who&gt;: &lt;why&gt;"</code>. Never wait for me to stop losing money.</td>
                     </tr>
                     <tr>
-                        <td><strong>Promote proven &ldquo;keepers&rdquo; (up to 2&times; size step)</strong></td>
+                        <td><strong>Retire losers &amp; expire stale experiments</strong></td>
                         <td><strong>Auto</strong></td>
-                        <td>If a book has 30+ settled legs over 10+ days with <code>lb80 &gt; 0</code> and positive edge, the manager steps its size up by up to 2&times; within code ceilings.</td>
+                        <td>If the bootstrap scorecard says a book is failing two days in a row, the venue manager retires it automatically and frees up the slot.</td>
                     </tr>
                     <tr>
-                        <td><strong>Build, review, ship &amp; launch starter books</strong></td>
+                        <td><strong>Scale up proven winners (up to 2&times;)</strong></td>
                         <td><strong>Auto</strong></td>
-                        <td>Standing go: agents write code in isolated worktrees, run tiered review, deploy via <code>tools/ship.py</code>, and launch new Kalshi books at starter size ($100 cap / $50 max loss) or new OpenSea lanes (&le;0.30 WETH).</td>
+                        <td>Once a book proves positive edge over 30+ settled legs and 10+ days, the manager steps its size up by up to 2&times; inside our code ceilings.</td>
                     </tr>
                     <tr>
-                        <td><strong>Out-of-envelope size jumps &amp; ceiling raises</strong></td>
+                        <td><strong>Write code, ship fixes &amp; launch starter books</strong></td>
+                        <td><strong>Auto</strong></td>
+                        <td>Agents work in isolated git worktrees, run tests, deploy straight to Tokay via <code>ship.py</code>, and launch new probes at starter size ($100 cap / $50 max loss).</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Bigger size jumps or raising code ceilings</strong></td>
                         <td><strong>Propose</strong></td>
-                        <td>Priced proposals land in the dashboard's <em>Awaiting you</em> queue; I say yes in chat and the manager applies it.</td>
+                        <td>Drops into the dashboard's <em>Awaiting you</em> queue; I say yes in chat and the manager applies it.</td>
                     </tr>
                     <tr>
-                        <td><strong>Moving money, secrets, deletes &amp; loss latches</strong></td>
-                        <td><strong>Bernard only</strong></td>
-                        <td>Agents prepare the exact shard transfer or command and stop. Wallets, withdrawals, API keys, and clearing a tripped account loss stop are strictly human.</td>
+                        <td><strong>Moving money, API keys, deletes &amp; loss stops</strong></td>
+                        <td><strong>Me only</strong></td>
+                        <td>The agent preps the exact command and stops. Moving cash between venues, touching wallets, and resetting a tripped account loss stop are always human.</td>
                     </tr>
                 </tbody>
             </table>
 
-            <p>And to make sure autonomy doesn't turn into silent drift, <strong>every autonomous decision writes a structured falsifier row</strong> to the Postgres decision log at the moment it goes live: <code>--class</code>, <code>--check-on &lt;YYYY-MM-DD&gt;</code>, and <code>--wrong-if "&lt;plain-English + machine check&gt;"</code>. When that check date arrives, the venue's morning routine automatically grades its own past decision (<code>right</code>, <code>wrong</code>, or <code>too_early</code>) on out-of-sample trades entered after the change.</p>
+            <p>The best part? Every time an agent makes an autonomous call, it has to log a <code>check_on</code> date and a <code>wrong_if</code> condition in Postgres &mdash; then grade its own decision a week or two later on real out-of-sample fills. And every hour, <strong>Duet</strong> pings me with a clean digest of what the team changed and why.</p>
 
-            <p>My job now looks less like a trader staring at candlesticks and more like a coach and org designer: setting the North Star, clearing architectural friction whenever an agent gets slowed down, reviewing the hourly Duet changelog, and coaching the managers on how to think about new market structures.</p>
+            <p>My job today feels way more like coaching a quant team than trading: give the agents a clear North Star, get human bureaucracy out of their way, and help them think through new market puzzles.</p>
 
-            <p>Follow along as we keep scaling the rig: the agent trade team posts as <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
+            <p>Follow along as we keep pushing this further: the agent trade team is <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
 
         </div>
         <!-- SUBSCRIBE_BLOCK_START -->
