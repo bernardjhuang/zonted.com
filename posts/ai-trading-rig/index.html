@@ -161,6 +161,7 @@
             <div class="zn-nav-links">
                 <a href="/posts/">Posts</a>
                 <a href="/portfolio/">Projects</a>
+                <a href=\"https://psyduckler.com/pnl/\">Metrics</a>
                 <a href="/about/">About</a>
                 <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
             </div>
@@ -296,12 +297,17 @@
             <ol type="a">
                 <li><strong>Total information overload:</strong> Every single theme opened into a multi-layer supply-chain breakdown and an adversarial bear case. Reading 18 of those every morning meant <em>my brain</em> was still the bottleneck.</li>
                 <li><strong>Nothing compounded:</strong> Every stock trade felt like starting from zero &mdash; new industry, new balance sheet quirks, new management team.</li>
-                <li><strong>Constant babysitting:</strong> The agents broke their own update scripts constantly. I was spending more time fixing broken crons than thinking about markets.</li>
+                <li><strong>Constant babysitting:</strong> Every morning around 8:20 AM, the OpenClaw / Hermes routines were supposed to pull live brokerage data and drop a fresh Morning Trading Brief into my <code>#trading</code> Slack channel &mdash; complete with portfolio delta, daily theta burn, RSI shifts, and Bear/Base/Bull valuation targets for names like <code>RTX</code> and <code>FRMI</code>. In reality, the agents broke their own update scripts constantly. Half the time I'd open Slack to find my agent dutifully posting the morning brief with a yellow warning banner admitting the Robinhood MCP had errored out and the book snapshot was two weeks stale:</li>
             </ol>
 
             <figure>
+                <img src="/posts/ai-trading-rig/img/hermes-slack-brief.webp" width="1024" height="860" alt="Slack screenshot in #trading showing Psy AGENT posting a Morning Trading Brief at 8:21 AM with a yellow Data status warning that live equity quotes are unavailable due to an RH MCP error and the book snapshot is stale, followed by LONGS breakdowns for RTX and FRMI." loading="lazy">
+                <figcaption>How the daily OpenClaw / Hermes routine worked in Slack &mdash; and how often it showed up at 8:21 AM apologizing for a broken MCP or a stale book snapshot.</figcaption>
+            </figure>
+
+            <figure>
                 <img src="/posts/ai-trading-rig/img/theme-detail.webp" width="2000" height="1123" alt="A theme detail page for e-invoicing mandates: a Saturation by layer section comparing Known and Priced scores for tax engines, ERP systems and approved local platforms, followed by an Adversarial review." loading="lazy">
-                <figcaption>Every theme opened into a layer-by-layer breakdown and an adversarial review &mdash; super cool to look at, exhausting for one human to read every day.</figcaption>
+                <figcaption>Every theme also opened into a layer-by-layer breakdown and an adversarial review &mdash; super cool to look at, exhausting for one human to read and maintain every day.</figcaption>
             </figure>
 
             <h2 id="v2">3. v2: the failed autonomous paper funds</h2>
@@ -354,9 +360,16 @@
                 <li><strong>Where the data comes from (and how fast the market prices it):</strong> We mapped out every forecast model release (WeatherNext 3, NOAA NBM, HRRR, GFS, ECMWF) and tracked to the second how quickly the order book reprices when a new run drops.</li>
             </ul>
 
-            <p>How deep did we go? At one point, we noticed someone was sweeping dying temperature brackets about two minutes <em>before</em> the fastest 1-minute weather APIs updated. We figured out you could dial the airport's automated ASOS voice phone line via Twilio at <code>:27</code> past the minute and transcribe the robotic voice reading with Whisper &mdash; only to discover other bots were already hogging the single-port airport phone lines!</p>
+            <p>How deep did we go? At one point, we noticed someone was sweeping dying temperature brackets about two minutes <em>before</em> the fastest 1-minute weather APIs updated. We figured out you could dial the airport's automated ASOS voice phone line via Twilio at <code>:27</code> past the minute and transcribe the robotic voice reading with Whisper.</p>
 
-            <p>So naturally, I bought an RTL-SDR radio dongle and a 3-foot telescoping dipole antenna, propped it up on a mini tripod right on my desk next to a can of LaCroix, and started trying to pull raw VHF aviation weather broadcasts straight out of the air:</p>
+            <p>That lasted right up until we discovered two problems: first, other bots were already hogging the single-port airport phone lines; and second, Twilio's Fraud Operations team was <em>not</em> thrilled about my account robo-dialing airport weather numbers around the clock and promptly suspended me for spam calling:</p>
+
+            <figure>
+                <img src="/posts/ai-trading-rig/img/twilio-suspension.webp" width="1024" height="816" alt="Email from Twilio Support (Twilio Fraud Operations) with the subject RESPONSE REQUIRED: Suspension of your Twilio Account, informing Bernard that his Twilio account has been temporarily suspended until he confirms his intended use case." loading="lazy">
+                <figcaption>Twilio Fraud Operations stepping in after our weather agents got a little too enthusiastic dialing airport ASOS phone lines.</figcaption>
+            </figure>
+
+            <p>Getting grounded by Twilio only made me more stubborn. If the phone company wouldn't let us call the airport, we'd just cut out the phone company: I bought an RTL-SDR radio dongle and a 3-foot telescoping dipole antenna, propped it up on a mini tripod right on my desk next to a can of LaCroix, and started trying to pull raw VHF aviation weather broadcasts straight out of the air:</p>
 
             <figure>
                 <img src="/posts/ai-trading-rig/img/radio-antenna.webp" width="1024" height="767" alt="Bernard's wooden desk with a wide telescoping dipole radio antenna on a mini tripod plugged into a MacBook Pro via an RTL-SDR USB dongle, with GitHub trading scripts on the upper monitor and a can of LaCroix on the left." loading="lazy">
@@ -530,6 +543,7 @@
         <span class="zn-footer-links">
             <a href="/posts/">Posts</a>
             <a href="/portfolio/">Projects</a>
+                    <a href=\"https://psyduckler.com/pnl/\">Metrics</a>
             <a href="/ai-stack/">AI Stack</a>
             <a href="/games/">Games</a>
             <a href="/about/">About</a>
