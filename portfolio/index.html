@@ -5,10 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="theme-color" content="#0a0518">
     <title>Projects — Zonted</title>
-    <meta name="description" content="Every project shipped, as a collectible card — thesis, business model, real numbers. Tabiji, PixelForge, AgentTune, and one in stealth.">
+    <meta name="description" content="Every project shipped, as a collectible card — thesis, business model, real numbers. Tabiji, Rig++, groundhog.markets, parrot.markets, chameleons.markets, PixelForge, AgentTune, and the graveyard.">
     <link rel="canonical" href="https://zonted.com/portfolio/">
     <meta property="og:title" content="Projects — Zonted">
-    <meta property="og:description" content="Every project Bernard has shipped, as a collectible. Each card carries the thesis, the business model, and the real numbers.">
+    <meta property="og:description" content="Every project Bernard has shipped, as a collectible card — Tabiji, Rig++, groundhog.markets, parrot.markets, chameleons.markets, PixelForge, AgentTune, and the postmortem graveyard.">
     <meta property="og:url" content="https://zonted.com/portfolio/">
     <meta property="og:type" content="website">
     <meta property="og:image" content="https://img.zonted.com/og/operator-notes.png">
@@ -608,9 +608,8 @@
         }
 
         /* ---------- Dead-card state (concept 1 — Tombstone) ---------- */
-        /* Dead cards sort to the bottom of the grid via grid-item order.
-           Live cards keep order:0 by default; dead cards push to order:1. */
-        .port-cards .tc-card.tc-dead { order: 1; }
+        /* Dead cards are placed after live cards in DOM source order so visual
+           and keyboard/screen-reader order match without CSS order overrides. */
         .tc-card.tc-dead {
             background: linear-gradient(160deg, #e3dfd6 0%, #c9c4ba 100%) !important;
             border-color: #4a4540 !important;
@@ -713,31 +712,8 @@
             <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
             <div class="zn-nav-links">
                 <a href="/posts/">Posts</a>
-                <span class="zn-nav-dd">
-                    <a href="/trading/">Trading</a>
-                    <details class="zn-dd">
-                        <summary aria-label="Trading sections" title="Trading sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-                        <div class="zn-dd-menu">
-                            <a href="/trading/">Desk</a>
-                            <a href="/trading/themes/">Themes</a>
-                            <a href="/trading/vwap-setups/">VWAP Setups</a>
-                            <a href="/trading/momentum/">Momentum</a>
-                            <a href="/trading/mentality/">Mentality</a>
-                            <a href="/trading/performance/">Performance</a>
-                        </div>
-                    </details>
-                </span>
-                <span class="zn-nav-dd">
-                    <a href="/about/">About</a>
-                    <details class="zn-dd">
-                        <summary aria-label="About sections" title="About sections"><svg viewBox="0 0 10 6" width="10" height="6" aria-hidden="true"><path d="M1 1l4 4 4-4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></summary>
-                        <div class="zn-dd-menu">
-                            <a href="/about/">About</a>
-                            <a href="/portfolio/" class="active">Projects</a>
-                            <a href="/metrics/">Metrics</a>
-                        </div>
-                    </details>
-                </span>
+                <a href="/portfolio/" class="active">Projects</a>
+                <a href="/about/">About</a>
                 <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
             </div>
         </div>
@@ -760,9 +736,9 @@
                     Every project Bernard has shipped, as a collectible. Each card carries the <strong>thesis</strong>, the <strong>business model</strong>, and the <strong>real numbers</strong>.
                 </p>
                 <div class="port-hero-chips">
-                    <span class="port-hero-chip chip-ultra">1 ultra</span>
+                    <span class="port-hero-chip chip-ultra">2 ultra</span>
                     <span class="port-hero-chip chip-rare">6 rare</span>
-                    <span class="port-hero-chip chip-slot" style="background:rgba(88,28,135,0.13); border-color:#581c87; color:#581c87;">1 in stealth</span>
+                    <span class="port-hero-chip chip-slot">4 retired</span>
                 </div>
             </div>
         </section>
@@ -879,69 +855,344 @@
                     </div>
 
                     <div class="tc-bottom">
-                        <strong>001/008</strong>
+                        <strong>001/012</strong>
                         <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span><span style="--d:0.6s;">&starf;</span></span>
                         <strong>©BH</strong>
                     </div>
                 </a>
 
-                <!-- 002 · VERACITY · RARE -->
-                <a href="/posts/veracity-postmortem/" class="tc-card tc-dead" aria-label="VERACITY — read the post-mortem">
+                <!-- 002 · RIG++ · ULTRA -->
+                <a href="/posts/ai-trading-rig/" class="tc-card tc-card-foil" style="--card-color: #06b6d4; --card-glow: rgba(6,182,212,0.65); box-shadow: 0 8px 28px rgba(6,182,212,0.55), 0 0 0 1px #06b6d4, inset 0 0 0 2px #fbbf24;" aria-label="RIG++ — read the autonomous trading rig breakdown">
                     <div class="tc-frame"></div>
+                    <div class="tc-holo tc-foil-strong" aria-hidden="true"></div>
+                    <svg class="tc-sparkle" aria-hidden="true" style="left:8%; top:14%; --delay:0.2s; --dur:2.4s;" viewBox="0 0 14 14"><path d="M7 0 L8 6 L14 7 L8 8 L7 14 L6 8 L0 7 L6 6 Z" fill="#fff"/></svg>
+                    <svg class="tc-sparkle" aria-hidden="true" style="left:86%; top:20%; --delay:0.8s; --dur:2.8s;" viewBox="0 0 14 14"><path d="M7 0 L8 6 L14 7 L8 8 L7 14 L6 8 L0 7 L6 6 Z" fill="#fff"/></svg>
+                    <svg class="tc-sparkle" aria-hidden="true" style="left:80%; top:80%; --delay:1.3s; --dur:2.1s;" viewBox="0 0 14 14"><path d="M7 0 L8 6 L14 7 L8 8 L7 14 L6 8 L0 7 L6 6 Z" fill="#fff"/></svg>
 
                     <div class="tc-header">
                         <div class="tc-header-meta">
-                            <span class="tc-year">2026 ☩ 2026</span>
-                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
+                            <span class="tc-year">2026 &rarr;</span>
+                            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
                         </div>
                         <div class="tc-title-row">
-                            <span class="tc-name">VERACITY</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
+                            <span class="tc-name">RIG++</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #06b6d4, #0a0a0a); box-shadow:0 0 8px #06b6d4;">R</span>
                         </div>
                         <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">API · RETIRED</span>
+                            <span class="tc-type-label" style="color:#0e7490; border-color:#06b6d4; background:rgba(6,182,212,0.09);">AUTONOMOUS TRADING</span>
+                            <span class="tc-badge">&starf; Multi-Venue</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">VERACITY</div>
-                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/veracity.png" alt="VeracityAPI homepage screenshot" loading="lazy">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 002</div>
-                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
-                        <div class="tc-stamp-dead">RIP · 2026</div>
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(6,182,212,0.18);">RIG++</div>
+                        <img class="tc-image-img" src="/posts/ai-trading-rig/img/rigpp-dashboard.webp" alt="Rig++ multi-venue terminal dashboard" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 002</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
+                        <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(6,182,212,0.33) 50%, transparent 100%);"></div>
                     </div>
 
-                    <div class="tc-thesis">
-                        <p class="tc-thesis-label">✝ Cause of Death</p>
-                        <p class="tc-thesis-text">Killed by its maker: opportunity cost. Trading was working; the API needed upkeep and never found a buyer.</p>
+                    <div class="tc-thesis" style="background:rgba(6,182,212,0.11); border-left-color:#06b6d4;">
+                        <p class="tc-thesis-label" style="color:#0e7490;">&starf; Thesis</p>
+                        <p class="tc-thesis-text">Agents as first-class citizens trading live capital.</p>
                     </div>
 
                     <div class="tc-detail">
-                        <p>A pre-publish slop check for agents, built in an afternoon. API, MCP, SDKs, a Chrome extension, free tools. Four outside signups, zero paying customers.</p>
+                        <p>Autonomous multi-venue trading rig across Kalshi, Polymarket, Hyperliquid, and OpenSea. Powered by Opus 5.5 on a persistent tokay.io VM, Console MCP + Postgres, and Duet.</p>
                     </div>
 
                     <div class="tc-model">
-                        <p class="tc-model-label">💰 Final tally</p>
-                        <p class="tc-model-text">~$400 burned · 4 months · $0 revenue</p>
+                        <p class="tc-model-label">&#x1F4B0; Business Model</p>
+                        <p class="tc-model-text">Proprietary capital &middot; 30d return north star</p>
                     </div>
 
                     <div class="tc-numbers">
-                        <p class="tc-numbers-label"># Final stats</p>
+                        <p class="tc-numbers-label"># By the numbers</p>
                         <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Signups</dt><dd class="tc-metric-v">4</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Revenue</dt><dd class="tc-metric-v">$0</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Venues</dt><dd class="tc-metric-v">4</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Live books</dt><dd class="tc-metric-v">78</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Closed legs</dt><dd class="tc-metric-v">3,055</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Net P&amp;L</dt><dd class="tc-metric-v">+$7.8K</dd></div>
                         </dl>
                     </div>
 
-                    <div class="tc-foot">
-                        <span>SEALED · 002/008 · ©BH</span>
-                        <span class="tc-postmortem">POSTMORTEM →</span>
+                    <div class="tc-moves">
+                        <div class="tc-move" style="background:rgba(6,182,212,0.18); border-color:rgba(6,182,212,0.45);">
+                            <div class="tc-move-num" style="background:#0891b2;">1</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Maker-First Book</span>
+                                    <span class="tc-move-dmg">+9.6%</span>
+                                </div>
+                                <p class="tc-move-desc">Posts resting liquidity across weather, mentions, sports, and NFTs.</p>
+                            </div>
+                        </div>
+                        <div class="tc-move" style="background:rgba(6,182,212,0.09); border-color:rgba(6,182,212,0.35);">
+                            <div class="tc-move-num" style="background:#0891b2;">2</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Ask Forgiveness</span>
+                                    <span class="tc-move-dmg">24/7</span>
+                                </div>
+                                <p class="tc-move-desc">Proposer, critic, and venue managers iterate without human approval gates.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tc-bottom">
+                        <strong>002/012</strong>
+                        <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span><span style="--d:0.6s;">&starf;</span></span>
+                        <strong>©BH</strong>
                     </div>
                 </a>
 
-                <!-- 003 · ZONTED · RARE -->
+                <!-- 003 · GROUNDHOG · RARE -->
+                <a href="https://groundhog.markets" class="tc-card" target="_blank" rel="noopener" style="--card-color: #d97706; --card-glow: rgba(217,119,6,0.55); box-shadow: 0 8px 28px rgba(217,119,6,0.5), 0 0 0 1px #d97706, inset 0 0 0 2px #fbbf24;" aria-label="GROUNDHOG.MARKETS — open groundhog.markets">
+                    <div class="tc-frame"></div>
+                    <div class="tc-holo tc-foil" aria-hidden="true"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 &rarr;</span>
+                            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
+                        </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">GROUNDHOG</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #d97706, #0a0a0a); box-shadow:0 0 8px #d97706;">W</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#b45309; border-color:#d97706; background:rgba(217,119,6,0.08);">WEATHER ORACLE</span>
+                            <span class="tc-badge">&starf; Agent-Ready</span>
+                        </div>
+                    </div>
+
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(217,119,6,0.15);">GROUNDHOG</div>
+                        <img class="tc-image-img" src="/posts/ai-trading-rig/img/groundhog-markets.webp" alt="groundhog.markets homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 003</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
+                        <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(217,119,6,0.33) 50%, transparent 100%);"></div>
+                    </div>
+
+                    <div class="tc-thesis" style="background:rgba(217,119,6,0.11); border-left-color:#d97706;">
+                        <p class="tc-thesis-label" style="color:#92400e;">&starf; Thesis</p>
+                        <p class="tc-thesis-text">Every free weather forecast. One call.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>Open weather data blended across NWS, HRRR, GFS, and ECMWF for agents and traders pricing Kalshi and Polymarket high, low, and rain contracts.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">&#x1F4B0; Business Model</p>
+                        <p class="tc-model-text">Open agent utility &middot; Rig++ spinout</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># By the numbers</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">Cities</dt><dd class="tc-metric-v">77</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Venues</dt><dd class="tc-metric-v">KX + PM</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Markets</dt><dd class="tc-metric-v">Hi/Lo/Rain</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Access</dt><dd class="tc-metric-v">Free API</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-moves">
+                        <div class="tc-move" style="background:rgba(217,119,6,0.18); border-color:rgba(217,119,6,0.45);">
+                            <div class="tc-move-num" style="background:#d97706;">1</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Ensemble Blend</span>
+                                    <span class="tc-move-dmg">77x</span>
+                                </div>
+                                <p class="tc-move-desc">Fuses multi-model forecasts with live Kalshi and Polymarket brackets.</p>
+                            </div>
+                        </div>
+                        <div class="tc-move" style="background:rgba(217,119,6,0.09); border-color:rgba(217,119,6,0.35);">
+                            <div class="tc-move-num" style="background:#d97706;">2</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">ASOS Station Lock</span>
+                                    <span class="tc-move-dmg">100</span>
+                                </div>
+                                <p class="tc-move-desc">Maps every city contract to its exact NWS Daily Climate Report station.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tc-bottom">
+                        <strong>003/012</strong>
+                        <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
+                        <strong>©BH</strong>
+                    </div>
+                </a>
+
+                <!-- 004 · PARROT · RARE -->
+                <a href="https://parrot.markets" class="tc-card" target="_blank" rel="noopener" style="--card-color: #0d9488; --card-glow: rgba(13,148,136,0.55); box-shadow: 0 8px 28px rgba(13,148,136,0.5), 0 0 0 1px #0d9488, inset 0 0 0 2px #fbbf24;" aria-label="PARROT.MARKETS — open parrot.markets">
+                    <div class="tc-frame"></div>
+                    <div class="tc-holo tc-foil" aria-hidden="true"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 &rarr;</span>
+                            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
+                        </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">PARROT</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #0d9488, #0a0a0a); box-shadow:0 0 8px #0d9488;">M</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#0f766e; border-color:#0d9488; background:rgba(13,148,136,0.08);">MENTION MARKETS</span>
+                            <span class="tc-badge">&starf; MCP Server</span>
+                        </div>
+                    </div>
+
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(13,148,136,0.15);">PARROT</div>
+                        <img class="tc-image-img" src="/posts/ai-trading-rig/img/parrot-markets.webp" alt="parrot.markets homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 004</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
+                        <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(13,148,136,0.33) 50%, transparent 100%);"></div>
+                    </div>
+
+                    <div class="tc-thesis" style="background:rgba(13,148,136,0.11); border-left-color:#0d9488;">
+                        <p class="tc-thesis-label" style="color:#115e59;">&starf; Thesis</p>
+                        <p class="tc-thesis-text">Open data for earnings-call mention markets.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>Transcripts, word appearance history, and calibrated probabilities for Kalshi and Polymarket mention contracts &mdash; with one-line HTTP MCP install for agent swarms.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">&#x1F4B0; Business Model</p>
+                        <p class="tc-model-text">Open agent utility &middot; HTTP MCP</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># By the numbers</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">Venues</dt><dd class="tc-metric-v">KX + PM</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Transport</dt><dd class="tc-metric-v">HTTP MCP</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Agent docs</dt><dd class="tc-metric-v">llms.txt</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Cost</dt><dd class="tc-metric-v">Free</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-moves">
+                        <div class="tc-move" style="background:rgba(13,148,136,0.18); border-color:rgba(13,148,136,0.45);">
+                            <div class="tc-move-num" style="background:#0d9488;">1</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Transcript Base Rate</span>
+                                    <span class="tc-move-dmg">96%</span>
+                                </div>
+                                <p class="tc-move-desc">Scores quarter-by-quarter word hit rates across earnings transcripts.</p>
+                            </div>
+                        </div>
+                        <div class="tc-move" style="background:rgba(13,148,136,0.09); border-color:rgba(13,148,136,0.35);">
+                            <div class="tc-move-num" style="background:#0d9488;">2</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">One-Line MCP</span>
+                                    <span class="tc-move-dmg">HTTP</span>
+                                </div>
+                                <p class="tc-move-desc">Agents attach directly via claude mcp add --transport http.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tc-bottom">
+                        <strong>004/012</strong>
+                        <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
+                        <strong>©BH</strong>
+                    </div>
+                </a>
+
+                <!-- 005 · CHAMELEONS · RARE -->
+                <a href="https://chameleons.markets" class="tc-card" target="_blank" rel="noopener" style="--card-color: #9333ea; --card-glow: rgba(147,51,234,0.55); box-shadow: 0 8px 28px rgba(147,51,234,0.5), 0 0 0 1px #9333ea, inset 0 0 0 2px #fbbf24;" aria-label="CHAMELEONS.MARKETS — open chameleons.markets">
+                    <div class="tc-frame"></div>
+                    <div class="tc-holo tc-foil" aria-hidden="true"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 &rarr;</span>
+                            <span class="tc-pip tc-pip-live"><span class="tc-pip-dot"></span>LIVE</span>
+                        </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">CHAMELEONS</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #9333ea, #0a0a0a); box-shadow:0 0 8px #9333ea;">C</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#7e22ce; border-color:#9333ea; background:rgba(147,51,234,0.08);">COPY-TRADING INTEL</span>
+                            <span class="tc-badge">&starf; On-Chain</span>
+                        </div>
+                    </div>
+
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(147,51,234,0.15);">CHAMELEONS</div>
+                        <img class="tc-image-img" src="/posts/ai-trading-rig/img/chameleons-markets.webp" alt="chameleons.markets homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 005</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
+                        <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(147,51,234,0.33) 50%, transparent 100%);"></div>
+                    </div>
+
+                    <div class="tc-thesis" style="background:rgba(147,51,234,0.11); border-left-color:#9333ea;">
+                        <p class="tc-thesis-label" style="color:#6b21a8;">&starf; Thesis</p>
+                        <p class="tc-thesis-text">Polymarket copy-trading ratings that filter out the mirages.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>Scores Polymarket wallets on 90-day modelled ROIC, hold time, and category edge while flagging wash bots, both-sides farmers, and one-event luck.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">&#x1F4B0; Business Model</p>
+                        <p class="tc-model-text">Open agent utility &middot; Wallet signal feed</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># By the numbers</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">2&starf;+ wallets</dt><dd class="tc-metric-v">387</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">1&starf;+ wallets</dt><dd class="tc-metric-v">524</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Window</dt><dd class="tc-metric-v">90d ROIC</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Categories</dt><dd class="tc-metric-v">10</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-moves">
+                        <div class="tc-move" style="background:rgba(147,51,234,0.18); border-color:rgba(147,51,234,0.45);">
+                            <div class="tc-move-num" style="background:#9333ea;">1</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Mirage Filter</span>
+                                    <span class="tc-move-dmg">61</span>
+                                </div>
+                                <p class="tc-move-desc">Flags "Both sides", "Losing all-time", and "One event" wallets automatically.</p>
+                            </div>
+                        </div>
+                        <div class="tc-move" style="background:rgba(147,51,234,0.09); border-color:rgba(147,51,234,0.35);">
+                            <div class="tc-move-num" style="background:#9333ea;">2</div>
+                            <div class="tc-move-body">
+                                <div class="tc-move-row">
+                                    <span class="tc-move-name">Hold-Time Decay</span>
+                                    <span class="tc-move-dmg">90d</span>
+                                </div>
+                                <p class="tc-move-desc">Separates copyable conviction swing traders from latency arb bots.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tc-bottom">
+                        <strong>005/012</strong>
+                        <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
+                        <strong>©BH</strong>
+                    </div>
+                </a>
+
+                <!-- 006 · ZONTED · RARE -->
                 <a href="/" class="tc-card" target="_blank" rel="noopener" style="--card-color: #ef4444; --card-glow: rgba(239,68,68,0.55); box-shadow: 0 8px 28px rgba(239,68,68,0.5), 0 0 0 1px #ef4444, inset 0 0 0 2px #fbbf24;" aria-label="ZONTED — open the zonted homepage">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
@@ -964,7 +1215,7 @@
                     <div class="tc-image">
                         <div class="tc-image-fallback" style="--card-bg-grad: rgba(239,68,68,0.15);">ZONTED</div>
                         <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/zonted.png" alt="Zonted homepage screenshot" loading="lazy">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 003</div>
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 006</div>
                         <div class="tc-image-stamp tc-image-stamp-br">HOLO ✦</div>
                         <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(239,68,68,0.33) 50%, transparent 100%);"></div>
                     </div>
@@ -987,7 +1238,7 @@
                         <p class="tc-numbers-label"># By the numbers</p>
                         <dl class="tc-metrics">
                             <div class="tc-metric"><dt class="tc-metric-l">Live since</dt><dd class="tc-metric-v">2018</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Cadence</dt><dd class="tc-metric-v">Weekly</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Essays</dt><dd class="tc-metric-v">72</dd></div>
                             <div class="tc-metric"><dt class="tc-metric-l">Delivery</dt><dd class="tc-metric-v">RSS + email</dd></div>
                             <div class="tc-metric"><dt class="tc-metric-l">Cost</dt><dd class="tc-metric-v">Free</dd></div>
                         </dl>
@@ -1011,131 +1262,19 @@
                                     <span class="tc-move-name">Compound Interest</span>
                                     <span class="tc-move-dmg">30</span>
                                 </div>
-                                <p class="tc-move-desc">Each letter quietly stacks. Six years in and still going.</p>
+                                <p class="tc-move-desc">Each letter quietly stacks. Eight years in and still going.</p>
                             </div>
                         </div>
                     </div>
 
                     <div class="tc-bottom">
-                        <strong>003/008</strong>
+                        <strong>006/012</strong>
                         <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
                         <strong>©BH</strong>
                     </div>
                 </a>
 
-                <!-- 004 · PALMAURA · RARE -->
-                <a href="/posts/palmaura-postmortem/" class="tc-card tc-dead" aria-label="PALMAURA — read the post-mortem">
-                    <div class="tc-frame"></div>
-
-                    <div class="tc-header">
-                        <div class="tc-header-meta">
-                            <span class="tc-year">2026 ☩ 2026</span>
-                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
-                        </div>
-                        <div class="tc-title-row">
-                            <span class="tc-name">PALMAURA</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
-                        </div>
-                        <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">iOS APP · REJECTED</span>
-                        </div>
-                    </div>
-
-                    <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">PALMAURA</div>
-                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/palmaura.png" alt="Palmaura app homepage screenshot" loading="lazy">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 004</div>
-                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
-                        <div class="tc-stamp-dead">RIP · 2026</div>
-                    </div>
-
-                    <div class="tc-thesis">
-                        <p class="tc-thesis-label">✝ Cause of Death</p>
-                        <p class="tc-thesis-text">Killed by Apple — Guideline 4.3(b), twice. A saturated category and a closed door.</p>
-                    </div>
-
-                    <div class="tc-detail">
-                        <p>Palm photo in, daily read out. Built in a couple of shots; died in review. Five builds, two rejections, zero downloads.</p>
-                    </div>
-
-                    <div class="tc-model">
-                        <p class="tc-model-label">💰 Final tally</p>
-                        <p class="tc-model-text">$99 burned · 2 weeks · 0 users</p>
-                    </div>
-
-                    <div class="tc-numbers">
-                        <p class="tc-numbers-label"># Final stats</p>
-                        <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Builds</dt><dd class="tc-metric-v">5</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Rejections</dt><dd class="tc-metric-v">2</dd></div>
-                        </dl>
-                    </div>
-
-                    <div class="tc-foot">
-                        <span>SEALED · 004/008 · ©BH</span>
-                        <span class="tc-postmortem">POSTMORTEM →</span>
-                    </div>
-                </a>
-
-                <!-- 005 · KAPIKO · CLOSED -->
-                <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead" aria-label="KAPIKO — read the post-mortem">
-                    <div class="tc-frame"></div>
-
-                    <div class="tc-header">
-                        <div class="tc-header-meta">
-                            <span class="tc-year">2026 ☩ 2026</span>
-                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
-                        </div>
-                        <div class="tc-title-row">
-                            <span class="tc-name">KAPIKO</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
-                        </div>
-                        <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">AI MUSIC · CLOSED</span>
-                        </div>
-                    </div>
-
-                    <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">KAPIKO</div>
-                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="Kapiko homepage screenshot" loading="lazy">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 005</div>
-                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
-                        <div class="tc-stamp-dead">RIP · 2026</div>
-                    </div>
-
-                    <div class="tc-thesis">
-                        <p class="tc-thesis-label">✝ Cause of Death</p>
-                        <p class="tc-thesis-text">Killed by the Suno wrapper — no public API, patched every 1-2 days.</p>
-                    </div>
-
-                    <div class="tc-detail">
-                        <p>Generative ambient music. Pipeline worked. Distribution didn't. Ten days, $150, 57 videos, 3 subscribers. Closed.</p>
-                    </div>
-
-                    <div class="tc-model">
-                        <p class="tc-model-label">💰 Final tally</p>
-                        <p class="tc-model-text">~$150 burned · 10 days · 3 subscribers</p>
-                    </div>
-
-                    <div class="tc-numbers">
-                        <p class="tc-numbers-label"># Final stats</p>
-                        <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$150</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Runtime</dt><dd class="tc-metric-v">10 days</dd></div>
-                        </dl>
-                    </div>
-
-                    <div class="tc-foot">
-                        <span>SEALED · 005/008 · ©BH</span>
-                        <span class="tc-postmortem">POSTMORTEM →</span>
-                    </div>
-                </a>
-
-                <!-- 006 · AGENT-TUNE · RARE -->
+                <!-- 007 · AGENT-TUNE · RARE -->
                 <a href="https://agent-tune.com" class="tc-card" target="_blank" rel="noopener" style="--card-color: #6366f1; --card-glow: rgba(99,102,241,0.55); box-shadow: 0 8px 28px rgba(99,102,241,0.5), 0 0 0 1px #6366f1, inset 0 0 0 2px #fbbf24;" aria-label="AGENT-TUNE — open agent-tune.com">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
@@ -1151,14 +1290,14 @@
                         </div>
                         <div class="tc-type-strip">
                             <span class="tc-type-label" style="color:#6366f1; border-color:#6366f1; background:rgba(99,102,241,0.07);">AI PERSONALIZATION</span>
-                            <span class="tc-badge">&starf; New</span>
+                            <span class="tc-badge">&starf; Open</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
                         <div class="tc-image-fallback" style="--card-bg-grad: rgba(99,102,241,0.15);">AGENT&middot;TUNE</div>
                         <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/agent-tune.png" alt="AgentTune homepage screenshot" loading="lazy">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 006</div>
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 007</div>
                         <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
                         <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(99,102,241,0.33) 50%, transparent 100%);"></div>
                     </div>
@@ -1211,13 +1350,13 @@
                     </div>
 
                     <div class="tc-bottom">
-                        <strong>006/008</strong>
+                        <strong>007/012</strong>
                         <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
                         <strong>©BH</strong>
                     </div>
                 </a>
 
-                <!-- 007 · PIXEL-FORGE · RARE -->
+                <!-- 008 · PIXEL-FORGE · RARE -->
                 <a href="https://pixel-forge.net" class="tc-card" target="_blank" rel="noopener" style="--card-color: #10b981; --card-glow: rgba(16,185,129,0.55); box-shadow: 0 8px 28px rgba(16,185,129,0.5), 0 0 0 1px #10b981, inset 0 0 0 2px #fbbf24;" aria-label="PIXEL-FORGE — open pixel-forge.net">
                     <div class="tc-frame"></div>
                     <div class="tc-holo tc-foil" aria-hidden="true"></div>
@@ -1233,14 +1372,14 @@
                         </div>
                         <div class="tc-type-strip">
                             <span class="tc-type-label" style="color:#047857; border-color:#10b981; background:rgba(16,185,129,0.07);">GAME SPRITE TOOL</span>
-                            <span class="tc-badge">&starf; New</span>
+                            <span class="tc-badge">&starf; $5 Pack</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
                         <div class="tc-image-fallback" style="--card-bg-grad: rgba(16,185,129,0.15);">PIXEL&middot;FORGE</div>
                         <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/pixel-forge.png" alt="PixelForge homepage screenshot" loading="lazy" onerror="this.remove()">
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 007</div>
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART &middot; 008</div>
                         <div class="tc-image-stamp tc-image-stamp-br">HOLO &#x2726;</div>
                         <div class="tc-image-scan" style="background:linear-gradient(180deg, transparent 0%, rgba(16,185,129,0.33) 50%, transparent 100%);"></div>
                     </div>
@@ -1293,91 +1432,235 @@
                     </div>
 
                     <div class="tc-bottom">
-                        <strong>007/008</strong>
+                        <strong>008/012</strong>
                         <span class="tc-stars"><span style="--d:0s;">&starf;</span><span style="--d:0.3s;">&starf;</span></span>
                         <strong>©BH</strong>
                     </div>
                 </a>
 
-                <!-- 008 · STEALTH -->
-                <div class="tc-card" style="--card-color: #581c87; --card-glow: rgba(88,28,135,0.5); box-shadow: 0 8px 28px rgba(88,28,135,0.45), 0 0 0 1px #581c87, inset 0 0 0 2px #fbbf24; cursor: default;" aria-label="A project currently in stealth mode">
+                <!-- 009 · PAPER FUNDS · RETIRED -->
+                <a href="/posts/retiring-autonomous-agent-paper-fund-ii/" class="tc-card tc-dead" aria-label="PAPER FUNDS — read the autonomous paper fund post-mortem">
                     <div class="tc-frame"></div>
-                    <div class="tc-holo tc-foil" aria-hidden="true"></div>
 
                     <div class="tc-header">
                         <div class="tc-header-meta">
-                            <span class="tc-year">2026 →</span>
-                            <span class="tc-pip tc-pip-open" style="background:rgba(88,28,135,0.15); color:#fbf8f0; border-color:#581c87;"><span class="tc-pip-dot" style="background:#581c87; box-shadow:0 0 4px #581c87;"></span>STEALTH</span>
+                            <span class="tc-year">2026 ☩ 2026</span>
+                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
                         </div>
                         <div class="tc-title-row">
-                            <span class="tc-name">STEALTH</span>
-                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #581c87, #0a0a0a); box-shadow:0 0 8px #581c87;">?</span>
+                            <span class="tc-name">PAPER FUNDS</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
                         </div>
                         <div class="tc-type-strip">
-                            <span class="tc-type-label" style="color:#581c87; border-color:#581c87; background:rgba(88,28,135,0.07);">CLASSIFIED</span>
-                            <span class="tc-badge">★ Building quietly</span>
+                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">PAPER FUNDS I &amp; II · RETIRED</span>
                         </div>
                     </div>
 
                     <div class="tc-image">
-                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(88,28,135,0.18);">??</div>
-                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 008</div>
-                        <div class="tc-image-stamp tc-image-stamp-br">HOLO ✦</div>
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">SLO &amp; PSY</div>
+                        <img class="tc-image-img" src="/posts/autonomous-trading-crons-retrospective/autonomous-trading-retrospective-receipt.png" alt="Autonomous trading crons receipt screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 009</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+                        <div class="tc-stamp-dead">RIP · 2026</div>
                     </div>
 
-                    <div class="tc-thesis" style="background:rgba(88,28,135,0.11); border-left-color:#581c87;">
-                        <p class="tc-thesis-label" style="color:#581c87;">★ Thesis</p>
-                        <p class="tc-thesis-text">Currently in stealth. Building quietly — more when it ships.</p>
+                    <div class="tc-thesis">
+                        <p class="tc-thesis-label">✝ Cause of Death</p>
+                        <p class="tc-thesis-text">Killed by human-style guardrails, cron drift, and fragile local Mac Mini harnesses (Slo &amp; Psy).</p>
                     </div>
 
                     <div class="tc-detail">
-                        <p>Project name, thesis, business model, and numbers will land here when this one leaves stealth.</p>
+                        <p>Two generations of autonomous equity paper funds. Seven crons, 26 journals, four closed paper trades on Fund I, and zero fills in nine days on Fund II.</p>
                     </div>
 
                     <div class="tc-model">
-                        <p class="tc-model-label">💰 Business Model</p>
-                        <p class="tc-model-text">Undisclosed</p>
+                        <p class="tc-model-label">💰 Final tally</p>
+                        <p class="tc-model-text">2 funds retired · 0 live fills · paved way for Rig++</p>
                     </div>
 
                     <div class="tc-numbers">
-                        <p class="tc-numbers-label"># By the numbers</p>
+                        <p class="tc-numbers-label"># Final stats</p>
                         <dl class="tc-metrics">
-                            <div class="tc-metric"><dt class="tc-metric-l">Status</dt><dd class="tc-metric-v">Stealth</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Ship date</dt><dd class="tc-metric-v">?</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Category</dt><dd class="tc-metric-v">?</dd></div>
-                            <div class="tc-metric"><dt class="tc-metric-l">Reveal</dt><dd class="tc-metric-v">Soon</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Agents</dt><dd class="tc-metric-v">Slo + Psy</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Crons killed</dt><dd class="tc-metric-v">7</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Paper trades</dt><dd class="tc-metric-v">4</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Lessons</dt><dd class="tc-metric-v">Rig++</dd></div>
                         </dl>
                     </div>
 
-                    <div class="tc-moves">
-                        <div class="tc-move" style="background:rgba(88,28,135,0.18); border-color:rgba(88,28,135,0.45);">
-                            <div class="tc-move-num" style="background:#581c87;">1</div>
-                            <div class="tc-move-body">
-                                <div class="tc-move-row">
-                                    <span class="tc-move-name">Quiet Build</span>
-                                    <span class="tc-move-dmg" style="color:#581c87; text-shadow:none;">?</span>
-                                </div>
-                                <p class="tc-move-desc">Heads-down. No teases, no launch plan, no pre-announce. Just shipping.</p>
-                            </div>
+                    <div class="tc-foot">
+                        <span>SEALED · 009/012 · ©BH</span>
+                        <span class="tc-postmortem">POSTMORTEM →</span>
+                    </div>
+                </a>
+
+                <!-- 010 · VERACITY · RETIRED -->
+                <a href="/posts/veracity-postmortem/" class="tc-card tc-dead" aria-label="VERACITY — read the post-mortem">
+                    <div class="tc-frame"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 ☩ 2026</span>
+                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
                         </div>
-                        <div class="tc-move" style="background:rgba(88,28,135,0.09); border-color:rgba(88,28,135,0.35);">
-                            <div class="tc-move-num" style="background:#581c87;">2</div>
-                            <div class="tc-move-body">
-                                <div class="tc-move-row">
-                                    <span class="tc-move-name">Reveal Beam</span>
-                                    <span class="tc-move-dmg" style="color:#581c87; text-shadow:none;">?</span>
-                                </div>
-                                <p class="tc-move-desc">When this card lights up, you'll know.</p>
-                            </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">VERACITY</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">API · RETIRED</span>
                         </div>
                     </div>
 
-                    <div class="tc-bottom">
-                        <strong>008/008</strong>
-                        <span class="tc-stars"><span style="--d:0s;">&starf;</span></span>
-                        <strong>©BH</strong>
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">VERACITY</div>
+                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/veracity.png" alt="VeracityAPI homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 010</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+                        <div class="tc-stamp-dead">RIP · 2026</div>
                     </div>
-                </div>
+
+                    <div class="tc-thesis">
+                        <p class="tc-thesis-label">✝ Cause of Death</p>
+                        <p class="tc-thesis-text">Killed by its maker: opportunity cost. Trading was working; the API needed upkeep and never found a buyer.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>A pre-publish slop check for agents, built in an afternoon. API, MCP, SDKs, a Chrome extension, free tools. Four outside signups, zero paying customers.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">💰 Final tally</p>
+                        <p class="tc-model-text">~$400 burned · 4 months · $0 revenue</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># Final stats</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Signups</dt><dd class="tc-metric-v">4</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Revenue</dt><dd class="tc-metric-v">$0</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-foot">
+                        <span>SEALED · 010/012 · ©BH</span>
+                        <span class="tc-postmortem">POSTMORTEM →</span>
+                    </div>
+                </a>
+
+                <!-- 011 · PALMAURA · RETIRED -->
+                <a href="/posts/palmaura-postmortem/" class="tc-card tc-dead" aria-label="PALMAURA — read the post-mortem">
+                    <div class="tc-frame"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 ☩ 2026</span>
+                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
+                        </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">PALMAURA</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">iOS APP · REJECTED</span>
+                        </div>
+                    </div>
+
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">PALMAURA</div>
+                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/palmaura.png" alt="Palmaura app homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 011</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+                        <div class="tc-stamp-dead">RIP · 2026</div>
+                    </div>
+
+                    <div class="tc-thesis">
+                        <p class="tc-thesis-label">✝ Cause of Death</p>
+                        <p class="tc-thesis-text">Killed by Apple — Guideline 4.3(b), twice. A saturated category and a closed door.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>Palm photo in, daily read out. Built in a couple of shots; died in review. Five builds, two rejections, zero downloads.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">💰 Final tally</p>
+                        <p class="tc-model-text">$99 burned · 2 weeks · 0 users</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># Final stats</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Builds</dt><dd class="tc-metric-v">5</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Rejections</dt><dd class="tc-metric-v">2</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-foot">
+                        <span>SEALED · 011/012 · ©BH</span>
+                        <span class="tc-postmortem">POSTMORTEM →</span>
+                    </div>
+                </a>
+
+                <!-- 012 · KAPIKO · RETIRED -->
+                <a href="/posts/kapiko-postmortem/" class="tc-card tc-dead" aria-label="KAPIKO — read the post-mortem">
+                    <div class="tc-frame"></div>
+
+                    <div class="tc-header">
+                        <div class="tc-header-meta">
+                            <span class="tc-year">2026 ☩ 2026</span>
+                            <span class="tc-pip tc-pip-rip"><span class="tc-pip-dot"></span>RIP</span>
+                        </div>
+                        <div class="tc-title-row">
+                            <span class="tc-name">KAPIKO</span>
+                            <span class="tc-type-bubble" style="background:radial-gradient(circle at 30% 30%, #6a635a, #1a1816); box-shadow:0 0 6px rgba(0,0,0,0.4);">✝</span>
+                        </div>
+                        <div class="tc-type-strip">
+                            <span class="tc-type-label" style="color:#4a4540; border-color:#6a635a; background:rgba(74,69,64,0.07);">AI MUSIC · CLOSED</span>
+                        </div>
+                    </div>
+
+                    <div class="tc-image">
+                        <div class="tc-image-fallback" style="--card-bg-grad: rgba(74,69,64,0.15);">KAPIKO</div>
+                        <img class="tc-image-img" src="https://img.zonted.com/resources/portfolio/kapiko.png" alt="Kapiko homepage screenshot" loading="lazy">
+                        <div class="tc-image-stamp tc-image-stamp-tl">ART · 012</div>
+                        <div class="tc-image-stamp tc-image-stamp-br">CLOSED ✝</div>
+                        <div class="tc-stamp-dead">RIP · 2026</div>
+                    </div>
+
+                    <div class="tc-thesis">
+                        <p class="tc-thesis-label">✝ Cause of Death</p>
+                        <p class="tc-thesis-text">Killed by the Suno wrapper — no public API, patched every 1-2 days.</p>
+                    </div>
+
+                    <div class="tc-detail">
+                        <p>Generative ambient music. Pipeline worked. Distribution didn't. Ten days, $150, 57 videos, 3 subscribers. Closed.</p>
+                    </div>
+
+                    <div class="tc-model">
+                        <p class="tc-model-label">💰 Final tally</p>
+                        <p class="tc-model-text">~$150 burned · 10 days · 3 subscribers</p>
+                    </div>
+
+                    <div class="tc-numbers">
+                        <p class="tc-numbers-label"># Final stats</p>
+                        <dl class="tc-metrics">
+                            <div class="tc-metric"><dt class="tc-metric-l">Born</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Buried</dt><dd class="tc-metric-v">2026</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Spend</dt><dd class="tc-metric-v">$150</dd></div>
+                            <div class="tc-metric"><dt class="tc-metric-l">Runtime</dt><dd class="tc-metric-v">10 days</dd></div>
+                        </dl>
+                    </div>
+
+                    <div class="tc-foot">
+                        <span>SEALED · 012/012 · ©BH</span>
+                        <span class="tc-postmortem">POSTMORTEM →</span>
+                    </div>
+                </a>
 
             </div>
         </section>
@@ -1429,9 +1712,8 @@
         <span class="zn-footer-links">
             <a href="/posts/">Posts</a>
             <a href="/portfolio/">Projects</a>
+            <a href="/ai-stack/">AI Stack</a>
             <a href="/games/">Games</a>
-            <a href="/trading/">Trading</a>
-            <a href="/metrics/">Metrics</a>
             <a href="/about/">About</a>
             <a href="/feed.xml">RSS</a>
             <a href="https://x.com/bernardjhuang">X</a>

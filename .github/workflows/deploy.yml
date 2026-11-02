@@ -14,31 +14,12 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build and verify trading hypotheses
+      - name: Verify post integrity tests
         run: |
-          python3 scripts/build-net-dcf.py --check
-          python3 scripts/build-mu-zs-valuations.py --check
-          python3 scripts/build-siegy-valuation.py --check
-          python3 scripts/build-crm-crwv-valuations.py --check
-          python3 scripts/build-hypothesis-summary.py --cached
-
-          if python3 -c "from pathlib import Path; raise SystemExit(0 if '<span class=\"stamp\">Live ·' in Path('trading/index.html').read_text() else 1)"; then
-            export ZONTED_DESK_MORNING_QUOTES=trading/desk-morning-quotes.json
-            python3 scripts/build-trading-desk.py --mode morning --quotes "$ZONTED_DESK_MORNING_QUOTES" --check
-          else
-            python3 scripts/build-trading-desk.py --mode close --check
-          fi
-          python3 scripts/test-hypothesis-summary.py
-          python3 scripts/test_build_desk_positions.py
-          python3 scripts/test-trading-ui.py
-          python3 scripts/test_trading_desk_sync.py
           python3 scripts/test-paper-fund-i-post.py
           python3 scripts/test-autonomous-trading-retrospective-post.py
           python3 scripts/test-backtest-contamination-post.py
           python3 scripts/test-sol-fund-winning-strategies-post.py
-
-      - name: Strip build-time pipeline buffer from deploy
-        run: rm -f trading/pipeline.html
 
       - name: Deploy to Cloudflare Pages
         uses: cloudflare/wrangler-action@v3
