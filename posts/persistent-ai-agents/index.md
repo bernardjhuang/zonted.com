@@ -143,6 +143,10 @@ Indoctrinating every session from line one fixes the vibes overnight. Ranked rul
 
 From there, [`AUTONOMY.md`](https://zonted.com/posts/ai-trading-rig/#first-class-citizens) deletes the rest of the friction in plumbing: keep a tiny human-only fence (moving cash between venues, manual trades, secrets, deletes, public posts, loosening loss stops, and reversing recent human decisions early), make everything inside code bounds **act-then-tell** with a `--note` audit trail, keep state in git and Postgres instead of 16 KB notes or 1.3 million stray spool files, and give unattended bots scoped API keys instead of UI confirmation cards.
 
+![Animated StarCraft Zergling wave rushing down a ramp in unison under the caption AI swarm commencing task.](https://zonted.com/posts/persistent-ai-agents/img/ai-swarm-commencing-task.gif)
+
+*What the swarm finally feels like once every agent reads the same Charter at boot and stops waiting on approval cards.*
+
 Task-based AI waited on you to type the next prompt. Persistent AI is taking over real coworker seats, background tasks, and everyday assistant work at 6:00 AM before you open your laptop — and whether those agents spend the day compounding or stuck on expired approval cards comes down to the Charter you hand them first.
 
 If you want to watch a Charter-governed swarm against a real scoreboard, live settled receipts run daily at [psyduckler.com/pnl/](https://psyduckler.com/pnl/), the team posts on [@psy_duckler](https://x.com/psy_duckler), and I'm [@bernardjhuang](https://x.com/bernardjhuang).
