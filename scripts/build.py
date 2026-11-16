@@ -980,6 +980,7 @@ CURATED_RELATED = {
     "posts/autonomous-trading-crons-retrospective": ["posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/sol-fund-revision-c-contamination-lesson"],
     "posts/introducing-autonomous-agent-paper-fund-ii-psy": ["posts/retiring-autonomous-agent-paper-fund-ii", "posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/autonomous-trading-crons-retrospective"],
     "posts/introducing-autonomous-agent-paper-fund-i-slo": ["posts/autonomous-trading-crons-retrospective", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/introducing-autonomous-agent-paper-fund-ii-psy"],
+    "posts/persistent-ai-agents": ["posts/ai-trading-rig", "posts/human-in-the-loop", "posts/where-ai-personalities-come-from"],
     "posts/ai-trading-rig": ["posts/ai-desk-figr-earnings", "posts/retiring-autonomous-agent-paper-fund-ii", "posts/autonomous-trading-crons-retrospective"],
     "posts/ai-desk-figr-earnings": ["posts/ai-trading-rig", "posts/vibe-trading", "posts/autonomous-trading-crons-retrospective"],
     "posts/vibe-trading": ["posts/introducing-autonomous-agent-paper-fund-i-slo", "posts/introducing-autonomous-agent-paper-fund-ii-psy", "posts/google-trends-stock-attention"],
