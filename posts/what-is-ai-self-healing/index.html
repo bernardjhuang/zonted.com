@@ -11,6 +11,7 @@
     <title>What Is AI Self-Healing? — Zonted</title>
     <meta name="description" content="AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously.">
     <link rel="canonical" href="https://zonted.com/posts/what-is-ai-self-healing/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="What Is AI Self-Healing?">
     <meta property="og:description" content="AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously. A real case study from tabiji.ai where the AI agent fixed a production failure at 4 AM — no human involved.">
     <meta property="og:type" content="article">
@@ -23,11 +24,14 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-29">
+    <meta property="article:modified_time" content="2026-03-29">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/what-is-ai-self-healing/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "What Is AI Self-Healing?", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-29", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/what-is-ai-self-healing/", "description": "AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously. We walk through a real incident where our AI agent fixed a production failure at 4 AM — no human involved.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/what-is-ai-self-healing/", "dateModified": "2026-03-29"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "What Is AI Self-Healing?", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-03-29", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/what-is-ai-self-healing/", "description": "AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously. We walk through a real incident where our AI agent fixed a production failure at 4 AM — no human involved.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/what-is-ai-self-healing/", "dateModified": "2026-03-29", "inLanguage": "en-US", "wordCount": 1439, "articleSection": "Guides", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {
@@ -41,6 +45,9 @@
     }
     </script>
     
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is AI self-healing in production systems?", "acceptedAnswer": {"@type": "Answer", "text": "True AI self-healing is an autonomous agent reading a production failure stack trace, diagnosing the underlying root cause, patching the code in version control, and running a post-deploy verification check—rather than merely retrying an HTTP request or restarting a crashed container."}}, {"@type": "Question", "name": "What happened in the March 29 /tmp self-healing incident?", "acceptedAnswer": {"@type": "Answer", "text": "On March 29, 2026, a destination-comparison pipeline crashed with a FileNotFoundError after macOS purged a template file from /tmp. By 4:30 AM, an OpenClaw agent read the Slack stack trace, moved the template into git, patched the Python path resolution (commit b605c306), and verified a green rebuild."}}, {"@type": "Question", "name": "What five requirements enable AI self-healing?", "acceptedAnswer": {"@type": "Answer", "text": "Autonomous self-healing requires monitoring access (high-signal stack traces), diagnostic reasoning capability, scoped repository write permissions, persistent codebase context, and a closed post-fix verification loop—bounded by strict blast-radius guardrails."}}]}
+    </script>
     <style>
         :root {
             --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
@@ -279,14 +286,14 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
 
         <h1>What Is AI Self-Healing?</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">March 29, 2026 · 8 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-29">March 29, 2026</time> · 8 min read</div>
             </div>
         </div>
 
@@ -482,7 +489,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div><!-- /article-content -->
 </div><!-- /content-wrapper -->
 </main>

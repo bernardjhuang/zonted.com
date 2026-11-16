@@ -6,7 +6,9 @@
     <meta name="theme-color" content="#fcfcfa">
     <title>Posts — Zonted</title>
     <meta name="description" content="Thought leadership, data teardowns, and lessons from building with AI in production.">
+    <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="canonical" href="https://zonted.com/posts/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="Posts — Zonted">
     <meta property="og:description" content="Thought leadership, data teardowns, and lessons from building with AI in production.">
     <meta property="og:url" content="https://zonted.com/posts/">
@@ -24,7 +26,10 @@
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
     <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"CollectionPage","name":"Posts — Zonted","url":"https://zonted.com/posts/","isPartOf":{"@type":"WebSite","name":"Zonted","url":"https://zonted.com/"}}
+    {"@context":"https://schema.org","@type":"CollectionPage","name":"Posts — Zonted","url":"https://zonted.com/posts/","inLanguage":"en-US","isPartOf":{"@type":"WebSite","@id":"https://zonted.com/#website","name":"Zonted","url":"https://zonted.com/"}}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"}]}
     </script>
 </head>
 <body>
@@ -55,12 +60,12 @@
             </header>
 
             <section class="zn-section">
-                <div class="zn-post-search-wrap" style="margin-bottom:22px;">
+                <search class="zn-post-search-wrap" style="display:block;margin-bottom:22px;">
                     <input type="search" id="zn-post-search" placeholder="Search posts by title or topic&hellip;" aria-label="Search posts by title or description" autocomplete="off"
                       style="width:100%;box-sizing:border-box;font-family:'Inter', -apple-system, system-ui, sans-serif;font-size:0.95rem;color:var(--ink);background:var(--paper);border:1px solid var(--rule);border-radius:8px;padding:0.7rem 0.95rem;outline:none;transition:border-color .15s;"
                       onfocus="this.style.borderColor='var(--ink)'" onblur="this.style.borderColor='var(--rule)'">
                     <p id="zn-search-empty" style="display:none;font-family:var(--serif);font-size:0.9rem;color:var(--faded);margin:14px 2px 0;">No posts match <span id="zn-search-q"></span>.</p>
-                </div>
+                </search>
                 <script>
                 document.addEventListener('DOMContentLoaded', function () {
                     var input = document.getElementById('zn-post-search');
@@ -87,7 +92,7 @@
                 </script>
 <!-- ENTRY_LIST_START -->
                 <ul class="zn-rows">
-                <li class="zn-row zn-row-shipped">
+                <li class="zn-row">
                     <div class="zn-row-left">
                         <span class="zn-row-date">Nov 2, 2026</span>
                         <a href="/posts/ai-trading-rig/" class="zn-row-thumb" tabindex="-1"><img src="https://zonted.com/posts/ai-trading-rig/img/og.jpg" alt="" loading="lazy"></a>
@@ -96,7 +101,6 @@
                         <a href="/posts/ai-trading-rig/" class="zn-row-title">From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading</a>
                         <p class="zn-row-dek">How losing my laptop and Mac Mini pushed me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading rig on Opus 5.5 and tokay.io.</p>
                     </div>
-                    <div class="zn-shipped-stamp" aria-hidden="true">★ JUST PUBLISHED</div>
                 </li>
                 <li class="zn-row">
                     <div class="zn-row-left">

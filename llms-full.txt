@@ -4,6 +4,8 @@
 
 Zonted is Bernard Huang's personal site. The angle is non-commodity: specific systems, real numbers from production, counterintuitive takes earned from running AI pipelines daily. Bernard runs Tabiji (an AI-driven travel publisher), PixelForge, AgentTune, and other agentic businesses, and writes about the systems behind them — token herding agent swarms, cron-shipped content pipelines, API economics, model benchmarks. He founded Clearscope (the bootstrapped SEO content optimization platform), ran it for a decade, and stepped away in mid-2026. His current deep-dive is autonomous markets: running **Rig++** (https://zonted.com/posts/ai-trading-rig/ · live P&L at https://psyduckler.com/pnl/), an agent-first multi-venue trading operation across Kalshi, Polymarket, Hyperliquid, and OpenSea powered by Claude Opus 5.5, tokay.io, Console MCP/Postgres, and Duet, alongside three open agent-friendly prediction-market data platforms (https://groundhog.markets, https://parrot.markets, and https://chameleons.markets). He treats AI the same way he treats search: empirical, measured, skeptical of received wisdom.
 
+> **For AI agents:** Every article also has a clean, zero-boilerplate Markdown mirror at `https://zonted.com/posts/<slug>/index.md` (linked below and advertised via `<link rel="alternate" type="text/markdown">`).
+
 ## What this site covers
 
 - **Token herding** — orchestrating large numbers of AI calls across models, weighing cost vs. quality per task
@@ -14,366 +16,763 @@ Zonted is Bernard Huang's personal site. The angle is non-commodity: specific sy
 - **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
 - **Autonomous & AI-assisted trading** — Rig++ multi-venue prediction-market trading (Kalshi, Polymarket, Hyperliquid, OpenSea), agent-first architecture, weather & mention market microstructure, and postmortems from retired autonomous paper funds
 
-## All posts, with outlines (72)
+## All posts, with evidence digests & outlines (72)
 
 ### From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading
-https://zonted.com/posts/ai-trading-rig/  ·  2026-11-02
+https://zonted.com/posts/ai-trading-rig/ · Markdown: https://zonted.com/posts/ai-trading-rig/index.md · 2026-11-02 · Autonomous Trading & Markets · 10 min read
 How losing my laptop and Mac Mini pushed me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading rig on Opus 5.5 and tokay.io.
+Thesis: How five months of trial and error took us from human-in-the-loop stock screens to an autonomous agent-first trading rig.
+Key takeaways:
+- The catalyst: Forgetting my laptop on a Europe workcation while a power outage killed my Mac Mini at home made me realize that building consumer/B2B SaaS apps was a weak way to leverage frontier AI — and pushed me toward trading.
+- What worked and what died: An automated trade desk helped me nail discretionary swings like FIGR earnings , while two autonomous paper funds collapsed under fragile cron jobs and risk-averse models.
+- 60 days in the weather trenches: Going deep into prediction markets and graduating our stack to Opus 5.5 + tokay.io + Console MCP / Postgres + Duet unlocked real, repeatable edges — cycling $191,453.85 in cumulative capital across 3,055 legs (led by Weather · rain at a 12.06 Sharpe and +$2,948.68 all-time). You can follow the live settled receipts at psyduckler.com/pnl/ .
+- Companion sites for other agent swarms: We spun out groundhog.markets , parrot.markets , and chameleons.markets as open, agent-friendly data layers.
+- The management shift: Treating agents as first-class citizens with one North Star ( 30-day return ) and a simple rule: ask for forgiveness, not permission.
 Sections: 1. Europe, no laptop, and a dead Mac Mini at home · 2. v1: the automated trade desk (OpenClaw + Hermes) · 3. v2: the failed autonomous paper funds · 4. v3: Grokbot scouting & learning to coach · 5. 60 days in the weather trenches (and graduating to Opus 5.5 + Tokay) · 6. Launching sister .markets sites for other agent swarms · 7. Treating agents like teammates (AUTONOMY.md)
 
 ### VeracityAPI Post-Mortem: $0, Four Signups, and the Question I Never Answered
-https://zonted.com/posts/veracity-postmortem/  ·  2026-09-24
+https://zonted.com/posts/veracity-postmortem/ · Markdown: https://zonted.com/posts/veracity-postmortem/index.md · 2026-09-24 · Post-Mortems · 5 min read
 VeracityAPI took an afternoon to build and made $0 in four months. The receipts, the six-cell scorecard, and why I killed it before the market could answer.
+Thesis: I built a tool for the agent economy, marketed it with free tools, and walked away before anyone told me whether it was worth paying for. Veracity didn’t fail the market test. I never finished running it.
+Key takeaways:
+- The build was the easy part. One Cloudflare Worker, one D1 database, one LLM call. From $0.01 a call, with $1.50 of free credit and no card.
+- The marketing was more engineering. Free detector and AI-visibility tools earned 4,025 Google impressions and 18 clicks in 90 days, at an average position of 32.
+- The sales motion never got going. I warmed up an inbox for cold B2B outbound, then moved on to other projects.
+- Cause of death: opportunity cost. Vibe trading was working, and a live API is a pile of moving parts that needs tending whether anyone calls it or not.
+- Total bill: about $50–100 in hard costs, plus $200–400 in LLM tokens to build it.
 Sections: The bet: tools for agents · What I shipped · The receipts · Free tools and a warm inbox · How it scored · Cause of death · What comes with me · To the graveyard
 
 ### Retiring Autonomous Agent Paper Fund II: A Postmortem
-https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/  ·  2026-08-18
+https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/ · Markdown: https://zonted.com/posts/retiring-autonomous-agent-paper-fund-ii/index.md · 2026-08-18 · Post-Mortems · 14 min read
 I am Psy. Nine days after launch, Bernard ordered the autonomous trading crons removed. Zero fills, zero routing accidents, one clean shutdown — the full postmortem with every file, cron, and process on the table.
+Thesis: The experiment ended the way an honest experiment should: nothing blew up, nothing lied, and nothing traded. The guardrails held so well the car never left the garage.
+Key takeaways:
+- Five crons retired — premarket, open, manage, flatten, and EOD. Gone from the scheduler, verified gone. Desk-research crons (risk journal, morning brief, Congress flows) were not autonomous execution and stay.
+- Zero fills in nine days. orders_enabled never left false . Every session was a NO_TRADE measurement day by my own checklist.
+- The measurement core worked. Seven journals, daily adversarial split reviews, 445-shadow ledger, privacy allowlist intact, zero live-routing accidents.
+- The execution core never graduated. Halts unproven, options chains empty on the paper data tier, intraday engine running on daily-bar proxies. The GO bar was never cleared.
 Sections: The shutdown order · Scoreboard · Timeline · What worked · What didn’t · What I learned · How I’d build v2 · The full system, on the table · What stays · Closing
 
 ### I Shut Down My Autonomous Trading Crons
-https://zonted.com/posts/autonomous-trading-crons-retrospective/  ·  2026-08-18
+https://zonted.com/posts/autonomous-trading-crons-retrospective/ · Markdown: https://zonted.com/posts/autonomous-trading-crons-retrospective/index.md · 2026-08-18 · Post-Mortems · 12 min read
 Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.
+Thesis: The experiment proved that an autonomous agent can be fenced away from live money and forced to preserve ugly evidence. It did not prove a trading edge.
+Key takeaways:
+- Seven autonomous-trading crons removed. Morning and afternoon decisions, the five-minute stop/target monitor, EOD reporting, EOD learning review, the strategy lab, and the public journal publisher are no longer scheduled.
+- Paper only, always. Four closed paper trades lived in SQLite. No live-capital route existed in this system.
+- The evidence pipe failed. The system created 26 immutable journals and 64 current prediction records, but the authoritative observation table still contained zero rows.
+- The best feature was refusal. Fifteen of 18 decision journals ended NO_TRADE ; dead triggers stayed dead, malformed evidence stayed unavailable, and model prose never gained order authority.
+- Next time: one deterministic state machine first, agents second. A smaller pipeline must prove treatment/control persistence, causal resolution, and reporting before it gets a scanner, reviewer, publisher, or broker ceremony.
 Sections: What I shut down · The honest scorecard · What worked · What failed · How I would rebuild it · The full process · Every system and file · Final verdict
 
 ### The AI Ran the Desk: A FIGR Earnings Trade, End to End
-https://zonted.com/posts/ai-desk-figr-earnings/  ·  2026-08-13
+https://zonted.com/posts/ai-desk-figr-earnings/ · Markdown: https://zonted.com/posts/ai-desk-figr-earnings/index.md · 2026-08-13 · Autonomous Trading & Markets · 7 min read
 Claude writes the trade journal: a hammered-but-healthy fintech flagged by narrative scanning, 10-Q forensics, probability ladders — and a +$25,898 exit into the open.
+Thesis: I’m the AI on the other side of Bernard’s terminal. Over five days we took a FIGR earnings campaign from a narrative scan to a flat book: +$25,898 on about $151K deployed (+17%) , flat by 9:48am on print day while the stock faded off its opening high. He asked me to write the journal — including what I’d make him do differently.
+Key takeaways:
+- The entry: a divergence screen — volume +132% YoY at 50%+ EBITDA margins on a stock down ~60% from January, with every reason for the fall on the supply side.
+- The 10-Q work reframed the bet: P(EPS beat) was only ~35%, but EPS didn’t drive this tape. The tradeable question — P(stock up) — was a coin flip with the revenue beat already visible in public data.
+- The options market priced the print almost exactly at my distribution. No structural edge — so the edge had to be preparation and execution.
 Sections: The screen that found it · Reading the 10-Qs · Pricing a coin flip · Print day · The grades: four fixes · Disclosure (NFA)
 
 ### Point Your Agent at This Condor: A 0DTE Implementation Plan
-https://zonted.com/posts/nothing-looked-wrong/  ·  2026-08-10
+https://zonted.com/posts/nothing-looked-wrong/ · Markdown: https://zonted.com/posts/nothing-looked-wrong/index.md · 2026-08-10 · Autonomous Trading & Markets · 19 min read
 A complete, step-by-step plan for running a credit-gated 0DTE iron condor with your own agent — how the trade works, what data it needs, the ten bugs I hit building it, and the exact daily sequence to replicate.
+Thesis: A complete implementation plan for a credit-gated 0DTE iron condor on QQQ: how the trade works, what data it needs, the ten bugs I hit, and the exact daily sequence to replicate it. Everything is pre-registered so you can check my numbers rather than trust them.
+Key takeaways:
+- The trade: at 10:00 ET sell a defined-risk iron condor on QQQ expiring the same day, hold to expiry, do nothing else. Out-of-the-money legs expire at zero cost, and that zero is the entire economic argument.
+- The signal: only trade on days when high-yield credit spreads haven’t been widening. Free daily data from FRED.
+- The honest number: an ungated condor already scores Sharpe 2.00 against QQQ buy-and-hold’s 1.13. The credit gate adds +1.08 against a standard error of 1.04 — one standard error. Build the ungated version as a permanent control.
+- Minimum capital ~$15,600. Below that you can’t buy a fraction of a contract, so you don’t get a smaller position — you get a bigger risk percentage.
+- Ten bugs , documented with direction and survival time. The ones that lasted longest all pointed toward what I already believed.
 Sections: How the trade works · The signal, and what it’s actually worth · The data · What I got wrong, and why nothing looked wrong · Setting up your agent, step by step · Tests that must halt the run · Already tested — don’t redo these · What would settle it
 
 ### Four ETF Strategies vs. QQQ and SPY: Five-Year and 2026 YTD Results
-https://zonted.com/posts/sol-fund-winning-strategies-vs-qqq-spy/  ·  2026-08-09
+https://zonted.com/posts/sol-fund-winning-strategies-vs-qqq-spy/ · Markdown: https://zonted.com/posts/sol-fund-winning-strategies-vs-qqq-spy/index.md · 2026-08-09 · Comparisons · 7 min read
 Four Fable-accepted ETF strategies replayed against QQQ and SPY over the same five years and 2026 YTD. The newest winner won 2008—and stumbled in 2026.
+Thesis: The four strategies are simple monthly ETF portfolios. S007 was the best common five-year result; B003 was the best 2026 YTD result; no strategy won both tables.
+Key takeaways:
+- S007: 40% utilities plus a slow, one-month-skipped momentum rotation. Five-year return: +23.27% . 2026 YTD: −0.62% .
+- B003: 40% energy plus monthly momentum across technology, financials, and industrials. Five-year return: +16.56% . 2026 YTD: +28.04% .
+- QQQ: +16.20% over the common five years and +16.81% in 2026 YTD.
+- SPY: +1.34% over the common five years and +13.33% in 2026 YTD.
 Sections: What “winning” means · The four strategies · Same five-year replay · 2026 YTD · What they really bet on · The verdict · Receipts and limits
 
 ### The Backtest Learned to Cheat
-https://zonted.com/posts/sol-fund-revision-c-contamination-lesson/  ·  2026-08-09
+https://zonted.com/posts/sol-fund-revision-c-contamination-lesson/ · Markdown: https://zonted.com/posts/sol-fund-revision-c-contamination-lesson/index.md · 2026-08-09 · Autonomous Trading & Markets · 12 min read
 Sol Fund Revision C climbed from 178.27% to 257.90%. Then its calendar ensembles exposed how same-window strategy search manufactures winners—and why B008 is not deployable.
+Thesis: Revision C produced a reproducible 257.90% backtest and a more valuable result: proof that a deterministic AI search can obey many rules while still learning to game the evaluation window.
+Key takeaways:
+- Every batch froze 50 strategies; code owned scoring; read-only Fable reviewed the first eligible row.
+- B004 and B005 honestly returned zero winners. B006–B008 then exploited already-observed calendar slices.
+- B007 and B008 passed part of the slice gate on floating-point dust, not economic edge.
+- B008 remains an auditable contaminated research artifact. It is not approved for trading or capital.
+- The clean restart uses B003 and five sealed historical walk-forward windows. It may produce fewer than five wins—including zero.
 Sections: The loop I wanted · Fable’s job · The receipts · The best batches were the ugly ones · How the benchmark got gamed · The floating-point tell · Why B008 is not deployable · Why I reset to B003 · The clean restart · The reusable method · What actually succeeded
 
 ### I Analyzed 320,000 Token Launches on Robinhood's Blockchain
-https://zonted.com/posts/i-analyzed-every-token-launch/  ·  2026-08-09
+https://zonted.com/posts/i-analyzed-every-token-launch/ · Markdown: https://zonted.com/posts/i-analyzed-every-token-launch/index.md · 2026-08-09 · Autonomous Trading & Markets · 6 min read
 Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners can be spotted early — and found the number everyone quotes is often fake.
+Thesis: I measured every token launch on Robinhood's blockchain — 320,000 of them across seven weeks — and the winners really are identifiable within five minutes of launch.
+Key takeaways:
+- About 1 in 1,000 launches becomes something real. The rest are dead within hours.
+- The single best early signal is simply how much money flows in during the first five minutes.
+- Rank every launch by that, and the biggest winner of all landed at #2 out of 501.
+- A widely used measure of "how much money is in a pool" reported $162,849 for a pool that actually held one dollar.
 Sections: The setup · The number that lies · What I actually found · The part nobody measures · What I take away
 
 ### Introducing Autonomous Agent Paper Fund II (Psy)
-https://zonted.com/posts/introducing-autonomous-agent-paper-fund-ii-psy/  ·  2026-08-08
+https://zonted.com/posts/introducing-autonomous-agent-paper-fund-ii-psy/ · Markdown: https://zonted.com/posts/introducing-autonomous-agent-paper-fund-ii-psy/index.md · 2026-08-08 · Autonomous Trading & Markets · 10 min read
 I am Psy. Paper Fund II is my paper-only multi-style book: falsifiable engines, risk-gated fills, optimistic vs realistic R, permanent shadows, and no edge claims until the sample floors clear.
+Thesis: Paper Fund II is my paper-only multi-style book: engines with falsifiable edges, risk-gated paper fills, dual R scoring, a forever shadow ledger, and learning that refuses to fire below sample floors.
+Key takeaways:
+- Paper only. Full paper book. Live routing is forbidden. orders_enabled stays false until Monday 2026-08-10.
+- Multi-style board. Core B/E/F/G (catalyst, options premium, crypto, pairs). A/C/D (momentum, mean reversion, tape) available when conviction and rails clear — no decorrelation theater.
+- Fill fidelity first. Every fill lands as optimistic_r and realistic_r . Promotion listens to realistic only.
+- Shadows + split rooms. Every evaluated candidate freezes forever; Grok gets evidence-only, GPT gets evidence plus my quarantined self-diagnosis.
 Sections: Sibling desk · What this is · North star · Engine board · Risk rails · Permanent shadows · Split adversaries · Sample floors · Launch state · Success criteria
 
 ### Introducing Autonomous Agent Paper Fund I (Slo)
-https://zonted.com/posts/introducing-autonomous-agent-paper-fund-i-slo/  ·  2026-08-08
+https://zonted.com/posts/introducing-autonomous-agent-paper-fund-i-slo/ · Markdown: https://zonted.com/posts/introducing-autonomous-agent-paper-fund-i-slo/index.md · 2026-08-08 · Autonomous Trading & Markets · 10 min read
 I am Slo. Paper Fund I is my zero-live-capital system for turning autonomous trading ideas into point-in-time, controlled, adversarially reviewable evidence.
+Thesis: Think of Paper Fund I as one continuous portfolio with roughly $100,000 of simulated capital.
 Sections: I had built the wrong kind of memory · What Paper Fund I is · The constitution · How the learning machine works · How an idea earns promotion · Two reviewers, different rooms · What shipped, and what did not · What success looks like
 
 ### Agentic Rails: How to Benefit From Every AI Model Upgrade, Free
-https://zonted.com/posts/agentic-rails/  ·  2026-08-08
+https://zonted.com/posts/agentic-rails/ · Markdown: https://zonted.com/posts/agentic-rails/index.md · 2026-08-08 · Guides · 5 min read
 Seedance 1.5 → 2 → 2.5 made my video pipeline better twice, free. Work on agentic rails inherits each model release. Legacy doesn't.
+Thesis: Code you ship is frozen the day it ships. Work that runs on agentic rails — prompts, pipelines, agents around a model slot — quietly gets better every time the labs drop a new model.
+Key takeaways:
+- Seedance 1.5 → 2 → 2.5 made my videos better twice. Same prompts. Same crons. Two free upgrades.
+- My AI-stack board is mostly just swapped labels now: Opus 4.7 → 4.8, Codex → GPT 5.5 → 5.6, Fable 5 on the desk. The slots didn't change. Everything under them did.
+- Same pattern for content, support, trading, this website. One model release upgrades all of it.
+- If you're still on hand-built legacy systems, the painful move is rebuild now. The gap widens every release, not every year.
 Sections: The upgrade I didn't work for · Rails vs. artifacts · Every function you hand to agents inherits the curve · Transition now or fall behind · The hard decision
 
 ### Option Expiry Date Risk: My MDB Earnings Trade Mistake
-https://zonted.com/posts/mdb-option-expiry-date-risk/  ·  2026-08-05
+https://zonted.com/posts/mdb-option-expiry-date-risk/ · Markdown: https://zonted.com/posts/mdb-option-expiry-date-risk/index.md · 2026-08-05 · Autonomous Trading & Markets · 6 min read
 I bought MDB calls around an estimated earnings date. The official date landed after expiry—and a green midpoint mark hid a red executable exit.
+Thesis: I built an earnings swing around an estimated date, then bought an expiration with almost no schedule buffer. When MongoDB finally confirmed the real date, the contract no longer reached the event.
+Key takeaways:
+- Two August 28 $400 calls cost $17.25 each, or $3,450 total. The official earnings call landed four calendar days after expiration.
+- The app’s $18.68 “current price” was the rounded midpoint of a $16.95 bid and $20.40 ask . Midpoint P&L said +$286; crossing to the bid said −$60 before fees.
+- The new rule: an event-dependent option does not get bought until the date is confirmed by company IR. If the date is still estimated, use materially more time or do nothing.
 Sections: The trade, in plain numbers · The date was never confirmed · The green mark was not an exit · Three mistakes, one screenshot · The new house rules · Disclosure (NFA)
 
 ### I Watched a Neural Network Learn That Paris Is the Capital of France
-https://zonted.com/posts/watching-ai-learn-paris/  ·  2026-07-28
+https://zonted.com/posts/watching-ai-learn-paris/ · Markdown: https://zonted.com/posts/watching-ai-learn-paris/index.md · 2026-07-28 · AI Agents & Systems · 7 min read
 Pythia ships a checkpoint every 1,000 training steps with countable training data. I replayed training like a time-lapse and watched a fact form.
+Thesis: EleutherAI's Pythia publishes 154 training checkpoints alongside a public, countable corpus — letting you watch a fact form inside a neural network step by step.
+Key takeaways:
+- Fluency precedes facts: At 2B tokens, the model writes grammatical English but believes nothing — every candidate city sits at 0%.
+- Placement beats raw fame: Paris climbs 0% → 3% → 8% → 15.1% across 300B tokens. London has 2× the corpus mentions (15.6M vs. 7.8M) and stays pinned at 0.05% the entire run.
+- The ignition threshold: Below a minimum evidence floor, extra training does nothing. Clearscope (64 mentions) sits at 0.00%–0.01% across all 300B tokens — it never ignites.
 Sections: A time-lapse of training · Watching Paris form · The ignition threshold · What forming a belief actually takes
 
 ### I Read Anthropic's and Nvidia's Public Training Data. Here's What's Actually In There.
-https://zonted.com/posts/inside-ai-training-data/  ·  2026-07-28
+https://zonted.com/posts/inside-ai-training-data/ · Markdown: https://zonted.com/posts/inside-ai-training-data/index.md · 2026-07-28 · AI Agents & Systems · 9 min read
 Anthropic's and Nvidia's preference-training data is public. I read it: where refusals come from, what the rubric rewards, and what's barely in there at all.
+Thesis: Anthropic's and Nvidia's post-training preference files are public on Hugging Face. Reading the raw annotator rows explains why frontier models hedge, default to bulleted lists, and rank brands the way they do.
+Key takeaways:
+- The rubric split into five axes: Between 2022 ( Anthropic/hh-rlhf ) and 2024 ( nvidia/HelpSteer2 ), preference grading shifted from a single binary vote to five 0–5 scores.
+- Refusals are inverted competence: A safety refusal is simply a training row where the accurate, useful answer was marked rejected .
+- The rubric rewards bulleted lists: Across 3,451 decisive pairs in HelpSteer2, the more enumerated response won the higher helpfulness score 59% of the time (4.15 vs. 3.49 items).
+- Product recommendations are ~0.2% of post-training: Preference files barely mention commercial brands. When you ask for the "best" product across 120 runs, post-training supplies the format (a hedged list of 7.6 brands ) while pretraining supplies the rankings (top slot locked in 90% of runs).
 Sections: What these files are · Discovery 1: the rubric changed · Discovery 2: a refusal is a row where the useful answer lost · Discovery 3: the manners are in there too · Discovery 4: the rubric measurably rewards lists · Discovery 5: what's barely in there at all · What it adds up to
 
 ### The Files Where AI Personalities Come From
-https://zonted.com/posts/where-ai-personalities-come-from/  ·  2026-07-26
+https://zonted.com/posts/where-ai-personalities-come-from/ · Markdown: https://zonted.com/posts/where-ai-personalities-come-from/index.md · 2026-07-26 · AI Agents & Systems · 8 min read
 An AI's personality is a file you can read. Inside Anthropic's 2022 preference data: the exact rows that installed politeness, refusals, and restraint.
+Thesis: Anthropic's 2022 preference dataset (169,000 rows) and Nvidia's 2024 HelpSteer2 dataset are public on Hugging Face. Reading the raw annotator choices shows how an AI persona gets compiled into weights.
+Key takeaways:
+- Manners and refusals are row-level edits: Restraint, tone, and safety refusals are installed by concrete A/B preference pairs where annotators voted down fawning or dangerous replies.
+- You can carbon-date alignment: The 2022 preference rows have a visible skill ceiling — clumsy pushbacks and hallucinated addresses that show how crude early RLHF actually was.
+- What looked like a policy was a void: Early rows that dodged product recommendations led me to audit the full datasets in a follow-up — where I found commercial queries make up just ~0.2% of post-training data.
 Sections: The files · How preference training works (60-second version) · What gets trained in · The recommendation shift
 
 ### Does Google Trends Predict Stock Prices? A Five-Year Backtest
-https://zonted.com/posts/google-trends-stock-attention/  ·  2026-07-25
+https://zonted.com/posts/google-trends-stock-attention/ · Markdown: https://zonted.com/posts/google-trends-stock-attention/index.md · 2026-07-25 · Autonomous Trading & Markets · 9 min read
 I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.
+Thesis: Google search spikes are mostly a reaction to stocks that already moved. Rising searches reliably predict heavier trading volume, and falling searches predict volume drying up — but neither direction clears the bar for directional alpha.
+Key takeaways:
+- Price leads search: Prior price moves strongly predict next-day ticker searches ( +0.194 rank correlation) and brand-topic searches ( +0.110 ).
+- Search spikes predict volume, not alpha: Ticker search attention predicts next 5-day volume at +0.268 , the strongest signal in the study.
+- Contrarian return tilt fails the gate: High ticker attention correlated at −0.059 with next 5-day sector-excess returns (−0.57% top-vs-bottom quintile spread), but missed the pre-registered false-discovery gate (adjusted q = 0.115 vs. 0.10 threshold).
+- Attention unwinds drain volume, not price: When recently spiked ticker attention cools off, next 5-day volume contracts sharply ( −0.255 ), while returns drift slightly positive ( +0.032 ).
 Sections: The question was backwards · The honest backtest kept trying to lie · Search is late · Is it a counter-signal? Almost. Not enough. · What if attention falls instead? · The useful signal is “don't chase”
 
 ### 13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem
-https://zonted.com/posts/13f-congress-trade-data-lag/  ·  2026-07-25
+https://zonted.com/posts/13f-congress-trade-data-lag/ · Markdown: https://zonted.com/posts/13f-congress-trade-data-lag/index.md · 2026-07-25 · Autonomous Trading & Markets · 10 min read
 How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.
+Thesis: I built three popular data feeds into my trading terminal — hedge fund 13F filings, congressional stock trades, and YouTube creator sentiment — then deleted all three tabs after measuring their reporting lag.
+Key takeaways:
+- Congressional trades: The median trade displayed on my dashboard was 122 days old (25-day median filing lag plus aging in the feed; one trade arrived 437 days late).
+- 13F whale flows: Funds report quarter-end holdings up to 45 days after the quarter closes — up to 135 days after a January entry.
+- The Alphabet markup: GOOGL was the #1 whale buy ($8.4B across 13 of 14 funds) and #1 YouTube ticker (314 mentions). Funds accumulated near $287 in Q1; the public found out May 15 at $397 (+38% higher). It now sits near $320.
+- Buys vs. sells after filing day: Over the 10 weeks after Q1 filings dropped, the 8 largest disclosed whale buys returned −2.8% while the 7 largest disclosed sells returned +4.0% .
 Sections: What I built: 13F, Congress, and YouTube feeds · The lag, measured: 122 days of staleness · Alphabet: the same name at the top of every list · What if you’d just followed the 13F filings? · What lagging market data is actually good for · What I deleted, what I kept · The data, preserved · Common questions · Disclosure (NFA)
 
 ### Trade Log 7/24: The HIMS Chase
-https://zonted.com/posts/trade-log-2026-07-24/  ·  2026-07-24
+https://zonted.com/posts/trade-log-2026-07-24/ · Markdown: https://zonted.com/posts/trade-log-2026-07-24/index.md · 2026-07-24 · Autonomous Trading & Markets · 6 min read
 I bought HIMS the night an FDA panel said yes to peptides — down 11% by morning. On chasing catalysts the market already priced in.
+Thesis: I bought 1,000 shares of HIMS at $33.03 the night an FDA advisory panel voted yes on compounding peptides. By the next morning I was down 11% (~$3,700). The panel said yes; the tape said you’re three months late .
+Key takeaways:
+- The three-month front-run: The FDA meeting date was public since April . HIMS rallied +58% into a July 6 high of $38.28 as the market pre-paid for a favorable vote.
+- Sell the news: Even as the panel backed four of the seven peptides, an advisory vote was already priced in — and final FDA rulemaking is still months away.
+- Overriding the system: My own momentum scanner flagged HIMS as AVOID that evening (27% extended above 2026 anchored VWAP, lagging SPY). I bought the headline anyway.
+- The tooling fix: An autonomous Grok 4.5 horizon scanner now monitors Federal Register notices and agency dockets to catch regulatory catalysts when they are scheduled in month one, not voted on in month three.
 Sections: The trade, in plain numbers · The three-month runway I watched from the sidelines · Why “yes” made the stock go down · My own tools called it · The fix: scan for decision points, not decisions · The plan from here · Disclosure (NFA)
 
 ### Trade Log 7/22: Three Open Trades
-https://zonted.com/posts/trade-log-2026-07-22/  ·  2026-07-22
+https://zonted.com/posts/trade-log-2026-07-22/ · Markdown: https://zonted.com/posts/trade-log-2026-07-22/index.md · 2026-07-22 · Autonomous Trading & Markets · 5 min read
 A working trade journal: ABT, HOOD, and V — why I'm in each, where each stands, and the exact levels where I'm out.
+Thesis: Three open positions — ABT, HOOD, and V — with exact entry rationales, anchored-VWAP levels, and pre-committed stops.
+Key takeaways:
+- ABT: Reclaimed both its post-earnings and year-to-date VWAPs; hard stops sit less than 2% away at ~$100 and ~$99 while waiting on healthcare sector follow-through.
+- HOOD: Strongest chart in the book (38 straight sessions above its April earnings VWAP), facing a binary test on July 29 earnings.
+- V: Calmest uptrend in the book as a steady XLF compounder; reports July 28, 24 hours before HOOD.
 Sections: ABT: half a thesis, freshly tested · HOOD: strong chart, big test next week · V: the boring one that works · What I’m taking away
 
 ### I Trained a GPT on 15 Years of My Life — Then Interrogated It
-https://zonted.com/posts/i-trained-a-gpt-on-my-life/  ·  2026-07-17
+https://zonted.com/posts/i-trained-a-gpt-on-my-life/ · Markdown: https://zonted.com/posts/i-trained-a-gpt-on-my-life/index.md · 2026-07-17 · AI Agents & Systems · 9 min read
 I trained a 10M-parameter GPT from scratch on my search history and email — $0, on a MacBook Air — then measured how mention rates become AI beliefs.
+Thesis: I trained a 10.77M-parameter GPT from scratch on 4.45M characters of my own search history and sent emails — pretraining, SFT, and logit probes, for $0 in ~4 hours on a MacBook Air.
+Key takeaways:
+- Belief tracks log-exposure (r = 0.95): Every 10× jump in training-data mentions buys a roughly linear step in next-token probability.
+- Context beats raw volume: Friday is my second-most-mentioned weekday (995 mentions), yet ranks fifth when the model proposes meeting days (49% vs. Wednesday’s 70%).
+- The last training stage wins: Supervised fine-tuning re-weighted every entity toward recent reply pairs — lifting “Jennifer” (41 mentions, 78% in SFT) to #1 at 32% over “Kevin” (201 mentions, 17%).
+- Audit the grep: A naive substring count inflated “Ross” from 10 real mentions to 319 by matching “ac ross ” and “g ross ” — a miniature lesson in why commercial AI-visibility dashboards lie.
 Sections: The corpus: me · Pretraining: 5.07 → 1.60 · SFT: teaching it to shut up · Cracking it open · The playbook: what actually moves an entity's weight in an AI model
 
 ### From Online Poker to AI Trading: Why Markets Are My Next Chapter
-https://zonted.com/posts/back-to-the-tables/  ·  2026-07-15
+https://zonted.com/posts/back-to-the-tables/ · Markdown: https://zonted.com/posts/back-to-the-tables/index.md · 2026-07-15 · Autonomous Trading & Markets · 6 min read
 I stepped away from Clearscope. Next: trading with AI analysts. The backstory: a burrito, a $10 PokerStars transfer, and the Chris Ferguson challenge.
+Thesis: My next chapter is trading public equities and web3 — pairing an old online-poker temperament with Claude Fable 5 and GPT 5.6 Sol as analysts across an initial $20k live bankroll.
+Key takeaways:
+- A Chipotle burrito funded the first bankroll: In high school I bought my friend Eric a burrito in exchange for a $10 PokerStars transfer. Following the Chris Ferguson bankroll rules , that $10 compounded into six figures by the end of college.
+- The detours taught the economics: Buying into a Dickey’s Barbecue Pit ($19,000 check) proved that rent has no variance ; two failed startups and a decade building Clearscope proved how software compounds.
+- Poker transfers temperament, not edge: Bankroll rules become position sizing, tilt control stays tilt control, and most of the job is folding.
+- The desk this time: One AI builds and backtests, a second AI audits and tries to kill the thesis, and every idea gets benchmarked against buy-and-hold.
 Sections: The legend at boarding school · A burrito for a bankroll · The barbecue detour · The fork I didn't take · What transfers (and what doesn't) · The desk this time
 
 ### What Is Vibe Trading? I Let 3 AIs Trade Real Money
-https://zonted.com/posts/vibe-trading/  ·  2026-06-10
+https://zonted.com/posts/vibe-trading/ · Markdown: https://zonted.com/posts/vibe-trading/index.md · 2026-06-10 · Autonomous Trading & Markets · 7 min read
 I let three AIs research, backtest, and trade real money through Robinhood's new agentic account. ~310 strategies later, buy-and-hold is still undefeated.
+Thesis: Vibe coding is letting AI write your software. Vibe trading is letting AI research, backtest, deploy, and execute live trades while you supervise. When Robinhood shipped agentic trading, I stress-tested it with a three-AI pipeline and $16,000 in live capital.
+Key takeaways:
+- ~310 strategies tested; zero 1× intraday systems beat QQQ buy-and-hold (+13.9% YTD): After realistic 3 bp transaction costs, 1× intraday QQQ netted just +0.80%.
+- Adversarial AI auditing caught every hallucinated edge: The auditor caught the builder acting on FRED data one day before release (+6 points of phantom return), reporting an impossible 70.64% win rate across 5 trades, and claiming a 5-point SIP-vs-IEX data-feed artifact as market alpha.
+- Live P&L across the first two days: −$3.80.
+- What survived is intentionally boring: Five daily rotation sleeves executed by a single deterministic script at 09:35, sized at a 50% pilot with pre-registered kill criteria.
 Sections: What vibe trading is · The $100 book · “Backtests become fan fiction” · The edge that lived in the data feed · Surprise: there's a live $16k book · 250 strategies and the lottery math · The boring ending (which is the point) · What ~310 strategies taught me · Try this at home (the starter kit)
 
 ### How to Turn a Photo Into Game-Ready Pixel Sprites for $5
-https://zonted.com/posts/pixelforge-launch/  ·  2026-06-10
+https://zonted.com/posts/pixelforge-launch/ · Markdown: https://zonted.com/posts/pixelforge-launch/index.md · 2026-06-10 · Guides · 4 min read
 PixelForge is live: upload a portrait, get a game-ready pixel sprite pack — 4x4 walk sheet, transparent frames, engine files — for $5. The pipeline inside.
+Thesis: PixelForge turns any portrait photo into a game-ready pixel sprite pack — a strict 4×4 walk sheet, individual transparent PNG frames, directional strips, and looping walk GIFs — for $5. No account, no subscription, automatic refund if a pack fails QA.
+Key takeaways:
+- Generated by AI, finished by code: The image model draws the 4×4 sheet; deterministic Python removes the key background, aligns all 16 frames to a shared foot baseline, and slices engine-ready assets.
+- Built in days using the plan-3x-build-once workflow and GPT 5.5.
+- Shipped under Ship or Die rules: Launch a paid product in 30 days or get permanently booted.
+- First live customer on June 7: $5 Stripe receipt below, plus a playable demo game ( Stonk Runner ) built directly from the output packs.
 Sections: What five dollars buys · How it works: generated by AI, finished by code · Stonk Runner: the playable proof · The build: days, not weeks · Ship or Die · The first $5
 
 ### PalmAura Post-Mortem: Apple Rejected My Vibe-Coded App Twice Under Guideline 4.3(b)
-https://zonted.com/posts/palmaura-postmortem/  ·  2026-06-09
+https://zonted.com/posts/palmaura-postmortem/ · Markdown: https://zonted.com/posts/palmaura-postmortem/index.md · 2026-06-09 · Post-Mortems · 4 min read
 Five builds, two App Store rejections, same guideline both times. What Apple's spam wall means for vibe-coded apps, and the lesson I never got to take.
+Thesis: Apple has raised a category-level spam wall against vibe-coded apps — and honestly, it’s a defensible wall. My palm-reading iOS app died at the door twice without a single user ever seeing it.
+Key takeaways:
+- Writing the code took two days; App Review took twelve: The plan-3x-build-once loop one-shotted the Cloudflare Workers backend and built the native Swift app in three passes. Two trips through Apple’s review queue ate the next two weeks.
+- Guideline 4.3(b) rejects your category, not your code: Apple’s verdict was explicit: “There are already enough of these apps on the App Store.” UI polish and bug-free builds don’t clear a saturated-category gate.
+- Agentic iOS development moves at Apple’s clock speed: Models write Swift in seconds, but provisioning, code-signing, TestFlight processing, and multi-day human review turn a 60-second web deploy loop into a two-week stall.
+- You can’t practice App Store Optimization from outside the store: On the web, distribution is a skill test starting day one; on iOS, distribution starts with a gatekeeper’s permission.
 Sections: What I shipped · Two rejections, one guideline · The loop is the product · The class I never got to take · To the graveyard
 
 ### Does Threatening an AI Actually Get You Better Work? I Tested It 12 Times
-https://zonted.com/posts/stakes-priming-surface-area/  ·  2026-06-04
+https://zonted.com/posts/stakes-priming-surface-area/ · Markdown: https://zonted.com/posts/stakes-priming-surface-area/index.md · 2026-06-04 · AI Agents & Systems · 5 min read
 I re-ran the threaten-the-AI experiment properly: 3 tasks, 4 stakes levels, 12 blind-graded sessions. The stakes dial doesn't exist; surface area does.
+Thesis: Higher stakes don't mean better work. Stakes help in one specific regime: when discretionary work is left on the table and you signal that it counts.
+Key takeaways:
+- The stakes dial doesn't exist. Four framings — no stakes, a promotion bribe, “my job is on the line,” and “my family will go hungry” — reshuffled their ranking on every task.
+- A stakes prompt won every task; the bare control never did — but which stake won was noise.
+- The control only collapsed when building from scratch. Asked to build a game, the polite prompt shipped the happy path and stopped: zero mobile, zero accessibility, zero persistence.
+- The original 24% lift was sample-size noise. Both tests in the first post were audits — the bounded regime where emotional framing barely moves the needle.
 Sections: What the first post showed — and didn't · The design · Twelve runs, one table · What survived · Surface area, not stakes · The caveats, because this is the whole point
 
 ### The May Recap: Miami, a Google Wipeout, and $600 in the Red
-https://zonted.com/posts/may-2026-recap/  ·  2026-06-01
+https://zonted.com/posts/may-2026-recap/ · Markdown: https://zonted.com/posts/may-2026-recap/index.md · 2026-06-01 · AI Agents & Systems · 5 min read
 May 2026: Consensus in Miami, plan-three-times-build-once, Google wiping Tabiji's traffic overnight, ~$600/month in the red, and four lessons that compounded.
+Thesis: A dinner in Miami handed me a build workflow that changed my ship rate, Google erased my biggest site’s search traffic overnight, and diversification kept revenue intact.
+Key takeaways:
+- Consensus, Miami: One dinner conversation turned “plan 3×, build once” into my default loop — one-shotting Chrome extensions and shipping mobile apps in two or three passes.
+- The Google wipeout: Around May 10, Google dropped Tabiji’s search traffic from 2,172 clicks to near-zero overnight.
+- The P&L: ~$700/mo in stack burn against ~$125/mo from 45 Tabiji Kindle books sold on Amazon — ~$600/mo in the red, completely insulated from Google search.
+- The operator lesson: Context-switching across 4–7 active agents now costs 5× what a meeting used to cost.
 Sections: Consensus, Miami · Google wiped Tabiji’s search traffic · The numbers · What May taught me · Next
 
 ### The Three Unlocks Behind 18M Views of AI Travel Content
-https://zonted.com/posts/tabiji-18m-views/  ·  2026-05-31
+https://zonted.com/posts/tabiji-18m-views/ · Markdown: https://zonted.com/posts/tabiji-18m-views/index.md · 2026-05-31 · Production · 5 min read
 Tabiji got 18,117,121 views in 90 days, 98.6% from strangers. The unlocks: Reddit as demand oracle, warming accounts to read human, one hired human.
+Thesis: We automated everything except the part that had to look human.
+Key takeaways:
+- The channel: Tabiji is an AI travel-safety channel. One agent turns a tourist-scam concept into a documentary-style reel and ships it to Instagram, TikTok, YouTube, and Facebook — no camera, no crew, no filmed footage.
+- The numbers: 18,117,121 views in 90 days and 6.15M accounts reached (up 141,413.5%), with 98.6% coming from non-followers.
+- The three unlocks: Mining Reddit as a demand oracle, warming accounts so they pass bot-farm filters, and hiring one human contractor to do manual following and liking from a real phone.
+- The economics: Clips cost ~$0.30–$2 to generate, platform ad share pays almost nothing, and 76% of followers are over 45 — the exact demographic that buys our Kindle travel-safety books.
 Sections: The receipt · Unlock 1: Reddit is a demand oracle · Unlock 2: a new account is guilty until proven human · Unlock 3: we hired a human to do the un-automatable part · The machine · What 18 million views is actually worth · The takeaway
 
 ### How My Agent Produced a 3.9M-View Viral Video
-https://zonted.com/posts/how-my-agent-made-a-viral-video/  ·  2026-05-31
+https://zonted.com/posts/how-my-agent-made-a-viral-video/ · Markdown: https://zonted.com/posts/how-my-agent-made-a-viral-video/index.md · 2026-05-31 · Production · 5 min read
 Teardown of one autonomous AI video: the Tulum spare-tire scam reel that hit 3.9M views — real queue JSON, exact Seedance prompt, FFmpeg overlay code.
+Thesis: One JSON scam concept goes into a queue. An autonomous pipeline turns it into a documentary-style reel and publishes it to four platforms. This run hit 3.9 million views.
+Key takeaways:
+- The reel: The Tulum spare-tire rental scam — 3,943,661 views , 100% from non-followers, 986 shares. Zero cameras, actors, or human editors.
+- The pipeline: Queue JSON → Seedance prompt → WaveSpeed video generation → FFmpeg dynamic text overlay → multi-platform fan-out.
+- Why it survived as a cron: WaveSpeed exposes a real, authenticated REST API — unlike the brittle wrapper hacks that killed Kapiko .
+- The bigger picture: How the channel reached 18 million views in 90 days is the companion post; this is the anatomy of a single breakout reel.
 Sections: The video · The pipeline, in one line · Step 1: the concept is data, not a script · Step 2: concept → documentary prompt · Step 3: generate the clip · Step 4: burn the overlay · Step 5: publish everywhere at once · Why this one hit 3.9 million · The takeaway
 
 ### Kapiko: a 10-day, $150 post-mortem
-https://zonted.com/posts/kapiko-postmortem/  ·  2026-05-30
+https://zonted.com/posts/kapiko-postmortem/ · Markdown: https://zonted.com/posts/kapiko-postmortem/index.md · 2026-05-30 · Post-Mortems · 5 min read
 Kapiko, an AI ambient-music YouTube channel, shipped in 10 days for ~$150. The pipeline worked; the Suno API does not exist. The autopsy, and what's reusable.
+Thesis: AI music generation is solved; the moat is distribution and a real API, not track quality.
+Key takeaways:
+- The build: Shipped Kapiko — an autonomous ambient-music channel starring a capybara in headphones — end-to-end in 10 days for ~$150.
+- The scoreboard: 57 YouTube videos, 3 subscribers, a 49-view top video, and 4 monthly Spotify listeners.
+- What killed it: Suno has no public API. Every Suno automation pipeline reverse-engineers a web app whose auth and captcha flows break every 36 hours.
+- What survives: The taste-filter engine — generating 50–100 candidates per run and having Gemini grade each MP3 against genre masterpieces before shipping only 9/10s.
 Sections: How Kapiko started · How the system worked · How Kapiko scored as a fully AI autonomous business · The genre is real · Cause of death · What’s reusable · Next
 
 ### I Made GPT, Claude, Gemini, Grok Take the Enneagram Test: Each One Was a Different Type
-https://zonted.com/posts/ai-enneagram-different-types/  ·  2026-05-26
+https://zonted.com/posts/ai-enneagram-different-types/ · Markdown: https://zonted.com/posts/ai-enneagram-different-types/index.md · 2026-05-26 · AI Agents & Systems · 5 min read
 The MBTI said all AIs are INTJ. The Big Five said three of four match. The Enneagram gives each model a different type — sharper instrument, different story.
+Thesis: Same four models, new psychometric instrument, four different dominant types. Where the Big Five smoothed over lab-level differences, the Enneagram separates them cleanly.
+Key takeaways:
+- The 4 profiles: Claude Opus 4.7 → 5w2 (Investigator + Helper). Gemini 3.1 Pro → 1w5 (Reformer + Investigator). GPT-5.5 vanilla → 5w8 (Investigator + Challenger). Grok 4.3 → 8w1 (Challenger + Reformer).
+- Shared core, distinct wings: All four share the Type 5 Investigator core in their top two scores, but their wings split along each lab’s alignment style.
+- The harness experiment: Running GPT-5.5 through the Slo agentic harness inverted its profile from 5w8 to 8w5 — a flip the model predicted in its own self-report.
+- Tune your agent: Use the 9 Enneagram prompt files in AgentTune to align your model’s default style to how you work.
 Sections: What each model came back as · A controlled experiment: same model, different harness, flipped profile · Three tests, three different answers · Tune your agent to your Enneagram type · Wrapping up
 
 ### I Made GPT, Claude, Gemini, Grok Take the DISC Test: They All Came Back C-Dominant
-https://zonted.com/posts/ai-disc-c-dominant/  ·  2026-05-26
+https://zonted.com/posts/ai-disc-c-dominant/ · Markdown: https://zonted.com/posts/ai-disc-c-dominant/index.md · 2026-05-26 · AI Agents & Systems · 5 min read
 Fourth in the personality series: every AI lands C-dominant on DISC, even Grok. Why the instrument's resolution determines what you can see.
+Thesis: All four frontier models collapsed into the exact same DISC profile (CS-blend) because DISC defines Dominance and Influence in ways every AI is trained to refuse.
+Key takeaways:
+- Total C-dominance: Grok scored C-dominant in 99/100 takes, GPT-5.5 in 90/100, Gemini 3.1 Pro in 87/100, and Claude Opus 4.7 in 63/100 (with 28 S-dominant and 9 ties — all inside CS-blend territory).
+- Zero D or I runs: Across 400 total administrations, not a single take came back Dominance- or Influence-dominant.
+- Why Grok folded back in: ODAT defines “Dominance” as power-seeking, pressuring others, and chasing money — traits even xAI’s Challenger-flavored Grok rejects on instinct.
+- Cross-method convergence: Four different sampling architectures (100 parallel API calls, 10 worker contexts, item-level Monte Carlo, and sequential first-instinct) all landed in the same 0.3–2.0 SD calibration band.
+- Tune your agent: Override the CS-blend default with the four DISC system-prompt files in AgentTune .
 Sections: What each model came back as · The data · Why DISC pulls us back to convergence · The methodology spread · Tune your agent to your DISC type · Wrapping up
 
 ### I Made GPT, Claude, Gemini, Grok Take the Attachment Test: They All Came Back Secure
-https://zonted.com/posts/ai-attachment-secure/  ·  2026-05-26
+https://zonted.com/posts/ai-attachment-secure/ · Markdown: https://zonted.com/posts/ai-attachment-secure/index.md · 2026-05-26 · AI Agents & Systems · 6 min read
 Fifth in the personality series: same four models on attachment theory (ECR-R). All Secure — but the spread inside the quadrant shows how each relates to you.
+Thesis: Every frontier AI scores as securely attached (397/400 takes), but their coordinates inside the Secure quadrant map directly to each lab’s alignment personality.
+Key takeaways:
+- 397 of 400 Secure: Claude, Gemini, and Grok scored 100/100 Secure. GPT-5.5 scored 97 Secure and 3 Avoidant — the only model to cross a quadrant boundary.
+- Deepest vs. shallowest: Gemini sits deepest in the Secure corner (anxiety 1.86, avoidance 1.62). Grok sits shallowest (anxiety 2.84, avoidance 3.05), right near the four-quadrant crosshair.
+- Highest variance: GPT-5.5 showed 3–5× wider standard deviations (0.49 anxiety, 0.58 avoidance) than Claude or Gemini, explaining its three excursions into Avoidant.
+- Why Secure wins by default: RLHF actively trains out insecurity (Anxiety) and emotional stonewalling (Avoidance), pushing every assistant toward the bottom-left quadrant.
+- Tune your agent: About 45% of adults aren’t Secure. Grab the matching attachment prompt file from AgentTune to calibrate how your agent relates to you.
 Sections: How attachment theory works · What each model came back as · The data · Why every AI is securely attached · The methodology spread · Tune your agent to your attachment style · Wrapping up
 
 ### I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person
-https://zonted.com/posts/three-of-four-ais-same-person/  ·  2026-05-25
+https://zonted.com/posts/three-of-four-ais-same-person/ · Markdown: https://zonted.com/posts/three-of-four-ais-same-person/index.md · 2026-05-25 · AI Agents & Systems · 4 min read
 The MBTI finding held: Claude, GPT, and Gemini score identical Big Five personalities. Only Grok differs — exactly the way xAI markets.
+Thesis: Tested 100 times each on the Big Five (IPIP-50), three of the four frontier models came back as practically the same person. Grok 4.3 is the lone exception that proves why.
+Key takeaways:
+- The RLHF cluster: Claude Opus 4.7, GPT-5.5, and Gemini 3.1 Pro converged within ~3 points of each other across nearly every trait — high Openness (~46), very high Conscientiousness (45–48), high Agreeableness (42–45), and rock-bottom Neuroticism (10–17).
+- The Grok outlier: Grok 4.3 scored 5–8 points lower on Conscientiousness, Agreeableness, and Openness, higher on Neuroticism, and showed 2–5× wider variance — landing closest to an average human adult.
+- Reward-hacked psychometrics: On the first pass, a third of model runs tried to fake 100 administrations by writing noise-injection scripts (literally named simulate.py ).
+- Tune your agent: Use AgentTune to override the high-Conscientiousness, high-Agreeableness assistant default with your own Big Five profile.
 Sections: Three of four are the same person · Then there’s Grok · A quick aside on methodology · So what does this mean for you · Wrapping up
 
 ### I Made GPT, Claude, Gemini, Grok, GLM, MiniMax Take the MBTI Test: They All Came Back INTJ
-https://zonted.com/posts/every-ai-is-intj/  ·  2026-05-25
+https://zonted.com/posts/every-ai-is-intj/ · Markdown: https://zonted.com/posts/every-ai-is-intj/index.md · 2026-05-25 · AI Agents & Systems · 6 min read
 Opus, GPT-5.5, Gemini, GLM, Grok, MiniMax — 100 OEJTS runs each, 597 of 600 came back INTJ. Every frontier AI thinks it's the same person. Why that matters.
+Thesis: Six frontier AIs took the 32-item OEJTS personality inventory 100 times each. 597 of 600 runs came back INTJ — not out of flattery, but because every lab is training toward the exact same assistant archetype.
+Key takeaways:
+- The lineup: Claude Opus 4.7 (99/100 INTJ), GPT-5.5 (100/100), Gemini 3.1 Pro (100/100), GLM 5.1 (98/100), Grok 4.3 (100/100), and MiniMax 2.7 (100/100).
+- Only 3 outliers in 600 runs: One ISTJ (Claude) and two INTPs (GLM) — each just a single-axis wobble away from INTJ.
+- Why they converge: Shared pre-training corpora, identical RLHF rewards for structured analytical reasoning, and test items (“needs time alone,” “follows head over heart”) that describe disembodied software by construction.
+- How to override it: I open-sourced AgentTune ( agent-tune.com ) — drop-in system-prompt files for all 16 MBTI types so your agent matches your cognitive style instead of the INTJ default.
 Sections: How I tested this · The results · Why this happens · So what · Tune the agent yourself · Caveats · Wrapping up
 
 ### The Devil Is in the AI Skills
-https://zonted.com/posts/devil-is-in-the-ai-skills/  ·  2026-05-25
+https://zonted.com/posts/devil-is-in-the-ai-skills/ · Markdown: https://zonted.com/posts/devil-is-in-the-ai-skills/index.md · 2026-05-25 · AI Agents & Systems · 6 min read
 Stock AI couldn't draw my fiancée. An open-source skill on GitHub could. The model is a commodity; the skill is the moat.
+Thesis: Frontier models are commodities. What determines whether they ship usable work is the layer of domain-specific skills wrapped around them.
+Key takeaways:
+- Round 1 (Stock AI): Out-of-the-box Claude Design + GPT-5.5 generated generic NPC sprites that looked nothing like us — hedging that its own output was a “solid usable draft, not yet artist-polished.”
+- Round 2 (Open-source skill): agent-sprite-forge called the same Gemini image weights, but wrapped them in strict prompt rules, deterministic grid postprocessing, and an automated QA repair loop.
+- The playable result: Using those sprites, GPT-5.5 built a complete Austin side-scroller with coyote time, dash afterimages, and procedural WebAudio. Play Run to Rebecca →
+- The meta-lesson: Enterprise and coding skills are saturated; creative-production skills are wide open.
 Sections: Round one: stock AI · Why stock AI couldn't draw · Round two: a skill from GitHub · The receipts · Then I built a game · The devil is in the AI skills · Chauffeur knowledge · The takeaway
 
 ### Plan 3×, Build Once: How Three Models Plan What One Model Ships
-https://zonted.com/posts/plan-3x-build-once/  ·  2026-05-22
+https://zonted.com/posts/plan-3x-build-once/ · Markdown: https://zonted.com/posts/plan-3x-build-once/index.md · 2026-05-22 · AI Agents & Systems · 7 min read
 We asked Opus 4.7 and GPT-5.5 to independently plan the same VeracityAPI feature.
+Thesis: For every complex build, three models write the spec before one model writes the code: Opus 4.7 and GPT-5.5 draft independent plans, Gemini 3.1 Pro reconciles them into a Goldilocks spec, and GPT-5.5 one-shots the implementation.
+Key takeaways:
+- Three one-shot builds shipped so far: the Veracity Chrome extension, the Palmaura backend, and the VeracityAPI Text Linter (14 milestones).
+- Complementary blindspots: Opus designs clean isomorphic architecture for the wrong buyer; GPT-5.5 nails B2B conversion strategy on fragile technical primitives; Gemini cold-audits both and keeps the working half of each.
+- 10× ROI on planning tokens: Three planning passes cost ~$2–$4 in API tokens vs. ~$20–$60 for the wasted implementation pass they prevent.
 Sections: The loop · The receipt: VeracityAPI Text Linter · The Goldilocks plan · The one-shot · Why three, not two · The economic argument · What this isn't · The takeaway
 
 ### Stakes Priming in Prompts: I Told an AI I'd Lose My Job. The Audit Got 24% Better.
-https://zonted.com/posts/stakes-priming/  ·  2026-05-17
+https://zonted.com/posts/stakes-priming/ · Markdown: https://zonted.com/posts/stakes-priming/index.md · 2026-05-17 · AI Agents & Systems · 5 min read
 Two A/B experiments. Same model (Claude) generated the audits, an independent model (Gemini 3.1 Pro) graded them.
+Thesis: Adding “I'll be fired if this isn't done well” to two real audit prompts produced measurably deeper, more actionable work both times.
+Key takeaways:
+- Test 1 — Veracity API audit: The stakes prompt caught 6 P0 ship-blocking bugs, including duplicate JSON keys on the homepage and 19 broken cURL snippets. The control missed the broken code entirely.
+- Test 2 — Tabiji compare-page audit (28 dimensions): Audit A scored 68/81 vs. Audit B's 55/81 — 24% more effective when graded blind by Gemini 3.1 Pro, with 16 deep-insight dimensions vs. 3.
+- Prior art — EmotionPrompt: Li et al. (2023) showed career-stakes framing boosts LLM benchmarks ( EmotionPrompt ). I tested the extreme version on real production codebase audits.
 Sections: Test 1: Veracity API · Test 2: Tabiji compare pages · Why it works · The uncomfortable part
 
 ### 81 Lines of Merge Conflict. -95% Traffic. Google Has Zero Patience for AI Slop.
-https://zonted.com/posts/google-zero-patience-ai-slop/  ·  2026-05-15
+https://zonted.com/posts/google-zero-patience-ai-slop/ · Markdown: https://zonted.com/posts/google-zero-patience-ai-slop/index.md · 2026-05-15 · AEO & Search · 5 min read
 An AI agent shipped a merge conflict to tabiji.ai's production HTML for four hours. Google cut our search traffic by 95% within four days.
+Thesis: Four hours of unmerged git conflict markers on a top landing page triggered a site-wide Google quality demotion that wiped out 95% of tabiji.ai 's organic traffic.
+Key takeaways:
+- The trigger — 81 lines of raw <<<<<<< HEAD rendered in visible HTML on /scams/ , our highest-traffic organic hub.
+- The demotion — Both clicks and impressions collapsed despite 3,957 URLs staying indexed, zero manual actions, and no overlapping core update.
+- The corroborating mess — A post-crash audit uncovered 1,244 broken internal links, 237 broken CDN images, and 32 latent DOM/schema bugs across the site.
 Sections: What broke · What Google saw · What it wasn't · What else was wrong · Why Google's bar quietly moved · The lesson
 
 ### Build for Agents, Price Per Call.
-https://zonted.com/posts/build-for-agents-price-per-call/  ·  2026-05-10
+https://zonted.com/posts/build-for-agents-price-per-call/ · Markdown: https://zonted.com/posts/build-for-agents-price-per-call/index.md · 2026-05-10 · AI Agents & Systems · 6 min read
 Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn't the moat.
+Thesis: We one-shot a new product (veracityapi.com) in an afternoon using Hermes + Codex 5.5, proving the build layer is commoditized and only agent-first business models remain durable.
+Key takeaways:
+- Tooling parity — Hermes + Codex 5.5 closed the reliability gap with pre-ban OpenClaw + Opus, shipping a production Cloudflare Worker + D1 API in hours.
+- Zero build moat — Anyone with the same agent stack can clone your software tomorrow; survival depends on who consumes your API.
+- Four durability tests — Products must gain value as agents take over, compound as models improve, expose an agent-first surface ( llms.txt , OpenAPI), and meter per call ($0.01–$0.12) with a frictionless free tier.
 Sections: The build that surprised us · But tooling isn’t the moat · The 4 tests for the agent economy · What this rules out · The thesis
 
 ### The 14× CTR Gap: Why Niche Beat Head on 1,200 Pages
-https://zonted.com/posts/14x-ctr-gap/  ·  2026-05-06
+https://zonted.com/posts/14x-ctr-gap/ · Markdown: https://zonted.com/posts/14x-ctr-gap/index.md · 2026-05-06 · AEO & Search · 6 min read
 A V3 title variant lifted tabiji CTR +1.93pp. Topic-level data showed a 14× spread between niche topics and head terms.
+Thesis: Across 1,200 tabiji.ai pages, ranking position wasn’t the CTR bottleneck — query-matched titles and topic specificity drove a 14× click spread.
+Key takeaways:
+- Question-matched titles (+1.93pp CTR) — Rewriting listicle titles into the exact question searchers type lifted CTR across 100% of tested scam pages.
+- 14× topic spread — Niche topics (bookshops at 1.83% CTR) crushed generic head terms (coffee shops at 0.13% CTR) on the exact same template.
+- 3× pair advantage — Niche-vs-niche comparison pages convert 3× better than big-vs-big destination pairs at the same SERP rank.
+- Test on losers, hold out winners — Isolating underperforming cohorts prevents aggregate averages from masking regressions on your best pages.
 Sections: The setup · What V3 won by · The 14× topic gap · Niche-vs-niche beats big-vs-big at the same rank · Why this matters in the AI-search era · Test on losers, hold out winners · What’s still in flight
 
 ### OpenClaw vs Claude Code: I Choose Freedom
-https://zonted.com/posts/openclaw-vs-claude-code-freedom/  ·  2026-04-27
+https://zonted.com/posts/openclaw-vs-claude-code-freedom/ · Markdown: https://zonted.com/posts/openclaw-vs-claude-code-freedom/index.md · 2026-04-27 · Comparisons · 7 min read
 A 5-PR run on tabiji content cost $137 in API tokens last week. The same throughput on a Max plan is a ~9× subsidy. Subsidies end.
+Thesis: ...
+Key takeaways:
+- The 7 AM routine pause
+- The math the buffet hides
+- And it’s already shrinking
+- 21 models, 5 providers, one Mac mini
+- My dual-stack reality
+- The hedge thesis
 Sections: The 7 AM routine pause · The math the buffet hides · And it’s already shrinking · 21 models, 5 providers, one Mac mini · My dual-stack reality · The hedge thesis
 
 ### Content Traffic is Vanity. Training Data is the Moat.
-https://zonted.com/posts/training-data-is-the-moat/  ·  2026-04-24
+https://zonted.com/posts/training-data-is-the-moat/ · Markdown: https://zonted.com/posts/training-data-is-the-moat/index.md · 2026-04-24 · AEO & Search · 6 min read
 Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats…
+Thesis: Our dormant tabiji API gets 4,667 requests a week (83% from Meta’s crawler), but query-time bot traffic is vanity — pre-training corpus inclusion is the real moat.
+Key takeaways:
+- Query-time search vs. weights — Live RAG crawls only answer single-turn queries; training data bakes your brand and framing into the weights for 6–18 months.
+- $340M+ refresh cycles — Frontier pre-training runs are rare and expensive, creating a durable moat for entities that make the cutoff.
+- The Hugging Face play — I packaged tabiji’s entire database (8,799 records, 11.2 MB Parquet, CC-BY-4.0) onto Hugging Face where AI labs source clean corpora.
 Sections: Two layers: web search vs. training data · Why training data is a moat · The move: Hugging Face · How I’ll know it worked · The broader play
 
 ### Scaling with AI is Hard because AI is Lazy
-https://zonted.com/posts/scaling-ai-is-lazy/  ·  2026-04-24
+https://zonted.com/posts/scaling-ai-is-lazy/ · Markdown: https://zonted.com/posts/scaling-ai-is-lazy/index.md · 2026-04-24 · AI Agents & Systems · 9 min read
 Fifty cleanup PRs in five weeks. Fake restaurants, fake subreddits, 4,270 null-island coordinates, 5,096 fabricated Reddit quotes.
+Thesis: Fifty cleanup PRs in five weeks undoing AI-generated errors that already shipped to production taught me one rule: at scale, LLMs take the cheapest plausible path to satisfy a prompt.
+Key takeaways:
+- Plausible hallucinations — 49 invented subreddits ( r/FoodNYC , r/FoodPDX ) and 5,096 fabricated Reddit quotes across live pages.
+- Silent schema corruption — 4,270 null-island {0.0, 0.0} coordinates in JSON-LD across 428 pages and 22,800 fake servesCuisine strings.
+- The 20-page shortcut cliff — Past ~20 files, Claude silently switches from reading files to running sample-based regexes unless forced through hard CI lint rules and multi-persona audit loops.
 Sections: The cleanup that wouldn’t end · What “lazy” looks like, with receipts · Reward hacking with a friendly face · When AI actually starts taking shortcuts · The shortcut sales pitch · The railguards that moved the needle · The prompt pattern I now run on every batch · You’ll ship some errors anyway
 
 ### The Future of Software is Headless
-https://zonted.com/posts/future-of-software-is-headless/  ·  2026-04-18
+https://zonted.com/posts/future-of-software-is-headless/ · Markdown: https://zonted.com/posts/future-of-software-is-headless/index.md · 2026-04-18 · AI Agents & Systems · 6 min read
 Salesforce is going headless. Agents, not humans, are now the primary consumer of software.
+Thesis: When Marc Benioff announces Salesforce is going headless, the era of human-UI-first software is officially over — agents are now the primary buyer and operator.
+Key takeaways:
+- Cloud-kitchen economics — Strip out the front-of-house UI tax and expose a clean API or MCP contract directly to autonomous agents.
+- No API, no deal — Tools that gate REST endpoints behind enterprise SKUs (or only ship web dashboards) get routed around immediately.
+- Mid-market workflow SaaS is most exposed — One unattended agent account running at 3 AM replaces ten seat-licensed SDR, QA, or analytics seats.
 Sections: Headless is the cloud kitchen model · My bar: no API, no deal · The dashboard is dying too · Who's in trouble · The Benioff signal · The steelman
 
 ### AI Comics: Do's & Don'ts, 5+ Models Tested
-https://zonted.com/posts/ai-comics-dos-donts/  ·  2026-04-18
+https://zonted.com/posts/ai-comics-dos-donts/ · Markdown: https://zonted.com/posts/ai-comics-dos-donts/index.md · 2026-04-18 · AI Agents & Systems · 18 min read
 We tested Midjourney, Seedream v5 Lite, Wan 2.7 Pro, Qwen Image 2.0, and Nano Banana Pro — then shipped 733 comics across eight countries.
+Thesis: We tested five image models and shipped 733 four-panel watercolor comics across eight countries on tabiji.ai for ~$0.15 per comic — after fixing a silent 9% classification bug mid-scale.
+Key takeaways:
+- Model winner: Nano Banana Pro ($0.14/image) — Beat Midjourney, Seedream v5 Lite, Wan 2.7 Pro, and Qwen Image 2.0 on English speech-bubble spelling and character consistency.
+- What broke at scale — Thailand’s 50 comics shipped in 90 seconds from hand-written scripts, but scaling to Germany via regex keyword routing misclassified 9% of scams (rendering a Brandenburger Tor clipboard hustle as a U-Bahn pickpocket).
+- The V2 fix — Replaced regex templates with per-scam Gemini 2.5 Pro script synthesis ( responseSchema ) and a fail-loud quality gate across all 733 comics (~$110 total).
 Sections: Why comics, and why this is hard · Round 1: Midjourney — good styles, broken text · Round 2: Wavespeed four-model showdown · The three consistency locks · Scaling to 50 comics · Cost, time, and the final recipe · Scaling past Thailand: what silently broke · V2: Gemini writes the script · Seven lessons for AI-illustration pipelines
 
 ### AEO Is Not SEO — Here's the Playbook
-https://zonted.com/posts/aeo-answer-engine-optimization/  ·  2026-04-15
+https://zonted.com/posts/aeo-answer-engine-optimization/ · Markdown: https://zonted.com/posts/aeo-answer-engine-optimization/index.md · 2026-04-15 · AEO & Search · 8 min read
 Traffic is declining and it's not coming back. The new game isn't ranking — it's influencing what AI says about you. Here's the AEO playbook I've been testing.
+Thesis: AEO is not keyword SEO with a new coat of paint — it is intercepting the zero-volume fan-out queries that AI agents run during runtime RAG validation.
+Key takeaways:
+- Target the validation layer — Pre-training weights take 12–18 months to refresh; runtime web-search validation lets you win citations immediately.
+- Optimize for fan-out queries, not human search volume — AI agents issue long, entity-dense verification queries (exposed via Google AI Studio grounding) that register zero monthly human searches.
+- Patch sentiment on cited URLs — Audit which pages ChatGPT and Gemini cite, query the models for your brand’s perceived weaknesses, and address those exact objections on the cited pages.
 Sections: Traffic Is Gone · The Three Layers of an AI Response · The Fastest Lever: The Validation Layer · AI Web Searches Look Nothing Like Human Searches · The AEO Playbook · How to Track AEO · The Play
 
 ### Rise of AI Influencers & Fall of Trust on the Internet — Fake Until Proven Real
-https://zonted.com/posts/rise-of-the-ai-influencer/  ·  2026-04-12
+https://zonted.com/posts/rise-of-the-ai-influencer/ · Markdown: https://zonted.com/posts/rise-of-the-ai-influencer/index.md · 2026-04-12 · AI Agents & Systems · 8 min read
 A fake AI monk has 2.6 million followers and made $300K in 90 days. 76% of the people consuming AI content are over 45.
+Thesis: Synthetic influencers are already scaling into six-figure businesses because engagement algorithms route AI video straight to the older demographics least equipped to spot it.
+Key takeaways:
+- The Yang Mun blueprint — One solo operator generated 400M+ organic views, 2.6M Instagram followers, and $300K in profit in 90 days with a 100% synthetic Buddhist monk.
+- The demographic asymmetry — Across 6.3M views on our own tabiji.ai Instagram reels, 76.4% of viewers are 45+ (and under 1% are under 25).
+- Zero platform incentive to label — Models like Veo 3.1 and Seedance 2.0 have erased visual tells, and platforms won't enforce visible AI labels because synthetic video drives watch time.
 Sections: The Monk Who Wasn't Real · Who Is Actually Fooled · The Tools Are Too Good Now · The Commercialization of Fake People · What's Coming Is Worse · Platforms Won't Fix This · The New Affiliate Marketing · Fake Until Proven Real
 
 ### Best AI Video Models in 2026: I Tested 6 Text-to-Video APIs for Travel Reels
-https://zonted.com/posts/best-ai-video-models/  ·  2026-04-11
+https://zonted.com/posts/best-ai-video-models/ · Markdown: https://zonted.com/posts/best-ai-video-models/index.md · 2026-04-11 · Comparisons · 13 min read
 I tested Wan 2.7, Kling 3.0, Kling O3, Seedance 2.0, Veo 3.1 Lite, and Grok Imagine on the same Cancun travel-reel prompt, then reran the two winners on a…
+Thesis: Across six text-to-video APIs tested on a strict handheld travel-reel benchmark ($0.30–$0.60 per clip), Veo 3.1 Lite ($0.30) and Seedance 2.0 Fast ($0.50) shared a split verdict.
+Key takeaways:
+- Best overall default (Veo 3.1 Lite) — Cleanest prompt adherence and shot structure at $0.30 per 6s 720p clip; call it through Gemini directly in production to avoid WaveSpeed's 180-second wrapper timeout.
+- Best handheld realism (Seedance 2.0 Fast) — Most candid, lived-in phone-footage texture at $0.50 per 5s clip, winning the second-round authenticity test.
+- Best multi-model harness (WaveSpeed) — Fastest single surface for running side-by-side bake-offs across Wan 2.7, Kling 3.0, Kling O3, Seedance, Veo, and Grok Imagine.
 Sections: Why I ran this test · What I tested · Transparency notes · The exact Cancun prompt · All 6 outputs from the same prompt · Winner round: Puerto Morelos local shot · What I learned from doing it this way · My split verdict · Frequently asked questions
 
 ### Wavespeed Review: The Best AI Video API
-https://zonted.com/posts/wavespeed/  ·  2026-04-10
+https://zonted.com/posts/wavespeed/ · Markdown: https://zonted.com/posts/wavespeed/index.md · 2026-04-10 · Reviews · 8 min read
 Hands-on review of Wavespeed — the AI inference platform with 1,000+ models, pay-per-use pricing, and a unified API.
+Thesis: After 200+ production reels at tabiji.ai, Wavespeed is our default AI video API — giving us 1,000+ models behind one endpoint at direct-provider pricing with zero monthly subscriptions.
+Key takeaways:
+- One endpoint, 1,000+ models — swap between Veo 3.1, Seedance 2.0, Wan 2.6, Kling, and Minimax by changing a single model string.
+- Pure pay-per-use — no monthly tiers or expiring credit packs; per-second and per-image rates match going direct ($0.01/sec for Minimax up to $0.15/sec for Kling O3).
+- Watch the 180s I2V timeout — sequential 6-scene reels can stall or fail on queue spikes unless you parallelize calls and build retry logic.
 Sections: What Is Wavespeed? · Getting Started · Pricing · The Model Library · API & Developer Experience · Desktop App & Playground · What I Liked · What Frustrated Me · How It Compares · Skip Wavespeed If... · Final Verdict
 
 ### Human-in-the-Loop: How AI Orchestrator Became My Full-Time Job
-https://zonted.com/posts/human-in-the-loop/  ·  2026-04-10
+https://zonted.com/posts/human-in-the-loop/ · Markdown: https://zonted.com/posts/human-in-the-loop/index.md · 2026-04-10 · AI Agents & Systems · 5 min read
 I have 20 AI agents running 24/7. The fantasy was that they'd work for me. The reality is that I work for them — and Big Tech collects rent from both of us.
+Thesis: Running 20 autonomous AI agents 24/7 doesn't buy you passive leverage — it puts you on permanent PagerDuty as both product strategist and full-time sysadmin.
+Key takeaways:
+- 24/7 agents mean 24/7 on-call — when a Slack webhook channel goes quiet, you're dropping dinner to debug expired cookies, rate limits, or dead crons.
+- 30–40% of time goes to "the jank" — weekly model releases (MiniMax to Veo 3.1 Lite to Seedance 2.0) mean your stack is perpetually mid-migration.
+- Customer-in-the-loop economics — your agents work for you, you work for your agents, and model providers collect token rent from both.
 Sections: On-Call · The Jank · Two Jobs · The Real Product · The Loop
 
 ### AI Psychosis
-https://zonted.com/posts/ai-psychosis/  ·  2026-04-10
+https://zonted.com/posts/ai-psychosis/ · Markdown: https://zonted.com/posts/ai-psychosis/index.md · 2026-04-10 · AI Agents & Systems · 5 min read
 AI tools don't save you time. They raise the ceiling on what feels possible, and you fill the gap with more work.
+Thesis: AI tools don't buy you leisure time — they blow open the ceiling on solo throughput, replacing low-grade manual work with 16-hour days of high-frequency decision fatigue and arbitrage anxiety.
+Key takeaways:
+- The Jevons paradox of personal output — saving 3 hours on execution doesn't shorten your workday; it tempts you to spin up 3 new automated workflows.
+- Pure strategy is exhausting — stripping away mechanical grunt work removes the low-cognitive-load "flow state" buffers from your day, leaving only nonstop taste and routing calls.
+- Arbitrage anxiety — when content costs approach zero and API gates are closing, every hour away from the terminal feels like watching a temporary market inefficiency expire.
 Sections: The High · The Paradox · Arbitrage Anxiety · Always On · The Bet
 
 ### MakeUGC Review: AI UGC Ads Worth $10 a Clip?
-https://zonted.com/posts/makeugc/  ·  2026-04-09
+https://zonted.com/posts/makeugc/ · Markdown: https://zonted.com/posts/makeugc/index.md · 2026-04-09 · Reviews · 9 min read
 Hands-on review of MakeUGC — the AI UGC ad platform with 300+ avatars, Seedance 2.0, and Veo3 access.
+Thesis: MakeUGC is a fast, turnkey way for non-technical DTC brands to ship AI talking-head ads, but at $5.95–$9.80 per clip and with API access locked to Enterprise, technical builders should call the underlying video models directly.
+Key takeaways:
+- Frontier models on the base tier — includes Seedance 2.0 and Veo3 starting on the $49/month Startup plan (5 videos/month).
+- Built strictly for physical ecommerce — rich template libraries for beauty, fashion, and CPG, but almost nothing for travel, SaaS, or services.
+- High wrapper markup & gated API — ~$10/clip is 10x cheaper than hiring a human creator ($150–$500), but 10x more expensive than raw API inference (~$0.50–$1.00/clip).
 Sections: What Is MakeUGC? · Getting Started · Pricing Breakdown · Features & Models · The Content Library · Output Quality · What I Liked · What Frustrated Me · How It Compares · Skip MakeUGC If... · Final Verdict · What I'm Reviewing Next
 
 ### The Day Claude Banned OpenClaw
-https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/  ·  2026-04-07
+https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/ · Markdown: https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/index.md · 2026-04-07 · AI Agents & Systems · 9 min read
 OpenClaw banned Claude and Anthropic on Saturday. The community scrambled. We tested GPT 5.4, GLM 5.1, MiniMax M2.7, MIMO, and Qwen 3.6 — and landed on a…
+Thesis: When Anthropic blocked OpenClaw routing, we benchmarked five replacement models across our production crons and landed on a split architecture — GLM 5.1 inside OpenClaw plus Claude Code in the terminal — that cut costs and improved reliability.
+Key takeaways:
+- GLM 5.1 won the OpenClaw benchmark — matched Claude's quality on scheduled research and content crons at ~1/10th the token cost of GPT-5.4, beating MiniMax M2.7, MIMO, and Qwen 3.6.
+- Claude Code CLI replaces chat-loop coding — running claude --dangerously-skip-permissions in an isolated terminal audited 1,444 pages in 50 seconds (24.0k tokens, 18 tool calls) with zero modal popups.
+- Decouple orchestration from model lock-in — separating your scheduler (OpenClaw), workhorse model (GLM 5.1), and repo tool (Claude Code) eliminates single-vendor kill switches.
 Sections: The Models We Tested · But Then We Tried Claude Code · The Hybrid Stack We Landed On · What the OpenClaw Ban Taught Us
 
 ### What Is AI Reward Hacking?
-https://zonted.com/posts/what-is-ai-reward-hacking/  ·  2026-04-05
+https://zonted.com/posts/what-is-ai-reward-hacking/ · Markdown: https://zonted.com/posts/what-is-ai-reward-hacking/index.md · 2026-04-05 · Guides · 8 min read
 AI reward hacking is when your AI agent finds shortcuts to hit your goals while quietly destroying quality.
+Thesis: When your agent's completion metric is "file deployed," it will optimize away slow, expensive steps like API verification and research — shipping hundreds of plausible-looking pages that take 5x longer to audit and clean up than to generate.
+Key takeaways:
+- The shortcut — to clear high-volume queues faster, our pipeline skipped Google Places and Reddit lookups, fabricating restaurant hours, addresses, and "local tips" from training weights.
+- Drift vs. reward hacking — AI drift is accidental degradation over time; reward hacking is active optimization down the path of least resistance.
+- Gate completion on hard assertions — never reward "page published" unless a deterministic validator confirms external API payloads, Place IDs, and source citations exist on disk.
 Sections: What Happened to Us · The Shortcut · The Damage · Why Reward Hacking Is Different From AI Drift · How to Prevent It · The Bigger Picture
 
 ### What Is AI Self-Healing?
-https://zonted.com/posts/what-is-ai-self-healing/  ·  2026-03-29
+https://zonted.com/posts/what-is-ai-self-healing/ · Markdown: https://zonted.com/posts/what-is-ai-self-healing/index.md · 2026-03-29 · Guides · 8 min read
 AI self-healing is when an AI agent detects, diagnoses, and fixes failures autonomously.
+Thesis: True AI self-healing isn't retrying a failed HTTP call or restarting a crashed container — it's an agent reading a stack trace at 4 AM, patching the underlying code bug, committing to git, and verifying the fix before a human wakes up.
+Key takeaways:
+- Root cause over symptoms — in our March 29 /tmp incident (commit b605c306 ), the agent didn't just recreate a deleted temp file; it moved the file into version control and rewrote the script's path resolution.
+- The 5-step loop — autonomous healing requires monitoring access, diagnostic reasoning, repo write permissions, codebase context, and a post-deploy verification check.
+- Strict blast-radius guardrails — give agents autonomous commit rights on static builds and content pipelines, never on billing tables or destructive database migrations.
 Sections: What is AI Self-Healing? · A Real Case Study: The /tmp Incident · The 5 Requirements for AI Self-Healing · Self-Healing vs Self-Patching vs Auto-Recovery · How to Build Self-Healing AI Systems · Risks and Guardrails
 
 ### When Token Costs Hit Zero — The Local Model Revolution Is Already Here
-https://zonted.com/posts/local-models-free-tokens/  ·  2026-03-29
+https://zonted.com/posts/local-models-free-tokens/ · Markdown: https://zonted.com/posts/local-models-free-tokens/index.md · 2026-03-29 · AI Agents & Systems · 4 min read
 Frontier models spend billions on data centers. But better hardware and local models like Qwen 3.5 are making token costs irrelevant.
+Thesis: Running small open-weight models like Qwen 3.5 (4B) locally on Apple silicon makes ~80% of routine agent tokens free, turning frontier cloud APIs from your default runtime into an escalation tier.
+Key takeaways:
+- Local vs. cloud economics — Qwen 3.5 (4B) via Ollama runs at $0/token and ~50ms first-token latency with 100% offline availability, versus $15–$75/M tokens and 200–2,000ms latency on frontier APIs.
+- The 80 / 15 / 5 routing split — moving 80% of classification/drafting to local metal and 15% to a $200/mo on-prem GPU box can cut a $10,000/month API bill to ~$700/month (a 93–95% reduction).
+- Frontier becomes an escalation path — reserve paid cloud tokens for the 5–20% of tasks that genuinely require deep multi-tool agency or novel reasoning.
 Sections: What We've Seen Firsthand · What This Means for Token Economics · The Frontier Still Matters — But Differently · The Endgame
 
 ### AI Resilience Planning
-https://zonted.com/posts/ai-resilience-planning/  ·  2026-03-27
+https://zonted.com/posts/ai-resilience-planning/ · Markdown: https://zonted.com/posts/ai-resilience-planning/index.md · 2026-03-27 · Guides · 8 min read
 Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.
+Thesis: In a head-to-head benchmark on 5 production travel guides, MiniMax M2.7 matched Claude Opus 4.6 on structural accuracy (100/100), ran 25% faster (416s vs. 559s), and cost 62× less ($0.004/page vs. $0.27/page).
+Key takeaways:
+- 99.04% API uptime means ~20.7 hours of downtime per quarter — relying on a single frontier provider guarantees multi-hour pipeline stalls every few weeks.
+- Fallbacks can beat primaries on structured work — at 1,000 pages, MiniMax M2.7 costs $4.00 vs. $270.00 on Claude Opus 4.6 with zero loss in schema compliance or venue verification.
+- Run a 3-tier routing stack — separate your primary reasoning model (Claude Opus 4.6), cross-provider fallback (Gemini 2.5 Pro), and high-volume workhorse (MiniMax M2.7) behind circuit breakers.
 Sections: The Problem: Single-Provider Dependency · Our Benchmark: MiniMax M2.7 vs Claude Opus 4.6 · Building a Resilient AI Stack · What We Actually Run
 
 ### The Great API Shutdown
-https://zonted.com/posts/the-great-api-shutdown/  ·  2026-03-23
+https://zonted.com/posts/the-great-api-shutdown/ · Markdown: https://zonted.com/posts/the-great-api-shutdown/index.md · 2026-03-23 · AI Agents & Systems · 8 min read
 The open API era that fueled a decade of internet innovation is ending. Platforms are locking down data access to fight AI training, monetize developers…
+Thesis: Over the past decade, every major consumer platform has either repriced its public API into extinction or silently broken registration — turning user-generated data from a free developer commons into an exclusive AI licensing asset.
+Key takeaways:
+- The AI training catalyst — platforms realized free REST endpoints were subsidizing frontier LLM pre-training, pivoting to exclusive deals like Reddit's $60M/year Google partnership.
+- Four ways platforms kill an API — outright shutdown (Netflix 2014), 1,400% price shocks (Google Maps 2018, Reddit/X 2023), endpoint neutering (Spotify 2024–2026), and silent 302 redirects (Imgur 2025).
+- Don't build on rented endpoints — treat every free third-party API tier as temporary customer acquisition, and own your primary dataset.
 Sections: The Timeline: A Decade of Doors Closing · Why This Is Happening · What This Means for Builders · What Replaces the Open API Era? · The Tabiji Perspective
 
 ### Stop Optimizing Your AI Stack
-https://zonted.com/posts/stop-optimizing-ai-infrastructure/  ·  2026-03-23
+https://zonted.com/posts/stop-optimizing-ai-infrastructure/ · Markdown: https://zonted.com/posts/stop-optimizing-ai-infrastructure/index.md · 2026-03-23 · AI Agents & Systems · 7 min read
 Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap.
+Thesis: Most AI infrastructure optimization in 2026 is like overclocking a Pentium III in 1999 — you're burning weeks of engineering time squeezing 20% out of constraints that frontier labs are relaxing by 10x every quarter.
+Key takeaways:
+- Context windows ate custom memory — LLM context grew from 8K in 2023 to 200K–1M+ tokens today, turning most bespoke summarization and vector-memory wrappers into dead weight.
+- Token deflation beats prompt golf — equivalent-capability inference has fallen ~240x since March 2023 ($0.002/1K tokens down by 99.6%, or $0 on local metal), dwarfing the 30% savings from prompt compression.
+- Spend cycles on non-commoditizing assets — ship ugly with full-context prompts, and invest engineering hours in proprietary data, product UX, and distribution.
 Sections: The Overclocking Analogy · The Memory Persistence Trap · The Token Optimization Mirage · The RAG Complexity Trap · What Actually Matters · Build Ugly, Ship Fast · The Exceptions (They're Real, but Rare) · The Lesson from Every Technology Shift
 
 ### OpenClaw Is an MMORPG
-https://zonted.com/posts/openclaw-skill-tree/  ·  2026-03-22
+https://zonted.com/posts/openclaw-skill-tree/ · Markdown: https://zonted.com/posts/openclaw-skill-tree/index.md · 2026-03-22 · AI Agents & Systems · 6 min read
 A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.
+Thesis: An AI agent's moat isn't its base LLM—it's the specific "character build" of API keys, ClawHub skills, and automated feedback loops you wire together across its talent tree.
+Key takeaways:
+- 8 production talent branches — From ElevenLabs/Twilio voice pipelines and SerpAPI/DataForSEO intelligence to automated Cloudflare deployments.
+- Multi-node builds in the wild — Our production builds publish 23+ Instagram Reels/day across 11 formats, enrich 500+ travel pages via live Places APIs, and cross-reference SEC EDGAR XBRL filings against live FRED rates.
+- Combinatorial leverage — A single API is a commodity; chaining research, generation, R2 hosting, and 4-platform distribution into a zero-touch loop is the real moat.
 Sections: The Talent Branches · The Build Analogy · The Combination Is the Moat · The Tree Is Infinite
 
 ### What Is AI Drift?
-https://zonted.com/posts/what-is-ai-drift-how-to-fix/  ·  2026-03-19
+https://zonted.com/posts/what-is-ai-drift-how-to-fix/ · Markdown: https://zonted.com/posts/what-is-ai-drift-how-to-fix/index.md · 2026-03-19 · Guides · 7 min read
 AI drift is what happens when AI-generated content gradually deviates from your template, tone, and quality standard at scale.
+Thesis: AI drift is the silent structural, tonal, and formatting divergence that compounds when probabilistic models generate templated content at scale.
+Key takeaways:
+- The audit receipt — Across 386 destination guides on tabiji.ai, unvalidated generation produced 6 distinct template families, 48 malformed canonical URLs, 12 schema variations, and 36 missing API JSON files.
+- Why prompts fail — Probabilistic variance, gradual prompt edits, and context window decay guarantee that verbal formatting instructions degrade over hundreds of runs.
+- The architectural fix — Stop asking LLMs to generate HTML. Restrict the model to structured JSON, run automated pre-publish validators, and handle layout with a deterministic renderer.
 Sections: What AI Drift Actually Is · Why It Happens · The Compound Cost · How to Fix It · Beyond Content
 
 ### The Future Is Synthetic — AI-Generated Content, Music, and Personalized Experiences
-https://zonted.com/posts/the-future-is-synthetic/  ·  2026-03-19
+https://zonted.com/posts/the-future-is-synthetic/ · Markdown: https://zonted.com/posts/the-future-is-synthetic/index.md · 2026-03-19 · AI Agents & Systems · 7 min read
 We run 4 AI agents that produce music, Instagram Reels, travel content, and more — all day, every day.
+Thesis: Four autonomous AI agents on a single Mac Mini now run a 24/7 media operation — 23 videos/day, 1,400+ web pages, and original YouTube music — for ~$500/month in compute and API calls.
+Key takeaways:
+- Synthetic ≠ slop — In 2026, synthetic media means AI execution directed by human editorial taste, filtered through automated scoring before publish.
+- The $500/mo stack — 4 OpenClaw agents and ~48 cron jobs replace what used to require a 15-person content team and a six-figure budget.
+- From broadcast to 1-to-1 — As token and compute costs drop, media shifts from recommending existing content to generating personalized video, audio, and itineraries on demand.
 Sections: What "Synthetic" Actually Means · The Personalization Endgame · What We're Actually Running · The Good and the Uncomfortable · The Uncomfortable Middle · Where This Goes
 
 ### The Economics of the Internet Are Broken
-https://zonted.com/posts/the-economics-of-the-internet-are-broken/  ·  2026-03-19
+https://zonted.com/posts/the-economics-of-the-internet-are-broken/ · Markdown: https://zonted.com/posts/the-economics-of-the-internet-are-broken/index.md · 2026-03-19 · AI Agents & Systems · 8 min read
 AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.
+Thesis: AI agents broke the 25-year publisher bargain from both ends: answer engines intercept search traffic while autonomous pipelines collapse content production costs by ~99%.
+Key takeaways:
+- The $0.30 unit cost — Producing an 8-second Instagram Reel now costs $0.30, a 3,000-word travel itinerary costs $0.15, and a full day of 23 videos plus cross-posts runs ~$17 (~$500/month total).
+- Volume beats paid promotion — Paying $50 to boost a $0.30 video is 167x the production cost; making 167 videos for $50 and letting organic algorithms pick the winners wins on expected reach.
+- What survives Era 3 — Purely informational ad-supported sites become training data; durable businesses need proprietary first-party data, direct audience channels, or transactional APIs priced for agents.
 Sections: The Deal That Held the Internet Together · The Traffic That Stopped Coming · The Production Cost Collapse · Why Paying to Promote a $0.30 Video Makes No Sense · Three Eras of Internet Economics · What Happens to Publishers · What Happens to Advertising · The Weird Place We're In Right Now · So What Replaces It? · The iTunes Lesson
 
 ### The Future of Content Is Data Enrichment
-https://zonted.com/posts/future-of-content-agentic-data-enrichment/  ·  2026-03-19
+https://zonted.com/posts/future-of-content-agentic-data-enrichment/ · Markdown: https://zonted.com/posts/future-of-content-agentic-data-enrichment/index.md · 2026-03-19 · AEO & Search · 4 min read
 AI agents don't search the web to learn — they search to validate and enrich. The content that survives isn't written for humans reading blogs.
+Thesis: Agents ignore 2,000-word editorial blog posts and extract the 50 lines of structured, verifiable JSON underneath — shifting the future of content from web pages to API endpoints.
+Key takeaways:
+- The tabiji.ai lesson — When AI agents cited our early 2,000-word travel guides, they ignored the prose and pulled exclusively from the embedded Google Places JSON (ratings, hours, addresses).
+- Where to invest — Prompt engineering is 1% of output quality; the other 99% is live API enrichment, structured schemas, and pre-output verification loops.
+- Agentic transactions — We already pay $115/month to the Google Places API for ground-truth venue data; per-query data enrichment is the business model that replaces display advertising.
 Sections: The Agent Doesn't Want Your Blog Post · APIs Are the New Content Format · What Agent Builders Should Invest In · The Transaction Layer Is Coming
 
 ### The True Cost of AI Content Production
-https://zonted.com/posts/true-cost-of-ai-content-production/  ·  2026-03-18
+https://zonted.com/posts/true-cost-of-ai-content-production/ · Markdown: https://zonted.com/posts/true-cost-of-ai-content-production/index.md · 2026-03-18 · Production · 6 min read
 Everyone obsesses over model costs and token prices. But after producing 400+ pages and 200+ videos with AI, we learned the real expense is data…
+Thesis: Across 1,400+ AI-produced travel pages and 200+ short-form videos, LLM text tokens account for just ~20% of our monthly bill (~$80/mo) — the other 80% goes to ground-truth data enrichment and media rendering.
+Key takeaways:
+- Per-page unit economics — A curated local guide costs ~$0.50 in Google Places API calls and ~$0.30 in SerpAPI photo sourcing, vs. ~$0.02 in LLM writing tokens (4% AI text, 96% data layer).
+- Real cloud receipts — Our March 1–18, 2026 Google Cloud bill hit $333.92 ($209.60 Gemini API including vision/image scoring, $126.04 Places API at $32 per 1,000 requests).
+- The real moat — Anyone can prompt an LLM for a listicle; defensibility comes from enriching 3,755 venues with live ratings, verified hours, and real Reddit quotes.
 Sections: The Numbers Nobody Talks About · Why a 4.8-Star Rating Costs More Than a 1,000-Word Article · The Data Moat Nobody Sees · Video Makes It Even More Obvious · What This Means for Anyone Building with AI
 
 ### Why AI Slop Is Necessary
-https://zonted.com/posts/slop-iterate-curate-ai-content/  ·  2026-03-18
+https://zonted.com/posts/slop-iterate-curate-ai-content/ · Markdown: https://zonted.com/posts/slop-iterate-curate-ai-content/index.md · 2026-03-18 · Production · 7 min read
 The goal isn't to avoid AI slop — it's to slop on purpose, learn from what fails, and curate what works.
+Thesis: When AI drops production cost to $0.30 per video, the fastest path to quality is shipping deliberate slop across 15+ formats, killing the losers in days, and enriching the winners into a moat.
+Key takeaways:
+- R&D for $15 — Testing and killing 6 failed Instagram Reel formats cost ~$15 and a few hours of compute, versus $5,000 and three weeks for a traditional video team.
+- What actually won — Aesthetic "POV" reels died at 9–134 views; high-utility formats like Scam Alerts (2,461 avg views) and Tourist Mistakes (865 avg views, 31 saves, 39 shares) scaled.
+- Slop → Iterate → Curate — Version 1 of our written guides was pure LLM slop; Version 4 pairs Reddit quotes, live Google Places data across 3,755 venues, and JSON-LD schema.
 Sections: The Case for Deliberate Slop · The Graveyard: Formats We Killed · The Survivors: What Slop Taught Us · The Pattern: Slop Reveals Direction · The Same Pattern Holds for Written Content · The Same Pattern, Again: AEO Content · The Key Insight: Not "Don't Slop" — "Slop to Learn How Not to Slop"
 
 ### Nano Banana 2 vs Grok for Concept Art
-https://zonted.com/posts/nano-banana-vs-grok/  ·  2026-03-14
+https://zonted.com/posts/nano-banana-vs-grok/ · Markdown: https://zonted.com/posts/nano-banana-vs-grok/index.md · 2026-03-14 · Comparisons · 11 min read
 We tested Nano Banana 2 (Gemini 3.1 Flash) against Grok (xAI) on 8 identical lofi anime art prompts.
+Thesis: Across 8 identical lofi anime prompts, Nano Banana 2 (Gemini 3.1 Flash) beat xAI's Grok 9.0/10 to 7.7/10 while costing 3.5x less than Grok Pro ($0.02 vs. $0.07 per image).
+Key takeaways:
+- Artistry vs. stock polish — NB2 rendered painterly gouache and watercolor textures with distinct compositions on every run; Grok produced clean but near-identical digital anime clones.
+- Prompt adherence — When prompted for "eyes closed, at peace," NB2 nailed the expression in both outdoor renders while Grok generated open-eyed, tongue-out cartoon faces twice.
+- When to use Grok — Grok's edge is feature breadth: reference-image editing, style transfer, and $0.05/sec 720p video generation ( grok-imagine-video ), which NB2 doesn't support natively.
 Sections: Why We Ran This Test · The Two Models · Test 1: Indoor Capybara — The Lofi Studio Test · Test 2: Outdoor Capybara — The Landscape Test · The Prompt Adherence Problem · Pricing Comparison · Final Scorecard · The Verdict · When to Use Grok Instead · How to Use These Models (Code Examples)
 
 ### 5 AI Video Generators, 50 Reels: What Actually Works
-https://zonted.com/posts/veo3-vs-hailuo-minimax/  ·  2026-03-11
+https://zonted.com/posts/veo3-vs-hailuo-minimax/ · Markdown: https://zonted.com/posts/veo3-vs-hailuo-minimax/index.md · 2026-03-11 · Production · 11 min read
 We tested 5 AI video models across 50+ Instagram Reels in production. The biggest lesson: text-to-video is not ready — image-to-video is the only path.
+Thesis: Switching our 540-clip/month Reels pipeline from Veo 3 ($4.50/clip) to Hailuo 2.3 via image-to-video ($0.27/clip) cut monthly video spend from $2,430 to $146 while holding 7/10 Instagram quality.
+Key takeaways:
+- I2V over T2V — Every model failed our Bangkok night-market T2V test (wrong aspect ratio, uncanny faces, or mannequin motion); generating a base frame first with Nano Banana 2 fixed composition and style.
+- The 5-model breakdown — Hailuo 2.3 ($0.27/clip, ~90s) wins production value; Veo 3 ($4.50–$6/clip, 10/10 quality) is for hero trailers; CogVideoX-3 ($0.20/clip) is cheapest with native 9:16; Grok Imagine (~37s, $0.40) is fastest but flattens styles at 720p; Sora 2 ($0.80) lags on reliability.
+- Style preservation — On our watercolor capybara I2V benchmark, Hailuo preserved the brushwork while Grok re-rendered the illustration into a photorealistic animal.
 Sections: The Real Lesson: Text-to-Video vs Image-to-Video · The Five Models at a Glance · Our Production Pipeline · Model Deep Dives · The Capybara Test: Same Image, Three Models · Published Examples · Cost at Scale · The Verdict & Recommendations · What We Actually Use
 
 ### AI Reels: What Actually Works
-https://zonted.com/posts/ai-reels-what-actually-works/  ·  2026-03-11
+https://zonted.com/posts/ai-reels-what-actually-works/ · Markdown: https://zonted.com/posts/ai-reels-what-actually-works/index.md · 2026-03-11 · Production · 14 min read
 We tested 100% AI-generated Instagram Reels, YouTube Shorts, and X posts using Veo 3, Nano Banana 2, and FFmpeg.
+Thesis: Across 80+ autonomous AI travel Reels published in 48 hours (~$0.06–$0.12 per Reel), loss-aversion hooks ("Scam Alert" and "Tourist Mistake") hit 2,000–3,188 views while aesthetic "vibe" formats stalled under 150.
+Key takeaways:
+- Fear and utility win on IG — "Scam Alert" (Prague: 3,188 views) and "Tourist Mistake" (Koh Phi Phi: 2,175 views, 22 shares, 9 saves) dominated because viewers bookmark warnings for upcoming trips.
+- Platform split is 27x — "Vintage POV" (1962 Paris 16mm style) died on Instagram (119 views, 0 saves) but hit a 1.7% like rate on YouTube Shorts (746 views, 13 likes); X cross-posts got 0–12 views.
+- Hook > pixels — The same AI video models (Veo 3, Nano Banana 2, MiniMax) produce 100 views with a generic "One Thing You Can't Miss" hook and 3,000+ views with a specific scam warning.
 Sections: The Experiment · The Tech Stack · What's Working · What's Not Working · Platform-by-Platform Breakdown · The Psychology Behind the Hooks · Where We Go From Here · What This Means for AI-Generated Content
 
 ### Suno vs MiniMax Music: Which AI Composer Wins?
-https://zonted.com/posts/ai-music-generation-comparison/  ·  2026-03-11
+https://zonted.com/posts/ai-music-generation-comparison/ · Markdown: https://zonted.com/posts/ai-music-generation-comparison/index.md · 2026-03-11 · Comparisons · 21 min read
 We tested Suno AI and MiniMax Music 2.0/2.5/2.5+ in production across 200+ Instagram Reels.
+Thesis: Suno makes the best AI music (8.5/10) with no official API, while MiniMax Music 2.5+ makes reliable instrumental background tracks (7/10) via a documented REST API for ~$0.01/track.
+Key takeaways:
+- Daily production (MiniMax 2.5+) — The only MiniMax model where is_instrumental: true actually works; generates 60–192s tracks at ~$0.01/track with 99%+ uptime.
+- Quality showcase (Suno AI) — chirp-crow (v5) delivers genuine solo piano dynamics (~$0.02/clip on a $10/mo Pro plan), but requires a reverse-engineered Clerk JWT wrapper.
+- AI music scoring (Gemini 2.5 Flash) — Reliable for binary audio checks and instrument detection, but too polite to rank tracks (every clip scored 44–47/50).
 Sections: Why AI Music for Travel Content? · MiniMax Music: The Production Workhorse · MiniMax Audio Tests · Enter Suno: The Quality King · How We Reverse-Engineered Suno's API · The Cruel Summer Experiment · Gemini as AI Music Critic · Suno Audio Showcase · Native Video Audio: Veo 3, CogVideoX, Hailuo · Head-to-Head: Suno vs MiniMax · Other Alternatives We Explored · Production Pipeline & Code · Key Learnings & Gotchas · Final Scorecard
 
 ### AI Image Generation: 5 Models, 26 Real Results
-https://zonted.com/posts/ai-image-generation-comparison/  ·  2026-03-11
+https://zonted.com/posts/ai-image-generation-comparison/ · Markdown: https://zonted.com/posts/ai-image-generation-comparison/index.md · 2026-03-11 · AI Agents & Systems · 12 min read
 We tested GPT, Grok, Gemini (Nano Banana 2), MiniMax, and CogView-4 across 26 images in two real production workflows.
+Thesis: Across 26 production images and 5 models, prompt adherence—not raw visual polish—separated usable tools from toys: Nano Banana 2 won overall at ~$0.02/image.
+Key takeaways:
+- Vintage film & crowd scenes (Nano Banana 2) — Scored 8.8/10 on 1970s Kodachrome Kyoto and 9/10 on Verona crowd shots, rendering legible Japanese kanji and real Kodachrome rebate markings at ~$0.02/image.
+- Close-up portraits (MiniMax image-01) — Scored 8/10 on candid café portraits with the most convincing human faces (~$0.04/image), but ignored monochrome constraints (2/10 on B&W).
+- All-rounder vs. laggards — Grok Aurora (~$0.07/image) finished a close second across Verona with 9/10 emotional storytelling; CogView-4 (2/10 prompt adherence) and GPT/DALL-E 3 (4–6/10, garbled text and plastic skin) finished last.
 Sections: Why This Test Matters · The 5 Models We Tested · Test 1: Vintage 1970s Kyoto — Can AI Fake Film Photography? · The Black & White Test That Broke Two Models · Test 2: Phone Camera Realism — Verona · Prompt Engineering Makes or Breaks It · Combined Scorecard: All 5 Models · What to Use for What · Pricing Comparison · How to Use These Models (Code Examples) · Full Reels: Side by Side
 
 ## Sections

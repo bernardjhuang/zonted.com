@@ -11,6 +11,7 @@
     <title>AI Resilience Planning — Zonted</title>
     <meta name="description" content="Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.">
     <link rel="canonical" href="https://zonted.com/posts/ai-resilience-planning/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="AI Resilience Planning">
     <meta property="og:description" content="Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.">
     <meta property="og:type" content="article">
@@ -19,15 +20,18 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-27">
+    <meta property="article:modified_time" content="2026-03-27">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/ai-resilience-planning/hero-bg.jpg">
     <meta name="twitter:title" content="AI Resilience Planning">
     <meta name="twitter:description" content="Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/ai-resilience-planning/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "AI Resilience Planning", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-27", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/ai-resilience-planning/", "description": "Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.", "image": "https://img.zonted.com/resources/ai-resilience-planning/hero-bg.jpg", "mainEntityOfPage": "https://zonted.com/posts/ai-resilience-planning/", "dateModified": "2026-03-27"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "AI Resilience Planning", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-03-27", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/ai-resilience-planning/", "description": "Claude API was down 14 hours last quarter. We benchmarked MiniMax M2.7 vs Claude Opus 4.6 on identical tasks — here's how to build a resilient AI stack.", "image": "https://img.zonted.com/resources/ai-resilience-planning/hero-bg.jpg", "mainEntityOfPage": "https://zonted.com/posts/ai-resilience-planning/", "dateModified": "2026-03-27", "inLanguage": "en-US", "wordCount": 1097, "articleSection": "Guides", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {
@@ -217,7 +221,8 @@
   .article-body .tldr li:last-child {
     margin-bottom: 0;
   }
-</style>
+        .article-body .tier-card h3 { font-size: 0.85rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--accent); margin: 0 0 0.5rem; }
+    </style>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
@@ -282,14 +287,14 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
 
         <h1>AI Resilience Planning</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">March 27, 2026 · 8 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-27">March 27, 2026</time> · 8 min read</div>
             </div>
         </div>
 
@@ -396,17 +401,17 @@
 
             <div class="tier-grid">
                 <div class="tier-card primary">
-                    <h4>Tier 1 — Primary</h4>
+                    <h3>Tier 1 — Primary</h3>
                     <div class="tier-name">Highest Quality</div>
                     <p>Your best model for complex, nuanced tasks. Worth the premium for reasoning, analysis, and critical decisions.</p>
                 </div>
                 <div class="tier-card fallback">
-                    <h4>Tier 2 — Fallback</h4>
+                    <h3>Tier 2 — Fallback</h3>
                     <div class="tier-name">Different Provider</div>
                     <p>Comparable quality from a different provider. Activates when Tier 1 is down or rate-limited. Must be from a separate infrastructure.</p>
                 </div>
                 <div class="tier-card budget">
-                    <h4>Tier 3 — Budget</h4>
+                    <h3>Tier 3 — Budget</h3>
                     <div class="tier-name">High Volume</div>
                     <p>For cost-sensitive, high-volume tasks where "good enough" quality meets the bar. Runs the bulk of your routine workload.</p>
                 </div>
@@ -472,7 +477,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div><!-- /article-content -->
 </div><!-- /content-wrapper -->
 </main>

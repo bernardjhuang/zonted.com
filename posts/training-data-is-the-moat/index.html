@@ -11,6 +11,7 @@
     <title>Content Traffic is Vanity. Training Data is the Moat. — Zonted</title>
     <meta name="description" content="Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats…">
     <link rel="canonical" href="https://zonted.com/posts/training-data-is-the-moat/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="Content Traffic is Vanity. Training Data is the Moat.">
     <meta property="og:description" content="Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats web-search citations as an AEO lever.">
     <meta property="og:type" content="article">
@@ -19,6 +20,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-04-24">
+    <meta property="article:modified_time" content="2026-04-24">
     <meta property="article:section" content="AI &amp; Technology">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png">
@@ -26,9 +28,11 @@
     <meta name="twitter:description" content="Our dormant API is 83% Meta crawler. Flattering, wrong metric. Why I uploaded tabiji's whole database to Hugging Face.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/training-data-is-the-moat/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "Content Traffic is Vanity. Training Data is the Moat.", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-04-24", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/training-data-is-the-moat/", "description": "Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats web-search citations as an AEO lever.", "image": "https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png", "mainEntityOfPage": "https://zonted.com/posts/training-data-is-the-moat/", "dateModified": "2026-04-24"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "Content Traffic is Vanity. Training Data is the Moat.", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-04-24", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/training-data-is-the-moat/", "description": "Our forgotten API is 83% Meta crawler. Flattering, wrong metric. I uploaded tabiji's entire dataset to Hugging Face — here's why training data beats web-search citations as an AEO lever.", "image": "https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png", "mainEntityOfPage": "https://zonted.com/posts/training-data-is-the-moat/", "dateModified": "2026-04-24", "inLanguage": "en-US", "wordCount": 957, "articleSection": "AEO & Search", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Content Traffic is Vanity. Training Data is the Moat."}]}
@@ -190,7 +194,7 @@
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">April 24, 2026 &middot; 6 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-04-24">April 24, 2026</time> &middot; 6 min read</div>
             </div>
         </div>
 
@@ -208,7 +212,7 @@
 
             <p class="dropcap">While cleaning up old tabiji.ai experiments last week, I checked the Cloudflare logs for our public <code>/api/</code> endpoint &mdash; an early experiment we shipped, barely promoted, and mostly forgot about. Before killing it, I wanted to see if anything was still calling it.</p>
 
-            <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png" alt="Cloudflare traffic breakdown for /api/ over 8 days: 4,667 requests, 60 human visits, 83% Meta external crawler, long tail of AI crawlers" width="626" height="208" loading="lazy" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Eight days of traffic on our forgotten <code>/api/</code> endpoint. The humans are the noise. The bots are the signal.</figcaption></figure>
+            <figure style="margin:1.5rem 0 2rem;"><img src="https://img.zonted.com/resources/training-data-is-the-moat/cf-api-traffic.png" alt="Cloudflare traffic breakdown for /api/ over 8 days: 4,667 requests, 60 human visits, 83% Meta external crawler, long tail of AI crawlers" width="626" height="208" style="width:100%;height:auto;border-radius:6px;border:1px solid var(--border);" fetchpriority="high"><figcaption style="font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.8rem;color:var(--text-dim);margin-top:0.5rem;font-style:italic;">Eight days of traffic on our forgotten <code>/api/</code> endpoint. The humans are the noise. The bots are the signal.</figcaption></figure>
 
             <p><strong>4,667 requests over 8 days. Only 60 came from humans.</strong> Meta&rsquo;s external crawler accounted for 83% of the bot volume, followed by GPTBot, PerplexityBot, Applebot, and Bytespider. The rest was vulnerability scanners probing for <code>.env</code> files. Our forgotten API had quietly become an LLM feed.</p>
 

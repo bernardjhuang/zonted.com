@@ -11,6 +11,7 @@
     <title>Does Google Trends Predict Stock Prices? A Five-Year Backtest</title>
     <meta name="description" content="I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.">
     <link rel="canonical" href="https://zonted.com/posts/google-trends-stock-attention/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="I Backtested Five Years of Google Searches Against Stocks">
     <meta property="og:description" content="Search spikes predicted something. It just wasn't returns. The full backtest, failed alpha gate, and 51,372-row receipt trail.">
     <meta property="og:type" content="article">
@@ -23,12 +24,17 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/google-trends-stock-attention/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-07-25", "dateModified": "2026-07-25", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/google-trends-stock-attention/", "description": "I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.", "image": "https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png", "mainEntityOfPage": "https://zonted.com/posts/google-trends-stock-attention/"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-07-25", "dateModified": "2026-07-25", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/google-trends-stock-attention/", "description": "I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.", "image": "https://zonted.com/posts/google-trends-stock-attention/img/search-attention-results.png", "mainEntityOfPage": "https://zonted.com/posts/google-trends-stock-attention/", "inLanguage": "en-US", "wordCount": 1517, "articleSection": "Autonomous Trading & Markets", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Google Trends Stock Backtest"}]}
+    </script>
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "Does Google Trends predict future stock prices?", "acceptedAnswer": {"@type": "Answer", "text": "In a five-year out-of-sample backtest across liquid U.S. stocks with a two-day signal lag and 40-session embargo, Google Trends reliably predicted trading volume (+0.268 rank correlation for next 5-day volume) but did not clear the bar for directional return alpha."}}, {"@type": "Question", "name": "Do search spikes cause price moves or react to them?", "acceptedAnswer": {"@type": "Answer", "text": "Price leads search: prior price moves strongly predicted next-day ticker searches (+0.194 rank correlation) and brand-topic searches (+0.110)."}}, {"@type": "Question", "name": "What happened when testing search attention as a contrarian signal?", "acceptedAnswer": {"@type": "Answer", "text": "High ticker attention correlated at -0.059 with next 5-day sector-excess returns (-0.57% top-vs-bottom quintile spread), missing the pre-registered false-discovery gate (adjusted q = 0.115 vs. the 0.10 threshold)."}}]}
     </script>
     <style>
         :root {
@@ -211,13 +217,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
         <h1>I Backtested Five Years of Google Searches Against Stocks. The Signal Wasn't Alpha.</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">July 25, 2026 &middot; 9 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-07-25">July 25, 2026</time> &middot; 9 min read</div>
             </div>
         </div>
 
@@ -240,7 +246,7 @@
             </div>
 
             <figure>
-                <img src="img/search-attention-results.png" width="1200" height="630" alt="Summary of the backtest: past price moves strongly predict next-day searches, search attention strongly predicts next five-day volume, and search attention has a small negative but statistically non-robust relationship with next five-day returns.">
+                <img src="img/search-attention-results.png" width="1200" height="630" alt="Summary of the backtest: past price moves strongly predict next-day searches, search attention strongly predicts next five-day volume, and search attention has a small negative but statistically non-robust relationship with next five-day returns." fetchpriority="high">
                 <figcaption>The whole result in three arrows. Rank correlations from the final untouched test period.</figcaption>
             </figure>
 
@@ -364,7 +370,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div>
 </div>
 </main>

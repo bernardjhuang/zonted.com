@@ -7,6 +7,7 @@
     <title>I Trained a GPT on 15 Years of My Life — Then Interrogated It</title>
     <meta name="description" content="I trained a 10M-parameter GPT from scratch on my search history and email — $0, on a MacBook Air — then measured how mention rates become AI beliefs.">
     <link rel="canonical" href="https://zonted.com/posts/i-trained-a-gpt-on-my-life/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="I Trained a GPT on 15 Years of My Life — Then Interrogated It">
     <meta property="og:description" content="A 10M-parameter GPT built from scratch on my Google Takeout, for $0 — and what cracking it open taught me about how AI models decide who and what to believe in.">
     <meta property="og:type" content="article">
@@ -15,15 +16,18 @@
     <meta name="twitter:image" content="https://zonted.com/posts/i-trained-a-gpt-on-my-life/img/og.png">
     <meta property="og:url" content="https://zonted.com/posts/i-trained-a-gpt-on-my-life/">
     <meta property="article:published_time" content="2026-07-17">
+    <meta property="article:modified_time" content="2026-07-17">
     <meta name="robots" content="index, follow, max-image-preview:large">
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/i-trained-a-gpt-on-my-life/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "I Trained a GPT on 15 Years of My Life — Then Interrogated It", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-07-17", "publisher": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/", "description": "I built a 10M-parameter language model from scratch on my Google search history and email, for $0, on a MacBook Air — then cracked it open to measure exactly how mention rates become AI beliefs.", "image": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/img/og.png", "mainEntityOfPage": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/", "dateModified": "2026-07-17"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "I Trained a GPT on 15 Years of My Life — Then Interrogated It", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-07-17", "publisher": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/", "description": "I built a 10M-parameter language model from scratch on my Google search history and email, for $0, on a MacBook Air — then cracked it open to measure exactly how mention rates become AI beliefs.", "image": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/img/og.png", "mainEntityOfPage": "https://zonted.com/posts/i-trained-a-gpt-on-my-life/", "dateModified": "2026-07-17", "inLanguage": "en-US", "wordCount": 1645, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Trained a GPT on 15 Years of My Life — Then Interrogated It"}]}
@@ -205,13 +209,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
         <h1>I Trained a GPT on 15 Years of My Life &mdash; Then Interrogated It</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">July 17, 2026 &middot; 9 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-07-17">July 17, 2026</time> &middot; 9 min read</div>
             </div>
         </div>
 
@@ -443,7 +447,7 @@ Ugh, I know. There must be a ton of money sloshing around...
                 </form>
             </section>
             <!-- SUBSCRIBE_BLOCK_END -->
-    </div>
+    </article>
 </div>
 </div>
 </main>

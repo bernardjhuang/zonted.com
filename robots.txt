@@ -2,9 +2,10 @@ User-agent: *
 Allow: /
 Sitemap: https://zonted.com/sitemap.xml
 
-# Machine-readable LLM indexes:
+# Machine-readable LLM indexes & Markdown mirrors:
 # https://zonted.com/llms.txt
 # https://zonted.com/llms-full.txt
+# Per-post clean Markdown: https://zonted.com/posts/<slug>/index.md
 
 # AI crawlers and answer engines welcome
 User-agent: GPTBot
@@ -19,6 +20,9 @@ Allow: /
 User-agent: ClaudeBot
 Allow: /
 
+User-agent: Claude-SearchBot
+Allow: /
+
 User-agent: Claude-Web
 Allow: /
 
@@ -28,7 +32,13 @@ Allow: /
 User-agent: PerplexityBot
 Allow: /
 
+User-agent: Perplexity-User
+Allow: /
+
 User-agent: Google-Extended
+Allow: /
+
+User-agent: GoogleOther
 Allow: /
 
 User-agent: Applebot-Extended
@@ -40,7 +50,25 @@ Allow: /
 User-agent: Meta-ExternalAgent
 Allow: /
 
+User-agent: Meta-ExternalFetcher
+Allow: /
+
+User-agent: MistralAI-User
+Allow: /
+
 User-agent: DuckAssistBot
+Allow: /
+
+User-agent: cohere-ai
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: PhindBot
+Allow: /
+
+User-agent: ExaBot
 Allow: /
 
 User-agent: CCBot

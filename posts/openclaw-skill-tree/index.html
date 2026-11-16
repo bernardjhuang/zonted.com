@@ -8,6 +8,9 @@
     <meta name="description" content="A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.">
     <link rel="canonical" href="https://zonted.com/posts/openclaw-skill-tree/">
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/openclaw-skill-tree/index.md">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="OpenClaw Is an MMORPG's Skill Tree">
     <meta property="og:description" content="A fresh OpenClaw install is a level 0 character. Every API key you add, every skill you install is a talent point. Here's how to build your agent.">
     <meta property="og:type" content="article">
@@ -15,6 +18,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-22T00:00:00Z">
+    <meta property="article:modified_time" content="2026-03-22">
     <meta property="article:section" content="AI &amp; Technology">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="OpenClaw Is an MMORPG's Skill Tree">
@@ -23,7 +27,10 @@
     <meta name="twitter:image" content="https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg">
 
     <script type="application/ld+json">
-    [{"@context": "https://schema.org", "@type": "Article", "headline": "OpenClaw Is an MMORPG", "author": {"@type": "Person", "name": "Bernard Huang"}, "datePublished": "2026-03-22", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/openclaw-skill-tree/", "description": "A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point. Here's how to build your agent.", "image": "https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://zonted.com/"}, {"@type": "ListItem", "position": 2, "name": "Posts", "item": "https://zonted.com/posts/"}, {"@type": "ListItem", "position": 3, "name": "OpenClaw Is an MMORPG", "item": "https://zonted.com/posts/openclaw-skill-tree/"}]}]
+    {"@context": "https://schema.org", "@type": "Article", "headline": "OpenClaw Is an MMORPG", "author": {"@type": "Person", "name": "Bernard Huang", "@id": "https://zonted.com/#bernard-huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-22", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/openclaw-skill-tree/", "description": "A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point. Here's how to build your agent.", "image": "https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg", "dateModified": "2026-03-22", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://zonted.com/posts/openclaw-skill-tree/"}, "inLanguage": "en-US", "wordCount": 1013, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
+    </script>
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://zonted.com/"}, {"@type": "ListItem", "position": 2, "name": "Posts", "item": "https://zonted.com/posts/"}, {"@type": "ListItem", "position": 3, "name": "OpenClaw Is an MMORPG", "item": "https://zonted.com/posts/openclaw-skill-tree/"}]}
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -222,7 +229,7 @@
         <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
         <div>
             <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-            <div style="font-size:0.85rem;color:var(--text-muted);">March 22, 2026 · 6 min read</div>
+            <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-22">March 22, 2026</time> · 6 min read</div>
         </div>
     </div>
 
@@ -230,7 +237,7 @@
         <p class="dropcap">A fresh <a href="https://github.com/openclaw/openclaw" target="_blank" rel="noopener">OpenClaw</a> install looks just like a level-zero character in <em>Diablo</em>: bare stats, zero skills allocated, standing at the dungeon entrance with nothing but a chat loop. Out of the box, it can hold a conversation and not much else.</p>
 
         <figure style="margin:2rem 0;text-align:center;">
-            <img  src="https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg" width="1095" height="688" alt="Diablo IV skill tree showing interconnected talent nodes — the inspiration for thinking about AI agent capabilities as a skill tree" style="border-radius:6px;border:1px solid var(--border);max-width:100%;" loading="lazy">
+            <img  src="https://img.zonted.com/resources/openclaw-skill-tree/diablo-skill-tree.jpg" width="1095" height="688" alt="Diablo IV skill tree showing interconnected talent nodes — the inspiration for thinking about AI agent capabilities as a skill tree" style="border-radius:6px;border:1px solid var(--border);max-width:100%;" fetchpriority="high">
             <figcaption style="font-family:'Inter';font-size:0.8rem;color:var(--text-dim);font-style:italic;margin-top:0.75rem;">The Diablo IV skill tree — same energy as building an OpenClaw agent.</figcaption>
         </figure>
 
