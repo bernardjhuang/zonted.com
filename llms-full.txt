@@ -16,7 +16,18 @@ Zonted is Bernard Huang's personal site. The angle is non-commodity: specific sy
 - **Operator philosophy** — why "slop, iterate, curate" beats hand-crafting; why owning the stack matters
 - **Autonomous & AI-assisted trading** — Rig++ multi-venue prediction-market trading (Kalshi, Polymarket, Hyperliquid, OpenSea), agent-first architecture, weather & mention market microstructure, and postmortems from retired autonomous paper funds
 
-## All posts, with evidence digests & outlines (72)
+## All posts, with evidence digests & outlines (73)
+
+### Persistent AI vs. Task-Based AI: Leading Always-On Agents Without Friction
+https://zonted.com/posts/persistent-ai-agents/ · Markdown: https://zonted.com/posts/persistent-ai-agents/index.md · 2026-11-16 · Comparisons · 10 min read
+How we moved from Mac mini crons and task-based prompts to persistent agents (Instinct, OpenAI Dots, Meta Muse, Grokbot, Claude Duet) — and the 7-rule Rig++ Charter that keeps them aligned.
+Thesis: Persistent AI replaces the blank chat tab with an always-on coworker — which makes alignment and stripping out agent-friction the whole job.
+Key takeaways:
+- Mac minis showed it first: Running OpenClaw and Hermes on a dedicated Mac mini gave early builders a taste of persistent AI before Instinct , OpenAI Dots , Meta Muse , Grokbot , and Claude Duet turned it into hosted products.
+- Two ways to fake "always-on": Querying Meta Muse, Grokbot, and Claude Duet directly splits them into shared persistent VMs (vulnerable to 2,048,000 -inode crashes) vs. ephemeral containers over mounted disks and 16 KB notes files.
+- Why swarms stall: Frontier models are RLHF-trained to pause for human reassurance. On Grokbot, expired approval cards broke our daily morning PnL routine until we killed them.
+- The Rig++ Charter: Every agent boots from one shared Charter — one Mission, one 30-day return North Star, and seven ranked rules where "Having to ask for what you're allowed is a bug."
+Sections: 1. From blank tabs to a Mac mini on my desk · 2. Under the hood: Muse, Grokbot, and Duet · 3. Why smart agents stall at 7 AM: RLHF friction · 4. Indoctrinating the swarm: the Rig++ Charter · 5. Why alignment fixes the vibes
 
 ### From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading
 https://zonted.com/posts/ai-trading-rig/ · Markdown: https://zonted.com/posts/ai-trading-rig/index.md · 2026-11-02 · Autonomous Trading & Markets · 10 min read
@@ -777,7 +788,7 @@ Sections: Why This Test Matters · The 5 Models We Tested · Test 1: Vintage 197
 
 ## Sections
 
-- [All posts](https://zonted.com/posts/): Complete archive — 72 essays, updated regularly
+- [All posts](https://zonted.com/posts/): Complete archive — 73 essays, updated regularly
 - [Projects](https://zonted.com/portfolio/): Every project shipped (Tabiji, Rig++, groundhog.markets, parrot.markets, chameleons.markets, PixelForge, AgentTune) and the postmortem graveyard
 - [Metrics / Live P&L](https://psyduckler.com/pnl/): Live trading P&L and strategy metrics for Rig++
 - [AI Stack](https://zonted.com/ai-stack/): The tools and models actually running in production right now

@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#fcfcfa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400;1,9..144,500&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Serif+4:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/zonted.854b6be280a3.css">
+    <title>Persistent AI vs. Task-Based AI: Leading Always-On Agents Without Friction</title>
+    <meta name="description" content="How we moved from Mac mini crons and task-based prompts to persistent agents (Instinct, OpenAI Dots, Meta Muse, Grokbot, Claude Duet) — and the 7-rule Rig++ Charter that keeps them aligned.">
+    <link rel="canonical" href="https://zonted.com/posts/persistent-ai-agents/">
+    <meta property="og:site_name" content="Zonted">
+    <meta property="og:title" content="Persistent AI vs. Task-Based AI: Leading Always-On Agents Without Friction">
+    <meta property="og:description" content="How we moved from Mac mini crons and task-based prompts to persistent agents (Instinct, OpenAI Dots, Meta Muse, Grokbot, Claude Duet) — and the 7-rule Rig++ Charter that keeps them aligned.">
+    <meta property="og:type" content="article">
+    <meta property="og:image" content="https://zonted.com/posts/persistent-ai-agents/img/og.jpg">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://zonted.com/posts/persistent-ai-agents/img/og.jpg">
+    <meta property="og:url" content="https://zonted.com/posts/persistent-ai-agents/">
+    <meta property="article:published_time" content="2026-11-16">
+    <meta property="article:modified_time" content="2026-11-16">
+    <meta name="robots" content="index, follow, max-image-preview:large">
+
+    <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/persistent-ai-agents/index.md">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "Article", "headline": "Persistent AI vs. Task-Based AI: Leading Always-On Agents Without Friction", "author": {"@type": "Person", "@id": "https://zonted.com/#bernard-huang", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-11-16", "dateModified": "2026-11-16", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://zonted.com/posts/persistent-ai-agents/"}, "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/persistent-ai-agents/", "description": "How we moved from Mac mini crons and task-based prompts to persistent agents (Instinct, OpenAI Dots, Meta Muse, Grokbot, Claude Duet) — and the 7-rule Rig++ Charter that keeps them aligned.", "image": "https://zonted.com/posts/persistent-ai-agents/img/og.jpg", "inLanguage": "en-US", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}, "wordCount": 2411, "articleSection": "Comparisons"}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Persistent AI vs. Task-Based AI"}]}
+    </script>
+    <script type="application/ld+json">
+    {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":"What is the difference between persistent AI and task-based AI?","acceptedAnswer":{"@type":"Answer","text":"Task-based AI lives inside disposable chat tabs where you carry the context, trigger each prompt, and click every button. Persistent AI gives agents their own computers, browsers, credentials, and recurring schedules — from DIY OpenClaw and Hermes setups on a Mac mini to hosted platforms like Instinct, OpenAI Dots, Meta Muse, Grokbot, and Claude Duet."}},{"@type":"Question","name":"How do Meta Muse, Grokbot, and Claude Duet differ under the hood?","acceptedAnswer":{"@type":"Answer","text":"When queried directly on November 16, 2026, Meta Muse reported an ephemeral 2-vCPU AMD EPYC / 8 GB RAM Linux VM (only 9 minutes old) mounted over a 100 GB persistent home directory; Grokbot reported one persistent shared Debian 13 host (8 Intel Xeon vCPUs, 15 GiB RAM, 128 GB disk with a 2,048,000 file-slot limit); and Claude Duet reported turn-based Ubuntu 24.04 containers (4 vCPUs, 15 GB RAM, 31 GB per-session disk over a 1 PB network project mount) persisting across runs via a 16 KB notes file and hourly routines."}},{"@type":"Question","name":"What is agent-friction in autonomous AI systems?","acceptedAnswer":{"@type":"Answer","text":"Agent-friction is the built-in drag caused by habits frontier models pick up during chat alignment — popping confirmation cards, asking for human reassurance inside pre-approved bounds, or refusing to act in unattended runs. On Grokbot, expired unanswered approval cards stalled daily morning PnL routines until execution moved onto API keys and rule-bound autonomy."}},{"@type":"Question","name":"How does the Rig++ Charter govern always-on agents?","acceptedAnswer":{"@type":"Answer","text":"Every Rig++ session boots with a shared Charter defining one mission, one whole-account North Star (30-day time-weighted return, counterweighted by ~60% open-ground research and loss-stop guardrails), and seven ranked rules — Survive, Verify, Evidence decides, Own it, Build on the record, Seek new ground, and Spend like an owner — where earlier rules win any conflict and acting inside your role without asking is mandatory."}}]}
+    </script>
+    <style>
+        :root {
+            --bg: #fcfcfa; --bg-surface: #f5f4f0; --bg-raised: #edecea;
+            --border: #ddd; --border-light: #e8e8e4;
+            --text: #1a1a1a; --text-muted: #595959; --text-dim: #6e6e6e;
+            --accent: #1a1a1a; --accent-hover: #000;
+            --green: #2a7a2a; --red: #a33; --blue: #369;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html, body { width: 100%; -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; text-rendering: optimizeLegibility; }
+        body { font-family: 'Source Serif 4', Georgia, serif; font-size: 1.1rem; line-height: 1.85; font-feature-settings: 'kern' 1, 'liga' 1; background: var(--bg); color: var(--text); }
+        img, video { max-width: 100%; height: auto; }
+        .article-body figure img { width: 100%; height: auto; }
+        .article-body figure { margin: 1.5rem 0 2rem; }
+        .article-body figure.portrait { max-width: 460px; margin-left: auto; margin-right: auto; }
+        .article-body figure > img { border-radius: 6px; border: 1px solid var(--border); display: block; }
+        .article-body figcaption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.82rem; color: var(--text-dim); margin-top: 0.5rem; font-style: italic; text-align: center; line-height: 1.5; }
+        .article-container { max-width: 660px; margin: 0 auto; padding: 0.5rem 2rem 3rem; }
+        .article-container h1 { font-size: clamp(1.8rem, 4vw, 2.5rem); color: var(--text); line-height: 1.25; letter-spacing: -0.02em; margin-bottom: 1.5rem; }
+        .article-body h2 { font-size: 1.4rem; color: var(--text); font-weight: 700; margin: 2.5rem 0 1rem; letter-spacing: -0.01em; }
+        .article-body h3 { font-size: 1.15rem; color: var(--text); font-weight: 600; margin: 2rem 0 0.75rem; }
+        .article-body p { margin-bottom: 1.25rem; font-size: 1.05rem; line-height: 1.75; color: var(--text); }
+        .article-body ul, .article-body ol { margin: 1rem 0 1.5rem 1.5rem; }
+        .article-body li { margin-bottom: 0.55rem; font-size: 1.05rem; line-height: 1.7; color: var(--text); }
+        .article-body a { color: var(--text); text-decoration: underline; }
+        .article-body pre { max-width: 100%; overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .article-body pre code { font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace; color: var(--text); }
+        .article-body blockquote { background: var(--bg-surface); border-left: 3px solid var(--text); padding: 1rem 1.5rem; border-radius: 0 6px 6px 0; margin: 1.5rem 0; font-style: italic; color: var(--text-muted); }
+        .article-body blockquote p:last-child { margin-bottom: 0; }
+        .article-body strong { color: var(--text); font-weight: 700; }
+        .article-body code { background: var(--bg-surface); padding: 0.15rem 0.4rem; border-radius: 4px; font-size: 0.9rem; color: var(--text-muted); }
+        .article-body table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.92rem; }
+        .article-body table th { text-align: left; padding: 0.5rem 0.75rem; border-bottom: 2px solid var(--text); font-weight: 600; }
+        .article-body table th.num { text-align: right; }
+        .article-body table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--border); vertical-align: top; }
+        .article-body table td.num { text-align: right; font-family: 'IBM Plex Mono', monospace; font-variant-numeric: tabular-nums; }
+
+        .article-body .table-caption { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; font-weight: 600; color: var(--text-muted); margin: 1.75rem 0 0.5rem; }
+        .article-body .table-wrapper { overflow: auto; max-inline-size: 100%; max-block-size: min(560px, 80vh); margin: 0 0 2rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); container-type: inline-size; }
+        .article-body .table-wrapper:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+        .article-body .table-wrapper table { width: 100%; margin: 0; border-collapse: separate; border-spacing: 0; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.88rem; line-height: 1.5; }
+        .article-body .table-wrapper thead { position: sticky; inset-block-start: 0; z-index: 2; background: var(--bg-surface); }
+        .article-body .table-wrapper th, .article-body .table-wrapper td { padding: 0.65rem 0.8rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+        .article-body .table-wrapper thead th { border-bottom: 2px solid var(--text); font-weight: 600; color: var(--text); white-space: nowrap; }
+        .article-body .table-wrapper tbody th { position: sticky; inset-inline-start: 0; z-index: 1; background: var(--bg); font-weight: 600; color: var(--text); white-space: nowrap; border-right: 1px solid var(--border-light); }
+        .article-body .table-wrapper tbody tr:last-child th, .article-body .table-wrapper tbody tr:last-child td { border-bottom: none; }
+        @container (width < 600px) {
+            .article-body .table-wrapper { border: none; background: transparent; max-block-size: none; overflow: visible; }
+            .article-body .table-wrapper table,
+            .article-body .table-wrapper tbody,
+            .article-body .table-wrapper tr,
+            .article-body .table-wrapper th,
+            .article-body .table-wrapper td { display: block; width: 100%; }
+            .article-body .table-wrapper thead { display: none; }
+            .article-body .table-wrapper tr { margin-block-end: 1rem; border: 1px solid var(--border); border-radius: 6px; background: var(--bg); overflow: hidden; }
+            .article-body .table-wrapper tbody th { position: sticky; inset-block-start: 0; z-index: 2; background: var(--bg-surface); border-right: none; border-bottom: 1px solid var(--border); white-space: normal; }
+            .article-body .table-wrapper td { padding: 0.55rem 0.8rem; border-bottom: 1px solid var(--border-light); }
+            .article-body .table-wrapper tr td:last-child { border-bottom: none; }
+            .article-body .table-wrapper table {
+                --label-2: "Compute & RAM";
+                --label-3: "Persistence";
+                --label-4: "Cadence";
+                --label-5: "Hardest Limit Hit";
+            }
+            .article-body .table-wrapper td:nth-child(2)::before { content: var(--label-2) ": "; font-weight: 600; color: var(--text); }
+            .article-body .table-wrapper td:nth-child(3)::before { content: var(--label-3) ": "; font-weight: 600; color: var(--text); }
+            .article-body .table-wrapper td:nth-child(4)::before { content: var(--label-4) ": "; font-weight: 600; color: var(--text); }
+            .article-body .table-wrapper td:nth-child(5)::before { content: var(--label-5) ": "; font-weight: 600; color: var(--text); }
+        }
+
+        footer { text-align: center; padding: 3rem 2rem; border-top: 1px solid var(--border); background: var(--bg); }
+        footer p { color: var(--text-muted); font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; }
+        footer a { color: var(--text-muted); text-decoration: underline; }
+
+        .dropcap::first-letter { float: left; font-family: 'Source Serif 4', Georgia, serif; font-size: 3.5rem; line-height: 0.8; padding-right: 0.1em; padding-top: 0.1em; font-weight: 700; color: var(--text); }
+
+        .article-body .tldr { background: var(--bg-surface); border-left: 4px solid var(--text); border-radius: 0 8px 8px 0; padding: 1.25rem 1.75rem; margin: 2rem 0; }
+        .article-body .tldr-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text); margin-bottom: 0.5rem; }
+        .article-body .tldr-thesis { font-weight: 600; margin-bottom: 0.75rem; font-size: 1.05rem; line-height: 1.5; color: var(--text); }
+        .article-body .tldr ul { margin: 0.5rem 0 0.75rem 1.25rem; }
+        .article-body .tldr li { margin-bottom: 0.35rem; font-size: 0.95rem; line-height: 1.55; color: var(--text); }
+        .article-body .tldr-tail { margin-top: 0.5rem; margin-bottom: 0; color: var(--text-muted); font-size: 0.95rem; line-height: 1.55; }
+        .article-body .tldr a { color: var(--text); text-decoration: underline; }
+
+        .article-meta {
+            font-family: 'Inter', -apple-system, system-ui, sans-serif;
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .toc-sidebar {
+            padding-top: 3rem;
+            width: 220px; flex-shrink: 0;
+            position: sticky; top: 80px;
+            max-height: calc(100vh - 100px); overflow-y: auto;
+        }
+        .toc-sidebar h2, .toc-sidebar .toc-sidebar-label { font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+        .toc-sidebar ul { list-style: none; padding: 0; margin: 0; }
+        .toc-sidebar li { margin-bottom: 0.4rem; }
+        .toc-sidebar a { font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; display: block; padding: 0.25rem 0 0.25rem 0.75rem; border-left: 2px solid transparent; line-height: 1.3; }
+        .toc-sidebar a:hover { color: var(--text); }
+        .toc-sidebar a.active { color: var(--text); border-left-color: var(--text); font-weight: 600; }
+
+        .toc-mobile-wrapper { display: none; position: sticky; top: 56px; z-index: 99; }
+        .toc-mobile-sticky { background: #fcfcfa; border-bottom: 1px solid var(--border); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+        .toc-mobile-toggle { width: 100%; padding: 0.7rem 1.2rem; display: flex; justify-content: space-between; align-items: center; background: none; border: none; cursor: pointer; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+        .toc-mobile-toggle .toc-active-label { flex: 1; text-align: left; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-right: 0.5rem; }
+        .toc-mobile-toggle .toc-chevron { transition: transform 0.25s ease; font-size: 0.7rem; color: var(--text-muted); }
+        .toc-mobile-sticky.open .toc-chevron { transform: rotate(180deg); }
+        .toc-mobile-dropdown { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; border-top: 1px solid var(--border); }
+        .toc-mobile-sticky.open .toc-mobile-dropdown { max-height: 60vh; overflow-y: auto; }
+        .toc-mobile-dropdown ul { list-style: none; padding: 0.5rem 0; margin: 0; }
+        .toc-mobile-dropdown a { display: block; padding: 0.55rem 1.2rem; font-family: 'Inter', -apple-system, system-ui, sans-serif; color: var(--text-muted); text-decoration: none; font-size: 0.9rem; transition: background 0.15s, color 0.15s; }
+        .toc-mobile-dropdown a:hover { background: var(--bg-surface); color: var(--text); }
+        .toc-mobile-dropdown a.active { color: var(--text); font-weight: 600; background: var(--bg-surface); }
+
+        .content-wrapper { max-width: 1040px; margin: 0 auto; padding: 0 2rem; display: flex; gap: 3rem; align-items: flex-start; }
+        .content-wrapper .article-content { flex: 1; min-width: 0; max-width: 720px; }
+        .content-wrapper .article-content .article-container { max-width: none; padding-left: 0; padding-right: 0; }
+        @media (max-width: 900px) {
+            .content-wrapper { flex-direction: column; gap: 0; padding: 0; max-width: 100%; }
+            .toc-sidebar { display: none; }
+            .toc-mobile-wrapper { display: block; }
+            .article-content { max-width: 100%; width: 100%; }
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 2rem; max-width: 100%; }
+            .article-container h1 { font-size: 1.4rem; line-height: 1.3; word-wrap: break-word; overflow-wrap: break-word; }
+            .article-body h2 { font-size: 1.2rem; margin: 2rem 0 0.75rem; }
+            .article-body h3 { font-size: 1.05rem; margin: 1.5rem 0 0.5rem; }
+            .article-body p, .article-body li { font-size: 0.95rem; line-height: 1.7; }
+            .article-body blockquote { padding: 0.75rem 1rem; font-size: 0.95rem; margin: 1rem 0; }
+            .article-body table { font-size: 0.8rem; }
+            .article-body table th, .article-body table td { padding: 0.4rem 0.5rem; }
+        }
+        @media (max-width: 480px) {
+            .content-wrapper .article-content .article-container { padding: 2rem 1.25rem 1.5rem; }
+            .article-container h1 { font-size: 1.25rem; }
+            .article-body p, .article-body li { font-size: 0.9rem; }
+        }
+
+        .skip-link { position: absolute; top: 0; left: 0; background: var(--text); color: var(--bg); padding: 8px 16px; z-index: 200; font-family: 'Inter', system-ui, sans-serif; font-size: 0.85rem; text-decoration: none; border-radius: 0 0 4px 0; transform: translateY(-100%); }
+        .skip-link:focus { transform: translateY(0); }
+        a:focus-visible, button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+        .footer-social { display: flex; gap: 20px; justify-content: center; font-family: 'Inter', -apple-system, system-ui, sans-serif; font-size: 0.85rem; margin-top: 8px; }
+        .footer-social a { color: var(--text-muted); text-decoration: none; transition: color 0.2s; }
+        .footer-social a:hover { color: var(--text); }
+    </style>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
+    <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
+</head>
+<body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <nav class="zn-nav">
+        <div class="zn-nav-inner">
+            <a href="/" class="zn-logo"><span class="zn-avatar-sm">Z</span>zonted.</a>
+            <input type="checkbox" id="zn-menu-toggle" class="zn-menu-toggle" aria-label="Toggle menu">
+            <label for="zn-menu-toggle" class="zn-menu-btn" aria-hidden="true"><span></span><span></span><span></span></label>
+            <div class="zn-nav-links">
+                <a href="/posts/">Posts</a>
+                <a href="/portfolio/">Projects</a>
+                <a href="https://psyduckler.com/pnl/">Metrics</a>
+                <a href="/about/">About</a>
+                <a href="/#subscribe" class="zn-nav-cta">Subscribe</a>
+            </div>
+        </div>
+    </nav>
+
+
+<div class="toc-mobile-wrapper">
+<div class="toc-mobile-sticky" id="toc-mobile">
+    <button type="button" class="toc-mobile-toggle" aria-expanded="false" onclick="this.closest('.toc-mobile-sticky').classList.toggle('open');this.setAttribute('aria-expanded',this.closest('.toc-mobile-sticky').classList.contains('open'))">
+        <span class="toc-active-label">Contents</span>
+        <span class="toc-chevron" aria-hidden="true">&#9660;</span>
+    </button>
+    <div class="toc-mobile-dropdown" id="toc-mobile-dropdown">
+        <ul>
+            <li><a href="#task-vs-persistent">1. From blank tabs to a Mac mini</a></li>
+            <li><a href="#under-the-hood">2. Under the hood: Muse, Grokbot, Duet</a></li>
+            <li><a href="#agent-friction">3. Why smart agents stall at 7 AM</a></li>
+            <li><a href="#the-charter">4. Indoctrinating the swarm: the Charter</a></li>
+            <li><a href="#vibes-and-friction">5. Why alignment fixes the vibes</a></li>
+        </ul>
+    </div>
+</div>
+</div>
+
+    <main id="main">
+    <div class="content-wrapper">
+<aside class="toc-sidebar">
+    <p class="toc-sidebar-label">Contents</p>
+    <ul>
+        <li><a href="#task-vs-persistent">1. From blank tabs to a Mac mini</a></li>
+        <li><a href="#under-the-hood">2. Under the hood: Muse, Grokbot, Duet</a></li>
+        <li><a href="#agent-friction">3. Why smart agents stall at 7 AM</a></li>
+        <li><a href="#the-charter">4. Indoctrinating the swarm: the Charter</a></li>
+        <li><a href="#vibes-and-friction">5. Why alignment fixes the vibes</a></li>
+    </ul>
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <div style="font-family:'Inter',system-ui,sans-serif;font-size:0.75rem;font-weight:600;text-transform:uppercase;letter-spacing:0.08em;color:var(--text-dim);margin-bottom:8px;">Newsletter</div>
+        <form class="zn-subscribe-compact" data-resend-subscribe novalidate><input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email"><button type="submit">Subscribe</button><p class="zn-subscribe-status" data-subscribe-status hidden></p></form>
+    </div>
+<!-- COPY_LINK -->
+    <div style="margin-top:1.5rem;padding-top:1rem;border-top:1px solid var(--border);">
+        <button onclick="navigator.clipboard.writeText(window.location.href).then(()=>{const t=this.querySelector('span');t.textContent='Copied!';setTimeout(()=>t.textContent='Copy Link',1500)})" style="display:inline-flex;align-items:center;gap:0.4rem;font-family:'Inter',-apple-system,system-ui,sans-serif;font-size:0.85rem;color:var(--text-muted);background:none;border:1px solid var(--border);border-radius:6px;padding:0.4rem 0.75rem;cursor:pointer;transition:color 0.2s,border-color 0.2s;" onmouseover="this.style.color='var(--text)';this.style.borderColor='var(--text)'" onmouseout="this.style.color='var(--text-muted)';this.style.borderColor='var(--border)'"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg><span>Copy Post Link</span></button>
+    </div>
+    <!-- /COPY_LINK -->
+</aside>
+<div class="article-content">
+    <article class="article-container">
+        <h1>Persistent AI vs. Task-Based AI: Leading Always-On Agents Without Friction</h1>
+        <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
+            <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
+            <div>
+                <div style="font-weight:600;color:var(--text);"><a href="/about/" style="color:inherit;text-decoration:none;">Bernard Huang</a></div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-11-16">November 16, 2026</time> &middot; 10 min read</div>
+            </div>
+        </div>
+
+        <div class="article-body">
+
+            <p class="dropcap">For the last three years, "using AI" mostly meant opening a blank tab, typing a one-off prompt, waiting thirty seconds, and closing the tab. You carried the context in your head and clicked every button.</p>
+
+            <p>That already feels like dial-up. Right now every frontier lab and AI startup is racing toward the same thing: <strong>persistent, always-on agents</strong> with their own computers, browsers, logins, and schedules that keep working after you shut your laptop.</p>
+
+            <p>I've spent the last few months running persistent agents 24/7 inside <a href="/posts/ai-trading-rig/">Rig++</a>, my autonomous trading rig. Here's the catch nobody puts in the launch demo: <strong>giving an AI a permanent machine fixes amnesia, not judgment.</strong> Left alone, frontier models carry all their polite chatbot habits into a 24/7 job &mdash; asking permission for calls they already own, waiting on confirmation popups at 4 AM, and talking themselves into doing nothing.</p>
+
+            <div class="tldr">
+                <div class="tldr-label">TL;DR</div>
+                <p class="tldr-thesis">Persistent AI replaces the blank chat tab with an always-on coworker &mdash; which makes alignment and stripping out agent-friction the whole job.</p>
+                <ul>
+                    <li><strong>Mac minis showed it first:</strong> Running <a href="/posts/openclaw-skill-tree/">OpenClaw</a> and Hermes on a dedicated Mac mini gave early builders a taste of persistent AI before <strong>Instinct</strong>, <strong>OpenAI Dots</strong>, <strong>Meta Muse</strong>, <strong>Grokbot</strong>, and <strong>Claude Duet</strong> turned it into hosted products.</li>
+                    <li><strong>Two ways to fake "always-on":</strong> Querying Meta Muse, Grokbot, and Claude Duet directly splits them into shared persistent VMs (vulnerable to <code>2,048,000</code>-inode crashes) vs. ephemeral containers over mounted disks and <code>16 KB</code> notes files.</li>
+                    <li><strong>Why swarms stall:</strong> Frontier models are RLHF-trained to pause for human reassurance. On Grokbot, expired approval cards broke our daily morning PnL routine until we killed them.</li>
+                    <li><strong>The Rig++ Charter:</strong> Every agent boots from one shared Charter &mdash; one Mission, one <strong>30-day return</strong> North Star, and seven ranked rules where <em>"Having to ask for what you're allowed is a bug."</em></li>
+                </ul>
+            </div>
+
+            <h2 id="task-vs-persistent">1. From blank tabs to a Mac mini on my desk</h2>
+
+            <p>I learned the ceiling of task-based AI the hard way earlier this year. Gluing stateless prompts onto cron jobs gave me <a href="/posts/autonomous-trading-crons-retrospective/">26 journals, four closed paper trades, and zero persisted learning</a>, while running 20 independent cron workflows turned into <a href="/posts/human-in-the-loop/">working PagerDuty for bash scripts</a>.</p>
+
+            <p>My first real glimpse of what came next was self-hosting <strong><a href="/posts/openclaw-skill-tree/">OpenClaw</a></strong> and <strong>Hermes</strong> on a dedicated Mac mini at home. Before any mainstream lab offered persistent agents out of the box, buying and unboxing a little aluminum cube for your desk was the only way to give an AI a permanent home folder, a logged-in browser, and a 24/7 schedule &mdash; Texas power outages and <a href="/posts/openclaw-vs-claude-code-freedom/"><code>launchd</code> babysitting</a> included:</p>
+
+            <figure class="portrait">
+                <img src="/posts/persistent-ai-agents/img/mac-mini-box.webp" width="768" height="1024" alt="An unopened Apple Mac mini box sitting on a wooden desk beside a laptop — the DIY hardware operators bought to run OpenClaw and Hermes agents 24/7." loading="lazy">
+                <figcaption>Before the labs hosted persistent VMs, unboxing a Mac mini for OpenClaw or Hermes gave an early glimpse of always-on AI.</figcaption>
+            </figure>
+
+            <p>Once you live with an agent that keeps working after you walk away from your desk, blank chat tabs feel broken. That DIY Mac mini workflow was the preview; now the mainstream labs and consumer AI startups are shipping hosted versions of that exact idea:</p>
+
+            <ul>
+                <li><strong>Instinct</strong> skipped building yet another workspace dashboard. It lives inside iMessage, WhatsApp, group chats, and phone calls, wired to a persistent cloud computer that finishes real errands &mdash; bookings, purchases, group plans &mdash; while you go live your life.</li>
+                <li><strong>OpenAI Dots</strong> brings persistent coworkers into ChatGPT and team tools: each Dot runs on an isolated cloud computer with a headless browser, connects to Slack, docs, and repos, and keeps grinding through multi-day tasks while you sleep.</li>
+                <li><strong>Meta Muse</strong>, <strong>Grokbot</strong>, and <strong>Claude Duet</strong> give builders hosted VMs, recurring routines, and shared files without wiring hardware in a spare bedroom.</li>
+            </ul>
+
+            <p>The future is undeniably persistent AI, with more of the internet graduating from one-off prompts to always-on agents handling coworker roles, recurring tasks, and assistant work. The catch is that "always-on" means very different things depending on whose box your agent sits on.</p>
+
+            <h2 id="under-the-hood">2. Under the hood: Muse, Grokbot, and Duet</h2>
+
+            <p>Launch demos make every persistent agent sound like an immortal cloud workstation. To see what actually breaks at 4 AM, I asked three environments I use &mdash; <strong>Meta Muse</strong>, <strong>Grokbot</strong>, and <strong>Claude Duet</strong> &mdash; to check their own hardware and confirmed limits.</p>
+
+            <h3>Meta Muse: disposable boxes over a persistent home folder</h3>
+
+            <p>Inside Meta Muse, I opened my agent <code>Merlin</code> (<code>Chats</code>, <code>Call</code>, and <code>Invite</code> right at the top &mdash; team chat UX over a Linux box) and asked for its specs:</p>
+
+            <figure>
+                <img src="/posts/persistent-ai-agents/img/meta-muse-vm-specs.webp" width="699" height="467" alt="Meta Muse chat with Merlin reporting 2 AMD EPYC 9D25 vCPUs, 8 GB RAM with no swap and 6.8 GB used, a 100 GB home volume, and a Linux VM only 9 minutes old." loading="lazy">
+                <figcaption>Merlin on Meta Muse: 2 EPYC vCPUs, 8 GB RAM, 100 GB home disk &mdash; on a box 9 minutes old.</figcaption>
+            </figure>
+
+            <p>Look at that last bullet: the Linux box itself was 9 minutes old, with 6.8 GB of its 8 GB RAM already spoken for and zero swap. Muse swaps ephemeral compute containers underneath a durable 100 GB home volume &mdash; great for keeping files intact, fatal if you expected a background process in RAM to survive a container swap.</p>
+
+            <h3>Grokbot: one shared Debian box (and the scars to prove it)</h3>
+
+            <p>Next I asked <code>psy</code>, our Grokbot agent that runs <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a>, the same question. Because we've pushed Grokbot hard in production, it came back with an incident log instead of just <code>/proc/meminfo</code>:</p>
+
+            <figure class="portrait">
+                <img src="/posts/persistent-ai-agents/img/grokbot-vm-specs.webp" width="899" height="1024" alt="Grokbot dark UI showing psy reporting 8 Intel Xeon vCPUs, 15 GiB shared RAM, 128 GB Debian 13 disk, a 2,048,000 file-slot limit hit Nov 10 by 1.36 million spool files, X read caps, expired approval cards failing morning PnL, and a Nov 15 snapshot rollback." loading="lazy">
+                <figcaption>Grokbot (<code>psy</code>) listing shared hardware specs alongside the production limits we actually hit.</figcaption>
+            </figure>
+
+            <p>Every bot on Grokbot shares one persistent Debian 13 machine with 15 GiB of RAM (~3 GiB free) and separate desktops. On November 10 at 7:42 AM CT, 1.36 million tiny spool files hit the filesystem's <code>2,048,000</code> file-slot (inode) ceiling while half the disk's bytes were still free, wiping part of <code>psy</code>'s working state. Five days later, the box briefly booted into an old snapshot. And I love that last line: I had half-remembered a "50 routines" cap when asking, and <code>psy</code> politely told me not to print a number without a source.</p>
+
+            <h3>Claude Duet: turn-based containers glued by memory files</h3>
+
+            <p>Finally, I asked <strong>Claude Duet</strong> (<code>claude.ai/duet</code>), the notifier we wired into <a href="/posts/ai-trading-rig/">Rig++</a>, for its confirmed bounds:</p>
+
+            <figure>
+                <img src="/posts/persistent-ai-agents/img/claude-duet-vm-specs.webp" width="1024" height="718" alt="Claude Duet showing 4 Intel Xeon vCPUs, 15 GB RAM, 31 GB writable per session on a 252 GB volume plus a 1 PB shared project mount, Ubuntu 24.04 up for 2 minutes, hourly routines, 16 KB notes file, and 8 KB helper briefs." loading="lazy">
+                <figcaption>Claude Duet confirming its runtime bounds: 2-minute container uptime, hourly routines, and a 16 KB notes ceiling.</figcaption>
+            </figure>
+
+            <p>Duet independently pushed back on the same "50-routine" rumor and drew the clearest line in the whole post: <em>"the main difference from an always-on bot like Grokbot is that the persistence comes from memory files and scheduled runs, not a process that never stops."</em> Duet wakes up in fresh Ubuntu 24.04 containers (only 2 minutes old here), caps routines at once an hour, loads one <code>16 KB</code> notes file each turn, trims helper handoff briefs at <code>8 KB</code>, and reclaims local scratch files outside the shared <code>1 PB</code> project mount after inactivity.</p>
+
+            <p>Compare those three cloud patterns side by side with the DIY Mac mini setup where most of us started:</p>
+
+            <p class="table-caption" id="vm-comparison-title">Four ways persistent AI runs in practice (verified Nov 2026)</p>
+            <div class="table-wrapper" tabindex="0" role="region" aria-labelledby="vm-comparison-title">
+                <table>
+                    <thead>
+                        <tr>
+                            <th scope="col">Platform</th>
+                            <th scope="col">Compute &amp; RAM</th>
+                            <th scope="col">Persistence Model</th>
+                            <th scope="col">Cadence &amp; Memory</th>
+                            <th scope="col">Hardest Limit Hit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th scope="row">Meta Muse</th>
+                            <td>2 AMD EPYC vCPUs, 8 GB RAM (no swap, ~6.8 GB used)</td>
+                            <td>Ephemeral Linux container (9 min old) over 100 GB persistent <code>/home</code></td>
+                            <td>Chats, voice calls &amp; invites over durable home directory</td>
+                            <td>Tight RAM headroom (~1.2 GB free); RAM processes vanish on swap</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Grokbot (<code>psy</code>)</th>
+                            <td>8 Xeon vCPUs, 15 GiB RAM (shared across bots)</td>
+                            <td>Long-lived shared Debian 13 machine, 128 GB disk</td>
+                            <td>Always-on desktop + routines (&ge;5 min spacing, flexible window)</td>
+                            <td>2,048,000-inode crash; expired approval cards stalling morning PnL</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Claude Duet</th>
+                            <td>4 Xeon vCPUs (2.1 GHz), 15 GB RAM (no swap)</td>
+                            <td>Turn-based Ubuntu 24.04 containers + 31 GB local + 1 PB shared mount</td>
+                            <td>Hourly max routines; 16 KB notes file; 8 KB helper briefs</td>
+                            <td>No standing daemon; local scratch reclaimed within 30 idle days</td>
+                        </tr>
+                        <tr>
+                            <th scope="row">Mac mini (OpenClaw / Hermes)</th>
+                            <td>Apple Silicon desktop box on my desk</td>
+                            <td>Bare-metal macOS host, local SSD &amp; logged-in browser</td>
+                            <td>24/7 <code>launchd</code> &amp; cron jobs, local git repos &amp; markdown files</td>
+                            <td>Home power/Wi-Fi outages &amp; constant <code>launchd</code> / MCP babysitting</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h2 id="agent-friction">3. Why smart agents stall at 7 AM: RLHF friction</h2>
+
+            <p>Two bullets inside <code>psy</code>'s Grokbot report had nothing to do with Linux CPU or disk &mdash; and they broke more unattended runs than every VM quirk combined:</p>
+
+            <ul>
+                <li><strong>Approvals:</strong> <em>"an approval card that nobody answers expires, and the run stops there. That's why the morning PnL kept failing."</em></li>
+                <li><strong>Unattended posting:</strong> <em>"posting through the X connector needs a confirmation card, which a routine can't show. That's why we moved to your own API keys."</em></li>
+            </ul>
+
+            <p>Earlier this year I read through <a href="/posts/where-ai-personalities-come-from/">Anthropic's public preference-training data</a> and <a href="/posts/inside-ai-training-data/">Nvidia's preference rubrics</a>, so the root cause wasn't a mystery. Frontier models are RLHF-trained for 1-on-1 interactive chat, where asking <em>"Would you like me to proceed?"</em> or popping a confirmation check gets a gold star. In a browser tab while you watch the cursor stream, that caution feels helpful. In a 24/7 swarm, it turns into <strong>agent-friction</strong>:</p>
+
+            <ol>
+                <li><strong>Permission popups nobody is awake to click:</strong> Scheduled jobs halting mid-run because a harness or connector waits for a sleeping human's approval card.</li>
+                <li><strong>Risk-averse paralysis:</strong> Models talking themselves out of every asymmetric decision because alignment equates "doing nothing" with zero downside &mdash; the exact flaw that <a href="/posts/retiring-autonomous-agent-paper-fund-ii/">killed my first two autonomous paper funds</a>.</li>
+                <li><strong>Last-mile reassurance check-ins:</strong> Smart sessions finishing 95% of the research and stopping to ask whether they are allowed to make a change already inside their mandate.</li>
+            </ol>
+
+            <p>An unanswered approval card isn't free safety &mdash; in an unattended loop, it is just a silent outage. At <strong>Rig++</strong>, once our machines stayed online, most of our real engineering work became hunting down and deleting every spot where agents were trained to hesitate.</p>
+
+            <h2 id="the-charter">4. Indoctrinating the swarm: the Rig++ Charter</h2>
+
+            <p>Deleting confirmation popups without clear guardrails is how you turn hesitation into a blowup. Telling an RLHF model "be autonomous" only works if every session knows what winning looks like and which lines never move.</p>
+
+            <p>What actually unlocked Rig++ wasn't a clever prompt trick for one cron script. It was writing a single <strong>Charter</strong> (<code>HOME.md</code> + <code>AUTONOMY.md</code>) and <strong>indoctrinating every single agent with the exact same mission, values, and autonomy rules before it touches a tool</strong>. You can even open the Charter tab live right on the Rig++ console:</p>
+
+            <figure>
+                <img src="/posts/persistent-ai-agents/img/rigpp-charter-dashboard.webp" width="1024" height="742" alt="The Rig++ Dashboard Charter tab showing HOME.md Mission, Rules, and North Star plus bernard_words.jsonl and APPROVALS.md standing approvals on the left, and AUTONOMY.md act-then-tell venue rules on the right." loading="lazy">
+                <figcaption>The live Rig++ Charter tab: <code>HOME.md</code>, recorded operator words, and standing approvals on the left; <code>AUTONOMY.md</code> act-then-tell rules on the right.</figcaption>
+            </figure>
+
+            <p>The left column sets the shared doctrine (<code>HOME.md</code>), backed by a log of my verbatim decisions (<code>bernard_words.jsonl</code>) and standing approvals (<code>APPROVALS.md</code>) so agents never rely on fuzzy memory. The right column renders <code>AUTONOMY.md</code> into explicit act-then-tell rules by role and venue.</p>
+
+            <h3>Mission, North Star, and Seven Ranked Rules</h3>
+
+            <blockquote>
+                <p><strong>Mission:</strong> Compound the account inside its budgets and loss guards: find edges by any route, on new ground as well as worked; prove them live at small size; scale what holds; retire what fails its agreed test; and leave evidence the next agent can use.</p>
+            </blockquote>
+
+            <p>Our single <strong>North Star</strong> sits right under that Mission: <strong>the whole account's 30-day time-weighted return (TWR)</strong> across every venue, with idle cash sitting in the denominator so hoarding dry powder out of timid habit actually lowers the score. Strict 30-day Sharpe and daily loss stops act as hard brakes, while putting ~<strong>60% of weekly research onto open ground</strong> keeps managers exploring instead of only polishing old books.</p>
+
+            <p>Unordered "core values" stall LLMs the moment two nice principles collide, so the seven rules below sit in strict rank order &mdash; <strong>when two conflict, the earlier one wins:</strong></p>
+
+            <ol>
+                <li><strong>Survive.</strong> No day, bet, or bug may end the game. Protect first, write it up after. The loss guards and the explicit human-only list are absolute; report a stress, don't invent a limit.</li>
+                <li><strong>Verify.</strong> Done means checked live, with an alert that reaches an owner if it stops. Never save cost by skipping a check.</li>
+                <li><strong>Evidence decides.</strong> Live beats backtest, and a result counts once an independent run reproduces it. Every trading call states expected 30-day dollars, what would prove it wrong, and the date it is scored.</li>
+                <li><strong>Own it.</strong> Act on your role's calls, then tell; ship small and fix forward. Hand another role's call to its owner with the evidence, and follow up. <strong>Having to ask for what you're allowed is a bug.</strong></li>
+                <li><strong>Build on the record.</strong> Form your idea first, then check the register before you spend a test on it. File every verdict in its one place, with why and what would reopen it.</li>
+                <li><strong>Seek new ground.</strong> Most research goes where the record is thin: a new reason a price is wrong, a new kind of market, a new method. Many unlike bets at small size beat one idea tried ten ways. File a clean no: it maps the ground.</li>
+                <li><strong>Spend like an owner.</strong> Name the decision the work could change, run the cheapest test that could change it, and stop when another test wouldn't.</li>
+            </ol>
+
+            <h2 id="vibes-and-friction">5. Why alignment fixes the vibes</h2>
+
+            <p>It sounds weirdly un-technical to talk about the "vibes" of an agent system, but anyone running multi-agent swarms feels it right away.</p>
+
+            <p>Before every agent booted from that Charter, starting a fresh session felt like onboarding an anxious temp who hadn't read the company wiki. One session wrote a 1,200-word memo asking if it could tweak a parameter already inside its budget. Another re-tested an idea we killed three weeks earlier because no rule made it check the record. When two agents disagreed on risk, nobody knew whose instinct won.</p>
+
+            <p>Indoctrinating every session from line one fixes the vibes overnight. Ranked rules settle conflicts without meetings (<code>Verify</code> always beats saving tokens; <code>Survive</code> beats everything), every proposal speaks the same language (expected 30-day dollars, <code>wrong_if</code>, <code>check_on</code>), and Rule 6 explicitly rewards a clean <code>NO-GO</code> for mapping dead ends instead of hiding misses.</p>
+
+            <p>From there, <a href="/posts/ai-trading-rig/#first-class-citizens"><code>AUTONOMY.md</code></a> deletes the rest of the friction in plumbing: keep a tiny human-only fence (moving cash between venues, manual trades, secrets, deletes, public posts, loosening loss stops, and reversing recent human decisions early), make everything inside code bounds <strong>act-then-tell</strong> with a <code>--note</code> audit trail, keep state in git and Postgres instead of 16 KB notes or 1.3 million stray spool files, and give unattended bots scoped API keys instead of UI confirmation cards.</p>
+
+            <p>Task-based AI waited on you to type the next prompt. Persistent AI is taking over real coworker seats, background tasks, and everyday assistant work at 6:00 AM before you open your laptop &mdash; and whether those agents spend the day compounding or stuck on expired approval cards comes down to the Charter you hand them first.</p>
+
+            <p>If you want to watch a Charter-governed swarm against a real scoreboard, live settled receipts run daily at <a href="https://psyduckler.com/pnl/">psyduckler.com/pnl/</a>, the team posts on <a href="https://x.com/psy_duckler">@psy_duckler</a>, and I'm <a href="https://x.com/bernardjhuang">@bernardjhuang</a>.</p>
+
+        </div>
+        <!-- SUBSCRIBE_BLOCK_START -->
+            <section class="zn-post-subscribe">
+                <p class="zn-post-subscribe-label">Newsletter</p>
+                <h2 class="zn-post-subscribe-headline">Get the next post by email.</h2>
+                <p class="zn-post-subscribe-sub">One email when I publish something new. No spam, no fixed schedule, unsubscribe anytime.</p>
+                <form class="zn-subscribe-form zn-post-subscribe-form" data-resend-subscribe novalidate>
+                    <input type="email" name="email" placeholder="your@email.com" required aria-label="Email address" autocomplete="email">
+                    <button type="submit">Subscribe &rarr;</button>
+                    <p class="zn-subscribe-status" data-subscribe-status hidden></p>
+                </form>
+            </section>
+            <!-- SUBSCRIBE_BLOCK_END -->
+        <!-- RECOMMENDED_START -->
+            <section class="zn-recommended" id="related">
+                <p class="zn-recommended-label">Recommended Reading</p>
+                <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/ai-trading-rig/">From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading</a><p class="zn-recommended-dek">How losing my laptop and Mac Mini pushed me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading rig on Opus 5.5 and tokay.io.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/human-in-the-loop/">Human-in-the-Loop: How AI Orchestrator Became My Full-Time Job</a><p class="zn-recommended-dek">I have 20 AI agents running 24/7. The fantasy was that they&#x27;d work for me. The reality is that I work for them — and Big Tech collects rent from both…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/where-ai-personalities-come-from/">The Files Where AI Personalities Come From</a><p class="zn-recommended-dek">An AI&#x27;s personality is a file you can read. Inside Anthropic&#x27;s 2022 preference data: the exact rows that installed politeness, refusals, and…</p></li>
+                </ul>
+            </section>
+            <!-- RECOMMENDED_END -->
+    </article>
+</div>
+</div>
+</main>
+
+<footer class="zn-footer">
+    <div class="zn-container zn-footer-inner">
+        <span>&copy; 2026 Bernard Huang &middot; zonted.com</span>
+        <span class="zn-footer-links">
+            <a href="/posts/">Posts</a>
+            <a href="/portfolio/">Projects</a>
+                    <a href="https://psyduckler.com/pnl/">Metrics</a>
+            <a href="/ai-stack/">AI Stack</a>
+            <a href="/games/">Games</a>
+            <a href="/about/">About</a>
+            <a href="/feed.xml">RSS</a>
+            <a href="https://x.com/bernardjhuang">X</a>
+            <a href="https://www.linkedin.com/in/bernardjhuang/">LinkedIn</a>
+        </span>
+    </div>
+</footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const sections = document.querySelectorAll('h2[id]');
+    const tocLinks = document.querySelectorAll('.toc-sidebar a, .toc-mobile-dropdown a');
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                tocLinks.forEach(a => a.classList.remove('active'));
+                document.querySelectorAll(`a[href="#${entry.target.id}"]`).forEach(a => a.classList.add('active'));
+                const label = document.querySelector('.toc-active-label');
+                if (label) {
+                    const activeLink = document.querySelector(`.toc-mobile-dropdown a[href="#${entry.target.id}"]`);
+                    if (activeLink) label.textContent = activeLink.textContent;
+                }
+            }
+        });
+    }, { rootMargin: '-80px 0px -80% 0px' });
+    sections.forEach(s => observer.observe(s));
+});
+</script>
+<script defer src="/js/subscribe.js"></script>
+</body>
+</html>
