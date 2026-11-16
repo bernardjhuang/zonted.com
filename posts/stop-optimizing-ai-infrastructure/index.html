@@ -11,6 +11,7 @@
     <title>Stop Optimizing Your AI Stack — Zonted</title>
     <meta name="description" content="Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap.">
     <link rel="canonical" href="https://zonted.com/posts/stop-optimizing-ai-infrastructure/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="Stop Optimizing Your AI Stack">
     <meta property="og:description" content="Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap. Models are improving faster than your optimizations matter.">
     <meta property="og:type" content="article">
@@ -27,9 +28,11 @@
     <meta name="twitter:description" content="Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap. Build the thing instead.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/stop-optimizing-ai-infrastructure/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "Stop Optimizing Your AI Stack", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-23", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/stop-optimizing-ai-infrastructure/", "description": "Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap. Models are improving faster than your optimizations matter. Build the thing instead.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/stop-optimizing-ai-infrastructure/", "dateModified": "2026-03-23"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "Stop Optimizing Your AI Stack", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-03-23", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/stop-optimizing-ai-infrastructure/", "description": "Token optimization, memory persistence, context window hacks — most AI infrastructure work is a trap. Models are improving faster than your optimizations matter. Build the thing instead.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/stop-optimizing-ai-infrastructure/", "dateModified": "2026-03-23", "inLanguage": "en-US", "wordCount": 1084, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
 
     <script type="application/ld+json">
@@ -250,7 +253,7 @@
         <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
         <div>
             <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-            <div style="font-size:0.85rem;color:var(--text-muted);">March 23, 2026 · 7 min read</div>
+            <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-23">March 23, 2026</time> · 7 min read</div>
         </div>
     </div>
 
@@ -353,9 +356,9 @@
             <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
+                <li><a class="zn-recommended-title" href="/posts/agentic-rails/">Agentic Rails: How to Benefit From Every AI Model Upgrade, Free</a><p class="zn-recommended-dek">Seedance 1.5 → 2 → 2.5 made my video pipeline better twice, free. Work on agentic rails inherits each model release. Legacy doesn&#x27;t.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/openclaw-skill-tree/">OpenClaw Is an MMORPG</a><p class="zn-recommended-dek">A fresh OpenClaw install is a level 0 character — full of potential, zero abilities. Every API key you add, every skill you install is a talent point.</p></li>
                 <li><a class="zn-recommended-title" href="/posts/human-in-the-loop/">Human-in-the-Loop: How AI Orchestrator Became My Full-Time Job</a><p class="zn-recommended-dek">I have 20 AI agents running 24/7. The fantasy was that they&#x27;d work for me. The reality is that I work for them — and Big Tech collects rent from both…</p></li>
-                <li><a class="zn-recommended-title" href="/posts/build-for-agents-price-per-call/">Build for Agents, Price Per Call.</a><p class="zn-recommended-dek">Hermes + Codex 5.5 matched Opus-era smoothness — we one-shot a new product (veracityapi.com) in an afternoon. But the tooling unlock isn&#x27;t the moat.</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->

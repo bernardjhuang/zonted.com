@@ -8,6 +8,9 @@
     <meta name="description" content="AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3.">
     <link rel="canonical" href="https://zonted.com/posts/the-economics-of-the-internet-are-broken/">
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/the-economics-of-the-internet-are-broken/index.md">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="The Economics of the Internet Are Broken">
     <meta property="og:description" content="AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3. When content costs $0.30 to produce, the entire ad-supported internet stops making sense.">
     <meta property="og:type" content="article">
@@ -16,6 +19,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-19T00:00:00Z">
+    <meta property="article:modified_time" content="2026-03-19">
     <meta property="article:section" content="AI &amp; Technology">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
@@ -23,7 +27,10 @@
     <meta name="twitter:description" content="AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3. When content costs $0.30 to produce, the entire ad-supported internet stops making sense.">
 
     <script type="application/ld+json">
-    [{"@context": "https://schema.org", "@type": "Article", "headline": "The Economics of the Internet Are Broken", "author": {"@type": "Person", "name": "Bernard Huang"}, "datePublished": "2026-03-19", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/the-economics-of-the-internet-are-broken/", "description": "AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3. When producing a video costs $0.30 and promoting it costs $50, the math breaks. Here's what replaces it.", "image": "https://img.zonted.com/og/operator-notes.png"}, {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://zonted.com/"}, {"@type": "ListItem", "position": 2, "name": "Posts", "item": "https://zonted.com/posts/"}, {"@type": "ListItem", "position": 3, "name": "The Economics of the Internet Are Broken", "item": "https://zonted.com/posts/the-economics-of-the-internet-are-broken/"}]}]
+    {"@context": "https://schema.org", "@type": "Article", "headline": "The Economics of the Internet Are Broken", "author": {"@type": "Person", "name": "Bernard Huang", "@id": "https://zonted.com/#bernard-huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-19", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/the-economics-of-the-internet-are-broken/", "description": "AI agents killed the publisher incentive model the same way streaming killed the 99-cent MP3. When producing a video costs $0.30 and promoting it costs $50, the math breaks. Here's what replaces it.", "image": "https://img.zonted.com/og/operator-notes.png", "dateModified": "2026-03-19", "mainEntityOfPage": {"@type": "WebPage", "@id": "https://zonted.com/posts/the-economics-of-the-internet-are-broken/"}, "inLanguage": "en-US", "wordCount": 1517, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
+    </script>
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": [{"@type": "ListItem", "position": 1, "name": "Home", "item": "https://zonted.com/"}, {"@type": "ListItem", "position": 2, "name": "Posts", "item": "https://zonted.com/posts/"}, {"@type": "ListItem", "position": 3, "name": "The Economics of the Internet Are Broken", "item": "https://zonted.com/posts/the-economics-of-the-internet-are-broken/"}]}
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -159,7 +166,8 @@
   .article-body .tldr li:last-child {
     margin-bottom: 0;
   }
-</style>
+        .article-body .era-timeline .era h3 { font-family: 'Source Serif 4', Georgia, serif; color: var(--text); font-size: 0.95rem; margin: 0 0 0.4rem; }
+    </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
@@ -240,7 +248,7 @@
         <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
         <div>
             <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-            <div style="font-size:0.85rem;color:var(--text-muted);">March 19, 2026 · 8 min read</div>
+            <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-19">March 19, 2026</time> · 8 min read</div>
         </div>
     </div>
 
@@ -345,15 +353,15 @@
 
         <div class="era-timeline">
             <div class="era">
-                <h4>Era 1: Purchase</h4>
+                <h3>Era 1: Purchase</h3>
                 <p>Buy the content.<br>99 cents per song.<br>$15 per article (magazine).<br>Unit economics worked.</p>
             </div>
             <div class="era">
-                <h4>Era 2: Attention</h4>
+                <h3>Era 2: Attention</h3>
                 <p>Content is free.<br>You pay with attention (ads).<br>Traffic = revenue.<br>SEO era.</p>
             </div>
             <div class="era current">
-                <h4>Era 3: Synthetic</h4>
+                <h3>Era 3: Synthetic</h3>
                 <p>Content is AI-generated.<br>Near-zero production cost.<br>Traffic model broken.<br>We are here.</p>
             </div>
         </div>
@@ -400,7 +408,7 @@
             <li><strong>Owned channels become mandatory.</strong> Email lists, direct communities, and native tools are the only distribution pipes an upstream AI layer can't silently intercept.</li>
         </ol>
 
-        <h2>The iTunes Lesson</h2>
+        <h2 id="the-itunes-lesson">The iTunes Lesson</h2>
 
         <p>When Spotify launched, record labels sued and insisted the 99-cent download model had to be protected. The industry didn't die — it restructured. Artists and operators who built for streaming economics early captured the new market, while holdouts waiting for iTunes downloads to rebound got wiped out.</p>
 

@@ -11,6 +11,7 @@
     <title>The True Cost of AI Content Production — Zonted</title>
     <meta name="description" content="Everyone obsesses over model costs and token prices. But after producing 400+ pages and 200+ videos with AI, we learned the real expense is data…">
     <link rel="canonical" href="https://zonted.com/posts/true-cost-of-ai-content-production/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="The True Cost of AI Content Production">
     <meta property="og:description" content="Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — not generation.">
     <meta property="og:type" content="article">
@@ -19,6 +20,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-03-18T00:00:00Z">
+    <meta property="article:modified_time" content="2026-03-18">
     <meta property="article:section" content="AI &amp; Technology">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/true-cost-of-ai-content-production/google-cloud-billing-march-2026.png">
@@ -26,9 +28,11 @@
     <meta name="twitter:description" content="Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — not generation.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/true-cost-of-ai-content-production/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "The True Cost of AI Content Production", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-03-18", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/true-cost-of-ai-content-production/", "description": "Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — Google Places API, SerpAPI, Reddit scraping, and the infrastructure that makes AI output actually useful.", "image": "https://img.zonted.com/resources/true-cost-of-ai-content-production/google-cloud-billing-march-2026.png", "mainEntityOfPage": "https://zonted.com/posts/true-cost-of-ai-content-production/", "dateModified": "2026-03-18"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "The True Cost of AI Content Production", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-03-18", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/true-cost-of-ai-content-production/", "description": "Everyone obsesses over model costs and token prices. After producing 400+ pages and 200+ videos with AI, we learned the real expense is data enrichment — Google Places API, SerpAPI, Reddit scraping, and the infrastructure that makes AI output actually useful.", "image": "https://img.zonted.com/resources/true-cost-of-ai-content-production/google-cloud-billing-march-2026.png", "mainEntityOfPage": "https://zonted.com/posts/true-cost-of-ai-content-production/", "dateModified": "2026-03-18", "inLanguage": "en-US", "wordCount": 1042, "articleSection": "Production", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The True Cost of AI Content Production"}]}
@@ -231,14 +235,14 @@
         <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
         <div>
             <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-            <div style="font-size:0.85rem;color:var(--text-muted);">March 18, 2026 · 6 min read</div>
+            <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-03-18">March 18, 2026</time> · 6 min read</div>
         </div>
     </div>
 
     <div class="article-body">
         <p class="dropcap">Every week, another thread on X or Hacker News debates which frontier model is cheapest per million tokens — GPT-4o vs Claude Sonnet vs Gemini Flash, racing toward fractions of a cent per request. Founders still pitch "AI-powered content" as if the expensive part of publishing is getting a language model to emit paragraphs.</p>
 
-        <p>Over the last six weeks, we built <a href="/">tabiji.ai</a> — 386 local restaurant and activity guides, 324 travel itineraries, 706 destination pages, and 200+ short-form videos. After auditing our actual cloud and API bills, the conclusion is unmistakable: <strong>LLM token costs are a rounding error. Data enrichment is the real expense.</strong></p>
+        <p>Over the last six weeks, we built <a href="https://tabiji.ai/">tabiji.ai</a> — 386 local restaurant and activity guides, 324 travel itineraries, 706 destination pages, and 200+ short-form videos. After auditing our actual cloud and API bills, the conclusion is unmistakable: <strong>LLM token costs are a rounding error. Data enrichment is the real expense.</strong></p>
 
         <div class="tldr">
           <div class="tldr-label">TL;DR</div>
@@ -343,7 +347,7 @@
 
         <p>Right now, the video model accounts for 93% of the per-clip cost only because video inference hasn't commoditized as fast as text. Give it six months. Long after video generation drops to a penny per clip, the research layer — finding the exact local scam to warn tourists about and verifying the cultural context — will remain the real work.</p>
 
-        <h2>What This Means for Anyone Building with AI</h2>
+        <h2 id="what-this-means-for-anyone-building-with-ai">What This Means for Anyone Building with AI</h2>
 
         <p>If you're building an AI publishing pipeline, plan around one rule: <strong>your text model costs will fall to zero, while your ground-truth data costs won't.</strong></p>
 

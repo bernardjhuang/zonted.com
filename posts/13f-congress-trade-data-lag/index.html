@@ -11,6 +11,7 @@
     <title>13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem — Zonted</title>
     <meta name="description" content="How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.">
     <link rel="canonical" href="https://zonted.com/posts/13f-congress-trade-data-lag/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem">
     <meta property="og:description" content="How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.">
     <meta property="og:type" content="article">
@@ -19,19 +20,25 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-07-25T00:00:00Z">
+    <meta property="article:modified_time" content="2026-07-25">
     <meta property="article:section" content="AI &amp; Technology">
-    <meta name="twitter:card" content="summary">
+    <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/og/operator-notes.png">
     <meta name="twitter:title" content="13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem">
     <meta name="twitter:description" content="How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/13f-congress-trade-data-lag/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-07-25", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/13f-congress-trade-data-lag/", "description": "How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/13f-congress-trade-data-lag/", "dateModified": "2026-07-25"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "13F Filings, Congress Trades, YouTube Sentiment: The Lag Problem", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-07-25", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/13f-congress-trade-data-lag/", "description": "How stale is disclosure-delayed market data? Congressional trades ran a 122-day median age, 13Fs up to 4.5 months late — and copying buys lost to the sells.", "image": "https://img.zonted.com/og/operator-notes.png", "mainEntityOfPage": "https://zonted.com/posts/13f-congress-trade-data-lag/", "dateModified": "2026-07-25", "inLanguage": "en-US", "wordCount": 2408, "articleSection": "Autonomous Trading & Markets", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Three Dashboards I Deleted"}]}
+    </script>
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "How late are 13F filings?", "acceptedAnswer": {"@type": "Answer", "text": "Up to 135 days. Institutional managers report positions held on the final day of the quarter and have 45 calendar days after quarter-end to file, meaning a January 2 entry first appears on May 15 and the fund can exit in between without disclosing until next quarter."}}, {"@type": "Question", "name": "How long do members of Congress have to report stock trades?", "acceptedAnswer": {"@type": "Answer", "text": "The STOCK Act requires disclosure within 45 days. Across the 40 largest trades tracked, the median filing gap was 25 days (with one outlier arriving 437 days late), and the median trade displayed on the dashboard was 122 days old."}}, {"@type": "Question", "name": "Does copying 13F filings work?", "acceptedAnswer": {"@type": "Answer", "text": "Not as an execution trigger. Over the ten weeks after Q1 2026 filings dropped on May 15, the eight largest disclosed whale buys averaged -2.8% while the seven largest disclosed sells averaged +4.0%."}}, {"@type": "Question", "name": "Is congressional trading data useful at all?", "acceptedAnswer": {"@type": "Answer", "text": "For slow policy research or sentiment tracking, yes. As a same-day trade signal, no—by the time a filing is public, the median trade is months old and reported only as a broad dollar bracket without an execution price."}}]}
     </script>
     <style>
         :root {
@@ -179,7 +186,7 @@
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">July 25, 2026 &middot; 10 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-07-25">July 25, 2026</time> &middot; 10 min read</div>
             </div>
         </div>
 
@@ -280,9 +287,9 @@
             <section class="zn-recommended" id="related">
                 <p class="zn-recommended-label">Recommended Reading</p>
                 <ul class="zn-recommended-list">
-                <li><a class="zn-recommended-title" href="/posts/veo3-vs-hailuo-minimax/">5 AI Video Generators, 50 Reels: What Actually Works</a><p class="zn-recommended-dek">We tested 5 AI video models across 50+ Instagram Reels in production. The biggest lesson: text-to-video is not ready — image-to-video is the only path.</p></li>
-                <li><a class="zn-recommended-title" href="/posts/ai-reels-what-actually-works/">AI Reels: What Actually Works</a><p class="zn-recommended-dek">We tested 100% AI-generated Instagram Reels, YouTube Shorts, and X posts using Veo 3, Nano Banana 2, and FFmpeg.</p></li>
-                <li><a class="zn-recommended-title" href="/posts/ai-trading-rig/">From Vibe Trading to an Agent-First Rig: 5 Months of Autonomous Trading</a><p class="zn-recommended-dek">How losing my laptop and Mac Mini pushed me from shipping SaaS apps to building Rig++: an autonomous multi-venue trading rig on Opus 5.5 and tokay.io.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/google-trends-stock-attention/">Does Google Trends Predict Stock Prices? A Five-Year Backtest</a><p class="zn-recommended-dek">I backtested five years of Google search attention against hot stocks. Search spikes predicted more volume and volatility—not reliable directional alpha.</p></li>
+                <li><a class="zn-recommended-title" href="/posts/i-analyzed-every-token-launch/">I Analyzed 320,000 Token Launches on Robinhood&#x27;s Blockchain</a><p class="zn-recommended-dek">Robinhood launched a blockchain. Within weeks people were creating 9,600 new coins a day on it. I measured every single one to find out whether the winners…</p></li>
+                <li><a class="zn-recommended-title" href="/posts/ai-desk-figr-earnings/">The AI Ran the Desk: A FIGR Earnings Trade, End to End</a><p class="zn-recommended-dek">Claude writes the trade journal: a hammered-but-healthy fintech flagged by narrative scanning, 10-Q forensics, probability ladders — and a +$25,898 exit…</p></li>
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->

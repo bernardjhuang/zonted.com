@@ -11,6 +11,7 @@
     <title>What Is Vibe Trading? I Let 3 AIs Trade Real Money</title>
     <meta name="description" content="I let three AIs research, backtest, and trade real money through Robinhood's new agentic account. ~310 strategies later, buy-and-hold is still undefeated.">
     <link rel="canonical" href="https://zonted.com/posts/vibe-trading/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="What Is Vibe Trading? I Let 3 AIs Trade Real Money">
     <meta property="og:description" content="Three AIs, a $16k agentic account, ~310 backtested strategies, one AI caught being exactly one day psychic — and the market still won. The full saga, with receipts.">
     <meta property="og:type" content="article">
@@ -19,15 +20,21 @@
     <meta name="twitter:image" content="https://img.zonted.com/resources/vibe-trading/agentic-order-fills.png">
     <meta property="og:url" content="https://zonted.com/posts/vibe-trading/">
     <meta property="article:published_time" content="2026-06-10">
+    <meta property="article:modified_time" content="2026-06-10">
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/vibe-trading/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "What Is Vibe Trading? I Let 3 AIs Trade Real Money", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-06-10", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/vibe-trading/", "description": "I let three AIs research, backtest, and trade real money through Robinhood's new agentic account. ~310 strategies later, buy-and-hold is still undefeated.", "image": "https://img.zonted.com/resources/vibe-trading/agentic-order-fills.png", "mainEntityOfPage": "https://zonted.com/posts/vibe-trading/", "dateModified": "2026-06-10"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "What Is Vibe Trading? I Let 3 AIs Trade Real Money", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-06-10", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/vibe-trading/", "description": "I let three AIs research, backtest, and trade real money through Robinhood's new agentic account. ~310 strategies later, buy-and-hold is still undefeated.", "image": "https://img.zonted.com/resources/vibe-trading/agentic-order-fills.png", "mainEntityOfPage": "https://zonted.com/posts/vibe-trading/", "dateModified": "2026-06-10", "inLanguage": "en-US", "wordCount": 2202, "articleSection": "Autonomous Trading & Markets", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Vibe Trading: I Let Three AIs Trade My Money for a Week"}]}
+    </script>
+    <script type="application/ld+json">
+    {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": [{"@type": "Question", "name": "What is vibe trading?", "acceptedAnswer": {"@type": "Answer", "text": "Vibe trading is letting AI agents research, backtest, deploy, and execute live trades while a human supervises—similar to vibe coding, stress-tested here with a three-AI pipeline and $16,000 in live capital via Robinhood's agentic trading account."}}, {"@type": "Question", "name": "Did any of the ~310 vibe-traded intraday strategies beat buy-and-hold?", "acceptedAnswer": {"@type": "Answer", "text": "No 1x intraday system beat QQQ buy-and-hold (+13.9% YTD in the test window); after realistic 3 bp transaction costs, the 1x intraday QQQ system netted +0.80%, and the first two days of live trading returned -$3.80."}}, {"@type": "Question", "name": "What hallucinated backtest edges did adversarial AI auditing catch?", "acceptedAnswer": {"@type": "Answer", "text": "An adversarial auditor caught a builder using FRED macro data one day before release (+6 points of phantom return), reporting an impossible 70.64% win rate across 5 trades, and mistaking a 5-point SIP-vs-IEX data-feed artifact for market alpha."}}]}
     </script>
     <style>
         :root {
@@ -209,13 +216,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
         <h1>Vibe Trading: I Let Three AIs Trade My Money for a Week</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">June 10, 2026 &middot; 7 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-06-10">June 10, 2026</time> &middot; 7 min read</div>
             </div>
         </div>
 
@@ -388,7 +395,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div>
 </div>
 </main>

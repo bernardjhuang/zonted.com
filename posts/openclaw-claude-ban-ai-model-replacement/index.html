@@ -11,6 +11,7 @@
     <title>The Day Claude Banned OpenClaw — Zonted</title>
     <meta name="description" content="OpenClaw banned Claude and Anthropic on Saturday. The community scrambled. We tested GPT 5.4, GLM 5.1, MiniMax M2.7, MIMO, and Qwen 3.6 — and landed on a…">
     <link rel="canonical" href="https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="The Day Claude Banned OpenClaw">
     <meta property="og:description" content="OpenClaw banned Claude and Anthropic on Saturday. We tested GPT 5.4, GLM 5.1, MiniMax M2.7, MIMO, and Qwen 3.6 — and landed on a hybrid setup that actually works better than before.">
     <meta property="og:type" content="article">
@@ -19,6 +20,7 @@
     <meta name="robots" content="index, follow, max-image-preview:large">
     <meta name="author" content="Bernard Huang">
     <meta property="article:published_time" content="2026-04-07T00:00:00Z">
+    <meta property="article:modified_time" content="2026-04-07">
     <meta property="article:section" content="AI & Technology">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:image" content="https://img.zonted.com/resources/cleanshot-claude-ban.png">
@@ -26,9 +28,11 @@
     <meta name="twitter:description" content="OpenClaw banned Claude and Anthropic. We tested 5 replacement models and found a hybrid setup that beats the old one.">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "The Day Claude Banned OpenClaw", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-04-07", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/", "description": "OpenClaw banned Claude and Anthropic on Saturday. We tested 5 replacement models and landed on a hybrid setup that actually works better than before.", "image": "https://img.zonted.com/resources/cleanshot-claude-ban.png", "mainEntityOfPage": "https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/", "dateModified": "2026-04-07"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "The Day Claude Banned OpenClaw", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-04-07", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/", "description": "OpenClaw banned Claude and Anthropic on Saturday. We tested 5 replacement models and landed on a hybrid setup that actually works better than before.", "image": "https://img.zonted.com/resources/cleanshot-claude-ban.png", "mainEntityOfPage": "https://zonted.com/posts/openclaw-claude-ban-ai-model-replacement/", "dateModified": "2026-04-07", "inLanguage": "en-US", "wordCount": 928, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"The Day Claude Banned OpenClaw"}]}
@@ -177,7 +181,10 @@
   .article-body .tldr li:last-child {
     margin-bottom: 0;
   }
-</style>
+        .article-container .highlight-box h3, .article-body .highlight-box h3 { color: var(--text); margin: 0 0 0.5rem; font-size: 1rem; }
+        .article-container .verdict h3, .article-body .verdict h3 { margin: 0 0 0.5rem; font-size: 1rem; opacity: 0.85; }
+        .article-container .takeaway h3, .article-body .takeaway h3 { margin: 0 0 0.5rem; font-size: 1rem; }
+    </style>
         <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -239,13 +246,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-<div class="article-container">
+<article class="article-container">
         <h1>The Day Claude Banned OpenClaw</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img  src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">April 7, 2026 · 9 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-04-07">April 7, 2026</time> · 9 min read</div>
             </div>
         </div>
         <div class="article-body">
@@ -317,7 +324,7 @@
 </table>
 
 <div class="verdict">
-    <h4>Bottom Line</h4>
+    <h3>Bottom Line</h3>
     <p><strong>GLM 5.1 won on every axis that matters</strong> — delivering Claude-tier instruction following at a fraction of GPT-5.4's token price, without the creative hallucinations we saw from Qwen 3.6.</p>
 </div>
 
@@ -334,7 +341,7 @@
 <p>Out of the box, one friction point ruins automated runs: permission modals. That's where <code>--dangerously-skip-permissions</code> comes in.</p>
 
 <div class="highlight-box">
-    <h4>The Desktop App Problem</h4>
+    <h3>The Desktop App Problem</h3>
     <p>The Claude desktop app interrupts constantly even with permission bypass toggled on. Every file write, shell command, and directory read triggers a confirmation prompt. Ten minutes in, you've spent more time clicking "Allow" than shipping code — making it a non-starter for unattended runs.</p>
 </div>
 
@@ -344,7 +351,7 @@
   --prompt "Fix the bug in fulfill-order.js where the email template path is wrong"</code></pre>
 
 <div class="highlight-box">
-    <h4>⚠️ Security Note</h4>
+    <h3>⚠️ Security Note</h3>
     <p><code>--dangerously-skip-permissions</code> lets Claude Code execute arbitrary shell commands and modify files without confirmation. Only run it inside isolated containers, CI runners, or dedicated local workspaces where you control the blast radius.</p>
 </div>
 
@@ -363,7 +370,7 @@
 </ul>
 
 <div class="takeaway">
-    <h4>The Unexpected Result</h4>
+    <h3>The Unexpected Result</h3>
     <p>The forced migration improved both our unit economics and our uptime. GLM 5.1 runs our scheduled OpenClaw loops faster and cheaper than Claude did, while native Claude Code in the terminal is more deterministic for repo work than routing Claude through a third-party agent harness.</p>
 </div>
 
@@ -401,7 +408,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div>
 </div>
 </main>

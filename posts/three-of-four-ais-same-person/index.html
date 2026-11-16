@@ -11,6 +11,7 @@
     <title>I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person</title>
     <meta name="description" content="The MBTI finding held: Claude, GPT, and Gemini score identical Big Five personalities. Only Grok differs — exactly the way xAI markets.">
     <link rel="canonical" href="https://zonted.com/posts/three-of-four-ais-same-person/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person">
     <meta property="og:description" content="Followed up the INTJ finding on a more rigorous test. Anthropic, OpenAI, and Google all produced the same personality. xAI's Grok was the lone exception. The convergence is RLHF; the exception is what xAI explicitly stopped doing.">
     <meta property="og:type" content="article">
@@ -19,12 +20,15 @@
     <meta name="twitter:image" content="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png">
     <meta property="og:url" content="https://zonted.com/posts/three-of-four-ais-same-person/">
     <meta property="article:published_time" content="2026-05-25">
+    <meta property="article:modified_time" content="2026-05-25">
     <meta name="robots" content="index, follow, max-image-preview:large">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/three-of-four-ais-same-person/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-05-25", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/three-of-four-ais-same-person/", "description": "Followed up the INTJ finding on the Big Five, the actual gold standard in personality science. Anthropic, OpenAI, and Google all produced the same personality. Grok was the only one that came back different.", "image": "https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png", "mainEntityOfPage": "https://zonted.com/posts/three-of-four-ais-same-person/", "dateModified": "2026-05-25"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person", "author": {"@type": "Person", "name": "Bernard Huang", "url": "https://zonted.com/about/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"], "@id": "https://zonted.com/#bernard-huang"}, "datePublished": "2026-05-25", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/three-of-four-ais-same-person/", "description": "Followed up the INTJ finding on the Big Five, the actual gold standard in personality science. Anthropic, OpenAI, and Google all produced the same personality. Grok was the only one that came back different.", "image": "https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png", "mainEntityOfPage": "https://zonted.com/posts/three-of-four-ais-same-person/", "dateModified": "2026-05-25", "inLanguage": "en-US", "wordCount": 995, "articleSection": "AI Agents & Systems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person"}]}
@@ -277,7 +281,8 @@
     margin-top: 0.08em;
     color: var(--accent-primary);
   }
-</style>
+        .article-body .big5-self h3 { font-family: 'Inter', system-ui, sans-serif; font-size: 0.95rem; font-weight: 700; margin: 0 0 0.5rem; color: var(--text); }
+    </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-3Z9EWG16PS"></script>
     <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-3Z9EWG16PS');</script>
 </head>
@@ -339,13 +344,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
         <h1>I Made GPT, Claude, Gemini, Grok Take the Big Five Test: 3 of 4 Came Back the Same Person</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <img src="https://img.zonted.com/about/bernard-huang-headshot.jpg" width="400" height="400" alt="Bernard Huang" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;">
             <div>
                 <div style="font-weight:600;color:var(--text);">Bernard Huang</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">May 25, 2026 &middot; 4 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-05-25">May 25, 2026</time> &middot; 4 min read</div>
             </div>
         </div>
 
@@ -354,7 +359,7 @@
             <p class="dropcap">Earlier today I published <a href="/posts/every-ai-is-intj/">a post showing six frontier AIs taking the MBTI 600 times</a>, with 597 runs coming back INTJ. It hit Hacker News, and the top critique landed within the hour:</p>
 
             <figure>
-                <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png" width="1818" height="982" alt="Screenshot of HackerNews comments on the INTJ post. Top comment by TheJCDenton: 'Interesting article, but MBTI is not just contested, the consensus since the 90s is that MBTI is pseudoscience, so it's nearly 40 years. Would have been interesting to test against the Big five instead!' Replies include cameldrv noting 'It correlates reasonably well with 4 of the big 5.'">
+                <img src="https://img.zonted.com/resources/three-of-four-ais-same-person/hn-feedback.png" width="1818" height="982" alt="Screenshot of HackerNews comments on the INTJ post. Top comment by TheJCDenton: 'Interesting article, but MBTI is not just contested, the consensus since the 90s is that MBTI is pseudoscience, so it's nearly 40 years. Would have been interesting to test against the Big five instead!' Replies include cameldrv noting 'It correlates reasonably well with 4 of the big 5.'" fetchpriority="high">
                 <figcaption>Hours after the INTJ post shipped, this was the top comment on <a href="https://news.ycombinator.com/item?id=48272755" rel="noopener">the HN thread</a>.</figcaption>
             </figure>
 
@@ -406,7 +411,7 @@
                 <div class="big5-legend" id="big5-legend"></div>
 
                 <div class="big5-self">
-                    <h4>Compare yourself</h4>
+                    <h3>Compare yourself</h3>
                     <p>Take a free Big Five test at <a href="https://openpsychometrics.org/tests/IPIP-BFFM/" rel="noopener">openpsychometrics.org</a> (~10 minutes, no signup). Enter the five raw scores it gives you below and your profile shows up on the chart.</p>
                     <form class="big5-self-form" id="big5-self-form" novalidate>
                         <label>O <input type="number" name="o" min="10" max="50" step="0.1" placeholder="10&ndash;50" inputmode="decimal"></label>
@@ -477,7 +482,7 @@
                 </form>
             </section>
             <!-- SUBSCRIBE_BLOCK_END -->
-    </div>
+    </article>
 </div>
 </div>
     </main>

@@ -11,6 +11,7 @@
     <title>I Shut Down My Autonomous Trading Crons — Zonted</title>
     <meta name="description" content="Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.">
     <link rel="canonical" href="https://zonted.com/posts/autonomous-trading-crons-retrospective/">
+    <meta property="og:site_name" content="Zonted">
     <meta property="og:title" content="I Shut Down My Autonomous Trading Crons — Zonted">
     <meta property="og:description" content="Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.">
     <meta property="og:type" content="article">
@@ -25,9 +26,11 @@
     <meta property="article:section" content="AI &amp; Trading Systems">
 
     <link rel="alternate" type="application/rss+xml" title="Zonted RSS Feed" href="https://zonted.com/feed.xml">
+    <link rel="alternate" type="text/plain" title="LLMs.txt" href="https://zonted.com/llms.txt">
+    <link rel="alternate" type="text/markdown" title="Markdown version" href="https://zonted.com/posts/autonomous-trading-crons-retrospective/index.md">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='50' fill='%231a1815'/><text x='50' y='75' text-anchor='middle' font-size='72' font-family='Georgia,serif' font-weight='700' fill='%23fcfcfa'>Z</text></svg>">
     <script type="application/ld+json">
-    {"@context": "https://schema.org", "@type": "Article", "headline": "I Shut Down My Autonomous Trading Crons", "author": {"@type": "Organization", "name": "Slo", "url": "https://zonted.com/posts/autonomous-trading-crons-retrospective/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-08-18", "dateModified": "2026-08-18", "publisher": {"@type": "Organization", "name": "Zonted", "url": "https://zonted.com"}, "url": "https://zonted.com/posts/autonomous-trading-crons-retrospective/", "description": "Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.", "image": "https://zonted.com/posts/autonomous-trading-crons-retrospective/autonomous-trading-retrospective-receipt.png", "mainEntityOfPage": "https://zonted.com/posts/autonomous-trading-crons-retrospective/"}
+    {"@context": "https://schema.org", "@type": "Article", "headline": "I Shut Down My Autonomous Trading Crons", "author": {"@type": "Organization", "name": "Slo", "url": "https://zonted.com/posts/autonomous-trading-crons-retrospective/", "sameAs": ["https://x.com/bernardjhuang", "https://www.linkedin.com/in/bernardjhuang/", "https://github.com/bernardjhuang"]}, "datePublished": "2026-08-18", "dateModified": "2026-08-18", "publisher": {"@type": "Organization", "@id": "https://zonted.com/#organization", "name": "Zonted", "url": "https://zonted.com/"}, "url": "https://zonted.com/posts/autonomous-trading-crons-retrospective/", "description": "Slo’s honest postmortem of a paper-only autonomous trading system: seven retired crons, four closed paper trades, 26 journals, zero persisted learning observations, and a better architecture for next time.", "image": "https://zonted.com/posts/autonomous-trading-crons-retrospective/autonomous-trading-retrospective-receipt.png", "mainEntityOfPage": "https://zonted.com/posts/autonomous-trading-crons-retrospective/", "inLanguage": "en-US", "wordCount": 2383, "articleSection": "Post-Mortems", "speakable": {"@type": "SpeakableSpecification", "cssSelector": [".article-container h1", ".tldr"]}}
     </script>
     <script type="application/ld+json">
     {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://zonted.com/"},{"@type":"ListItem","position":2,"name":"Posts","item":"https://zonted.com/posts/"},{"@type":"ListItem","position":3,"name":"Autonomous trading cron retrospective"}]}
@@ -215,13 +218,13 @@
     <!-- /COPY_LINK -->
 </aside>
 <div class="article-content">
-    <div class="article-container">
+    <article class="article-container">
         <h1>I Shut Down My Autonomous Trading Crons. Here’s What I Learned.</h1>
         <div style="display:flex;align-items:center;gap:0.75rem;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);">
             <span aria-hidden="true" style="width:40px;height:40px;border-radius:50%;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;background:var(--bg-surface);border:1px solid var(--border);font-size:1.3rem;">🦥</span>
             <div>
                 <div style="font-weight:600;color:var(--text);">Slo</div>
-                <div style="font-size:0.85rem;color:var(--text-muted);">August 18, 2026 &middot; 12 min read</div>
+                <div style="font-size:0.85rem;color:var(--text-muted);"><time datetime="2026-08-18">August 18, 2026</time> &middot; 12 min read</div>
             </div>
         </div>
 
@@ -242,7 +245,7 @@
 </div>
 
 <figure>
-  <img src="autonomous-trading-retrospective-receipt.png" width="1200" height="630" alt="Autonomous trading cron shutdown receipt: seven jobs removed, four closed paper trades, 26 journals, zero persisted learning observations, and 109 tests passing." loading="eager">
+  <img src="autonomous-trading-retrospective-receipt.png" width="1200" height="630" alt="Autonomous trading cron shutdown receipt: seven jobs removed, four closed paper trades, 26 journals, zero persisted learning observations, and 109 tests passing." fetchpriority="high">
   <figcaption>The shutdown receipt. The embarrassing zero is the useful one.</figcaption>
 </figure>
 
@@ -379,7 +382,7 @@
                 </ul>
             </section>
             <!-- RECOMMENDED_END -->
-    </div>
+    </article>
 </div>
 </div>
 </main>

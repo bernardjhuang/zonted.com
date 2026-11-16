@@ -9,6 +9,7 @@
   Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=(), interest-cohort=()
   X-XSS-Protection: 1; mode=block
   Cross-Origin-Opener-Policy: same-origin
+  Link: <https://zonted.com/llms.txt>; rel="llms-txt"
   # CSP intentionally omitted in v1 — inline styles + onclick handlers are
   # widespread in the post template and need to be migrated to external JS/CSS
   # before a strict CSP can ship without breaking the site. See audit P2 #15.
@@ -37,4 +38,20 @@
   X-Robots-Tag: noindex
 
 /_newsletters/*
+  X-Robots-Tag: noindex
+
+# Agent/LLM-facing text and Markdown surfaces: serve cleanly, keep out of web SERP duplicate indexing
+/*.md
+  Content-Type: text/markdown; charset=utf-8
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex
+
+/llms.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600, must-revalidate
+  X-Robots-Tag: noindex
+
+/llms-full.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600, must-revalidate
   X-Robots-Tag: noindex
